@@ -88,7 +88,9 @@ where $K$ is a non-negative kernel function which is symmetric about zero, integ
 
 
 Our multiscale statistic combines the kernel averages $\widehat{\psi}_T(u,h)$ for a wide range of different locations $u$ and bandwidths or scales $h$. Specifically, it takes into account all points $(u,h) \in \mathcal{G}_T$, where $\mathcal{G}_T$ is some subset of 
-\[ \mathcal{G} =  \big\{ (u,h): [u-h,u+h] \subseteq [0,1] \text{ with } u \in [0,1] \text{ and } h \in [h_{\min},h_{\max}] \big\} \]
+\begin{equation}\label{g-set}
+\mathcal{G} =  \big\{ (u,h): [u-h,u+h] \subseteq [0,1] \text{ with } u \in [0,1] \text{ and } h \in [h_{\min},h_{\max}] \big\} 
+\end{equation}
 with $h_{\min}$ and $h_{\max}$ denoting some minimal and maximal bandwidth value respectively. In order our theory to work, we require the following conditions to hold:
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
 \setcounter{enumi}{3}
@@ -174,9 +176,13 @@ Let the conditions of Theorem \ref{theo-stat} be satisfied and let $m$ be any fi
 \[ \pr \big( \widehat{\Psi}_T \le q_T(\alpha) \big) = o(1). \]
 \end{corollary}
 To formulate the next result, we define 
-\[ \Pi_T = \big\{ I_{u,h} = [u-h,u+h]: (u,h) \in \mathcal{A}_T \big\} \]
+\begin{equation}\label{pi-set}
+\Pi_T = \big\{ I_{u,h} = [u-h,u+h]: (u,h) \in \mathcal{A}_T \big\}
+\end{equation}
 with 
-\[ \mathcal{A}_T = \Big\{ (u,h) \in \mathcal{G}_T: \Big|\frac{\widehat{\psi}_T(u,h)}{\widehat{\sigma}}\Big| - \lambda(h) > q_T(\alpha) \Big\}. \]
+\begin{equation}\label{a-set}
+\mathcal{A}_T = \Big\{ (u,h) \in \mathcal{G}_T: \Big|\frac{\widehat{\psi}_T(u,h)}{\widehat{\sigma}}\Big| - \lambda(h) > q_T(\alpha) \Big\}.
+\end{equation}
 $\Pi_T$ is the collection of intervals $I_{u,h} = [u-h,u+h]$ for which the (corrected) test statistic $|\widehat{\psi}_T(u,h)| - \lambda(h)$ lies above the critical value $q_T(\alpha)$. With this notation at hand, we consider the event 
 \[ E_T = \Big\{ \forall I_{u,h} \in \Pi_T: m(v) \ne 0 \text{ for some } v \in I_{u,h} = [u-h,u+h] \Big\}. \]
 This is the event that the null hypothesis is violated on all intervals $I_{u,h}$ for which the (corrected) test statistic $|\widehat{\psi}_T(u,h)/\widehat{\sigma}| - \lambda(h)$ is above the critical value $q_T(\alpha)$. We can make the following formal statement about the event $E_T$. 
@@ -198,43 +204,148 @@ This suggests to plot the minimal intervals in $\Pi_T^*$ rather than the whole c
 \newpage
 \section{Testing for shape constraints of a time trend}\label{sec-test-shape}
 
-In this section we adapt the multiscale test method developed in Section \ref{subsec-method-test} to test more interesting hypothesis $H_0$
+In this section we adapt the multiscale test method developed above %in Section \ref{subsec-method-stat}
+to test the hypothesis $H_0$: ``$m$ is constant''. This hypothesis is essentially equivalent to testing another hypothesis $\widetilde{H}_0: m'=0$, therefore, the procedure itself and the underlying theory very closely follows Section \ref{sec-method}. Hence, similar arguments will be omitted for the sake of brevity.
+
+\subsection{Construction of the test statistic}\label{subsec-test-shape-stat}
+
+As in Section \ref{subsec-method-stat}, in order to test the hypothesis $H_0$: ``$m$ is constant'' in the model \eqref{model1} we first consider the kernel averages similar to those in \eqref{kernel-ave}
+\begin{equation}\label{kernel-ave-shape}
+\widehat{\psi}_T(u,h) = \sum\limits_{t=1}^T \widetilde{w}_{t,T}(u,h) Y_t, 
+\end{equation}
+where $u\in [0,1]$, $h$ is the bandwidth parameter and $\widetilde{w}_{t,T}(u,h)$ is a differential kernel average: 
+\[ \widetilde{w}_{t,T}(u,h) = \frac{1}{\|K'\|_{u,h,T}} K'\Big( \frac{u - t/T}{h} \Big) \, \quad \text{with} \quad \|K'\|_{u,h,T} = \Big\{\sum\limits_{t=1}^T  (K')^2\Big( \frac{u - t/T}{h} \Big)\Big\}.^{1/2} \]
+Here $K'$ is the first derivative of a non-negative kernel function $K$, which is as in Section \ref{subsec-method-stat} symmetric about zero, integrates to one and has compact support $[-1,1]$.
+
+As before, for any fixed location $u$ we have $\var(\widehat{\psi}_T(u,h)) = \sigma^2 + o(1)$ under $h \rightarrow 0$ and $Th \rightarrow \infty$, where $\sigma^2$ is long-run error variance. In the following sections we mainly consider normalized versions $\widehat{\psi}_T(u,h)/\widehat{\sigma}$ of the kernel averages $\widehat{\psi}_T(u,h)$, where $\widehat{\sigma}^2$ is a $\sqrt{T}$-consistent estimator of $\sigma^2$.
+
+Our multiscale statistic is then analogously defined as 
+\[ \widehat{\Psi}_T = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widehat{\psi}_T(u,h)}{\widehat{\sigma}}\Big| - \lambda(h) \Big\} \] 
+with $\lambda(h) = \sqrt{2 \log \{ 1/(2h) \}}$ and $\mathcal{G}_T$ being a subset of $\mathcal{G}$ from \eqref{g-set}. The additive correction term $\lambda(h)$ is substracted from the statistics due to the same arguments as in Section \ref{subsec-method-stat} and in \cite{DuembgenSpokoiny2001}.
 
 
-Consider the time trend model 
-\[ Y_t = m \Big( \frac{t}{T} \Big) + \varepsilon_t \]
-for $t=1,\ldots,T$ with $\ex[\varepsilon_t] = 0$. We want to test the null hypothesis 
-\[ H_0: m \text{ is constant}. \]
-%Put differently, for a pre-specfied confidence level, we want to identify a set of intervals $[u-h,u+h] \subseteq [0,1]$, where $m$ is not constant. We want to identify a set of intervals $S^\pm \subseteq S$ with the following property: for a pre-specified confidence level, we can conclude that $m$ is not constant on any of the intervals in $S^\pm$. 
-As in Section {subsec-method-test}, this can be achieved with the help of the following multiscale test statistic: 
-\[ \mathcal{M}_T = \max_{(u,h) \in \mathcal{G}_T} \Big\{ |\Psi_T(u,h)| -\lambda(h)\}, \]
+\subsection{The test procedure}\label{subsec-test-shape-test}
 
-% \sqrt{2 \log \big( \textstyle{\frac{1}{2h}} \big)} \Big
- 
- where 
-\[ \Psi_T(u,h) = \sum\limits_{t=1}^T w_{t,T}(u,h) \varepsilon_t \]
-with
-\[ w_{t,T}(u,h) =  \frac{1}{\hat{\sigma} \sqrt{Th}} \, K^\prime\Big( \frac{u - t/T}{h} \Big), \]
-where $\hat{\sigma}^2$ is a suitable estimator of the long-run error variance $\sigma^2$. 
+In order to be able to reject or accept our null hypothesis, we need to compare it with some prespecified critical values. These critical values are then found using the Gaussian version $\Phi_T^*$ of the test statistic $\widehat{\Psi}_T$ under the null hypothesis $H_0$:
+\[ \Phi_T^* = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_T^*(u,h)}{\sigma}\Big| - \lambda(h) \Big\}, \] 
+where
+\[ \phi_T^*(u,h) = \sum\limits_{t=1}^T \tilde{w}_{t,T}(u,h) \, \sigma Z_t \]
+and $Z_t$ are independent standard normal random variables. The $(1-\alpha)$-quantile of $\Phi_T^*$, denoted further as $q_T(\alpha)$, can thus be computed by Monte Carlo simulations. Our multiscale test of the hypothesis $H_0$: ``$m$ is constant'' is defined as follows: For a given significance level $\alpha \in (0,1)$, we reject $H_0$ if $\widehat{\Psi}_T > q_T(\alpha)$. 
 
 
+\subsection{Theoretical properties of the test}\label{subsec-test-shape-theo}
 
+As in Section \ref{subsec-method-theo}, we first investigate theoretical properties of the auxiliary statistic 
+\begin{align*}
+\widehat{\Phi}_T 
+ & = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\psi}_T(u,h) - \ex \widehat{\psi}_T(u,h)}{\widehat{\sigma}} \Big| - \lambda(h) \Big\} \\
+ & = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}_T(u,h)} {\widehat{\sigma}} \Big| - \lambda(h) \Big \} 
+\end{align*}
+with 
+\[ \widehat{\phi}_T(u,h) = \sum\limits_{t=1}^T \widetilde{w}_{t,T}(u,h) \varepsilon_t. \]
+
+
+The main result in this Section is an adaptation of the Theorem \ref{theo-stat} to our current test problem. According to it, for any given $\alpha \in (0,1)$ we can use the known quantiles $q_T(\alpha)$ of $\Phi_T^*$ to accept or reject our hypothesis. More formally, the result is formulated as follows. 
+\begin{theorem}\label{theo-stat-shape}
+Let \ref{C-err1}--\ref{C-h} be fulfilled and suppose that the first derivative of the kernel $K'$ is Lipschitz continuous and has compact support $[-1,1]$. Then 
+\[ \pr \big( \widehat{\Phi}_T \le q_T(\alpha) \big) = (1 - \alpha) + o(1). \]
+\end{theorem}
+The proof of Theorem \ref{theo-stat-shape} goes in parallel to the one of Theorem \ref{theo-stat}, and thereby omitted.
+
+As in Section \ref{subsec-method-theo}, the theoretical properties of our multiscale test are immediate consequences of the Theorem \ref{theo-stat-shape}. 
+\begin{corollary}\label{corollary-test-shape-1}
+Let the conditions of Theorem \ref{theo-stat-shape} be satisfied. Under the null hypothesis $H_0$: ``$m$ is constant'', it holds that 
+\[ \pr \big( \widehat{\Psi}_T \le q_T(\alpha) \big) = (1 - \alpha) + o(1). \]
+\end{corollary}
+\begin{corollary}\label{corollary-test-shape-2}
+Let the conditions of Theorem \ref{theo-stat-shape} be satisfied and let $m$ be any fixed non-constant function. Then 
+\[ \pr \big( \widehat{\Psi}_T \le q_T(\alpha) \big) = o(1). \]
+\end{corollary}
+
+With $\Pi_T$ and $\mathcal{A}_T$ defined as in \eqref{pi-set} and \eqref{a-set} respectively, we now consider the event 
+\[ \widetilde{E}_T = \Big\{ \forall I_{u,h} \in \Pi_T: m'(v) \ne 0 \text{ for some } v \in I_{u,h} = [u-h,u+h] \Big\}. \]
+This is the event that our current null hypothesis is violated on all intervals $I_{u,h}$ for which the (corrected) test statistic $|\widehat{\psi}_T(u,h)/\widehat{\sigma}| - \lambda(h)$ is above the critical value $q_T(\alpha)$. Proceding further as in Section \ref{subsec-method-theo}, we arrive at the following result regarding $\widetilde{E}_T$. 
+\begin{corollary}\label{corollary-test-shape-3}
+Under the conditions of Theorem \ref{theo-stat-shape}, it holds that  
+\[ \pr \big( \widetilde{E}_T \big) \ge (1-\alpha) + o(1). \] 
+\end{corollary}
+
+As before, Corollary \ref{corollary-test-shape-3} allows us to specify the regions where violation of the null hypothesis occurs with (asymptotic) probability at least $(1-\alpha)$.
+
+\newpage
 \section{Testing for equality of time trends}\label{sec-test-equality}
 
+In this section we adapt the multiscale test method developed in Section \ref{sec-method} 
+to test the hypothesis that the trend functions in different time series are equal. More formally, the null hypothesis is formulated as $H_0: m_1 = m_2 = \ldots = m_N$ in the model \eqref{model2}. To test 
 
-Suppose we observe $n$ different time series $\mathcal{Y}_i = \{Y_{it}: 1 \le t \le T\}$ for $1 \le i \le n$. The $i$-th time series is assumed to follow the time trend model
-\[ Y_{it} = m_i\Big(\frac{t}{T}\Big) + \alpha_i + \varepsilon_{it} \]
-for $1 \le t \le T$, where $\ex[\varepsilon_{it}] = 0$ and $\alpha_i$ are (deterministic or random) intercept terms. (We here set $\alpha_i = 0$ for simplicity and incorporate the intercepts $\alpha_i$ later into the procedure.) We want to test the null hypothesis that 
-\[ H_0: m_1 = m_2 = \ldots = m_n. \]
-To do so, we modify the baseline procedure from Section ??: For any pair of time series $i$ and $j$, we define
-\[ \mathcal{M}_{ij,T} = \max_{L \in \mathcal{L}} \max_{\substack{1 \le t \le t ^\prime \le T \\ |t^\prime - t + 1| = L}} \Big\{ |\Delta_{ij}(t,t^\prime)| - \sqrt{2 \log \big( \textstyle{\frac{T}{L}} \big)} \Big\}, \]
-where 
-\[ \Delta_{ij}(t,t^\prime) = \frac{1}{\sqrt{|t^\prime-t+1|}} \sum\limits_{s=t}^{t^\prime} V_s \quad \text{with} \quad V_{ij,s} = \frac{(Y_{is} -\ex[Y_{is}]) - (Y_{js} -\ex[Y_{js}])}{2\sigma} \]
-for $t^\prime \ge t$. The test statistic $\mathcal{M}_T$ is then defined as
-\[ \mathcal{M}_T = \max_{1 \le i < j \le n} \mathcal{M}_{ij,T}. \]
+\subsection{Construction of the test statistic}\label{subsec-test-equality-stat}
+
+In order to test the hypothesis, we modify the baseline procedure from Section \ref{subsec-method-stat} as follows: For any pair of time series $i$ and $j$, we define
+
+\begin{equation}\label{kernel-ave-equality}
+\widehat{\psi}_{ij,T}(u,h) = \sum\limits_{t=1}^T w_{t,T}(u,h) (Y_{it} - Y_{jt}), 
+\end{equation}
+where $u\in [0,1]$, $h$ is the bandwidth parameter and $w_{t,T}(u,h)$ is a kernel average: 
+\[ w_{t,T}(u,h) = \frac{1}{\|K\|_{u,h,T}} K\Big( \frac{u - t/T}{h} \Big) \, \quad \text{with} \quad \|K\|_{u,h,T} = \Big\{\sum\limits_{t=1}^T  K^2\Big( \frac{u - t/T}{h} \Big)\Big\}.^{1/2} \]
+Here $K$ is a non-negative kernel function $K$, which is as in Section \ref{subsec-method-stat} symmetric about zero, integrates to one and has compact support $[-1,1]$.
+
+Letting 
+\[ \widehat{\Psi}_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widehat{\psi}_{ij,T}(u,h)}{2\widehat{\sigma}}\Big| - \lambda(h) \Big\} \] 
+with $\lambda(h) = \sqrt{2 \log \{ 1/(2h) \}}$ and $\mathcal{G}_T$ being a subset of $\mathcal{G}$ from \eqref{g-set},
+we define our multiscale statistic $\widehat{\Psi}_T$ as
+\[ \widehat{\Psi}_T = \max_{1 \le i < j \le N} \widehat{\Psi}_{ij,T}. \]
 
 
+%As before, for any fixed location $u$ we have $\var(\widehat{\psi}_T(u,h)) = \sigma^2 + o(1)$ under $h \rightarrow 0$ and $Th \rightarrow \infty$, where $\sigma^2$ is long-run error variance. In the following sections we mainly consider normalized versions $\widehat{\psi}_T(u,h)/\widehat{\sigma}$ of the kernel averages $\widehat{\psi}_T(u,h)$, where $\widehat{\sigma}^2$ is a $\sqrt{T}$-consistent estimator of $\sigma^2$.
 
+\subsection{The test procedure}\label{subsec-test-equality-test}
+
+%In order to be able to reject or accept our null hypothesis, we need to compare it with some prespecified critical values. These critical values are then found using the Gaussian version $\Phi_T^*$ of the test statistic $\widehat{\Psi}_T$ under the null hypothesis $H_0$:
+%\[ \Phi_T^* = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_T^*(u,h)}{\sigma}\Big| - \lambda(h) \Big\}, \] 
+%where
+%\[ \phi_T^*(u,h) = \sum\limits_{t=1}^T \tilde{w}_{t,T}(u,h) \, \sigma Z_t \]
+%and $Z_t$ are independent standard normal random variables. The $(1-\alpha)$-quantile of $\Phi_T^*$, denoted further as $q_T(\alpha)$, can thus be computed by Monte Carlo simulations. Our multiscale test of the hypothesis $H_0$: ``$m$ is constant'' is defined as follows: For a given significance level $\alpha \in (0,1)$, we reject $H_0$ if $\widehat{\Psi}_T > q_T(\alpha)$. 
+
+\subsection{Theoretical properties of the test}\label{subsec-test-equality-theo}
+
+%As in Section \ref{subsec-method-theo}, we first investigate theoretical properties of the auxiliary statistic 
+%\begin{align*}
+%\widehat{\Phi}_T 
+% & = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\psi}_T(u,h) - \ex \widehat{\psi}_T(u,h)}{\widehat{\sigma}} \Big| - \lambda(h) \Big\} \\
+% & = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}_T(u,h)} {\widehat{\sigma}} \Big| - \lambda(h) \Big \} 
+%\end{align*}
+%with 
+%\[ \widehat{\phi}_T(u,h) = \sum\limits_{t=1}^T \widetilde{w}_{t,T}(u,h) \varepsilon_t. \]
+
+
+%The main result in this Section is an adaptation of the Theorem \ref{theo-stat} to our current test problem. According to it, for any given $\alpha \in (0,1)$ we can use the known quantiles $q_T(\alpha)$ of $\Phi_T^*$ to accept or reject our hypothesis. More formally, the result is formulated as follows. 
+%\begin{theorem}\label{theo-stat-shape}
+%Let \ref{C-err1}--\ref{C-h} be fulfilled and suppose that the first derivative of the kernel $K'$ is Lipschitz continuous and has compact support $[-1,1]$. Then 
+%\[ \pr \big( \widehat{\Phi}_T \le q_T(\alpha) \big) = (1 - \alpha) + o(1). \]
+%\end{theorem}
+%The proof of Theorem \ref{theo-stat-shape} goes in parallel to the one of Theorem \ref{theo-stat}, and thereby omitted.
+
+%As in Section \ref{subsec-method-theo}, the theoretical properties of our multiscale test are immediate consequences of the Theorem \ref{theo-stat-shape}. 
+%\begin{corollary}\label{corollary-test-shape-1}
+%Let the conditions of Theorem \ref{theo-stat-shape} be satisfied. Under the null hypothesis $H_0$: ``$m$ is constant'', it holds that 
+%\[ \pr \big( \widehat{\Psi}_T \le q_T(\alpha) \big) = (1 - \alpha) + o(1). \]
+%\end{corollary}
+%\begin{corollary}\label{corollary-test-shape-2}
+%Let the conditions of Theorem \ref{theo-stat-shape} be satisfied and let $m$ be any fixed non-constant function. Then 
+%\[ \pr \big( \widehat{\Psi}_T \le q_T(\alpha) \big) = o(1). \]
+%\end{corollary}
+
+%With $\Pi_T$ and $\mathcal{A}_T$ defined as in \eqref{pi-set} and \eqref{a-set} respectively, we now consider the event 
+%\[ \widetilde{E}_T = \Big\{ \forall I_{u,h} \in \Pi_T: m'(v) \ne 0 \text{ for some } v \in I_{u,h} = [u-h,u+h] \Big\}. \]
+%This is the event that our current null hypothesis is violated on all intervals $I_{u,h}$ for which the (corrected) test statistic $|\widehat{\psi}_T(u,h)/\widehat{\sigma}| - \lambda(h)$ is above the critical value $q_T(\alpha)$. Proceding further as in Section \ref{subsec-method-theo}, we arrive at the following result regarding $\widetilde{E}_T$. 
+%\begin{corollary}\label{corollary-test-shape-3}
+%Under the conditions of Theorem \ref{theo-stat-shape}, it holds that  
+%\[ \pr \big( \widetilde{E}_T \big) \ge (1-\alpha) + o(1). \] 
+%\end{corollary}
+
+%As before, Corollary \ref{corollary-test-shape-3} allows us to specify the regions where violation of the null hypothesis occurs with (asymptotic) probability at least $(1-\alpha)$.
+
+\newpage
 \section{Estimation of the long-run error variance}\label{sec-error-var}
 
 For estimating the long-run error covariance $\sigma^2 = \sum_{k \in \integers} \ex[\varepsilon_0 \varepsilon_k]$ various consistent estimators can be used. Here we employ the difference-based method proposed by \cite{Hall2003} which has the advantage that it does not depend on a bandwidth parameter. The exact procedure of constructing $\hat{\sigma}^2$ is described below.
