@@ -286,54 +286,59 @@ In order to test the hypothesis, we modify the baseline procedure from Section \
 \widehat{\psi}_{ij,T}(u,h) = \sum\limits_{t=1}^T w_{t,T}(u,h) (Y_{it} - Y_{jt}), 
 \end{equation}
 where $u\in [0,1]$, $h$ is the bandwidth parameter and $w_{t,T}(u,h)$ is a kernel average: 
-\[ w_{t,T}(u,h) = \frac{1}{\|K\|_{u,h,T}} K\Big( \frac{u - t/T}{h} \Big) \, \quad \text{with} \quad \|K\|_{u,h,T} = \Big\{\sum\limits_{t=1}^T  K^2\Big( \frac{u - t/T}{h} \Big)\Big\}.^{1/2} \]
-Here $K$ is a non-negative kernel function $K$, which is as in Section \ref{subsec-method-stat} symmetric about zero, integrates to one and has compact support $[-1,1]$.
+\[ w_{t,T}(u,h) = \frac{1}{\|K\|_{u,h,T}} K\Big( \frac{u - t/T}{h} \Big) \, \quad \text{with} \quad \|K\|_{u,h,T} = \Big\{\sum\limits_{t=1}^T  K^2\Big( \frac{u - t/T}{h} \Big)\Big\}^{1/2}_. \]
+Here $K$ is a non-negative kernel function, which is as in Section \ref{subsec-method-stat} symmetric about zero, integrates to one and has compact support $[-1,1]$.
 
 Letting 
-\[ \widehat{\Psi}_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widehat{\psi}_{ij,T}(u,h)}{2\widehat{\sigma}}\Big| - \lambda(h) \Big\} \] 
+\[ \widehat{\Psi}_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widehat{\psi}_{ij,T}(u,h)}{\sqrt{2}\widehat{\sigma}}\Big| - \lambda(h) \Big\} \] 
 with $\lambda(h) = \sqrt{2 \log \{ 1/(2h) \}}$ and $\mathcal{G}_T$ being a subset of $\mathcal{G}$ from \eqref{g-set},
 we define our multiscale statistic $\widehat{\Psi}_T$ as
 \[ \widehat{\Psi}_T = \max_{1 \le i < j \le N} \widehat{\Psi}_{ij,T}. \]
-
 
 %As before, for any fixed location $u$ we have $\var(\widehat{\psi}_T(u,h)) = \sigma^2 + o(1)$ under $h \rightarrow 0$ and $Th \rightarrow \infty$, where $\sigma^2$ is long-run error variance. In the following sections we mainly consider normalized versions $\widehat{\psi}_T(u,h)/\widehat{\sigma}$ of the kernel averages $\widehat{\psi}_T(u,h)$, where $\widehat{\sigma}^2$ is a $\sqrt{T}$-consistent estimator of $\sigma^2$.
 
 \subsection{The test procedure}\label{subsec-test-equality-test}
 
-%In order to be able to reject or accept our null hypothesis, we need to compare it with some prespecified critical values. These critical values are then found using the Gaussian version $\Phi_T^*$ of the test statistic $\widehat{\Psi}_T$ under the null hypothesis $H_0$:
-%\[ \Phi_T^* = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_T^*(u,h)}{\sigma}\Big| - \lambda(h) \Big\}, \] 
-%where
-%\[ \phi_T^*(u,h) = \sum\limits_{t=1}^T \tilde{w}_{t,T}(u,h) \, \sigma Z_t \]
-%and $Z_t$ are independent standard normal random variables. The $(1-\alpha)$-quantile of $\Phi_T^*$, denoted further as $q_T(\alpha)$, can thus be computed by Monte Carlo simulations. Our multiscale test of the hypothesis $H_0$: ``$m$ is constant'' is defined as follows: For a given significance level $\alpha \in (0,1)$, we reject $H_0$ if $\widehat{\Psi}_T > q_T(\alpha)$. 
+Critical values for the statistics $\widehat{\Psi}_T$ are found using the Gaussian version $\Phi_T^*$ of it under the null hypothesis $H_0$:
+\begin{align*}
+&\Phi_T^* = \max_{1\le i < j \le N} \Phi_{ij, T}^*,\\
+&\Phi_{ij, T}^* =  \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij,T}^*(u,h)}{\sqrt{2} \sigma}\Big| - \lambda(h) \Big\},
+\end{align*} 
+where
+\[ \phi_{ij,T}^*(u,h) = \sum\limits_{t=1}^T w_{t,T}(u,h) \, (\sigma Z_{i,t} - \sigma Z_{j,t}) \]
+and for every $i \in \{1, \ldots, N\}$ $(Z_{i,t})_t$ are independent standard normal random variables.
+ 
+We can compute the $(1-\alpha)$-quantile of $\Phi_T^*$, denoted further as $q_T(\alpha)$, by Monte Carlo simulations, and thus it can be regarded as a known value. Our multiscale test of the hypothesis $H_0: m_1 = m_2 = \ldots = m_N$ is defined as follows: For a given significance level $\alpha \in (0,1)$, we reject $H_0$ if $\widehat{\Psi}_T > q_T(\alpha)$. 
 
 \subsection{Theoretical properties of the test}\label{subsec-test-equality-theo}
 
-%As in Section \ref{subsec-method-theo}, we first investigate theoretical properties of the auxiliary statistic 
-%\begin{align*}
-%\widehat{\Phi}_T 
-% & = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\psi}_T(u,h) - \ex \widehat{\psi}_T(u,h)}{\widehat{\sigma}} \Big| - \lambda(h) \Big\} \\
-% & = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}_T(u,h)} {\widehat{\sigma}} \Big| - \lambda(h) \Big \} 
-%\end{align*}
-%with 
-%\[ \widehat{\phi}_T(u,h) = \sum\limits_{t=1}^T \widetilde{w}_{t,T}(u,h) \varepsilon_t. \]
+As in previous sections, we first introduce auxiliary statistic 
+\begin{align*}
+\widehat{\Phi}_T &= \max_{1\le i < j \le N} \widehat{\Phi}_{ij, T},\\
+\widehat{\Phi}_{ij,T} 
+ & = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\psi}_{ij,T}(u,h) - \ex \widehat{\psi}_{ij,T}(u,h)}{\sqrt{2}\widehat{\sigma}} \Big| - \lambda(h) \Big\} \\
+ & = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}_{ij,T}(u,h)} {\sqrt{2}\widehat{\sigma}} \Big| - \lambda(h) \Big \} 
+\end{align*}
+with 
+\[ \widehat{\phi}_{ij,T}(u,h) = \sum\limits_{t=1}^T w_{t,T}(u,h) (\varepsilon_{i,t} - \varepsilon_{j,t}). \]
 
 
-%The main result in this Section is an adaptation of the Theorem \ref{theo-stat} to our current test problem. According to it, for any given $\alpha \in (0,1)$ we can use the known quantiles $q_T(\alpha)$ of $\Phi_T^*$ to accept or reject our hypothesis. More formally, the result is formulated as follows. 
-%\begin{theorem}\label{theo-stat-shape}
-%Let \ref{C-err1}--\ref{C-h} be fulfilled and suppose that the first derivative of the kernel $K'$ is Lipschitz continuous and has compact support $[-1,1]$. Then 
-%\[ \pr \big( \widehat{\Phi}_T \le q_T(\alpha) \big) = (1 - \alpha) + o(1). \]
-%\end{theorem}
-%The proof of Theorem \ref{theo-stat-shape} goes in parallel to the one of Theorem \ref{theo-stat}, and thereby omitted.
+The main result in this Section is very similar to the results in previous sections. It states that for any given $\alpha \in (0,1)$ we can use the known quantiles $q_T(\alpha)$ of $\Phi_T^*$ to reject our null hypothesis.
+\begin{theorem}\label{theo-stat-equality}
+Let \ref{C-err1}--\ref{C-h} be fulfilled and suppose that the kernel function $K$ is Lipschitz continuous and has compact support $[-1,1]$. Then 
+\[ \pr \big( \widehat{\Phi}_T \le q_T(\alpha) \big) = (1 - \alpha) + o(1). \]
+\end{theorem}
+The proof of Theorem \ref{theo-stat-equality} goes follows closely the one of Theorem \ref{theo-stat} and is given in the Appendix.
 
-%As in Section \ref{subsec-method-theo}, the theoretical properties of our multiscale test are immediate consequences of the Theorem \ref{theo-stat-shape}. 
-%\begin{corollary}\label{corollary-test-shape-1}
-%Let the conditions of Theorem \ref{theo-stat-shape} be satisfied. Under the null hypothesis $H_0$: ``$m$ is constant'', it holds that 
-%\[ \pr \big( \widehat{\Psi}_T \le q_T(\alpha) \big) = (1 - \alpha) + o(1). \]
-%\end{corollary}
-%\begin{corollary}\label{corollary-test-shape-2}
-%Let the conditions of Theorem \ref{theo-stat-shape} be satisfied and let $m$ be any fixed non-constant function. Then 
-%\[ \pr \big( \widehat{\Psi}_T \le q_T(\alpha) \big) = o(1). \]
-%\end{corollary}
+As in Section \ref{subsec-method-theo}, the following corollaries, which characterize theoretical properties of our multiscale test, are immediate consequences of the Theorem \ref{theo-stat-equality}. 
+\begin{corollary}\label{corollary-test-equality-1}
+Let the conditions of Theorem \ref{theo-stat-equality} be satisfied. Under the null hypothesis $H_0: m_1 = m_2 = \ldots = m_N$, it holds that 
+\[ \pr \big( \widehat{\Psi}_T \le q_T(\alpha) \big) = (1 - \alpha) + o(1). \]
+\end{corollary}
+\begin{corollary}\label{corollary-test-equality-2}
+Let the conditions of Theorem \ref{theo-stat-equality} be satisfied and let $m$ be any fixed non-constant function. Then 
+\[ \pr \big( \widehat{\Psi}_T \le q_T(\alpha) \big) = o(1). \]
+\end{corollary}
 
 %With $\Pi_T$ and $\mathcal{A}_T$ defined as in \eqref{pi-set} and \eqref{a-set} respectively, we now consider the event 
 %\[ \widetilde{E}_T = \Big\{ \forall I_{u,h} \in \Pi_T: m'(v) \ne 0 \text{ for some } v \in I_{u,h} = [u-h,u+h] \Big\}. \]
