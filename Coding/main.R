@@ -1,6 +1,7 @@
 source("functions.R")
 library(microbenchmark)
 
+set.seed(1)
 sigma <- 2
 T<-1000
 y_data <- rnorm(T, 0, sigma)
@@ -17,14 +18,14 @@ g_t_set_temp$values <-numeric(nrow(g_t_set_temp)) # Setting the values of the st
 g_t_set <- subset(g_t_set_temp, u - h >= 0 & u + h <= 1, select = c(u, h, values))
 g_t_set$lambda <- lambda(g_t_set[['h']])
 
-#psihat_statistic(y_data, g_t_set, epanechnikov_kernel, sigmahat)
+psihat_statistic(y_data, g_t_set, epanechnikov_kernel, sigmahat)
 #psihat_statistic_temp(y_data, g_t_set, epanechnikov_kernel, sigmahat)
 
-microbenchmark(psihat_statistic(y_data, g_t_set, epanechnikov_kernel, sigmahat))
+#microbenchmark(psihat_statistic(y_data, g_t_set, epanechnikov_kernel, sigmahat))
 microbenchmark(psihat_statistic_temp(y_data, g_t_set, epanechnikov_kernel, sigmahat))
 
-gaussian_statistic_distribution <- replicate(1000, {
-  z = rnorm(T, 0, 1)
-  z_temp = sigma * z
-  psihat_statistic(z_temp, g_t_set, k_function, sigma)
-})
+#gaussian_statistic_distribution <- replicate(1000, {
+#  z = rnorm(T, 0, 1)
+#  z_temp = sigma * z
+#  psihat_statistic(z_temp, g_t_set, epanechnikov_kernel, sigma)
+#})

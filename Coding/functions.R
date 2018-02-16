@@ -28,7 +28,7 @@ lambda <- function(h)
 # Meanwhile, the function also calculates
 # the norm ||K||_{u,h,T} of the kernel function.
 
-omega <- function(T, u, h, k_function, K_norm)
+omega <- function(T, u, h, k_function)
 {
   result_temp = c()
   K_norm_temp = 0 
