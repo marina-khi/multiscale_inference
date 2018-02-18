@@ -66,20 +66,21 @@ psi_average <- function(data, u, h, k_function)
 #   sigmahat: the estimator of the square root of the long-run error variance \sigma^2
 # It produces the value of the test statistic as an output
 
-psihat_statistic <- function(y_data, g_t_set, k_function = epanechnikov_kernel, sigmahat) {
-  g_t_set_card = nrow(g_t_set)
-  for (i in 1:g_t_set_card) {
-    g_t_set[['values']][i] <- abs(psi_average(y_data, .subset2(g_t_set,'u')[i], .subset2(g_t_set,'h')[i], k_function)/sigmahat) - .subset2(g_t_set, 'lambda')[i]
-  }
-  result = max(g_t_set$values)
-#  cat("Statistic:", result)
-  return(result)
-}
+#old version
+#psihat_statistic <- function(y_data, g_t_set, k_function = epanechnikov_kernel, sigmahat) {
+#  g_t_set_card = nrow(g_t_set)
+#  for (i in 1:g_t_set_card) {
+#    g_t_set[['values']][i] <- abs(psi_average(y_data, .subset2(g_t_set,'u')[i], .subset2(g_t_set,'h')[i], k_function)/sigmahat) - .subset2(g_t_set, 'lambda')[i]
+#  }
+#  result = max(g_t_set$values)
+#  return(result)
+#}
 
-psihat_statistic_temp <- function(y_data, g_t_set, kernel_function = epanechnikov_kernel, sigmahat) {
+psihat_statistic <- function(y_data, g_t_set, kernel_function = epanechnikov_kernel, sigmahat) {
   g_t_set$values <- abs(mapply(psi_average, u = g_t_set$u, h = g_t_set$h,
                                     MoreArgs = list(data = y_data, k_function = kernel_function))/sigmahat) - .subset2(g_t_set, 'lambda')
   result = max(g_t_set$values)
+#  cat("Statistic:", result)
   return(result)
 }
 
