@@ -32,7 +32,7 @@ def omega_function(T, u, h, k_function):
     result_temp = np.zeros(T)
     K_norm_temp = 0
     for i in range(T):
-        x = (u - i/T)/h
+        x = (u - (i+1)/T)/h
         k = k_function(x)
         result_temp[i] = k
         K_norm_temp = K_norm_temp + k*k
@@ -42,7 +42,7 @@ def omega_function(T, u, h, k_function):
 
 
 
-def psi_average(data, u_list, h_list, k_function):
+def psi_average(data, u_list, h_list, sigmahat, k_function):
     '''
     Kernel average function \psi_T(u,h) that takes u, h, data
     and the type of kernel function as arguments.
@@ -51,12 +51,11 @@ def psi_average(data, u_list, h_list, k_function):
     The output is one value for each u and h.
     '''
     T = len(data)
-    psi_average_list = []
+    psi_average_normed_list = []
     for u, h in zip(u_list, h_list):
-        psi_average_list.append(sum(omega_function(T, u, h, k_function)*data))
-    return psi_average_list
-
-
+        psi_average_normed = sum(omega_function(T, u, h, k_function)*data)
+        psi_average_normed_list.append(abs(psi_average_normed)/sigmahat)
+    return psi_average_normed_list
 
 
 def psihat_statistic(y_data, g_t_set, sigmahat, k_function = epanechnikov_kernel):
@@ -69,13 +68,9 @@ def psihat_statistic(y_data, g_t_set, sigmahat, k_function = epanechnikov_kernel
         sigmahat: the estimator of the square root of the long-run error variance \sigma^2
     It produces the value of the test statistic as an output
     '''
-    myList = psi_average(y_data, g_t_set.loc[:, 'u'], g_t_set.loc[:, 'h'], k_function)
-    g_t_set.loc[:,'values'] = [abs(i)/sigmahat - j for i,j in zip(myList, g_t_set['lambda_'])]
+    g_t_set.loc[:,'values'] = psi_average(y_data, g_t_set['u'], g_t_set['h'], sigmahat, k_function) - g_t_set['lambda_']
     result = g_t_set['values'].max()
-    return myList, result
-
-
-
+    return result
 '''
 # Function that calculates the auxiliary statistic \Psi^star_T.
 # It takes the following entities as arguments.
