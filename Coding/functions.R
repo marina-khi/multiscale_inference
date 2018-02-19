@@ -81,17 +81,11 @@ psihat_statistic <- function(y_data, g_t_set, kernel_function = epanechnikov_ker
                                     MoreArgs = list(data = y_data, k_function = kernel_function))/sigmahat) - .subset2(g_t_set, 'lambda')
   result = max(g_t_set$values)
 #  cat("Statistic:", result)
-  return(result)
+  return(list(g_t_set, result))
 }
 
 # Function that calculates the auxiliary statistic \Psi^star_T.
-# It takes the following entities as arguments.
-#   z_t: the independent standard normal random variables
-#   g_t_set: range of different locations u and bandwidths h
-#   k_function: type of kernel function
-#   sigma: the square root of the long-run error variance \sigma^2
-# It produces the value of the test statistic as an output
-# which is used further to calculate the critical values
+# The only difference with the previus function is in the return values.
 
 psistar_statistic <- function(z, g_t_set, k_function = epanechnikov_kernel, sigma) {
   g_t_set_card = nrow(g_t_set)
