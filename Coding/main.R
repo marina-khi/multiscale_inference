@@ -4,8 +4,9 @@ library(gsubfn)
 
 #Defining constants 
 sigma <- 2 #square root of long run-variance
-T<-1000
+T<-100
 alpha <-0.05
+noise_to_signal <- 2
 
 
 #Creating g_t_set over which we are taking the maximum (from Section 2.1)
@@ -21,26 +22,37 @@ g_t_set$lambda <- lambda(g_t_set[['h']]) #Calculating the lambda(h) in order to 
 
 #If we have already calculated quantiles and stored them in a file 'distribution.RData'
 #then no need to calculate them once more, we just load them from this file.
-if(!file.exists('distribution.RData')) {
-  gaussian_statistic_distribution <- replicate(1000, {
-    z = rnorm(T, 0, 1)
-    z_temp = sigma * z
-    psistar_statistic(z_temp, g_t_set, epanechnikov_kernel, sigma)
-  })
-  save(gaussian_statistic_distribution, file = 'distribution.RData')
-  } else {
-  load('distribution.RData')
-  }
+calculating_gaussian_quantile <- function(T){
+  filename = paste("distribution_with_T_equal_to_", T, ".RData", sep = "")
+  if(!file.exists(filename)) {
+    gaussian_statistic_distribution <- replicate(1000, {
+      z = rnorm(T, 0, 1)
+      z_temp = sigma * z
+      psistar_statistic(z_temp, g_t_set, epanechnikov_kernel, sigma)
+    })
+    save(gaussian_statistic_distribution, file = filename)
+    } else {
+    load(filename)
+    }
+  #Calculate the quantiles for gaussian statistic defined in the previous step
+  gaussian_quantile <- quantile(gaussian_statistic_distribution, probs = (1 - alpha), type = 1)
+  return(gaussian_quantile)
+}
 
-#Calculate the quantiles for gaussian statistic defined in the previous step
-gaussian_quantile <- quantile(gaussian_statistic_distribution, probs = (1 - alpha), type = 1)
+gaussian_quantile <- calculating_gaussian_quantile(100)
+gaussian_quantile <- calculating_gaussian_quantile(500)
+gaussian_quantile <- calculating_gaussian_quantile(1000)
+
 
 
 #Defining the data Y = m + noise
 set.seed(1) #For reproducibility
+
+a <- sqrt(4*48/(5*noise_to_signal))
+b <-0.5 * T/a
 m <- numeric(T)
 for (i in 1:T) {
-  if (i/T < 0.5) {m[i] <- 0} else {m[i] <- i - 0.5*T}
+  if (i/T < 0.5) {m[i] <- 0} else {m[i] <- (i - 0.5*T)/b}
 } 
 y_data_1 <- m + rnorm(T, 0, sigma)#Adding to noise a function that is 0 on the first half and linear on the second half
 y_data_2 <- 1 + rnorm(T, 0, sigma)#Adding constant function m=1
