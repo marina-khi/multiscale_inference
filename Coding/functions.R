@@ -88,3 +88,17 @@ psistar_statistic <- function(y_data, g_t_set, kernel_function = epanechnikov_ke
   result = max(g_t_set$values)
   return(result)
 }
+
+choosing_minimal_intervals <- function(dataset){
+  dataset <- dataset[order(-dataset$startpoint, dataset$endpoint),]
+  set_cardinality <- nrow(dataset)
+  for (i in 1:set_cardinality){
+    for (j in i:set_cardinality){
+      if ((dataset$startpoint[i] >= dataset$startpoint[j])&(dataset$endpoint[i]<dataset$endpoint[j])) {
+        cat("[",dataset$startpoint[i], ", " dataset$endpoint[i],"], [", dataset$startpoint[j], ", ", dataset$endpoint[j], sep="")
+        dataset <- dataset[-i,]
+        break
+      }
+    }
+  }
+}

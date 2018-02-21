@@ -10,15 +10,17 @@ noise_to_signal <- 2
 
 
 #Creating g_t_set over which we are taking the maximum (from Section 2.1)
-u <- seq(4/T, 1, length.out = T/4)
-h <- seq(3/T, 1/4+3/T, length.out = T/20)
+creating_g_set <- function(T){
+  u <- seq(4/T, 1, length.out = T/4)
+  h <- seq(3/T, 1/4+3/T, length.out = T/20)
 
-g_t_set_temp <- expand.grid(u = u, h = h) #Creating a dataframe with all possible combination of u and h
-g_t_set_temp$values <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
+  g_t_set_temp <- expand.grid(u = u, h = h) #Creating a dataframe with all possible combination of u and h
+  g_t_set_temp$values <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
 
-g_t_set <- subset(g_t_set_temp, u - h >= 0 & u + h <= 1, select = c(u, h, values)) #Subsetting u and h such that [u-h, u+h] lies in [0,1]
-g_t_set$lambda <- lambda(g_t_set[['h']]) #Calculating the lambda(h) in order to speed up the function psistar_statistic
-
+  g_t_set <- subset(g_t_set_temp, u - h >= 0 & u + h <= 1, select = c(u, h, values)) #Subsetting u and h such that [u-h, u+h] lies in [0,1]
+  g_t_set$lambda <- lambda(g_t_set[['h']]) #Calculating the lambda(h) in order to speed up the function psistar_statistic
+  return(g_t_set)
+}
 
 #If we have already calculated quantiles and stored them in a file 'distribution.RData'
 #then no need to calculate them once more, we just load them from this file.
@@ -39,10 +41,17 @@ calculating_gaussian_quantile <- function(T){
   return(gaussian_quantile)
 }
 
-gaussian_quantile <- calculating_gaussian_quantile(100)
-gaussian_quantile <- calculating_gaussian_quantile(500)
-gaussian_quantile <- calculating_gaussian_quantile(1000)
+############################################
+#Calculating quantiles for T=100, 500, 1000#
+############################################
+for (t in c(100)) {
+  g_t_set <- creating_g_set(t)
+  gaussian_quantile <- calculating_gaussian_quantile(t)
+}
 
+##################################
+#Calculating the statistic itself#
+##################################
 
 
 #Defining the data Y = m + noise
@@ -60,6 +69,7 @@ y_data_3 <- rnorm(T, 0, sigma)#Here the null hypothesis is true, m=0
 
 sigmahat <- sigma #Here will be the estimate of the square root of the long-run variance sigma^2
 
+g_t_set <- creating_g_set(T)
 
 #Auxiliary line for checking function time
 #microbenchmark(psihat_statistic(y_data, g_t_set, epanechnikov_kernel, sigmahat))
@@ -84,7 +94,12 @@ plotting_all_rejected_intervals <-function(data, plotname){
 
     #The collection of intervals where the corrected test statistic lies above the critical value (as in (2.6))
     a_t_set <- subset(g_t_set_with_values, values > gaussian_quantile, select = c(u, h, values))
-  
+    p_t_set <- data.frame('startpoint' = a_t_set$u - a_t_set$h,
+                          'endpoint' = a_t_set$u + a_t_set$h,
+                          'value' = a_t_set$values)
+    
+#    p_t_set <- choosing_minimal_intervals(p_t_set)
+      
     #The plotting itself
     jpeg(filename=plotname)
     ymaxlim = max(a_t_set$values)
@@ -93,7 +108,7 @@ plotting_all_rejected_intervals <-function(data, plotname){
     segments(a_t_set[['u']] - a_t_set[['h']], a_t_set[['values']], a_t_set[['u']] + a_t_set[['h']], a_t_set[['values']])
     dev.off()  
 
-    return(a_t_set)
+    return(list(a_t_set, p_t_set))
   } else {
     cat("We fail to reject H_0 with probability", alpha, "Psihat_statistic = ", psihat_statistic_value,
         "Gaussian quantile value = ", gaussian_quantile, "\n")
@@ -101,19 +116,9 @@ plotting_all_rejected_intervals <-function(data, plotname){
   }
 }
 
-a_t_set_1 <- plotting_all_rejected_intervals(y_data_1, "rightplot.jpg") #We expect to reject H_0 and the plot is mostly to the right
-a_t_set_2 <- plotting_all_rejected_intervals(y_data_2, "constantplot.jpg") #We expect to reject H_0 and the plot is everywhere
-a_t_set_3 <- plotting_all_rejected_intervals(y_data_3, "nullplot.jpg") #We expect to fail to reject H_0
+a_t_set_1 <- plotting_all_rejected_intervals(y_data_1, "rightplot.jpg")[[1]]
+p_t_set_1 <- plotting_all_rejected_intervals(y_data_1, "rightplot.jpg")[[2]]#We expect to reject H_0 and the plot is mostly to the right
+a_t_set_2 <- plotting_all_rejected_intervals(y_data_2, "constantplot.jpg")[[1]] #We expect to reject H_0 and the plot is everywhere
+a_t_set_3 <- plotting_all_rejected_intervals(y_data_3, "nullplot.jpg")[[1]] #We expect to fail to reject H_0
 
 a_t_set_1[which.min(a_t_set_1$u),]
-
-
-
-
-
-
-
-
-
-
-
