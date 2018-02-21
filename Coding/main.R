@@ -1,12 +1,12 @@
 source("functions.R")
 library(microbenchmark)
-library(gsubfn)
+
 
 #Defining constants 
 sigma <- 2 #square root of long run-variance
-T<-100
+T<-1000
 alpha <-0.05
-noise_to_signal <- 2
+noise_to_signal <- 1
 
 
 #Creating g_t_set over which we are taking the maximum (from Section 2.1)
@@ -44,7 +44,7 @@ calculating_gaussian_quantile <- function(T){
 ############################################
 #Calculating quantiles for T=100, 500, 1000#
 ############################################
-for (t in c(100)) {
+for (t in c(100,500,1000)) {
   g_t_set <- creating_g_set(t)
   gaussian_quantile <- calculating_gaussian_quantile(t)
 }
@@ -96,16 +96,24 @@ plotting_all_rejected_intervals <-function(data, plotname){
     a_t_set <- subset(g_t_set_with_values, values > gaussian_quantile, select = c(u, h, values))
     p_t_set <- data.frame('startpoint' = a_t_set$u - a_t_set$h,
                           'endpoint' = a_t_set$u + a_t_set$h,
-                          'value' = a_t_set$values)
+                          'values' = a_t_set$values)
     
-#    p_t_set <- choosing_minimal_intervals(p_t_set)
+    p_t_set <- choosing_minimal_intervals(p_t_set)
       
     #The plotting itself
     jpeg(filename=plotname)
-    ymaxlim = max(a_t_set$values)
-    yminlim = min(a_t_set$values)
+    ymaxlim = max(p_t_set$values)
+    yminlim = min(p_t_set$values)
     plot(NA, xlim=c(0,1), ylim = c(yminlim, ymaxlim + 1), xlab="x", ylab="y")
-    segments(a_t_set[['u']] - a_t_set[['h']], a_t_set[['values']], a_t_set[['u']] + a_t_set[['h']], a_t_set[['values']])
+    segments(p_t_set[['startpoint']], p_t_set[['values']], p_t_set[['endpoint']], p_t_set[['values']])
+    dev.off()  
+    
+    #The plotting itself
+    jpeg(filename=cat("level_", plotname, sep=""))
+    ymaxlim = max(p_t_set$values)
+    yminlim = min(p_t_set$values)
+    plot(NA, xlim=c(0,1), ylim = c(yminlim, ymaxlim + 1), xlab="x", ylab="y")
+    segments(p_t_set[['startpoint']], 1, p_t_set[['endpoint']], 1)
     dev.off()  
 
     return(list(a_t_set, p_t_set))
@@ -117,7 +125,7 @@ plotting_all_rejected_intervals <-function(data, plotname){
 }
 
 a_t_set_1 <- plotting_all_rejected_intervals(y_data_1, "rightplot.jpg")[[1]]
-p_t_set_1 <- plotting_all_rejected_intervals(y_data_1, "rightplot.jpg")[[2]]#We expect to reject H_0 and the plot is mostly to the right
+p_t_set_1 <- plotting_all_rejected_intervals(y_data_1, "rightplot.jpg")[[2]]
 a_t_set_2 <- plotting_all_rejected_intervals(y_data_2, "constantplot.jpg")[[1]] #We expect to reject H_0 and the plot is everywhere
 a_t_set_3 <- plotting_all_rejected_intervals(y_data_3, "nullplot.jpg")[[1]] #We expect to fail to reject H_0
 

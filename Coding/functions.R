@@ -90,15 +90,20 @@ psistar_statistic <- function(y_data, g_t_set, kernel_function = epanechnikov_ke
 }
 
 choosing_minimal_intervals <- function(dataset){
-  dataset <- dataset[order(-dataset$startpoint, dataset$endpoint),]
-  set_cardinality <- nrow(dataset)
-  for (i in 1:set_cardinality){
-    for (j in i:set_cardinality){
-      if ((dataset$startpoint[i] >= dataset$startpoint[j])&(dataset$endpoint[i]<dataset$endpoint[j])) {
-        cat("[",dataset$startpoint[i], ", " dataset$endpoint[i],"], [", dataset$startpoint[j], ", ", dataset$endpoint[j], sep="")
-        dataset <- dataset[-i,]
-        break
+  set_cardinality <- nrow(dataset) 
+  if (set_cardinality > 1) {
+    dataset <- dataset[order(dataset$startpoint, -dataset$endpoint),]
+    rownames(dataset) <- 1:nrow(dataset)
+    dataset[['contains']] <- numeric(set_cardinality)
+    for (i in 1:(set_cardinality-1)){
+      for (j in (i+1):set_cardinality){
+        if ((dataset$startpoint[i] <= dataset$startpoint[j])&(dataset$endpoint[i] >= dataset$endpoint[j])) {
+#          cat("[",dataset$startpoint[i], ", ", dataset$endpoint[i],"], [", dataset$startpoint[j], ", ", dataset$endpoint[j], "]", sep="")
+          dataset[['contains']][i] <- 1
+          break
+        }
       }
     }
+    p_t_set <- subset(dataset, contains == 0, select = c(startpoint, endpoint, values))
   }
 }
