@@ -57,14 +57,17 @@ for (t in c(100,500,1000)) {
 #Defining the data Y = m + noise
 set.seed(1) #For reproducibility
 
-a <- sqrt(4*48/(5*noise_to_signal))
+a <- sqrt(6*sigma*sigma/noise_to_signal)
 b <-0.5 * T/a
 m <- numeric(T)
 for (i in 1:T) {
   if (i/T < 0.5) {m[i] <- 0} else {m[i] <- (i - 0.5*T)/b}
 } 
+
+const <- sqrt(sigma*sigma/noise_to_signal)
+
 y_data_1 <- m + rnorm(T, 0, sigma)#Adding to noise a function that is 0 on the first half and linear on the second half
-y_data_2 <- 1 + rnorm(T, 0, sigma)#Adding constant function m=1
+y_data_2 <- const + rnorm(T, 0, sigma)#Adding constant function m=const
 y_data_3 <- rnorm(T, 0, sigma)#Here the null hypothesis is true, m=0
 
 sigmahat <- sigma #Here will be the estimate of the square root of the long-run variance sigma^2
@@ -109,7 +112,8 @@ plotting_all_rejected_intervals <-function(data, plotname){
     dev.off()  
     
     #The plotting itself
-    jpeg(filename=cat("level_", plotname, sep=""))
+    second_plotname <- cat("level_", plotname, sep="")
+    jpeg(filename=second_plotname)
     ymaxlim = max(p_t_set$values)
     yminlim = min(p_t_set$values)
     plot(NA, xlim=c(0,1), ylim = c(yminlim, ymaxlim + 1), xlab="x", ylab="y")
