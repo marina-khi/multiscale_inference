@@ -5,61 +5,6 @@
 #include <Rmath.h>
 
 
-  double awert(double x)
-  { if(x < 0) 
-      return(-x);
-    else
-      return(x);
-  }
-
-
-  
-  double epanc(double x, double xi, double h)
-  {       double lower, upper;
-          if(xi > 1 || xi < 0)
-	     return(0.0);
-          else
-	  {  if(awert(x-xi) < h) 
-	     {  if(1-xi < h)  
-                   upper = (1-xi) * (1 - (1-xi) * (1-xi)/(h*h*3.0))/h;
-                else 
-                   upper = 2.0/3.0;
-                if(xi < h)
-                   lower = -xi * (1 - xi * xi/(h*h*3.0))/h;
-                else
-                   lower = -2.0/3.0;
-                return((1- (x-xi) * (x-xi)/(h*h))/(upper-lower)) ;
-             }
-             else
-                return(0.0);
-          }
-  }
-
-
-
-  double biweight(double x, double xi, double h)
-  {       double lower, upper;
-          if(xi > 1 || xi < 0)
-	     return(0.0);
-          else
-	  {  if(awert(x-xi) < h) 
-	     {  if(1-xi < h)  
-		 upper = ((1-xi)/h) * (1 - (2.0/3.0) * pow((1-xi)/h,2) +  (1.0/5.0) * pow((1-xi)/h,4));
-                else 
-                   upper = 8.0/15.0;
-                if(xi < h)
-                   lower =  (-xi/h) * (1 - (2.0/3.0) * pow(-xi/h,2) +  (1.0/5.0) * pow(-xi/h,4));
-                else
-                   lower = -8.0/15.0;
-                return((1 - pow((x-xi)/h,2)) * (1 - pow((x-xi)/h,2)) / (upper-lower));
-             }
-             else
-                return(0.0);
-          }
-  }
-
-
-
   void sbfnw(double *x, double *y, int *n, int *dim, double *grid, int *ng, double *h, 
              double *dens, double *m0, double *mbf, double *reg, int *iterate, double *conv, 
              double *fh_int, double *fh_int2a, double *fh_int2b, double *reg_int)

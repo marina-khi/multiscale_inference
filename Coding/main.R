@@ -1,5 +1,8 @@
 source("functions.R")
-library(microbenchmark)
+
+dyn.load("psihat_statistic.dll")
+source("psihat_statistic.R")
+#library(microbenchmark)
 
 
 #Defining constants 
@@ -8,19 +11,6 @@ T<-1000
 alpha <-0.05
 noise_to_signal <- 1
 
-
-#Creating g_t_set over which we are taking the maximum (from Section 2.1)
-creating_g_set <- function(T){
-  u <- seq(4/T, 1, length.out = T/4)
-  h <- seq(3/T, 1/4+3/T, length.out = T/20)
-
-  g_t_set_temp <- expand.grid(u = u, h = h) #Creating a dataframe with all possible combination of u and h
-  g_t_set_temp$values <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
-
-  g_t_set <- subset(g_t_set_temp, u - h >= 0 & u + h <= 1, select = c(u, h, values)) #Subsetting u and h such that [u-h, u+h] lies in [0,1]
-  g_t_set$lambda <- lambda(g_t_set[['h']]) #Calculating the lambda(h) in order to speed up the function psistar_statistic
-  return(g_t_set)
-}
 
 #If we have already calculated quantiles and stored them in a file 'distribution.RData'
 #then no need to calculate them once more, we just load them from this file.
@@ -57,16 +47,17 @@ for (t in c(100,500,1000)) {
 #Defining the data Y = m + noise
 set.seed(1) #For reproducibility
 
-a <- sqrt(6*sigma*sigma/noise_to_signal)
-b <-0.5 * T/a
+#Adding a function that is 0 on the first half and linear on the second half
+a <- sqrt(6*sigma*sigma/noise_to_signal)#This is the value of m(1), it depends on Var(e) and Noise to Signal Ratio
+b <-0.5 * T/a #Constant needed just for calculation
 m <- numeric(T)
 for (i in 1:T) {
   if (i/T < 0.5) {m[i] <- 0} else {m[i] <- (i - 0.5*T)/b}
 } 
-
+y_data_1 <- m + rnorm(T, 0, sigma)
 const <- sqrt(sigma*sigma/noise_to_signal)
 
-y_data_1 <- m + rnorm(T, 0, sigma)#Adding to noise a function that is 0 on the first half and linear on the second half
+
 y_data_2 <- const + rnorm(T, 0, sigma)#Adding constant function m=const
 y_data_3 <- rnorm(T, 0, sigma)#Here the null hypothesis is true, m=0
 
@@ -83,7 +74,7 @@ g_t_set <- creating_g_set(T)
 #gaussian version. This function needs to be called only in environment
 #with g_t_set and sigmahat defined.
 #Returns the set with regions and value of the statistic in this regions.
-plotting_all_rejected_intervals <-function(data, plotname){
+plotting_all_rejected_intervals <-function(data, plotname, second_plotname){
   
   #Calculating our statistic
   result <-psihat_statistic(data, g_t_set, epanechnikov_kernel, sigmahat)
@@ -112,12 +103,12 @@ plotting_all_rejected_intervals <-function(data, plotname){
     dev.off()  
     
     #The plotting itself
-    second_plotname <- cat("level_", plotname, sep="")
+#    second_plotname <- cat("level_", plotname, sep="")
     jpeg(filename=second_plotname)
     ymaxlim = max(p_t_set$values)
     yminlim = min(p_t_set$values)
     plot(NA, xlim=c(0,1), ylim = c(yminlim, ymaxlim + 1), xlab="x", ylab="y")
-    segments(p_t_set[['startpoint']], 1, p_t_set[['endpoint']], 1)
+    segments(p_t_set[['startpoint']], (yminlim + ymaxlim)/2, p_t_set[['endpoint']], (yminlim + ymaxlim)/2)
     dev.off()  
 
     return(list(a_t_set, p_t_set))
@@ -128,9 +119,9 @@ plotting_all_rejected_intervals <-function(data, plotname){
   }
 }
 
-a_t_set_1 <- plotting_all_rejected_intervals(y_data_1, "rightplot.jpg")[[1]]
-p_t_set_1 <- plotting_all_rejected_intervals(y_data_1, "rightplot.jpg")[[2]]
-a_t_set_2 <- plotting_all_rejected_intervals(y_data_2, "constantplot.jpg")[[1]] #We expect to reject H_0 and the plot is everywhere
-a_t_set_3 <- plotting_all_rejected_intervals(y_data_3, "nullplot.jpg")[[1]] #We expect to fail to reject H_0
+a_t_set_1 <- plotting_all_rejected_intervals(y_data_1, "rightplot.jpg", "level_rightplot.jpg")[[1]]
+p_t_set_1 <- plotting_all_rejected_intervals(y_data_1, "rightplot.jpg", "level_rightplot.jpg")[[2]]
+a_t_set_2 <- plotting_all_rejected_intervals(y_data_2, "constantplot.jpg", "level_constantplot.jpg")[[1]] #We expect to reject H_0 and the plot is everywhere
+a_t_set_3 <- plotting_all_rejected_intervals(y_data_3, "nullplot.jpg", "level_nullplot.jpg")[[1]] #We expect to fail to reject H_0
 
 a_t_set_1[which.min(a_t_set_1$u),]

@@ -1,58 +1,68 @@
-# Epanechnikov kernel function,
-# which is defined as f(x) = 3/4(1-x^2)
-# for |x|<=1 and 0 elsewhere
-epanechnikov_kernel <- function(x)
-{
-  if (abs(x)<=1)
-  {
-    result = 3/4 * (1 - x*x)
-  } else {
-    result = 0
-  }
-  return(result)
+psihat_statistic <- function(y_data, g_t_set, kernel_function = epanechnikov, sigmahat){
+  #Wrapper of a C function from psihat_statistic.C
+  #Arguments:
+  # y_data          vector of length T 
+  # g_t_set         dataframe with columns "u", "h", "values" (equal to 0), "lambda"
+  # kernel_function type of kernel function used. Currently only epanechnikov and biweight kernels are supported
+  # sigmahat        appropriate estimate of sqrt(long-run variance)
+  
+  T <- as.integer(length(y_data))
+
+  #Passing an indicator to C functions that determines a necessary kernel function
+  if (kernel_function = epanechnikov) {kernel_ind = 1}
+  else {kernel_ind = 2}
+
+  
+  
+    
+  d <- as.integer(dim(x)[2])
+
+if (!n == length(y))
+  stop("Predictor and Response of different length")
+
+if (!length(bw) == d)
+  stop("Wrong dimension of bandwidth vector")
+
+storage.mode(x)       <- "double"
+storage.mode(y)       <- "double"
+storage.mode(bw)      <- "double"
+storage.mode(N)       <- "integer"
+storage.mode(iterate) <- "integer"
+
+if(grids==TRUE)
+  Grid <- Grid1
+else
+  Grid <- rep(seq(0,1,1/(N-1)),d)
+
+L <- ceiling(0.5*d*(d-1)*N)
+L <- as.integer(L)
+
+
+xvec     <- as.vector(x)
+gridvec  <- as.vector(Grid)
+m0       <- vector(mode="double",length=1)
+kde      <- vector(mode="double",length=d*N)
+regbf    <- vector(mode="double",length=d*N)
+regnw    <- regbf       
+conv     <- vector(mode="double",length=d)
+fh_int   <- vector(mode="double",length=d)
+fh_int2a <- vector(mode="double",length=L)
+fh_int2b <- vector(mode="double",length=L)  
+reg_int  <- vector(mode="double",length=d) 
+
+
+result <- .C("sbfnw", xvec, y, n, d, gridvec, N, bw, kde, m0, regbf, regnw,
+             iterate, conv, fh_int, fh_int2a, fh_int2b, reg_int)
+
+list(grid=matrix(result[[5]], ncol=d),bw=result[[7]], kde=matrix(result[[8]], ncol=d),
+     m0=result[[9]], sbf=matrix(result[[10]], ncol=d), nwr=matrix(result[[11]], ncol=d),
+     iteration=result[[12]], conv=result[[13]], fh_int=matrix(result[[14]],ncol=d),
+     fh_int2a=matrix(result[[15]],ncol=ceiling(0.5*d*(d-1))),
+     fh_int2b=matrix(result[[16]],ncol=ceiling(0.5*d*(d-1))), 
+     nwr_int=matrix(result[[17]],ncol=d)) 
 }
 
 
-# Additive correction tern \lambda(h) that depends only on the bandwidth h
-lambda <- function(h)
-{
-  result = tryCatch(sqrt(2*log(1/(2*h))), warning = function(w) print("h is exceeding h_max"))
-  return(result)
-}
-
-
-# Kernel weight function that calculates
-# the vector of (\omega_{1,T}(u,h), \ldots, \omega_{T,T}(u,h)).
-# Meanwhile, the function also calculates
-# the norm ||K||_{u,h,T} of the kernel function.
-omega <- function(T, u, h, k_function)
-{
-  result_temp = c()
-  K_norm_temp = 0 
-  for (i in 1:T) {
-    x = (u - i/T)/h
-    k = k_function(x)
-    result_temp[i] = k
-    K_norm_temp = K_norm_temp + k^2
-  }
-  K_norm = sqrt(K_norm_temp)
-  result = result_temp / K_norm
-  #  cat("K_norm:", K_norm, " omega_t:", result)
-  return(result)
-}
-
-
-# Kernel average function \psi_T(u,h) that takes u, h, data
-# and the type of kernel function as arguments.
-# The data can be y_data for \hat{\Psi}_T or independent gaussian rv
-# z_temp = sigma*z for \Psi^star_T.
-# The output is one value for each u and h.
-psi_average <- function(data, u, h, k_function)
-{
-  T = length(data)
-  result = sum(omega(T, u, h, k_function)*data)
-  return(result)
-}
 
 
 # Function that calculates the multiscale statistic \hat{\Psi}_T.
