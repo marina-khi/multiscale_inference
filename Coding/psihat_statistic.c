@@ -1,10 +1,8 @@
 /*
 Filename: "psihat_statistic.c"
-Return a vectors of sequentially summed values
-Arguments:
-start -- value to start the sum at
-size -- the number of elements to return
-sumVect -- the vector of summed output values
+Returns value of \Psi^hat_statistic together with the values of
+kernel averages \psi_T(u, h) for each u and h from g_t_set.
+Arguments are described in the function itself.
 */
 
 #include <math.h> 
@@ -69,7 +67,7 @@ double psi_average(double data[], int T, double u, double h, int k_function){
 	k = 0;
 	if (k_function == 1) {
 		for (i = 0; i < T; i++) {
-			k = epanc((u - i /(float)T) / h);
+			k = epanc((u - (i + 1) /(float)T) / h);
 			result_temp += k * data[i];
 			k_norm += k * k;
 /*			Rprintf("We are here, %f, %f, %f\n", k, result_temp, k_norm);*/
@@ -77,7 +75,7 @@ double psi_average(double data[], int T, double u, double h, int k_function){
 	}
 	else {
 		for (i = 0; i < T; i++) {
-			k = biweight_derivative((u - i / (float)T) / h);
+			k = biweight_derivative((u - (i + 1) / (float)T) / h);
 			result_temp += k * data[i];
 			k_norm += k * k;
 /*	   		Rprintf("We are here, %f, %f, %f\n", k, result_temp, k_norm); */   	
@@ -95,24 +93,20 @@ void psihat_statistic(double *y_data, int *T, double *g_t_set, int *N, int *k_fu
                 N        	length of the grid
                 g_t_set   	grid vector grid= (u_1,...,u_N, g_1,...,g_N, lambda_1,...lambda_N)
                 k_function	integer that indicates kernel function, 1 = epanechnikov kernel, 2 = derivative of biweight kernel
+				sigmahat	appropriate estimator for sigma
                 maximum		return: value of the test statistic
 				values		return: vector of values psi_average for each (u, h) from the grid
 			*/
-	int i, kernel_ind, ndim;
-	double max;
-    
-    kernel_ind = k_function[0];
-    ndim = N[0];
+	int i;
  	
- 	for (i=0; i < ndim; i++) {
-    	values[i] = awert(psi_average(y_data, T[0], g_t_set[i], g_t_set[i + ndim], kernel_ind) / sigmahat[0]) - g_t_set[2 *ndim +i];
+ 	for (i=0; i < N[0]; i++) {
+    	values[i] = awert(psi_average(y_data, T[0], g_t_set[i], g_t_set[i + N[0]], k_function[0]) / sigmahat[0]) - g_t_set[2 * N[0] +i];
 /*    	Rprintf("%f, %f, %f, %f\n",tmp1, tmp2, tmp3, values[i]);*/
     	if (i == 0) {
-    		max = values[i];
-    	} else if (values[i] > max) {
-    			max = values[i];
+    		maximum[0] = values[i];
+    	} else if (values[i] > maximum[0]) {
+    		maximum[0] = values[i];
 /*    			Rprintf("%f %d\n",max,i);*/
     	}
   	}
-  	maximum[0] = max;	
 }

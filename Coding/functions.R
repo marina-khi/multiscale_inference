@@ -34,10 +34,11 @@ omega <- function(T, u, h, k_function)
     k = k_function(x)
     result_temp[i] = k
     K_norm_temp = K_norm_temp + k^2
+#    cat("k:", k, " omega_t_temp:", result_temp[i], "i = ", i, "\n")
   }
   K_norm = sqrt(K_norm_temp)
   result = result_temp / K_norm
-#  cat("K_norm:", K_norm, " omega_t:", result)
+
   return(result)
 }
 
@@ -62,26 +63,15 @@ psi_average <- function(data, u, h, k_function)
 #   k_function: type of kernel function
 #   sigmahat: the estimator of the square root of the long-run error variance \sigma^2
 # It produces the value of the test statistic as an output
-psihat_statistic <- function(y_data, g_t_set, kernel_function = epanechnikov_kernel, sigmahat) {
+psihat_statistic_old <- function(y_data, g_t_set, kernel_function = epanechnikov_kernel, sigmahat) {
   g_t_set$values <- abs(mapply(psi_average, u = g_t_set$u, h = g_t_set$h,
                                     MoreArgs = list(data = y_data, k_function = kernel_function))/sigmahat) - .subset2(g_t_set, 'lambda')
   result = max(g_t_set$values)
   return(list(g_t_set, result))
 }
 
-#old version
-#psihat_statistic <- function(y_data, g_t_set, k_function = epanechnikov_kernel, sigmahat) {
-#  g_t_set_card = nrow(g_t_set)
-#  for (i in 1:g_t_set_card) {
-#    g_t_set[['values']][i] <- abs(psi_average(y_data, .subset2(g_t_set,'u')[i], .subset2(g_t_set,'h')[i], k_function)/sigmahat) - .subset2(g_t_set, 'lambda')[i]
-#  }
-#  result = max(g_t_set$values)
-#  return(result)
-#}
-
-
 # Function that calculates the auxiliary statistic \Psi^star_T.
-# The only difference with the previus function is in the return values.
+# The only difference with the previous function is in the return values.
 psistar_statistic <- function(y_data, g_t_set, kernel_function = epanechnikov_kernel, sigmahat) {
   g_t_set$values <- abs(mapply(psi_average, u = g_t_set$u, h = g_t_set$h,
                                MoreArgs = list(data = y_data, k_function = kernel_function))/sigmahat) - .subset2(g_t_set, 'lambda')
@@ -89,8 +79,7 @@ psistar_statistic <- function(y_data, g_t_set, kernel_function = epanechnikov_ke
   return(result)
 }
 
-
-#This functions chooses minimal intervals as described in Dumbgen()
+#This functions chooses minimal intervals as described in Duembgen(2002)
 choosing_minimal_intervals <- function(dataset){
   set_cardinality <- nrow(dataset) 
   if (set_cardinality > 1) {

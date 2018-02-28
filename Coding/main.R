@@ -1,51 +1,58 @@
-#source("functions.R")
-
-dyn.load("psihat_statistic.dll")
-source("functions_with_C.R")
 library(microbenchmark)
+source("functions.R")
+dyn.load("psihat_statistic.dll")
+source("psihat_statistic.R")
 
+##############################
+#Defining necessary constants#
+##############################
 
-#Defining constants 
 sigma <- 2 #square root of long run-variance
-T<-1000
+T<-100 #length 
 alpha <-0.05
 noise_to_signal <- 1
+sigmahat <- sigma #Here will be the estimate of the square root of the long-run variance sigma^2
+kernel_f = "epanechnikov" #Only "epanechnikov" and "biweight" kernel functions are currently supported
+if (kernel_f == "epanechnikov"){
+  kernel_ind = 1
+} else if (kernel_f == "biweight"){
+  kernel_ind = 2
+} else {
+  print('Currently only Epanechnikov and Biweight kernel functions are supported')
+}
 
+#####################################
+#Calculating gaussian quantile for T#
+#####################################
 
 #If we have already calculated quantiles and stored them in a file 'distribution.RData'
 #then no need to calculate them once more, we just load them from this file.
-calculating_gaussian_quantile <- function(T){
+#Ohterwise simulate the statistic 1000 times in order to calculate the qunatiles
+calculating_gaussian_quantile <- function(T, g_t_set, sigmahat, alpha = 0.05){
   filename = paste("distribution_with_T_equal_to_", T, ".RData", sep = "")
   if(!file.exists(filename)) {
     gaussian_statistic_distribution <- replicate(1000, {
       z = rnorm(T, 0, 1)
-      z_temp = sigma * z
-      psistar_statistic(z_temp, g_t_set, epanechnikov_kernel, sigma)
+      z_temp = sigmahat * z
+      psistar_statistic(z_temp, g_t_set, kernel_ind, sigmahat)
     })
     save(gaussian_statistic_distribution, file = filename)
-    } else {
+  } else {
     load(filename)
-    }
+  }
   #Calculate the quantiles for gaussian statistic defined in the previous step
   gaussian_quantile <- quantile(gaussian_statistic_distribution, probs = (1 - alpha), type = 1)
   return(gaussian_quantile)
 }
 
-############################################
-#Calculating quantiles for T=100, 500, 1000#
-############################################
-for (t in c(100,500,1000)) {
-  g_t_set <- creating_g_set(t)
-  gaussian_quantile <- calculating_gaussian_quantile(t)
-}
-
-##################################
-#Calculating the statistic itself#
-##################################
+g_t_set <- creating_g_set(T)
+gaussian_quantile <- calculating_gaussian_quantile(T, g_t_set, sigmahat, alpha)
 
 
-#Defining the data Y = m + noise
-set.seed(1) #For reproducibility
+#################################################
+#Defining the data for simulations Y = m + noise#
+#################################################
+set.seed(16) #For reproducibility
 
 #Adding a function that is 0 on the first half and linear on the second half
 a <- sqrt(6*sigma*sigma/noise_to_signal)#This is the value of m(1), it depends on Var(e) and Noise to Signal Ratio
@@ -55,19 +62,32 @@ for (i in 1:T) {
   if (i/T < 0.5) {m[i] <- 0} else {m[i] <- (i - 0.5*T)/b}
 } 
 y_data_1 <- m + rnorm(T, 0, sigma)
+
+#Adding a function that is const on the whole interval
 const <- sqrt(sigma*sigma/noise_to_signal)
+y_data_2 <- const + rnorm(T, 0, sigma)
+
+#Not adding anything, here the null hypothesis is true
+y_data_3 <- rnorm(T, 0, sigma)
 
 
-y_data_2 <- const + rnorm(T, 0, sigma)#Adding constant function m=const
-y_data_3 <- rnorm(T, 0, sigma)#Here the null hypothesis is true, m=0
+##################################
+#Calculating the statistic itself#
+##################################
 
-sigmahat <- sigma #Here will be the estimate of the square root of the long-run variance sigma^2
+#Auxiliary lines for checking function time
+#microbenchmark(psihat_statistic(y_data_1, g_t_set, kernel_ind, sigmahat))
+#microbenchmark(psihat_statistic_old(y_data_1, g_t_set, epanechnikov_kernel, sigmahat))
 
-g_t_set <- creating_g_set(T)
 
-#Auxiliary line for checking function time
-microbenchmark(psihat_statistic(y_data_1, g_t_set, 1, sigmahat))
+#Comparing C function with R function 
+result <-psihat_statistic(y_data_1, g_t_set, kernel_ind, sigmahat)
+g_t_set_with_values <- result[[1]]
+psihat_statistic_value <- result[[2]]
 
+result_old <-psihat_statistic_old(y_data_1, g_t_set, epanechnikov_kernel, sigmahat)
+g_t_set_with_values <- result_old[[1]]
+psihat_statistic_value <- result_old[[2]]
 
 #Function that takes the data as argument and plots the regions where
 #the corrected test statistic is bigger than the critical value of the 
@@ -77,7 +97,7 @@ microbenchmark(psihat_statistic(y_data_1, g_t_set, 1, sigmahat))
 plotting_all_rejected_intervals <-function(data, plotname, second_plotname){
   
   #Calculating our statistic
-  result <-psihat_statistic(data, g_t_set, 1, sigmahat)
+  result <-psihat_statistic(data, g_t_set, kernel_ind, sigmahat)
   g_t_set_with_values <- result[[1]]
   psihat_statistic_value <- result[[2]]
   
@@ -119,7 +139,7 @@ plotting_all_rejected_intervals <-function(data, plotname, second_plotname){
   }
 }
 
-a_t_set_1 <- plotting_all_rejected_intervals(y_data_1, "rightplot.jpg", "level_rightplot.jpg")[[1]]
+#a_t_set_1 <- plotting_all_rejected_intervals(y_data_1, "rightplot.jpg", "level_rightplot.jpg")[[1]]
 #p_t_set_1 <- plotting_all_rejected_intervals(y_data_1, "rightplot.jpg", "level_rightplot.jpg")[[2]]
 #a_t_set_2 <- plotting_all_rejected_intervals(y_data_2, "constantplot.jpg", "level_constantplot.jpg")[[1]] #We expect to reject H_0 and the plot is everywhere
 #a_t_set_3 <- plotting_all_rejected_intervals(y_data_3, "nullplot.jpg", "level_nullplot.jpg")[[1]] #We expect to fail to reject H_0
