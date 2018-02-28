@@ -8,10 +8,10 @@ sumVect -- the vector of summed output values
 */
 
 #include <math.h> 
-#include <Rinternals.h> 
 #include <R.h>
+#include <Rmath.h> 
 #include <stdlib.h> 
-#include <Rmath.h>
+#include <stdio.h>
 
 double awert(double x){
 	/*
@@ -63,54 +63,62 @@ double psi_average(double data[], int T, double u, double h, int k_function){
 	The output is one value for each u and h.
 	*/
 	int i;
-	double result, k, k_norm;
-	result = 0;
+	double result, result_temp, k, k_norm;
+	result_temp = 0;
 	k_norm = 0;
+	k = 0;
 	if (k_function == 1) {
 		for (i = 0; i < T; i++) {
 			k = epanc((u - i /(float)T) / h);
-			result += k * data[i];
+			result_temp += k * data[i];
 			k_norm += k * k;
-		}
+/*			Rprintf("We are here, %f, %f, %f\n", k, result_temp, k_norm);*/
+		} 		    	
 	}
 	else {
 		for (i = 0; i < T; i++) {
 			k = biweight_derivative((u - i / (float)T) / h);
-			result += k * data[i];
+			result_temp += k * data[i];
 			k_norm += k * k;
+/*	   		Rprintf("We are here, %f, %f, %f\n", k, result_temp, k_norm); */   	
 		}
 	}
-	return(result / sqrt(k_norm));
+	result = result_temp / sqrt(k_norm);
+/*	Rprintf("We are here, %f, %f, %f, %d\n", result, result_temp, k_norm, k_function);*/
+	return(result);
 }
 
 
-void sumSeq(int *start, int *size, int *sumVect){
-    /*
-    This function provides a simple sequential sum
-    where F[n] = F[n-1] + n
-    */
-    int i, j ;
-    j = 0 ;
-    for(i = *start; i < (*start + *size); i++){
-        if(i == *start){
-            sumVect[j] = i ;
-        }
-        else{
-            sumVect[j] = sumVect[j-1] + i ;
-        }
-        j ++ ;
-    }
-}
-
-void fiboSeq(int *size, int *sumVect){
-    /*
-    This function returns the Fibonacci sequence
-    where F[n] = F[n-1] + F[n-2]
-    */
-    int i ;
-    sumVect[0] = 0 ;
-    sumVect[1] = 1 ;
-    for(i = 2; i < *size; i++){
-        sumVect[i] = sumVect[i-1] + sumVect[i-2] ;
-    }
+void psihat_statistic(double *y_data, int *T, double *g_t_set, int *N, int *k_function, double *sigmahat, double *maximum, double *values){
+             /* y_data		list of y_t values y= (y_1,...,y_n)
+                T        	length of time series
+                N        	length of the grid
+                g_t_set   	grid vector grid= (u_1,...,u_N, g_1,...,g_N, lambda_1,...lambda_N)
+                k_function	integer that indicates kernel function, 1 = epanechnikov kernel, 2 = derivative of biweight kernel
+                maximum		return: value of the test statistic
+				values		return: vector of values psi_average for each (u, h) from the grid
+			*/
+	int i, kernel_ind, ndim;
+	double max, tmp1, tmp2, tmp3;
+    
+    kernel_ind = k_function[0];
+    ndim = N[0];
+    tmp1 = 0;
+    tmp2 = 0;
+    tmp3 = 0;   
+ 	
+ 	for (i=0; i < ndim; i++) {
+ 		tmp1 = psi_average(y_data, T[0], g_t_set[i], g_t_set[i + ndim], kernel_ind);
+ 		tmp2 = tmp1 / (float) sigmahat[0];
+ 		tmp3 = g_t_set[2 *ndim +i];
+    	values[i] = awert(tmp2) - tmp3;
+/*    	Rprintf("%f, %f, %f, %f\n",tmp1, tmp2, tmp3, values[i]);*/
+    	if (i == 0) {
+    		max = values[i];
+    	} else if (values[i] > max) {
+    			max = values[i];
+/*    			Rprintf("%f %d\n",max,i);*/
+    	}
+  	}
+  	maximum[0] = max;	
 }

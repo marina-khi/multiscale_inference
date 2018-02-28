@@ -1,8 +1,8 @@
-source("functions.R")
+#source("functions.R")
 
 dyn.load("psihat_statistic.dll")
-source("psihat_statistic.R")
-#library(microbenchmark)
+source("functions_with_C.R")
+library(microbenchmark)
 
 
 #Defining constants 
@@ -66,7 +66,7 @@ sigmahat <- sigma #Here will be the estimate of the square root of the long-run 
 g_t_set <- creating_g_set(T)
 
 #Auxiliary line for checking function time
-#microbenchmark(psihat_statistic(y_data, g_t_set, epanechnikov_kernel, sigmahat))
+microbenchmark(psihat_statistic(y_data_1, g_t_set, 1, sigmahat))
 
 
 #Function that takes the data as argument and plots the regions where
@@ -77,7 +77,7 @@ g_t_set <- creating_g_set(T)
 plotting_all_rejected_intervals <-function(data, plotname, second_plotname){
   
   #Calculating our statistic
-  result <-psihat_statistic(data, g_t_set, epanechnikov_kernel, sigmahat)
+  result <-psihat_statistic(data, g_t_set, 1, sigmahat)
   g_t_set_with_values <- result[[1]]
   psihat_statistic_value <- result[[2]]
   
@@ -95,21 +95,21 @@ plotting_all_rejected_intervals <-function(data, plotname, second_plotname){
     p_t_set <- choosing_minimal_intervals(p_t_set)
       
     #The plotting itself
-    jpeg(filename=plotname)
-    ymaxlim = max(p_t_set$values)
-    yminlim = min(p_t_set$values)
-    plot(NA, xlim=c(0,1), ylim = c(yminlim, ymaxlim + 1), xlab="x", ylab="y")
-    segments(p_t_set[['startpoint']], p_t_set[['values']], p_t_set[['endpoint']], p_t_set[['values']])
-    dev.off()  
+#    jpeg(filename=plotname)
+#    ymaxlim = max(p_t_set$values)
+#    yminlim = min(p_t_set$values)
+#    plot(NA, xlim=c(0,1), ylim = c(yminlim, ymaxlim + 1), xlab="x", ylab="y")
+#    segments(p_t_set[['startpoint']], p_t_set[['values']], p_t_set[['endpoint']], p_t_set[['values']])
+#    dev.off()  
     
     #The plotting itself
 #    second_plotname <- cat("level_", plotname, sep="")
-    jpeg(filename=second_plotname)
-    ymaxlim = max(p_t_set$values)
-    yminlim = min(p_t_set$values)
-    plot(NA, xlim=c(0,1), ylim = c(yminlim, ymaxlim + 1), xlab="x", ylab="y")
-    segments(p_t_set[['startpoint']], (yminlim + ymaxlim)/2, p_t_set[['endpoint']], (yminlim + ymaxlim)/2)
-    dev.off()  
+#    jpeg(filename=second_plotname)
+#    ymaxlim = max(p_t_set$values)
+#    yminlim = min(p_t_set$values)
+#    plot(NA, xlim=c(0,1), ylim = c(yminlim, ymaxlim + 1), xlab="x", ylab="y")
+#    segments(p_t_set[['startpoint']], (yminlim + ymaxlim)/2, p_t_set[['endpoint']], (yminlim + ymaxlim)/2)
+#    dev.off()  
 
     return(list(a_t_set, p_t_set))
   } else {
@@ -120,8 +120,8 @@ plotting_all_rejected_intervals <-function(data, plotname, second_plotname){
 }
 
 a_t_set_1 <- plotting_all_rejected_intervals(y_data_1, "rightplot.jpg", "level_rightplot.jpg")[[1]]
-p_t_set_1 <- plotting_all_rejected_intervals(y_data_1, "rightplot.jpg", "level_rightplot.jpg")[[2]]
-a_t_set_2 <- plotting_all_rejected_intervals(y_data_2, "constantplot.jpg", "level_constantplot.jpg")[[1]] #We expect to reject H_0 and the plot is everywhere
-a_t_set_3 <- plotting_all_rejected_intervals(y_data_3, "nullplot.jpg", "level_nullplot.jpg")[[1]] #We expect to fail to reject H_0
+#p_t_set_1 <- plotting_all_rejected_intervals(y_data_1, "rightplot.jpg", "level_rightplot.jpg")[[2]]
+#a_t_set_2 <- plotting_all_rejected_intervals(y_data_2, "constantplot.jpg", "level_constantplot.jpg")[[1]] #We expect to reject H_0 and the plot is everywhere
+#a_t_set_3 <- plotting_all_rejected_intervals(y_data_3, "nullplot.jpg", "level_nullplot.jpg")[[1]] #We expect to fail to reject H_0
 
-a_t_set_1[which.min(a_t_set_1$u),]
+#a_t_set_1[which.min(a_t_set_1$u),]
