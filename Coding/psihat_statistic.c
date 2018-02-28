@@ -99,19 +99,13 @@ void psihat_statistic(double *y_data, int *T, double *g_t_set, int *N, int *k_fu
 				values		return: vector of values psi_average for each (u, h) from the grid
 			*/
 	int i, kernel_ind, ndim;
-	double max, tmp1, tmp2, tmp3;
+	double max;
     
     kernel_ind = k_function[0];
     ndim = N[0];
-    tmp1 = 0;
-    tmp2 = 0;
-    tmp3 = 0;   
  	
  	for (i=0; i < ndim; i++) {
- 		tmp1 = psi_average(y_data, T[0], g_t_set[i], g_t_set[i + ndim], kernel_ind);
- 		tmp2 = tmp1 / (float) sigmahat[0];
- 		tmp3 = g_t_set[2 *ndim +i];
-    	values[i] = awert(tmp2) - tmp3;
+    	values[i] = awert(psi_average(y_data, T[0], g_t_set[i], g_t_set[i + ndim], kernel_ind) / sigmahat[0]) - g_t_set[2 *ndim +i];
 /*    	Rprintf("%f, %f, %f, %f\n",tmp1, tmp2, tmp3, values[i]);*/
     	if (i == 0) {
     		max = values[i];
