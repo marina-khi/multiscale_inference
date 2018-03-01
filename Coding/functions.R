@@ -63,21 +63,21 @@ psi_average <- function(data, u, h, k_function)
 #   k_function: type of kernel function
 #   sigmahat: the estimator of the square root of the long-run error variance \sigma^2
 # It produces the value of the test statistic as an output
-psihat_statistic_old <- function(y_data, g_t_set, kernel_function = epanechnikov_kernel, sigmahat) {
-  g_t_set$values <- abs(mapply(psi_average, u = g_t_set$u, h = g_t_set$h,
-                                    MoreArgs = list(data = y_data, k_function = kernel_function))/sigmahat) - .subset2(g_t_set, 'lambda')
-  result = max(g_t_set$values)
-  return(list(g_t_set, result))
-}
+#psihat_statistic_old <- function(y_data, g_t_set, kernel_function = epanechnikov_kernel, sigmahat) {
+#  g_t_set$values <- abs(mapply(psi_average, u = g_t_set$u, h = g_t_set$h,
+#                                    MoreArgs = list(data = y_data, k_function = kernel_function))/sigmahat) - .subset2(g_t_set, 'lambda')
+#  result = max(g_t_set$values)
+#  return(list(g_t_set, result))
+#}
 
 # Function that calculates the auxiliary statistic \Psi^star_T.
 # The only difference with the previous function is in the return values.
-psistar_statistic <- function(y_data, g_t_set, kernel_function = epanechnikov_kernel, sigmahat) {
-  g_t_set$values <- abs(mapply(psi_average, u = g_t_set$u, h = g_t_set$h,
-                               MoreArgs = list(data = y_data, k_function = kernel_function))/sigmahat) - .subset2(g_t_set, 'lambda')
-  result = max(g_t_set$values)
-  return(result)
-}
+#psistar_statistic_old <- function(y_data, g_t_set, kernel_function = epanechnikov_kernel, sigmahat) {
+#  g_t_set$values <- abs(mapply(psi_average, u = g_t_set$u, h = g_t_set$h,
+#                               MoreArgs = list(data = y_data, k_function = kernel_function))/sigmahat) - .subset2(g_t_set, 'lambda')
+#  result = max(g_t_set$values)
+#  return(result)
+#}
 
 #This functions chooses minimal intervals as described in Duembgen(2002)
 choosing_minimal_intervals <- function(dataset){

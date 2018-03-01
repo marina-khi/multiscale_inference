@@ -1,5 +1,7 @@
 library(microbenchmark)
 source("functions.R")
+source("estimating_sigma.R")
+
 dyn.load("psihat_statistic.dll")
 source("psihat_statistic.R")
 
@@ -8,11 +10,13 @@ source("psihat_statistic.R")
 ##############################
 
 sigma <- 2 #square root of long run-variance
-T<-100 #length 
+T<-1000 #length 
 alpha <-0.05
 noise_to_signal <- 1
+p <- 5 #Order of AR(p) process of the error terms
 sigmahat <- sigma #Here will be the estimate of the square root of the long-run variance sigma^2
 kernel_f = "epanechnikov" #Only "epanechnikov" and "biweight" kernel functions are currently supported
+
 if (kernel_f == "epanechnikov"){
   kernel_ind = 1
 } else if (kernel_f == "biweight"){
@@ -71,9 +75,9 @@ y_data_2 <- const + rnorm(T, 0, sigma)
 y_data_3 <- rnorm(T, 0, sigma)
 
 
-##################################
-#Calculating the statistic itself#
-##################################
+###########################################
+#Calculating the statistic for simulations#
+###########################################
 
 #Auxiliary lines for checking function time
 #microbenchmark(psihat_statistic(y_data_1, g_t_set, kernel_ind, sigmahat))
@@ -81,13 +85,13 @@ y_data_3 <- rnorm(T, 0, sigma)
 
 
 #Comparing C function with R function 
-result <-psihat_statistic(y_data_1, g_t_set, kernel_ind, sigmahat)
-g_t_set_with_values <- result[[1]]
-psihat_statistic_value <- result[[2]]
+#result <-psihat_statistic(y_data_1, g_t_set, kernel_ind, sigmahat)
+#g_t_set_with_values <- result[[1]]
+#psihat_statistic_value <- result[[2]]
 
-result_old <-psihat_statistic_old(y_data_1, g_t_set, epanechnikov_kernel, sigmahat)
-g_t_set_with_values <- result_old[[1]]
-psihat_statistic_value <- result_old[[2]]
+#result_old <-psihat_statistic_old(y_data_1, g_t_set, epanechnikov_kernel, sigmahat)
+#g_t_set_with_values <- result_old[[1]]
+#psihat_statistic_value <- result_old[[2]]
 
 #Function that takes the data as argument and plots the regions where
 #the corrected test statistic is bigger than the critical value of the 
@@ -115,23 +119,23 @@ plotting_all_rejected_intervals <-function(data, plotname, second_plotname){
     p_t_set <- choosing_minimal_intervals(p_t_set)
       
     #The plotting itself
-#    jpeg(filename=plotname)
-#    ymaxlim = max(p_t_set$values)
-#    yminlim = min(p_t_set$values)
-#    plot(NA, xlim=c(0,1), ylim = c(yminlim, ymaxlim + 1), xlab="x", ylab="y")
-#    segments(p_t_set[['startpoint']], p_t_set[['values']], p_t_set[['endpoint']], p_t_set[['values']])
-#    dev.off()  
+    jpeg(filename=plotname)
+    ymaxlim = max(p_t_set$values)
+    yminlim = min(p_t_set$values)
+    plot(NA, xlim=c(0,1), ylim = c(yminlim, ymaxlim + 1), xlab="x", ylab="y")
+    segments(p_t_set[['startpoint']], p_t_set[['values']], p_t_set[['endpoint']], p_t_set[['values']])
+    dev.off()  
     
     #The plotting itself
 #    second_plotname <- cat("level_", plotname, sep="")
-#    jpeg(filename=second_plotname)
-#    ymaxlim = max(p_t_set$values)
-#    yminlim = min(p_t_set$values)
-#    plot(NA, xlim=c(0,1), ylim = c(yminlim, ymaxlim + 1), xlab="x", ylab="y")
-#    segments(p_t_set[['startpoint']], (yminlim + ymaxlim)/2, p_t_set[['endpoint']], (yminlim + ymaxlim)/2)
-#    dev.off()  
+    jpeg(filename=second_plotname)
+    ymaxlim = max(p_t_set$values)
+    yminlim = min(p_t_set$values)
+    plot(NA, xlim=c(0,1), ylim = c(yminlim, ymaxlim + 1), xlab="x", ylab="y")
+    segments(p_t_set[['startpoint']], (yminlim + ymaxlim)/2, p_t_set[['endpoint']], (yminlim + ymaxlim)/2)
+    dev.off()  
 
-    return(list(a_t_set, p_t_set))
+    return(a_t_set)
   } else {
     cat("We fail to reject H_0 with probability", alpha, "Psihat_statistic = ", psihat_statistic_value,
         "Gaussian quantile value = ", gaussian_quantile, "\n")
@@ -139,9 +143,17 @@ plotting_all_rejected_intervals <-function(data, plotname, second_plotname){
   }
 }
 
-#a_t_set_1 <- plotting_all_rejected_intervals(y_data_1, "rightplot.jpg", "level_rightplot.jpg")[[1]]
-#p_t_set_1 <- plotting_all_rejected_intervals(y_data_1, "rightplot.jpg", "level_rightplot.jpg")[[2]]
-#a_t_set_2 <- plotting_all_rejected_intervals(y_data_2, "constantplot.jpg", "level_constantplot.jpg")[[1]] #We expect to reject H_0 and the plot is everywhere
-#a_t_set_3 <- plotting_all_rejected_intervals(y_data_3, "nullplot.jpg", "level_nullplot.jpg")[[1]] #We expect to fail to reject H_0
+a_t_set_1 <- plotting_all_rejected_intervals(y_data_1, "rightplot.jpg", "level_rightplot.jpg")
+a_t_set_2 <- plotting_all_rejected_intervals(y_data_2, "constantplot.jpg", "level_constantplot.jpg") #We expect to reject H_0 and the plot is everywhere
+a_t_set_3 <- plotting_all_rejected_intervals(y_data_3, "nullplot.jpg", "level_nullplot.jpg") #We expect to fail to reject H_0
 
 #a_t_set_1[which.min(a_t_set_1$u),]
+
+###################################
+#Loading the real data for England#
+###################################
+
+temperature <- read.table("cetml1659on.dat", header = TRUE, skip = 6)
+yearly_temp <-temperature$YEAR
+len = length(yearly_temp)
+gamma_ <- estimating_sigma(yearly_temp, p, len/2, len-1)
