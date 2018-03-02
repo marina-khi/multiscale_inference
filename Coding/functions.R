@@ -107,8 +107,29 @@ creating_g_set <- function(T){
   
   g_t_set_temp <- expand.grid(u = u, h = h) #Creating a dataframe with all possible combination of u and h
   g_t_set_temp$values <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
+  g_t_set_temp$values_with_sign <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
   
-  g_t_set <- subset(g_t_set_temp, u - h >= 0 & u + h <= 1, select = c(u, h, values)) #Subsetting u and h such that [u-h, u+h] lies in [0,1]
+  g_t_set <- subset(g_t_set_temp, u - h >= 0 & u + h <= 1, select = c(u, h, values, values_with_sign)) #Subsetting u and h such that [u-h, u+h] lies in [0,1]
   g_t_set$lambda <- lambda(g_t_set[['h']]) #Calculating the lambda(h) in order to speed up the function psistar_statistic
   return(g_t_set)
+}
+
+#If we have already calculated quantiles and stored them in a file 'distribution.RData'
+#then no need to calculate them once more, we just load them from this file.
+#Ohterwise simulate the statistic 1000 times in order to calculate the qunatiles
+calculating_gaussian_quantile <- function(T, g_t_set, kernel_ind, sigmahat, alpha = 0.05){
+  filename = paste("distribution_T_equal_to_", T,"_and_kernel_", kernel_ind, ".RData", sep = "")
+  if(!file.exists(filename)) {
+    gaussian_statistic_distribution <- replicate(1000, {
+      z = rnorm(T, 0, 1)
+      z_temp = sigmahat * z
+      psistar_statistic(z_temp, g_t_set, kernel_ind, sigmahat)
+    })
+    save(gaussian_statistic_distribution, file = filename)
+  } else {
+    load(filename)
+  }
+  #Calculate the quantiles for gaussian statistic defined in the previous step
+  gaussian_quantile <- quantile(gaussian_statistic_distribution, probs = (1 - alpha), type = 1)
+  return(gaussian_quantile)
 }

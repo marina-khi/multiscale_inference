@@ -87,7 +87,7 @@ double psi_average(double data[], int T, double u, double h, int k_function){
 }
 
 
-void psihat_statistic(double *y_data, int *T, double *g_t_set, int *N, int *k_function, double *sigmahat, double *maximum, double *values){
+void psihat_statistic(double *y_data, int *T, double *g_t_set, int *N, int *k_function, double *sigmahat, double *maximum, double *values, double *values_with_sign){
              /* y_data		list of y_t values y= (y_1,...,y_n)
                 T        	length of time series
                 N        	length of the grid
@@ -98,9 +98,12 @@ void psihat_statistic(double *y_data, int *T, double *g_t_set, int *N, int *k_fu
 				values		return: vector of values psi_average for each (u, h) from the grid
 			*/
 	int i;
+	double tmp1;
  	
  	for (i=0; i < N[0]; i++) {
-    	values[i] = awert(psi_average(y_data, T[0], g_t_set[i], g_t_set[i + N[0]], k_function[0]) / sigmahat[0]) - g_t_set[2 * N[0] +i];
+		tmp1 = psi_average(y_data, T[0], g_t_set[i], g_t_set[i + N[0]], k_function[0]) / sigmahat[0];
+    	values[i] = awert(tmp1) - g_t_set[2 * N[0] +i];
+		values_with_sign[i] = tmp1;
 /*    	Rprintf("%f, %f, %f, %f\n",tmp1, tmp2, tmp3, values[i]);*/
     	if (i == 0) {
     		maximum[0] = values[i];
