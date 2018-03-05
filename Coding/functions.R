@@ -133,3 +133,92 @@ calculating_gaussian_quantile <- function(T, g_t_set, kernel_ind, sigmahat, alph
   gaussian_quantile <- quantile(gaussian_statistic_distribution, probs = (1 - alpha), type = 1)
   return(gaussian_quantile)
 }
+
+plotting <- function(set, name){
+  jpeg(filename=name)
+  ymaxlim = max(set$values)
+  yminlim = min(set$values)
+  plot(NA, xlim=c(0,1), ylim = c(yminlim - 1, ymaxlim + 1), xlab="x", ylab="y")
+  segments(set[['startpoint']], set[['values']], set[['endpoint']], set[['values']])
+  dev.off()
+}
+
+plotting_one_level <- function(set, name){
+  jpeg(filename=name)
+  ymaxlim = max(set$values)
+  yminlim = min(set$values)
+  plot(NA, xlim=c(0,1), ylim = c(yminlim - 1, ymaxlim + 1), xlab="x", ylab="y")
+  segments(set[['startpoint']], (yminlim + ymaxlim)/2, set[['endpoint']], (yminlim + ymaxlim)/2)
+  dev.off()
+}
+
+
+#Function that takes the data as argument and plots the regions where
+#the corrected test statistic is bigger than the critical value of the 
+#gaussian version.
+#Returns the set with regions and value of the statistic in this regions.
+plotting_all_rejected_intervals <-function(data, g_t_set, quantile, kernel_ind, sigm, dir, plotname){
+  
+  #Calculating our statistic
+  result <-psihat_statistic(data, g_t_set, kernel_ind, sigm)
+  g_t_set_with_values <- result[[1]]
+  psihat_statistic_value <- result[[2]]
+  
+  #And now the testing itself
+  if (psihat_statistic_value > quantile) {
+    cat("We reject H_0 with probability", alpha, "Psihat_statistic = ", psihat_statistic_value,
+        "Gaussian quantile value = ", gaussian_quantile, "\n")
+    
+    #The collection of intervals where the corrected test statistic lies above the critical value (as in (2.6))
+    a_t_set <- subset(g_t_set_with_values, values > gaussian_quantile, select = c(u, h, values))
+    p_t_set <- data.frame('startpoint' = a_t_set$u - a_t_set$h,
+                          'endpoint' = a_t_set$u + a_t_set$h,
+                          'values' = a_t_set$values)
+    
+    p_t_set <- choosing_minimal_intervals(p_t_set)
+    
+    a_t_set_plus <- subset(g_t_set_with_values, values_with_sign > gaussian_quantile + lambda, select = c(u, h, values_with_sign))
+    p_t_set_plus <- data.frame('startpoint' = a_t_set_plus$u - a_t_set_plus$h,
+                               'endpoint' = a_t_set_plus$u + a_t_set_plus$h,
+                               'values' = a_t_set_plus$values_with_sign)
+    
+    p_t_set_plus <- choosing_minimal_intervals(p_t_set_plus)
+    
+    a_t_set_minus <- subset(g_t_set_with_values, -values_with_sign > gaussian_quantile + lambda, select = c(u, h, values_with_sign))
+    p_t_set_minus <- data.frame('startpoint' = a_t_set_minus$u - a_t_set_minus$h,
+                                'endpoint' = a_t_set_minus$u + a_t_set_minus$h,
+                                'values' = a_t_set_minus$values_with_sign)
+    
+    p_t_set_minus <- choosing_minimal_intervals(p_t_set_minus)
+    
+    #The plotting itself
+    plotname1 = paste(dir, plotname, sep = "")
+    plotname2 = paste(dir, "level_", plotname, sep = "")
+    
+    plotting(p_t_set, plotname1)
+    plotting_one_level(p_t_set, plotname2)
+    
+    #Plotting the set A_plus
+    plotname3 = paste(dir, "plus_", plotname, sep = "")
+    plotting(p_t_set_plus, plotname3)
+    
+    #Plotting the set A_plus on one level
+    plotname4 = paste(dir, "level_plus_", plotname, sep = "")
+    plotting_one_level(p_t_set_plus, plotname4)
+    
+    #if (nrow(p_t_set_minus) > 0)
+    #Plotting the set A_minus
+    #plotname5 = paste(dir, "minus_", plotname, sep = "")
+    #plotting(p_t_set_minus, plotname5)
+    
+    #Plotting the set A_plus on one level
+    #plotname6 = paste(dir, "level_minus_", plotname, sep = "")
+    #plotting_one_level(p_t_set_minus, plotname6)
+    
+    return(list(p_t_set, p_t_set_plus, p_t_set_minus))
+  } else {
+    cat("We fail to reject H_0 with probability", alpha, "Psihat_statistic = ", psihat_statistic_value,
+        "Gaussian quantile value = ", gaussian_quantile, "\n")
+    return(NULL)
+  }
+}

@@ -52,3 +52,25 @@ estimating_sigma <- function(y, p, L1, L2){
   #  return(sqrt(sigma2))
   return(gamma_hat)
 }
+
+estimating_sigma_for_AR1_with_param <- function(y, L1, L2){
+  #Function that calculates the estimate of the square root of long-run variance sigma^2
+  T = length(y)
+  
+  #Step 1 as in Section 5.2
+  gamma_hat_zero = 0
+  for (r in L1:L2) {
+    for (t in (r+1):T) {
+      gamma_hat_zero = gamma_hat_zero + 1/(2 * (T - r) * (L2 - L1 + 1)) * (y[t] - y[t-r]) * (y[t] - y[t-r])
+    }
+  }
+  
+  #Step 2
+  fittedmodel = ar.ols(x = y, order.max = 1, demean = FALSE, intercept = FALSE)
+  a_hat_1 = fittedmodel$ar[1]
+  
+  #Step 3 as in Section 5.2
+  sigma_eta2 = gamma_hat_zero * (1 - a_hat_1 * a_hat_1)
+  sigma2 = sigma_eta2 / ((1 - a_hat_1) * (1 - a_hat_1))
+  return(sqrt(sigma2))
+}

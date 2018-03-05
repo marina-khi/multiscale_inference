@@ -1,8 +1,11 @@
 source("estimating_sigma.R")
+source("auxiliary.R")
 library("robts")
 
 L1<-10
 L2<-20
+
+
 sigmahat_for_iid <- replicate(1000, {
   x <- rnorm(400, 0, 1)
   estimating_sigma_for_AR1(x, L1, L2)
@@ -33,17 +36,6 @@ hist(sigmahat_for_AR_05, breaks=seq(1.0,7.0,by=0.3))
 hist(sigmahat_for_AR_05_with_param, breaks=seq(1.0,7.0,by=0.3))
 hist(sigmahat_for_AR_075, breaks=seq(0,32, by = 2))
 hist(sigmahat_for_AR_075_with_param, breaks=seq(0,32, by = 2))
-
-
-
-
-
-
-
-#asymvar.acf(x)$lrv
-#asymvar.acf(a)$lrv
-#asymvar.acf(b)$lrv
-
 
 #estimating_sigma_for_AR1(yearly_temp, L1, L2)
 #asymvar.acf(yearly_temp)$lrv
