@@ -51,13 +51,13 @@ for (T in c(250, 500, 1000)){
       d
     })
     size_iid <- c(size_iid, sum(size_of_the_test_iid)/N)
-    cat("Ratio of rejection in iid case is ", sum(size_of_the_test_iid)/N, "with T = ", T, "and alpha = ", alpha, "\n")
+    cat("Ratio of rejection in iid case under H0 is ", sum(size_of_the_test_iid)/N, "with T = ", T, "and alpha = ", alpha, "\n")
   }
 }
 matrix_notrend_iid <- matrix(size_iid, nrow = 3, ncol = 3, byrow = TRUE)
 
 #We don't have the trend function, the null hypothesis is true and the errors are from AR(1)
-for (T in c(1000, 2000)){
+for (T in c(250, 500, 1000)){
   L1 <- floor(sqrt(T))
   L2 <- floor(2 * sqrt(T))
   g_t_set = creating_g_set(T)
@@ -76,7 +76,7 @@ for (T in c(1000, 2000)){
       d
     })
     size_ar1 <- c(size_ar1, sum(size_of_the_test_ar_1)/N)
-    cat("Ratio of rejection in AR(1) case is ", sum(size_of_the_test_ar_1)/N, "with T = ", T, "and alpha = ", alpha, "\n")
+    cat("Ratio of rejection in AR(1) under H0 case is ", sum(size_of_the_test_ar_1)/N, "with T = ", T, "and alpha = ", alpha, "\n")
   }
 }
 matrix_notrend_ar1 <- matrix(size_ar1, nrow = 4, ncol = 3, byrow = TRUE)
@@ -86,9 +86,9 @@ matrix_notrend_ar1 <- matrix(size_ar1, nrow = 4, ncol = 3, byrow = TRUE)
 ###################################
 power_ar1 = c()
 #This is for partly linear function + AR(1) case
-for (noise_to_signal in c(1, 2, 4, 10)){
+for (noise_to_signal in c(1, 2, 4)){
   a = sqrt((48 * sigma * sigma)/(5*noise_to_signal))#This is the value of m(1), it depends on Var(e) and Noise to Signal Ratio
-  for (T in c(250, 500, 1000)){
+  for (T in c(250, 500)){
     L1 = floor(sqrt(T))
     L2 = floor(2 * sqrt(T))
     
@@ -112,7 +112,7 @@ for (noise_to_signal in c(1, 2, 4, 10)){
         d
       })
       power_ar1 = c(power_ar1, sum(size_of_the_test_with_trend)/N)
-      cat("Ratio of rejection in AR(1) case with partially linear trend is", sum(size_of_the_test_with_trend)/N, "with NTS ratio =", noise_to_signal, ", T =", T, "and alpha =", alpha, "\n")
+      cat("Ratio of rejection in AR(1) under H1 case with partially linear trend is", sum(size_of_the_test_with_trend)/N, "with NTS ratio =", noise_to_signal, ", T =", T, "and alpha =", alpha, "\n")
     }
   }
 }
@@ -144,7 +144,7 @@ for (noise_to_signal in c(1, 2, 4)){
         d
       })
       power_iid = c(power_iid, sum(size_of_the_test_with_trend_iid)/N)
-      cat("Ratio of rejection in AR(1) case with partially linear trend is", sum(size_of_the_test_with_trend_iid)/N, "with NTS ratio =", noise_to_signal, ", T =", T, "and alpha =", alpha, "\n")
+      cat("Ratio of rejection in iid case under H1 with partially linear trend is", sum(size_of_the_test_with_trend_iid)/N, "with NTS ratio =", noise_to_signal, ", T =", T, "and alpha =", alpha, "\n")
     }
   }
 }
