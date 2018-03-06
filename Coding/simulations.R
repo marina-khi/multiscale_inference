@@ -36,7 +36,7 @@ size_iid <- c()
 size_ar1 <- c()
 
 #We don't have the trend function, the null hypothesis is true and the errors are iid.
-for (T in c(250, 500, 1000, 2000)){
+for (T in c(250, 500, 1000)){
   g_t_set = creating_g_set(T)
   
   for (alpha in c(0.01, 0.05, 0.1)){
@@ -54,7 +54,7 @@ for (T in c(250, 500, 1000, 2000)){
     cat("Ratio of rejection in iid case is ", sum(size_of_the_test_iid)/N, "with T = ", T, "and alpha = ", alpha, "\n")
   }
 }
-matrix_notrend_iid <- matrix(size_iid, nrow = 5, ncol = 3, byrow = TRUE)
+matrix_notrend_iid <- matrix(size_iid, nrow = 3, ncol = 3, byrow = TRUE)
 
 #We don't have the trend function, the null hypothesis is true and the errors are from AR(1)
 for (T in c(1000, 2000)){
