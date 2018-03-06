@@ -1,7 +1,7 @@
 source("functions.R")
 source("estimating_sigma.R")
-dyn.load("psihat_statistic.dll")
-source("psihat_statistic.R")
+dyn.load("C_code\psihat_statistic.dll")
+source("C_code\psihat_statistic.R")
 
 ##############################
 #Defining necessary constants#

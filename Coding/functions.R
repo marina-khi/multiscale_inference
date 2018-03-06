@@ -1,95 +1,13 @@
-# Epanechnikov kernel function,
-# which is defined as f(x) = 3/4(1-x^2)
-# for |x|<=1 and 0 elsewhere
-epanechnikov_kernel <- function(x)
-{
-  if (abs(x)<=1)
-  {
-    result = 3/4 * (1 - x*x)
-  } else {
-    result = 0
-  }
-  return(result)
-}
-
-
-# Additive correction tern \lambda(h) that depends only on the bandwidth h
-lambda <- function(h)
-{
-  result = tryCatch(sqrt(2*log(1/(2*h))), warning = function(w) print("h is exceeding h_max"))
-  return(result)
-}
-
-
-# Kernel weight function that calculates
-# the vector of (\omega_{1,T}(u,h), \ldots, \omega_{T,T}(u,h)).
-# Meanwhile, the function also calculates
-# the norm ||K||_{u,h,T} of the kernel function.
-omega <- function(T, u, h, k_function)
-{
-  result_temp = c()
-  K_norm_temp = 0 
-  for (i in 1:T) {
-    x = (u - i/T)/h
-    k = k_function(x)
-    result_temp[i] = k
-    K_norm_temp = K_norm_temp + k^2
-#    cat("k:", k, " omega_t_temp:", result_temp[i], "i = ", i, "\n")
-  }
-  K_norm = sqrt(K_norm_temp)
-  result = result_temp / K_norm
-
-  return(result)
-}
-
-
-# Kernel average function \psi_T(u,h) that takes u, h, data
-# and the type of kernel function as arguments.
-# The data can be y_data for \hat{\Psi}_T or independent gaussian rv
-# z_temp = sigma*z for \Psi^star_T.
-# The output is one value for each u and h.
-psi_average <- function(data, u, h, k_function)
-{
-  T = length(data)
-  result = sum(omega(T, u, h, k_function)*data)
-  return(result)
-}
-
-
-# Function that calculates the multiscale statistic \hat{\Psi}_T.
-# It takes the following entities as arguments.
-#   y-data: the data
-#   g_t_set: range of different locations u and bandwidths h
-#   k_function: type of kernel function
-#   sigmahat: the estimator of the square root of the long-run error variance \sigma^2
-# It produces the value of the test statistic as an output
-#psihat_statistic_old <- function(y_data, g_t_set, kernel_function = epanechnikov_kernel, sigmahat) {
-#  g_t_set$values <- abs(mapply(psi_average, u = g_t_set$u, h = g_t_set$h,
-#                                    MoreArgs = list(data = y_data, k_function = kernel_function))/sigmahat) - .subset2(g_t_set, 'lambda')
-#  result = max(g_t_set$values)
-#  return(list(g_t_set, result))
-#}
-
-# Function that calculates the auxiliary statistic \Psi^star_T.
-# The only difference with the previous function is in the return values.
-#psistar_statistic_old <- function(y_data, g_t_set, kernel_function = epanechnikov_kernel, sigmahat) {
-#  g_t_set$values <- abs(mapply(psi_average, u = g_t_set$u, h = g_t_set$h,
-#                               MoreArgs = list(data = y_data, k_function = kernel_function))/sigmahat) - .subset2(g_t_set, 'lambda')
-#  result = max(g_t_set$values)
-#  return(result)
-#}
-
-#This functions chooses minimal intervals as described in Duembgen(2002)
+#This functions finds minimal intervals as described in Duembgen(2002)
 choosing_minimal_intervals <- function(dataset){
   set_cardinality <- nrow(dataset) 
   if (set_cardinality > 1) {
     dataset <- dataset[order(dataset$startpoint, -dataset$endpoint),]
-    rownames(dataset) <- 1:nrow(dataset)
+    rownames(dataset) <- 1:nrow(dataset) #restoring the indices after ordering
     dataset[['contains']] <- numeric(set_cardinality)
     for (i in 1:(set_cardinality-1)){
       for (j in (i+1):set_cardinality){
-        if ((dataset$startpoint[i] <= dataset$startpoint[j])&(dataset$endpoint[i] >= dataset$endpoint[j])) {
-#          cat("[",dataset$startpoint[i], ", ", dataset$endpoint[i],"], [", dataset$startpoint[j], ", ", dataset$endpoint[j], "]", sep="")
+        if ((dataset$startpoint[i] <= dataset$startpoint[j]) & (dataset$endpoint[i] >= dataset$endpoint[j])) {
           dataset[['contains']][i] <- 1
           break
         }
@@ -105,20 +23,21 @@ creating_g_set <- function(T){
   u <- seq(4/T, 1, length.out = T/4)
   h <- seq(3/T, 1/4+3/T, length.out = T/20)
   
-  g_t_set_temp <- expand.grid(u = u, h = h) #Creating a dataframe with all possible combination of u and h
-  g_t_set_temp$values <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
+  g_t_set_temp                  <- expand.grid(u = u, h = h) #Creating a dataframe with all possible combination of u and h
+  g_t_set_temp$values           <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
   g_t_set_temp$values_with_sign <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
   
-  g_t_set <- subset(g_t_set_temp, u - h >= 0 & u + h <= 1, select = c(u, h, values, values_with_sign)) #Subsetting u and h such that [u-h, u+h] lies in [0,1]
+  g_t_set        <- subset(g_t_set_temp, u - h >= 0 & u + h <= 1, select = c(u, h, values, values_with_sign)) #Subsetting u and h such that [u-h, u+h] lies in [0,1]
   g_t_set$lambda <- lambda(g_t_set[['h']]) #Calculating the lambda(h) in order to speed up the function psistar_statistic
   return(g_t_set)
 }
 
+
 #If we have already calculated quantiles and stored them in a file 'distribution.RData'
 #then no need to calculate them once more, we just load them from this file.
-#Ohterwise simulate the statistic 1000 times in order to calculate the qunatiles
+#Ohterwise simulate the \Psi^star statistic 1000 times in order to calculate the quantiles
 calculating_gaussian_quantile <- function(T, g_t_set, kernel_ind, sigmahat, alpha = 0.05){
-  filename = paste("distribution_T_equal_to_", T,"_and_kernel_", kernel_ind, ".RData", sep = "")
+  filename = paste("data/distribution_T_equal_to_", T,"_and_kernel_", kernel_ind, ".RData", sep = "")
   if(!file.exists(filename)) {
     gaussian_statistic_distribution <- replicate(1000, {
       z = rnorm(T, 0, 1)
@@ -134,6 +53,10 @@ calculating_gaussian_quantile <- function(T, g_t_set, kernel_ind, sigmahat, alph
   return(gaussian_quantile)
 }
 
+
+#Function that plot the intervals (either minimal or not) to a file with name = "name"
+#with respect to the value of the statistic on this interval. The set with the intervals should
+#have the column named named "startpoint", "endpoint", and "values"
 plotting <- function(set, name){
   jpeg(filename=name)
   ymaxlim = max(set$values)
@@ -143,6 +66,9 @@ plotting <- function(set, name){
   dev.off()
 }
 
+
+#Function that plot all the intervals (either minimal or not) to a file with name = "name"
+#on one level. The set with the intervals should have the columns named "startpoint", "endpoint", and "values"
 plotting_one_level <- function(set, name){
   jpeg(filename=name)
   ymaxlim = max(set$values)
@@ -157,11 +83,11 @@ plotting_one_level <- function(set, name){
 #the corrected test statistic is bigger than the critical value of the 
 #gaussian version.
 #Returns the set with regions and value of the statistic in this regions.
-plotting_all_rejected_intervals <-function(data, g_t_set, quantile, kernel_ind, sigm, dir, plotname){
+plotting_all_rejected_intervals <-function(data, g_t_set, quantile, kernel_ind, sigma, dir, plotname){
   
   #Calculating our statistic
-  result <-psihat_statistic(data, g_t_set, kernel_ind, sigm)
-  g_t_set_with_values <- result[[1]]
+  result                 <- psihat_statistic(data, g_t_set, kernel_ind, sigma)
+  g_t_set_with_values    <- result[[1]]
   psihat_statistic_value <- result[[2]]
   
   #And now the testing itself
@@ -174,21 +100,20 @@ plotting_all_rejected_intervals <-function(data, g_t_set, quantile, kernel_ind, 
     p_t_set <- data.frame('startpoint' = a_t_set$u - a_t_set$h,
                           'endpoint' = a_t_set$u + a_t_set$h,
                           'values' = a_t_set$values)
-    
     p_t_set <- choosing_minimal_intervals(p_t_set)
     
+    #The collection of intervals where the values_with_sign > gaussian_quantile + lambda (as in (2.6))
     a_t_set_plus <- subset(g_t_set_with_values, values_with_sign > gaussian_quantile + lambda, select = c(u, h, values_with_sign))
     p_t_set_plus <- data.frame('startpoint' = a_t_set_plus$u - a_t_set_plus$h,
                                'endpoint' = a_t_set_plus$u + a_t_set_plus$h,
                                'values' = a_t_set_plus$values_with_sign)
-    
     p_t_set_plus <- choosing_minimal_intervals(p_t_set_plus)
     
+    #The collection of intervals where the -values_with_sign > gaussian_quantile + lambda (as in (2.6))
     a_t_set_minus <- subset(g_t_set_with_values, -values_with_sign > gaussian_quantile + lambda, select = c(u, h, values_with_sign))
     p_t_set_minus <- data.frame('startpoint' = a_t_set_minus$u - a_t_set_minus$h,
                                 'endpoint' = a_t_set_minus$u + a_t_set_minus$h,
                                 'values' = a_t_set_minus$values_with_sign)
-    
     p_t_set_minus <- choosing_minimal_intervals(p_t_set_minus)
     
     #The plotting itself
@@ -199,21 +124,21 @@ plotting_all_rejected_intervals <-function(data, g_t_set, quantile, kernel_ind, 
     plotting_one_level(p_t_set, plotname2)
     
     #Plotting the set A_plus
-    plotname3 = paste(dir, "plus_", plotname, sep = "")
-    plotting(p_t_set_plus, plotname3)
+    if (nrow(p_t_set_plus) > 0) {
+      plotname3 = paste(dir, "plus_", plotname, sep = "")
+      plotting(p_t_set_plus, plotname3)
+      plotname4 = paste(dir, "level_plus_", plotname, sep = "")
+      plotting_one_level(p_t_set_plus, plotname4)
+    } else {cat("The set A_plus is empty\n")}
     
-    #Plotting the set A_plus on one level
-    plotname4 = paste(dir, "level_plus_", plotname, sep = "")
-    plotting_one_level(p_t_set_plus, plotname4)
-    
-    #if (nrow(p_t_set_minus) > 0)
+
     #Plotting the set A_minus
-    #plotname5 = paste(dir, "minus_", plotname, sep = "")
-    #plotting(p_t_set_minus, plotname5)
-    
-    #Plotting the set A_plus on one level
-    #plotname6 = paste(dir, "level_minus_", plotname, sep = "")
-    #plotting_one_level(p_t_set_minus, plotname6)
+    if (nrow(p_t_set_minus) > 0){
+      plotname5 = paste(dir, "minus_", plotname, sep = "")
+      plotting(p_t_set_minus, plotname5)
+      plotname6 = paste(dir, "level_minus_", plotname, sep = "")
+      plotting_one_level(p_t_set_minus, plotname6)
+    } else {cat("The set A_minus is empty\n")}
     
     return(list(p_t_set, p_t_set_plus, p_t_set_minus))
   } else {
