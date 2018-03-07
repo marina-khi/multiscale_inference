@@ -1,3 +1,10 @@
+# Additive correction tern \lambda(h) that depends only on the bandwidth h
+lambda <- function(h)
+{
+  result = tryCatch(sqrt(2*log(1/(2*h))), warning = function(w) print("h is exceeding h_max"))
+  return(result)
+}
+
 #This functions finds minimal intervals as described in Duembgen(2002)
 choosing_minimal_intervals <- function(dataset){
   set_cardinality <- nrow(dataset) 
@@ -20,8 +27,8 @@ choosing_minimal_intervals <- function(dataset){
 
 #Creating g_t_set over which we are taking the maximum (from Section 2.1)
 creating_g_set <- function(T){
-  u <- seq(4/T, 1, length.out = T/4)
-  h <- seq(3/T, 1/4+3/T, length.out = T/20)
+  u <- seq(from = 5/T, to = 1, by = 5/T)
+  h <- seq(from = 3/T, to = 1/4+3/T, by = 5/T)
   
   g_t_set_temp                  <- expand.grid(u = u, h = h) #Creating a dataframe with all possible combination of u and h
   g_t_set_temp$values           <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
@@ -123,22 +130,22 @@ plotting_all_rejected_intervals <-function(data, g_t_set, quantile, kernel_ind, 
     plotting(p_t_set, plotname1)
     plotting_one_level(p_t_set, plotname2)
     
-    #Plotting the set A_plus
-    if (nrow(p_t_set_plus) > 0) {
-      plotname3 = paste(dir, "plus_", plotname, sep = "")
-      plotting(p_t_set_plus, plotname3)
-      plotname4 = paste(dir, "level_plus_", plotname, sep = "")
-      plotting_one_level(p_t_set_plus, plotname4)
-    } else {cat("The set A_plus is empty\n")}
-    
-
-    #Plotting the set A_minus
-    if (nrow(p_t_set_minus) > 0){
-      plotname5 = paste(dir, "minus_", plotname, sep = "")
-      plotting(p_t_set_minus, plotname5)
-      plotname6 = paste(dir, "level_minus_", plotname, sep = "")
-      plotting_one_level(p_t_set_minus, plotname6)
-    } else {cat("The set A_minus is empty\n")}
+    # #Plotting the set A_plus
+    # if (nrow(p_t_set_plus) > 0) {
+    #   plotname3 = paste(dir, "plus_", plotname, sep = "")
+    #   plotting(p_t_set_plus, plotname3)
+    #   plotname4 = paste(dir, "level_plus_", plotname, sep = "")
+    #   plotting_one_level(p_t_set_plus, plotname4)
+    # } else {cat("The set A_plus is empty\n")}
+    # 
+    # 
+    # #Plotting the set A_minus
+    # if (nrow(p_t_set_minus) > 0){
+    #   plotname5 = paste(dir, "minus_", plotname, sep = "")
+    #   plotting(p_t_set_minus, plotname5)
+    #   plotname6 = paste(dir, "level_minus_", plotname, sep = "")
+    #   plotting_one_level(p_t_set_minus, plotname6)
+    # } else {cat("The set A_minus is empty\n")}
     
     return(list(p_t_set, p_t_set_plus, p_t_set_minus))
   } else {

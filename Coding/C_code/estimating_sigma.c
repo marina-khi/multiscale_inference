@@ -8,14 +8,16 @@ Filename: "estimating_sigma.c"
 #include <stdlib.h> 
 #include <stdio.h>
 
-void estimating_sigma(double *y, int *T, int *L1, int *L2, double *sigmahat){
+void estimating_sigma(double *y, int *T, int *L1, int *L2, double *sigmahat, double *a_hat_1, double *sigma_eta){
              /* y			list of y_t values y= (y_1,...,y_T)
                 T        	length of time series
                 L1, L2     	Tuning parameters, integers
 				sigmahat	return: estimator for square root of long-run error variance, sigma
+				a_hat_1		return: estimator for a_1 coefficient of AR(1)
+				sigma_eta	return: estimator for square root of the variance of the innovation in AR(1) model
 			*/
 	int r, t, j;
-	double gamma_hat_zero, gamma_hat_one, a_hat_1, sigma2;
+	double gamma_hat_zero, gamma_hat_one, sigma2;
 	gamma_hat_zero = 0;
  
 	/*Step 1 as in Section 5.2*/
@@ -31,9 +33,10 @@ void estimating_sigma(double *y, int *T, int *L1, int *L2, double *sigmahat){
 	}
 
 	/*Step 2 as in Section 5.2 */
-	a_hat_1 = gamma_hat_one / gamma_hat_zero;
-	
+	a_hat_1[0] = gamma_hat_one / gamma_hat_zero;
+		
 	/*Step 3 as in Section 5.2*/
-	sigma2 = (gamma_hat_zero * (1 - a_hat_1 * a_hat_1)) / ((1 - a_hat_1) * (1 - a_hat_1));
+	sigma_eta[0] = sqrt(gamma_hat_zero * (1 - a_hat_1[0] * a_hat_1[0]));
+	sigma2 =  (sigma_eta[0] * sigma_eta[0])  / ((1 - a_hat_1[0]) * (1 - a_hat_1[0]));
 	sigmahat[0] = sqrt(sigma2);
 }
