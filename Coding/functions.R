@@ -1,5 +1,4 @@
-# Epanechnikov kernel function,
-# which is defined as f(x) = 3/4(1-x^2)
+# Epanechnikov kernel function, which is defined as f(x) = 3/4(1-x^2)
 # for |x|<=1 and 0 elsewhere
 epanechnikov_kernel <- function(x)
 {
@@ -12,6 +11,23 @@ epanechnikov_kernel <- function(x)
   return(result)
 }
 
+#Nadaraya-Watson estimator using the epanechnikov kernel. 
+epanechnikov_smoothing <-function(u, data_p, grid_p, bw){
+  if (length(data_p) != length(grid_p)){
+    cat("Dimensions of the grid and the data do not match, please check the arguments")
+    return(NULL)
+  } else {
+    result = 0
+    norm = 0
+    for (i in 1:length(data_points)){
+      result = result + epanechnikov_kernel((u - grid_p[i])/bw) * data_p[i]
+      norm = norm + epanechnikov_kernel((u - grid_p[i])/bw) 
+    }
+    return(result/norm)
+  }
+}
+
+
 #Additive correction tern \lambda(h) that depends only on the bandwidth h
 lambda <- function(h)
 {
@@ -23,18 +39,18 @@ lambda <- function(h)
 choosing_minimal_intervals <- function(dataset){
   set_cardinality <- nrow(dataset) 
   if (set_cardinality > 1) {
-    dataset <- dataset[order(dataset$startpoint, -dataset$endpoint),]
+    dataset <- dataset[order(dataset$startpoint, -dataset$endpoint),] #Ordering such that we do not have 
     rownames(dataset) <- 1:nrow(dataset) #restoring the indices after ordering
     dataset[['contains']] <- numeric(set_cardinality)
     for (i in 1:(set_cardinality-1)){
       for (j in (i+1):set_cardinality){
         if ((dataset$startpoint[i] <= dataset$startpoint[j]) & (dataset$endpoint[i] >= dataset$endpoint[j])) {
-          dataset[['contains']][i] <- 1
+          dataset[['contains']][i] <- 1 #We are marking all the intervals that contain at least one another interval
           break
         }
       }
     }
-    p_t_set <- subset(dataset, contains == 0, select = c(startpoint, endpoint, values))
+    p_t_set <- subset(dataset, contains == 0, select = c(startpoint, endpoint, values))#Subsetting everything not marked
   }
 }
 
@@ -168,3 +184,10 @@ plotting_all_rejected_intervals <-function(data, g_t_set, quantile, kernel_ind, 
     return(NULL)
   }
 }
+
+creating_matrix_and_texing <- function(vect, vect_T, vect_alpha, filename){
+  matrix_ <- matrix(vect, nrow = length(vect_T), ncol = length(vect_alpha), byrow = TRUE)
+  rownames(matrix_) <- vect_T
+  colnames(matrix_) <- vect_alpha
+  print.xtable(xtable(matrix_), type="latex", file=filename)
+  }

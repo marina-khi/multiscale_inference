@@ -101,29 +101,6 @@ estimating_sigma_for_AR1_with_param <- function(y, L1, L2){
 #  return(result)
 #}
 
-# Epanechnikov kernel function,
-# which is defined as f(x) = 3/4(1-x^2)
-# for |x|<=1 and 0 elsewhere
-epanechnikov_kernel <- function(x)
-{
-  if (abs(x)<=1)
-  {
-    result = 3/4 * (1 - x*x)
-  } else {
-    result = 0
-  }
-  return(result)
-}
-
-
-# Additive correction tern \lambda(h) that depends only on the bandwidth h
-lambda <- function(h)
-{
-  result = tryCatch(sqrt(2*log(1/(2*h))), warning = function(w) print("h is exceeding h_max"))
-  return(result)
-}
-
-
 # Kernel weight function that calculates
 # the vector of (\omega_{1,T}(u,h), \ldots, \omega_{T,T}(u,h)).
 # Meanwhile, the function also calculates
@@ -157,3 +134,10 @@ psi_average <- function(data, u, h, k_function)
   result = sum(omega(T, u, h, k_function)*data)
   return(result)
 }
+
+# weights_trapezoid <- c(1, rep(2, times = 357), 1)
+# 
+# integral_t <- sum(weights_trapezoid * nonpar.reg$y) / (3 * T_tempr)
+# integral_squared_function_t <- sum(weights_trapezoid * nonpar.reg$y * nonpar.reg$y) / (3 * T_tempr)
+# variance_t <- integral_squared_function_t - integral_t * integral_t
+# noise_to_signal_t <- sigma_eta / sqrt(variance_t)
