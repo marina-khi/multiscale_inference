@@ -465,13 +465,41 @@ The estimator $\widehat{\sigma}^2$ depends on the two tuning parameters $L_1$ an
 Since $\{ \varepsilon_t\}$ is an AR($p$) process, the autocovariances $\gamma(r)$ decay exponentially fast to zero as $r \rightarrow \infty$. Hence, the bias term $\sum_{r=L_1}^{L_2} \gamma(r) / (L_2-L_1+1)$ is asymptotically negligible if $L_1$ grows sufficiently fast with the sample size $T$. Due to the exponential decay of the autocovariances, it in particular suffices to assume that $L_1/\log T \rightarrow \infty$. For the second bias term  $O\{ (L_2/T)^2 \}$ to be asymptotically negligible, we need to assume that $L_2$ grows more slowly than the sample size $T$. In practice, $L_1$ should be chosen so large that the autocovariances $\gamma(\ell)$ with $\ell > L_1$ can be expected to be close to zero, ensuring that the bias term $\sum_{r=L_1}^{L_2} \gamma(r) / (L_2-L_1+1)$ is sufficiently small. The choice of $L_2$ can be expected to be less important in practice than that of $L_1$ as long as we do not pick $L_2$ too close to the sample size $T$. As pointed out in \cite{Hall2003}, it can be shown that $\widehat{\sigma}^2 = \sigma^2 + O_p(1/\sqrt{T})$ provided that $L_1/\log T \rightarrow \infty$ and $L_2 = O(\sqrt{T})$. 
 
 \newpage
-\section*{Simulatoins}
+\section{Simulations}
+
 \begin{table}[H]
     \begin{center}
-        \caption{Baseline preferences parameters and optimal policy rules under Epstein-Zin utility}
-        \label{tab:ez_utility_baseline}
+        \caption{Size of the test calculated for different sample sizes (T = 250, 350, 500, 1000) and confident levels ($\alpha$ = 0.01, 0.05, 0.10)}
+        \label{tab:size}
         \centering
-        \input{output/ez_utility_baseline}
+        \input{Coding/output/sizetable}
+    \end{center}
+\end{table}
+
+\begin{table}[H]
+    \begin{center}
+        \caption{Power of the test calculated for different sample sizes (T = 250, 350, 500, 1000) and confident levels ($\alpha$ = 0.01, 0.05, 0.10) for Noise to Signal ratio equal to 2}
+        \label{tab:power_nts2}
+        \centering
+        \input{Coding/output/powertable_nts2}
+    \end{center}
+\end{table}
+
+\begin{table}[H]
+    \begin{center}
+        \caption{Power of the test calculated for different sample sizes (T = 250, 350, 500, 1000) and confident levels ($\alpha$ = 0.01, 0.05, 0.10) for Noise to Signal ratio equal to 3}
+        \label{tab:power_nts3}
+        \centering
+        \input{Coding/output/powertable_nts3}
+    \end{center}
+\end{table}
+
+\begin{table}[H]
+    \begin{center}
+        \caption{Power of the test calculated for different sample sizes (T = 250, 350, 500, 1000) and confident levels ($\alpha$ = 0.01, 0.05, 0.10) for Noise to Signal ratio equal to 4}
+        \label{tab:power_nts4}
+        \centering
+        \input{Coding/output/powertable_nts4}
     \end{center}
 \end{table}
 
