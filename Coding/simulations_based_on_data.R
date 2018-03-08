@@ -4,6 +4,8 @@ dyn.load("C_code/estimating_sigma.dll")
 dyn.load("C_code/psihat_statistic.dll")
 source("C_code/psihat_statistic.R")
 
+N <- 1000 #Number of replications for calculating the size and the power of the test
+
 kernel_f = "biweight" #Only "epanechnikov" and "biweight" kernel functions are currently supported
 
 if (kernel_f == "epanechnikov"){
@@ -23,23 +25,31 @@ yearly_tempr            <- temperature[temperature$YEAR > -99, 'YEAR']
 yearly_tempr_normalised <- yearly_tempr - mean(yearly_tempr)
 
 T_tempr <- length(yearly_tempr)
-N <- 1000
 
 #Tuning parameters
 L1 <- floor(sqrt(T_tempr))
 L2 <- floor(2 * sqrt(T_tempr))
 
-grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr)
+grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points for plotting and estimating
 plot(grid_points, yearly_tempr_normalised, type = 'h')
 
 result <- estimating_sigma_for_AR1(yearly_tempr_normalised, L1, L2)
 
 #sigmahat <- result[[1]]
-a_hat <- result[[2]]
-sigma_eta <-result[[3]]
+a_hat <- result[[2]] #Estimation of the AR coefficient
+sigma_eta <-result[[3]] #Estimation of the sqrt of the variance 
+
+epanechnikov_smoothing <-function(u, data_points, grid_points, bandwidth){
+  result = 0
+  for (i in 1:length(data_points)){
+    result = result + 1/(length(data_points) * bandwidth) * epanechnikov_kernel((u - grid_points[i])/h) * data_points[i]
+  }
+  return(result)
+}
 
 noise_to_signal_vector <- c()
 for (h in c(0.01, 0.05, 0.1, 0.15, 0.2, 0.25)){
+  smoothed_curve <- lapply(grid_points, sum)
   nonpar.reg <- ksmooth(grid_points, yearly_tempr_normalised, kernel="normal", bandwidth=h)
   
   # Plotting the estimated curve on top of the data:

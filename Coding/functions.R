@@ -1,4 +1,18 @@
-# Additive correction tern \lambda(h) that depends only on the bandwidth h
+# Epanechnikov kernel function,
+# which is defined as f(x) = 3/4(1-x^2)
+# for |x|<=1 and 0 elsewhere
+epanechnikov_kernel <- function(x)
+{
+  if (abs(x)<=1)
+  {
+    result = 3/4 * (1 - x*x)
+  } else {
+    result = 0
+  }
+  return(result)
+}
+
+#Additive correction tern \lambda(h) that depends only on the bandwidth h
 lambda <- function(h)
 {
   result = tryCatch(sqrt(2*log(1/(2*h))), warning = function(w) print("h is exceeding h_max"))
