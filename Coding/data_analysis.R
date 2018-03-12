@@ -38,16 +38,13 @@ grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points 
 
 sigmahat_tempr <- estimating_sigma_for_AR1(yearly_tempr_normalised, L1, L2)[[1]]
 
-###################################################################
-#Calculating smoothed curve for the data using Epanechnikov kernel#
-###################################################################
 
 #####################################
 #Calculating gaussian quantile for T#
 #####################################
 
 g_t_set_tempr <- creating_g_set(T_tempr)
-gaussian_quantile <- calculating_gaussian_quantile(T_tempr, g_t_set_tempr, kernel_ind, sigmahat_tempr2, alpha)
+gaussian_quantile <- calculating_gaussian_quantile(T_tempr, g_t_set_tempr, kernel_ind, sigmahat_tempr, alpha)
 
 
 #########################################

@@ -48,6 +48,11 @@ result <- estimating_sigma_for_AR1(yearly_tempr_normalised, L1, L2)
 a_hat <- result[[2]] #Estimation of the AR coefficient
 sigma_eta <-result[[3]] #Estimation of the sqrt of the variance 
 
+
+###################################################################
+#Calculating smoothed curve for the data using Epanechnikov kernel#
+###################################################################
+
 #Fitting a curve with a data and calculating Noise to Signal Ratio for this curves
 #in order to do simulations based on this ratio
 noise_to_signal_vector <- c()
@@ -66,6 +71,7 @@ for (h in c(0.01, 0.05, 0.1, 0.15, 0.2, 0.25)){
   noise_to_signal_vector <- c(noise_to_signal_vector, noise_to_signal)
   cat("noise_to_signal:", noise_to_signal, "\n")
 }
+
 
 ##################################
 #Calculating the size of the test#
