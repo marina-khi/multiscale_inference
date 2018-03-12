@@ -51,10 +51,12 @@ def psi_average(data, u_list, h_list, sigmahat, k_function):
     The output is one value for each u and h.
     '''
     T = len(data)
-    psi_average_normed_list = []
+    '''psi_average_normed_list = []
     for u, h in zip(u_list, h_list):
         psi_average_normed = sum(omega_function(T, u, h, k_function)*data)
         psi_average_normed_list.append(abs(psi_average_normed)/sigmahat)
+    '''
+    psi_average_normed_list = [abs(sum(omega_function(T, u, h, k_function) * data))/sigmahat for u, h in zip(u_list, h_list)]
     return psi_average_normed_list
 
 

@@ -19,7 +19,7 @@ epanechnikov_smoothing <-function(u, data_p, grid_p, bw){
   } else {
     result = 0
     norm = 0
-    for (i in 1:length(data_points)){
+    for (i in 1:length(data_p)){
       result = result + epanechnikov_kernel((u - grid_p[i])/bw) * data_p[i]
       norm = norm + epanechnikov_kernel((u - grid_p[i])/bw) 
     }
@@ -160,23 +160,23 @@ plotting_all_rejected_intervals <-function(data, g_t_set, quantile, kernel_ind, 
     plotting(p_t_set, plotname1)
     plotting_one_level(p_t_set, plotname2)
     
-    # #Plotting the set A_plus
-    # if (nrow(p_t_set_plus) > 0) {
-    #   plotname3 = paste(dir, "plus_", plotname, sep = "")
-    #   plotting(p_t_set_plus, plotname3)
-    #   plotname4 = paste(dir, "level_plus_", plotname, sep = "")
-    #   plotting_one_level(p_t_set_plus, plotname4)
-    # } else {cat("The set A_plus is empty\n")}
-    # 
-    # 
-    # #Plotting the set A_minus
-    # if (nrow(p_t_set_minus) > 0){
-    #   plotname5 = paste(dir, "minus_", plotname, sep = "")
-    #   plotting(p_t_set_minus, plotname5)
-    #   plotname6 = paste(dir, "level_minus_", plotname, sep = "")
-    #   plotting_one_level(p_t_set_minus, plotname6)
-    # } else {cat("The set A_minus is empty\n")}
-    
+    #Plotting the set A_plus
+    if (!is.null(p_t_set_plus)) {
+      plotname3 = paste(dir, "plus_", plotname, sep = "")
+      plotting(p_t_set_plus, plotname3)
+      plotname4 = paste(dir, "level_plus_", plotname, sep = "")
+      plotting_one_level(p_t_set_plus, plotname4)
+    } else {cat("The set A_plus is empty\n")}
+
+
+    #Plotting the set A_minus
+    if (!is.null(p_t_set_minus)){
+      plotname5 = paste(dir, "minus_", plotname, sep = "")
+      plotting(p_t_set_minus, plotname5)
+      plotname6 = paste(dir, "level_minus_", plotname, sep = "")
+      plotting_one_level(p_t_set_minus, plotname6)
+    } else {cat("The set A_minus is empty\n")}
+
     return(list(p_t_set, p_t_set_plus, p_t_set_minus))
   } else {
     cat("We fail to reject H_0 with probability", alpha, "Psihat_statistic = ", psihat_statistic_value,
