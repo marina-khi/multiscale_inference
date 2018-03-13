@@ -1,5 +1,7 @@
 dyn.load("C_code/psihat_statistic_ij.dll")
 source("C_code/psihat_statistic_ij.R")
+#dyn.load("C_code/psihat_statistic.dll")
+#source("C_code/psihat_statistic.R")
 source("C_code/estimating_sigma.R")
 dyn.load("C_code/estimating_sigma.dll")
 source("functions.R")
@@ -9,7 +11,7 @@ source("functions.R")
 ##############################
 
 p <- 1 #Order of AR(p) process of the error terms. Currently only p=1 is supported
-N <- 3 #number of different time series 
+N <- 4 #number of different time series 
 
 alpha    <- 0.05
 kernel_f <- "epanechnikov" #Only "epanechnikov" and "biweight" kernel functions are currently supported
@@ -67,21 +69,45 @@ L1 <- floor(sqrt(T_tempr))
 L2 <- floor(2 * sqrt(T_tempr))
 
 #Calculating each sigma_i separately
-sigmahat_vector <- c()
+sigmahat_vector_2 <- c()
 for (i in TemperatureColumns){
   sigma_i <- estimating_sigma_for_AR1(monthly_temp[[i]], L1, L2)[[1]]
-  sigmahat_vector <- c(sigmahat_vector, sigma_i * sigma_i)
+  sigmahat_vector_2 <- c(sigmahat_vector_2, sigma_i * sigma_i)
 }
 
-sigmahat_tempr <- sqrt(sum(sigmahat_vector)/N)
+sigmahat_tempr <- sqrt(sum(sigmahat_vector_2)/N)
 
 ###########################################
 #Calculating gaussian quantile for T_tempr#
 ###########################################
 
 g_t_set_tempr <- creating_g_set(T_tempr)
-gaussian_quantile <- calculating_gaussian_quantile(T_tempr, N, g_t_set_tempr, kernel_ind, sigmahat_tempr, alpha)
+
+gaussian_quantile_ij <- calculating_gaussian_quantile_ij(T_tempr, N, g_t_set_tempr, kernel_ind, alpha)
+gaussian_quantile <- calculating_gaussian_quantile(T_tempr, N, g_t_set_tempr, kernel_ind, alpha)
 
 
-grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points for plotting and estimating
+#########################################
+#Calculating the statistic for real data#
+#########################################
+
+matrix_of_statistic <- matrix(, nrow = N, ncol = N)
+for (i in (1 : (N - 1))){
+  for (j in ((i + 1):N)){
+    result = psihat_statistic_ij(monthly_temp[[i + 2]], monthly_temp[[j + 2]], g_t_set_tempr, kernel_ind, sigmahat_tempr)
+    matrix_of_statistic[i, j] = result[[2]]
+    cat(matrix_of_statistic[i, j], "with i =", i, "and j = ",j, "\n")
+    g_t_set = result[[1]]
+    #cat(head(monthly_temp[[i + 2]]), "\n")
+    #cat(head(monthly_temp[[j + 2]]), "\n")
+    }
+}
+#max(vector_of_ij_statistic)
+
+#statistic <- psihat_statistic(monthly_temp, N, g_t_set_tempr, kernel_ind, sigmahat_tempr)
+#result <- psihat_statistic_ij(monthly_temp, g_t_set, kernel_ind, sigmahat_tempr)
+
+
+
+#grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points for plotting and estimating
 

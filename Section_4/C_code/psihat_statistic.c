@@ -104,11 +104,11 @@ void psihat_statistic(double *y_data, int *T, int *N_ts, double *g_t_set, int *N
 	p = 0;
 	for (i = 0; i < N_ts[0] - 1; i++) {
 		for (j = i + 1; j < N_ts[0]; j++) {
+			for (k = 0; k < T[0]; k++) {
+				y_data_i[k] = y_data[i * T[0] + k];
+				y_data_j[k] = y_data[j * T[0] + k];
+			}
 			for (n = 0; i < N[0]; i++) {
-				for (k = 0; k < T[0]; k++) {
-					y_data_i[k] = y_data[i * T[0] + k];
-					y_data_j[k] = y_data[j * T[0] + k];
-				}
 				tmp1 = psi_average_ij(y_data_i, y_data_j, T[0], g_t_set[n], g_t_set[n + N[0]], k_function[0]) / (sqrt(2) * sigmahat[0]);
 				values[n] = awert(tmp1) - g_t_set[2 * N[0] + n];
 				values_with_sign[n] = tmp1;

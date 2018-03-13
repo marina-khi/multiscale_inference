@@ -33,7 +33,7 @@ psihat_statistic <- function(y_data, N_ts, g_t_set, kernel_ind, sigmahat){
   return(list(statistic_vector, statistic)) 
 }
 
-psistar_statistic <- function(z_data_i, z_data_j, g_t_set, kernel_ind = 1, sigmahat){
+psistar_statistic <- function(z_data, N_ts, g_t_set, kernel_ind = 1, sigmahat){
   #Wrapper of a C function from psihat_statistic.C
   #Function that calculates the auxiliary statistic \Psi^star_T.
   #The only difference with the previous function is in the return values.
@@ -44,7 +44,7 @@ psistar_statistic <- function(z_data_i, z_data_j, g_t_set, kernel_ind = 1, sigma
   # sigmahat        appropriate estimate of sqrt(long-run variance)
 
 
-  T        <- as.integer(nrow(y_data))
+  T        <- as.integer(nrow(z_data))
   N        <- as.integer(nrow(g_t_set))
   sigmahat <- as.double(sigmahat)
   kernel   <- as.integer(kernel_ind)
