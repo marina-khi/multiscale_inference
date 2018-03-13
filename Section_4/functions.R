@@ -62,7 +62,7 @@ calculating_gaussian_quantile_ij <- function(T, N, g_t_set, kernel_ind, sigmahat
 #then no need to calculate them once more, we just load them from this file.
 #Ohterwise simulate the \Psi^star statistic 1000 times in order to calculate the quantiles
 calculating_gaussian_quantile <- function(T, N_ts, g_t_set, kernel_ind, sigmahat, alpha = 0.05){
-  filename = paste("data/distr_T_", T,"_and_kernel_", kernel_ind, "_and_N_", N, ".RData", sep = "")
+  filename = paste("data/distr_T_", T,"_and_kernel_", kernel_ind, "_and_N_ts_", N_ts, ".RData", sep = "")
   if(!file.exists(filename)) {
     gaussian_statistic_distribution <- replicate(1000, {
       z_matrix <- matrix(rnorm(T * N_ts, 0, 1), T, N_ts)

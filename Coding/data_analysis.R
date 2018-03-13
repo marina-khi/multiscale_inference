@@ -74,14 +74,14 @@ plot(grid_points, yearly_tempr_normalised, type = "l")
 #Calculating smoothed curve for the data using Epanechnikov kernel#
 ###################################################################
 h <- c(0.01, 0.05, 0.1, 0.15, 0.2)
-plot(NA, xlim = c(0, 1), ylim = c(-1.5, 1,5))
+plot(NA, xlim = c(0, 1), ylim = c(-1.5, 1.5))
 for (i in 1:5){
   #This part plots kernel smoothers for different bandwidths (all on one plot).
   smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(yearly_tempr_normalised, grid_points, h[i]))
-  lines(grid_points, smoothed_curve, lty = i, col = colors[i]) 
+  lines(grid_points, smoothed_curve, lty = i)#, col = colors[i]) 
 }
 
-legend(-1/T_tempr, 1.3, legend=h, col=colors, lty = 1, ncol=1)
+legend(-1/T_tempr, 1.3, legend=h, lty = i, ncol=1)
 
 
 #Plotting the minimal intervals. Do not have any negative minimal intervals, so plotting all (positive) ones
@@ -92,5 +92,5 @@ segments(p_t_set[['startpoint']], p_t_set[['values']], p_t_set[['endpoint']], p_
 #legend(1/T_tempr, 1, legend = c("Minimal (positive) intervals"), lty = 1, ncol = 1)
 
 
-title(main = "Plots for normalised yearly temperature data for England",  outer = TRUE)
+title(main = "Plots for normalized yearly temperature data for England",  outer = TRUE)
 dev.off()

@@ -67,7 +67,8 @@ sigma_eta <-result[[3]] #Estimation of the sqrt of the variance
 #Fitting a curve with a data and calculating Noise to Signal Ratio for this curves
 #in order to do simulations based on this ratio
 
-plot(NA, xlim = c(0, 1), ylim = c(-1.5, 1,5))
+end_point <- c()
+plot(NA, xlim = c(0, 1), ylim = c(-1.5, 1.5))
 for (i in 1:4){
   #This part plots kernel smoothers for different bandwidths (all on one plot).
   smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(yearly_tempr_normalised, grid_points, h[i]))
@@ -111,27 +112,28 @@ creating_matrix_and_texing(size_ar1, different_T, different_alpha, "Output/sizet
 #Calculating the power of the test#
 ###################################
 
-plot(NA, xlim = c(0, 1), ylim = c(-1.5, 1,5))
-power_ar1 = c()
+plot(NA, xlim = c(0, 1), ylim = c(-1.5, 1.5))
 
 #This is for partly linear function + AR(1) case
-for (a in c(1.2, 0.6, 0.3)){
+for (a in c(1.0, 0.75, 0.65, 0.5, 0.25)){
+  power_ar1 = c()
   #a = sqrt((48 * sigma_eta * sigma_eta)/(5*nts))#This is the value of m(1), it depends on Var(e) and Noise to Signal Ratio
   for (T in different_T){
     L1 <- floor(sqrt(T))
     L2 <- floor(2 * sqrt(T))
     g_t_set = creating_g_set(T)
+    grid_points <- seq(from = 1/T, to = 1, length.out = T)
     
     b = 0.4 * T/a #Constant needed just for calculation
     m = numeric(T)
 
     for (i in 1:T) {if (i/T < 0.6) {m[i] = 0} else {m[i] = (i - 0.6*T)/b}}
-    lines(grid_points, m, lty = i, col = colors[i])
+    lines(grid_points, m, lty = i)#, col = colors[i])
     
     for (alpha in different_alpha){
       #Calculating gaussian quantiles for given T and alpha
       gaussian_quantile = calculating_gaussian_quantile(T, g_t_set, kernel_ind, sigma_eta, alpha)
-      
+
       #Replicating test procedure N times
       size_of_the_test_with_trend = replicate(N, {
         #Adding a function that is 0 on the first half and linear on the second half
@@ -142,11 +144,13 @@ for (a in c(1.2, 0.6, 0.3)){
         d
       })
       power_ar1 = c(power_ar1, sum(size_of_the_test_with_trend)/N)
-      cat("Ratio of rejection in AR(1) under H1 case with partially linear trend is", sum(size_of_the_test_with_trend)/N, "with a =", a, ", T =", T, "and alpha =", alpha, "\n")
+      #cat("Ratio of rejection in AR(1) under H1 case with partially linear trend is", sum(size_of_the_test_with_trend)/N, "with a =", a, ", T =", T, "and alpha =", alpha, "\n")
     }
   }
+  filename = paste0("Output/powertable_", a*100, ".tex")
+  creating_matrix_and_texing(power_ar1, different_T, different_alpha, filename)
 }
 
-creating_matrix_and_texing(power_ar1[1:(num_T * num_alpha)], different_T, different_alpha, "Output/powertable_v1.tex")
-creating_matrix_and_texing(power_ar1[(num_T * num_alpha + 1):(2 * num_T * num_alpha)], different_T, different_alpha, "Output/powertable_v2.tex")
-creating_matrix_and_texing(power_ar1[(2 * num_T * num_alpha + 1):(3 * num_T * num_alpha)], different_T, different_alpha, "Output/powertable_v3.tex")
+#creating_matrix_and_texing(power_ar1[1:(num_T * num_alpha)], different_T, different_alpha, "Output/powertable_v1.tex")
+#creating_matrix_and_texing(power_ar1[(num_T * num_alpha + 1):(2 * num_T * num_alpha)], different_T, different_alpha, "Output/powertable_v2.tex")
+#creating_matrix_and_texing(power_ar1[(2 * num_T * num_alpha + 1):(3 * num_T * num_alpha)], different_T, different_alpha, "Output/powertable_v3.tex")
