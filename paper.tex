@@ -6,6 +6,7 @@
 \usepackage{epsfig}
 %\usepackage{graphics}
 \usepackage{graphicx}
+\usepackage{pdfpages}
 \usepackage[font=small]{caption}
 \usepackage[hang,flushmargin]{footmisc} 
 \usepackage{float}
@@ -479,28 +480,28 @@ Since $\{ \varepsilon_t\}$ is an AR($p$) process, the autocovariances $\gamma(r)
 
 \begin{table}[H]
     \begin{center}
-        \caption{Power of the test calculated for different sample sizes (T = 250, 350, 500, 1000) and confident levels ($\alpha$ = 0.01, 0.05, 0.10) for Noise to Signal ratio equal to 2}
-        \label{tab:power_nts2}
+        \caption{Power of the test calculated for different sample sizes (T = 250, 350, 500, 1000) and confident levels ($\alpha$ = 0.01, 0.05, 0.10) for a = 1.2}
+        \label{tab:power_v1}
         \centering
-        \input{Coding/output/powertable_nts2}
+        \input{Coding/output/powertable_v1}
     \end{center}
 \end{table}
 
 \begin{table}[H]
     \begin{center}
-        \caption{Power of the test calculated for different sample sizes (T = 250, 350, 500, 1000) and confident levels ($\alpha$ = 0.01, 0.05, 0.10) for Noise to Signal ratio equal to 3}
-        \label{tab:power_nts3}
+        \caption{Power of the test calculated for different sample sizes (T = 250, 350, 500, 1000) and confident levels ($\alpha$ = 0.01, 0.05, 0.10) for a = 1.2}
+        \label{tab:power_v2}
         \centering
-        \input{Coding/output/powertable_nts3}
+        \input{Coding/output/powertable_v2}
     \end{center}
 \end{table}
 
 \begin{table}[H]
     \begin{center}
-        \caption{Power of the test calculated for different sample sizes (T = 250, 350, 500, 1000) and confident levels ($\alpha$ = 0.01, 0.05, 0.10) for Noise to Signal ratio equal to 4}
-        \label{tab:power_nts4}
+        \caption{Power of the test calculated for different sample sizes (T = 250, 350, 500, 1000) and confident levels ($\alpha$ = 0.01, 0.05, 0.10) for a = 0.6}
+        \label{tab:power_v3}
         \centering
-        \input{Coding/output/powertable_nts4}
+        \input{Coding/output/powertable_v3}
     \end{center}
 \end{table}
 
@@ -509,7 +510,7 @@ Since $\{ \varepsilon_t\}$ is an AR($p$) process, the autocovariances $\gamma(r)
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=150mm]{Coding/Output/threegraphics.jpg}
+\includepdf[pages=-,pagecommand={},width=\textwidth]{Coding/Output/threegraphics.pdf}
 \caption{Yearly temperature data for England\label{yearly_data}}
 \end{figure}
 
