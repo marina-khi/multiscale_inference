@@ -141,3 +141,25 @@ psi_average <- function(data, u, h, k_function)
 # integral_squared_function_t <- sum(weights_trapezoid * nonpar.reg$y * nonpar.reg$y) / (3 * T_tempr)
 # variance_t <- integral_squared_function_t - integral_t * integral_t
 # noise_to_signal_t <- sigma_eta / sqrt(variance_t)
+
+
+#Fitting a curve with a data and calculating Noise to Signal Ratio for this curves
+#in order to do simulations based on this ratio
+noise_to_signal_vector <- c()
+end_point <- c()
+
+for (h in c(0.01, 0.05, 0.1, 0.15, 0.2, 0.25)){
+  smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(yearly_tempr_normalised, grid_points, h))
+  # Plotting the estimated curve on top of the data:
+  plot(grid_points, yearly_tempr_normalised, type = "l"); lines(grid_points, smoothed_curve, type = "l", col = "red")
+  
+  #Calculating the integral using the Simpsons method (with fitting a parabola to data)
+  weights <- c(1, rep(c(4, 2), times = 178), 4, 1)
+  
+  integral <- sum(weights * smoothed_curve) / (3 * T_tempr)
+  integral_squared_function <- sum(weights * smoothed_curve * smoothed_curve) / (3 * T_tempr)
+  variance <- integral_squared_function - integral * integral
+  noise_to_signal <- sigma_eta / sqrt(variance)
+  noise_to_signal_vector <- c(noise_to_signal_vector, noise_to_signal)
+  cat("noise_to_signal:", noise_to_signal, "\n")
+}

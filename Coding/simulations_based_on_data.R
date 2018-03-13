@@ -8,12 +8,19 @@ dyn.load("C_code/psihat_statistic.dll")
 source("C_code/psihat_statistic.R")
 
 
+###############################
+#Defining necessary parameters#
+###############################
+
 N <- 1000 #Number of replications for calculating the size and the power of the test
 different_T     <- c(250, 350, 500, 1000) #Different lengths of time series for which we calculate size and power
 different_alpha <- c(0.01, 0.05, 0.1) #Different alpha for which we calculate size and power
 
 num_T     <- length(different_T)
 num_alpha <- length(different_alpha)
+
+h         <- c(0.05, 0.1, 0.15, 0.2) #Different bandwidth for plotting. Number must be <=6
+colors    <- c("black", "red", "green", "blue", "yellow") #Different colors for plotting. Number must be >= number of bandwidths
 
 kernel_f = "biweight" #Only "epanechnikov" and "biweight" kernel functions are currently supported
 
@@ -34,38 +41,33 @@ yearly_tempr            <- temperature[temperature$YEAR > -99, 'YEAR']
 yearly_tempr_normalised <- yearly_tempr - mean(yearly_tempr)
 
 T_tempr <- length(yearly_tempr)
+#Plotting the normalized data
+grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points for plotting and estimating
+plot(grid_points, yearly_tempr_normalised, type = 'h')
+
+
+#####################################
+#Estimating parameters from the data#
+#####################################
 
 #Tuning parameters
 L1 <- floor(sqrt(T_tempr))
 L2 <- floor(2 * sqrt(T_tempr))
-
-grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points for plotting and estimating
-plot(grid_points, yearly_tempr_normalised, type = 'h')
-
 result <- estimating_sigma_for_AR1(yearly_tempr_normalised, L1, L2)
 
 #sigmahat <- result[[1]]
 a_hat <- result[[2]] #Estimation of the AR coefficient
 sigma_eta <-result[[3]] #Estimation of the sqrt of the variance 
 
-#Fitting a curve with a data and calculating Noise to Signal Ratio for this curves
-#in order to do simulations based on this ratio
-noise_to_signal_vector <- c()
-for (h in c(0.01, 0.05, 0.1, 0.15, 0.2, 0.25)){
-  smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(yearly_tempr_normalised, grid_points, h))
-  # Plotting the estimated curve on top of the data:
-  plot(grid_points, yearly_tempr_normalised, type = "l"); lines(grid_points, smoothed_curve, type = "l", col = "red")
-  
-  #Calculating the integral using the Simpsons method (with fitting a parabola to data)
-  weights <- c(1, rep(c(4, 2), times = 178), 4, 1)
-  
-  integral <- sum(weights * smoothed_curve) / (3 * T_tempr)
-  integral_squared_function <- sum(weights * smoothed_curve * smoothed_curve) / (3 * T_tempr)
-  variance <- integral_squared_function - integral * integral
-  noise_to_signal <- sigma_eta / sqrt(variance)
-  noise_to_signal_vector <- c(noise_to_signal_vector, noise_to_signal)
-  cat("noise_to_signal:", noise_to_signal, "\n")
+plot(NA, xlim = c(0, 1), ylim = c(-1.5, 1,5))
+for (i in 1:4){
+  #This part plots kernel smoothers for different bandwidths (all on one plot).
+  smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(yearly_tempr_normalised, grid_points, h[i]))
+  lines(grid_points, smoothed_curve, lty = i, col = colors[i])
+  end_point <- c(end_point, smoothed_curve[T_tempr])
+  cat("End point:", smoothed_curve[T_tempr], "\n")
 }
+
 
 ##################################
 #Calculating the size of the test#
@@ -101,18 +103,22 @@ creating_matrix_and_texing(size_ar1, different_T, different_alpha, "Output/sizet
 #Calculating the power of the test#
 ###################################
 
+plot(NA, xlim = c(0, 1), ylim = c(-1.5, 1,5))
 power_ar1 = c()
+
 #This is for partly linear function + AR(1) case
-for (nts in c(2, 3, 4)){
-  a = sqrt((48 * sigma_eta * sigma_eta)/(5*nts))#This is the value of m(1), it depends on Var(e) and Noise to Signal Ratio
+for (a in c(1.2, 0.6, 0.3)){
+  #a = sqrt((48 * sigma_eta * sigma_eta)/(5*nts))#This is the value of m(1), it depends on Var(e) and Noise to Signal Ratio
   for (T in different_T){
     L1 <- floor(sqrt(T))
     L2 <- floor(2 * sqrt(T))
     g_t_set = creating_g_set(T)
     
-    b = 0.5 * T/a #Constant needed just for calculation
+    b = 0.4 * T/a #Constant needed just for calculation
     m = numeric(T)
-    for (i in 1:T) {if (i/T < 0.5) {m[i] = 0} else {m[i] = (i - 0.5*T)/b}}
+
+    for (i in 1:T) {if (i/T < 0.6) {m[i] = 0} else {m[i] = (i - 0.6*T)/b}}
+    lines(grid_points, m, lty = i, col = colors[i])
     
     for (alpha in different_alpha){
       #Calculating gaussian quantiles for given T and alpha
@@ -128,12 +134,11 @@ for (nts in c(2, 3, 4)){
         d
       })
       power_ar1 = c(power_ar1, sum(size_of_the_test_with_trend)/N)
-      cat("Ratio of rejection in AR(1) under H1 case with partially linear trend is", sum(size_of_the_test_with_trend)/N, "with NTS ratio =", nts, ", T =", T, "and alpha =", alpha, "\n")
+      cat("Ratio of rejection in AR(1) under H1 case with partially linear trend is", sum(size_of_the_test_with_trend)/N, "with a =", a, ", T =", T, "and alpha =", alpha, "\n")
     }
   }
 }
 
-#Creating nice-looking matrices for power of the test (each for different Noise to Signal ratio) and writing them to tex files
-creating_matrix_and_texing(power_ar1[1:(num_T * num_alpha)], different_T, different_alpha, "Output/powertable_nts2.tex")
-creating_matrix_and_texing(power_ar1[(num_T * num_alpha + 1):(2 * num_T * num_alpha)], different_T, different_alpha, "Output/powertable_nts3.tex")
-creating_matrix_and_texing(power_ar1[(2 * num_T * num_alpha + 1):(3 * num_T * num_alpha)], different_T, different_alpha, "Output/powertable_nts4.tex")
+creating_matrix_and_texing(power_ar1[1:(num_T * num_alpha)], different_T, different_alpha, "Output/powertable_v1.tex")
+creating_matrix_and_texing(power_ar1[(num_T * num_alpha + 1):(2 * num_T * num_alpha)], different_T, different_alpha, "Output/powertable_v2.tex")
+creating_matrix_and_texing(power_ar1[(2 * num_T * num_alpha + 1):(3 * num_T * num_alpha)], different_T, different_alpha, "Output/powertable_v3.tex")
