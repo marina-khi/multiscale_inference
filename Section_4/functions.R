@@ -11,12 +11,31 @@ epanechnikov_kernel <- function(x)
   return(result)
 }
 
+
+#Nadaraya-Watson estimator using the epanechnikov kernel. 
+epanechnikov_smoothing <-function(u, data_p, grid_p, bw){
+  if (length(data_p) != length(grid_p)){
+    cat("Dimensions of the grid and the data do not match, please check the arguments")
+    return(NULL)
+  } else {
+    result = 0
+    norm = 0
+    for (i in 1:length(data_p)){
+      result = result + epanechnikov_kernel((u - grid_p[i])/bw) * data_p[i]
+      norm = norm + epanechnikov_kernel((u - grid_p[i])/bw) 
+    }
+    return(result/norm)
+  }
+}
+
+
 #Additive correction tern \lambda(h) that depends only on the bandwidth h
 lambda <- function(h)
 {
   result = tryCatch(sqrt(2*log(1/(2*h))), warning = function(w) print("h is exceeding h_max"))
   return(result)
 }
+
 
 #Creating g_t_set over which we are taking the maximum (from Section 2.1)
 creating_g_set <- function(T){

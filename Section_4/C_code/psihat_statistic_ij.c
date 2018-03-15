@@ -101,7 +101,7 @@ void psihat_statistic_ij(double *y_data_i, double *y_data_j, int *T, double *g_t
 	double tmp1;
  	
  	for (i=0; i < N[0]; i++) {
-		tmp1 = psi_average_ij(y_data_i, y_data_j, T[0], g_t_set[i], g_t_set[i + N[0]], k_function[0]) / (sqrt(2) * sigmahat[0]);
+		tmp1 = psi_average_ij(y_data_i, y_data_j, T[0], g_t_set[i], g_t_set[i + N[0]], k_function[0]) / sigmahat[0];
     	values[i] = awert(tmp1) - g_t_set[2 * N[0] + i];
 		values_with_sign[i] = tmp1;
 /*    	Rprintf("%f, %f, %f, %f\n",tmp1, tmp2, tmp3, values[i]);*/

@@ -11,12 +11,11 @@ source("functions.R")
 N     <- 3 #number of different time series
 N_rep <- 1000
 
-different_T     <- c(250, 350, 500, 1000, 2000) #Different lengths of time series for which we calculate size and power
+different_T     <- c(250, 350, 500, 1000) #Different lengths of time series for which we calculate size and power
 different_alpha <- c(0.01, 0.05, 0.1) #Different alpha for which we calculate size and power
 
 kernel_f <- "epanechnikov" #Only "epanechnikov" and "biweight" kernel functions are currently supported
 a_hat <- 0.5
-T_sim <- 430
 
 if (kernel_f == "epanechnikov"){
   kernel_ind = 1
@@ -27,26 +26,10 @@ if (kernel_f == "epanechnikov"){
 }
 
 
-#Tuning parameters
-L1 <- floor(sqrt(T_sim))
-L2 <- floor(2 * sqrt(T_sim))
-
-#########################################
-#Calculating gaussian quantile for T_sim#
-#########################################
-
-#g_t_set_sim <- creating_g_set(T_sim)
-#gaussian_quantile <- calculating_gaussian_quantile_ij(T_sim, N, g_t_set_sim, kernel_ind, alpha)
-
 ######################################
 #Simulating the data for the iid case#
 ######################################
 
-#m = numeric(T_sim)
-#for (i in 1:T_sim) {if (i/T_sim < 0.5) {m[i] = -5} else {m[i] = 5}}
-
-
-#iid case
 size_iid <- c()
 
 for (T_size in different_T){
@@ -91,7 +74,6 @@ for (T_size in different_T){
 #Simulating the data for the AR1 case#
 ######################################
 
-#AR1 case
 size_ar1 <- c()
 
 for (T_size in different_T){
