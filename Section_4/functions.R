@@ -62,7 +62,7 @@ calculating_gaussian_quantile_ij <- function(T, N_ts, g_t_set, kernel_ind, alpha
       statistic_vector <- c()
       for (i in (1:(N_ts - 1))){
         for (j in ((i + 1):N_ts)){
-          statistic_vector = c(statistic_vector, psistar_statistic_ij(z_matrix[,i], z_matrix[,j], g_t_set, kernel_ind, 1))
+          statistic_vector = c(statistic_vector, psistar_statistic_ij(z_matrix[,i], z_matrix[,j], g_t_set, kernel_ind, sqrt(2)))
         }
       }
       max(statistic_vector)

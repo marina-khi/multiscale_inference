@@ -44,24 +44,6 @@ for (i in 1:N){
 monthly_temp <- na.omit(monthly_temp)#Deleting the rows with ommitted variables
 T_tempr <- nrow(monthly_temp)
 
-###################################################################
-#Calculating smoothed curve for the data using Epanechnikov kernel#
-###################################################################
-h <- c(0.01, 0.05, 0.1, 0.15, 0.2)
-
-plot(NA, xlim = c(0, 1), ylim = c(-1.5, 1.5))
-for (i in 1:5){
-  #This part plots kernel smoothers for different bandwidths (all on one plot).
-  smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(yearly_tempr_normalised, grid_points, h[i]))
-  lines(grid_points, smoothed_curve, lty = i)#, col = colors[i]) 
-}
-
-legend(-1/T_tempr, 1.3, legend=h, lty = i, ncol=1)
-
-#plot(monthly_temp[["tmean1"]], ylim = c(-3, 3), type = 'l')
-#plot(monthly_temp[["tmean2"]],ylim = c(-3, 3),type = 'l')
-#plot(monthly_temp[["tmean3"]],type = 'l')
-
 
 ######################
 #Deseasonalizing data#
@@ -73,6 +55,7 @@ for (i in TemperatureColumns){
   #plot(monthly_temp[[i]],type = 'l')
 }
 
+
 ###################################################################
 #Calculating smoothed curve for the data using Epanechnikov kernel#
 ###################################################################
@@ -80,15 +63,27 @@ for (i in TemperatureColumns){
 h <- c(0.01, 0.05, 0.1, 0.15)
 grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points for plotting and estimating
 
+# for (column in TemperatureColumns){
+#   plot(NA, xlim = c(0, 1), ylim = c(-3, 3))
+#   for (i in 1:4){
+#     #This part plots kernel smoothers for different bandwidths (all on one plot).
+#     smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(monthly_temp[[column]], grid_points, h[i]))
+#     lines(grid_points, smoothed_curve, lty = i)#, col = colors[i]) 
+#   }
+# }
+
+plot(NA, xlim = c(0, 1), ylim = c(-1.5, 1.5))
 for (column in TemperatureColumns){
-  plot(NA, xlim = c(0, 1), ylim = c(-3, 3))
-  for (i in 1:5){
-    #This part plots kernel smoothers for different bandwidths (all on one plot).
-    smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(monthly_temp[[column]], grid_points, h[i]))
-    lines(grid_points, smoothed_curve, lty = i)#, col = colors[i]) 
-  }
-  legend(-1/T_tempr, 1.3, legend=h, lty = i, ncol=1)
+  smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(monthly_temp[[column]], grid_points, 0.05))
+  lines(grid_points, smoothed_curve)#, lty = i), col = colors[i]) 
 }
+
+plot(NA, xlim = c(0, 1), ylim = c(-1.5, 1.5))
+for (column in TemperatureColumns){
+  smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(monthly_temp[[column]], grid_points, 0.1))
+  lines(grid_points, smoothed_curve)#, lty = i), col = colors[i]) 
+}
+
 
 #####################
 #Estimating variance#
@@ -114,7 +109,7 @@ sigmahat_tempr <- sqrt(sum(sigmahat_vector_2)/N)
 
 g_t_set_tempr <- creating_g_set(T_tempr)
 gaussian_quantile <- calculating_gaussian_quantile_ij(T_tempr, N, g_t_set_tempr, kernel_ind, alpha)
-
+pairwise_gaussian_quantile <- calculating_gaussian_quantile_ij(T_tempr, 2, g_t_set_tempr, kernel_ind, alpha)
 
 #########################################
 #Calculating the statistic for real data#
@@ -137,11 +132,3 @@ for (i in (1 : (N - 1))){
 }
 statistic = max(as.vector(matrix_of_statistic), na.rm=TRUE)
 statistic_new = max(as.vector(matrix_of_statistic_new), na.rm=TRUE)
-
-#max(vector_of_ij_statistic)
-
-
-
-
-#grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points for plotting and estimating
-

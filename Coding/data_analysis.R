@@ -8,7 +8,6 @@ source("C_code/psihat_statistic.R")
 #Defining necessary constants#
 ##############################
 
-noise_to_signal <- 1
 p <- 1 #Order of AR(p) process of the error terms. Currently only p=1 is supported
 alpha <-0.05
 kernel_f = "biweight" #Only "epanechnikov" and "biweight" kernel functions are currently supported
