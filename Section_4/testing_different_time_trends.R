@@ -9,9 +9,9 @@ source("functions.R")
 ##############################
 
 p <- 1 #Order of AR(p) process of the error terms. Currently only p = 1 is supported
-N <- 34 #number of different time series 
+N <- 3 #number of different time series 
 
-alpha    <- 0.05
+alpha    <- 0.1
 kernel_f <- "epanechnikov" #Only "epanechnikov" and "biweight" kernel functions are currently supported
 
 if (kernel_f == "epanechnikov"){
@@ -27,12 +27,12 @@ if (kernel_f == "epanechnikov"){
 ###########################################
 
 for (i in 1:N){
-  filename = paste("data/txt", i, ".txt", sep = "")
+  filename = paste("data/", i, "_station_farapart.txt", sep = "")
   temperature_tmp  <- read.table(filename, header = FALSE, skip = 7,
                                  col.names = c("year", "month", "tmax", "tmin", "af", "rain", "sun", "aux"), fill = TRUE,  na.strings = c("---"))
   monthly_temp_tmp <- data.frame('1' = temperature_tmp[['year']], '2' = temperature_tmp[['month']],
-                                 #'3' = (temperature_tmp[["tmax"]] + temperature_tmp[["tmin"]]) / 2)
-                                 '3' = temperature_tmp[["tmax"]])
+                                 '3' = (temperature_tmp[["tmax"]] + temperature_tmp[["tmin"]]) / 2)
+                                 #'3' = temperature_tmp[["tmax"]])
   colnames(monthly_temp_tmp) <- c('year', 'month', paste0("tmean", i))
   if (i == 1){
     monthly_temp <- monthly_temp_tmp

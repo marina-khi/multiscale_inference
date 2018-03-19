@@ -62,7 +62,7 @@ pdf("Output/threegraphics.pdf",width=10,height=10,paper="special")
 #jpeg(filename="Output/threegraphics.jpg")
 par(mfrow = c(3,1)) #Setting the layout of the graphs
 par(mar = c(0, 0.5, 0, 0.5)) #Margins for each plot
-par(oma = c(0, 2, 2, 0)) #Outer margins
+par(oma = c(0, 2, 0, 0)) #Outer margins
 
 
 # Plotting the real data
@@ -91,5 +91,5 @@ segments(p_t_set[['startpoint']], p_t_set[['values']], p_t_set[['endpoint']], p_
 #legend(1/T_tempr, 1, legend = c("Minimal (positive) intervals"), lty = 1, ncol = 1)
 
 
-title(main = "Plots for normalized yearly temperature data for England",  outer = TRUE)
+#title(main = "Plots for normalized yearly temperature data for England",  outer = TRUE)
 dev.off()

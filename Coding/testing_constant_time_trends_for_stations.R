@@ -10,6 +10,7 @@ source("C_code/psihat_statistic.R")
 
 p <- 1 #Order of AR(p) process of the error terms. Currently only p=1 is supported
 alpha <-0.05
+N <- 34
 kernel_f = "biweight" #Only "epanechnikov" and "biweight" kernel functions are currently supported
 
 if (kernel_f == "epanechnikov"){
@@ -24,13 +25,12 @@ if (kernel_f == "epanechnikov"){
 #Loading the real data for stations in England#
 ###############################################
 
-for (i in 1:34){
+for (i in 1:N){
   filename = paste("data/txt", i, ".txt", sep = "")
-  temperature_tmp  <- read.table(filename, header = FALSE, skip = 7,
+  temperature_tmp  <- read.table(filename, header = FALSE, skip = 3,
                                  col.names = c("year", "month", "tmax", "tmin", "af", "rain", "sun", "aux"), fill = TRUE,  na.strings = c("---"))
   monthly_temp_tmp <- data.frame('1' = temperature_tmp[['year']], '2' = temperature_tmp[['month']],
-                                 #'3' = (temperature_tmp[["tmax"]] + temperature_tmp[["tmin"]]) / 2)
-                                 '3' = temperature_tmp[["tmax"]])
+                                 '3' = (temperature_tmp[["tmax"]] + temperature_tmp[["tmin"]]) / 2)
   colnames(monthly_temp_tmp) <- c('year', 'month', paste0("tmean", i))
   if (i == 1){
     monthly_temp <- monthly_temp_tmp
@@ -38,7 +38,7 @@ for (i in 1:34){
     monthly_temp <- merge(monthly_temp, monthly_temp_tmp, by = c("year", "month"))
   }
 }
-
+monthly_temp <- na.omit(monthly_temp)#Deleting the rows with ommitted variables
 T_tempr <- nrow(monthly_temp)
 
 
@@ -85,7 +85,7 @@ gaussian_quantile <- calculating_gaussian_quantile(T_tempr, g_t_set_tempr, kerne
 
 for (i in 1:N){
   psihat_statistic_value <- psihat_statistic(monthly_temp[[i+2]], g_t_set_tempr, kernel_ind, sqrt(sigmahat_vector_2[i]))[[2]]
-  if (psihat_statistic_value > quantile) {
+  if (psihat_statistic_value > gaussian_quantile) {
     cat("We reject H_0 with probability", alpha, "Psihat_statistic = ", psihat_statistic_value,
         "Gaussian quantile value = ", gaussian_quantile, "\n")
   } else {
