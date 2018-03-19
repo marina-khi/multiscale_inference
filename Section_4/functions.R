@@ -11,12 +11,31 @@ epanechnikov_kernel <- function(x)
   return(result)
 }
 
+
+#Nadaraya-Watson estimator using the epanechnikov kernel. 
+epanechnikov_smoothing <-function(u, data_p, grid_p, bw){
+  if (length(data_p) != length(grid_p)){
+    cat("Dimensions of the grid and the data do not match, please check the arguments")
+    return(NULL)
+  } else {
+    result = 0
+    norm = 0
+    for (i in 1:length(data_p)){
+      result = result + epanechnikov_kernel((u - grid_p[i])/bw) * data_p[i]
+      norm = norm + epanechnikov_kernel((u - grid_p[i])/bw) 
+    }
+    return(result/norm)
+  }
+}
+
+
 #Additive correction tern \lambda(h) that depends only on the bandwidth h
 lambda <- function(h)
 {
   result = tryCatch(sqrt(2*log(1/(2*h))), warning = function(w) print("h is exceeding h_max"))
   return(result)
 }
+
 
 #Creating g_t_set over which we are taking the maximum (from Section 2.1)
 creating_g_set <- function(T){
@@ -32,19 +51,18 @@ creating_g_set <- function(T){
   return(g_t_set)
 }
 
-#If we have already calculated quantiles and stored them in a file 'distribution.RData'
+#If we have already calculated quantiles and stored them in a file 'distr_T_....RData'
 #then no need to calculate them once more, we just load them from this file.
 #Ohterwise simulate the \Psi^star statistic 1000 times in order to calculate the quantiles
-calculating_gaussian_quantile_ij <- function(T, N, g_t_set, kernel_ind, sigmahat, alpha = 0.05){
-  filename = paste("data/distr_T_", T,"_and_kernel_", kernel_ind, "_and_N_", N, ".RData", sep = "")
+calculating_gaussian_quantile_ij <- function(T, N_ts, g_t_set, kernel_ind, alpha = 0.05){
+  filename = paste("data/distr_T_", T,"_and_kernel_", kernel_ind, "_and_N_", N_ts, ".RData", sep = "")
   if(!file.exists(filename)) {
     gaussian_statistic_distribution <- replicate(1000, {
-      z_matrix <- matrix(rnorm(T * N, 0, 1), T, N)
-      z_temp = sigmahat * z_matrix
+      z_matrix <- matrix(rnorm(T * N_ts, 0, 1), T, N_ts)
       statistic_vector <- c()
-      for (i in (1:(N-1))){
-        for (j in ((i+1):N)){
-          statistic_vector = c(statistic_vector, psistar_statistic_ij(z_temp[, i], z_temp[, j], g_t_set, kernel_ind, sigmahat))
+      for (i in (1:(N_ts - 1))){
+        for (j in ((i + 1):N_ts)){
+          statistic_vector = c(statistic_vector, psistar_statistic_ij(z_matrix[,i], z_matrix[,j], g_t_set, kernel_ind, sqrt(2)))
         }
       }
       max(statistic_vector)
@@ -57,30 +75,6 @@ calculating_gaussian_quantile_ij <- function(T, N, g_t_set, kernel_ind, sigmahat
   gaussian_quantile <- quantile(gaussian_statistic_distribution, probs = (1 - alpha), type = 1)
   return(gaussian_quantile)
 }
-
-#If we have already calculated quantiles and stored them in a file 'distribution.RData'
-#then no need to calculate them once more, we just load them from this file.
-#Ohterwise simulate the \Psi^star statistic 1000 times in order to calculate the quantiles
-calculating_gaussian_quantile <- function(T, N_ts, g_t_set, kernel_ind, sigmahat, alpha = 0.05){
-  filename = paste("data/distr_T_", T,"_and_kernel_", kernel_ind, "_and_N_ts_", N_ts, ".RData", sep = "")
-  if(!file.exists(filename)) {
-    gaussian_statistic_distribution <- replicate(1000, {
-      z_matrix <- matrix(rnorm(T * N_ts, 0, 1), T, N_ts)
-      z_temp = sigmahat * z_matrix
-      psistar_statistic(z_temp, N_ts, g_t_set, kernel_ind, sigmahat)
-    })
-    save(gaussian_statistic_distribution, file = filename)
-  } else {
-    load(filename)
-  }
-  #Calculate the quantiles for gaussian statistic defined in the previous step
-  gaussian_quantile <- quantile(gaussian_statistic_distribution, probs = (1 - alpha), type = 1)
-  return(gaussian_quantile)
-}
-
-
-
-
 
 
 #This functions finds minimal intervals as described in Duembgen(2002)
