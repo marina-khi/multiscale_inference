@@ -37,8 +37,8 @@ simulations_based_on_data <- function(N, different_T, different_alpha, data, tes
   
   a_hat <- result[[2]] #Estimation of the AR coefficient
   sigma_eta <-result[[3]] #Estimation of the sqrt of the variance of the innovation 
-  
-  ##################################
+
+  #################################
   #Calculating the size of the test#
   ##################################
   
@@ -47,6 +47,7 @@ simulations_based_on_data <- function(N, different_T, different_alpha, data, tes
   for (T in different_T){
     L1 = floor(sqrt(T))
     L2 = floor(2 * sqrt(T))
+    
     g_t_set = defining_set(T)
     
     for (alpha in different_alpha){

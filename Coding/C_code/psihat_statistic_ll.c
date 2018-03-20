@@ -57,7 +57,7 @@ double s_t_1(double u, double h, int T) {
 	double result;
 	result = 0;
 	for (i = 0; i < T; i++) {
-		result += epanc((u - (i + 1) / (float)T) / h) * ((u - (i + 1) / (float)T) / h);
+		result += epanc(((i + 1) / (float)T - u) / h) * (((i + 1) / (float)T - u) / h);
 	}
 	return(result / (T * h));
 }
@@ -67,7 +67,7 @@ double s_t_2(double u, double h, int T) {
 	double result;
 	result = 0;
 	for (i = 0; i < T; i++) {
-		result += epanc((u - (i + 1) / (float)T) / h) * ((u - (i + 1) / (float)T) / h) * ((u - (i + 1) / (float)T) / h);
+		result += epanc(((i + 1) / (float)T - u) / h) * (((i + 1) / (float)T - u) / h) * (((i + 1) / (float)T - u) / h);
 	}
 	return(result / (T * h));
 }
@@ -77,7 +77,7 @@ double s_t_0(double u, double h, int T) {
 	double result;
 	result = 0;
 	for (i = 0; i < T; i++) {
-		result += epanc((u - (i + 1) / (float)T) / h) ;
+		result += epanc(((i + 1) / (float)T - u) / h);
 	}
 	return(result / (T * h));
 }
@@ -97,7 +97,7 @@ double psi_average_ll(double data[], int T, double u, double h, int k_function){
 	k = 0;
 	if (k_function == 1) {
 		for (i = 0; i < T; i++) {
-			x = (u - (i + 1) / (float)T) / h;
+			x = (((i + 1) / (float)T - u) / h);
 			k = epanc(x) * (s_t_2(u, h, T) - s_t_1(u, h, T) * x);
 			result_temp += k * data[i];
 			k_norm += k * k;
@@ -106,8 +106,8 @@ double psi_average_ll(double data[], int T, double u, double h, int k_function){
 	}
 	else {
 		for (i = 0; i < T; i++) {
-			x = (u - (i + 1) / (float)T) / h;
-			k = epanc(x) * (s_t_0(x, h, T) * x - s_t_1(x, h, T));
+			x = (((i + 1) / (float)T - u) / h);
+			k = epanc(x) * (s_t_0(u, h, T) * x - s_t_1(u, h, T));
 			result_temp += k * data[i];
 			k_norm += k * k;
 /*	   		Rprintf("We are here, %f, %f, %f\n", k, result_temp, k_norm); */   	

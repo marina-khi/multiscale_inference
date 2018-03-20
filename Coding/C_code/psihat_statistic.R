@@ -12,8 +12,8 @@ psihat_statistic <- function(y_data, g_t_set, kernel_ind, sigmahat){
   sigmahat <- as.double(sigmahat)
   kernel   <- as.integer(kernel_ind)
   
-  storage.mode(kernel_ind)  <- "integer"
-  storage.mode(sigmahat)    <- "double"
+  #storage.mode(kernel_ind)  <- "integer"
+  #storage.mode(sigmahat)    <- "double"
   
   g_t_set_vec       <- unlist(g_t_set[c('u', 'h', 'lambda')])
   values            <- vector(mode = "double",length = N)
@@ -74,8 +74,8 @@ psihat_statistic_ll <- function(y_data, g_t_set, kernel_ind, sigmahat){
   sigmahat <- as.double(sigmahat)
   kernel   <- as.integer(kernel_ind)
   
-  storage.mode(kernel_ind)  <- "integer"
-  storage.mode(sigmahat)    <- "double"
+  #storage.mode(kernel_ind)  <- "integer"
+  #storage.mode(sigmahat)    <- "double"
   
   g_t_set_vec       <- unlist(g_t_set[c('u', 'h', 'lambda')])
   values            <- vector(mode = "double",length = N)
