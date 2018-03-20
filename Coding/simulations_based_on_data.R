@@ -1,15 +1,15 @@
-simulations_based_on_data <- function(N, different_T, different_alpha, data, kernel_f = "epanechnikov", kernel_t = "nw"){
+simulations_based_on_data <- function(N, different_T, different_alpha, data, test_problem = "zero", kernel_t = "nw"){
   #Defining necessary parameters
   num_T     <- length(different_T)
   num_alpha <- length(different_alpha)
   
   #Recoding kernel functions and type of kernel estimator 
-  if (kernel_f == "epanechnikov"){
+  if (test_problem == "zero"){
     kernel_ind = 1
-  } else if (kernel_f == "biweight"){
+  } else if (test_problem == "constant"){
     kernel_ind = 2
   } else {
-    print('Currently only Epanechnikov and Biweight kernel functions are supported')
+    print('Given testing problem is currently not supported')
   }
  
   if (kernel_t == "nw"){
@@ -21,7 +21,7 @@ simulations_based_on_data <- function(N, different_T, different_alpha, data, ker
     statistic_function = psihat_statistic_ll
     defining_set = creating_g_set_ll
   } else {
-    print('Currently not supported')
+    print('Given method is currently not supported')
   }
 
   T_data <- length(data)
@@ -51,7 +51,7 @@ simulations_based_on_data <- function(N, different_T, different_alpha, data, ker
     
     for (alpha in different_alpha){
       #Calculating gaussian quantiles for given T and alpha
-      gaussian_quantile = quantile_function(T, g_t_set, kernel_ind, sigma_eta, alpha)
+      gaussian_quantile = quantile_function(T, g_t_set, kernel_ind, alpha)
       cat("Gaussian quantile = ", gaussian_quantile, "with T = ", T, "and alpha = ", alpha, "\n")
       
       #Replicating test procedure N times
@@ -67,7 +67,7 @@ simulations_based_on_data <- function(N, different_T, different_alpha, data, ker
     }
   }
   #Creating a nice-looking matrix for size of the test and writing it to a tex file
-  filename = paste0("Output/sizetable_", kernel_t, "_and_", kernel_f, ".tex")
+  filename = paste0("Output/sizetable_", kernel_t, "_testing_", test_problem, ".tex")
   creating_matrix_and_texing(size_ar1, different_T, different_alpha, filename)
 
   ###################################
@@ -93,7 +93,7 @@ simulations_based_on_data <- function(N, different_T, different_alpha, data, ker
       
       for (alpha in different_alpha){
         #Calculating gaussian quantiles for given T and alpha
-        gaussian_quantile = quantile_function(T, g_t_set, kernel_ind, sigma_eta, alpha)
+        gaussian_quantile = quantile_function(T, g_t_set, kernel_ind, alpha)
         cat("Gaussian quantile = ", gaussian_quantile, "with T = ", T, "and alpha = ", alpha, "\n")
         
         #Replicating test procedure N times
@@ -109,7 +109,7 @@ simulations_based_on_data <- function(N, different_T, different_alpha, data, ker
         cat("Ratio of rejection in AR(1) under H1 case with partially linear trend is", sum(size_of_the_test_with_trend)/N, "with a =", a, ", T =", T, "and alpha =", alpha, "\n")
       }
     }
-    filename = paste0("Output/powertable_", a*100, "_", kernel_t, "_and_", kernel_f, ".tex")
+    filename = paste0("Output/powertable_", a*100, "_", kernel_t, "_testing_", test_problem, ".tex")
     creating_matrix_and_texing(power_ar1, different_T, different_alpha, filename)
   }
 }

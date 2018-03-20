@@ -88,8 +88,8 @@ creating_g_set_ll <- function(T){
 #If we have already calculated quantiles and stored them in a file 'distribution.RData'
 #then no need to calculate them once more, we just load them from this file.
 #Ohterwise simulate the \Psi^star statistic 1000 times in order to calculate the quantiles
-calculating_gaussian_quantile <- function(T, g_t_set, kernel_ind, sigmahat, alpha = 0.05){
-  filename = paste0("data/distr_T_equal_to_", T,"_and_kernel_", kernel_ind, ".RData")
+calculating_gaussian_quantile <- function(T, g_t_set, kernel_ind, alpha = 0.05){
+  filename = paste0("data/distr_T_", T,"_and_kernel_", kernel_ind, ".RData")
   if(!file.exists(filename)) {
     gaussian_statistic_distribution <- replicate(1000, {
       z = rnorm(T, 0, 1)
@@ -105,8 +105,8 @@ calculating_gaussian_quantile <- function(T, g_t_set, kernel_ind, sigmahat, alph
 }
 
 #Everything as in previous function but using local linear estimate
-calculating_gaussian_quantile_ll <- function(T, g_t_set, kernel_ind, sigmahat, alpha = 0.05){
-  filename = paste0("data/distr_T_equal_to_", T,"_and_kernel_", kernel_ind, "_type_ll.RData")
+calculating_gaussian_quantile_ll <- function(T, g_t_set, kernel_ind, alpha = 0.05){
+  filename = paste0("data/distr_T_", T,"_and_kernel_", kernel_ind, "_type_ll.RData")
   if(!file.exists(filename)) {
     gaussian_statistic_distribution <- replicate(1000, {
       z = rnorm(T, 0, 1)
@@ -126,5 +126,5 @@ creating_matrix_and_texing <- function(vect, vect_T, vect_alpha, filename){
   matrix_ <- matrix(vect, nrow = length(vect_T), ncol = length(vect_alpha), byrow = TRUE)
   rownames(matrix_) <- vect_T
   colnames(matrix_) <- vect_alpha
-  print.xtable(xtable(matrix_), type="latex", file=filename)
+  print.xtable(xtable(matrix_, digits = c(3)), type="latex", file=filename)
   }
