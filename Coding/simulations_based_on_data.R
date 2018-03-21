@@ -52,7 +52,7 @@ simulations_based_on_data <- function(N, different_T, different_alpha, data, tes
     
     for (alpha in different_alpha){
       #Calculating gaussian quantiles for given T and alpha
-      gaussian_quantile = quantile_function(T, g_t_set, kernel_ind, alpha)
+      gaussian_quantile = quantile_function(T, g_t_set, test_problem, kernel_ind, alpha)
       cat("Gaussian quantile = ", gaussian_quantile, "with T = ", T, "and alpha = ", alpha, "\n")
       
       #Replicating test procedure N times
@@ -64,7 +64,7 @@ simulations_based_on_data <- function(N, different_T, different_alpha, data, tes
         d
       })
       size_ar1 <- c(size_ar1, sum(size_of_the_test_ar_1)/N)
-      cat("Ratio of rejection in AR(1) under H0 case is ", sum(size_of_the_test_ar_1)/N, "with T = ", T, "and alpha = ", alpha, "\n")
+      cat("Ratio of rejection under H0 is ", sum(size_of_the_test_ar_1)/N, "with T = ", T, "and alpha = ", alpha, "\n")
     }
   }
   #Creating a nice-looking matrix for size of the test and writing it to a tex file
@@ -90,11 +90,11 @@ simulations_based_on_data <- function(N, different_T, different_alpha, data, tes
       m = numeric(T)
       
       for (i in 1:T) {if (i/T < 0.6) {m[i] = 0} else {m[i] = (i - 0.6*T)/b}}
-      lines(grid_points, m, lty = i)#, col = colors[i])
+      #lines(grid_points, m, lty = i)
       
       for (alpha in different_alpha){
         #Calculating gaussian quantiles for given T and alpha
-        gaussian_quantile = quantile_function(T, g_t_set, kernel_ind, alpha)
+        gaussian_quantile = quantile_function(T, g_t_set, test_problem, kernel_ind, alpha)
         cat("Gaussian quantile = ", gaussian_quantile, "with T = ", T, "and alpha = ", alpha, "\n")
         
         #Replicating test procedure N times
@@ -107,7 +107,7 @@ simulations_based_on_data <- function(N, different_T, different_alpha, data, tes
           d
         })
         power_ar1 = c(power_ar1, sum(size_of_the_test_with_trend)/N)
-        cat("Ratio of rejection in AR(1) under H1 case with partially linear trend is", sum(size_of_the_test_with_trend)/N, "with a =", a, ", T =", T, "and alpha =", alpha, "\n")
+        cat("Ratio of rejection under H1 with partially linear trend is", sum(size_of_the_test_with_trend)/N, "with a =", a, ", T =", T, "and alpha =", alpha, "\n")
       }
     }
     filename = paste0("Output/powertable_", a*100, "_", kernel_t, "_testing_", test_problem, ".tex")

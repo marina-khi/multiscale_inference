@@ -11,6 +11,7 @@ epanechnikov_kernel <- function(x)
   return(result)
 }
 
+
 #Nadaraya-Watson estimator using the epanechnikov kernel. 
 epanechnikov_smoothing <-function(u, data_p, grid_p, bw){
   if (length(data_p) != length(grid_p)){
@@ -40,7 +41,7 @@ lambda <- function(h)
 choosing_minimal_intervals <- function(dataset){
   set_cardinality <- nrow(dataset) 
   if (set_cardinality > 1) {
-    dataset <- dataset[order(dataset$startpoint, -dataset$endpoint),] #Ordering such that we do not have 
+    dataset <- dataset[order(dataset$startpoint, -dataset$endpoint),] #Ordering such that we don't need to check previous intervals
     rownames(dataset) <- 1:nrow(dataset) #restoring the indices after ordering
     dataset[['contains']] <- numeric(set_cardinality)
     for (i in 1:(set_cardinality-1)){
@@ -70,6 +71,7 @@ creating_g_set <- function(T){
   return(g_t_set)
 }
 
+
 #Creating g_t_set for local linear estimator over which we are taking the maximum (from Section 2.1)
 creating_g_set_ll <- function(T){
   u <- seq(from = 5/T, to = 1, by = 5/T)
@@ -79,7 +81,6 @@ creating_g_set_ll <- function(T){
   g_t_set_temp$values           <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
   g_t_set_temp$values_with_sign <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
   
-  #g_t_set        <- subset(g_t_set_temp, u >= 0.05 & u <= 0.95, select = c(u, h, values, values_with_sign)) #Subsetting u and h such that [u-h, u+h] lies in [0,1]
   g_t_set        <- subset(g_t_set_temp, u >= 0 & u <= 1, select = c(u, h, values, values_with_sign)) #Subsetting u and h such that [u-h, u+h] lies in [0,1]
   g_t_set$lambda <- lambda(g_t_set[['h']]) #Calculating the lambda(h) in order to speed up the function psistar_statistic
   return(g_t_set)
@@ -89,8 +90,8 @@ creating_g_set_ll <- function(T){
 #If we have already calculated quantiles and stored them in a file 'distribution.RData'
 #then no need to calculate them once more, we just load them from this file.
 #Ohterwise simulate the \Psi^star statistic 1000 times in order to calculate the quantiles
-calculating_gaussian_quantile <- function(T, g_t_set, kernel_ind, alpha = 0.05){
-  filename = paste0("data/distr_T_", T,"_and_kernel_", kernel_ind, ".RData")
+calculating_gaussian_quantile <- function(T, g_t_set, test_problem, kernel_ind, alpha = 0.05){
+  filename = paste0("distribution/distr_T_", T,"_testing_", test_problem, ".RData")
   if(!file.exists(filename)) {
     gaussian_statistic_distribution <- replicate(1000, {
       z = rnorm(T, 0, 1)
@@ -105,9 +106,10 @@ calculating_gaussian_quantile <- function(T, g_t_set, kernel_ind, alpha = 0.05){
   return(gaussian_quantile)
 }
 
+
 #Everything as in previous function but using local linear estimate
-calculating_gaussian_quantile_ll <- function(T, g_t_set, kernel_ind, alpha = 0.05){
-  filename = paste0("data/distr_T_", T,"_and_kernel_", kernel_ind, "_type_ll.RData")
+calculating_gaussian_quantile_ll <- function(T, g_t_set, test_problem, kernel_ind, alpha = 0.05){
+  filename = paste0("distribution/distr_T_", T,"_testing_", test_problem, "_type_ll.RData")
   if(!file.exists(filename)) {
     gaussian_statistic_distribution <- replicate(1000, {
       z = rnorm(T, 0, 1)
@@ -121,6 +123,7 @@ calculating_gaussian_quantile_ll <- function(T, g_t_set, kernel_ind, alpha = 0.0
   gaussian_quantile <- quantile(gaussian_statistic_distribution, probs = (1 - alpha), type = 1)
   return(gaussian_quantile)
 }
+
 
 #Create a matrix (for size and power table for example) and write them in the tex file
 creating_matrix_and_texing <- function(vect, vect_T, vect_alpha, filename){

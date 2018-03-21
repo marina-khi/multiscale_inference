@@ -33,7 +33,7 @@ data_analysis <- function(alpha, y_data, test_problem = "zero", kernel_t = "nw")
   ##########################################
   
   g_t_set           <- defining_set(T_data)
-  gaussian_quantile <- quantile_function(T_data, g_t_set, kernel_ind, alpha)
+  gaussian_quantile <- quantile_function(T_data, g_t_set, test_problem, kernel_ind, alpha)
   
   
   #########################################
@@ -53,11 +53,11 @@ data_analysis <- function(alpha, y_data, test_problem = "zero", kernel_t = "nw")
     a_t_set <- subset(g_t_set_with_values, values > gaussian_quantile, select = c(u, h, values))
     p_t_set <- data.frame('startpoint' = a_t_set$u - a_t_set$h, 'endpoint' = a_t_set$u + a_t_set$h, 'values' = a_t_set$values)
     p_t_set <- choosing_minimal_intervals(p_t_set)
-    
+
     #The collection of intervals where the values_with_sign > gaussian_quantile + lambda (as in (2.6))
-    a_t_set_plus <- subset(g_t_set_with_values, values_with_sign > gaussian_quantile + lambda, select = c(u, h, values_with_sign))
-    p_t_set_plus <- data.frame('startpoint' = a_t_set_plus$u - a_t_set_plus$h, 'endpoint' = a_t_set_plus$u + a_t_set_plus$h, 'values' = a_t_set_plus$values_with_sign)
-    p_t_set_plus <- choosing_minimal_intervals(p_t_set_plus)
+    #a_t_set_plus <- subset(g_t_set_with_values, values_with_sign > gaussian_quantile + lambda, select = c(u, h, values_with_sign))
+    #p_t_set_plus <- data.frame('startpoint' = a_t_set_plus$u - a_t_set_plus$h, 'endpoint' = a_t_set_plus$u + a_t_set_plus$h, 'values' = a_t_set_plus$values_with_sign)
+    #p_t_set_plus <- choosing_minimal_intervals(p_t_set_plus)
     
     #The collection of intervals where the -values_with_sign > gaussian_quantile + lambda (as in (2.6))
     #a_t_set_minus <- subset(g_t_set_with_values, -values_with_sign > gaussian_quantile + lambda, select = c(u, h, values_with_sign))
@@ -72,33 +72,34 @@ data_analysis <- function(alpha, y_data, test_problem = "zero", kernel_t = "nw")
   #Parameters for plotting
   grid_points <- seq(from = 1/T_data, to = 1, length.out = T_data) #grid points for plotting and estimating
     
-  pdffilename = paste0("Output/threegraphics_testproblem_", test_problem, "_method_", kernel_t, ".pdf")
-  pdf("Output/threegraphics_plus.pdf",width=10,height=10,paper="special")
+  pdffilename = paste0("Output/threegraphics_testing_", test_problem, "_method_", kernel_t, ".pdf")
+  pdf(pdffilename, width=10, height=10, paper="special")
 
-  par(mfrow = c(3,1)) #Setting the layout of the graphs
-  par(mar = c(0, 0.5, 0, 0.5)) #Margins for each plot
-  par(oma = c(0, 2, 0, 0)) #Outer margins
+  par(mfrow = c(3,1), cex = 1.2, tck = -0.025) #Setting the layout of the graphs
+  par(mar = c(0, 0.5, 0, 0)) #Margins for each plot
+  par(oma = c(1.5, 1.5, 0.2, 0)) #Outer margins
   
   # Plotting the real data
-  plot(grid_points, y_data, type = "l") 
+  plot(grid_points, y_data, type = "l", mgp=c(2,0.5,0)) 
   
   ###################################################################
   #Calculating smoothed curve for the data using Epanechnikov kernel#
   ###################################################################
   h <- c(0.01, 0.05, 0.1, 0.15, 0.2)
-  plot(NA, xlim = c(0, 1), ylim = c(-1.5, 1.5))
+  plot(NA, xlim = c(0, 1), ylim = c(-1.5, 1.5), yaxp  = c(-1.5, 1.5, 3), mgp=c(2,0.5,0))
   for (i in 1:5){
     #This part plots kernel smoothers for different bandwidths (all on one plot).
     smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(y_data, grid_points, h[i]))
     lines(grid_points, smoothed_curve, lty = i) 
   }
-  legend(-1/T_data, 1.3, legend=h, lty = i, ncol=1)
+  legend(7/T_data, 1.3, legend=c("h = 0.01", "h = 0.05", "h = 0.10", "h = 0.15", "h = 0.2"), lty = 1:5, cex = 0.75, ncol=1)
   
   #Plotting the minimal intervals. Do not have any negative minimal intervals, so plotting all (positive) ones
-  ymaxlim = max(p_t_set_plus$values)
-  yminlim = min(p_t_set_plus$values)
-  plot(NA, xlim=c(0,1), ylim = c(yminlim - 1, ymaxlim + 1), xlab="x", ylab="y")
-  segments(p_t_set_plus[['startpoint']], p_t_set_plus[['values']], p_t_set_plus[['endpoint']], p_t_set_plus[['values']])
+  ymaxlim = max(p_t_set$values)
+  yminlim = min(p_t_set$values)
+  plot(NA, xlim=c(0,1), ylim = c(yminlim - 0.5, ymaxlim + 0.5), yaxp  = c(1.5, 3, 3), mgp=c(2,0.5,0))
+  segments(p_t_set[['startpoint']], p_t_set[['values']], pmin(p_t_set$endpoint, 1.03), p_t_set[['values']])
+  abline(h = gaussian_quantile, lty = 2)
   
   #title(main = "Plots for normalized yearly temperature data for England",  outer = TRUE)
   dev.off()

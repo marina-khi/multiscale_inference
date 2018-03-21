@@ -21,7 +21,6 @@ different_alpha <- c(0.01, 0.05, 0.1) #Different alpha for which we calculate si
 alpha <- 0.05
 
 h         <- c(0.05, 0.1, 0.15, 0.2) #Different bandwidth for plotting. Number must be <=6 in order for the plot to be readable
-colors    <- c("black", "red", "green", "blue", "yellow") #Different colors for plotting. Number must be >= number of bandwidths
 
 kernel_method <- "ll" #Only "nw" (Nadaraya-Watson) and "ll" (local linear) methods are currently supported
 test_problem  <- "constant" #Only "zero" (H_0: m = 0) or "constant" (H_0: m = const) testing problems are currently supported. 
