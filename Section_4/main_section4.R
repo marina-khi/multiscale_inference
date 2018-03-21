@@ -11,7 +11,11 @@ source("testing_different_time_trends.R")
 ##############################
 
 N        <- 34 #number of different time series 
+N_rep    <- 1000 #number of repetitions for calculating gaussian statistic
 alpha    <- 0.05 #alpha for calculating quantiles
+
+different_T     <- c(250, 350, 500, 1000) #Different lengths of time series for which we calculate size and power
+different_alpha <- c(0.01, 0.05, 0.1) #Different alpha for which we calculate size and power
 
 kernel_method <- "ll" #Only "nw" (Nadaraya-Watson) and "ll" (local linear) methods are currently supported
 
