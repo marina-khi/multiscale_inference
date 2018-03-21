@@ -1,0 +1,346 @@
+
+\section*{Appendix}
+
+\def\theequation{A.\arabic{equation}}
+\setcounter{equation}{0}
+\allowdisplaybreaks[3]
+
+
+
+In what follows, we prove the main theoretical results of the paper. Throughout the Appendix, the symbol $C$ denotes a universal real constant which may take a different value on each occurrence. We use the following notation: For $a,b \in \reals$, we write $a_+ = \max \{0,a\}$ and $a \vee b = \max\{a,b\}$. For any set $A$, the symbol $|A|$ denotes the cardinality of $A$. The notation $X \stackrel{\mathcal{D}}{=} Y$ means that the two random variables $X$ and $Y$ have the same distribution. Finally, $f_0(\cdot)$ and $F_0(\cdot)$ denote the density and distribution function of the standard Gaussian distribution, respectively.
+
+
+
+\subsection*{Auxiliary results using strong approximation theory}
+
+
+The main purpose of this section is to prove that there is a version of the multiscale statistic $\widehat{\Phi}_T$ defined in \eqref{Phi-hat-statistic} which is close to a Gaussian statistic whose distribution is known. More specifically, we prove the following result. 
+%
+%
+\begin{propA}\label{propA-strong-approx}
+Under the conditions of Theorem \ref{theo-stat}, there exist statistics $\widetilde{\Phi}_T$ for $T = 1,2,\ldots$ with the following two properties: (i) $\widetilde{\Phi}_T$ has the same distribution as $\widehat{\Phi}_T$ for any $T$, and (ii)
+\[ \big| \widetilde{\Phi}_T - \Phi_T \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} \Big), \]
+where $\Phi_T$ is a Gaussian statistic as defined in \eqref{Phi-statistic}. 
+\end{propA}
+%
+%
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-strong-approx}}}] 
+For the proof, we draw on strong approximation theory for stationary processes $\{\varepsilon_t\}$ that fulfill the conditions \ref{C-err1}--\ref{C-err3}. By Theorem 2.1 and Corollary 2.1 in \cite{BerkesLiuWu2014}, the following strong approximation result holds true: On a richer probability space, there exist a standard Brownian motion $\mathbb{B}$ and a sequence $\{ \widetilde{\varepsilon}_t: t \in \naturals \}$ such that $[\widetilde{\varepsilon}_1,\ldots,\widetilde{\varepsilon}_T] \stackrel{\mathcal{D}}{=} [\varepsilon_1,\ldots,\varepsilon_T]$ for each $T$ and 
+\begin{equation}\label{eq-strongapprox-dep}
+\max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_s - \sigma \mathbb{B}(t) \Big| = o\big( T^{1/q} \big) \quad \text{a.s.},  
+\end{equation}
+where $\sigma^2 = \sum_{k \in \integers} \cov(\varepsilon_0, \varepsilon_k)$ denotes the long-run error variance. To apply this result, we let 
+\[ \widetilde{\Phi}_T = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widetilde{\phi}_T(u,h)}{\widetilde{\sigma}}\Big| - \lambda(h) \Big\}, \]
+where $\widetilde{\phi}_T(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \widetilde{\varepsilon}_t$ and $\widetilde{\sigma}^2$ is the same estimator as $\widehat{\sigma}^2$ with $Y_t = m(t/T) + \varepsilon_t$ replaced by $\widetilde{Y}_t = m(t/T) + \widetilde{\varepsilon}_t$ for $1 \le t \le T$. In addition, we define
+\begin{align*}
+\Phi_T & = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_T(u,h)}{\sigma}\Big| - \lambda(h) \Big\} \\
+\Phi_T^{*} & = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_T(u,h)}{\widetilde{\sigma}}\Big| - \lambda(h) \Big\} 
+\end{align*}
+with $\phi_T(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \sigma Z_t$ and $Z_t = \mathbb{B}(t) - \mathbb{B}(t-1)$. With this notation, we can write 
+\begin{equation}\label{eq-strongapprox-bound1}
+\big| \widetilde{\Phi}_T - \Phi_T \big| \le \big| \widetilde{\Phi}_T - \Phi_T^{*} \big| + \big| \Phi_T^{*} - \Phi_T \big| = \big| \widetilde{\Phi}_T - \Phi_T^{*} \big| + O_p \Big( \sqrt{\frac{\log T}{T}} \Big), 
+\end{equation}
+where the last equality follows by taking into account that $\widetilde{\sigma}^2 - \sigma^2 = O_p(T^{-1/2})$, $\phi_T(u,h) \sim \normal(0,\sigma^2)$ for all $(u,h) \in \mathcal{G}_T$ and $|\mathcal{G}_T| = O(T^\theta)$ for some large but fixed constant $\theta$. Straightforward calculations yield that 
+\[ \big| \widetilde{\Phi}_T - \Phi_T^{*} \big| \le \widetilde{\sigma}^{-1} \max_{(u,h) \in \mathcal{G}_T} \big| \widetilde{\phi}_T(u,h) - \phi_T(u,h) \big|. \]
+Using summation by parts,
+%($\sum_{i=1}^n a_i b_i = \sum_{i=1}^{n-1} A_i (b_i - b_{i+1}) + A_n b_n$ with $A_j = \sum_{j=1}^i a_j$) 
+we further obtain that 
+\begin{align*}
+\big| \widetilde{\phi}_T(u,h) - \phi_T(u,h) \big| 
+ & \le W_T(u,h) \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_s - \sigma \sum\limits_{s=1}^t \big\{ \mathbb{B}(s) - \mathbb{B}(s-1) \big\} \Big| \\
+ & = W_T(u,h) \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_s - \sigma \mathbb{B}(t) \Big|,
+\end{align*}
+where
+\[ W_T(u,h) = \sum\limits_{t=1}^{T-1} |w_{t+1,T}(u,h) - w_{t,T}(u,h)| + |w_{T,T}(u,h)|. \]
+Standard arguments show that $\max_{(u,h) \in \mathcal{G}_T} W_T(u,h) = O( 1/\sqrt{Th_{\min}} )$. Applying the strong approximation result \eqref{eq-strongapprox-dep}, we can thus infer that 
+\begin{align}
+\big| \widetilde{\Phi}_T - \Phi_T^{*} \big| 
+ & \le \widetilde{\sigma}^{-1} \max_{(u,h) \in \mathcal{G}_T} \big| \widetilde{\phi}_T(u,h) - \phi_T(u,h) \big| \nonumber \\
+ & \le \widetilde{\sigma}^{-1} \max_{(u,h) \in \mathcal{G}_T} W_T(u,h) \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_s - \sigma \mathbb{B}(t) \Big| 
+ = o_p \Big( \frac{T^{1/q}}{\sqrt{Th_{\min}}} \Big). \label{eq-strongapprox-bound2}
+\end{align}
+Plugging \eqref{eq-strongapprox-bound2} into \eqref{eq-strongapprox-bound1} completes the proof.
+\end{proof}
+
+
+
+\subsection*{Auxiliary results using anti-concentration bounds}
+
+
+In this section, we establish some properties of the Gaussian statistic $\Phi_T$ defined in \eqref{Phi-statistic}. We in particular show that $\Phi_T$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$ with $\delta_T$ converging to zero.  
+%
+%
+\begin{propA}\label{propA-anticon}
+Set $\delta_T = T^{1/q} / \sqrt{T h_{\min}}$. Under the conditions of Theorem \ref{theo-stat}, it holds that 
+\[ \sup_{x \in \reals} \pr \Big( | \Phi_T - x | \le \delta_T \Big) = o(1). \]
+\end{propA}
+%
+%
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-anticon}}}] 
+The main technical tool for proving Proposition \ref{propA-anticon} are anti-concentration bounds for Gaussian random vectors. The following proposition slightly generalizes anti-concentration results derived in \cite{Chernozhukov2015}, in particular Theorem 3 therein. 
+\begin{propA}\label{theo-anticon}
+Let $(X_1,\ldots,X_p)^\top$ be a Gaussian random vector in $\reals^p$ with $\ex[X_j] = \mu_j$ and $\var(X_j) = \sigma_j^2 > 0$ for $1 \le j \le p$. Define $\overline{\mu} = \max_{1 \le j \le p} |\mu_j|$ together with $\underline{\sigma} = \min_{1 \le j \le p} \sigma_j$ and $\overline{\sigma} = \max_{1 \le j \le p} \sigma_j$. Moreover, set $a_p = \ex[ \max_{1 \le j \le p} (X_j-\mu_j)/\sigma_j ]$ and $b_p = \ex[ \max_{1 \le j \le p} (X_j-\mu_j) ]$. For every $\delta > 0$, it holds that
+\[ \sup_{x \in \reals} \pr \Big( \big| \max_{1 \le j \le p} X_j - x \big| \le \delta \Big) \le C \delta \big\{ \overline{\mu} + a_p + b_p + \sqrt{1 \vee \log(\underline{\sigma}/\delta)} \big\}, \]
+where $C > 0$ depends only on $\underline{\sigma}$ and $\overline{\sigma}$. 
+\end{propA} 
+For the sake of completeness, the proof of Proposition \ref{theo-anticon} is provided at the end of the Appendix. To apply Proposition \ref{theo-anticon} to our setting at hand, we introduce the following notation: We write $x = (u,h)$ along with $\mathcal{G}_T = \{ x : x \in \mathcal{G}_T \} = \{x_1,\ldots,x_p\}$, where $p := |\mathcal{G}_T| \le O(T^\theta)$ for some large but fixed $\theta > 0$ by our assumptions. Moreover, for $j = 1,\ldots,p$, we set 
+\begin{align*}
+X_{2j-1} & = \frac{\phi_T(x_{j1},x_{j2})}{\sigma} - \lambda(x_{j2}) \\
+X_{2j} & = -\frac{\phi_T(x_{j1},x_{j2})}{\sigma} - \lambda(x_{j2}) 
+\end{align*}
+with $x_j = (x_{j1},x_{j2})$. This notation allows us to write
+\[ \Phi_T = \max_{1 \le j \le 2p} X_j, \]
+where $(X_1,\ldots,X_{2p})^\top$ is a Gaussian random vector with the following properties: (i) $\mu_j := \ex[X_j] = - \lambda(x_{j2})$ and thus $\overline{\mu} = \max_{1 \le j \le p} |\mu_j| \le C \sqrt{\log T}$, and (ii) $\sigma_j^2 := \var(X_j) = 1$ for all $j$. Since $\sigma_j = 1$ for all $j$, it holds that $a_p = b_p$. Moreover, as the variables $(X_j - \mu_j)/\sigma_j$ are standard normal, we have that $a_p = b_p \le \sqrt{2 \log (2p)} \le C \sqrt{\log T}$. We can now apply Proposition \ref{theo-anticon} to obtain that 
+\[ \sup_{x \in \reals} \pr \Big( \big| \Phi_T - x \big| \le \delta_T \Big) \le C \delta_T \Big[ \sqrt{\log T} + \sqrt{ \log(\underline{\sigma}/\delta_T) } \Big] = o(1) \]
+with $\delta_T = T^{1/q} / \sqrt{T h_{\min}}$, which is the statement of Proposition \ref{propA-anticon}.
+\end{proof}
+
+
+
+\newpage
+\subsection*{Proof of Theorem \ref{theo-stat}}
+
+
+To prove Theorem \ref{theo-stat}, we make use of the two auxiliary results derived above. By Proposition \ref{propA-strong-approx}, there exist statistics $\widetilde{\Phi}_T$ for $T = 1,2,\ldots$ which are distributed as $\widehat{\Phi}_T$ for any $T \ge 1$ and which have the property that 
+\begin{equation}\label{statement-propA-strong-approx}
+\big| \widetilde{\Phi}_T - \Phi_T \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} \Big), 
+\end{equation}
+where $\Phi_T$ is a Gaussian statistic as defined in \eqref{Phi-statistic}. The approximation result \eqref{statement-propA-strong-approx} allows us to replace the multiscale statistic $\widehat{\Phi}_T$ by an identically distributed version $\widetilde{\Phi}_T$ which is close to the Gaussian statistic $\Phi_T$. In the next step, we show that  
+\begin{equation}\label{eq-theo-stat-step2}
+\sup_{x \in \reals} \big| \pr(\widetilde{\Phi}_T \le x) - \pr(\Phi_T \le x) \big| = o(1), 
+\end{equation}
+which immediately implies the statement of Theorem \ref{theo-stat}. For the proof of \eqref{eq-theo-stat-step2}, we use the following simple lemma: 
+\begin{lemmaA}\label{lemma1-theo-stat}
+Let $V_T$ and $W_T$ be real-valued random variables for $T = 1,2,\ldots$ such that $V_T - W_T = o_p(\delta_T)$ with $\delta_T = o(1)$. If 
+\begin{equation}\label{eq-lemma1-cond}
+\sup_{x \in \reals} \pr(|V_T - x| \le \delta_T) = o(1), 
+\end{equation}
+then 
+\begin{equation}\label{eq-lemma1-statement}
+\sup_{x \in \reals} \big| \pr(V_T \le x) - \pr(W_T \le x) \big| = o(1). 
+\end{equation}
+\end{lemmaA}
+The statement of Lemma \ref{lemma1-theo-stat} can be summarized as follows: If $W_T$ can be approximated by $V_T$ in the sense that $V_T - W_T = o_p(\delta_T)$ and if $V_T$ does not concentrate too strongly in small regions of the form $[x - \delta_T,x+\delta_T]$ as assumed in \eqref{eq-lemma1-cond}, then the distribution of $W_T$ can be approximated by that of $V_T$ in the sense of \eqref{eq-lemma1-statement}.
+\begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{lemma1-theo-stat}}}] 
+It holds that 
+\begin{align*}
+ & \big| \pr(V_T \le x) - \pr(W_T \le x) \big| \\
+ & = \big| \ex \big[ 1(V_T \le x) - 1(W_T \le x) \big] \big| \\
+ & \le \big| \ex \big[ \big\{ 1(V_T \le x) - 1(W_T \le x) \big\} 1(|V_T - W_T| \le \delta_T) \big] + \ex \big[ 1(|V_T - W_T| > \delta_T) \big] \big| \\
+ & \le \ex \big[ 1(|V_T - x| \le \delta_T, |V_T - W_T| \le \delta_T) \big] + o(1) \\
+ & \le \pr (|V_T - x| \le \delta_T) + o(1). \qedhere
+\end{align*}
+\end{proof}
+We now apply this lemma with $V_T = \Phi_T$, $W_T = \widetilde{\Phi}_T$ and $\delta_T = T^{1/q} / \sqrt{T h_{\min}}$: From \eqref{statement-propA-strong-approx}, we already know that $\widetilde{\Phi}_T - \Phi_T = o_p(\delta_T)$. Moreover, by Proposition \ref{propA-anticon}, it holds that 
+\begin{equation}\label{statement-propA-anticon}
+\sup_{x \in \reals} \pr \Big( | \Phi_T - x | \le \delta_T \Big) = o(1). 
+\end{equation}
+Note that with the help of Theorem 2.1 in \cite{DuembgenSpokoiny2001}, we can further show that $\Phi_T = O_p(1)$. Together with \eqref{statement-propA-anticon}, this says that the Gaussian multiscale statistic $\Phi_T$ is asymptotically tight and does not concentrate too strongly in small regions of the form $[x - \delta_T,x + \delta_T]$. Putting everything together, we are now in a position to apply Lemma \ref{lemma1-theo-stat}, which in turn yields \eqref{eq-theo-stat-step2}. This completes the proof of Theorem \ref{theo-stat}. 
+
+
+
+\subsection*{Proof of Proposition \ref{prop-test-2}}
+
+
+Define $\widehat{\psi}_T^A(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \varepsilon_t$, $\widehat{\psi}_T^B(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) m_T(t/T)$ and
+\[ \widehat{\psi}_T^*(u,h) = \frac{ \sqrt{Th} \int_0^1 h^{-1} K(\frac{w-u}{h}) [S_2(u,h) - S_1(u,h)(\frac{w-u}{h})] m_T(w) dw }{ \{ \int_0^1 h^{-1} K^2(\frac{w-u}{h}) [S_2(u,h) - S_1(u,h)(\frac{w-u}{h})]^2 dw \}^{1/2} }, \] 
+where $S_\ell(u,h) = \int_0^1 h^{-1} K(\frac{w-u}{h}) (\frac{w-u}{h})^\ell dw$. With the help of Proposition \ref{propA-strong-approx}, we can show that
+\begin{equation}\label{eq1-proof-prop-test-2}
+\max_{(u,h) \in \mathcal{G}_T} |\widehat{\psi}_T^A(u,h)| = O_p(\sqrt{\log T}). 
+\end{equation}
+Moreover, standard calculations yield that 
+\begin{equation}\label{eq2-proof-prop-test-2}
+\big| \widehat{\psi}_T^B(u,h) - \widehat{\psi}_T^*(u,h) \big| \le \frac{C}{Th}, 
+\end{equation}
+where the constant $C$ is independent of $u$, $h$ and $T$. By assumption, there exists $(u,h) \in \mathcal{G}_T$ with $[u-h,u+h] \subseteq [0,1]$ such that $m_T(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$. For this $(u,h)$, it holds that 
+\begin{equation}\label{eq3-proof-prop-test-2}
+\widehat{\psi}_T^*(u,h) = \frac{\sqrt{Th}}{\int K^2(\varphi)d\varphi} \int_0^1 K\Big(\frac{w-u}{h}\Big) m_T(w) dw \ge \frac{c_T \sqrt{\log T}}{\int K^2(\varphi)d\varphi}. 
+\end{equation}
+Using \eqref{eq1-proof-prop-test-2}--\eqref{eq3-proof-prop-test-2} and noticing that $\lambda(h) \le \lambda(h_{\min}) \le C \sqrt{\log T}$, we obtain that 
+\begin{align}
+\widehat{\Psi}_T 
+ & \ge \max_{(u,h) \in \mathcal{G}_T} \frac{|\widehat{\psi}_T^B(u,h)|}{\widehat{\sigma}} - \max_{(u,h) \in \mathcal{G}_T} \Big\{ \frac{|\widehat{\psi}_T^A(u,h)|}{\widehat{\sigma}} + \lambda(h) \Big\} \nonumber \\
+ & = \max_{(u,h) \in \mathcal{G}_T} \frac{|\widehat{\psi}_T^B(u,h)|}{\widehat{\sigma}} + O_p(\sqrt{\log T}) \nonumber \\
+ & \ge \frac{c_T \sqrt{\log T}}{\int K^2(\varphi)d\varphi} + O_p(\sqrt{\log T}). \label{eq4-proof-prop-test-2}
+\end{align}  
+Since $q_T(\alpha) = O(\sqrt{\log T})$ for any fixed $\alpha \in (0,1)$, \eqref{eq4-proof-prop-test-2} immediately implies that $\pr(\widehat{\Psi}_T \le q_T(\alpha)) = o(1)$. 
+
+
+
+\subsection*{Proof of Proposition \ref{prop-test-3}}
+
+ 
+The statement of Proposition \ref{prop-test-3} is a consequence of the following observation: For all $(u,h) \in \mathcal{G}_T$ with 
+\[ \Big|\frac{\widehat{\psi}_T(u,h) - \ex \widehat{\psi}_T(u,h)}{\widehat{\sigma}}\Big| - \lambda(h) \le q_T(\alpha) \quad \text{and} \quad \Big|\frac{\widehat{\psi}_T(u,h)}{\widehat{\sigma}}\Big| - \lambda(h) > q_T(\alpha), \]
+it holds that $\ex[\widehat{\psi}_T(u,h)] \ne 0$, which in turn implies that $m(v) \ne 0$ for some $v \in I_{u,h}$. From this observation, we can infer the following: On the event 
+\[ \big\{ \widehat{\Phi}_T \le q_T(\alpha) \big\} = \Big\{ \max_{(u,h) \in \mathcal{G}_T} \Big( \Big|\frac{\widehat{\psi}_T(u,h) - \ex \widehat{\psi}_T(u,h)}{\widehat{\sigma}}\Big| - \lambda(h) \Big) \le q_T(\alpha) \Big\}, \]
+it holds that for all $(u,h) \in \mathcal{A}_T$, 
+$m(v) \ne 0$ for some $v \in I_{u,h}$. Hence, we obtain that 
+\[ \big\{ \widehat{\Phi}_T \le q_T(\alpha) \big\} \subseteq E_T. \]
+As a result, we arrive at  
+\[ \pr(E_T) \ge \pr \big(  \widehat{\Phi}_T \le q_T(\alpha) \big) = (1-\alpha) + o(1), \]
+where the last equality holds by Theorem \ref{theo-stat}.
+
+
+
+\subsection*{Proof of Theorem \ref{theo-stat-equality}}
+
+
+The proof proceeds analogous to that of Theorem \ref{theo-stat}. In the first step, we show that that there exist statistics $\widetilde{\Phi}_{n,T}$ for $T = 1,2,\ldots$ with the following two properties: (i) $\widetilde{\Phi}_{n,T}$ has the same distribution as $\widehat{\Phi}_{n,T}$ for any $T$, and (ii)
+\begin{equation}\label{eq-theo-stat-equality-step1}
+\big| \widetilde{\Phi}_{n,T} - \Phi_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} \Big), 
+\end{equation}
+where $\Phi_{n,T}$ is a Gaussian statistic as defined in Section \ref{subsec-test-equality-theo}. In the second step, we prove that 
+\begin{equation}\label{eq-theo-stat-equality-step2}
+\sup_{x \in \reals} \big| \pr(\widetilde{\Phi}_{n,T} \le x) - \pr(\Phi_{n,T} \le x) \big| = o(1). 
+\end{equation}
+To verify \eqref{eq-theo-stat-equality-step1}, we follow the arguments for the proof of Proposition \ref{propA-strong-approx}, adapting the notation accordingly. The details are given below. The proof of \eqref{eq-theo-stat-equality-step2} is almost identical to that of \eqref{eq-theo-stat-step2} and thus omitted. 
+
+
+To complete the proof, it remains to verify \eqref{eq-theo-stat-equality-step1}. By Theorem 2.1 and Corollary 2.1 in \cite{BerkesLiuWu2014}, there exist a standard Brownian motion $\mathbb{B}_i$ and a sequence $\{ \widetilde{\varepsilon}_{it}: t \in \naturals \}$ for each $i$ such that the following holds: (i) $\mathbb{B}_i$ and $\{ \widetilde{\varepsilon}_{it}: t \in \naturals \}$ are independent across $i$, (ii) $[\widetilde{\varepsilon}_{i1},\ldots,\widetilde{\varepsilon}_{iT}] \stackrel{\mathcal{D}}{=} [\varepsilon_{i1},\ldots,\varepsilon_{iT}]$ for each $i$ and $T$, and (iii)  
+\begin{equation*}
+\max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \sigma \mathbb{B}_i(t) \Big| = o\big( T^{1/q} \big) \quad \text{a.s.}  
+\end{equation*}
+for each $i$, where $\sigma^2 = \sum_{k \in \integers} \cov(\varepsilon_{i0}, \varepsilon_{ik})$ denotes the long-run error variance. We define 
+\[ \widetilde{\Phi}_T = \max_{1\le i < j \le N} \widetilde{\Phi}_{ij,T} \quad \text{with} \quad \widetilde{\Phi}_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widetilde{\phi}_{ij,T}(u,h)}{\sqrt{2}\widetilde{\sigma}}\Big| - \lambda(h) \Big\}, \]
+where $\widetilde{\phi}_{ij,T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) (\widetilde{\varepsilon}_{it} - \widetilde{\varepsilon}_{jt})$ and $\widetilde{\sigma}$ is the same estimator as $\widehat{\sigma}^\circ$ with $Y_{it}^\circ = m_i(t/T) + \varepsilon_{it}$ replaced by  $\widetilde{Y}_{it} = m_i(t/T) + \widetilde{\varepsilon}_{it}$. In addition, we let 
+\begin{align*} 
+ & \Phi_T = \max_{1\le i < j \le N} \Phi_{ij,T} \quad \text{with} \quad \Phi_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij,T}(u,h)}{\sqrt{2}\sigma}\Big| - \lambda(h) \Big\} \\
+ & \Phi_T^* = \max_{1\le i < j \le N} \Phi_{ij,T}^* \quad \text{with} \quad \Phi_{ij,T}^* = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij,T}(u,h)}{\sqrt{2}\widetilde{\sigma}}\Big| - \lambda(h) \Big\}, 
+\end{align*}
+where $\phi_T(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \sigma (Z_{it} - Z_{jt})$ and $Z_{it} = \mathbb{B}_i(t) - \mathbb{B}_i(t-1)$. With this notation at hand, we can follow the steps of the proof for Proposition \ref{propA-strong-approx} to arrive at \eqref{eq-theo-stat-equality-step1}. 
+
+
+
+\subsection*{Proof of Proposition \ref{prop-clustering-1}}
+
+
+Consider the event  
+\[ E_{n,T} = \Big\{ \max_{1 \le \ell \le N} \max_{i,j \in G_\ell} \widehat{\Psi}_{ij,T} \le q_{n,T}(\alpha) \ \text{ and } \ \min_{1 \le \ell < \ell^\prime \le N} \max_{\substack{i \in G_\ell \\ j \in G_{\ell^\prime}}} \widehat{\Psi}_{ij,T} > q_{n,T}(\alpha) \Big\}. \]
+The term $\max_{1 \le \ell \le N} \max_{i,j \in G_\ell} \widehat{\Psi}_{ij,T}$ is the largest multiscale distance between two time series $i$ and $j$ from the same group, whereas $\min_{1 \le \ell < \ell^\prime \le N} \max_{i \in G_\ell, \, j \in G_{\ell^\prime}} \widehat{\Psi}_{ij,T}$ is the smallest multiscale distance between two time series from two different groups. On the event $E_{n,T}$, it obviously holds that 
+\begin{equation}\label{eq-E-prop-clustering-1}
+\max_{1 \le \ell \le N} \max_{i,j \in G_\ell} \widehat{\Psi}_{ij,T} < \min_{1 \le \ell < \ell^\prime \le N} \max_{\substack{i \in G_\ell \\ j \in G_{\ell^\prime}}} \widehat{\Psi}_{ij,T}. 
+\end{equation}
+Hence, any two time series from the same class have a smaller distance than any two time series from two different classes. From Theorem \ref{theo-stat-equality}, it follows that 
+\[  \pr \Big( \max_{1 \le \ell \le N} \max_{i,j \in G_\ell} \widehat{\Psi}_{ij,T} \le q_{n,T}(\alpha) \Big) \ge (1 - \alpha) + o(1), \]
+and from part (ii) of Proposition \ref{prop-test-equality}, we obtain that 
+\[  \pr \Big( \max_{1 \le \ell \le N} \max_{i,j \in G_\ell} \widehat{\Psi}_{ij,T} \le q_{n,T}(\alpha) \Big) = o(1). \]
+Taken together, these two statements imply that 
+\begin{equation}\label{eq-Eprob-prop-clustering-1}
+\pr \big( E_{n,T} \big) \ge (1-\alpha) + o(1). 
+\end{equation}
+In what follows, we show that on the event $E_{n,T}$, it holds that $\{ \widehat{G}_1^{[n-N]},\ldots,\widehat{G}_N^{[n-N]} \} =\{ G_1,\ldots,G_N \}$ and $\widehat{N} = N$. From this and \eqref{eq-Eprob-prop-clustering-1}, the statements of Proposition \ref{prop-clustering-1} easily follow. 
+
+
+We first show that $\{ \widehat{G}_1^{[n-N]},\ldots,\widehat{G}_N^{[n-N]} \} =\{ G_1,\ldots,G_N \}$ on the event $E_{n,T}$. The proof proceeds by induction on the iteration steps $r$ of the HAC algorithm. Assume that we are on the event $E_{n,T}$. 
+\begin{itemize}[leftmargin=2.1cm]
+\item[$r = 0$:] In the first iteration step, the HAC algorithm merges two singleton clusters $\widehat{G}_i^{[0]} = \{ i \}$ and $\widehat{G}_j^{[0]} = \{ j \}$ with $i$ and $j$ belonging to the same class $G_k$. This is a direct consequence of \eqref{eq-E-prop-clustering-1}. The algorithm thus produces a partition $\{ G_1^{[1]},\ldots,G_{n-1}^{[1]} \}$ whose elements $G_\ell^{[1]}$ all have the following property: $G_\ell^{[1]} \subseteq G_k$ for some $k$, that is, the clusters $G_\ell^{[1]}$ contain elements from only one group. 
+\item[$r \curvearrowright r+1$:]
+Now suppose we are in the $r$-th iteration step for some $r < n-N$. Assume that the partition $\{G_1^{[r]},\ldots,G_{n-r}^{[r]}\}$ in the $r$-th iteration step is such that for any $\ell$, $G_\ell^{[r]} \subseteq G_k$ for some $k$. Because of \eqref{eq-E-prop-clustering-1}, the dissimilarity $\widehat{\Delta}(G_\ell^{[r]},G_{\ell^\prime}^{[r]})$ gets minimal for two groups $G_\ell^{[r]}$ and $G_{\ell^\prime}^{[r]}$ with the property that $G_\ell^{[r]} \cup G_{\ell^\prime}^{[r]} \subseteq G_k$ for some $k$. Hence, the HAC algorithm produces a partition $\{ G_1^{[r+1]},\ldots,G_{n-(r+1)}^{[r+1]} \}$ whose elements $G_\ell^{[1]}$ are all such that $G_\ell^{[r+1]} \subseteq G_k$ for some $k$. 
+\end{itemize}
+The induction argument shows the following: For any $r \le n - N$, the partition $\{ \widehat{G}_1^{[r]},\ldots,\widehat{G}_{n-r}^{[r]} \}$ consists of clusters $\widehat{G}_\ell^{[r]}$ which all have the property that $G_\ell^{[r]} \subseteq G_k$ for some $k$. This in particular holds for the partition $\{ \widehat{G}_1^{[n-N]},\ldots,\widehat{G}_N^{[n-N]} \}$, which in turn implies that $\{ \widehat{G}_1^{[n-N]},\ldots,\widehat{G}_N^{[n-N]} \} =\{ G_1,\ldots,G_N \}$.  
+
+
+We next prove that $\widehat{N} = N$ on the event $E_{n,T}$. It is trivial to see that (no matter whether we are on the event $E_{n,T}$ or not) each partition $\{ \widehat{G}_1^{[n-r]},\ldots,\widehat{G}_r^{[n-r]} \}$ with $r < N$ contains at least one element $\widehat{G}_\ell^{[n-r]}$ with the following property: $\widehat{G}_\ell^{[n-r]} \cap G_k \ne \emptyset$ and $\widehat{G}_\ell^{[n-r]} \cap G_{k^\prime} \ne \emptyset$ for some $k \ne k^\prime$, that is, $\widehat{G}_\ell^{[n-r]}$ contains elements from at least two different groups. On the event $E_{n,T}$, it holds that $\widehat{\Psi}_{ij,T} > q_{n,T}(\alpha)$ for any two time series $i$ and $j$ from two different groups, which immediately implies that $\max_{1 \le \ell \le r} \widehat{\Delta} ( \widehat{G}_\ell^{[n-r]} ) > q_{n,T}(\alpha)$ for any $r < N$. Since $\{ \widehat{G}_1^{[n-N]},\ldots,\widehat{G}_N^{[n-N]} \} =\{ G_1,\ldots,G_N \}$ and $\widehat{\Delta}(G_\ell) \le q_{n,T}(\alpha)$ for any $\ell$ on the event $E_{n,T}$, we further get that $\max_{1 \le \ell \le N} \widehat{\Delta} ( \widehat{G}_\ell^{[n-N]} ) = \max_{1 \le \ell \le N} \widehat{\Delta} ( \widehat{G}_\ell^{[n-N]} ) \le q_{n,T}(\alpha)$. As a result, we obtain that on the event $E_{n,T}$, 
+\[ \min \Big\{ r = 1,2,\ldots \Big| \max_{1 \le \ell \le r} \widehat{\Delta} \big( \widehat{G}_\ell^{[n-r]} \big) \le q_{n,T}(\alpha) \Big\} = N, \]
+that is, $\widehat{N} = N$. 
+
+
+
+\subsection*{Proof of Proposition \ref{theo-anticon}}
+
+ 
+The proof makes use of the following three lemmas, which correspond to Lemmas 5--7 in \cite{Chernozhukov2015}. 
+\begin{lemmaA}\label{lemma1-anticon}
+Let $(W_1,\ldots,W_p)^\top$ be a (not necessarily centred) Gaussian random vector in $\reals^p$ with $\var(W_j) = 1$ for all $1 \le j \le p$. Suppose that $\text{Corr}(W_j,W_k) < 1$ whenever $j \ne k$. Then the distribution of $\max_{1 \le j \le p} W_j$ is absolutely continuous with respect to Lebesgue measure and a version of the density is given by 
+\[ f(x) = f_0(x) \sum\limits_{j=1}^p e^{\ex[W_j]x - \ex[W_j]^2/2} \, \pr \big(W_k \le x \text{ for all } k \ne j \, \big| \, W_j = x \big). \]
+\end{lemmaA}
+\begin{lemmaA}\label{lemma2-anticon}
+Let $(W_0,W_1,\ldots,W_p)^\top$ be a (not necessarily centred) Gaussian random vector in $\reals^p$ with $\var(W_j) = 1$ for all $1 \le j \le p$. Suppose that $\ex[W_0] \ge 0$. Then the map 
+\[ x \mapsto  e^{\ex[W_0]x - \ex[W_0]^2/2} \, \pr \big(W_j \le x \text{ for } 1 \le j \le p \, \big| \, W_0 = x \big) \]
+is non-decreasing on $\reals$. 
+\end{lemmaA}
+\begin{lemmaA}\label{lemma3-anticon}
+Let $(X_1,\ldots,X_p)^\top$ be a centred Gaussian random vector in $\reals^p$ with $\max_{1 \le j \le p} \ex[X_j^2] \le \sigma^2$ for some $\sigma^2 > 0$. Then for any $r > 0$, 
+\[ \pr \Big( \max_{1 \le j \le p} X_j \ge \ex \Big[ \max_{1 \le j \le p} X_j \Big] + r \Big) \le e^{-r^2/(2\sigma^2)}. \]
+\end{lemmaA} 
+The proof of Lemmas \ref{lemma1-anticon} and \ref{lemma2-anticon} can be found in \cite{Chernozhukov2015}. Lemma \ref{lemma3-anticon} is a standard result on Gaussian concentration whose proof is given e.g.\ in \cite{Ledoux2001}; see in particular Theorem 7.1 therein. We now closely follow the arguments for the proof of Theorem 3 in \cite{Chernozhukov2015}. The proof splits up into three steps. 
+\vspace{10pt}
+
+
+\textit{Step 1.} To start with, we show that the analysis can be restricted to the unit variance case. To see this, pick any $x \ge 0$ and set 
+\[ W_j = \frac{X_j - x}{\sigma_j} + \frac{\overline{\mu} + x}{\underline{\sigma}}. \]
+By construction, $\ex[W_j] \ge 0$ and $\var(W_j) = 1$. Defining $Z = \max_{1 \le j \le p} W_j$, it holds that  
+\begin{align*}
+\pr \Big( \Big| \max_{1 \le j \le p} X_j - x \Big| \le \delta \Big) 
+ & \le \pr \Big( \Big| \max_{1 \le j \le p} \frac{X_j - x}{\sigma_j} \Big| \le \frac{\delta}{\underline{\sigma}} \Big) \\
+ & \le \sup_{y \in \reals} \pr \Big( \Big| \max_{1 \le j \le p} \frac{X_j - x}{\sigma_j} + \frac{\overline{\mu} + x}{\underline{\sigma}} - y \Big| \le \frac{\delta}{\underline{\sigma}} \Big) \\
+ & = \sup_{y \in \reals} \pr \Big( |Z - y| \le \frac{\delta}{\underline{\sigma}} \Big). 
+\end{align*}
+\vspace{1pt}
+
+
+\textit{Step 2.} We next bound the density of $Z$. Without loss of generality, we assume that $\text{Corr}(W_j,W_k) < 1$ for $k \ne j$. The marginal distribution of $W_j$ is $\normal(\nu_j,1)$ with $\nu_j = \ex[W_j] = (\mu_j/\sigma_j + \overline{\mu}/{\underline{\sigma}}) + (x/\underline{\sigma} - x/\sigma_j) \ge 0$. Hence, by Lemmas \ref{lemma1-anticon} and \ref{lemma2-anticon}, the random variable $Z$ has a density of the form
+\begin{equation}\label{eq-dens-Z}
+f_p(z) = f_0(z) G_p(z), 
+\end{equation}
+where the map $z \mapsto G_p(z)$ is non-decreasing. Define $\overline{Z} = \max_{1 \le j \le p} (W_j - \ex[W_j])$ and set $\overline{z} = 2 \overline{\mu}/\underline{\sigma} + x(1/\underline{\sigma} - 1/\overline{\sigma})$ such that $\ex[W_j] \le \overline{z}$ for any $1 \le j \le p$. With these definitions at hand, we obtain that  
+\begin{align*}
+\int_z^{\infty} f_0(u)du \, G_p(z) & \le \int_z^{\infty} f_0(u) G_p(u) du = \pr(Z > z) \\ 
+ & \le P(\overline{Z} > z - \overline{z}) \le \exp \Big( - \frac{(z - \overline{z} - \ex[\overline{Z}])^2_+}{2} \Big), 
+\end{align*}
+where the last inequality follows from Lemma \ref{lemma3-anticon}. Since $W_j - \ex[W_j] = (X_j - \mu_j)/\sigma_j$, it holds that 
+\[ \ex[\overline{Z}] = \ex \Big[ \max_{1 \le j \le p} \Big\{ \frac{X_j-\mu_j}{\sigma_j} \Big\} \Big] =: a_p. \]
+Hence, for every $z \in \reals$, 
+\begin{equation}\label{eq-bound-Gp}
+G_p(z) \le \frac{1}{1 - F_0(z)} \exp\Big( - \frac{(z - \overline{z} - a_p)_+^2}{2} \Big). 
+\end{equation}
+Mill's inequality states that for $z > 0$, 
+\[ z \le \frac{f_0(z)}{1-F_0(z)} \le z \frac{1+z^2}{z^2}. \]
+Since $(1+z^2)/z^2 \le 2$ for $z > 1$ and $f_0(z)/\{1-F_0(z)\} \le 1.53 \le 2$ for $z \in (-\infty,1)$, we can infer that
+\[ \frac{f_0(z)}{1-F_0(z)} \le 2 (z \vee 1) \quad \text{for any } z \in \reals. \]
+This together with \eqref{eq-dens-Z} and \eqref{eq-bound-Gp} yields that
+\[ f_p(z) \le 2 (z \vee 1)  \exp\Big( - \frac{(z - \overline{z} - a_p)_+^2}{2} \Big) \quad \text{for any } z \in \reals. \]
+\vspace{1pt}
+ 
+
+\textit{Step 3.} By Step 2, we get that for any $y \in \reals$ and $u > 0$, 
+\[ \pr( |Z - y| \le u) = \int_{y - u}^{y + u} f_p(z) dz \le 2u \max_{z \in [y-u,y+u]} f_p(z) \le 4u (\overline{z} + a_p + 1), \] 
+where the last inequality follows from the fact that the map $z \mapsto z e^{-(z-a)^2/2}$ (with $a > 0$) is non-increasing on $[a+1,\infty)$. Combining this bound with Step 1, we further obtain that for any $x \ge 0$ and $\delta > 0$, 
+\begin{equation}\label{eq-bound1-Levy}
+\pr \Big( \Big| \max_{1 \le j \le p} X_j - x \Big| \le \delta \Big) \le 4\delta \Big\{ \frac{2\overline{\mu}}{\underline{\sigma}} + |x| \Big(\frac{1}{\underline{\sigma}} - \frac{1}{\overline{\sigma}}\Big) + a_p + 1 \Big\} \big/ \underline{\sigma}. 
+\end{equation} 
+This inequality also holds for $x < 0$ by an analogous argument, and hence for all $x \in \reals$. 
+
+
+Now let $0 < \delta \le \underline{\sigma}$ and define $b_p = \ex \max_{1 \le j \le p} \{X_j - \mu_j\}$. For any $|x| \le \delta + \overline{\mu} + b_p + \overline{\sigma} \sqrt{2\log(\underline{\sigma}/\delta)}$, \eqref{eq-bound1-Levy} yields that 
+\begin{align}
+\pr \Big( \Big| \max_{1 \le j \le p} X_j - x \Big| \le \delta \Big) 
+ & \le \frac{4 \delta}{\underline{\sigma}} \Big\{ \overline{\mu} \Big( \frac{3}{\underline{\sigma}} - \frac{1}{\overline{\sigma}} \Big) + a_p + \Big( \frac{1}{\underline{\sigma}} - \frac{1}{\overline{\sigma}} \Big) b_p \nonumber \\ & \phantom{\le \frac{4 \delta}{\underline{\sigma}} \Big\{} + \Big( \frac{\overline{\sigma}}{\underline{\sigma}} - 1 \Big) \sqrt{2\log\Big(\frac{\underline{\sigma}}{\delta}\Big)} + 2 - \frac{\underline{\sigma}}{\overline{\sigma}} \Big\} \nonumber \\[0.2cm]
+ & \le C \delta \big\{ \overline{\mu} + a_p + b_p + \sqrt{1 \vee \log(\underline{\sigma}/\delta)} \big\} \label{eq-bound2-Levy}
+\end{align}
+with a sufficiently large constant $C > 0$ that depends only on $\underline{\sigma}$ and $\overline{\sigma}$. For $|x| \ge \delta + \overline{\mu} + b_p + \overline{\sigma}\sqrt{2\log(\underline{\sigma}/\delta)}$, we obtain that 
+\begin{equation}\label{eq-bound3-Levy}
+\pr \Big( \Big| \max_{1 \le j \le p} X_j - x \Big| \le \delta \Big) \le \frac{\delta}{\underline{\sigma}}, 
+\end{equation}
+which can be seen as follows: If $x > \delta + \overline{\mu}$, then $|\max_j X_j - x| \le \delta$ implies that $|x| - \delta \le \max_j X_j \le \max_j \{ X_j - \mu_j \} + \overline{\mu}$ and thus $\max_j \{ X_j - \mu_j \} \ge |x| - \delta - \overline{\mu}$. It thus holds that 
+\begin{equation}\label{eq-bound3-Levy-prep1}
+\pr \Big( \Big| \max_{1 \le j \le p} X_j - x \Big| \le \delta \Big) \le \pr \Big( \max_{1 \le j \le p} \big\{ X_j - \mu_j \} \ge |x| - \delta - \overline{\mu} \Big). 
+\end{equation}
+If $x < - (\delta + \overline{\mu})$, then $|\max_j X_j - x| \le \delta$ implies that $\max_j \{ X_j - \mu_j \} \le -|x| + \delta + \overline{\mu}$. Hence, in this case,
+\begin{align}
+\pr \Big( \Big| \max_{1 \le j \le p} X_j - x \Big| \le \delta \Big) 
+ & \le \pr \Big( \max_{1 \le j \le p} \big\{ X_j - \mu_j \} \le -|x| + \delta + \overline{\mu} \Big) \nonumber \\
+ & \le \pr \Big( \max_{1 \le j \le p} \big\{ X_j - \mu_j \} \ge |x| - \delta - \overline{\mu} \Big), \label{eq-bound3-Levy-prep2}
+\end{align}
+where the last inequality follows from the fact that for centred Gaussian random variables $Z_j$ and $z > 0$, $\pr(\max_j Z_j \le - z) \le \pr(Z_1 \le -z) = P(Z_1 \ge z) \le \pr(\max_j Z_j \ge z)$. With \eqref{eq-bound3-Levy-prep1} and \eqref{eq-bound3-Levy-prep2}, we obtain that for any $|x| \ge \delta + \overline{\mu} + b_p + \overline{\sigma}\sqrt{2\log(\underline{\sigma}/\delta)}$,
+\begin{align*} 
+\pr \Big( & \Big| \max_{1 \le j \le p} X_j - x \Big| \le \delta \Big) \le \pr \Big( \max_{1 \le j \le p} \big\{ X_j - \mu_j \} \ge |x| - \delta - \overline{\mu} \Big) \\
+ & \le \pr \Big( \max_{1 \le j \le p} \big\{ X_j - \mu_j \big\} \ge \ex \Big[ \max_{1 \le j \le p} \big\{ X_j-\mu_j \big\} \Big] + \overline{\sigma} \sqrt{2\log(\underline{\sigma}/\delta)} \Big) \le \frac{\delta}{\underline{\sigma}}, 
+\end{align*}
+the last inequality following from Lemma \ref{lemma3-anticon}. To sum up, we have established that for any $0 < \delta \le \underline{\sigma}$ and any $x \in \reals$, 
+\begin{equation}\label{claim-prop-anticon}
+\pr \Big( \Big| \max_{1 \le j \le p} X_j - x \Big| \le \delta \Big) \le C \delta \big\{ \overline{\mu} + a_p + b_p + \sqrt{1 \vee \log(\underline{\sigma}/\delta)} \big\} 
+\end{equation}
+with some constant $C > 0$ that does only depend on $\underline{\sigma}$ and $\overline{\sigma}$. For $\delta > \underline{\sigma}$, \eqref{claim-prop-anticon} trivially follows upon setting $C \ge 1/\underline{\sigma}$. This completes the proof. 
+
