@@ -77,7 +77,7 @@ data_analysis <- function(alpha, y_data, test_problem = "zero", kernel_t = "nw")
 
   par(mfrow = c(3,1), cex = 1.2, tck = -0.025) #Setting the layout of the graphs
   par(mar = c(0, 0.5, 0, 0)) #Margins for each plot
-  par(oma = c(1.5, 1.5, 0.2, 0)) #Outer margins
+  par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
   
   # Plotting the real data
   plot(grid_points, y_data, type = "l", mgp=c(2,0.5,0)) 

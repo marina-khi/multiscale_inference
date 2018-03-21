@@ -51,18 +51,32 @@ creating_g_set <- function(T){
   return(g_t_set)
 }
 
+#Creating g_t_set for local linear estimator over which we are taking the maximum (from Section 2.1)
+creating_g_set_ll <- function(T){
+  u <- seq(from = 5/T, to = 1, by = 5/T)
+  h <- seq(from = 3/T, to = 1/4+3/T, by = 5/T)
+  
+  g_t_set_temp                  <- expand.grid(u = u, h = h) #Creating a dataframe with all possible combination of u and h
+  g_t_set_temp$values           <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
+  g_t_set_temp$values_with_sign <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
+  
+  g_t_set        <- subset(g_t_set_temp, u >= 0 & u <= 1, select = c(u, h, values, values_with_sign)) #Subsetting u and h such that [u-h, u+h] lies in [0,1]
+  g_t_set$lambda <- lambda(g_t_set[['h']]) #Calculating the lambda(h) in order to speed up the function psistar_statistic
+  return(g_t_set)
+}
+
 #If we have already calculated quantiles and stored them in a file 'distr_T_....RData'
 #then no need to calculate them once more, we just load them from this file.
 #Ohterwise simulate the \Psi^star statistic 1000 times in order to calculate the quantiles
-calculating_gaussian_quantile_ij <- function(T, N_ts, g_t_set, kernel_ind, alpha = 0.05){
-  filename = paste("data/distr_T_", T,"_and_kernel_", kernel_ind, "_and_N_", N_ts, ".RData", sep = "")
+calculating_gaussian_quantile <- function(T, N_ts, g_t_set, alpha = 0.05){
+  filename = paste("distribution/distr_T_", T, "_and_N_", N_ts, ".RData", sep = "")
   if(!file.exists(filename)) {
     gaussian_statistic_distribution <- replicate(1000, {
       z_matrix <- matrix(rnorm(T * N_ts, 0, 1), T, N_ts)
       statistic_vector <- c()
       for (i in (1:(N_ts - 1))){
         for (j in ((i + 1):N_ts)){
-          statistic_vector = c(statistic_vector, psistar_statistic_ij(z_matrix[,i], z_matrix[,j], g_t_set, kernel_ind, sqrt(2)))
+          statistic_vector = c(statistic_vector, psistar_statistic_ij(z_matrix[,i], z_matrix[,j], g_t_set, sqrt(2)))
         }
       }
       max(statistic_vector)
@@ -75,6 +89,30 @@ calculating_gaussian_quantile_ij <- function(T, N_ts, g_t_set, kernel_ind, alpha
   gaussian_quantile <- quantile(gaussian_statistic_distribution, probs = (1 - alpha), type = 1)
   return(gaussian_quantile)
 }
+
+#Exactly as previous function but using the local linear estamator instead of Nadaraya Watson estimator
+calculating_gaussian_quantile_ll <- function(T, N_ts, g_t_set, alpha = 0.05){
+  filename = paste("distribution/distr_T_", T, "_and_N_", N_ts, ".RData", sep = "")
+  if(!file.exists(filename)) {
+    gaussian_statistic_distribution <- replicate(1000, {
+      z_matrix <- matrix(rnorm(T * N_ts, 0, 1), T, N_ts)
+      statistic_vector <- c()
+      for (i in (1:(N_ts - 1))){
+        for (j in ((i + 1):N_ts)){
+          statistic_vector = c(statistic_vector, psistar_statistic_ij_ll(z_matrix[,i], z_matrix[,j], g_t_set, sqrt(2)))
+        }
+      }
+      max(statistic_vector)
+    })
+    save(gaussian_statistic_distribution, file = filename)
+  } else {
+    load(filename)
+  }
+  #Calculate the quantiles for gaussian statistic defined in the previous step
+  gaussian_quantile <- quantile(gaussian_statistic_distribution, probs = (1 - alpha), type = 1)
+  return(gaussian_quantile)
+}
+
 
 
 #This functions finds minimal intervals as described in Duembgen(2002)
@@ -170,22 +208,6 @@ plotting_all_rejected_intervals <-function(data, g_t_set, quantile, kernel_ind, 
     plotting(p_t_set, plotname1)
     plotting_one_level(p_t_set, plotname2)
     
-    #Plotting the set A_plus
-    if (!is.null(p_t_set_plus)) {
-      plotname3 = paste(dir, "plus_", plotname, sep = "")
-      plotting(p_t_set_plus, plotname3)
-      plotname4 = paste(dir, "level_plus_", plotname, sep = "")
-      plotting_one_level(p_t_set_plus, plotname4)
-    } else {cat("The set A_plus is empty\n")}
-
-
-    #Plotting the set A_minus
-    if (!is.null(p_t_set_minus)){
-      plotname5 = paste(dir, "minus_", plotname, sep = "")
-      plotting(p_t_set_minus, plotname5)
-      plotname6 = paste(dir, "level_minus_", plotname, sep = "")
-      plotting_one_level(p_t_set_minus, plotname6)
-    } else {cat("The set A_minus is empty\n")}
 
     return(list(p_t_set, p_t_set_plus, p_t_set_minus))
   } else {
