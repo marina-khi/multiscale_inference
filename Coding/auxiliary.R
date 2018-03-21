@@ -204,10 +204,10 @@ plotting_all_rejected_intervals <-function(data, g_t_set, quantile, kernel_ind, 
   #And now the testing itself
   if (psihat_statistic_value > quantile) {
     cat("We reject H_0 with probability", alpha, "Psihat_statistic = ", psihat_statistic_value,
-        "Gaussian quantile value = ", gaussian_quantile, "\n")
+        "Gaussian quantile value = ", quantile, "\n")
     
     #The collection of intervals where the corrected test statistic lies above the critical value (as in (2.6))
-    a_t_set <- subset(g_t_set_with_values, values > gaussian_quantile, select = c(u, h, values))
+    a_t_set <- subset(g_t_set_with_values, values > quantile, select = c(u, h, values))
     p_t_set <- data.frame('startpoint' = a_t_set$u - a_t_set$h,
                           'endpoint' = a_t_set$u + a_t_set$h,
                           'values' = a_t_set$values)
