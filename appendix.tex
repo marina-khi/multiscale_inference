@@ -7,7 +7,7 @@
 
 
 
-In what follows, we prove the main theoretical results of the paper. Throughout the Appendix, the symbol $C$ denotes a universal real constant which may take a different value on each occurrence. We use the following notation: For $a,b \in \reals$, we write $a_+ = \max \{0,a\}$ and $a \vee b = \max\{a,b\}$. For any set $A$, the symbol $|A|$ denotes the cardinality of $A$. The notation $X \stackrel{\mathcal{D}}{=} Y$ means that the two random variables $X$ and $Y$ have the same distribution. Finally, $f_0(\cdot)$ and $F_0(\cdot)$ denote the density and distribution function of the standard Gaussian distribution, respectively.
+In what follows, we prove the main theoretical results of the paper. Throughout the Appendix, the symbol $C$ denotes a universal real constant which may take a different value on each occurrence. We use the following notation: For $a,b \in \reals$, we write $a_+ = \max \{0,a\}$ and $a \vee b = \max\{a,b\}$. For any set $A$, the symbol $|A|$ denotes the cardinality of $A$. The notation $X \stackrel{\mathcal{D}}{=} Y$ means that the two random variables $X$ and $Y$ have the same distribution. Finally, $f_0(\cdot)$ and $F_0(\cdot)$ denote the density and distribution function of the standard normal distribution, respectively.
 
 
 
@@ -38,9 +38,9 @@ where $\widetilde{\phi}_T(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \widetilde{\
 \end{align*}
 with $\phi_T(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \sigma Z_t$ and $Z_t = \mathbb{B}(t) - \mathbb{B}(t-1)$. With this notation, we can write 
 \begin{equation}\label{eq-strongapprox-bound1}
-\big| \widetilde{\Phi}_T - \Phi_T \big| \le \big| \widetilde{\Phi}_T - \Phi_T^{*} \big| + \big| \Phi_T^{*} - \Phi_T \big| = \big| \widetilde{\Phi}_T - \Phi_T^{*} \big| + O_p \Big( \sqrt{\frac{\log T}{T}} \Big), 
+\big| \widetilde{\Phi}_T - \Phi_T \big| \le \big| \widetilde{\Phi}_T - \Phi_T^{*} \big| + \big| \Phi_T^{*} - \Phi_T \big| = \big| \widetilde{\Phi}_T - \Phi_T^{*} \big| + o_p \Big( \frac{T^{1/q}}{\sqrt{Th_{\min}}} \Big), 
 \end{equation}
-where the last equality follows by taking into account that $\widetilde{\sigma}^2 - \sigma^2 = O_p(T^{-1/2})$, $\phi_T(u,h) \sim \normal(0,\sigma^2)$ for all $(u,h) \in \mathcal{G}_T$ and $|\mathcal{G}_T| = O(T^\theta)$ for some large but fixed constant $\theta$. Straightforward calculations yield that 
+where the last equality follows by taking into account that $\phi_T(u,h) \sim \normal(0,\sigma^2)$ for all $(u,h) \in \mathcal{G}_T$, $|\mathcal{G}_T| = O(T^\theta)$ for some large but fixed constant $\theta$ and $\widetilde{\sigma}^2 = \sigma^2 + o_p(T^{1/q}/\sqrt{T h_{\min} \log T})$. Straightforward calculations yield that 
 \[ \big| \widetilde{\Phi}_T - \Phi_T^{*} \big| \le \widetilde{\sigma}^{-1} \max_{(u,h) \in \mathcal{G}_T} \big| \widetilde{\phi}_T(u,h) - \phi_T(u,h) \big|. \]
 Using summation by parts,
 %($\sum_{i=1}^n a_i b_i = \sum_{i=1}^{n-1} A_i (b_i - b_{i+1}) + A_n b_n$ with $A_j = \sum_{j=1}^i a_j$) 
@@ -90,7 +90,7 @@ X_{2j} & = -\frac{\phi_T(x_{j1},x_{j2})}{\sigma} - \lambda(x_{j2})
 \end{align*}
 with $x_j = (x_{j1},x_{j2})$. This notation allows us to write
 \[ \Phi_T = \max_{1 \le j \le 2p} X_j, \]
-where $(X_1,\ldots,X_{2p})^\top$ is a Gaussian random vector with the following properties: (i) $\mu_j := \ex[X_j] = - \lambda(x_{j2})$ and thus $\overline{\mu} = \max_{1 \le j \le p} |\mu_j| \le C \sqrt{\log T}$, and (ii) $\sigma_j^2 := \var(X_j) = 1$ for all $j$. Since $\sigma_j = 1$ for all $j$, it holds that $a_p = b_p$. Moreover, as the variables $(X_j - \mu_j)/\sigma_j$ are standard normal, we have that $a_p = b_p \le \sqrt{2 \log (2p)} \le C \sqrt{\log T}$. We can now apply Proposition \ref{theo-anticon} to obtain that 
+where $(X_1,\ldots,X_{2p})^\top$ is a Gaussian random vector with the following properties: (i) $\mu_j := \ex[X_j] = - \lambda(x_{j2})$ and thus $\overline{\mu} = \max_{1 \le j \le p} |\mu_j| \le C \sqrt{\log T}$, and (ii) $\sigma_j^2 := \var(X_j) = 1$ for all $j$. Since $\sigma_j = 1$ for all $j$, it holds that $a_p = b_p$. Moreover, as the variables $(X_j - \mu_j)/\sigma_j$ are standard normal, we have that $a_p = b_p \le \sqrt{2 \log (2p)} \le C \sqrt{\log T}$. With this notation at hand, we can apply Proposition \ref{theo-anticon} to obtain that 
 \[ \sup_{x \in \reals} \pr \Big( \big| \Phi_T - x \big| \le \delta_T \Big) \le C \delta_T \Big[ \sqrt{\log T} + \sqrt{ \log(\underline{\sigma}/\delta_T) } \Big] = o(1) \]
 with $\delta_T = T^{1/q} / \sqrt{T h_{\min}}$, which is the statement of Proposition \ref{propA-anticon}.
 \end{proof}
@@ -154,14 +154,13 @@ Moreover, standard calculations yield that
 \end{equation}
 where the constant $C$ is independent of $u$, $h$ and $T$. By assumption, there exists $(u,h) \in \mathcal{G}_T$ with $[u-h,u+h] \subseteq [0,1]$ such that $m_T(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$. For this $(u,h)$, it holds that 
 \begin{equation}\label{eq3-proof-prop-test-2}
-\widehat{\psi}_T^*(u,h) = \frac{\sqrt{Th}}{\int K^2(\varphi)d\varphi} \int_0^1 K\Big(\frac{w-u}{h}\Big) m_T(w) dw \ge \frac{c_T \sqrt{\log T}}{\int K^2(\varphi)d\varphi}. 
+\widehat{\psi}_T^*(u,h) = \kappa^{-1} \sqrt{Th} \int_0^1 h^{-1} K\Big(\frac{w-u}{h}\Big) m_T(w) dw \ge \kappa^{-1} c_T \sqrt{\log T},  
 \end{equation}
-Using \eqref{eq1-proof-prop-test-2}--\eqref{eq3-proof-prop-test-2} and noticing that $\lambda(h) \le \lambda(h_{\min}) \le C \sqrt{\log T}$, we obtain that 
+where $\kappa = \int K^2(\varphi)d\varphi$. Using \eqref{eq1-proof-prop-test-2}--\eqref{eq3-proof-prop-test-2} and noticing that $\lambda(h) \le \lambda(h_{\min}) \le C \sqrt{\log T}$, we obtain that 
 \begin{align}
 \widehat{\Psi}_T 
  & \ge \max_{(u,h) \in \mathcal{G}_T} \frac{|\widehat{\psi}_T^B(u,h)|}{\widehat{\sigma}} - \max_{(u,h) \in \mathcal{G}_T} \Big\{ \frac{|\widehat{\psi}_T^A(u,h)|}{\widehat{\sigma}} + \lambda(h) \Big\} \nonumber \\
- & = \max_{(u,h) \in \mathcal{G}_T} \frac{|\widehat{\psi}_T^B(u,h)|}{\widehat{\sigma}} + O_p(\sqrt{\log T}) \nonumber \\
- & \ge \frac{c_T \sqrt{\log T}}{\int K^2(\varphi)d\varphi} + O_p(\sqrt{\log T}). \label{eq4-proof-prop-test-2}
+ & = \max_{(u,h) \in \mathcal{G}_T} \frac{|\widehat{\psi}_T^B(u,h)|}{\widehat{\sigma}} + O_p(\sqrt{\log T}) \ge \frac{c_T \sqrt{\log T}}{\kappa \widehat{\sigma}} + O_p(\sqrt{\log T}). \label{eq4-proof-prop-test-2}
 \end{align}  
 Since $q_T(\alpha) = O(\sqrt{\log T})$ for any fixed $\alpha \in (0,1)$, \eqref{eq4-proof-prop-test-2} immediately implies that $\pr(\widehat{\Psi}_T \le q_T(\alpha)) = o(1)$. 
 
@@ -183,10 +182,24 @@ where the last equality holds by Theorem \ref{theo-stat}.
 
 
 
+\subsection*{Proof of Proposition \ref{prop-test-shape-1}}
+
+
+We only need to prove part (b). By assumption, there exists $(u,h) \in \mathcal{G}_T$ with $[u-h,u+h] \subseteq [0,1]$ such that $m_T^\prime(w) \ge c_T \sqrt{\log T/(Th^3)}$ for all $w \in [u-h,u+h]$. Arguing analogously as in the proof of Proposition \ref{prop-test-2}, we get that 
+\begin{align*}
+\widehat{\Psi}_T 
+ & \ge \frac{\sqrt{Th}}{\kappa \widehat{\sigma}} \int_0^1 h^{-1} K\Big(\frac{w-u}{h}\Big) \Big(\frac{w-u}{h}\Big) m_T(w) dw + O_p(\sqrt{\log T}) \\
+ & = \frac{\sqrt{Th^3}}{\kappa \widehat{\sigma}} \int_0^1 h^{-1} K\Big(\frac{w-u}{h}\Big) \Big(\frac{w-u}{h}\Big)^2 m_T^\prime(\xi_{u,w}) dw + O_p(\sqrt{\log T}) \\[0.1cm]
+ & \ge \frac{\int_0^1 K(\varphi) \varphi^2 d\varphi}{\kappa \widehat{\sigma}} \, c_T \sqrt{\log T} + O_p(\sqrt{\log T}),
+\end{align*}  
+where $\kappa = \int K^2(\varphi) \varphi^2 d\varphi$ and $\xi_{u,w} \in [u-h,u+h]$ is an intermediate point between $u$ and $w$. Since $q_T^\prime(\alpha) = O(\sqrt{\log T})$ for any fixed $\alpha \in (0,1)$, this implies that $\pr(\widehat{\Psi}_T^\prime \le q_T^\prime(\alpha)) = o(1)$. 
+
+
+
 \subsection*{Proof of Theorem \ref{theo-stat-equality}}
 
 
-The proof proceeds analogous to that of Theorem \ref{theo-stat}. In the first step, we show that that there exist statistics $\widetilde{\Phi}_{n,T}$ for $T = 1,2,\ldots$ with the following two properties: (i) $\widetilde{\Phi}_{n,T}$ has the same distribution as $\widehat{\Phi}_{n,T}$ for any $T$, and (ii)
+The proof proceeds analogous to that of Theorem \ref{theo-stat}. In the first step, we show that there exist statistics $\widetilde{\Phi}_{n,T}$ for $T = 1,2,\ldots$ with the following two properties: (i) $\widetilde{\Phi}_{n,T}$ has the same distribution as $\widehat{\Phi}_{n,T}$ for any $T$, and (ii)
 \begin{equation}\label{eq-theo-stat-equality-step1}
 \big| \widetilde{\Phi}_{n,T} - \Phi_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} \Big), 
 \end{equation}
@@ -197,7 +210,7 @@ where $\Phi_{n,T}$ is a Gaussian statistic as defined in Section \ref{subsec-tes
 To verify \eqref{eq-theo-stat-equality-step1}, we follow the arguments for the proof of Proposition \ref{propA-strong-approx}, adapting the notation accordingly. The details are given below. The proof of \eqref{eq-theo-stat-equality-step2} is almost identical to that of \eqref{eq-theo-stat-step2} and thus omitted. 
 
 
-To complete the proof, it remains to verify \eqref{eq-theo-stat-equality-step1}. By Theorem 2.1 and Corollary 2.1 in \cite{BerkesLiuWu2014}, there exist a standard Brownian motion $\mathbb{B}_i$ and a sequence $\{ \widetilde{\varepsilon}_{it}: t \in \naturals \}$ for each $i$ such that the following holds: (i) $\mathbb{B}_i$ and $\{ \widetilde{\varepsilon}_{it}: t \in \naturals \}$ are independent across $i$, (ii) $[\widetilde{\varepsilon}_{i1},\ldots,\widetilde{\varepsilon}_{iT}] \stackrel{\mathcal{D}}{=} [\varepsilon_{i1},\ldots,\varepsilon_{iT}]$ for each $i$ and $T$, and (iii)  
+We now turn to the proof of \eqref{eq-theo-stat-equality-step1}. By Theorem 2.1 and Corollary 2.1 in \cite{BerkesLiuWu2014}, there exist a standard Brownian motion $\mathbb{B}_i$ and a sequence $\{ \widetilde{\varepsilon}_{it}: t \in \naturals \}$ for each $i$ such that the following holds: (i) $\mathbb{B}_i$ and $\{ \widetilde{\varepsilon}_{it}: t \in \naturals \}$ are independent across $i$, (ii) $[\widetilde{\varepsilon}_{i1},\ldots,\widetilde{\varepsilon}_{iT}] \stackrel{\mathcal{D}}{=} [\varepsilon_{i1},\ldots,\varepsilon_{iT}]$ for each $i$ and $T$, and (iii)  
 \begin{equation*}
 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \sigma \mathbb{B}_i(t) \Big| = o\big( T^{1/q} \big) \quad \text{a.s.}  
 \end{equation*}
@@ -216,34 +229,72 @@ where $\phi_T(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \sigma (Z_{it} - Z_{jt})
 
 
 Consider the event  
-\[ E_{n,T} = \Big\{ \max_{1 \le \ell \le N} \max_{i,j \in G_\ell} \widehat{\Psi}_{ij,T} \le q_{n,T}(\alpha) \ \text{ and } \ \min_{1 \le \ell < \ell^\prime \le N} \max_{\substack{i \in G_\ell \\ j \in G_{\ell^\prime}}} \widehat{\Psi}_{ij,T} > q_{n,T}(\alpha) \Big\}. \]
-The term $\max_{1 \le \ell \le N} \max_{i,j \in G_\ell} \widehat{\Psi}_{ij,T}$ is the largest multiscale distance between two time series $i$ and $j$ from the same group, whereas $\min_{1 \le \ell < \ell^\prime \le N} \max_{i \in G_\ell, \, j \in G_{\ell^\prime}} \widehat{\Psi}_{ij,T}$ is the smallest multiscale distance between two time series from two different groups. On the event $E_{n,T}$, it obviously holds that 
-\begin{equation}\label{eq-E-prop-clustering-1}
-\max_{1 \le \ell \le N} \max_{i,j \in G_\ell} \widehat{\Psi}_{ij,T} < \min_{1 \le \ell < \ell^\prime \le N} \max_{\substack{i \in G_\ell \\ j \in G_{\ell^\prime}}} \widehat{\Psi}_{ij,T}. 
+\[ B_{n,T} = \Big\{ \max_{1 \le \ell \le N} \max_{i,j \in G_\ell} \widehat{\Psi}_{ij,T} \le q_{n,T}(\alpha) \ \text{ and } \ \min_{1 \le \ell < \ell^\prime \le N} \min_{\substack{i \in G_\ell \\ j \in G_{\ell^\prime}}} \widehat{\Psi}_{ij,T} > q_{n,T}(\alpha) \Big\}. \]
+The term $\max_{1 \le \ell \le N} \max_{i,j \in G_\ell} \widehat{\Psi}_{ij,T}$ is the largest multiscale distance between two time series $i$ and $j$ from the same group, whereas $\min_{1 \le \ell < \ell^\prime \le N} \min_{i \in G_\ell, \, j \in G_{\ell^\prime}} \widehat{\Psi}_{ij,T}$ is the smallest multiscale distance between two time series from two different groups. On the event $B_{n,T}$, it obviously holds that 
+\begin{equation}\label{eq1-prop-clustering-1}
+\max_{1 \le \ell \le N} \max_{i,j \in G_\ell} \widehat{\Psi}_{ij,T} < \min_{1 \le \ell < \ell^\prime \le N} \min_{\substack{i \in G_\ell \\ j \in G_{\ell^\prime}}} \widehat{\Psi}_{ij,T}. 
 \end{equation}
 Hence, any two time series from the same class have a smaller distance than any two time series from two different classes. From Theorem \ref{theo-stat-equality}, it follows that 
-\[  \pr \Big( \max_{1 \le \ell \le N} \max_{i,j \in G_\ell} \widehat{\Psi}_{ij,T} \le q_{n,T}(\alpha) \Big) \ge (1 - \alpha) + o(1), \]
-and from part (ii) of Proposition \ref{prop-test-equality}, we obtain that 
-\[  \pr \Big( \max_{1 \le \ell \le N} \max_{i,j \in G_\ell} \widehat{\Psi}_{ij,T} \le q_{n,T}(\alpha) \Big) = o(1). \]
+\[  \pr \Big( \max_{1 \le \ell \le N} \max_{i,j \in G_\ell} \widehat{\Psi}_{ij,T} \le q_{n,T}(\alpha) \Big) \ge (1 - \alpha) + o(1). \]
+Moreover, by part (b) of Proposition \ref{prop-test-equality}, we obtain that 
+\[  \pr \Big( \min_{1 \le \ell < \ell^\prime \le N} \min_{\substack{i \in G_\ell \\ j \in G_{\ell^\prime}}} \widehat{\Psi}_{ij,T} \le q_{n,T}(\alpha) \Big) = o(1). \]
 Taken together, these two statements imply that 
-\begin{equation}\label{eq-Eprob-prop-clustering-1}
-\pr \big( E_{n,T} \big) \ge (1-\alpha) + o(1). 
+\begin{equation}\label{eq2-prop-clustering-1}
+\pr \big( B_{n,T} \big) \ge (1-\alpha) + o(1). 
 \end{equation}
-In what follows, we show that on the event $E_{n,T}$, it holds that $\{ \widehat{G}_1^{[n-N]},\ldots,\widehat{G}_N^{[n-N]} \} =\{ G_1,\ldots,G_N \}$ and $\widehat{N} = N$. From this and \eqref{eq-Eprob-prop-clustering-1}, the statements of Proposition \ref{prop-clustering-1} easily follow. 
+In what follows, we show that on the event $B_{n,T}$, (i) $\{ \widehat{G}_1^{[n-N]},\ldots,\widehat{G}_N^{[n-N]} \big\} = \big\{ G_1,\ldots$ $\ldots,G_N \}$ and (ii) $\widehat{N} = N$. From (i), (ii) and \eqref{eq2-prop-clustering-1}, the statements of Proposition \ref{prop-clustering-1} easily follow. 
 
 
-We first show that $\{ \widehat{G}_1^{[n-N]},\ldots,\widehat{G}_N^{[n-N]} \} =\{ G_1,\ldots,G_N \}$ on the event $E_{n,T}$. The proof proceeds by induction on the iteration steps $r$ of the HAC algorithm. Assume that we are on the event $E_{n,T}$. 
-\begin{itemize}[leftmargin=2.1cm]
-\item[$r = 0$:] In the first iteration step, the HAC algorithm merges two singleton clusters $\widehat{G}_i^{[0]} = \{ i \}$ and $\widehat{G}_j^{[0]} = \{ j \}$ with $i$ and $j$ belonging to the same class $G_k$. This is a direct consequence of \eqref{eq-E-prop-clustering-1}. The algorithm thus produces a partition $\{ G_1^{[1]},\ldots,G_{n-1}^{[1]} \}$ whose elements $G_\ell^{[1]}$ all have the following property: $G_\ell^{[1]} \subseteq G_k$ for some $k$, that is, the clusters $G_\ell^{[1]}$ contain elements from only one group. 
-\item[$r \curvearrowright r+1$:]
-Now suppose we are in the $r$-th iteration step for some $r < n-N$. Assume that the partition $\{G_1^{[r]},\ldots,G_{n-r}^{[r]}\}$ in the $r$-th iteration step is such that for any $\ell$, $G_\ell^{[r]} \subseteq G_k$ for some $k$. Because of \eqref{eq-E-prop-clustering-1}, the dissimilarity $\widehat{\Delta}(G_\ell^{[r]},G_{\ell^\prime}^{[r]})$ gets minimal for two groups $G_\ell^{[r]}$ and $G_{\ell^\prime}^{[r]}$ with the property that $G_\ell^{[r]} \cup G_{\ell^\prime}^{[r]} \subseteq G_k$ for some $k$. Hence, the HAC algorithm produces a partition $\{ G_1^{[r+1]},\ldots,G_{n-(r+1)}^{[r+1]} \}$ whose elements $G_\ell^{[1]}$ are all such that $G_\ell^{[r+1]} \subseteq G_k$ for some $k$. 
-\end{itemize}
-The induction argument shows the following: For any $r \le n - N$, the partition $\{ \widehat{G}_1^{[r]},\ldots,\widehat{G}_{n-r}^{[r]} \}$ consists of clusters $\widehat{G}_\ell^{[r]}$ which all have the property that $G_\ell^{[r]} \subseteq G_k$ for some $k$. This in particular holds for the partition $\{ \widehat{G}_1^{[n-N]},\ldots,\widehat{G}_N^{[n-N]} \}$, which in turn implies that $\{ \widehat{G}_1^{[n-N]},\ldots,\widehat{G}_N^{[n-N]} \} =\{ G_1,\ldots,G_N \}$.  
+\begin{proof}[\textnormal{\textbf{Proof of (i).}}]
+Suppose we are on the event $B_{n,T}$. The proof proceeds by induction on the iteration steps $r$ of the HAC algorithm. 
+\vspace{7pt}
+
+\textit{Base case} ($r=0$): In the first iteration step, the HAC algorithm merges two singleton clusters $\widehat{G}_i^{[0]} = \{ i \}$ and $\widehat{G}_j^{[0]} = \{ j \}$ with $i$ and $j$ belonging to the same group $G_k$. This is a direct consequence of \eqref{eq1-prop-clustering-1}. The algorithm thus produces a partition $\{ \widehat{G}_1^{[1]},\ldots,\widehat{G}_{n-1}^{[1]} \}$ whose elements $\widehat{G}_\ell^{[1]}$ all have the following property: $\widehat{G}_\ell^{[1]} \subseteq G_k$ for some $k$, that is, the clusters $\widehat{G}_\ell^{[1]}$ contain elements from only one group. 
+\vspace{7pt}
+
+\textit{Induction step} ($r \curvearrowright r+1$): Now suppose we are in the $r$-th iteration step for some $r < n-N$. Assume that the partition $\{\widehat{G}_1^{[r]},\ldots,\widehat{G}_{n-r}^{[r]}\}$ is such that for any $\ell$, $\widehat{G}_\ell^{[r]} \subseteq G_k$ for some $k$. Because of \eqref{eq1-prop-clustering-1}, the dissimilarity $\widehat{\Delta}(\widehat{G}_\ell^{[r]},\widehat{G}_{\ell^\prime}^{[r]})$ gets minimal for two groups $\widehat{G}_\ell^{[r]}$ and $\widehat{G}_{\ell^\prime}^{[r]}$ with the property that $\widehat{G}_\ell^{[r]} \cup \widehat{G}_{\ell^\prime}^{[r]} \subseteq G_k$ for some $k$. Hence, the HAC algorithm produces a partition $\{ \widehat{G}_1^{[r+1]},\ldots,\widehat{G}_{n-(r+1)}^{[r+1]} \}$ whose elements $\widehat{G}_\ell^{[r+1]}$ are all such that $\widehat{G}_\ell^{[r+1]} \subseteq G_k$ for some $k$. 
+\vspace{7pt}
+
+The above induction argument shows the following: For any $r \le n - N$, the partition $\{ \widehat{G}_1^{[r]},\ldots,\widehat{G}_{n-r}^{[r]} \}$ consists of clusters $\widehat{G}_\ell^{[r]}$ which all have the property that $\widehat{G}_\ell^{[r]} \subseteq G_k$ for some $k$. This in particular holds for the partition $\{ \widehat{G}_1^{[n-N]},\ldots,\widehat{G}_N^{[n-N]} \}$, which in turn implies that $\{ \widehat{G}_1^{[n-N]},\ldots,\widehat{G}_N^{[n-N]} \} =\{ G_1,\ldots,G_N \}$.  
+\end{proof}
 
 
-We next prove that $\widehat{N} = N$ on the event $E_{n,T}$. It is trivial to see that (no matter whether we are on the event $E_{n,T}$ or not) each partition $\{ \widehat{G}_1^{[n-r]},\ldots,\widehat{G}_r^{[n-r]} \}$ with $r < N$ contains at least one element $\widehat{G}_\ell^{[n-r]}$ with the following property: $\widehat{G}_\ell^{[n-r]} \cap G_k \ne \emptyset$ and $\widehat{G}_\ell^{[n-r]} \cap G_{k^\prime} \ne \emptyset$ for some $k \ne k^\prime$, that is, $\widehat{G}_\ell^{[n-r]}$ contains elements from at least two different groups. On the event $E_{n,T}$, it holds that $\widehat{\Psi}_{ij,T} > q_{n,T}(\alpha)$ for any two time series $i$ and $j$ from two different groups, which immediately implies that $\max_{1 \le \ell \le r} \widehat{\Delta} ( \widehat{G}_\ell^{[n-r]} ) > q_{n,T}(\alpha)$ for any $r < N$. Since $\{ \widehat{G}_1^{[n-N]},\ldots,\widehat{G}_N^{[n-N]} \} =\{ G_1,\ldots,G_N \}$ and $\widehat{\Delta}(G_\ell) \le q_{n,T}(\alpha)$ for any $\ell$ on the event $E_{n,T}$, we further get that $\max_{1 \le \ell \le N} \widehat{\Delta} ( \widehat{G}_\ell^{[n-N]} ) = \max_{1 \le \ell \le N} \widehat{\Delta} ( \widehat{G}_\ell^{[n-N]} ) \le q_{n,T}(\alpha)$. As a result, we obtain that on the event $E_{n,T}$, 
+\begin{proof}[\textnormal{\textbf{Proof of (ii).}}]
+First consider any partition $\{ \widehat{G}_1^{[n-r]},\ldots,\widehat{G}_r^{[n-r]} \}$ with $r < N$ elements. Such a partition must contain at least one element $\widehat{G}_\ell^{[n-r]}$ with the following property: $\widehat{G}_\ell^{[n-r]} \cap G_k \ne \emptyset$ and $\widehat{G}_\ell^{[n-r]} \cap G_{k^\prime} \ne \emptyset$ for some $k \ne k^\prime$. On the event $B_{n,T}$, it obviously holds that $\widehat{\Delta}(S) > q_{n,T}(\alpha)$ for any $S$ with the property that $S \cap G_k \ne \emptyset$ and $S \cap G_{k^\prime} \ne \emptyset$ for some $k \ne k^\prime$. Hence, we can infer that on the event $B_{n,T}$, $\max_{1 \le \ell \le r} \widehat{\Delta} ( \widehat{G}_\ell^{[n-r]} ) > q_{n,T}(\alpha)$ for any $r < N$. 
+
+Next consider the partition $\{ \widehat{G}_1^{[n-r]},\ldots,\widehat{G}_r^{[n-r]} \}$ with $r = N$ and suppose we are on the event $B_{n,T}$. From (i), we already know that $\{ \widehat{G}_1^{[n-N]},\ldots,\widehat{G}_N^{[n-N]} \} =\{ G_1,\ldots,G_N \}$. Moreover, it is easy to see that $\widehat{\Delta}(G_\ell) \le q_{n,T}(\alpha)$ for any $\ell$. Hence, we obtain that $\max_{1 \le \ell \le N} \widehat{\Delta} ( \widehat{G}_\ell^{[n-N]} ) = \max_{1 \le \ell \le N} \widehat{\Delta} (G_\ell) \le q_{n,T}(\alpha)$.
+
+Putting everything together, we can conclude that on the event $B_{n,T}$, 
 \[ \min \Big\{ r = 1,2,\ldots \Big| \max_{1 \le \ell \le r} \widehat{\Delta} \big( \widehat{G}_\ell^{[n-r]} \big) \le q_{n,T}(\alpha) \Big\} = N, \]
 that is, $\widehat{N} = N$. 
+\end{proof}
+
+
+
+\subsection*{Proof of Proposition \ref{prop-clustering-2}}
+
+
+For simplicity of notation, suppose that $\alpha_i = 0$ for all $i$. This allows us to write 
+\[ \widehat{\Phi}_{n,T} = \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\psi}_{ij,T}(u,h)- \ex \widehat{\psi}_{ij,T}(u,h)} {\sqrt{2}\widehat{\sigma}} \Big| - \lambda(h) \Big \}. \]
+We consider the event
+\[ D_{n,T} = \Big\{ \widehat{\Phi}_{n,T} \le q_{n,T}(\alpha) \, \text{ and } \,  \min_{1 \le \ell < \ell^\prime \le N} \min_{\substack{i \in G_\ell \\ j \in G_{\ell^\prime}}} \widehat{\Psi}_{ij,T} > q_{n,T}(\alpha) \Big\}, \]
+which can be analyzed by the same arguments as those applied to the event $B_{n,T}$ in the proof of Proposition \ref{prop-clustering-1}. In particular, analogous to \eqref{eq2-prop-clustering-1} and statements (i) and (ii) therein, we can show that 
+\begin{equation}\label{eq1-prop-clustering-2}
+\pr \big( D_{n,T} \big) \ge (1-\alpha) + o(1)
+\end{equation}
+and 
+\begin{equation}\label{eq2-prop-clustering-2}
+D_{n,T} \subseteq \big\{ \widehat{N} = N \text{ and } \widehat{G}_\ell = G_\ell \text{ for all } \ell \big\}.
+\end{equation}
+Moreover, we have that
+\begin{equation}\label{eq3-prop-clustering-2}
+D_{n,T} \subseteq \bigcap_{1 \le \ell < \ell^\prime \le \widehat{N}} E_{n,T}(\ell,\ell^\prime),
+\end{equation}
+which is a consequence of the following observation: For all $i$, $j$ and $(u,h) \in \mathcal{G}_T$ with 
+\[ \Big|\frac{\widehat{\psi}_{ij,T}(u,h) - \ex \widehat{\psi}_{ij,T}(u,h)}{\sqrt{2} \widehat{\sigma}}\Big| - \lambda(h) \le q_{n,T}(\alpha) \quad \text{and} \quad \Big|\frac{\widehat{\psi}_{ij,T}(u,h)}{\sqrt{2} \widehat{\sigma}}\Big| - \lambda(h) > q_T(\alpha), \]
+it holds that $\ex[\widehat{\psi}_{ij,T}(u,h)] \ne 0$, which in turn implies that $m_i(v) - m_j(v) \ne 0$ for some $v \in I_{u,h}$. From \eqref{eq2-prop-clustering-2} and \eqref{eq3-prop-clustering-2}, we obtain that 
+\[ D_{n,T} \subseteq \Big\{ \bigcap_{1 \le \ell < \ell^\prime \le \widehat{N}} E_{n,T}(\ell,\ell^\prime) \Big\} \cap \big\{ \widehat{N} = N \text{ and } \widehat{G}_\ell = G_\ell \text{ for all } \ell \big\} = E_{n,T}. \] 
+This together with \eqref{eq1-prop-clustering-2} implies that $\pr(E_{n,T}) \ge (1-\alpha) + o(1)$, thus completing the proof. 
 
 
 
@@ -265,7 +316,7 @@ Let $(X_1,\ldots,X_p)^\top$ be a centred Gaussian random vector in $\reals^p$ wi
 \[ \pr \Big( \max_{1 \le j \le p} X_j \ge \ex \Big[ \max_{1 \le j \le p} X_j \Big] + r \Big) \le e^{-r^2/(2\sigma^2)}. \]
 \end{lemmaA} 
 The proof of Lemmas \ref{lemma1-anticon} and \ref{lemma2-anticon} can be found in \cite{Chernozhukov2015}. Lemma \ref{lemma3-anticon} is a standard result on Gaussian concentration whose proof is given e.g.\ in \cite{Ledoux2001}; see in particular Theorem 7.1 therein. We now closely follow the arguments for the proof of Theorem 3 in \cite{Chernozhukov2015}. The proof splits up into three steps. 
-\vspace{10pt}
+\vspace{7pt}
 
 
 \textit{Step 1.} To start with, we show that the analysis can be restricted to the unit variance case. To see this, pick any $x \ge 0$ and set 
@@ -277,7 +328,6 @@ By construction, $\ex[W_j] \ge 0$ and $\var(W_j) = 1$. Defining $Z = \max_{1 \le
  & \le \sup_{y \in \reals} \pr \Big( \Big| \max_{1 \le j \le p} \frac{X_j - x}{\sigma_j} + \frac{\overline{\mu} + x}{\underline{\sigma}} - y \Big| \le \frac{\delta}{\underline{\sigma}} \Big) \\
  & = \sup_{y \in \reals} \pr \Big( |Z - y| \le \frac{\delta}{\underline{\sigma}} \Big). 
 \end{align*}
-\vspace{1pt}
 
 
 \textit{Step 2.} We next bound the density of $Z$. Without loss of generality, we assume that $\text{Corr}(W_j,W_k) < 1$ for $k \ne j$. The marginal distribution of $W_j$ is $\normal(\nu_j,1)$ with $\nu_j = \ex[W_j] = (\mu_j/\sigma_j + \overline{\mu}/{\underline{\sigma}}) + (x/\underline{\sigma} - x/\sigma_j) \ge 0$. Hence, by Lemmas \ref{lemma1-anticon} and \ref{lemma2-anticon}, the random variable $Z$ has a density of the form
@@ -301,7 +351,6 @@ Since $(1+z^2)/z^2 \le 2$ for $z > 1$ and $f_0(z)/\{1-F_0(z)\} \le 1.53 \le 2$ f
 \[ \frac{f_0(z)}{1-F_0(z)} \le 2 (z \vee 1) \quad \text{for any } z \in \reals. \]
 This together with \eqref{eq-dens-Z} and \eqref{eq-bound-Gp} yields that
 \[ f_p(z) \le 2 (z \vee 1)  \exp\Big( - \frac{(z - \overline{z} - a_p)_+^2}{2} \Big) \quad \text{for any } z \in \reals. \]
-\vspace{1pt}
  
 
 \textit{Step 3.} By Step 2, we get that for any $y \in \reals$ and $u > 0$, 
