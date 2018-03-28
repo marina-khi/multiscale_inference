@@ -16,7 +16,7 @@ source("data_analysis.R")
 ###############################
 
 N <- 1000 #Number of replications for calculating the size and the power of the test
-different_T     <- c(250, 350, 500) #Different lengths of time series for which we calculate size and power
+different_T     <- c(250, 350, 500, 1000) #Different lengths of time series for which we calculate size and power
 different_alpha <- c(0.01, 0.05, 0.1) #Different alpha for which we calculate size and power
 alpha <- 0.05 #alpha for calculating quantiles
 
