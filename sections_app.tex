@@ -1,8 +1,8 @@
 
 \section{Simulations}\label{sec-sim}
-In this section we present a simulation study to assess the performance of our baseline test procedure from Section \ref{sec-model}.
+In this section we present a simulation study to assess the performance of our baseline test procedure from Section \ref{sec-model}. Before we proceed any fruther, we first need to specify some parameters that has an effect on the test statistic.
 
-Our statistic $\widehat{\Psi}_T$ depends not only on the sample size $T$, but also on the choice of the kernel function $K(x)$ and the set $\mathcal{G}_T$. Throughout our numerical experiments, the Epanechnikov kernel $K(x) = \mathbbm{1}_{|x|\leq 1} \frac{3}{4} (1 - x^2)$ and the set $\mathcal{G}_T = \{(u, h): u = (5k)/T \text{ and } h = (3+5l)/T \text{ for some } k, l \in \mathbb{N}, k \le T/5, l \le T/20\}$ are used. The Epanechnikov kernel $K(x)$ satisfies the condition \ref{C-ker}, whereas the set $\mathcal{G}_T$ with $|\mathcal{G}_T| = O(T^2)$ satisfies the conditions \ref{C-grid}-\ref{C-h}.
+Our statistic $\widehat{\Psi}_T$ depends not only on the sample size $T$, but also on the choice of the kernel function $K(x)$ and the set $\mathcal{G}_T$. Throughout our numerical experiments, the Epanechnikov kernel $K(x) = \mathbbm{1}_{|x|\leq 1} \frac{3}{4} (1 - x^2)$ and the set $\mathcal{G}_T = \{(u, h): u = (5k)/T \text{ and } h = (3+5l)/T \text{ for some } k, l \in \mathbb{N}, k \le T/5, l \le T/20\}$ are used. The Epanechnikov kernel $K(x)$ and the set $\mathcal{G}_T$ with $|\mathcal{G}_T| = O(T^2)$ satisfy the conditions \ref{C-ker} and \ref{C-grid}-\ref{C-h} respectively.
 
 
 \subsection{Size of the test}\label{subsec-sim-size}
@@ -30,7 +30,7 @@ Table \ref{tab:size_ll} shows size computations for various sample size ($T = 25
 
 \subsection{Power of the test}\label{subsec-sim-power}
 
-Tables \ref{tab:power_025_ll} - \ref{tab:power_075_ll} show power computations for various sample size ($T = 250, 350, 500, 1000$), confidence levels ($\alpha = 0.01, 0.05, 0.10$) and under different alternatives $H_1$. The simulations are based on 1000 replications and give results for one-sided tests under the alternative hypothesis $H_1: m \ne 0$. As can be seen from the tables \ref{tab:power_025_ll} - \ref{tab:power_075_ll}, our test has approximately correct size even for small values of $T$ and the accuracy does not decrease with the sample size.
+Tables \ref{tab:power_025_ll} - \ref{tab:power_075_ll} show power computations for various sample size ($T = 250, 350, 500, 1000$), confidence levels ($\alpha = 0.01, 0.05, 0.10$) and under different alternatives $H_1$. The simulations are based on 1000 replications and give results for one-sided tests under the alternative hypothesis $H_1: m \ne 0$. As can be seen from the tables \ref{tab:power_025_ll} - \ref{tab:power_075_ll}, our test has considerable power against fixed alternative even for small values of $T$. Furthermore, in accordance with the theory, the power of out test for a fixed significance livel $\alpha$ is an increasing function of the slope of trend. For a fixed slope of the trend, increasing the significance level also increases the power.
 
 
 \begin{center}
