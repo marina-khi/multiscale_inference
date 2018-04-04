@@ -2,11 +2,12 @@
 \section{The model}\label{sec-model}
 
 
-The model setting for the test problems considered in Sections \ref{sec-method} and \ref{sec-test-shape} is as follows: We observe a time series $\{Y_t: 1 \le t \le T \}$ of length $T$ which satisfies the model equation 
+We now describe the two model settings in detail which were briefly outlined in the introduction. The model for the test problems considered in Sections \ref{sec-method} and \ref{sec-test-shape} is as follows: We observe a time series $\{Y_t: 1 \le t \le T \}$ of length $T$ which satisfies the model equation 
 \begin{equation}\label{model1}
 Y_t = m \Big( \frac{t}{T} \Big) + \varepsilon_t 
 \end{equation}
 for $1 \le t \le T$. Here, $m$ is an unknown nonparametric regression function defined on $[0,1]$ and $\{ \varepsilon_t: 1 \le t \le T \}$ is a zero-mean stationary error process. For simplicity, we restrict attention to equidistant design points $x_t = t/T$. However, our methods and theory can also be carried over to non-equidistant designs. The stationary error process $\{\varepsilon_t\}$ is assumed to have the following properties: 
+\newpage
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
 
 \item \label{C-err1} The variables $\varepsilon_t$ allow for the representation $\varepsilon_t = G(\ldots,\eta_{t-1},\eta_t,\eta_{t+1},\ldots)$, where $\eta_t$ are i.i.d.\ random variables and $G: \reals^\integers \rightarrow \reals$ is a measurable function. 
@@ -382,7 +383,7 @@ In principle, it is possible to construct an estimator of $\sigma^2$ under the g
 %In principle, it is possible to construct an estimator of $\sigma^2$ under the very general conditions on the error process laid out in Section \ref{sec-model} (or at least under somewhat stronger versions of these conditions). However, even though interesting from a theoretical point of view, such an estimator is presumably not very useful in practice. As is well-known, it is quite involved to estimate the long-run variance of a time series process under general conditions, the resulting estimators tending to be quite imprecise. From a practical point of view, it thus makes more sense to impose some time series model on the errors and to estimate $\sigma^2$ under the restrictions of this model. Of course, this may create some bias due to misspecification. However, as long as the model gives a reasonable approximation to the true error process, this bias can be expected to be less severe than the error stemming from the instabilities of a general estimator of $\sigma^2$. In what follows, we consider an autoregressive (AR) model for the error terms which is widely used in practice and which is appropriate for our applications in Section ??. 
 
 
-\subsection{Independent error terms}\label{subsec-error-var-iid}
+\subsection{Independent error terms}\label{subsec-error-var-iid} 
 
 
 Before we discuss the case of autoregressive error terms, we introduce the idea of difference-based methods for estimating $\sigma^2$ in the simple case of i.i.d.\ errors $\varepsilon_t$. In this case, $\sigma^2$ is identical to the variance of the random variables $\varepsilon_t$, that is, $\sigma^2 = \var(\varepsilon_t)$. Let $D_\ell Y_t = Y_t - Y_{t-\ell}$ denote the difference between $Y_t$ and $Y_{t-\ell}$ and suppose that $m$ is sufficiently smooth. In particular, assume that $m$ is Lipschitz continuous on $[0,1]$, that is, $|m(u) - m(v)| \le C|u - v|$ for all $u,v \in [0,1]$ and some constant $C < \infty$. Under these conditions, it holds that $|m(t/T) - m(\{t-\ell\}/T)| \le C \ell/T$, which implies that $D_\ell Y_t = D_\ell \varepsilon_t + O(\ell/T)$ uniformly over $t$. Hence, the observed differences $D_\ell Y_t$ approximate the unobserved differences of the error terms $D_\ell \varepsilon_t$. This together with the fact that $\ex[ \{D_\ell \varepsilon_t\}^2]/2 = \sigma^2$ suggests to estimate $\sigma^2$ by 

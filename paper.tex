@@ -1,7 +1,6 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage{amsmath}
 \usepackage{amssymb,amsthm,graphicx}
-\usepackage{bbm}
 \usepackage{enumitem}
 \usepackage{color}
 \usepackage{epsfig}
@@ -19,10 +18,6 @@
 \parindent0pt 
 
 \input{macros}
-\renewcommand{\baselinestretch}{1.2}
-\numberwithin{equation}{section}
-\allowdisplaybreaks[1]
-
 
 
 
@@ -31,11 +26,35 @@
 
 
 \heading{Multiscale Inference for}{Nonparametric Time Trends}
-\authors{Marina Khismatullina}{University of Bonn}{Michael Vogt}{University of Bonn} 
+\authors{Marina Khismatullina\renewcommand{\thefootnote}{1}\footnotemark[1]}{University of Bonn}{Michael Vogt\renewcommand{\thefootnote}{2}\footnotemark[2]}{University of Bonn} 
+\footnotetext[1]{Address: Department of Economics, University of Bonn, 53113 Bonn, Germany. Email: \texttt{marina.k} \texttt{@uni-bonn.de}.}
+\renewcommand{\thefootnote}{2}
+\footnotetext[2]{Corresponding author. Address: Department of Economics and Hausdorff Center for Mathematics, University of Bonn, 53113 Bonn, Germany. Email: \texttt{michael.vogt@uni-bonn.de}.}
+\renewcommand{\thefootnote}{\arabic{footnote}}
+\setcounter{footnote}{0}
+
+\vspace{-0.25cm}
+
 \version{\today}
 
+\vspace{-1cm}
 
 
+
+\renewcommand{\abstractname}{}
+\begin{abstract}
+\noindent We develop multiscale methods to test qualitative hypotheses about nonparametric time trends. In many applications, practitioners are interested in whether the observed time series has a time trend at all, that is, whether the trend function is non-constant. Moreover, they would like to get further information about the shape of the trend function. Among other things, they would like to know in which time regions the trend is moving upwards or downwards. When multiple time series are observed, another important question is whether the observed time series all have the same time trend. We design multiscale tests to formally approach these questions. Moreover, we derive asymptotic theory for the proposed tests and investigate their finite sample performance by means of simulations. In addition, we illustrate the methods by two applications to temperature data from Great Britain. 
+\end{abstract}
+
+
+
+\renewcommand{\baselinestretch}{1.2}\normalsize
+\numberwithin{equation}{section}
+\allowdisplaybreaks[1]
+
+
+
+\input{sections_intro}
 \input{sections_method}
 \input{sections_app}
 \newpage
