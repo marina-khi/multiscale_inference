@@ -40,7 +40,8 @@ T_tempr <- length(yearly_tempr_normalised)
 ###################################################################
 grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points for plotting and estimating
 end_point <- c()
-#plot(grid_points, yearly_tempr_normalised, ylim = c(-1.5, 1.5), type = 'l')
+plot(grid_points, yearly_tempr_normalised, ylim = c(-1.5, 1.5), type = 'l')
+
 for (i in 1:length(h)){
   smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(yearly_tempr_normalised, grid_points, h[i]))
   #lines(grid_points, smoothed_curve, lty = i)#, col = colors[i])
@@ -48,6 +49,12 @@ for (i in 1:length(h)){
   cat("End point:", smoothed_curve[T_tempr], "\n")
 }
 
+pdf("Output/temperature_data.pdf", width=10, height=3, paper="special")
+par(mar = c(0, 0.5, 0, 0)) #Margins for each plot
+par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
+data <- ts(yearly_tempr_normalised, start=1659, end=2017, frequency=1)
+plot(data, ylab="", xlab = '', yaxp  = c(-2, 1, 3), type = 'l', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
+dev.off()
 
 ############################################
 #Calculating the power and size of the test#

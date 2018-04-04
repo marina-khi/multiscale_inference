@@ -71,6 +71,7 @@ data_analysis <- function(alpha, y_data, test_problem = "zero", kernel_t = "nw")
   
   #Parameters for plotting
   grid_points <- seq(from = 1/T_data, to = 1, length.out = T_data) #grid points for plotting and estimating
+  grid_time <- seq(from = 1659, to = 2017, length.out = T_data) #grid points for plotting and estimating
     
   pdffilename = paste0("Output/threegraphics_testing_", test_problem, "_method_", kernel_t, ".pdf")
   pdf(pdffilename, width=10, height=10, paper="special")
@@ -80,25 +81,25 @@ data_analysis <- function(alpha, y_data, test_problem = "zero", kernel_t = "nw")
   par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
   
   # Plotting the real data
-  plot(grid_points, y_data, type = "l", mgp=c(2,0.5,0)) 
+  plot(grid_time, y_data, type = "l", mgp=c(2,0.5,0)) 
   
   ###################################################################
   #Calculating smoothed curve for the data using Epanechnikov kernel#
   ###################################################################
   h <- c(0.01, 0.05, 0.1, 0.15, 0.2)
-  plot(NA, xlim = c(0, 1), ylim = c(-1.5, 1.5), yaxp  = c(-1.5, 1.5, 3), mgp=c(2,0.5,0))
+  plot(NA, xlim = c(1659, 2017), ylim = c(-1.5, 1.5), yaxp  = c(-1.5, 1.5, 3), mgp=c(2,0.5,0))
   for (i in 1:5){
     #This part plots kernel smoothers for different bandwidths (all on one plot).
     smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(y_data, grid_points, h[i]))
-    lines(grid_points, smoothed_curve, lty = i) 
+    lines(grid_time, smoothed_curve, lty = i) 
   }
-  legend(7/T_data, 1.3, legend=c("h = 0.01", "h = 0.05", "h = 0.10", "h = 0.15", "h = 0.2"), lty = 1:5, cex = 0.75, ncol=1)
+  legend(1665, 1.25, legend=c("h = 0.01", "h = 0.05", "h = 0.10", "h = 0.15", "h = 0.2"), lty = 1:5, cex = 0.75, ncol=1)
   
   #Plotting the minimal intervals. Do not have any negative minimal intervals, so plotting all (positive) ones
   ymaxlim = max(p_t_set$values)
   yminlim = min(p_t_set$values)
-  plot(NA, xlim=c(0,1), ylim = c(yminlim - 0.5, ymaxlim + 0.5), yaxp  = c(1.5, 3, 3), mgp=c(2,0.5,0))
-  segments(p_t_set[['startpoint']], p_t_set[['values']], pmin(p_t_set$endpoint, 1.03), p_t_set[['values']])
+  plot(NA, xlim=c(1659,2017), ylim = c(yminlim - 0.5, ymaxlim + 0.5), yaxp  = c(1.5, 3, 3), mgp=c(2,0.5,0))
+  segments(p_t_set[['startpoint']] *T_data + 1659, p_t_set[['values']], pmin(p_t_set$endpoint*T_data + 1659, 1.03*T_data + 1659), p_t_set[['values']])
   abline(h = gaussian_quantile, lty = 2)
   
   #title(main = "Plots for normalized yearly temperature data for England",  outer = TRUE)
