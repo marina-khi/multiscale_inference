@@ -1,13 +1,14 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage{amsmath}
 \usepackage{amssymb,amsthm,graphicx}
-\usepackage{bbm}
-\usepackage{gensymb}
+%\usepackage{bbm} (Do not want to use these, may create conflicts)
+%\usepackage{gensymb}
 \usepackage{enumitem}
 \usepackage{color}
 \usepackage{epsfig}
 \usepackage{graphics}
 \usepackage{pdfpages}
+\usepackage{subcaption}
 \usepackage[font=small]{caption}
 \usepackage[hang,flushmargin]{footmisc} 
 \usepackage{float}
@@ -16,7 +17,7 @@
 \usepackage{natbib}
 \usepackage{setspace}
 \usepackage{mathrsfs}
-\usepackage[left=2.8cm,right=2.8cm,bottom=2.8cm,top=2.8cm]{geometry}
+\usepackage[left=2.7cm,right=2.7cm,bottom=2.7cm,top=2.7cm]{geometry}
 \parindent0pt 
 
 \input{macros}
@@ -29,7 +30,7 @@
 
 \heading{Multiscale Inference for}{Nonparametric Time Trends}
 \authors{Marina Khismatullina\renewcommand{\thefootnote}{1}\footnotemark[1]}{University of Bonn}{Michael Vogt\renewcommand{\thefootnote}{2}\footnotemark[2]}{University of Bonn} 
-\footnotetext[1]{Address: Bonn Graduate School of Economics, University of Bonn, 53113 Bonn, Germany. Email: \texttt{marina.k} \texttt{@uni-bonn.de}.}
+\footnotetext[1]{Address: Bonn Graduate School of Economics, University of Bonn, 53113 Bonn, Germany. Email: \texttt{marina.k@uni-bonn.de}.}
 \renewcommand{\thefootnote}{2}
 \footnotetext[2]{Corresponding author. Address: Department of Economics and Hausdorff Center for Mathematics, University of Bonn, 53113 Bonn, Germany. Email: \texttt{michael.vogt@uni-bonn.de}.}
 \renewcommand{\thefootnote}{\arabic{footnote}}
@@ -45,7 +46,7 @@
 
 \renewcommand{\abstractname}{}
 \begin{abstract}
-\noindent We develop multiscale methods to test qualitative hypotheses about nonparametric time trends. In many applications, practitioners are interested in whether the observed time series has a time trend at all, that is, whether the trend function is non-constant. Moreover, they would like to get further information about the shape of the trend function. Among other things, they would like to know in which time regions the trend is moving upwards or downwards. When multiple time series are observed, another important question is whether the observed time series all have the same time trend. We design multiscale tests to formally approach these questions. Moreover, we derive asymptotic theory for the proposed tests and investigate their finite sample performance by means of simulations. In addition, we illustrate the methods by two applications to temperature data from Great Britain. 
+\noindent We develop multiscale methods to test qualitative hypotheses about nonparametric time trends. In many applications, practitioners are interested in whether the observed time series has a time trend at all, that is, whether the trend function is non-constant. Moreover, they would like to get further information about the shape of the trend function. Among other things, they would like to know in which time regions there is an upward/downward movement in the trend. When multiple time series are observed, another important question is whether the observed time series all have the same time trend. We design multiscale tests to formally approach these questions. We derive asymptotic theory for the proposed tests and investigate their finite sample performance by means of simulations. In addition, we illustrate the methods by two applications to temperature data from Great Britain. 
 \end{abstract}
 
 
