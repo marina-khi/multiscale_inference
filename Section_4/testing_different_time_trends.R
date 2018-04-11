@@ -1,26 +1,14 @@
 testing_different_time_trends <- function(N, y_data, alpha, kernel_method, sigmahat_vector_2){
   
-  if (kernel_method == "nw"){
-    quantile_function = calculating_gaussian_quantile
-    statistic_function = psihat_statistic_ij
-    defining_set = creating_g_set
-  } else if (kernel_method == "ll"){
-    quantile_function = calculating_gaussian_quantile_ll
-    statistic_function = psihat_statistic_ij_ll
-    defining_set = creating_g_set_ll
-  } else {
-    print('Given method is currently not supported')
-  }
-  
   T_data <- nrow(y_data)
   
   ###########################################
   #Calculating gaussian quantile for T_tempr#
   ###########################################
   
-  g_t_set                    <- defining_set(T_data)
-  gaussian_quantile          <- quantile_function(T_data, N, g_t_set, alpha)
-  pairwise_gaussian_quantile <- quantile_function(T_data, 2, g_t_set, alpha)
+  g_t_set                    <- creating_g_set(T_data, kernel_method)
+  gaussian_quantile          <- calculating_gaussian_quantile(T_data, N, g_t_set, kernel_method, alpha)
+  pairwise_gaussian_quantile <- calculating_gaussian_quantile(T_data, 2, g_t_set, kernel_method, alpha)
 
   #########################################
   #Calculating the statistic for real data#
@@ -34,8 +22,8 @@ testing_different_time_trends <- function(N, y_data, alpha, kernel_method, sigma
   for (i in (1 : (N - 1))){
     for (j in ((i + 1):N)){
       sigmahat_new = sqrt(sigmahat_vector_2[i] + sigmahat_vector_2[j])
-      result = psihat_statistic_ij(y_data[[i + 2]], y_data[[j + 2]], g_t_set, sqrt(2) * sigmahat_tempr)
-      result_new = psihat_statistic_ij(y_data[[i + 2]], y_data[[j + 2]], g_t_set, sigmahat_new)
+      result = psihat_statistic_ij(y_data[[i + 3]], y_data[[j + 3]], g_t_set, sqrt(2) * sigmahat_tempr, kernel_method)
+      result_new = psihat_statistic_ij(y_data[[i + 3]], y_data[[j + 3]], g_t_set, sigmahat_new, kernel_method)
       matrix_of_statistic[i, j] = result[[2]]
       matrix_of_statistic_new[i, j] = result_new[[2]]
       cat(matrix_of_statistic[i, j], "with i =", i, "and j = ",j, "\n")
@@ -64,10 +52,3 @@ testing_different_time_trends <- function(N, y_data, alpha, kernel_method, sigma
   
   return(list(matrix_of_statistic, matrix_of_statistic_new, gaussian_quantile, pairwise_gaussian_quantile))
 }
-
-
-
-
-
-
-

@@ -12,7 +12,7 @@ source("simulations_based_on_data.R")
 ##############################
 
 N        <- 34 #number of different time series 
-N_rep    <- 1000 #number of repetitions for calculating gaussian statistic
+N_rep    <- 1000 #number of repetitions for calculating size and power
 alpha    <- 0.05 #alpha for calculating quantiles
 
 different_T     <- c(250, 350, 500, 1000) #Different lengths of time series for which we calculate size and power
@@ -68,7 +68,6 @@ for (i in TemperatureColumns){
 grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points for estimating
 
 pdf("../Plots/stations_data.pdf", width=10, height=10, paper="special")
-
 par(mfrow = c(3,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
 par(mar = c(0, 0.5, 0, 0)) #Margins for each plot
 par(oma = c(2.5, 1.5, 0.2, 0.2)) #Outer margins
@@ -98,9 +97,7 @@ for (column in TemperatureColumns){
 axis(1, at = grid_points[seq(1, 300, by = 20)], labels = monthly_temp$date[seq(1, 300, by = 20)])
 legend(0, 1.0, legend=c("h = 0.15"), lty = 1, cex = 0.95, ncol=1)
 
-
 dev.off()
-
 
 
 #####################
@@ -117,8 +114,9 @@ for (i in TemperatureColumns){
   sigma_i <- estimating_sigma_for_AR1(monthly_temp[[i]], L1, L2)[[1]]
   sigmahat_vector_2 <- c(sigmahat_vector_2, sigma_i * sigma_i)
 }
+
 #Calculating sqrt root of the average long-run variance
-sigmahat_tempr <- sqrt(sum(sigmahat_vector_2)/N)
+#sigmahat_tempr <- sqrt(sum(sigmahat_vector_2)/N)
 
 
 #################################
