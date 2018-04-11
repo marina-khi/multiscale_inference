@@ -1,5 +1,4 @@
 library(xtable)
-library(stargazer)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
 source("functions.R")

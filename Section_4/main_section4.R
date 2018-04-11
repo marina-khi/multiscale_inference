@@ -5,6 +5,7 @@ source("C_code/estimating_sigma.R")
 dyn.load("C_code/estimating_sigma.dll")
 source("functions.R")
 source("testing_different_time_trends.R")
+source("simulations_based_on_data.R")
 
 ##############################
 #Defining necessary constants#
@@ -16,6 +17,7 @@ alpha    <- 0.05 #alpha for calculating quantiles
 
 different_T     <- c(250, 350, 500, 1000) #Different lengths of time series for which we calculate size and power
 different_alpha <- c(0.01, 0.05, 0.1) #Different alpha for which we calculate size and power
+h <- c(0.01, 0.05, 0.1, 0.15) #Different bandwidth, not sure we use them
 
 kernel_method <- "ll" #Only "nw" (Nadaraya-Watson) and "ll" (local linear) methods are currently supported
 
@@ -32,44 +34,73 @@ for (i in 1:N){
                                  '3' = (temperature_tmp[["tmax"]] + temperature_tmp[["tmin"]]) / 2)
                                  #'3' = temperature_tmp[["tmax"]])
   colnames(monthly_temp_tmp) <- c('year', 'month', paste0("tmean", i))
+
+
   if (i == 1){
     monthly_temp <- monthly_temp_tmp
   } else {
     monthly_temp <- merge(monthly_temp, monthly_temp_tmp, by = c("year", "month"))
   }
+
 }
 
 monthly_temp <- na.omit(monthly_temp)#Deleting the rows with ommitted variables
+date         <- paste(sprintf("%02d", monthly_temp$month), monthly_temp$year,  sep='-')
+monthly_temp <- cbind(date, monthly_temp)
 T_tempr <- nrow(monthly_temp)
+
 
 ######################
 #Deseasonalizing data#
 ######################
 
-TemperatureColumns <- setdiff(names(monthly_temp), c("year", "month"))
+TemperatureColumns <- setdiff(names(monthly_temp), c("year", "month", "date"))
 for (i in TemperatureColumns){
   monthly_temp[[i]] <- monthly_temp[[i]] - ave(monthly_temp[[i]], monthly_temp[['month']], FUN = mean)
   #plot(monthly_temp[[i]],type = 'l')
 }
 
+
 ###################################################################
 #Calculating smoothed curve for the data using Epanechnikov kernel#
 ###################################################################
 
-h <- c(0.01, 0.05, 0.1, 0.15)
-grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points for plotting and estimating
+grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points for estimating
 
-plot(NA, xlim = c(0, 1), ylim = c(-1.5, 1.5))
+pdf("../Plots/stations_data.pdf", width=10, height=10, paper="special")
+
+par(mfrow = c(3,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
+par(mar = c(0, 0.5, 0, 0)) #Margins for each plot
+par(oma = c(2.5, 1.5, 0.2, 0.2)) #Outer margins
+
+plot(NA, ylab="", xlab = "", xlim = c(0,1), ylim = c(-1.5, 1.5), yaxp  = c(-1.2, 1.2, 2), xaxt = 'n', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
 for (column in TemperatureColumns){
   smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(monthly_temp[[column]], grid_points, 0.05))
   lines(grid_points, smoothed_curve)#, lty = i), col = colors[i]) 
 }
+axis(1, at = grid_points[seq(1, 300, by = 20)], labels = monthly_temp$date[seq(1, 300, by = 20)])
+legend(0, 1.0, legend=c("h = 0.05"), lty = 1, cex = 0.95, ncol=1)
 
-plot(NA, xlim = c(0, 1), ylim = c(-1.5, 1.5))
+plot(NA, ylab="", xlab = "", xlim = c(0,1), ylim = c(-1.5, 1.5), yaxp  = c(-1.2, 1.2, 2),xaxt = 'n', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
 for (column in TemperatureColumns){
   smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(monthly_temp[[column]], grid_points, 0.1))
   lines(grid_points, smoothed_curve)#, lty = i), col = colors[i]) 
 }
+axis(1, at = grid_points[seq(1, 300, by = 20)], labels = monthly_temp$date[seq(1, 300, by = 20)])
+legend(0, 1.0, legend=c("h = 0.10"), lty = 1, cex = 0.95, ncol=1)
+
+
+plot(NA, ylab="", xlab = "", xlim = c(0,1), ylim = c(-1.5, 1.5), yaxp  = c(-1.2, 1.2, 2),xaxt = 'n', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
+for (column in TemperatureColumns){
+  smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(monthly_temp[[column]], grid_points, 0.15))
+  lines(grid_points, smoothed_curve)#, lty = i), col = colors[i]) 
+}
+axis(1, at = grid_points[seq(1, 300, by = 20)], labels = monthly_temp$date[seq(1, 300, by = 20)])
+legend(0, 1.0, legend=c("h = 0.15"), lty = 1, cex = 0.95, ncol=1)
+
+
+dev.off()
+
 
 
 #####################
