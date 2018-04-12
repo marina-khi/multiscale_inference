@@ -1,6 +1,7 @@
-dyn.load("C_code/psihat_statistic_ij.dll")
-source("C_code/psihat_statistic_ij.R")
-dyn.load("C_code/psihat_statistic_ij_ll.dll")
+source("C_code/psihat_statistic.R")
+dyn.load("C_code/psihat_statistic_ll.dll")
+dyn.load("C_code/psihat_statistic_nw.dll")
+
 source("C_code/estimating_sigma.R")
 dyn.load("C_code/estimating_sigma.dll")
 source("functions.R")
@@ -11,13 +12,13 @@ source("simulations_based_on_data.R")
 #Defining necessary constants#
 ##############################
 
-N        <- 34 #number of different time series 
-N_rep    <- 1000 #number of repetitions for calculating size and power
+N_ts     <- 34 #number of different time series 
+N_rep    <- 100 #number of repetitions for calculating size and power
 alpha    <- 0.05 #alpha for calculating quantiles
 
-different_T     <- c(250, 350, 500, 1000) #Different lengths of time series for which we calculate size and power
+different_T     <- c(250, 350, 500) #Different lengths of time series for which we calculate size and power
 different_alpha <- c(0.01, 0.05, 0.1) #Different alpha for which we calculate size and power
-h <- c(0.01, 0.05, 0.1, 0.15) #Different bandwidth, not sure we use them
+h               <- c(0.01, 0.05, 0.1, 0.15) #Different bandwidth, not sure we use them
 
 kernel_method <- "ll" #Only "nw" (Nadaraya-Watson) and "ll" (local linear) methods are currently supported
 
@@ -26,13 +27,12 @@ kernel_method <- "ll" #Only "nw" (Nadaraya-Watson) and "ll" (local linear) metho
 #Loading the real station data for England#
 ###########################################
 
-for (i in 1:N){
+for (i in 1:N_ts){
   filename = paste("data/txt", i, ".txt", sep = "")
   temperature_tmp  <- read.table(filename, header = FALSE, skip = 7,
                                  col.names = c("year", "month", "tmax", "tmin", "af", "rain", "sun", "aux"), fill = TRUE,  na.strings = c("---"))
   monthly_temp_tmp <- data.frame('1' = temperature_tmp[['year']], '2' = temperature_tmp[['month']],
                                  '3' = (temperature_tmp[["tmax"]] + temperature_tmp[["tmin"]]) / 2)
-                                 #'3' = temperature_tmp[["tmax"]])
   colnames(monthly_temp_tmp) <- c('year', 'month', paste0("tmean", i))
 
 
@@ -47,7 +47,7 @@ for (i in 1:N){
 monthly_temp <- na.omit(monthly_temp)#Deleting the rows with ommitted variables
 date         <- paste(sprintf("%02d", monthly_temp$month), monthly_temp$year,  sep='-')
 monthly_temp <- cbind(date, monthly_temp)
-T_tempr <- nrow(monthly_temp)
+T_tempr      <- nrow(monthly_temp)
 
 
 ######################
@@ -72,7 +72,7 @@ par(mfrow = c(3,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
 par(mar = c(0, 0.5, 0, 0)) #Margins for each plot
 par(oma = c(2.5, 1.5, 0.2, 0.2)) #Outer margins
 
-plot(NA, ylab="", xlab = "", xlim = c(0,1), ylim = c(-1.5, 1.5), yaxp  = c(-1.2, 1.2, 2), xaxt = 'n', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
+plot(NA, ylab="", xlab = "", xlim = c(0,1), ylim = c(-1.5, 1.5), yaxp  = c(-1.0, 1.0, 2), xaxt = 'n', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
 for (column in TemperatureColumns){
   smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(monthly_temp[[column]], grid_points, 0.05))
   lines(grid_points, smoothed_curve)#, lty = i), col = colors[i]) 
@@ -80,7 +80,7 @@ for (column in TemperatureColumns){
 axis(1, at = grid_points[seq(1, 300, by = 20)], labels = monthly_temp$date[seq(1, 300, by = 20)])
 legend(0, 1.0, legend=c("h = 0.05"), lty = 1, cex = 0.95, ncol=1)
 
-plot(NA, ylab="", xlab = "", xlim = c(0,1), ylim = c(-1.5, 1.5), yaxp  = c(-1.2, 1.2, 2),xaxt = 'n', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
+plot(NA, ylab="", xlab = "", xlim = c(0,1), ylim = c(-1.5, 1.5), yaxp  = c(-1.0, 1.0, 2),xaxt = 'n', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
 for (column in TemperatureColumns){
   smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(monthly_temp[[column]], grid_points, 0.1))
   lines(grid_points, smoothed_curve)#, lty = i), col = colors[i]) 
@@ -89,7 +89,7 @@ axis(1, at = grid_points[seq(1, 300, by = 20)], labels = monthly_temp$date[seq(1
 legend(0, 1.0, legend=c("h = 0.10"), lty = 1, cex = 0.95, ncol=1)
 
 
-plot(NA, ylab="", xlab = "", xlim = c(0,1), ylim = c(-1.5, 1.5), yaxp  = c(-1.2, 1.2, 2),xaxt = 'n', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
+plot(NA, ylab="", xlab = "", xlim = c(0,1), ylim = c(-1.5, 1.5), yaxp  = c(-1.0, 1.0, 2),xaxt = 'n', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
 for (column in TemperatureColumns){
   smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(monthly_temp[[column]], grid_points, 0.15))
   lines(grid_points, smoothed_curve)#, lty = i), col = colors[i]) 
@@ -123,4 +123,12 @@ for (i in TemperatureColumns){
 #Testing equality of time trends#
 #################################
 
-results <- testing_different_time_trends(N, monthly_temp, alpha, kernel_method, sigmahat_vector_2)
+#results <- testing_different_time_trends(N_ts, monthly_temp[-c('year', 'date', 'month')], alpha, kernel_method, sigmahat_vector_2)
+
+
+############################
+#Calculating size and power#
+############################
+
+results_size <- simulations_based_on_data(30, N_rep, monthly_temp, different_T, different_alpha, kernel_method)
+

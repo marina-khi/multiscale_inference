@@ -1,5 +1,5 @@
 /*
-Filename: "psihat_statistic.c"
+Filename: "psihat_statistic_ij.c"
 Returns value of \Psi^hat_statistic together with the values of
 kernel averages \psi_T(u, h) for each u and h from g_t_set.
 Arguments are described in the function itself.
@@ -91,12 +91,13 @@ double psi_average_ij_ll(double data_i[], double data_j[], int T, double u, doub
 	The output is one value for each u and h.
 	*/
 	int i;
-	double result, result_temp, k, k_norm;
+	double x, result, result_temp, k, k_norm;
 	result_temp = 0;
 	k_norm = 0;
 	k = 0;
 	for (i = 0; i < T; i++) {
-		k = epanc(((i + 1) / (float)T - u) / h) * (s_t_2(u, h, T) - s_t_1(u, h, T) * (((i + 1) / (float)T - u) / h));
+		x = (((i + 1) / (float)T - u) / h);
+		k = epanc(x) * (s_t_2(u, h, T) - s_t_1(u, h, T) * x);
 		result_temp += k * (data_i[i] - data_j[i]);
 		k_norm += k * k;
 /*		Rprintf("We are here, %f, %f, %f\n", k, result_temp, k_norm);*/
@@ -107,28 +108,53 @@ double psi_average_ij_ll(double data_i[], double data_j[], int T, double u, doub
 }
 
 
-void psihat_statistic_ij_ll(double *y_data_i, double *y_data_j, int *T, double *g_t_set, int *N, double *sigmahat, double *maximum, double *values, double *values_with_sign){
+double psihat_statistic_ij_ll(double *y_data_i, double *y_data_j, int T, double *g_t_set, int N, double sigmahat){
+	int i;
+	double tmp1, maximum, values[N];
+ 	
+ 	for (i=0; i < N; i++) {
+		tmp1 = psi_average_ij_ll(y_data_i, y_data_j, T, g_t_set[i], g_t_set[i + N]) / sigmahat;
+    	values[i] = awert(tmp1) - g_t_set[2 * N + i];
+/*		values_with_sign[i] = tmp1;*/
+/*    	Rprintf("%f, %f, %f, %f\n",tmp1, tmp2, tmp3, values[i]);*/
+    	if (i == 0) {
+    		maximum = values[i];
+    	} else if (values[i] > maximum) {
+    		maximum = values[i];
+/*    			Rprintf("%f %d\n",max,i);*/
+    	}
+  	}
+  	return(maximum);
+}
+
+void psihat_statistic_ll(double *y_data, int *T, double *g_t_set, int *N, int *N_ts, double *sigmahat, double *statistic, double *statistic_result){
              /* y_data		list of y_t values y= (y_1,...,y_n)
                 T        	length of time series
                 N        	length of the grid
+                N_ts		numbet of time series
                 g_t_set   	grid vector grid= (u_1,...,u_N, g_1,...,g_N, lambda_1,...lambda_N)
 				sigmahat	appropriate estimator for sigma
                 maximum		return: value of the test statistic
 				values		return: vector of values psi_average for each (u, h) from the grid
 			*/
-	int i;
-	double tmp1;
+	int i, j, k, n;
+	double y_data_i[T[0]], y_data_j[T[0]];
  	
- 	for (i=0; i < N[0]; i++) {
-		tmp1 = psi_average_ij_ll(y_data_i, y_data_j, T[0], g_t_set[i], g_t_set[i + N[0]]) / sigmahat[0];
-    	values[i] = awert(tmp1) - g_t_set[2 * N[0] + i];
-		values_with_sign[i] = tmp1;
-/*    	Rprintf("%f, %f, %f, %f\n",tmp1, tmp2, tmp3, values[i]);*/
-    	if (i == 0) {
-    		maximum[0] = values[i];
-    	} else if (values[i] > maximum[0]) {
-    		maximum[0] = values[i];
+ 	k = 0;
+ 	for (i = 0; i < N_ts[0] - 1; i++) {
+ 		for (j = i + 1; j < N_ts[0]; j++){
+ 			for (n = 0; n < T[0]; n++){
+ 				y_data_i[n] = y_data[i * T[0] + n];
+ 				y_data_j[n] = y_data[j * T[0] + n];
+ 			}
+ 			statistic[k] = psihat_statistic_ij_ll(y_data_i, y_data_j, T[0], g_t_set, N[0], sigmahat[0]);
+ 			if (k == 0) {
+    			statistic_result[0] = statistic[k];
+    		} else if (statistic[k] > statistic_result[0]) {
+    			statistic_result[0] = statistic[k];
 /*    			Rprintf("%f %d\n",max,i);*/
-    	}
+    		}
+    		k ++;
+ 		}
   	}
 }

@@ -22,8 +22,8 @@ testing_different_time_trends <- function(N, y_data, alpha, kernel_method, sigma
   for (i in (1 : (N - 1))){
     for (j in ((i + 1):N)){
       sigmahat_new = sqrt(sigmahat_vector_2[i] + sigmahat_vector_2[j])
-      result = psihat_statistic_ij(y_data[[i + 3]], y_data[[j + 3]], g_t_set, sqrt(2) * sigmahat_tempr, kernel_method)
-      result_new = psihat_statistic_ij(y_data[[i + 3]], y_data[[j + 3]], g_t_set, sigmahat_new, kernel_method)
+      result = psihat_statistic_ij(y_data[[i]], y_data[[j]], g_t_set, sqrt(2) * sigmahat_tempr, kernel_method)
+      result_new = psihat_statistic_ij(y_data[[i]], y_data[[j]], g_t_set, sigmahat_new, kernel_method)
       matrix_of_statistic[i, j] = result[[2]]
       matrix_of_statistic_new[i, j] = result_new[[2]]
       cat(matrix_of_statistic[i, j], "with i =", i, "and j = ",j, "\n")

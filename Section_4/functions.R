@@ -66,13 +66,14 @@ calculating_gaussian_quantile <- function(T, N_ts, g_t_set, kernel_method, alpha
   if(!file.exists(filename)) {
       gaussian_statistic_distribution <- replicate(1000, {
         z_matrix <- matrix(rnorm(T * N_ts, 0, 1), T, N_ts)
-        statistic_vector <- c()
-        for (i in (1:(N_ts - 1))){
-          for (j in ((i + 1):N_ts)){
-            statistic_vector = c(statistic_vector, psistar_statistic_ij(z_matrix[,i], z_matrix[,j], g_t_set, sqrt(2), kernel_method))
-          }
-        }
-        max(statistic_vector)
+        psistar_statistic(z_matrix, N_ts, g_t_set, sqrt(2), kernel_method)
+        #statistic_vector <- c()
+        # for (i in (1:(N_ts - 1))){
+        #   for (j in ((i + 1):N_ts)){
+        #     statistic_vector = c(statistic_vector, )
+        #   }
+        # }
+        # max(statistic_vector)
       })
     save(gaussian_statistic_distribution, file = filename)
   } else {
@@ -80,6 +81,7 @@ calculating_gaussian_quantile <- function(T, N_ts, g_t_set, kernel_method, alpha
   }
   #Calculate the quantiles for gaussian statistic defined in the previous step
   gaussian_quantile <- quantile(gaussian_statistic_distribution, probs = (1 - alpha), type = 1)
+  cat("Gaussian quantile is", gaussian_quantile, "\n")
   return(gaussian_quantile)
 }
 
