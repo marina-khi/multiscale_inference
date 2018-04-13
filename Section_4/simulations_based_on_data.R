@@ -1,37 +1,29 @@
-simulations_based_on_data <- function(N_ts, N_rep, y_data, different_T, different_alpha, kernel_method){
+simulations_size <- function(N_ts, N_rep, different_T, different_alpha, kernel_method){
 
-  ##############################
-  #Defining necessary constants#
-  ##############################
-  
-  a_hat <- 0.267 #This I need to redo!!!!
-  
-  #####################
-  #Simulating the size#
-  #####################
-  
-  size <- c()
-  
+  a_hat <- 0.267
+  sigma <- 0.59
+  size  <- c()
+
   for (T_size in different_T){
     simulated_data           <- matrix(NA, nrow = T_size, ncol = N_ts)
     colnames(simulated_data) <- 1:N_ts
     L1                       <- floor(sqrt(T_size))
     L2                       <- floor(2 * sqrt(T_size))
     g_t_set_sim              <- creating_g_set(T_size, kernel_method)
-  
+
     for (alpha in different_alpha){
       #Calculating gaussian quantiles for given T and alpha
       gaussian_quantile = calculating_gaussian_quantile(T_size, N_ts, g_t_set_sim, kernel_method, alpha)
-      
+
       size_of_the_test = replicate(N_rep, {
         sigmahat_vector_2_simulated <- c()
         for (i in 1:N_ts){
-          simulated_data[, i] <- arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, 0.59), n = T_size)
+          simulated_data[, i] <- arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, sigma), n = T_size)
           sigma_i = estimating_sigma_for_AR1(simulated_data[, i], L1, L2)[[1]]
           sigmahat_vector_2_simulated <- c(sigmahat_vector_2_simulated, sigma_i * sigma_i)
         }
-        sigmahat <- sqrt(sum(sigmahat_vector_2_simulated)/N_ts)
-        result = psihat_statistic(simulated_data, N_ts, g_t_set_sim, sqrt(2) * sigmahat, kernel_method)[[2]]
+        #sigmahat <- sqrt(sum(sigmahat_vector_2_simulated)/N_ts)
+        result = psihat_statistic(simulated_data, N_ts, g_t_set_sim, sigmahat_vector_2_simulated, kernel_method)[[2]]
         if (result > gaussian_quantile) {d = 1} else {d = 0}
         d
       })
@@ -39,16 +31,19 @@ simulations_based_on_data <- function(N_ts, N_rep, y_data, different_T, differen
       cat("Ratio of rejection under H0 is ", sum(size_of_the_test)/N_rep, "with alpha = ", alpha, "and T = ", T_size, "\n")
     }
   }
-  
-  ######################
-  #Simulating the power#
-  ######################
-  
-  #Simulating the power
-  
+  filename = paste0("../Plots/30stations_sizetable_method_", kernel_method, ".tex")
+  creating_matrix_and_texing(size, different_T, different_alpha, filename)
+  return(size)
+}
+
+
+simulations_power <- function(N_ts, N_rep, different_T, different_alpha, kernel_method){
+  a_hat <- 0.267
+  sigma <- 0.59
   power <- c()
   
-  for (b in c(1.25, 1.875, 2.5)){
+  for (b in c(0.75)){
+    power_b <- c()
     for (T_size in different_T){
       simulated_data           <- matrix(NA, nrow = T_size, ncol = N_ts)
       colnames(simulated_data) <- 1:N_ts
@@ -57,28 +52,99 @@ simulations_based_on_data <- function(N_ts, N_rep, y_data, different_T, differen
       g_t_set_sim              <- creating_g_set(T_size, kernel_method)
       
       m <- numeric(T_size)
-      for (j in 1:T_size){if (j/T < 0.6) {m[i] = 0} else {m[j] = (j - 0.6*T)*b}}
+      for (j in 1:T_size){m[j] = (j - 0.5*T_size) * (b/T_size)}
       
       for (alpha in different_alpha){
         gaussian_quantile = calculating_gaussian_quantile(T_size, N_ts, g_t_set_sim, kernel_method, alpha)
         
         power_of_the_test = replicate(N_rep, {
           sigmahat_vector_2_simulated <- c()
-          simulated_data[, 1]         <- m + arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, 0.59), n = T_size)
+          simulated_data[, 1]         <- m + arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, sigma), n = T_size)
           for (i in 2:N_ts){
-            simulated_data[, i]         <- arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, 0.59), n = T_size)
+            simulated_data[, i]         <- arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, sigma), n = T_size)
             sigma_i                     <- estimating_sigma_for_AR1(simulated_data[, i], L1, L2)[[1]]
             sigmahat_vector_2_simulated <- c(sigmahat_vector_2_simulated, sigma_i * sigma_i)
           }
-          sigmahat <- sqrt(sum(sigmahat_vector_2_simulated)/N_ts)
-          result   <- psihat_statistic(simulated_data, N_ts, g_t_set_sim, sqrt(2) * sigmahat, kernel_method)[[2]]
+          #sigmahat <- sqrt(sum(sigmahat_vector_2_simulated)/N_ts)
+          result   <- psihat_statistic(simulated_data, N_ts, g_t_set_sim, sigmahat_vector_2_simulated, kernel_method)[[2]]
           if (result > gaussian_quantile) {d = 1} else {d = 0}
           d
         })
-        power = c(power, sum(power_of_the_test)/N_rep)
+        power_b = c(power_b, sum(power_of_the_test)/N_rep)
         cat("Ratio of rejection under H1 is ", sum(power_of_the_test)/N_rep, "with alpha = ", alpha, "T = ", T_size, "and b = ", b, "\n")
       }
     }
+    filename = paste0("../Plots/30stations_powertable_method_", kernel_method, "_with_b_", b, ".tex")
+    creating_matrix_and_texing(power_b, different_T, different_alpha, filename)
   }
-  return(list(size, power))
+  power <- c(power, power_b)
+  return(power)
+}
+
+simulations_clustering <- function(N_ts, N_rep, different_T, different_alpha, kernel_method){
+  a_hat <- 0.267
+  sigma <- 0.59
+  clusters <- c()
+ 
+  for (T_size in different_T){
+    simulated_data           <- matrix(NA, nrow = T_size, ncol = N_ts)
+    colnames(simulated_data) <- 1:N_ts
+    L1                       <- floor(sqrt(T_size))
+    L2                       <- floor(2 * sqrt(T_size))
+    g_t_set_sim              <- creating_g_set(T_size, kernel_method)
+    
+    m1 <- numeric(T_size)
+    m2 <- numeric(T_size)
+    for (j in 1:T_size){
+      m1[j] = (j - 0.5*T_size) * (1/T_size)
+      m2[j] = (j - 0.5*T_size) * (-1/T_size)
+    }
+    
+    for (alpha in different_alpha){
+      gaussian_quantile = calculating_gaussian_quantile(T_size, N_ts, g_t_set_sim, kernel_method, alpha)
+      clustering_results   = replicate(N_rep, {
+        sigmahat_vector_2_simulated <- c()
+        for (i in 1:(N_ts/3)){
+          simulated_data[, i]         <- arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, sigma), n = T_size)
+          sigma_i                     <- estimating_sigma_for_AR1(simulated_data[, i], L1, L2)[[1]]
+          sigmahat_vector_2_simulated <- c(sigmahat_vector_2_simulated, sigma_i * sigma_i)
+        }
+        for (i in (N_ts/3 + 1):(2 * N_ts/3)){
+          simulated_data[, i]         <- m1 + arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, sigma), n = T_size)
+          sigma_i                     <- estimating_sigma_for_AR1(simulated_data[, i], L1, L2)[[1]]
+          sigmahat_vector_2_simulated <- c(sigmahat_vector_2_simulated, sigma_i * sigma_i)
+        }
+        for (i in (2 * N_ts/3 + 1):N_ts){
+          simulated_data[, i]         <- m2 + arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, sigma), n = T_size)
+          sigma_i                     <- estimating_sigma_for_AR1(simulated_data[, i], L1, L2)[[1]]
+          sigmahat_vector_2_simulated <- c(sigmahat_vector_2_simulated, sigma_i * sigma_i)
+        }
+        #sigmahat         <- sqrt(sum(sigmahat_vector_2_simulated)/N_ts)
+        results          <- psihat_statistic(simulated_data, N_ts, g_t_set_sim, sigmahat_vector_2_simulated, kernel_method)
+        statistic_vector <- results[[1]]
+        statistic_value  <- results[[2]]
+        if (statistic_value > gaussian_quantile) {
+          statistic_matrix                                          <- matrix(0, N_ts, N_ts)
+          statistic_matrix[lower.tri(statistic_matrix, diag=FALSE)] <- statistic_vector
+          statistic_matrix                                          <- as.dist(statistic_matrix)
+          clustering_result <- hclust(statistic_matrix, method = "complete")
+          #groups1          <- cutree(clustering_result, k=3)
+          groups            <- cutree(clustering_result, h = gaussian_quantile)
+          number_of_groups  <- max(groups)  
+        } else {
+          number_of_groups <- 1
+          groups           <- rep(1, N_ts)
+        }
+        list(number_of_groups, groups)
+      })
+      # filename1 = paste0("distribution/number_of_groups_for_T_", T_size, "_and_alpha_", alpha*100, ".RData")
+      # save(clustering_results$num, file = filename1)
+      filename2 = paste0("distribution/clustering_results_for_T_", T_size, "_and_alpha_", alpha*100, ".RData")
+      save(clustering_results, file = filename2)      
+      #cat("Percentage of detecting true number of clusters", sum(true_clustering)/N_rep, "with alpha = ", alpha, "T = ", T_size, "\n")
+
+      clusters = c(clusters, clustering_results)
+    }
+  }
+  return(clusters)
 }

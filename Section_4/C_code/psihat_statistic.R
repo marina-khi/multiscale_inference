@@ -1,4 +1,4 @@
-psihat_statistic <- function(y_data, N_ts, g_t_set, sigmahat, kernel_method){
+psihat_statistic <- function(y_data, N_ts, g_t_set, sigmahat_vector_2, kernel_method){
   #Wrapper of a C function from psihat_statistic.C
   #Function that calculates the multiscale statistic \hat{\Psi}_T.
   #Arguments:
@@ -9,8 +9,8 @@ psihat_statistic <- function(y_data, N_ts, g_t_set, sigmahat, kernel_method){
   T        <- as.integer(nrow(y_data))
   N        <- as.integer(nrow(g_t_set))
   
-  storage.mode(sigmahat)    <- "double"
-  storage.mode(N_ts)        <- "integer"
+  storage.mode(sigmahat_vector_2)    <- "double"
+  storage.mode(N_ts)                 <- "integer"
   
   y_data_vec        <- unlist(y_data)
   g_t_set_vec       <- unlist(g_t_set[c('u', 'h', 'lambda')])
@@ -18,9 +18,9 @@ psihat_statistic <- function(y_data, N_ts, g_t_set, sigmahat, kernel_method){
   statistic_result  <- vector(mode = "double", length = 1)
   
   if (kernel_method == "nw"){
-    result <- .C("psihat_statistic_nw", y_data_vec, T, g_t_set_vec, N, N_ts, sigmahat, statistic_vector, statistic_result)
+    result <- .C("psihat_statistic_nw", y_data_vec, T, g_t_set_vec, N, N_ts, sigmahat_vector_2, statistic_vector, statistic_result)
   } else if (kernel_method == "ll"){
-    result <- .C("psihat_statistic_ll", y_data_vec, T, g_t_set_vec, N, N_ts, sigmahat, statistic_vector, statistic_result)
+    result <- .C("psihat_statistic_ll", y_data_vec, T, g_t_set_vec, N, N_ts, sigmahat_vector_2, statistic_vector, statistic_result)
   } else {
     print('Given method is currently not supported')
   }
@@ -30,7 +30,7 @@ psihat_statistic <- function(y_data, N_ts, g_t_set, sigmahat, kernel_method){
   return(list(statistic, statistic_value)) 
 }
 
-psistar_statistic <- function(z_data, N_ts, g_t_set, sigmahat, kernel_method){
+psistar_statistic <- function(z_data, N_ts, g_t_set, sigmahat_vector_2, kernel_method){
   #Wrapper of a C function from psihat_statistic.C
   #Function that calculates the multiscale statistic \Psi*star_T.
   #The only difference with the previous function is in the return values.
@@ -42,8 +42,8 @@ psistar_statistic <- function(z_data, N_ts, g_t_set, sigmahat, kernel_method){
   T        <- as.integer(nrow(z_data))
   N        <- as.integer(nrow(g_t_set))
   
-  storage.mode(sigmahat)    <- "double"
-  storage.mode(N_ts)        <- "integer"
+  storage.mode(sigmahat_vector_2)    <- "double"
+  storage.mode(N_ts)                 <- "integer"
   
   z_data_vec        <- unlist(z_data)
   g_t_set_vec       <- unlist(g_t_set[c('u', 'h', 'lambda')])
@@ -51,9 +51,9 @@ psistar_statistic <- function(z_data, N_ts, g_t_set, sigmahat, kernel_method){
   statistic_result  <- vector(mode = "double", length = 1)
 
   if (kernel_method == "nw"){
-    result <- .C("psihat_statistic_nw", z_data_vec, T, g_t_set_vec, N, N_ts, sigmahat, statistic_vector, statistic_result)
+    result <- .C("psihat_statistic_nw", z_data_vec, T, g_t_set_vec, N, N_ts, sigmahat_vector_2, statistic_vector, statistic_result)
   } else if (kernel_method == "ll"){
-    result <- .C("psihat_statistic_ll", z_data_vec, T, g_t_set_vec, N, N_ts, sigmahat, statistic_vector, statistic_result)
+    result <- .C("psihat_statistic_ll", z_data_vec, T, g_t_set_vec, N, N_ts, sigmahat_vector_2, statistic_vector, statistic_result)
   } else {
     print('Given method is currently not supported')
   }

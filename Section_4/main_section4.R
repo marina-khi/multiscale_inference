@@ -1,3 +1,7 @@
+library(xtable)
+options(xtable.floating = FALSE)
+options(xtable.timestamp = "")
+
 source("C_code/psihat_statistic.R")
 dyn.load("C_code/psihat_statistic_ll.dll")
 dyn.load("C_code/psihat_statistic_nw.dll")
@@ -13,12 +17,11 @@ source("simulations_based_on_data.R")
 ##############################
 
 N_ts     <- 34 #number of different time series 
-N_rep    <- 100 #number of repetitions for calculating size and power
+N_rep    <- 1000 #number of repetitions for calculating size and power
 alpha    <- 0.05 #alpha for calculating quantiles
 
-different_T     <- c(250, 350, 500) #Different lengths of time series for which we calculate size and power
+different_T     <- c(250, 350, 500, 1000) #Different lengths of time series for which we calculate size and power
 different_alpha <- c(0.01, 0.05, 0.1) #Different alpha for which we calculate size and power
-h               <- c(0.01, 0.05, 0.1, 0.15) #Different bandwidth, not sure we use them
 
 kernel_method <- "ll" #Only "nw" (Nadaraya-Watson) and "ll" (local linear) methods are currently supported
 
@@ -130,5 +133,8 @@ for (i in TemperatureColumns){
 #Calculating size and power#
 ############################
 
-results_size <- simulations_based_on_data(30, N_rep, monthly_temp, different_T, different_alpha, kernel_method)
+source("simulations_based_on_data.R")
+results_size     <- simulations_size(30, N_rep, different_T, different_alpha, kernel_method)
+results_power    <- simulations_power(30, N_rep, different_T, different_alpha, kernel_method)
+results_clusters <- simulations_clustering(30, N_rep, different_T, different_alpha, kernel_method)
 

@@ -147,7 +147,7 @@ void psihat_statistic_ll(double *y_data, int *T, double *g_t_set, int *N, int *N
  				y_data_i[n] = y_data[i * T[0] + n];
  				y_data_j[n] = y_data[j * T[0] + n];
  			}
- 			statistic[k] = psihat_statistic_ij_ll(y_data_i, y_data_j, T[0], g_t_set, N[0], sigmahat[0]);
+ 			statistic[k] = psihat_statistic_ij_ll(y_data_i, y_data_j, T[0], g_t_set, N[0], sqrt(sigmahat[i] + sigmahat[j]));
  			if (k == 0) {
     			statistic_result[0] = statistic[k];
     		} else if (statistic[k] > statistic_result[0]) {
