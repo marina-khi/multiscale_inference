@@ -19,7 +19,7 @@ The main purpose of this section is to prove that there is a version of the mult
 %
 \begin{propA}\label{propA-strong-approx}
 Under the conditions of Theorem \ref{theo-stat}, there exist statistics $\widetilde{\Phi}_T$ for $T = 1,2,\ldots$ with the following two properties: (i) $\widetilde{\Phi}_T$ has the same distribution as $\widehat{\Phi}_T$ for any $T$, and (ii)
-\[ \big| \widetilde{\Phi}_T - \Phi_T \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} \Big), \]
+\[ \big| \widetilde{\Phi}_T - \Phi_T \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} + \rho_T \sqrt{\log T} \Big), \]
 where $\Phi_T$ is a Gaussian statistic as defined in \eqref{Phi-statistic}. 
 \end{propA}
 %
@@ -34,14 +34,14 @@ where $\sigma^2 = \sum_{k \in \integers} \cov(\varepsilon_0, \varepsilon_k)$ den
 where $\widetilde{\phi}_T(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \widetilde{\varepsilon}_t$ and $\widetilde{\sigma}^2$ is the same estimator as $\widehat{\sigma}^2$ with $Y_t = m(t/T) + \varepsilon_t$ replaced by $\widetilde{Y}_t = m(t/T) + \widetilde{\varepsilon}_t$ for $1 \le t \le T$. In addition, we define
 \begin{align*}
 \Phi_T & = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_T(u,h)}{\sigma}\Big| - \lambda(h) \Big\} \\
-\Phi_T^{*} & = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_T(u,h)}{\widetilde{\sigma}}\Big| - \lambda(h) \Big\} 
+\Phi_T^{\diamond} & = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_T(u,h)}{\widetilde{\sigma}}\Big| - \lambda(h) \Big\} 
 \end{align*}
 with $\phi_T(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \sigma Z_t$ and $Z_t = \mathbb{B}(t) - \mathbb{B}(t-1)$. With this notation, we can write 
 \begin{equation}\label{eq-strongapprox-bound1}
-\big| \widetilde{\Phi}_T - \Phi_T \big| \le \big| \widetilde{\Phi}_T - \Phi_T^{*} \big| + \big| \Phi_T^{*} - \Phi_T \big| = \big| \widetilde{\Phi}_T - \Phi_T^{*} \big| + o_p \Big( \frac{T^{1/q}}{\sqrt{Th_{\min}}} \Big), 
+\big| \widetilde{\Phi}_T - \Phi_T \big| \le \big| \widetilde{\Phi}_T - \Phi_T^{\diamond} \big| + \big| \Phi_T^{\diamond} - \Phi_T \big| = \big| \widetilde{\Phi}_T - \Phi_T^{\diamond} \big| + o_p \big( \rho_T \sqrt{\log T} \big), 
 \end{equation}
-where the last equality follows by taking into account that $\phi_T(u,h) \sim \normal(0,\sigma^2)$ for all $(u,h) \in \mathcal{G}_T$, $|\mathcal{G}_T| = O(T^\theta)$ for some large but fixed constant $\theta$ and $\widetilde{\sigma}^2 = \sigma^2 + o_p(T^{1/q}/\sqrt{T h_{\min} \log T})$. Straightforward calculations yield that 
-\[ \big| \widetilde{\Phi}_T - \Phi_T^{*} \big| \le \widetilde{\sigma}^{-1} \max_{(u,h) \in \mathcal{G}_T} \big| \widetilde{\phi}_T(u,h) - \phi_T(u,h) \big|. \]
+where the last equality follows by taking into account that $\phi_T(u,h) \sim \normal(0,\sigma^2)$ for all $(u,h) \in \mathcal{G}_T$, $|\mathcal{G}_T| = O(T^\theta)$ for some large but fixed constant $\theta$ and $\widetilde{\sigma}^2 = \sigma^2 + o_p(\rho_T)$. Straightforward calculations yield that 
+\[ \big| \widetilde{\Phi}_T - \Phi_T^{\diamond} \big| \le \widetilde{\sigma}^{-1} \max_{(u,h) \in \mathcal{G}_T} \big| \widetilde{\phi}_T(u,h) - \phi_T(u,h) \big|. \]
 Using summation by parts,
 %($\sum_{i=1}^n a_i b_i = \sum_{i=1}^{n-1} A_i (b_i - b_{i+1}) + A_n b_n$ with $A_j = \sum_{j=1}^i a_j$) 
 we further obtain that 
@@ -54,10 +54,10 @@ where
 \[ W_T(u,h) = \sum\limits_{t=1}^{T-1} |w_{t+1,T}(u,h) - w_{t,T}(u,h)| + |w_{T,T}(u,h)|. \]
 Standard arguments show that $\max_{(u,h) \in \mathcal{G}_T} W_T(u,h) = O( 1/\sqrt{Th_{\min}} )$. Applying the strong approximation result \eqref{eq-strongapprox-dep}, we can thus infer that 
 \begin{align}
-\big| \widetilde{\Phi}_T - \Phi_T^{*} \big| 
+\big| \widetilde{\Phi}_T - \Phi_T^{\diamond} \big| 
  & \le \widetilde{\sigma}^{-1} \max_{(u,h) \in \mathcal{G}_T} \big| \widetilde{\phi}_T(u,h) - \phi_T(u,h) \big| \nonumber \\
- & \le \widetilde{\sigma}^{-1} \max_{(u,h) \in \mathcal{G}_T} W_T(u,h) \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_s - \sigma \mathbb{B}(t) \Big| 
- = o_p \Big( \frac{T^{1/q}}{\sqrt{Th_{\min}}} \Big). \label{eq-strongapprox-bound2}
+ & \le \widetilde{\sigma}^{-1} \max_{(u,h) \in \mathcal{G}_T} W_T(u,h) \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_s - \sigma \mathbb{B}(t) \Big| \nonumber \\
+ & = o_p \Big( \frac{T^{1/q}}{\sqrt{Th_{\min}}} \Big). \label{eq-strongapprox-bound2}
 \end{align}
 Plugging \eqref{eq-strongapprox-bound2} into \eqref{eq-strongapprox-bound1} completes the proof.
 \end{proof}
@@ -71,12 +71,12 @@ In this section, we establish some properties of the Gaussian statistic $\Phi_T$
 %
 %
 \begin{propA}\label{propA-anticon}
-Set $\delta_T = T^{1/q} / \sqrt{T h_{\min}}$. Under the conditions of Theorem \ref{theo-stat}, it holds that 
-\[ \sup_{x \in \reals} \pr \Big( | \Phi_T - x | \le \delta_T \Big) = o(1). \]
+Under the conditions of Theorem \ref{theo-stat}, it holds that 
+\[ \sup_{x \in \reals} \pr \Big( | \Phi_T - x | \le \delta_T \Big) = o(1), \]
+where $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$.
 \end{propA}
 %
 %
-\newpage
 \begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-anticon}}}] 
 The main technical tool for proving Proposition \ref{propA-anticon} are anti-concentration bounds for Gaussian random vectors. The following proposition slightly generalizes anti-concentration results derived in \cite{Chernozhukov2015}, in particular Theorem 3 therein. 
 \begin{propA}\label{theo-anticon}
@@ -94,18 +94,17 @@ with $x_j = (x_{j1},x_{j2})$. This notation allows us to write
 \[ \Phi_T = \max_{1 \le j \le 2p} X_j, \]
 where $(X_1,\ldots,X_{2p})^\top$ is a Gaussian random vector with the following properties: (i) $\mu_j := \ex[X_j] = - \lambda(x_{j2})$ and thus $\overline{\mu} = \max_{1 \le j \le p} |\mu_j| \le C \sqrt{\log T}$, and (ii) $\sigma_j^2 := \var(X_j) = 1$ for all $j$. Since $\sigma_j = 1$ for all $j$, it holds that $a_p = b_p$. Moreover, as the variables $(X_j - \mu_j)/\sigma_j$ are standard normal, we have that $a_p = b_p \le \sqrt{2 \log (2p)} \le C \sqrt{\log T}$. With this notation at hand, we can apply Proposition \ref{theo-anticon} to obtain that 
 \[ \sup_{x \in \reals} \pr \Big( \big| \Phi_T - x \big| \le \delta_T \Big) \le C \delta_T \Big[ \sqrt{\log T} + \sqrt{ \log(\underline{\sigma}/\delta_T) } \Big] = o(1) \]
-with $\delta_T = T^{1/q} / \sqrt{T h_{\min}}$, which is the statement of Proposition \ref{propA-anticon}.
+with $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$, which is the statement of Proposition \ref{propA-anticon}.
 \end{proof}
 
 
 
-\newpage
 \subsection*{Proof of Theorem \ref{theo-stat}}
 
 
 To prove Theorem \ref{theo-stat}, we make use of the two auxiliary results derived above. By Proposition \ref{propA-strong-approx}, there exist statistics $\widetilde{\Phi}_T$ for $T = 1,2,\ldots$ which are distributed as $\widehat{\Phi}_T$ for any $T \ge 1$ and which have the property that 
 \begin{equation}\label{statement-propA-strong-approx}
-\big| \widetilde{\Phi}_T - \Phi_T \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} \Big), 
+\big| \widetilde{\Phi}_T - \Phi_T \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} + \rho_T \sqrt{\log T} \Big), 
 \end{equation}
 where $\Phi_T$ is a Gaussian statistic as defined in \eqref{Phi-statistic}. The approximation result \eqref{statement-propA-strong-approx} allows us to replace the multiscale statistic $\widehat{\Phi}_T$ by an identically distributed version $\widetilde{\Phi}_T$ which is close to the Gaussian statistic $\Phi_T$. In the next step, we show that  
 \begin{equation}\label{eq-theo-stat-step2}
@@ -133,7 +132,7 @@ It holds that
  & \le \pr (|V_T - x| \le \delta_T) + o(1). \qedhere
 \end{align*}
 \end{proof}
-We now apply this lemma with $V_T = \Phi_T$, $W_T = \widetilde{\Phi}_T$ and $\delta_T = T^{1/q} / \sqrt{T h_{\min}}$: From \eqref{statement-propA-strong-approx}, we already know that $\widetilde{\Phi}_T - \Phi_T = o_p(\delta_T)$. Moreover, by Proposition \ref{propA-anticon}, it holds that 
+We now apply this lemma with $V_T = \Phi_T$, $W_T = \widetilde{\Phi}_T$ and $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$: From \eqref{statement-propA-strong-approx}, we already know that $\widetilde{\Phi}_T - \Phi_T = o_p(\delta_T)$. Moreover, by Proposition \ref{propA-anticon}, it holds that 
 \begin{equation}\label{statement-propA-anticon}
 \sup_{x \in \reals} \pr \Big( | \Phi_T - x | \le \delta_T \Big) = o(1). 
 \end{equation}
