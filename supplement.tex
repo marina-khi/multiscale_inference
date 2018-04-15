@@ -67,29 +67,37 @@ where $\kappa = \int K^2(\varphi) \varphi^2 d\varphi$ and $\xi_{u,w} \in [u-h,u+
 \subsection*{Proof of Theorem \ref{theo-stat-equality}}
 
 
-The proof proceeds analogous to that of Theorem \ref{theo-stat}. In the first step, we show that there exist statistics $\widetilde{\Phi}_{n,T}$ for $T = 1,2,\ldots$ with the following two properties: (i) $\widetilde{\Phi}_{n,T}$ has the same distribution as $\widehat{\Phi}_{n,T}$ for any $T$, and (ii)
-\begin{equation}\label{eq-theo-stat-equality-step1}
-\big| \widetilde{\Phi}_{n,T} - \Phi_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} \Big), 
-\end{equation}
-where $\Phi_{n,T}$ is a Gaussian statistic as defined in Section \ref{subsec-test-equality-theo}. In the second step, we prove that 
-\begin{equation}\label{eq-theo-stat-equality-step2}
-\sup_{x \in \reals} \big| \pr(\widetilde{\Phi}_{n,T} \le x) - \pr(\Phi_{n,T} \le x) \big| = o(1). 
-\end{equation}
-To verify \eqref{eq-theo-stat-equality-step1}, we follow the arguments for the proof of Proposition \ref{propA-strong-approx}, adapting the notation accordingly. The details are given below. The proof of \eqref{eq-theo-stat-equality-step2} is almost identical to that of \eqref{eq-theo-stat-step2} and thus omitted. 
-
-
-We now turn to the proof of \eqref{eq-theo-stat-equality-step1}. By Theorem 2.1 and Corollary 2.1 in \cite{BerkesLiuWu2014}, there exist a standard Brownian motion $\mathbb{B}_i$ and a sequence $\{ \widetilde{\varepsilon}_{it}: t \in \naturals \}$ for each $i$ such that the following holds: (i) $\mathbb{B}_i$ and $\{ \widetilde{\varepsilon}_{it}: t \in \naturals \}$ are independent across $i$, (ii) $[\widetilde{\varepsilon}_{i1},\ldots,\widetilde{\varepsilon}_{iT}] \stackrel{\mathcal{D}}{=} [\varepsilon_{i1},\ldots,\varepsilon_{iT}]$ for each $i$ and $T$, and (iii)  
+By Theorem 2.1 and Corollary 2.1 in \cite{BerkesLiuWu2014}, there exist a standard Brownian motion $\mathbb{B}_i$ and a sequence $\{ \widetilde{\varepsilon}_{it}: t \in \naturals \}$ for each $i$ such that the following holds: (i) $\mathbb{B}_i$ and $\{ \widetilde{\varepsilon}_{it}: t \in \naturals \}$ are independent across $i$, (ii) $[\widetilde{\varepsilon}_{i1},\ldots,\widetilde{\varepsilon}_{iT}] \stackrel{\mathcal{D}}{=} [\varepsilon_{i1},\ldots,\varepsilon_{iT}]$ for each $i$ and $T$, and (iii)  
 \begin{equation*}
-\max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \sigma \mathbb{B}_i(t) \Big| = o\big( T^{1/q} \big) \quad \text{a.s.}  
+\max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \sigma_i \mathbb{B}_i(t) \Big| = o\big( T^{1/q} \big) \quad \text{a.s.}  
 \end{equation*}
-for each $i$, where $\sigma^2 = \sum_{k \in \integers} \cov(\varepsilon_{i0}, \varepsilon_{ik})$ denotes the long-run error variance. We define 
-\[ \widetilde{\Phi}_T = \max_{1\le i < j \le N} \widetilde{\Phi}_{ij,T} \quad \text{with} \quad \widetilde{\Phi}_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widetilde{\phi}_{ij,T}(u,h)}{\sqrt{2}\widetilde{\sigma}}\Big| - \lambda(h) \Big\}, \]
-where $\widetilde{\phi}_{ij,T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) (\widetilde{\varepsilon}_{it} - \widetilde{\varepsilon}_{jt})$ and $\widetilde{\sigma}$ is the same estimator as $\widehat{\sigma}^\circ$ with $Y_{it}^\circ = m_i(t/T) + \varepsilon_{it}$ replaced by  $\widetilde{Y}_{it} = m_i(t/T) + \widetilde{\varepsilon}_{it}$. In addition, we let 
-\begin{align*} 
- & \Phi_T = \max_{1\le i < j \le N} \Phi_{ij,T} \quad \text{with} \quad \Phi_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij,T}(u,h)}{\sqrt{2}\sigma}\Big| - \lambda(h) \Big\} \\
- & \Phi_T^* = \max_{1\le i < j \le N} \Phi_{ij,T}^* \quad \text{with} \quad \Phi_{ij,T}^* = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij,T}(u,h)}{\sqrt{2}\widetilde{\sigma}}\Big| - \lambda(h) \Big\}, 
-\end{align*}
-where $\phi_T(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \sigma (Z_{it} - Z_{jt})$ and $Z_{it} = \mathbb{B}_i(t) - \mathbb{B}_i(t-1)$. With this notation at hand, we can follow the steps of the proof for Proposition \ref{propA-strong-approx} to arrive at \eqref{eq-theo-stat-equality-step1}. 
+for each $i$, where $\sigma_i^2 = \sum_{k \in \integers} \cov(\varepsilon_{i0}, \varepsilon_{ik})$ denotes the long-run error variance. We define 
+\[ \widetilde{\Phi}_{n,T} = \max_{1\le i < j \le N} \widetilde{\Phi}_{ij,T} \quad \text{with} \quad \widetilde{\Phi}_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widetilde{\phi}_{ij,T}(u,h)}{(\widetilde{\sigma}_i + \widetilde{\sigma}_j)^{1/2}}\Big| - \lambda(h) \Big\}, \]
+where $\widetilde{\phi}_{ij,T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) (\widetilde{\varepsilon}_{it} - \widetilde{\varepsilon}_{jt})$ and $\widetilde{\sigma}_i$ is the same estimator as $\widehat{\sigma}_i^\circ$ with $Y_{it}^\circ = m_i(t/T) + \varepsilon_{it}$ replaced by  $\widetilde{Y}_{it} = m_i(t/T) + \widetilde{\varepsilon}_{it}$. By construction, $\widetilde{\Phi}_{n,T}$ has the same distribution as $\widehat{\Phi}_{n,T}$ for each $T \ge 1$. In addition, we let 
+\[ \Phi_{n,T}^* = \max_{1\le i < j \le N} \Phi_{ij,T}^* \quad \text{with} \quad \Phi_{ij,T}^* = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij,T}^*(u,h)}{(\sigma_i^2 + \sigma_j^2)^{1/2}}\Big| - \lambda(h) \Big\}, \] 
+where $\phi_{ij,T}^*(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) (\sigma_i Z_{it} - \sigma_j Z_{jt})$ and $Z_{it} = \mathbb{B}_i(t) - \mathbb{B}_i(t-1)$. Without loss of generality, we also set $Z_{it} = \mathbb{B}_i(t) - \mathbb{B}_i(t-1)$ in the Gaussian statistic $\Phi_{n,T}$ which is defined in Section \ref{subsec-test-equality-test}. 
+
+
+We now follow the proof strategy for Theorem \ref{theo-stat}. Slightly modifying the arguments for Proposition \ref{propA-strong-approx}, we can show that 
+\begin{equation}\label{eq-theo-stat-equality-res1}
+\big| \widetilde{\Phi}_{n,T} - \Phi_{n,T}^* \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} + \rho_T \sqrt{\log T} \Big). 
+\end{equation}
+Moreover, it holds that 
+\begin{equation}\label{eq-theo-stat-equality-res2}
+\big| \Phi_{n,T} - \Phi_{n,T}^* \big| = o_p \big( \rho_T \sqrt{\log T} \big), 
+\end{equation}
+which is a straightforward consequence of the facts that the variables $Z_{it}$ are i.i.d.\ standard normal, $|\mathcal{G}_T| = O(T^\theta)$ for some large but fixed constant $\theta$ and $\widetilde{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$. Finally, by arguments very similar to those for Proposition \ref{propA-anticon}, we obtain that 
+\begin{equation}\label{eq-theo-stat-equality-res3}
+\sup_{x \in \mathbb{R}} \pr \big( \big| \Phi_{n,T}^* - x \big| \le \delta_{n,T} \big) = o(1) 
+\end{equation}
+with $\delta_{n,T} = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$. Combining \eqref{eq-theo-stat-equality-res1}--\eqref{eq-theo-stat-equality-res3} with Lemma \ref{lemma1-theo-stat}, we can infer that 
+\begin{align}
+\sup_{x \in \reals} \big| \pr \big( \widetilde{\Phi}_{n,T} \le x \big) -  \pr \big( \Phi_{n,T}^* \le x \big) \big| & = o(1) \label{eq-theo-stat-equality-res4} \\
+\sup_{x \in \reals} \big| \pr \big( \Phi_{n,T} \le x \big) -  \pr \big( \Phi_{n,T}^* \le x \big) \big| & = o(1). \label{eq-theo-stat-equality-res5}
+\end{align}
+From \eqref{eq-theo-stat-equality-res4} and \eqref{eq-theo-stat-equality-res5}, it immediately follows that 
+\[ \sup_{x \in \reals} \big| \pr \big( \widetilde{\Phi}_{n,T} \le x \big) -  \pr \big( \Phi_{n,T} \le x \big) \big| = o(1), \]
+which in turn implies that $\pr ( \widetilde{\Phi}_{n,T} \le q_{n,T}(\alpha) ) = (1 - \alpha) + o(1)$. Since $\widetilde{\Phi}_{n,T}$ has the same distribution as $\widehat{\Phi}_{n,T}$, this completes the proof of Theorem \ref{theo-stat-equality}. 
 
 
 
@@ -143,7 +151,7 @@ that is, $\widehat{N} = N$.
 
 
 For simplicity of notation, suppose that $\alpha_i = 0$ for all $i$. This allows us to write 
-\[ \widehat{\Phi}_{n,T} = \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\psi}_{ij,T}(u,h)- \ex \widehat{\psi}_{ij,T}(u,h)} {\sqrt{2}\widehat{\sigma}} \Big| - \lambda(h) \Big \}. \]
+\[ \widehat{\Phi}_{n,T} = \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\psi}_{ij,T}(u,h)- \ex \widehat{\psi}_{ij,T}(u,h)} {(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}} \Big| - \lambda(h) \Big \}. \]
 We consider the event
 \[ D_{n,T} = \Big\{ \widehat{\Phi}_{n,T} \le q_{n,T}(\alpha) \, \text{ and } \,  \min_{1 \le \ell < \ell^\prime \le N} \min_{\substack{i \in G_\ell \\ j \in G_{\ell^\prime}}} \widehat{\Psi}_{ij,T} > q_{n,T}(\alpha) \Big\}, \]
 which can be analyzed by the same arguments as those applied to the event $B_{n,T}$ in the proof of Proposition \ref{prop-clustering-1}. In particular, analogous to \eqref{eq2-prop-clustering-1} and statements (i) and (ii) therein, we can show that 
@@ -159,7 +167,7 @@ Moreover, we have that
 D_{n,T} \subseteq \bigcap_{1 \le \ell < \ell^\prime \le \widehat{N}} E_{n,T}(\ell,\ell^\prime),
 \end{equation}
 which is a consequence of the following observation: For all $i$, $j$ and $(u,h) \in \mathcal{G}_T$ with 
-\[ \Big|\frac{\widehat{\psi}_{ij,T}(u,h) - \ex \widehat{\psi}_{ij,T}(u,h)}{\sqrt{2} \widehat{\sigma}}\Big| - \lambda(h) \le q_{n,T}(\alpha) \quad \text{and} \quad \Big|\frac{\widehat{\psi}_{ij,T}(u,h)}{\sqrt{2} \widehat{\sigma}}\Big| - \lambda(h) > q_T(\alpha), \]
+\[ \Big|\frac{\widehat{\psi}_{ij,T}(u,h) - \ex \widehat{\psi}_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \le q_{n,T}(\alpha) \quad \text{and} \quad \Big|\frac{\widehat{\psi}_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) > q_{n,T}(\alpha), \]
 it holds that $\ex[\widehat{\psi}_{ij,T}(u,h)] \ne 0$, which in turn implies that $m_i(v) - m_j(v) \ne 0$ for some $v \in I_{u,h}$. From \eqref{eq2-prop-clustering-2} and \eqref{eq3-prop-clustering-2}, we obtain that 
 \[ D_{n,T} \subseteq \Big\{ \bigcap_{1 \le \ell < \ell^\prime \le \widehat{N}} E_{n,T}(\ell,\ell^\prime) \Big\} \cap \big\{ \widehat{N} = N \text{ and } \widehat{G}_\ell = G_\ell \text{ for all } \ell \big\} = E_{n,T}. \] 
 This together with \eqref{eq1-prop-clustering-2} implies that $\pr(E_{n,T}) \ge (1-\alpha) + o(1)$, thus completing the proof. 
@@ -183,7 +191,7 @@ is non-decreasing on $\reals$.
 Let $(X_1,\ldots,X_p)^\top$ be a centred Gaussian random vector in $\reals^p$ with $\max_{1 \le j \le p} \ex[X_j^2] \le \sigma^2$ for some $\sigma^2 > 0$. Then for any $r > 0$, 
 \[ \pr \Big( \max_{1 \le j \le p} X_j \ge \ex \Big[ \max_{1 \le j \le p} X_j \Big] + r \Big) \le e^{-r^2/(2\sigma^2)}. \]
 \end{lemmaA} 
-The proof of Lemmas \ref{lemma1-anticon} and \ref{lemma2-anticon} can be found in \cite{Chernozhukov2015}. Lemma \ref{lemma3-anticon} is a standard result on Gaussian concentration whose proof is given e.g.\ in \cite{Ledoux2001}; see in particular Theorem 7.1 therein. We now closely follow the arguments for the proof of Theorem 3 in \cite{Chernozhukov2015}. The proof splits up into three steps. 
+The proof of Lemmas \ref{lemma1-anticon} and \ref{lemma2-anticon} can be found in \cite{Chernozhukov2015}. Lemma \ref{lemma3-anticon} is a standard result on Gaussian concentration whose proof is given e.g.\ in \cite{Ledoux2001}; see Theorem 7.1 therein. We now closely follow the arguments for the proof of Theorem 3 in \cite{Chernozhukov2015}. The proof splits up into three steps. 
 \vspace{7pt}
 
 
