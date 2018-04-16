@@ -134,7 +134,7 @@ for (i in TemperatureColumns){
 ############################
 
 source("simulations_based_on_data.R")
-results_size     <- simulations_size(30, N_rep, different_T, different_alpha, kernel_method)
+#results_size     <- simulations_size(30, N_rep, different_T, different_alpha, kernel_method)
 results_power    <- simulations_power(30, N_rep, different_T, different_alpha, kernel_method)
-results_clusters <- simulations_clustering(30, N_rep, different_T, different_alpha, kernel_method)
+#results_clusters <- simulations_clustering(30, N_rep, different_T, different_alpha, kernel_method)
 
