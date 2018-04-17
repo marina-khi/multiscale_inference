@@ -84,21 +84,21 @@ double s_t_0(double u, double h, int T) {
 }
 
 
-double psi_average_ij_ll(double data_i[], double data_j[], int T, double u, double h){
+double psi_average_ij_ll(double *data, int i, int j, int T, double u, double h){
 	/*
 	Kernel average function \psi_T(u, h) that takes u, h, data, T=length(data) as arguments. 
 	The data can be y_data for \hat{ \Psi }_T or independent gaussian rv z_temp = sigma * z for \Psi^star_T.
 	The output is one value for each u and h.
 	*/
-	int i;
+	int n;
 	double x, result, result_temp, k, k_norm;
 	result_temp = 0;
 	k_norm = 0;
 	k = 0;
-	for (i = 0; i < T; i++) {
-		x = (((i + 1) / (float)T - u) / h);
+	for (n = 0; n < T; n++) {
+		x = (((n + 1) / (float)T - u) / h);
 		k = epanc(x) * (s_t_2(u, h, T) - s_t_1(u, h, T) * x);
-		result_temp += k * (data_i[i] - data_j[i]);
+		result_temp += k * (data[i * T + n] - data[j * T + n]);
 		k_norm += k * k;
 /*		Rprintf("We are here, %f, %f, %f\n", k, result_temp, k_norm);*/
 	} 		    	
@@ -108,19 +108,19 @@ double psi_average_ij_ll(double data_i[], double data_j[], int T, double u, doub
 }
 
 
-double psihat_statistic_ij_ll(double *y_data_i, double *y_data_j, int T, double *g_t_set, int N, double sigmahat){
-	int i;
+double psihat_statistic_ij_ll(double *y_data, int i, int j, int T, double *g_t_set, int N, double sigmahat){
+	int k;
 	double tmp1, maximum, values[N];
  	
- 	for (i=0; i < N; i++) {
-		tmp1 = psi_average_ij_ll(y_data_i, y_data_j, T, g_t_set[i], g_t_set[i + N]) / sigmahat;
-    	values[i] = awert(tmp1) - g_t_set[2 * N + i];
+ 	for (k=0; k < N; k++) {
+		tmp1 = psi_average_ij_ll(y_data, i, j, T, g_t_set[k], g_t_set[k + N]) / sigmahat;
+    	values[k] = awert(tmp1) - g_t_set[2 * N + k];
 /*		values_with_sign[i] = tmp1;*/
 /*    	Rprintf("%f, %f, %f, %f\n",tmp1, tmp2, tmp3, values[i]);*/
-    	if (i == 0) {
-    		maximum = values[i];
-    	} else if (values[i] > maximum) {
-    		maximum = values[i];
+    	if (k == 0) {
+    		maximum = values[k];
+    	} else if (values[k] > maximum) {
+    		maximum = values[k];
 /*    			Rprintf("%f %d\n",max,i);*/
     	}
   	}
@@ -138,16 +138,13 @@ void psihat_statistic_ll(double *y_data, int *T, double *g_t_set, int *N, int *N
 				values		return: vector of values psi_average for each (u, h) from the grid
 			*/
 	int i, j, k, n;
-	double y_data_i[T[0]], y_data_j[T[0]];
  	
  	k = 0;
  	for (i = 0; i < N_ts[0] - 1; i++) {
  		for (j = i + 1; j < N_ts[0]; j++){
  			for (n = 0; n < T[0]; n++){
- 				y_data_i[n] = y_data[i * T[0] + n];
- 				y_data_j[n] = y_data[j * T[0] + n];
  			}
- 			statistic[k] = psihat_statistic_ij_ll(y_data_i, y_data_j, T[0], g_t_set, N[0], sqrt(sigmahat[i] + sigmahat[j]));
+ 			statistic[k] = psihat_statistic_ij_ll(y_data, i, j, T[0], g_t_set, N[0], sqrt(sigmahat[i] + sigmahat[j]));
  			if (k == 0) {
     			statistic_result[0] = statistic[k];
     		} else if (statistic[k] > statistic_result[0]) {
