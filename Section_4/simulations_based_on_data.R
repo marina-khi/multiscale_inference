@@ -42,7 +42,7 @@ simulations_power <- function(N_ts, N_rep, different_T, different_alpha, kernel_
   sigma <- 0.59
   power <- c()
   
-  for (b in c(0.75)){
+  for (b in c(0.75, 1.00, 1.25)){
     power_b <- c()
     for (T_size in different_T){
       simulated_data           <- matrix(NA, nrow = T_size, ncol = N_ts)
