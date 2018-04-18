@@ -91,13 +91,15 @@ double psi_average_ij_ll(double *data, int i, int j, int T, double u, double h){
 	The output is one value for each u and h.
 	*/
 	int n;
-	double x, result, result_temp, k, k_norm;
+	double x, result, result_temp, k, k_norm, s_t_2_value, s_t_1_value;
 	result_temp = 0;
 	k_norm = 0;
 	k = 0;
+	s_t_2_value = s_t_2(u, h, T);
+	s_t_1_value = s_t_1(u, h, T);
 	for (n = 0; n < T; n++) {
 		x = (((n + 1) / (float)T - u) / h);
-		k = epanc(x) * (s_t_2(u, h, T) - s_t_1(u, h, T) * x);
+		k = epanc(x) * (s_t_2_value - s_t_1_value * x);
 		result_temp += k * (data[i * T + n] - data[j * T + n]);
 		k_norm += k * k;
 /*		Rprintf("We are here, %f, %f, %f\n", k, result_temp, k_norm);*/
@@ -137,13 +139,11 @@ void psihat_statistic_ll(double *y_data, int *T, double *g_t_set, int *N, int *N
                 maximum		return: value of the test statistic
 				values		return: vector of values psi_average for each (u, h) from the grid
 			*/
-	int i, j, k, n;
+	int i, j, k;
  	
  	k = 0;
  	for (i = 0; i < N_ts[0] - 1; i++) {
  		for (j = i + 1; j < N_ts[0]; j++){
- 			for (n = 0; n < T[0]; n++){
- 			}
  			statistic[k] = psihat_statistic_ij_ll(y_data, i, j, T[0], g_t_set, N[0], sqrt(sigmahat[i] + sigmahat[j]));
  			if (k == 0) {
     			statistic_result[0] = statistic[k];
