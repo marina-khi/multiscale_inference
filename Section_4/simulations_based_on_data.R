@@ -16,14 +16,14 @@ simulations_size <- function(N_ts, N_rep, different_T, different_alpha, kernel_m
       gaussian_quantile = calculating_gaussian_quantile(T_size, N_ts, g_t_set_sim, kernel_method, alpha)
 
       size_of_the_test = replicate(N_rep, {
-        sigmahat_vector_2_simulated <- c()
+        sigmahat_vector_2 <- c()
         for (i in 1:N_ts){
           simulated_data[, i] <- arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, sigma), n = T_size)
           sigma_i = estimating_sigma_for_AR1(simulated_data[, i], L1, L2)[[1]]
-          sigmahat_vector_2_simulated <- c(sigmahat_vector_2_simulated, sigma_i * sigma_i)
+          sigmahat_vector_2 <- c(sigmahat_vector_2, sigma_i * sigma_i)
         }
-        #sigmahat <- sqrt(sum(sigmahat_vector_2_simulated)/N_ts)
-        result = psihat_statistic(simulated_data, N_ts, g_t_set_sim, sigmahat_vector_2_simulated, kernel_method)[[2]]
+        #sigmahat <- sqrt(sum(sigmahat_vector_2)/N_ts)
+        result = psihat_statistic(simulated_data, N_ts, g_t_set_sim, sigmahat_vector_2, kernel_method)[[2]]
         if (result > gaussian_quantile) {d = 1} else {d = 0}
         d
       })
@@ -31,7 +31,7 @@ simulations_size <- function(N_ts, N_rep, different_T, different_alpha, kernel_m
       cat("Ratio of rejection under H0 is ", sum(size_of_the_test)/N_rep, "with alpha = ", alpha, "and T = ", T_size, "\n")
     }
   }
-  filename = paste0("../Plots/30stations_sizetable_method_", kernel_method, ".tex")
+  filename = paste0("../Plots/", N_ts, "stations_sizetable_method_", kernel_method, ".tex")
   creating_matrix_and_texing(size, different_T, different_alpha, filename)
   return(size)
 }
