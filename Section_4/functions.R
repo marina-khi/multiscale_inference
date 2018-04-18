@@ -11,6 +11,52 @@ epanechnikov_kernel <- function(x)
   return(result)
 }
 
+#Functions needed for local linear smoothing
+s_t_1 <- function(u, h, T_size) {
+  result = 0
+  for (i in 1:T_size) {
+    result = result + epanechnikov_kernel((i/T_size - u) / h) * ((i/T_size - u) / h)
+  }
+  return(result / (T_size * h));
+}
+
+s_t_2 <- function(u, h, T_size) {
+  result = 0
+  for (i in 1:T_size) {
+    result = result + epanechnikov_kernel((i/T_size - u) / h) * ((i/T_size - u) / h) * ((i/T_size - u) / h)
+  }
+  return(result / (T_size * h));
+}
+
+s_t_0 <- function(u, h, T_size) {
+  result = 0
+  for (i in 1:T_size) {
+    result = result + epanechnikov_kernel((i/T_size - u) / h)
+  }
+  return(result / (T_size * h));
+}
+
+
+#Local Linear estimator using the epanechnikov kernel. 
+local_linear_smoothing <- function(u, data_p, grid_p, bw){
+  if (length(data_p) != length(grid_p)){
+    cat("Dimensions of the grid and the data do not match, please check the arguments")
+    return(NULL)
+  } else {
+    result      = 0
+    norm        = 0
+    T_size      = length(data_p)
+    s_t_2_value = s_t_2(u, bw, T_size)
+    s_t_1_value = s_t_1(u, bw, T_size) 
+    for (i in 1:T_size){
+      k = (s_t_2_value - s_t_1_value * ((grid_p[i] - u) / bw)) * epanechnikov_kernel((grid_p[i] - u) / bw)
+      result = result + k * data_p[i]
+      norm = norm + k 
+    }
+    return(result/norm)
+  }
+}
+
 
 #Nadaraya-Watson estimator using the epanechnikov kernel. 
 epanechnikov_smoothing <-function(u, data_p, grid_p, bw){
