@@ -104,7 +104,7 @@ creating_g_set <- function(T, kernel_method){
   return(g_t_set)
 }
 
-#If we have already calculated quantiles and stored them in a file 'distr_T_....RData'
+#If we have already calculated gaussian quantiles and stored them in a file 'distr_T_....RData'
 #then no need to calculate them once more, we just load them from this file.
 #Ohterwise simulate the \Psi^star statistic 1000 times in order to calculate the quantiles
 calculating_gaussian_quantile <- function(T, N_ts, g_t_set, kernel_method, alpha = 0.05){
