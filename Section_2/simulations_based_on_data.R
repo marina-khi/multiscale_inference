@@ -1,4 +1,4 @@
-simulations_based_on_data <- function(N, different_T, different_alpha, data, test_problem, kernel_t){
+simulations_based_on_data <- function(N, different_T, different_alpha, data, a_hat, sigma_eta, test_problem, kernel_t){
   #Defining necessary parameters
   num_T     <- length(different_T)
   num_alpha <- length(different_alpha)
@@ -15,28 +15,15 @@ simulations_based_on_data <- function(N, different_T, different_alpha, data, tes
   if (kernel_t == "nw"){
     quantile_function = calculating_gaussian_quantile
     statistic_function = psihat_statistic
-    defining_set = creating_g_set
   } else if (kernel_t == "ll"){
     quantile_function = calculating_gaussian_quantile_ll
     statistic_function = psihat_statistic_ll
-    defining_set = creating_g_set_ll
   } else {
     print('Given method is currently not supported')
   }
 
   T_data <- length(data)
   
-  #####################################
-  #Estimating parameters from the data#
-  #####################################
-  
-  #Tuning parameters
-  L1 <- floor(sqrt(T_data))
-  L2 <- floor(2 * sqrt(T_data))
-  result <- estimating_sigma_for_AR1(data, L1, L2)
-  
-  a_hat <- result[[2]] #Estimation of the AR coefficient
-  sigma_eta <-result[[3]] #Estimation of the sqrt of the variance of the innovation 
 
   #################################
   #Calculating the size of the test#
@@ -48,7 +35,7 @@ simulations_based_on_data <- function(N, different_T, different_alpha, data, tes
     L1 = floor(sqrt(T))
     L2 = floor(2 * sqrt(T))
     
-    g_t_set = defining_set(T)
+    g_t_set =creating_g_set(T, kernel_t)
     
     for (alpha in different_alpha){
       #Calculating gaussian quantiles for given T and alpha
@@ -75,15 +62,14 @@ simulations_based_on_data <- function(N, different_T, different_alpha, data, tes
   #Calculating the power of the test#
   ###################################
   
-  plot(NA, xlim = c(0, 1), ylim = c(-1.5, 1.5))
-  
+
   #This is for partly linear function + AR(1) case
   for (a in c(1.0, 0.75, 0.5)){
     power_ar1 = c()
     for (T in different_T){
       L1 <- floor(sqrt(T))
       L2 <- floor(2 * sqrt(T))
-      g_t_set = defining_set(T)
+      g_t_set = creating_g_set(T, kernel_t)
       grid_points <- seq(from = 1/T, to = 1, length.out = T)
       
       b = a/(0.4 * T) #Constant needed just for calculation
