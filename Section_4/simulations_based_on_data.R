@@ -39,7 +39,7 @@ simulations_power <- function(N_ts, N_rep, different_T, different_alpha, kernel_
   sigma <- 0.59
   power <- c()
   
-  for (b in c(0.75, 1.00, 1.25)){
+  for (b in c(1.00, 1.25)){
     power_b <- c()
     for (T_size in different_T){
       simulated_data           <- matrix(NA, nrow = T_size, ncol = N_ts)
@@ -70,7 +70,7 @@ simulations_power <- function(N_ts, N_rep, different_T, different_alpha, kernel_
         cat("Ratio of rejection under H1 is ", sum(power_of_the_test)/N_rep, "with alpha = ", alpha, "T = ", T_size, "and b = ", b, "\n")
       }
     }
-    filename = paste0("../Plots/", N_ts, "_stations_powertable_method_", kernel_method, "_with_b_", b, ".tex")
+    filename = paste0("../Plots/", N_ts, "_stations_powertable_method_", kernel_method, "_with_b_", b*100, ".tex")
     creating_matrix_and_texing(power_b, different_T, different_alpha, filename)
   }
   power <- c(power, power_b)

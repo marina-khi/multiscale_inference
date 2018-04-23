@@ -21,7 +21,7 @@ N_ts     <- 34 #number of different time series
 N_rep    <- 1000 #number of repetitions for calculating size and power
 alpha    <- 0.05 #alpha for calculating quantiles
 
-different_T     <- c(250, 300, 500, 1000) #Different lengths of time series for which we calculate size and power
+different_T     <- c(250, 300, 500)#, 1000) #Different lengths of time series for which we calculate size and power
 different_alpha <- c(0.01, 0.05, 0.1) #Different alpha for which we calculate size and power
 
 kernel_method <- "ll" #Only "nw" (Nadaraya-Watson) and "ll" (local linear) methods are currently supported
@@ -124,14 +124,14 @@ for (i in TemperatureColumns){
 #Testing equality of time trends#
 #################################
 
-results <- testing_different_time_trends(N_ts, monthly_temp[-c(1, 2, 3)], alpha, kernel_method, sigmahat_vector_2)
+#results <- testing_different_time_trends(N_ts, monthly_temp[-c(1, 2, 3)], alpha, kernel_method, sigmahat_vector_2)
 
 
 ############################
 #Calculating size and power#
 ############################
 
-results_size     <- simulations_size(15, N_rep, different_T, different_alpha, kernel_method)
-results_power    <- simulations_power(15, N_rep, different_T, different_alpha, kernel_method)
+#results_size     <- simulations_size(15, N_rep, different_T, different_alpha, kernel_method)
+#results_power    <- simulations_power(15, N_rep, different_T, different_alpha, kernel_method)
 simulations_clustering(15, N_rep, different_T, different_alpha, kernel_method)
-results_clusters <- clustering_analysis(15, different_T, different_alpha)
+#results_clusters <- clustering_analysis(15, different_T, different_alpha)
