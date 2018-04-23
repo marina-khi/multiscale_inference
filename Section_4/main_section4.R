@@ -35,7 +35,7 @@ for (i in 1:N_ts){
   filename = paste("data/txt", i, ".txt", sep = "")
   temperature_tmp  <- read.table(filename, header = FALSE, skip = 7,
                                  col.names = c("year", "month", "tmax", "tmin", "af", "rain", "sun", "aux"), fill = TRUE,  na.strings = c("---"))
-  monthly_temp_tmp <- data.frame('1' = temperature_tmp[['year']], '2' = temperature_tmp[['month']],
+  monthly_temp_tmp <- data.frame('1' = as.numeric(temperature_tmp[['year']]), '2' = as.numeric(temperature_tmp[['month']]),
                                  '3' = (temperature_tmp[["tmax"]] + temperature_tmp[["tmin"]]) / 2)
   colnames(monthly_temp_tmp) <- c('year', 'month', paste0("tmean", i))
 
@@ -43,12 +43,14 @@ for (i in 1:N_ts){
   if (i == 1){
     monthly_temp <- monthly_temp_tmp
   } else {
-    monthly_temp <- merge(monthly_temp, monthly_temp_tmp, by = c("year", "month"))
+    monthly_temp <- merge(monthly_temp, monthly_temp_tmp, by = c("year", "month"), all.x = TRUE, all.y = TRUE)
   }
 
 }
-
+monthly_temp <- subset(monthly_temp, year >= 1986)
+monthly_temp <- monthly_temp[,colSums(is.na(monthly_temp)) <= 2]
 monthly_temp <- na.omit(monthly_temp)#Deleting the rows with ommitted variables
+
 date         <- paste(sprintf("%02d", monthly_temp$month), monthly_temp$year,  sep='-')
 monthly_temp <- cbind(date, monthly_temp)
 T_tempr      <- nrow(monthly_temp)
@@ -134,4 +136,4 @@ for (i in TemperatureColumns){
 #results_size     <- simulations_size(15, N_rep, different_T, different_alpha, kernel_method)
 #results_power    <- simulations_power(15, N_rep, different_T, different_alpha, kernel_method)
 simulations_clustering(15, N_rep, different_T, different_alpha, kernel_method)
-#results_clusters <- clustering_analysis(15, different_T, different_alpha)
+results_clusters <- clustering_analysis(15, different_T, different_alpha)
