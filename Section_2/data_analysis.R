@@ -11,11 +11,9 @@ data_analysis <- function(alpha, y_data, test_problem, kernel_t){
   if (kernel_t == "nw"){
     quantile_function = calculating_gaussian_quantile
     statistic_function = psihat_statistic
-    defining_set = creating_g_set
   } else if (kernel_t == "ll"){
     quantile_function = calculating_gaussian_quantile_ll
     statistic_function = psihat_statistic_ll
-    defining_set = creating_g_set_ll
   } else {
     print('Given method is currently not supported')
   }
@@ -32,7 +30,7 @@ data_analysis <- function(alpha, y_data, test_problem, kernel_t){
   #Calculating gaussian quantile for T_data#
   ##########################################
   
-  g_t_set           <- defining_set(T_data)
+  g_t_set           <- creating_g_set(T_data, kernel_t)
   gaussian_quantile <- quantile_function(T_data, g_t_set, test_problem, kernel_ind, alpha)
   
   
@@ -52,10 +50,10 @@ data_analysis <- function(alpha, y_data, test_problem, kernel_t){
     #The collection of intervals where the corrected test statistic lies above the critical value (as in (2.6))
     a_t_set <- subset(g_t_set_with_values, values > gaussian_quantile, select = c(u, h, values))
     p_t_set <- data.frame('startpoint' = (a_t_set$u - a_t_set$h)*T_data + 1659, 'endpoint' = (a_t_set$u + a_t_set$h)*T_data + 1659, 'values' = a_t_set$values)
-    p_t_set$endpoint <- pmin(p_t_set$endpoint, 2017) 
+    p_t_set <- subset(p_t_set, endpoint <= 2017, select = c(startpoint, endpoint, values)) 
     p_t_set <- choosing_minimal_intervals(p_t_set)
 
-    print.xtable(xtable(subset(p_t_set, select = c(startpoint, endpoint)), digits = c(0)), type="latex", file="../Plots/mimimal_intervals.tex")
+    print.xtable(xtable(subset(p_t_set, select = c(startpoint, endpoint)), digits = c(0)), type="latex", file="../Plots/minimal_intervals.tex")
 
     #The collection of intervals where the values_with_sign > gaussian_quantile + lambda (as in (2.6))
     #a_t_set_plus <- subset(g_t_set_with_values, values_with_sign > gaussian_quantile + lambda, select = c(u, h, values_with_sign))
@@ -86,14 +84,14 @@ data_analysis <- function(alpha, y_data, test_problem, kernel_t){
   # Plotting the real data
   plot(grid_time, xlim = c(1659, 2019), y_data, type = "l", mgp=c(2,0.5,0), xaxp = c(1675, 2025,7)) 
   
-  ###################################################################
-  #Calculating smoothed curve for the data using Epanechnikov kernel#
-  ###################################################################
+  ######################################################################
+  #Calculating smoothed curve for the data using local linear estimator#
+  ######################################################################
   h <- c(0.01, 0.05, 0.1, 0.15, 0.2)
   plot(NA, xlim = c(1659, 2019), ylim = c(7.5, 11), yaxp  = c(8, 10, 2), xaxp = c(1675, 2025,7), mgp=c(2,0.5,0))
   for (i in 1:5){
     #This part plots kernel smoothers for different bandwidths (all on one plot).
-    smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(y_data, grid_points, h[i]))
+    smoothed_curve <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(y_data, grid_points, h[i]))
     lines(grid_time, smoothed_curve, lty = i) 
   }
   legend(1950, 9, legend=c("h = 0.01", "h = 0.05", "h = 0.10", "h = 0.15", "h = 0.2"), lty = 1:5, cex = 0.95, ncol=1)

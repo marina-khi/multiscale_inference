@@ -35,16 +35,27 @@ yearly_tempr_normalised <- yearly_tempr - mean(yearly_tempr) #Normalization of t
 
 T_tempr <- length(yearly_tempr)
 
+
+#####################################
+#Estimating parameters from the data#
+#####################################
+  
+#Tuning parameters
+L1 <- floor(sqrt(T_tempr))
+L2 <- floor(2 * sqrt(T_tempr))
+result <- estimating_sigma_for_AR1(yearly_tempr, L1, L2)
+
+a_hat <- result[[2]] #Estimation of the AR coefficient
+sigma_eta <-result[[3]] #Estimation of the sqrt of the variance of the innovation 
+
+
 ###################################################################
 #Calculating smoothed curve for the data using Epanechnikov kernel#
 ###################################################################
 grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points for plotting and estimating
-end_point <- c()
-plot(grid_points, yearly_tempr, ylim = c(-1.5, 1.5), type = 'l')
 
 for (i in 1:length(h)){
-  smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(yearly_tempr_normalised, grid_points, h[i]))
-  end_point <- c(end_point, smoothed_curve[T_tempr])
+  smoothed_curve <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(yearly_tempr_normalised, grid_points, h[i]))
   cat("End point:", smoothed_curve[T_tempr], "\n")
 }
 
@@ -55,10 +66,11 @@ data <- ts(yearly_tempr, start=1659, end=2017, frequency=1)
 plot(data, ylab="", xlab = "", yaxp  = c(7, 11, 4), xaxp = c(1675, 2025, 7), type = 'l', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
 dev.off()
 
+
 ############################################
 #Calculating the power and size of the test#
 ############################################
-simulations_based_on_data(N, different_T, different_alpha, yearly_tempr, test_problem, kernel_method)
+#simulations_based_on_data(N, different_T, different_alpha, yearly_tempr, a_hat, sigma_eta, test_problem, kernel_method)
 
 
 ###############

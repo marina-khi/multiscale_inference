@@ -11,6 +11,51 @@ epanechnikov_kernel <- function(x)
   return(result)
 }
 
+#Functions needed for local linear smoothing
+s_t_1 <- function(u, h, T_size) {
+  result = 0
+  for (i in 1:T_size) {
+    result = result + epanechnikov_kernel((i/T_size - u) / h) * ((i/T_size - u) / h)
+  }
+  return(result / (T_size * h));
+}
+
+s_t_2 <- function(u, h, T_size) {
+  result = 0
+  for (i in 1:T_size) {
+    result = result + epanechnikov_kernel((i/T_size - u) / h) * ((i/T_size - u) / h) * ((i/T_size - u) / h)
+  }
+  return(result / (T_size * h));
+}
+
+s_t_0 <- function(u, h, T_size) {
+  result = 0
+  for (i in 1:T_size) {
+    result = result + epanechnikov_kernel((i/T_size - u) / h)
+  }
+  return(result / (T_size * h));
+}
+
+
+#Local Linear estimator using the epanechnikov kernel. 
+local_linear_smoothing <- function(u, data_p, grid_p, bw){
+  if (length(data_p) != length(grid_p)){
+    cat("Dimensions of the grid and the data do not match, please check the arguments")
+    return(NULL)
+  } else {
+    result      = 0
+    norm        = 0
+    T_size      = length(data_p)
+    s_t_2_value = s_t_2(u, bw, T_size)
+    s_t_1_value = s_t_1(u, bw, T_size) 
+    for (i in 1:T_size){
+      k = (s_t_2_value - s_t_1_value * ((grid_p[i] - u) / bw)) * epanechnikov_kernel((grid_p[i] - u) / bw)
+      result = result + k * data_p[i]
+      norm = norm + k 
+    }
+    return(result/norm)
+  }
+}
 
 #Nadaraya-Watson estimator using the epanechnikov kernel. 
 epanechnikov_smoothing <-function(u, data_p, grid_p, bw){
@@ -58,30 +103,22 @@ choosing_minimal_intervals <- function(dataset){
 
 
 #Creating g_t_set over which we are taking the maximum (from Section 2.1)
-creating_g_set <- function(T){
+creating_g_set <- function(T, kernel_method){
   u <- seq(from = 5/T, to = 1, by = 5/T)
   h <- seq(from = 3/T, to = 1/4+3/T, by = 5/T)
   
   g_t_set_temp                  <- expand.grid(u = u, h = h) #Creating a dataframe with all possible combination of u and h
   g_t_set_temp$values           <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
   g_t_set_temp$values_with_sign <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
-  
-  g_t_set        <- subset(g_t_set_temp, u - h >= 0 & u + h <= 1, select = c(u, h, values, values_with_sign)) #Subsetting u and h such that [u-h, u+h] lies in [0,1]
-  g_t_set$lambda <- lambda(g_t_set[['h']]) #Calculating the lambda(h) in order to speed up the function psistar_statistic
-  return(g_t_set)
-}
 
-
-#Creating g_t_set for local linear estimator over which we are taking the maximum (from Section 2.1)
-creating_g_set_ll <- function(T){
-  u <- seq(from = 5/T, to = 1, by = 5/T)
-  h <- seq(from = 3/T, to = 1/4+3/T, by = 5/T)
+  if (kernel_method == "nw"){
+    g_t_set <- subset(g_t_set_temp, u - h >= 0 & u + h <= 1, select = c(u, h, values, values_with_sign)) #Subsetting u and h such that [u-h, u+h] lies in [0,1]
+  } else if (kernel_method == "ll"){
+    g_t_set <- subset(g_t_set_temp, u >= 0 & u <= 1, select = c(u, h, values, values_with_sign)) #Subsetting u and h such that [u-h, u+h] lies in [0,1]
+  } else {
+    print('Given method is currently not supported')
+  }
   
-  g_t_set_temp                  <-expand.grid(u = u, h = h) #Creating a dataframe with all possible combination of u and h
-  g_t_set_temp$values           <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
-  g_t_set_temp$values_with_sign <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
-  
-  g_t_set        <- subset(g_t_set_temp, u >= 0 & u <= 1, select = c(u, h, values, values_with_sign)) #Subsetting u and h such that [u-h, u+h] lies in [0,1]
   g_t_set$lambda <- lambda(g_t_set[['h']]) #Calculating the lambda(h) in order to speed up the function psistar_statistic
   return(g_t_set)
 }
