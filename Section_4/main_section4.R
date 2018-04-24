@@ -18,7 +18,7 @@ source("simulations_based_on_data.R")
 ##############################
 
 N_ts     <- 34 #number of different time series 
-N_rep    <- 50 #number of repetitions for calculating size and power
+N_rep    <- 5 #number of repetitions for calculating size and power
 alpha    <- 0.05 #alpha for calculating quantiles
 
 different_T     <- c(250, 300, 500)#, 1000) #Different lengths of time series for which we calculate size and power
@@ -45,8 +45,8 @@ for (i in 1:N_ts){
   } else {
     monthly_temp <- merge(monthly_temp, monthly_temp_tmp, by = c("year", "month"), all.x = TRUE, all.y = TRUE)
   }
-
 }
+
 monthly_temp <- subset(monthly_temp, year >= 1986)
 monthly_temp <- monthly_temp[,colSums(is.na(monthly_temp)) <= 2]
 monthly_temp <- na.omit(monthly_temp)#Deleting the rows with ommitted variables
@@ -128,7 +128,7 @@ dev.off()
 #Testing equality of time trends#
 #################################
 
-#results <- testing_different_time_trends(N_ts, monthly_temp[-c(1, 2, 3)], monthly_temp['month'], alpha, kernel_method, sigmahat_vector_2)
+results <- testing_different_time_trends(N_ts, monthly_temp[-c(1, 2, 3)], monthly_temp['month'], alpha, kernel_method, sigmahat_vector_2)
 
 
 ############################

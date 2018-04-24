@@ -11,7 +11,7 @@ testing_different_time_trends <- function(N_ts, y_data, month_column, alpha, ker
   filename = paste("distribution/distr_for_application_T_", T_data, "_and_N_ts_", N_ts, "_and_method_", kernel_method, ".RData", sep = "")
   if(!file.exists(filename)) {
     gaussian_statistic_distribution <- replicate(1000, {
-      z_matrix <- matrix(, nrow = T_data, ncol = N_ts)
+      z_matrix <- matrix(0, nrow = T_data, ncol = N_ts + 1)
       for (i in 1:N_ts){
         z_matrix[, i] <- rnorm(T_data, 0, sqrt(sigmahat_vector_2[i]))
       }
@@ -27,7 +27,6 @@ testing_different_time_trends <- function(N_ts, y_data, month_column, alpha, ker
   gaussian_quantile <- quantile(gaussian_statistic_distribution, probs = (1 - alpha), type = 1)  
   cat("Gaussian quantile is", gaussian_quantile, "\n")
   
-
   #########################################
   #Calculating the statistic for real data#
   #########################################
