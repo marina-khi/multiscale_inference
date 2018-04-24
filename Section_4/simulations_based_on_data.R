@@ -139,10 +139,10 @@ simulations_clustering <- function(N_ts, N_rep, different_T, different_alpha, ke
       number_of_groups_vec <- c(number_of_groups_vec, number_of_groups)
       }
       cat("Number of groups:", number_of_groups_vec, "for T = ", T_size, "and alpha = ", alpha, "\n")
+      clustering_results <- rbind(number_of_groups_vec, groups_vec)
+      filename2 = paste0("distribution/clustering_results_for_T_", T_size, "_and_alpha_", alpha*100, ".RData")
+      save(clustering_results, file = filename2)      
     }
-    clustering_results <- rbind(number_of_groups_vec, groups_vec)
-    filename2 = paste0("distribution/clustering_results_for_T_", T_size, "_and_alpha_", alpha*100, ".RData")
-    save(clustering_results, file = filename2)      
   }
   return(NULL)
 }
