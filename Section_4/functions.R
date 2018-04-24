@@ -113,6 +113,7 @@ calculating_gaussian_quantile <- function(T, N_ts, g_t_set, kernel_method, alpha
   if(!file.exists(filename)) {
       gaussian_statistic_distribution <- replicate(1000, {
         z_matrix <- matrix(rnorm(T * N_ts, 0, 1), T, N_ts)
+        z_matrix <- z_matrix - colMeans(z_matrix)[col(z_matrix)]
         psistar_statistic(z_matrix, N_ts, g_t_set, sigma_vector, kernel_method)
       })
     save(gaussian_statistic_distribution, file = filename)
