@@ -35,7 +35,7 @@ for (i in 1:N_ts){
   filename = paste("data/txt", i, ".txt", sep = "")
   temperature_tmp  <- read.table(filename, header = FALSE, skip = 7,
                                  col.names = c("year", "month", "tmax", "tmin", "af", "rain", "sun", "aux"), fill = TRUE,  na.strings = c("---"))
-  monthly_temp_tmp <- data.frame('1' = temperature_tmp[['year']], '2' = temperature_tmp[['month']],
+  monthly_temp_tmp <- data.frame('1' = as.numeric(temperature_tmp[['year']]), '2' = as.numeric(temperature_tmp[['month']]),
                                  '3' = (temperature_tmp[["tmax"]] + temperature_tmp[["tmin"]]) / 2)
   colnames(monthly_temp_tmp) <- c('year', 'month', paste0("tmean", i))
 
@@ -43,31 +43,47 @@ for (i in 1:N_ts){
   if (i == 1){
     monthly_temp <- monthly_temp_tmp
   } else {
-    monthly_temp <- merge(monthly_temp, monthly_temp_tmp, by = c("year", "month"))
+    monthly_temp <- merge(monthly_temp, monthly_temp_tmp, by = c("year", "month"), all.x = TRUE, all.y = TRUE)
   }
-
 }
 
+monthly_temp <- subset(monthly_temp, year >= 1986)
+monthly_temp <- monthly_temp[,colSums(is.na(monthly_temp)) <= 2]
 monthly_temp <- na.omit(monthly_temp)#Deleting the rows with ommitted variables
+
 date         <- paste(sprintf("%02d", monthly_temp$month), monthly_temp$year,  sep='-')
 monthly_temp <- cbind(date, monthly_temp)
 T_tempr      <- nrow(monthly_temp)
-
+N_ts         <- ncol(monthly_temp) - 3
 
 ######################
 #Deseasonalizing data#
 ######################
 
+
 TemperatureColumns <- setdiff(names(monthly_temp), c("year", "month", "date"))
+monthly_temp[4:(N_ts + 3)] <- lapply(monthly_temp[4:(N_ts + 3)], function(x) x - ave(x, monthly_temp[['month']], FUN=mean))
+
+
+#####################
+#Estimating variance#
+#####################
+
+#Tuning parameters
+L1 <- floor(sqrt(T_tempr))
+L2 <- floor(2 * sqrt(T_tempr))
+
+#Calculating each sigma_i separately
+sigmahat_vector_2 <- c()
 for (i in TemperatureColumns){
-  monthly_temp[[i]] <- monthly_temp[[i]] - ave(monthly_temp[[i]], monthly_temp[['month']], FUN = mean)
-  #plot(monthly_temp[[i]],type = 'l')
+  sigma_i <- estimating_sigma_for_AR1(monthly_temp[[i]], L1, L2)[[1]]
+  sigmahat_vector_2 <- c(sigmahat_vector_2, sigma_i * sigma_i)
 }
 
 
-###################################################################
-#Calculating smoothed curve for the data using Epanechnikov kernel#
-###################################################################
+######################################################################
+#Calculating smoothed curve for the data using local linear estimator#
+######################################################################
 
 grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points for estimating
 
@@ -76,61 +92,46 @@ par(mfrow = c(3,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
 par(mar = c(0, 0.5, 0, 0)) #Margins for each plot
 par(oma = c(2.5, 1.5, 0.2, 0.2)) #Outer margins
 
-plot(NA, ylab="", xlab = "", xlim = c(0,1), ylim = c(-2.5, 2.5), yaxp  = c(-2.0, 2.0, 4), xaxt = 'n', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
+plot(NA, ylab="", xlab = "", xlim = c(0,1), ylim = c(-3.0, 3.0), yaxp  = c(-2.0, 2.0, 4), xaxt = 'n', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
 for (column in TemperatureColumns){
   smoothed_curve <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(monthly_temp[[column]], grid_points, 0.05))
   lines(grid_points, smoothed_curve)#, lty = i), col = colors[i])
 }
-axis(1, at = grid_points[seq(1, 300, by = 20)], labels = monthly_temp$date[seq(1, 300, by = 20)])
-legend(0, 1.0, legend=c("h = 0.05"), lty = 1, cex = 0.95, ncol=1)
+axis(1, at = grid_points[seq(1, 380, by = 20)], labels = monthly_temp$date[seq(1, 380, by = 20)])
+legend(0, 1.5, legend=c("h = 0.05"), lty = 1, cex = 0.95, ncol=1)
 
-plot(NA, ylab="", xlab = "", xlim = c(0,1), ylim = c(-1.5, 1.5), yaxp  = c(-1.0, 1.0, 2),xaxt = 'n', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
+plot(NA, ylab="", xlab = "", xlim = c(0,1), ylim = c(-2.5, 2.5), yaxp  = c(-2.0, 2.0, 4),xaxt = 'n', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
 for (column in TemperatureColumns){
   smoothed_curve <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(monthly_temp[[column]], grid_points, 0.1))
   lines(grid_points, smoothed_curve)#, lty = i), col = colors[i])
 }
-axis(1, at = grid_points[seq(1, 300, by = 20)], labels = monthly_temp$date[seq(1, 300, by = 20)])
-legend(0, 1.0, legend=c("h = 0.10"), lty = 1, cex = 0.95, ncol=1)
+axis(1, at = grid_points[seq(1, 380, by = 20)], labels = monthly_temp$date[seq(1, 380, by = 20)])
+legend(0, 1.5, legend=c("h = 0.10"), lty = 1, cex = 0.95, ncol=1)
 
 
-plot(NA, ylab="", xlab = "", xlim = c(0,1), ylim = c(-1.5, 1.5), yaxp  = c(-1.0, 1.0, 2),xaxt = 'n', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
+plot(NA, ylab="", xlab = "", xlim = c(0,1), ylim = c(-2.5, 2.5), yaxp  = c(-2.0, 2.0, 4),xaxt = 'n', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
 for (column in TemperatureColumns){
   smoothed_curve <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(monthly_temp[[column]], grid_points, 0.15))
   lines(grid_points, smoothed_curve)#, lty = i), col = colors[i])
 }
-axis(1, at = grid_points[seq(1, 300, by = 20)], labels = monthly_temp$date[seq(1, 300, by = 20)])
-legend(0, 1.0, legend=c("h = 0.15"), lty = 1, cex = 0.95, ncol=1)
+axis(1, at = grid_points[seq(1, 380, by = 20)], labels = monthly_temp$date[seq(1, 380, by = 20)])
+legend(0, 1.5, legend=c("h = 0.15"), lty = 1, cex = 0.95, ncol=1)
 
 dev.off()
-
-
-#####################
-#Estimating variance#
-#####################
-
-Tuning parameters
- L1 <- floor(sqrt(T_tempr))
- L2 <- floor(2 * sqrt(T_tempr))
- 
- #Calculating each sigma_i separately
- sigmahat_vector_2 <- c()
- for (i in TemperatureColumns){
-   sigma_i <- estimating_sigma_for_AR1(monthly_temp[[i]], L1, L2)[[1]]
-   sigmahat_vector_2 <- c(sigmahat_vector_2, sigma_i * sigma_i)
- }
 
 
 #################################
 #Testing equality of time trends#
 #################################
 
-results <- testing_different_time_trends(N_ts, monthly_temp[-c(1, 2, 3)], alpha, kernel_method, sigmahat_vector_2)
+results <- testing_different_time_trends(N_ts, monthly_temp[-c(1, 2, 3)], monthly_temp['month'], alpha, kernel_method, sigmahat_vector_2)
 
 
 ############################
 #Calculating size and power#
 ############################
 
+source("simulations_based_on_data.R")
 results_size     <- simulations_size(15, N_rep, different_T, different_alpha, kernel_method)
 results_power    <- simulations_power(15, N_rep, different_T, different_alpha, kernel_method)
 simulations_clustering(15, N_rep, different_T, different_alpha, kernel_method)

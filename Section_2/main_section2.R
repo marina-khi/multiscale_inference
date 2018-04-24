@@ -53,7 +53,6 @@ sigma_eta <-result[[3]] #Estimation of the sqrt of the variance of the innovatio
 #Calculating smoothed curve for the data using Epanechnikov kernel#
 ###################################################################
 grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points for plotting and estimating
-plot(grid_points, yearly_tempr, ylim = c(-1.5, 1.5), type = 'l')
 
 for (i in 1:length(h)){
   smoothed_curve <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(yearly_tempr_normalised, grid_points, h[i]))
@@ -71,7 +70,7 @@ dev.off()
 ############################################
 #Calculating the power and size of the test#
 ############################################
-simulations_based_on_data(N, different_T, different_alpha, yearly_tempr, a_hat, sigma_eta, test_problem, kernel_method)
+#simulations_based_on_data(N, different_T, different_alpha, yearly_tempr, a_hat, sigma_eta, test_problem, kernel_method)
 
 
 ###############

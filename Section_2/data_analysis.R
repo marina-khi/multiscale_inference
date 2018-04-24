@@ -50,10 +50,10 @@ data_analysis <- function(alpha, y_data, test_problem, kernel_t){
     #The collection of intervals where the corrected test statistic lies above the critical value (as in (2.6))
     a_t_set <- subset(g_t_set_with_values, values > gaussian_quantile, select = c(u, h, values))
     p_t_set <- data.frame('startpoint' = (a_t_set$u - a_t_set$h)*T_data + 1659, 'endpoint' = (a_t_set$u + a_t_set$h)*T_data + 1659, 'values' = a_t_set$values)
-    p_t_set <- susbet(p_t_set, endpoint > 2017, select = c(startpoint, endpoint, values)) 
+    p_t_set <- subset(p_t_set, endpoint <= 2017, select = c(startpoint, endpoint, values)) 
     p_t_set <- choosing_minimal_intervals(p_t_set)
 
-    print.xtable(xtable(subset(p_t_set, select = c(startpoint, endpoint)), digits = c(0)), type="latex", file="../Plots/mimimal_intervals.tex")
+    print.xtable(xtable(subset(p_t_set, select = c(startpoint, endpoint)), digits = c(0)), type="latex", file="../Plots/minimal_intervals.tex")
 
     #The collection of intervals where the values_with_sign > gaussian_quantile + lambda (as in (2.6))
     #a_t_set_plus <- subset(g_t_set_with_values, values_with_sign > gaussian_quantile + lambda, select = c(u, h, values_with_sign))
