@@ -17,8 +17,9 @@ simulations_size <- function(N_ts, N_rep, different_T, different_alpha, kernel_m
           sigma_i = estimating_sigma_for_AR1(simulated_data[, i], L1, L2)[[1]]
           sigmahat_vector_2 <- c(sigmahat_vector_2, sigma_i * sigma_i)
         }
+        sigmahat_averaged_2 <- rep(sum(sigmahat_vector_2)/N_ts, N_ts)
         simulated_data <- simulated_data - colMeans(simulated_data)[col(simulated_data)]
-        result = psihat_statistic(simulated_data, N_ts, g_t_set_sim, sigmahat_vector_2, kernel_method)[[2]]
+        result = psihat_statistic(simulated_data, N_ts, g_t_set_sim, sigmahat_averaged_2, kernel_method)[[2]]
         result
       })
     for (alpha in different_alpha){
@@ -52,15 +53,16 @@ simulations_power <- function(N_ts, N_rep, different_T, different_alpha, kernel_
       for (j in 1:T_size){m[j] = (j - 0.5*T_size) * (b/T_size)}
       
       simulated_statistic = replicate(N_rep, {
-        sigmahat_vector_2_simulated <- c()
-        simulated_data[, 1]         <- m + arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, sigma), n = T_size)
+        sigmahat_vector_2   <- c()
+        simulated_data[, 1] <- m + arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, sigma), n = T_size)
         for (i in 2:N_ts){
-          simulated_data[, i]         <- arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, sigma), n = T_size)
-          sigma_i                     <- estimating_sigma_for_AR1(simulated_data[, i], L1, L2)[[1]]
-          sigmahat_vector_2_simulated <- c(sigmahat_vector_2_simulated, sigma_i * sigma_i)
+          simulated_data[, i] <- arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, sigma), n = T_size)
+          sigma_i             <- estimating_sigma_for_AR1(simulated_data[, i], L1, L2)[[1]]
+          sigmahat_vector_2   <- c(sigmahat_vector_2, sigma_i * sigma_i)
         }
-        simulated_data <- simulated_data - colMeans(simulated_data)[col(simulated_data)]
-        result   <- psihat_statistic(simulated_data, N_ts, g_t_set_sim, sigmahat_vector_2_simulated, kernel_method)[[2]]
+        sigmahat_averaged_2 <- rep(sum(sigmahat_vector_2)/N_ts, N_ts)
+        simulated_data      <- simulated_data - colMeans(simulated_data)[col(simulated_data)]
+        result              <- psihat_statistic(simulated_data, N_ts, g_t_set_sim, sigmahat_averaged_2, kernel_method)[[2]]
         result
       })
       for (alpha in different_alpha){
@@ -97,24 +99,25 @@ simulations_clustering <- function(N_ts, N_rep, different_T, different_alpha, ke
     }
     
     simulated_statistic = replicate(N_rep, {
-      sigmahat_vector_2_simulated <- c()
+      sigmahat_vector_2 <- c()
       for (i in 1:(N_ts/3)){
-        simulated_data[, i]         <- arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, sigma), n = T_size)
-        sigma_i                     <- estimating_sigma_for_AR1(simulated_data[, i], L1, L2)[[1]]
-        sigmahat_vector_2_simulated <- c(sigmahat_vector_2_simulated, sigma_i * sigma_i)
+        simulated_data[, i] <- arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, sigma), n = T_size)
+        sigma_i             <- estimating_sigma_for_AR1(simulated_data[, i], L1, L2)[[1]]
+        sigmahat_vector_2   <- c(sigmahat_vector_2, sigma_i * sigma_i)
       }
       for (i in (N_ts/3 + 1):(2 * N_ts/3)){
-        simulated_data[, i]         <- m1 + arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, sigma), n = T_size)
-        sigma_i                     <- estimating_sigma_for_AR1(simulated_data[, i], L1, L2)[[1]]
-        sigmahat_vector_2_simulated <- c(sigmahat_vector_2_simulated, sigma_i * sigma_i)
+        simulated_data[, i] <- m1 + arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, sigma), n = T_size)
+        sigma_i             <- estimating_sigma_for_AR1(simulated_data[, i], L1, L2)[[1]]
+        sigmahat_vector_2   <- c(sigmahat_vector_2, sigma_i * sigma_i)
       }
       for (i in (2 * N_ts/3 + 1):N_ts){
-        simulated_data[, i]         <- m2 + arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, sigma), n = T_size)
-        sigma_i                     <- estimating_sigma_for_AR1(simulated_data[, i], L1, L2)[[1]]
-        sigmahat_vector_2_simulated <- c(sigmahat_vector_2_simulated, sigma_i * sigma_i)
+        simulated_data[, i] <- m2 + arima.sim(model = list(ar = a_hat), innov = rnorm(T_size, 0, sigma), n = T_size)
+        sigma_i             <- estimating_sigma_for_AR1(simulated_data[, i], L1, L2)[[1]]
+        sigmahat_vector_2   <- c(sigmahat_vector_2, sigma_i * sigma_i)
       }
+      sigmahat_averaged_2 <- rep(sum(sigmahat_vector_2)/N_ts, N_ts)
       simulated_data <- simulated_data - colMeans(simulated_data)[col(simulated_data)]
-      results        <- psihat_statistic(simulated_data, N_ts, g_t_set_sim, sigmahat_vector_2_simulated, kernel_method)[[1]]
+      results        <- psihat_statistic(simulated_data, N_ts, g_t_set_sim, sigmahat_averaged_2, kernel_method)[[1]]
       results
     })
     for (alpha in different_alpha){    
