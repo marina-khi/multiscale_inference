@@ -143,30 +143,36 @@ Hence, the conditions of Lemma \ref{lemma1-theo-stat} are satisfied. Applying th
 \subsection*{Proof of Proposition \ref{prop-test-2}}
 
 
-Write $\widehat{\Psi}_T(u,h) = \widehat{\psi}_T^A(u,h) + \widehat{\psi}_T^B(u,h)$ with $\widehat{\psi}_T^A(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \varepsilon_t$ and $\widehat{\psi}_T^B(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) m_T(t/T)$. By assumption, there exists $(u,h) \in \mathcal{G}_T$ with $[u-h,u+h] \subseteq [0,1]$ such that $m_T(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$. For this $(u,h)$ and sufficiently large $T$, it holds that 
-\begin{equation}\label{eq1-proof-prop-test-2}
-\widehat{\psi}_T^B(u,h) \ge c_T \sqrt{\frac{\log T}{Th}} \sum\limits_{t=1}^T w_{t,T}(u,h).
+Write $\widehat{\psi}_T(u,h) = \widehat{\psi}_T^A(u,h) + \widehat{\psi}_T^B(u,h)$ with $\widehat{\psi}_T^A(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \varepsilon_t$ and $\widehat{\psi}_T^B(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) m_T(\frac{t}{T})$. By assumption, there exists $(u_0,h_0) \in \mathcal{G}_T$ with $[u_0-h_0,u_0+h_0] \subseteq [0,1]$ such that $m_T(w) \ge c_T \sqrt{\log T/(Th_0)}$ for all $w \in [u_0-h_0,u_0+h_0]$. Since the kernel $K$ is symmetric and $u_0 = t/T$ for some $t$, it holds that $S_{T,1}(u_0,h_0) = 0$ and thus 
+\[ w_{t,T}(u_0,h_0) = K\Big(\frac{\frac{t}{T}-u_0}{h_0}\Big) \Big/ \Big\{ \sum_{t=1}^T K^2\Big(\frac{\frac{t}{T}-u_0}{h_0}\Big) \Big\}^{1/2} \ge 0. \]
+Together with the assumption that $m_T(w) \ge c_T \sqrt{\log T/(Th_0)}$ for all $w \in [u_0-h_0,u_0+h_0]$, this implies that 
+\begin{equation}\label{eq1-proof-prop-test-power}
+\widehat{\psi}_T^B(u_0,h_0) \ge c_T \sqrt{\frac{\log T}{Th_0}} \sum\limits_{t=1}^T w_{t,T}(u_0,h_0).
 \end{equation}
-Moreover, standard calculations show that for any $(u,h) \in \mathcal{G}_T$ with $[u-h,u+h] \subseteq [0,1]$, 
-\begin{equation}\label{eq2-proof-prop-test-2}
-\Big| \sum\limits_{t=1}^T w_{t,T}(u,h) - \kappa^{-1} \sqrt{Th} \Big| \le \frac{C}{Th}, 
+Standard calculations exploiting the Lipschitz continuity of the kernel $K$ show that for any $(u,h) \in \mathcal{G}_T$ and any given natural number $\ell$, 
+\begin{equation}\label{eq-riemann-sum}
+\Big| \frac{1}{Th} \sum\limits_{t=1}^T K\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big(\frac{\frac{t}{T}-u}{h}\Big)^\ell - \int_0^1 \frac{1}{h} K\Big(\frac{w-u}{h}\Big) \Big(\frac{w-u}{h}\Big)^\ell dw \Big| \le \frac{C}{Th}, 
 \end{equation}
-where $\kappa = (\int K^2(\varphi)d\varphi)^{1/2}$ and the constant $C$ is independent of $u$, $h$ and $T$. Combining \eqref{eq1-proof-prop-test-2} and \eqref{eq2-proof-prop-test-2}, we can infer that 
-\begin{equation}\label{eq3-proof-prop-test-2}
-\max_{(u,h) \in \mathcal{G}_T} \big| \widehat{\psi}_T^B(u,h) \big| \ge \frac{c_T \sqrt{\log T}}{2 \kappa} 
+where the constant $C$ does not depend on $u$, $h$ and $T$. With the help of \eqref{eq-riemann-sum}, we obtain that for any $(u,h) \in \mathcal{G}_T$ with $[u-h,u+h] \subseteq [0,1]$, 
+\begin{equation}\label{eq2-proof-prop-test-power}
+\Big| \sum\limits_{t=1}^T w_{t,T}(u,h) - \frac{\sqrt{Th}}{\kappa} \Big| \le \frac{C}{\sqrt{Th}}, 
 \end{equation}
-for sufficiently large $T$. Furthermore, arguments very similar to those for the proof of Proposition \ref{propA-strong-approx} yield that
-\begin{equation}\label{eq4-proof-prop-test-2}
+where $\kappa = (\int K^2(\varphi)d\varphi)^{1/2}$ and the constant $C$ does once again not depend on $u$, $h$ and $T$. From \eqref{eq2-proof-prop-test-power}, it follows that $\sum\nolimits_{t=1}^T w_{t,T}(u,h) \ge \sqrt{Th} / (2\kappa)$ for sufficiently large $T$ and any $(u,h) \in \mathcal{G}_T$ with $[u-h,u+h] \subseteq [0,1]$. This together with \eqref{eq1-proof-prop-test-power} allows us to infer that 
+\begin{equation}\label{eq3-proof-prop-test-power}
+\widehat{\psi}_T^B(u_0,h_0) \ge \frac{c_T \sqrt{\log T}}{2 \kappa} 
+\end{equation}
+for sufficiently large $T$. Moreover, arguments very similar to those for the proof of Proposition \ref{propA-strong-approx} yield that
+\begin{equation}\label{eq4-proof-prop-test-power}
 \max_{(u,h) \in \mathcal{G}_T} |\widehat{\psi}_T^A(u,h)| = O_p(\sqrt{\log T}). 
 \end{equation}
-With the help of \eqref{eq3-proof-prop-test-2}, \eqref{eq4-proof-prop-test-2} and the fact that $\lambda(h) \le \lambda(h_{\min}) \le C \sqrt{\log T}$, we obtain that 
+With the help of \eqref{eq3-proof-prop-test-power}, \eqref{eq4-proof-prop-test-power} and the fact that $\lambda(h) \le \lambda(h_{\min}) \le C \sqrt{\log T}$, we finally arrive at 
 \begin{align}
 \widehat{\Psi}_T 
  & \ge \max_{(u,h) \in \mathcal{G}_T} \frac{|\widehat{\psi}_T^B(u,h)|}{\widehat{\sigma}} - \max_{(u,h) \in \mathcal{G}_T} \Big\{ \frac{|\widehat{\psi}_T^A(u,h)|}{\widehat{\sigma}} + \lambda(h) \Big\} \nonumber \\
  & = \max_{(u,h) \in \mathcal{G}_T} \frac{|\widehat{\psi}_T^B(u,h)|}{\widehat{\sigma}} + O_p(\sqrt{\log T}) \nonumber \\
- & \ge \frac{c_T \sqrt{\log T}}{2 \kappa \widehat{\sigma}} + O_p(\sqrt{\log T}). \label{eq5-proof-prop-test-2}
+ & \ge \frac{c_T \sqrt{\log T}}{2 \kappa \widehat{\sigma}} + O_p(\sqrt{\log T}). \label{eq5-proof-prop-test-power}
 \end{align}  
-Since $q_T(\alpha) = O(\sqrt{\log T})$ for any fixed $\alpha \in (0,1)$, \eqref{eq5-proof-prop-test-2} immediately implies that $\pr(\widehat{\Psi}_T \le q_T(\alpha)) = o(1)$. 
+Since $q_T(\alpha) = O(\sqrt{\log T})$ for any fixed $\alpha \in (0,1)$, \eqref{eq5-proof-prop-test-power} immediately implies that $\pr(\widehat{\Psi}_T \le q_T(\alpha)) = o(1)$. 
 
 
 
