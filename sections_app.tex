@@ -2,13 +2,13 @@
 \section{Simulations}\label{sec-sim}
 
 
-To assess the finite sample performance of the methods from Sections \ref{sec-test-shape} and \ref{sec-test-equality}, we conduct a number of simulations. We first investigate the test procedure from Section \ref{sec-test-shape}. The simulation design is set up to mimic the situation in the application example of Section \ref{subsec-data-1}: We generate data from the model $Y_t = m(t/T) + \varepsilon_t$ for different time series lengths $T$. The errors $\varepsilon_t$ are drawn from the AR(1) process $\varepsilon_t = a \varepsilon_{t-1} + \eta_t$, where $\eta_t$ are independent and normally distributed with mean $0$ and variance $\sigma_\eta^2$. We set $a = 0.267$ and $\sigma_\eta^2 = 0.35$, thus matching the estimated values obtained in the application of Section \ref{subsec-data-1}. To simulate data under the null $H_0: m^\prime = 0$, we let $m$ be a constant function. In particular, we set $m = 0$ without loss of generality. To generate data under the alternative, we consider the trend functions $m(u) = \beta \, (u - 0.6) \, 1(0.6 \le u \le 1)$ with $\beta = 1.25, 1.875, 2.5$. These functions are broken lines with a kink at $u = 0.6$ and different slopes $\beta$. The slope parameter $\beta$ corresponds to a trend with the value $m(1) = 0.4 \, \beta$ at the right endpoint $u = 1$. We thus consider broken lines with the values $m(1) = 0.5, 0.75, 1.0$. Inspecting the middle panel of Figure \ref{plot-results-app1}, these broken lines can be seen to resemble the local linear trend estimates in the real-data example of Section \ref{subsec-data-1} (where we neglect the nonlinearities of the local linear fits at the beginning of the observation period). 
+To assess the finite sample performance of the methods from Sections \ref{sec-test-shape} and \ref{sec-test-equality}, we conduct a number of simulations. We first investigate the test procedure from Section \ref{sec-test-shape}. The simulation design is set up to mimic the situation in the application example of Section \ref{subsec-data-1}: We generate data from the model $Y_t = m(t/T) + \varepsilon_t$ for different time series lengths $T$. The errors $\varepsilon_t$ are drawn from the AR(1) process $\varepsilon_t = a \varepsilon_{t-1} + \eta_t$, where $\eta_t$ are independent and normally distributed with mean $0$ and variance $\sigma_\eta^2$. We set $a = 0.267$ and $\sigma_\eta^2 = 0.35$, thus matching the estimated values obtained in the application of Section \ref{subsec-data-1}. To simulate data under the null $H_0: m^\prime = 0$, we let $m$ be a constant function. In particular, we set $m = 0$ without loss of generality. To generate data under the alternative, we consider the trend functions $m(u) = \beta \, (u - 0.6) \, 1(0.6 \le u \le 1)$ with $\beta = 1.25, 1.875, 2.5$. These functions are broken lines with a kink at $u = 0.6$ and different slopes $\beta$. The slope parameter $\beta$ corresponds to a trend with the value $m(1) = 0.4 \, \beta$ at the right endpoint $u = 1$. We thus consider broken lines with the values $m(1) = 0.5, 0.75, 1.0$. Inspecting the middle panel of Figure \ref{plot-results-app1}, the broken line with the slope $\beta = 2.5$ can be seen to resemble the local linear trend estimates in the real-data example of Section \ref{subsec-data-1} (where we neglect the nonlinearities of the local linear fits at the beginning of the observation period), whereas the trend functions with smaller values of slope $\beta = 1.25, 1.875$ are closer to the null making it harder for our test to detect the difference.
 
 \begin{table}[t]
 \footnotesize{
 \begin{center}
 \caption{Size of the multiscale test from Section \ref{sec-test-shape} for different sample sizes $T$ and nominal sizes $\alpha$.}
-\label{tab:size_ll_shape}
+\label{tab:size_shape}
 \renewcommand{\arraystretch}{1.2}
 \input{Plots/sizetable_ll_testing_constant}
 \end{center}}
@@ -17,7 +17,7 @@ To assess the finite sample performance of the methods from Sections \ref{sec-te
 \begin{table}[t]
 \footnotesize{
 \begin{center}
-\caption{Power of the multiscale test from Section \ref{sec-test-shape} for different sample sizes $T$ and nominal sizes $\alpha$. Each panel corresponds to a different slope parameter $\beta$.}\label{tab:power_ll_shape}
+\caption{Power of the multiscale test from Section \ref{sec-test-shape} for different sample sizes $T$ and nominal sizes $\alpha$. Each panel corresponds to a different slope parameter $\beta$.}\label{tab:power_shape}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$\beta = 1.25$}\label{tab:power_050_ll_shape}
@@ -43,10 +43,10 @@ To implement our test methods, we use the Epanechnikov kernel $K(x) = 0.75 \, (1
 \begin{equation}\label{grid-sim-app}
 \mathcal{G}_T = \{(u, h): u = \frac{5k}{T} \text{ and } h = \frac{3+5l}{T} \text{ for some } k, l \in \mathbb{N}, k \le \frac{T}{5}, l \le \frac{T}{20}\}. 
 \end{equation}
-To estimate the long-run error variance $\sigma^2$, we employ the estimation procedure from Section \ref{subsec-error-var-ar}, setting the tuning parameters $L_1$ and $L_2$ to $18$ and $37$ respectively. The critical values are computed by simulating $1000$ values of the statistic $\Phi^\prime_T$ defined in Section \ref{subsec-test-shape-test} and computing their empirical $(1-\alpha)$ quantiles $q_T^\prime(\alpha)$. 
+To estimate the long-run error variance $\sigma^2$, we employ the estimation procedure from Section \ref{subsec-error-var-ar}, setting the tuning parameters $L_1$ and $L_2$ to $[\sqrt{T}]$ and $[2\sqrt{T}]$ respectively. The critical values are computed by simulating $1000$ values of the statistic $\Phi^\prime_T$ defined in Section \ref{subsec-test-shape-test} and computing their empirical $(1-\alpha)$ quantiles $q_T^\prime(\alpha)$. 
 
 
-Tables \ref{tab:size_ll_shape} and \ref{tab:power_ll_shape} report the simulation results for the sample sizes $T=250,350,500, 1000$ and the confidence levels $\alpha = 0.01, 0.05, 0.10$. The sample size $T = 350$ is approximately equal to the time series length $359$ in the real-data example of Section \ref{subsec-data-1}. To produce our simulation results, we generate $S=10000$ samples for each time series length $T$ and carry out the multiscale test for each simulated sample. The entries of Tables \ref{tab:size_ll_shape} and \ref{tab:power_ll_shape} are computed as the number of simulations in which the test rejects divided by the total number of simulations. As can be seen from Table \ref{tab:size_ll_shape}, the actual size of the test is fairly close to the nominal target $\alpha$ even for small values of $T$, the accuracy increasing with the sample size. Hence, the test has approximately the correct size. Inspecting Table \ref{tab:power_ll_shape}, one can further see that the test has reasonable power properties. For the smallest value $\beta = 1.25$, the deviation from the null is quite small, making it hard for the test to detect the alternative. As a consequence, the power is only moderate in cases $T=250$ and $T=350$. When we move further away from the null by increasing the slope parameter $\beta$, the power of the test quickly increases. For the slope $\beta =2.5$ and sample size $T=350$, which are the values that resemble the real-life data the most, the power of the test is fairly large. In addition, it can also be seen to quickly get larger as the sample size grows. 
+Tables \ref{tab:size_shape} and \ref{tab:power_shape} report the simulation results for the sample sizes $T=250,350,500, 1000$ and the confidence levels $\alpha = 0.01, 0.05, 0.10$. The sample size $T = 350$ is approximately equal to the time series length $359$ in the real-data example of Section \ref{subsec-data-1}. To produce our simulation results, we generate $S=10000$ samples for each time series length $T$ and carry out the multiscale test for each simulated sample. The entries of Tables \ref{tab:size_shape} and \ref{tab:power_shape} are computed as the number of simulations in which the test rejects divided by the total number of simulations. As can be seen from Table \ref{tab:size_shape}, the actual size of the test is fairly close to the nominal target $\alpha$ even for small values of $T$. Hence, the test has approximately the correct size. Inspecting Table \ref{tab:power_shape}, one can further see that the test has reasonable power properties. For the smallest value $\beta = 1.25$, the deviation from the null is quite small, making it hard for the test to detect the alternative. As a consequence, the power is only moderate in cases $T=250$ and $T=350$. When we move further away from the null by increasing the slope parameter $\beta$, the power of the test quickly increases. For the slope $\beta =2.5$ and sample size $T=350$, which are the values that resemble the real-life data the most, the power of the test is fairly large. In addition, it can also be seen to quickly get larger as the sample size grows. 
  
 
 
@@ -54,64 +54,64 @@ Tables \ref{tab:size_ll_shape} and \ref{tab:power_ll_shape} report the simulatio
 \footnotesize{
 \begin{center}
 \caption{Size of the multiscale test from Section \ref{sec-test-equality} for 15 time series, different sample sizes $T$ and nominal sizes $\alpha$.}
-\label{tab:size_ll_equality}
+\label{tab:size_equality}
 \renewcommand{\arraystretch}{1.2}
-\input{Plots/15stations_sizetable_method_ll}
+\input{Plots/15_stations_sizetable_method_ll}
 \end{center}}
 \end{table}
 
 \begin{table}[t]
 \footnotesize{
 \begin{center}
-\caption{Power of the multiscale test from Section \ref{sec-test-equality} for different sample sizes $T$ and nominal sizes $\alpha$. Each panel corresponds to a different slope parameter $\beta$.}\label{tab:power_ll_equality}
+\caption{Power of the multiscale test from Section \ref{sec-test-equality} for different sample sizes $T$ and nominal sizes $\alpha$. Each panel corresponds to a different slope parameter $\beta$.}\label{tab:power_equality}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
-\caption{$\beta = 1.25$}\label{tab:power_050_ll_shape}
+\caption{$\beta = 0.75$}\label{tab:power_75_equality}
 \renewcommand{\arraystretch}{1.2}
 \input{Plots/15_stations_powertable_method_ll_with_b_75}
 \end{subtable}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
-\caption{$\beta = 1.875$}\label{tab:power_075_ll_shape}
+\caption{$\beta = 1.00$}\label{tab:power_100_equality}
 \renewcommand{\arraystretch}{1.2}
-\input{Plots/30stations_powertable_method_ll_with_b_100}
+\input{Plots/15_stations_powertable_method_ll_with_b_100}
 \end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\centering
-\caption{$\beta = 2.5$}\label{tab:power_100_ll_shape}
-\renewcommand{\arraystretch}{1.2}
-\input{Plots/30stations_powertable_method_ll_with_b_125}
-\end{subtable}
+%\begin{subtable}[b]{0.32\textwidth}
+%\centering
+%\caption{$\beta = 1.25$}\label{tab:power_125_equality}
+%\renewcommand{\arraystretch}{1.2}
+%\input{Plots/15_stations_powertable_method_ll_with_b_125}
+%\end{subtable}
 \end{center}}
 \end{table}
 
 
-\begin{table}[t]
-\footnotesize{
-\begin{center}
-\caption{Clustering results for Section \ref{sec-test-equality} for different sample sizes $T$ and nominal sizes $\alpha$.}\label{tab:clustering_results}
-\begin{subtable}[b]{0.48\textwidth}
-\centering
-\caption{Correct number of groups}\label{tab:clustering_number_of_groups}
-\renewcommand{\arraystretch}{1.2}
-\input{Plots/15_stations_number_of_groups_method_ll}
-\end{subtable}
-\begin{subtable}[b]{0.48\textwidth}
-\centering
-\caption{Correct grouping}\label{tab:clustering_groups}
-\renewcommand{\arraystretch}{1.2}
-\input{Plots/15_stations_groups_method_ll}
-\end{subtable}
-\end{center}}
-\end{table}
+%\begin{table}[t]
+%\footnotesize{
+%\begin{center}
+%\caption{Clustering results for Section \ref{sec-test-equality} for different sample sizes $T$ and nominal sizes $\alpha$.}\label{tab:clustering_results}
+%\begin{subtable}[b]{0.48\textwidth}
+%\centering
+%\caption{Correct number of groups}\label{tab:clustering_number_of_groups}
+%\renewcommand{\arraystretch}{1.2}
+%\input{Plots/15_stations_number_of_groups_method_ll}
+%\end{subtable}
+%\begin{subtable}[b]{0.48\textwidth}
+%\centering
+%\caption{Correct grouping}\label{tab:clustering_groups}
+%\renewcommand{\arraystretch}{1.2}
+%\input{Plots/15_stations_groups_method_ll}
+%\end{subtable}
+%\end{center}}
+%\end{table}
 
 
-We next turn to the test methods from Section \ref{sec-test-equality}. The simulation design extends the setup from above. We generate data from the model $Y_{it} = m_i(t/T) + \varepsilon_{it}$, where the number of time series is set to $n = 15$ and we consider different time series lengths $T$. For each $i$, the errors $\varepsilon_{it}$ are drawn from the AR(1) model $\varepsilon_{it} = a \varepsilon_{i,t-1} + \eta_{it}$, where as before $a = 0.267$ and the innovations $\eta_{it}$ are i.i.d. normally distributed with mean $0$ and variance $0.35$. To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ without loss of generality. To produce data under the alternative, we define $m_1(u) = \beta \, (u - 0.5) $ with $\beta = 0.75, 1, 1.25$ and set $m_i = 0$ for all $i \ne 1$. Hence, all trend functions are the same except for $m_1$ which is an increasing linear function that resembles the local linear kernel estimates of the trends in the application in Section \ref{subsec-data-2}. 
+We next turn to the test methods from Section \ref{sec-test-equality}. The simulation design extends the setup from above. We generate data from the model $Y_{it} = m_i(t/T) + \varepsilon_{it}$, where the number of time series is set to $n = 15$ and we consider different time series lengths $T$. For each $i$, the errors $\varepsilon_{it}$ are drawn from the AR(1) model $\varepsilon_{it} = a \varepsilon_{i,t-1} + \eta_{it}$, where as before $a = 0.267$ and the innovations $\eta_{it}$ are i.i.d. normally distributed with mean $0$ and variance $0.35$. To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ without loss of generality. To produce data under the alternative, we define $m_1(u) = \beta \, (u - 0.5) $ with $\beta = 0.75, 1, 1.25$ and set $m_i = 0$ for all $i \ne 1$. Hence, all trend functions are the same except for $m_1$ which is an increasing linear function that resembles the local linear trend estimates in the application in Section \ref{subsec-data-2}. 
 
 
-The test is implemented analogously as above. We in particular work with an Epanechnikov kernel and the grid $\mathcal{G}_T$ defined in \eqref{grid-sim-app}. However, due to computational restrictions we make two important adjustments to the procedure described above. First, we make an assumption that the long run variance $\sigma_i^2$ does not depend on $i$, and hence, $\sigma_i^2 = \sigma^2 \forall i\in \{1, \ldots, 15\}$. This is a valid assumption since all time series were generated from the same model, and due to this assumption allows us to 
+The test is implemented analogously as above. As before, we work with an Epanechnikov kernel and the grid $\mathcal{G}_T$ defined in \eqref{grid-sim-app}. However, due to computational restrictions we make two important adjustments to the procedure described above. First, we run $S = 1000$ simulations instead of $10000$ in the previous simulations. Second, we make an assumption that the long run variance $\sigma_i^2$ does not depend on $i$, i.e. $\sigma_i^2 = \sigma^2$ $\forall i\in \{1, \ldots, n\}$. Since all time series were generated from the same model, this is a valid assumption, which leads to estimates of each $\sigma_i$ to be equal $\widehat{\sigma}^2 = (\sum_{i = 1}^n\widehat{\sigma_i^2})/n$ where $\sigma_i^2$ are calculated by the estimation procedure from Section \ref{subsec-error-var-ar} with $L_1 = [\sqrt{T}]$ and $L_2 = [2 \sqrt{T}]$. As a result, the gaussian statistics $\widehat{\Psi}_{ij, T}$ do not depend on $\widehat{\sigma}_i$ and $\widehat{\sigma}_j$, and hence, we do not need to recalculate the statistic distribution for each of $1000$ samples. This leads to significant increase in running time.
 
-Moreover, the long-run error variances $\sigma_i^2$ are estimated by the procedure from Section \ref{subsec-error-var-ar} with $L_1 = 17$ and $L_2 = 34$. The simulation results are reported in Tables \ref{tab:size_ll_equality} and ??. [\textcolor{red}{Discuss results!}]
+The simulation results are reported in Tables \ref{tab:size_equality} and \ref{tab:power_equality}. [\textcolor{red}{Discuss results!}]
 
 
 We finally investigate the finite sample performance of the clustering algorithm from Section \ref{subsec-test-equality-clustering}. To do so, we partition the $n = 15$ time series into $N=3$ groups, each containing $5$ time series. Specifically, we set $G_1 = \{1,\ldots,5\}$, $G_2 = \{6,\ldots,10\}$ and $G_3 =  \{11,\ldots,15\}$. Moreover, we define the group-specific trend functions $g_1$, $g_2$ and $g_3$ by $g_1(u) = 0$, $g_2(u) = 1 \cdot (u - 0.5)$ and $g_3(u) =  (- 1) \cdot (u - 0.5)$. In order to compute our estimators of the groups $G_1$, $G_2$, $G_3$ and their number $N = 3$, we use the same implementation as before. The estimation results are reported in Tables ??. [\textcolor{red}{Discuss results!}]   

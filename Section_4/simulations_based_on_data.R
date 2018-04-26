@@ -1,6 +1,4 @@
-simulations_size <- function(N_ts, N_rep, different_T, different_alpha, kernel_method){
-  a_hat <- 0.267
-  sigma <- 0.59
+simulations_size <- function(a_hat, sigma, N_ts, N_rep, different_T, different_alpha, kernel_method){
   size_vec  <- c()
 
   for (T_size in different_T){
@@ -30,14 +28,12 @@ simulations_size <- function(N_ts, N_rep, different_T, different_alpha, kernel_m
     }
   }
   filename = paste0("../Plots/", N_ts, "_stations_sizetable_method_", kernel_method, ".tex")
-  creating_matrix_and_texing(size, different_T, different_alpha, filename)
-  return(size)
+  creating_matrix_and_texing(size_vec, different_T, different_alpha, filename)
+  return(size_vec)
 }
 
 
-simulations_power <- function(N_ts, N_rep, different_T, different_alpha, kernel_method){
-  a_hat <- 0.267
-  sigma <- 0.59
+simulations_power <- function(a_hat, sigma, N_ts, N_rep, different_T, different_alpha, kernel_method){
   power_vec <- c()
   
   for (b in c(0.75, 1.00, 1.25)){
@@ -79,9 +75,7 @@ simulations_power <- function(N_ts, N_rep, different_T, different_alpha, kernel_
   return(power)
 }
 
-simulations_clustering <- function(N_ts, N_rep, different_T, different_alpha, kernel_method){
-  a_hat <- 0.267
-  sigma <- 0.59
+simulations_clustering <- function(a_hat, sigma, N_ts, N_rep, different_T, different_alpha, kernel_method){
   clusters <- c()
  
   for (T_size in different_T){
