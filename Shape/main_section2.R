@@ -15,7 +15,7 @@ source("data_analysis.R")
 #Defining necessary parameters#
 ###############################
 
-N <- 10000 #Number of replications for calculating the size and the power of the test
+N <- 1000 #Number of replications for calculating the size and the power of the test
 different_T     <- c(250, 350, 500, 1000) #Different lengths of time series for which we calculate size and power
 different_alpha <- c(0.01, 0.05, 0.1) #Different alpha for which we calculate size and power
 alpha <- 0.05 #alpha for calculating quantiles
@@ -70,7 +70,7 @@ dev.off()
 ############################################
 #Calculating the power and size of the test#
 ############################################
-#simulations_based_on_data(N, different_T, different_alpha, yearly_tempr, a_hat, sigma_eta, test_problem, kernel_method)
+simulations_based_on_data(N, different_T, different_alpha, yearly_tempr, a_hat, sigma_eta, test_problem, kernel_method)
 
 
 ###############
