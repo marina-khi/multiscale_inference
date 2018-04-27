@@ -1,7 +1,7 @@
 testing_different_time_trends <- function(N_ts, y_data, month_column, alpha, kernel_method, sigmahat_vector_2){
+
   T_data <- nrow(y_data)
 
-  
   ######################################################################
   #Calculating smoothed curve for the data using local linear estimator#
   ######################################################################

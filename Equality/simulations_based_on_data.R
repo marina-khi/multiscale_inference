@@ -68,7 +68,7 @@ simulations_power <- function(a_hat, sigma, N_ts, N_rep, different_T, different_
         cat("Ratio of rejection under H1 is ", power, "with alpha = ", alpha, "T = ", T_size, "and b =", b, "\n")
       }
     }
-    filename = paste0("../Plots/", N_ts, "_stations_powertable_method_", kernel_method, "_with_b_", b*100, ".tex")
+    filename = paste0("../Plots/", N_ts, "_stations_powertable_method_", kernel_method, "_with_b_", b*100, "_aux.tex")
     creating_matrix_and_texing(power_b_vec, different_T, different_alpha, filename)
   }
   power_vec <- c(power_vec, power_b_vec)
@@ -178,8 +178,8 @@ clustering_analysis <- function(N_ts, different_T, different_alpha){
       cat("Percentage of detecting true clustering", correctly_specified_groups/N_rep, "with alpha = ", alpha, "T = ", T_size, "\n")
     }
   }
-  filename = paste0("../Plots/", N_ts, "_stations_number_of_groups_method_", kernel_method, ".tex")
+  filename = paste0("../Plots/", N_ts, "_stations_number_of_groups_method_", kernel_method, "_aux.tex")
   creating_matrix_and_texing(correct_number_of_groups_vec, different_T, different_alpha, filename)
-  filename2 = paste0("../Plots/", N_ts, "_stations_groups_method_", kernel_method, ".tex")
+  filename2 = paste0("../Plots/", N_ts, "_stations_groups_method_", kernel_method, "_aux.tex")
   creating_matrix_and_texing(correctly_specified_groups_vec, different_T, different_alpha, filename2)
 }
