@@ -84,9 +84,9 @@ lambda <- function(h)
 
 
 #Creating g_t_set over which we are taking the maximum (from Section 2.1)
-creating_g_set <- function(T, kernel_method){
-  u <- seq(from = 5/T, to = 1, by = 5/T)
-  h <- seq(from = 3/T, to = 1/4+3/T, by = 5/T)
+creating_g_set <- function(T_size, kernel_method){
+  u <- seq(from = 5/T_size, to = 1, by = 5/T_size)
+  h <- seq(from = 3/T_size, to = 1/4+3/T_size, by = 5/T_size)
   
   g_t_set_temp                  <- expand.grid(u = u, h = h) #Creating a dataframe with all possible combination of u and h
   g_t_set_temp$values           <- numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
@@ -107,8 +107,7 @@ creating_g_set <- function(T, kernel_method){
 #If we have already calculated gaussian quantiles and stored them in a file 'distr_T_....RData'
 #then no need to calculate them once more, we just load them from this file.
 #Ohterwise simulate the \Psi^star statistic 1000 times in order to calculate the quantiles
-calculating_gaussian_quantile <- function(T, N_ts, g_t_set, kernel_method, alpha = 0.05){
-  filename = paste("distribution/distr_T_", T, "_and_N_", N_ts, "_and_method_", kernel_method, ".RData", sep = "")
+calculating_gaussian_quantile <- function(T, N_ts, g_t_set, kernel_method, alpha = 0.05, filename){
   sigma_vector <- rep(1, N_ts)
   if(!file.exists(filename)) {
       gaussian_statistic_distribution <- replicate(1000, {
