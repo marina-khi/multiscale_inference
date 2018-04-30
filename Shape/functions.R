@@ -128,7 +128,7 @@ creating_g_set <- function(T, kernel_method){
 #then no need to calculate them once more, we just load them from this file.
 #Ohterwise simulate the \Psi^star statistic 1000 times in order to calculate the quantiles
 calculating_gaussian_quantile <- function(T, g_t_set, test_problem, kernel_ind, alpha = 0.05){
-  filename = paste0("distribution/distr_T_", T,"_testing_", test_problem, ".RData")
+  filename = paste0("Shape/distribution/distr_T_", T,"_testing_", test_problem, ".RData")
   if(!file.exists(filename)) {
     gaussian_statistic_distribution <- replicate(1000, {
       z = rnorm(T, 0, 1)
@@ -146,7 +146,7 @@ calculating_gaussian_quantile <- function(T, g_t_set, test_problem, kernel_ind, 
 
 #Everything as in previous function but using local linear estimate
 calculating_gaussian_quantile_ll <- function(T, g_t_set, test_problem, kernel_ind, alpha = 0.05){
-  filename = paste0("distribution/distr_T_", T,"_testing_", test_problem, "_type_ll.RData")
+  filename = paste0("Shape/distribution/distr_T_", T,"_testing_", test_problem, "_type_ll.RData")
   if(!file.exists(filename)) {
     gaussian_statistic_distribution <- replicate(1000, {
       z = rnorm(T, 0, 1)

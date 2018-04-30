@@ -51,6 +51,8 @@ Tables \ref{tab:size_shape} and \ref{tab:power_shape} report the simulation resu
 We next turn to the test methods from Section \ref{sec-test-equality}. The simulation design extends the setup from above. We generate data from the model $Y_{it} = m_i(\frac{t}{T}) + \varepsilon_{it}$, where the number of time series is set to $n = 15$ and we consider different time series lengths $T$. For each $i$, the errors $\varepsilon_{it}$ are drawn from the AR(1) model $\varepsilon_{it} = a \varepsilon_{i,t-1} + \eta_{it}$, where as before $a = 0.267$ and the innovations $\eta_{it}$ are i.i.d.\ normally distributed with mean $0$ and variance $0.35$. To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ without loss of generality. To produce data under the alternative, we define $m_1(u) = \beta \, (u - 0.5) $ with $\beta = 0.75, 1, 1.25$ and set $m_i = 0$ for all $i \ne 1$. Hence, all trend functions are the same except for $m_1$ which is an increasing linear function with $m_1(0.5) = 0$. We here use a linear function rather than a broken line in order to satisfy the normalization constraint $\int_0^1 m_1(u) du = 0$. 
 
 
+\addtocounter{table}{-1} 
+
 \begin{table}[t]
 \footnotesize{
 \begin{center}
@@ -59,6 +61,8 @@ We next turn to the test methods from Section \ref{sec-test-equality}. The simul
 \renewcommand{\arraystretch}{1.2}
 \input{Plots/15_stations_sizetable_method_ll}
 \end{center}}
+
+
 \footnotesize{
 \begin{center}
 \caption{Power of the multiscale test from Section \ref{sec-test-equality} for $n=15$ time series, different sample sizes $T$ and nominal sizes $\alpha$. Each panel corresponds to a different slope parameter $\beta$.}\label{tab:power_equality}
@@ -89,7 +93,7 @@ The test is implemented analogously as above. As before, we work with an Epanech
 
 The simulation results are reported in Tables \ref{tab:size_equality} and \ref{tab:power_equality}. The entries of the tables are computed in the same way as those in Tables \ref{tab:size_shape} and \ref{tab:power_shape}. Inspecting Table \ref{tab:size_equality}, the actual size of the test can be seen to approximate the nominal target $\alpha$ quite well even for small values of $T$. Moreover, as can be seen from Table \ref{tab:power_equality}, the test also has reasonable power against the alternatives considered. For the smallest slope $\beta=0.75$ and the smaller sample sizes $T = 250, 350$, the power is only moderate, reflecting the fact that the alternative is not very far away from the null. However, as we increase the slope $\beta$ and the sample size $T$, the power quickly increases. For the largest slope $\beta = 1.25$ and $T=350$, we already reach a power of $1.00$.
 
-
+\addtocounter{table}{-1} 
 \begin{table}[t]
 \footnotesize{
 \begin{center}

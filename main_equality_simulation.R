@@ -39,5 +39,5 @@ results_power    <- simulations_power(a_hat, sigma, N_ts_sim, N_rep, different_T
 #Implementing clustering algorithm#
 ###################################
 
-simulations_clustering(a_hat, sigma, N_ts_sim, N_rep, different_T, different_alpha, kernel_method)
-results_clusters <- clustering_analysis(N_ts_sim, different_T, different_alpha)
+simulations_clustering(a_hat, sigma, N_ts_sim, N_rep, c(350), different_alpha, kernel_method)
+results_clusters <- clustering_analysis(N_ts_sim, c(350), different_alpha)

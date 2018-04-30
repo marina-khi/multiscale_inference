@@ -1,4 +1,4 @@
-simulations_based_on_data <- function(N, different_T, different_alpha, data, a_hat, sigma_eta, test_problem, kernel_t){
+simulations_based_on_data <- function(N, different_T, different_alpha, a_hat, sigma_eta, test_problem, kernel_t){
   #Defining necessary parameters
   num_T     <- length(different_T)
   num_alpha <- length(different_alpha)
@@ -22,13 +22,8 @@ simulations_based_on_data <- function(N, different_T, different_alpha, data, a_h
     print('Given method is currently not supported')
   }
 
-  T_data <- length(data)
-  
+  #Calculating the size of the test
 
-  #################################
-  #Calculating the size of the test#
-  ##################################
-  
   #We don't have the trend function, the null hypothesis is true and the errors are from AR(1)
   size_ar1 <- c()
   for (T in different_T){
@@ -55,7 +50,7 @@ simulations_based_on_data <- function(N, different_T, different_alpha, data, a_h
     }
   }
   #Creating a nice-looking matrix for size of the test and writing it to a tex file
-  filename = paste0("../Plots/sizetable_", kernel_t, "_testing_", test_problem, ".tex")
+  filename = paste0("Plots/sizetable_", kernel_t, "_testing_", test_problem, ".tex")
   creating_matrix_and_texing(size_ar1, different_T, different_alpha, filename)
 
   ###################################
@@ -96,7 +91,7 @@ simulations_based_on_data <- function(N, different_T, different_alpha, data, a_h
         cat("Ratio of rejection under H1 with partially linear trend is", sum(size_of_the_test_with_trend)/N, "with a =", a, ", T =", T, "and alpha =", alpha, "\n")
       }
     }
-    filename = paste0("../Plots/powertable_", a*100, "_", kernel_t, "_testing_", test_problem, ".tex")
+    filename = paste0("Plots/powertable_", a*100, "_", kernel_t, "_testing_", test_problem, ".tex")
     creating_matrix_and_texing(power_ar1, different_T, different_alpha, filename)
   }
 }

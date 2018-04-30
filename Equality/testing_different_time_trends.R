@@ -46,7 +46,7 @@ testing_different_time_trends <- function(N_ts, y_data, month_column, alpha, ker
       }
       z_matrix <- cbind(z_matrix, month_column) #Adding auxiliary month column to "deseasonalize" simulated data
       z_matrix[1:N_ts] <- lapply(z_matrix[1:N_ts], function(x) x - ave(x, z_matrix[N_ts + 1], FUN=mean))
-      z_matrix <- z_matrix[-(N_ts + 1)] #Dropping auxiliary month
+      z_matrix <- z_matrix[-(N_ts + 1)] #Dropping auxiliary month column
       psistar_statistic(z_matrix, N_ts, g_t_set, sigmahat_vector_2, kernel_method)
     })
     save(gaussian_statistic_distribution, file = filename)
