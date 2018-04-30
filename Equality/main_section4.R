@@ -22,7 +22,7 @@ N_ts_sim <- 15 #number of different time series for simulation
 N_rep    <- 1000 #number of repetitions for calculating size and power
 alpha    <- 0.05 #confidence level for application
 
-different_T     <- c(250, 350, 500, 1000) #Different lengths of time series for which we calculate size and power
+different_T     <- c(250, 350)#, 500, 1000) #Different lengths of time series for which we calculate size and power
 different_alpha <- c(0.01, 0.05, 0.1) #Different alpha for which we calculate size and power
 
 kernel_method <- "ll" #Only "nw" (Nadaraya-Watson) and "ll" (local linear) methods are currently supported
@@ -94,6 +94,6 @@ results <- testing_different_time_trends(N_ts, monthly_temp[-c(1, 2, 3)], monthl
 ############################
 
 results_size     <- simulations_size(a_hat, sigma, N_ts_sim, N_rep, different_T, different_alpha, kernel_method)
-results_power    <- simulations_power(a_hat, sigma, N_ts_sim, c(350), different_alpha, kernel_method)
-simulations_clustering(a_hat, sigma, N_ts_sim, N_rep, c(350), different_alpha, kernel_method)
-results_clusters <- clustering_analysis(N_ts_sim, c(350), different_alpha)
+results_power    <- simulations_power(a_hat, sigma, N_ts_sim, different_T, different_alpha, kernel_method)
+simulations_clustering(a_hat, sigma, N_ts_sim, N_rep, different_T, different_alpha, kernel_method)
+results_clusters <- clustering_analysis(N_ts_sim, different_T, different_alpha)

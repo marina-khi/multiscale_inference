@@ -21,13 +21,14 @@ simulations_size <- function(a_hat, sigma, N_ts, N_rep, different_T, different_a
         result
       })
     for (alpha in different_alpha){
-      gaussian_quantile = calculating_gaussian_quantile(T_size, N_ts, g_t_set_sim, kernel_method, alpha)
+      filename_distr = paste("Equality/distribution/distr_T_", T_size, "_and_N_", N_ts, "_and_method_", kernel_method, ".RData", sep = "")
+      gaussian_quantile = calculating_gaussian_quantile(T_size, N_ts, g_t_set_sim, kernel_method, alpha, filename_distr)
       size <- sum(simulated_statistic > gaussian_quantile)/N_rep
       size_vec = c(size_vec, size)
       cat("Ratio of rejection under H0 is ", size, "with alpha = ", alpha, "and T = ", T_size, "\n")
     }
   }
-  filename = paste0("../Plots/", N_ts, "_stations_sizetable_method_", kernel_method, ".tex")
+  filename = paste0("Plots/", N_ts, "_stations_sizetable_method_", kernel_method, ".tex")
   creating_matrix_and_texing(size_vec, different_T, different_alpha, filename)
   return(size_vec)
 }
@@ -62,13 +63,14 @@ simulations_power <- function(a_hat, sigma, N_ts, N_rep, different_T, different_
         result
       })
       for (alpha in different_alpha){
-        gaussian_quantile = calculating_gaussian_quantile(T_size, N_ts, g_t_set_sim, kernel_method, alpha)
+        filename_distr = paste("Equality/distribution/distr_T_", T_size, "_and_N_", N_ts, "_and_method_", kernel_method, ".RData", sep = "")
+        gaussian_quantile = calculating_gaussian_quantile(T_size, N_ts, g_t_set_sim, kernel_method, alpha, filename_distr)
         power <- sum(simulated_statistic > gaussian_quantile)/N_rep
         power_b_vec = c(power_b_vec, power)
         cat("Ratio of rejection under H1 is ", power, "with alpha = ", alpha, "T = ", T_size, "and b =", b, "\n")
       }
     }
-    filename = paste0("../Plots/", N_ts, "_stations_powertable_method_", kernel_method, "_with_b_", b*100, "_aux.tex")
+    filename = paste0("Plots/", N_ts, "_stations_powertable_method_", kernel_method, "_with_b_", b*100, "_aux.tex")
     creating_matrix_and_texing(power_b_vec, different_T, different_alpha, filename)
   }
   power_vec <- c(power_vec, power_b_vec)
@@ -114,8 +116,9 @@ simulations_clustering <- function(a_hat, sigma, N_ts, N_rep, different_T, diffe
       results        <- psihat_statistic(simulated_data, N_ts, g_t_set_sim, sigmahat_averaged_2, kernel_method)[[1]]
       results
     })
-    for (alpha in different_alpha){    
-      gaussian_quantile = calculating_gaussian_quantile(T_size, N_ts, g_t_set_sim, kernel_method, alpha)
+    for (alpha in different_alpha){
+      filename_distr = paste("Equality/distribution/distr_T_", T_size, "_and_N_", N_ts, "_and_method_", kernel_method, ".RData", sep = "")
+      gaussian_quantile = calculating_gaussian_quantile(T_size, N_ts, g_t_set_sim, kernel_method, alpha, filename_distr)
       groups_vec <- matrix(NA, ncol = N_rep, nrow = N_ts)
       number_of_groups_vec <- c()
       for (i in 1:N_rep){
@@ -136,7 +139,7 @@ simulations_clustering <- function(a_hat, sigma, N_ts, N_rep, different_T, diffe
       number_of_groups_vec <- c(number_of_groups_vec, number_of_groups)
       }
       clustering_results <- rbind(number_of_groups_vec, groups_vec)
-      filename2 = paste0("distribution/clustering_results_for_T_", T_size, "_and_alpha_", alpha*100, ".RData")
+      filename2 = paste0("Equality/distribution/clustering_results_for_T_", T_size, "_and_alpha_", alpha*100, ".RData")
       save(clustering_results, file = filename2)      
     }
   }
@@ -148,7 +151,7 @@ clustering_analysis <- function(N_ts, different_T, different_alpha){
   correctly_specified_groups_vec <- c()
   for (T_size in different_T){
     for (alpha in different_alpha){
-      filename2 = paste0("distribution/clustering_results_for_T_", T_size, "_and_alpha_", alpha*100, ".RData")
+      filename2 = paste0("Equality/distribution/clustering_results_for_T_", T_size, "_and_alpha_", alpha*100, ".RData")
       load(file = filename2)
       N_rep <- ncol(clustering_results)
       
@@ -178,8 +181,8 @@ clustering_analysis <- function(N_ts, different_T, different_alpha){
       cat("Percentage of detecting true clustering", correctly_specified_groups/N_rep, "with alpha = ", alpha, "T = ", T_size, "\n")
     }
   }
-  filename = paste0("../Plots/", N_ts, "_stations_number_of_groups_method_", kernel_method, "_aux.tex")
+  filename = paste0("Plots/", N_ts, "_stations_number_of_groups_method_", kernel_method, "_aux.tex")
   creating_matrix_and_texing(correct_number_of_groups_vec, different_T, different_alpha, filename)
-  filename2 = paste0("../Plots/", N_ts, "_stations_groups_method_", kernel_method, "_aux.tex")
+  filename2 = paste0("Plots/", N_ts, "_stations_groups_method_", kernel_method, "_aux.tex")
   creating_matrix_and_texing(correctly_specified_groups_vec, different_T, different_alpha, filename2)
 }
