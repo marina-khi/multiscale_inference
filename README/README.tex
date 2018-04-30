@@ -26,20 +26,59 @@
 
 
 
-\heading{Programs for `Multiscale Inference for}{Nonparametric Time Trends'}
+\headingSupplement{Programs for}{``Multiscale Inference for}{Nonparametric Time Trends''}
 \authors{Marina Khismatullina}{University of Bonn}{Michael Vogt}{University of Bonn} 
-\setcounter{footnote}{0}
 
-\vspace{-0.25cm}
 
 \version{\today}
 
-\vspace{-1cm}
+In this document we describe the files in folders  \verb|.\Shape| and \verb|.\Equality| that can be used to replicate all the empirical results reported in our paper. We first explain the model simulations and then the empirical results that were obtained with the UK Met Office Temperature data. All programs are written in R with some functions in C. They are all quite self-explanatory and commented. The code is self-sufficient, the only thing that needs to be changed is the extensions of dynamic libraries as they are OS-specific. At the moment everything is configured for running on Windows, that is, the ``.dll'' extension is used. In order to make the programs Linux or MacOS compatible, this extension should be changed to ``.so''. For example, 
+\begin{verbatim}
+dyn.load("Shape/C_code/estimating_sigma.dll")
+\end{verbatim} should be replaced by
+\begin{verbatim}
+dyn.load("Shape/C_code/estimating_sigma.so").
+\end{verbatim}
+
+All the dynamic libraries are already provided.
+
+\section{Model Simulations}
+\subsection{Testing for the presence of the time trend}
+The folder \verb|.\Shape| contains all the necessary functions, data and simulated distributions that were used for testing for the presence of time trends in Section 7. In particular, in order to obtain Tables 1 and 2, one needs to run \verb|.\main_shape_simulation.R|.
 
 
+The dynamic libraries and R-wrappers of respective C functions are provided in the folder \verb|.\Shape\C_code|. 
 
+\subsection{Testing for equality of the trends}
+The folder \verb|.\Equality| contains all the necessary functions, data and simulated distributions that were used for testing the equality of time trends in Section 7. Specifically, in order to obtain Tables 3, 4 and 5, one needs to run \verb|.\main_equality_simulation.R|.
 
+The directory \verb|.\Equality\distribution| comprises the simulated distributions of gaussian statistic $\widehat{\Psi}_{n, T}$ for $n= 15$ time series (the number that was used for the simulation study) and different lengths of time trends $T$. 
 
+The dynamic libraries and R-wrappers of respective C functions are provided in the folder \verb|.\Equality\C_code|. 
+
+\section{Application}
+\subsection{Testing for the presence of the time trend}
+
+As for the simulation study, the dynamic libraries and R-wrappers of respective C functions are provided in the directory \verb|.\Shape\C_code|. 
+
+\subsection{Testing for equality of the trends}
+The directory \verb|.\Equality\data| contains the historic station data in \verb|.txt| format downloaded from 
+\begin{verbatim}
+https://www.metoffice.gov.uk/public/weather/climate-historic/#?tab=climateHistoric
+\end{verbatim}
+and the description file \verb|.\Equality\Description_file.xlsx|. The data consists of:
+\begin{itemize}
+\item Mean daily maximum temperature ($tmax$)
+\item Mean daily minimum temperature ($tmin$)
+\item Days of air frost ($af$)
+\item Total rainfall ($rain$)
+\item Total sunshine duration ($sun$)
+\end{itemize}
+The monthly mean temperature that was used in the paper is calculated from the average of the mean daily maximum and mean daily minimum temperature, i.e.\ $(tmax+tmin)/2$. Full description of the data can be accessed on the official website of The UK Met Office \verb|https://www.metoffice.gov.uk|. 
+
+As for the simulation study, the dynamic libraries and R-wrappers of respective C functions are provided in the folder \verb|.\Equality\C_code|. 
+
+%Of course you can change anything else, but be aware of computing time when doing the simulations.
 
 \renewcommand{\baselinestretch}{1.2}\normalsize
 \numberwithin{equation}{section}
