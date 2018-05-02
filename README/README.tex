@@ -15,11 +15,13 @@
 \usepackage{natbib}
 \usepackage{setspace}
 \usepackage{mathrsfs}
-\usepackage[left=2.7cm,right=2.7cm,bottom=2.7cm,top=2.7cm]{geometry}
+\usepackage[Q=yes]{examplep}
+\usepackage[T1]{fontenc}
+%\usepackage{hanging}
+\usepackage[left=3cm,right=3cm,bottom=3cm,top=3cm]{geometry}
+\renewcommand{\baselinestretch}{1.05}\normalsize
 \parindent0pt
-\setlength{\parskip}{0.5em} 
 
-\input{macros}
 
 
 
@@ -27,103 +29,189 @@
 
 
 
-\headingSupplement{Programs for}{``Multiscale Inference for}{Nonparametric Time Trends''}
-\authors{Marina Khismatullina}{University of Bonn}{Michael Vogt}{University of Bonn} 
+\begin{center}
+{\LARGE \bf Code documentation}
+\end{center}
+\vspace{0.5cm}
 
 
-\version{\today}
 
-In this document we describe the programs and functions that can be used to replicate all the empirical results reported in our paper. We first explain the model simulations and then the empirical results that were obtained with the temperature data from UK Met Office. The results are stored either as figures or as \verb|.tex| files (for tables) in the folder \verb|.\Plots|.
+\section*{Summary}
 
-All programs are written in R with some functions in C. They are all quite self-explanatory and commented. The code is self-sufficient, the only thing that needs to be changed is the extensions of dynamic libraries as they are OS-specific. Dynamic libraries are defined in the beginning of each main file. At the moment everything is configured for running on Windows, that is, the \verb|.dll| extension is used. In order to make the programs Linux or MacOS compatible, this extension should be changed to \verb|.so|. For example, 
+
+\setlength{\parskip}{0.2cm} 
+This document describes the R code that can be used to replicate the empirical results reported in the paper \textit{Multiscale inference for nonparametric time trends}. The overall structure of the code is as follows. There are four main files each of which produces a specific part of the simulations and applications:
+\vspace{0.2cm}
+
+\everypar{\hangafter=1\hangindent=1.45cm\relax}
+\verb|main_shape_simulation.R| \hspace{1pt} produces the simulation results for the test of the hypothesis $H_0: m^\prime = 0$ from Section 4.
+
+\verb|main_equality_simulation.R| \hspace{1pt} produces the simulation results for the test of the hypothesis $H_0: m_1 = \ldots = m_n$ from Section 5.
+
+\verb|main_shape_application.R| \hspace{1pt} produces the application results from Section 8.1, where the test of the hypothesis $H_0: m^\prime = 0$ is used.
+
+\verb|main_equality_application.R| \hspace{1pt} produces the application results from Section 8.2, where the test of the hypothesis $H_0: m_1 = \ldots = m_n$ is used. 
+\vspace{0.2cm}
+
+\everypar{\hangafter=0\relax}
+These main files read in a number of functions which are collected in the two folders \verb|Shape| and \verb|Equality|. The folder \verb|Shape| contains the code for the test methods from Section 4 and \verb|Equality| the code for the methods from Section 5. The simulation and application results are stored either as figures or as \verb|.tex| files (for tables) in the folder \verb|Plots|. 
+\vspace{0.2cm}
+
+
+All programs are written in R with some functions in C. They are all quite self-explanatory and commented. The code is self-sufficient, the only thing that is OS-specific and may need to be changed is the extension of dynamic libraries. Dynamic libraries are defined in the beginning of each main file. At the moment everything is configured for running on Windows, that is, the \verb|.dll| extension is used. In order to make the programs Linux or MacOS compatible, this extension should be changed to \verb|.so|. For example, 
 \begin{verbatim}
 dyn.load("Shape/C_code/estimating_sigma.dll")
 \end{verbatim} should be replaced by
 \begin{verbatim}
 dyn.load("Shape/C_code/estimating_sigma.so").
 \end{verbatim}
-
 All the dynamic libraries are already provided, additional  compilation is not neccessary.
 
-\section{Model Simulations}
-\subsection{Testing for the presence of the time trend}
-The folder \verb|.\Shape| contains all the necessary functions, data and simulated distributions that were used for calculatig size and power of our method for testing for the presence of time trends in Section 7. In order to obtain Tables 1 and 2, one needs to run \verb|.\main_shape_simulation.R|. As was already mentioned, the only possible adjustment that needs to be done is the change of extension of dynamic libraries in the beginning of \verb|.\main_shape_simulation.R|. 
 
 
-The simulated distributions of Gaussian statistic $\Phi'_{T}$ for various lengths of time trends $T$ can be found in the directory \verb|.\Shape\distribution|. In order to be able to recalculate these distributions, the stored files need to be deleted or removed; the computation is then done automatically.
+\newpage
+\section*{Code for the test methods from Section 4}
 
 
-Size and power of the test are calculated by generating $1000$ samples. This number can be set as \verb|N_rep| in \verb|.\main_shape_simulation.R|. We have run our simulations for $10000$ samples as well, and the running time is quite small.
+\setlength{\parskip}{0.3cm}
+\everypar{\hangafter=1\hangindent=1.45cm\relax}
+
+\verb|main_shape_simulation.R| \hspace{1pt} produces the simulation results for the test method from Section 4, in particular Tables 1 and 2. If you use Linux or MacOS, please change the extension of dynamic libraries in the very beginning of the main file to \verb|.so|. The size and power results in Tables 1 and 2 are calculated from $1000$ simulated samples. This number can be set as \verb|N_rep| in \verb|main_shape_simulation.R|. The running time for $1000$ simulations is quite small, amounting to ??. 
+
+\verb|main_shape_application.R| \hspace{1pt} produces the application results from Section 8.1, in particular Figure 1. As above, please change the extension of dynamic libraries if you use Linux or MacOS.
+
+\verb|Shape| \hspace{1pt} directory containing all the necessary functions, data and simulated distributions to run \verb|main_shape_simulation.R| and \verb|main_shape_application.R|.
+
+\verb|Shape\C_code| \hspace{1pt} folder containing the dynamic libraries and R-wrappers of the C functions.
+
+\verb|Shape\functions.R| \hspace{1pt} folder containing auxiliary R functions.
+
+\verb|Shape\data| \hspace{1pt} folder with the file \verb|cetml1659on.dat| which contains the monthly and yearly mean central England temperature from 1659 up to 2017. It was downloaded from \verb|https://www.metoffice.gov.uk/hadobs/hadcet/data| \verb|/download.html|. A full description of the data can be accessed on the website of the UK Met Office \verb|https://www.metoffice.gov.uk|. 
+
+\verb|Shape\distribution| \hspace{1pt} folder containing simulated distributions of the Gaussian statistic $\Phi'_{T}$ for various time series lengths $T$. In order to recalculate these distributions, the stored files need to be deleted or removed; the computation is then done automatically. The distribution of the Gaussian statistic $\Phi'_T$ used to calculate the critical values of the test in Section 8.1 is stored in \verb|Shape\distribution\distr_T_359_testing_constant_type_ll.RData|. \newline As before, the distribution of $\Phi'_T$ can be re-calculated by removing or deleting this file before running \verb|N_rep| in \verb|main_equality_simulation.R|.  
+\vspace{0.2cm}
 
 
-The dynamic libraries and R-wrappers of respective C functions are provided in the folder \verb|.\Shape\C_code|.
 
-All the auxiliary functions can be found in \verb|.\Shape\functions.R|.
-
-
-\subsection{Testing for equality of the trends}
-The folder \verb|.\Equality| contains all the necessary functions, data and simulated distributions that were used for testing the equality of time trends in Section 7. Specifically, in order to obtain Tables 3, 4 and 5, one needs to run \verb|.\main_equality_simulation.R|. Do not forget to change the extensions of dynamic libraries in the very beginning of \verb|.\main_equality_simulation.R| (if needed).
-
-The directory \verb|.\Equality\distribution| comprises the simulated distributions of gaussian statistic $\Phi_{n, T}$ for $n= 15$ time series (the number that was used for the simulation study) and different lengths of time trends $T$. If you want to recalculate the distribution, the stored files need to be deleted or removed. The recomputation is then done automatically. However, note that with increasing values of time series length $T$ the running time increases significantly. For example, for $T = 1000$ and $n = 15$ calculation of $\Phi_{n, T}$ will probably take several hours.
+\section*{Code for the test methods from Section 5}
 
 
-The dynamic libraries and R-wrappers of respective C functions are provided in the folder \verb|.\Equality\C_code|.
+\everypar{\hangafter=1\hangindent=1.45cm\relax}
+
+\verb|main_equality_simulation.R| \hspace{1pt} produces the simulation results for the methods from Section 5, in particular Tables 3, 4 and 5. If you use Linux or Mac\-OS, please change the extension of dynamic libraries in the very beginning of the main file. The size and power results in Tables 3 and 4 are calculated from $1000$ simulated samples. This number can be set as \verb|N_rep| in \verb|main_equality_simulation.R|, though rising this parameter is not advisable due to computational tractability. 
+
+\verb|main_equality_application.R| \hspace{1pt} produces the application results from Section 8.2. As above, please change the extension of dynamic libraries if you use Linux or MacOS.
+
+\verb|Equality| \hspace{1pt} directory containing all the necessary functions, data and simulated distributions to run \verb|main_equality_simulation.R| and \verb|main_equality| \linebreak \verb|_application.R|.
+
+\verb|Equality\C_code| \hspace{1pt} folder containing the dynamic libraries and R-wrappers of the C functions.
+
+\verb|Equality\functions.R| \hspace{1pt} folder containing auxiliary R functions.
+
+\verb|Equality\data| \hspace{1pt} folder containing historic station data downloaded from the website
+{\verb|https://www.metoffice.gov.uk/public/weather/climate-historic/#?| \linebreak \verb|tab=climateHistoric|
+and the description file \verb|.\Equality\| \verb|Description_| \verb|file.xlsx|. The data consist of: \\[0.2cm]
+-- mean daily maximum temperature (\textit{tmax}) \\
+-- mean daily minimum temperature (\textit{tmin}) \\
+-- days of air frost (\textit{af}) \\
+-- total rainfall (\textit{rain}) \\
+-- total sunshine duration (\textit{sun}). \\[0.2cm]
+The monthly mean temperature used in the paper is calculated from the average of the mean daily maximum and mean daily minimum temperature, i.e.\ $(tmax+tmin)/2$. A full description of the data can be accessed on the official website of The UK Met Office \verb|https://www.metoffice.gov.uk|.}
+
+\verb|Equality\distribution| \hspace{1pt} folder containing the simulated distributions of the Gaussian statistic $\Phi_{n, T}$ for $n= 15$ time series (the number that was used for the simulation study) and different time series lengths $T$. If you want to recalculate these distributions, the stored files need to be deleted or removed. The recomputation is then done automatically. However, note that with increasing time series length $T$, the running time increases significantly. For example, for $T = 1000$ and $n = 15$, the calculation of $\Phi_{n, T}$ may take a few hours. The distribution of the Gaussian statistic $\Phi'_{n, T}$ that was used for calculating quantiles for the application in Section 8.2 is stored in the file
+\verb|.\Equality\distribution\distr_for_application_T_386_and_N_ts_| \linebreak \verb|25_and_method_ll.RData|. 
 
 
-All the auxiliary functions can be found in \verb|.\Equality\functions.R|.
 
 
-Size and power of the test are calculated generating $1000$ samples. This number can be set as \verb|N_rep| in \verb|.\main_equality_simulation.R|, though rising this parameter is not advisable due to computational tractability. 
+\newpage
 
-\section{Application}
-\subsection{Testing for the presence of the time trend}
-
-The file \verb|.\Shape\data\cetml1659on.dat| contains the monthly and yearly mean central England temperature from the year 1659 up to year 2017. It was downloaded from 
-\begin{verbatim}
-https://www.metoffice.gov.uk/hadobs/hadcet/data/download.html.
-\end{verbatim}
-Full description of the data can be accessed on the official website of The UK Met Office \verb|https://www.metoffice.gov.uk|. 
+\everypar{\hangafter=0\relax}
 
 
-As for the simulation study, the dynamic libraries and R-wrappers of respective C functions are provided in the directory \verb|.\Shape\C_code|. 
 
 
-The distribution of the Gaussian statistic $\Phi'_T$, that was used for calculating quantiles for the application, is stored in the file
-\begin{verbatim}
-.\Shape\distribution\distr_T_359_testing_constant_type_ll.RData.
-\end{verbatim} 
-As before, the recalculating of the Gaussian statistic distribution can be done by removing or deleting this file before running \verb|N_rep| in \verb|.\main_equality_simulation.R|.  
-
-All the auxiliary functions can be found in \verb|.\Shape\functions.R|.
+\section*{Simulations}
 
 
-\subsection{Testing for equality of the trends}
+\subsection*{Testing for the presence of a time trend}
+
+The file \verb|.\main_shape_simulation.R| produces the size and power results in Tables 1 and 2 of the paper. As was already mentioned, the only possible adjustment that needs to be done is the change of extension of dynamic libraries in the beginning of \verb|.\main_shape_simulation.R| (if Linux or MacOS is used). 
+Size and power of the test are calculated from $1000$ simulated samples. This number can be set as \verb|N_rep| in \verb|.\main_shape_simulation.R|. We have run our simulations for $10000$ samples as well, and the running time is quite small.
+
+The folder \verb|.\Shape| contains all the necessary functions, data and simulated distributions to run \verb|.\main_shape_simulation.R|. 
+
+The simulated distributions of the Gaussian statistic $\Phi'_{T}$ for various time series lengths $T$ can be found in the directory \verb|.\Shape\distribution|. In order to be able to recalculate these distributions, the stored files need to be deleted or removed; the computation is then done automatically.
+
+The dynamic libraries and R-wrappers of the C functions are provided in the folder \verb|.\Shape\C_code|.
+All the auxiliary R functions can be found in \verb|.\Shape\functions.R|.
+
+
+\subsection*{Testing for equality of time trends}
+
+
+In order to obtain Tables 3, 4 and 5 of the paper, one needs to run \verb|.\main_equality_| \verb|simulation.R|. Do not forget to change the extensions of dynamic libraries in the very beginning of \verb|.\main_equality_simulation.R| if you use Linux or MacOS.
+Size and power of the test are calculated from $1000$ simulated samples. This number can be set as \verb|N_rep| in \verb|.\main_equality_simulation.R|, though rising this parameter is not advisable due to computational tractability. 
+
+The folder \verb|.\Equality| contains all the necessary functions, data and simulated distributions required to run \verb|.\main_equality_simulation.R|. 
+
+The directory \verb|.\Equality\distribution| comprises the simulated distributions of the Gaussian statistic $\Phi_{n, T}$ for $n= 15$ time series (the number that was used for the simulation study) and different time series lengths $T$. If you want to recalculate the distribution, the stored files need to be deleted or removed. The recomputation is then done automatically. However, note that with increasing values of time series length $T$ the running time increases significantly. For example, for $T = 1000$ and $n = 15$, the calculation of $\Phi_{n, T}$ may take a few hours.  
+
+The dynamic libraries and R-wrappers of the C functions can be found in the folder \verb|.\Equality\C_code|.
+All the auxiliary R functions are in \verb|.\Equality\functions.R|.
+
+
+
+\section*{Application}
+
+
+\subsection*{Testing for the presence of a time trend}
+
+
+\verb|.\main_shape_application.R| produces the application results from Section 8.1. 
+
+The folder \verb|.\Shape| contains all the necessary functions, data and simulated distributions to run \verb|.\main_shape_application.R|. 
+
+The file \verb|.\Shape\data\cetml1659on.dat| contains the monthly and yearly mean central England temperature from the year 1659 up to the year 2017. It was downloaded from 
+\verb|https://www.metoffice.gov.uk/hadobs/hadcet/data/download.html|.
+A full description of the data can be accessed on the official website of the UK Met Office \verb|https://www.metoffice.gov.uk|. 
+
+The distribution of the Gaussian statistic $\Phi'_T$ used to calculate the critical values of the test is stored in the file
+\verb|.\Shape\distribution\distr_T_359_testing_constant_| \verb|type_ll.RData|.
+As before, the distribution of $\Phi'_T$ can be re-calculated by removing or deleting this file before running \verb|N_rep| in \verb|.\main_equality_simulation.R|.  
+
+%As for the simulation study, the dynamic libraries and R-wrappers of respective C functions are provided in the directory \verb|.\Shape\C_code|. All the auxiliary R functions can be found in \verb|.\Shape\functions.R|.
+
+
+\subsection*{Testing for equality of time trends}
+
+
+\verb|.\main_equality_application.R| produces the application results from Section 8.2. 
+
+The folder \verb|.\Equality| contains all the necessary functions, data and simulated distributions to run \verb|.\main_equality_application.R|. 
+
 The directory \verb|.\Equality\data| contains the historic station data in \verb|.txt| format downloaded from 
-\begin{verbatim}
-https://www.metoffice.gov.uk/public/weather/climate-historic/#?tab=climateHistoric
-\end{verbatim}
+\verb|https://www.metoffice.gov.uk/public/weather/climate-historic/| \verb|#?tab=climateHistoric|
 and the description file \verb|.\Equality\Description_file.xlsx|. The data consists of:
 \begin{itemize}
-\item Mean daily maximum temperature ($tmax$)
-\item Mean daily minimum temperature ($tmin$)
-\item Days of air frost ($af$)
-\item Total rainfall ($rain$)
-\item Total sunshine duration ($sun$)
+\setlength{\itemsep}{0cm}
+\item Mean daily maximum temperature (\textit{tmax})
+\item Mean daily minimum temperature (\textit{tmin})
+\item Days of air frost (\textit{af})
+\item Total rainfall (\textit{rain})
+\item Total sunshine duration (\textit{sun})
 \end{itemize}
-The monthly mean temperature that was used in the paper is calculated from the average of the mean daily maximum and mean daily minimum temperature, i.e.\ $(tmax+tmin)/2$. Full description of the data can be accessed on the official website of The UK Met Office \verb|https://www.metoffice.gov.uk|. 
+The monthly mean temperature that was used in the paper is calculated from the average of the mean daily maximum and mean daily minimum temperature, i.e.\ $(tmax+tmin)/2$. A full description of the data can be accessed on the official website of The UK Met Office \verb|https://www.metoffice.gov.uk|. 
 
-The distribution of the Gaussian statistic $\Phi'_{n, T}$, that was used for calculating quantiles for this application, is stored in the file
-\begin{verbatim}
-.\Equality\distribution\
-distr_for_application_T_386_and_N_ts_25_and_method_ll.RData.
-\end{verbatim} You can recalculate the distribution in order to check our results. In order to do so, delete or move the file mentioned above and the dstribution of the new Gaussian statistic will be computed automatically.
+The distribution of the Gaussian statistic $\Phi'_{n, T}$ that was used for calculating quantiles for this application is stored in the file
+\verb|.\Equality\distribution\distr_for| \verb|_application_T_386_and_N_ts_25_and_method_ll.RData|.
+%You can recalculate the distribution in order to check our results. In order to do so, delete or move the file mentioned above and the dstribution of the new Gaussian statistic will be computed automatically.
 
-
-As for the simulation study, the dynamic libraries and R-wrappers of respective C functions are provided in the folder \verb|.\Equality\C_code|. 
-
-
-All the auxiliary functions can be found in \verb|.\Equality\functions.R|.
+%As for the simulation study, the dynamic libraries and R-wrappers of respective C functions are provided in the folder \verb|.\Equality\C_code|. 
+%All the auxiliary R functions can be found in \verb|.\Equality\functions.R|.
 
 %Of course you can change anything else, but be aware of computing time when doing the simulations.
+
+
 
 \end{document}
