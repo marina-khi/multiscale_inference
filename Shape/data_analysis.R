@@ -43,7 +43,7 @@ data_analysis <- function(alpha, y_data, test_problem, kernel_t){
   result                 <- statistic_function(y_data, g_t_set, kernel_ind, sigmahat_data)
   g_t_set_with_values    <- result[[1]]
   psihat_statistic_value <- result[[2]]
-  
+  print(g_t_set_with_values)
   #And now the testing itself
   if (psihat_statistic_value > gaussian_quantile) {
     cat("We reject H_0 with probability", alpha, "Psihat_statistic = ", psihat_statistic_value,

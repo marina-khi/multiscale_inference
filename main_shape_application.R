@@ -27,6 +27,7 @@ test_problem  <- "constant" #Only "zero" (H_0: m = 0) or "constant" (H_0: m = co
 
 temperature  <- read.table("Shape/data/cetml1659on.dat", header = TRUE, skip = 6)
 yearly_tempr <- temperature[temperature$YEAR > -99, 'YEAR']
+yearly_tempr <- yearly_tempr - mean(yearly_tempr)
 T_tempr      <- length(yearly_tempr)
 
 
