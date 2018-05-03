@@ -27,7 +27,6 @@ test_problem  <- "constant" #Only "zero" (H_0: m = 0) or "constant" (H_0: m = co
 
 temperature  <- read.table("Shape/data/cetml1659on.dat", header = TRUE, skip = 6)
 yearly_tempr <- temperature[temperature$YEAR > -99, 'YEAR']
-yearly_tempr <- yearly_tempr - mean(yearly_tempr)
 T_tempr      <- length(yearly_tempr)
 
 
@@ -47,10 +46,17 @@ sigma_eta <-result[[3]] #Estimation of the sqrt of the variance of the innovatio
 ###################################################################
 #Calculating smoothed curve for the data using Epanechnikov kernel#
 ###################################################################
+
 grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points for plotting and estimating
 
 for (i in 1:length(h)){
-  smoothed_curve <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(yearly_tempr, grid_points, h[i]))
+  if (kernel_method == "nw"){
+    smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(yearly_tempr, grid_points, h[i]))
+  } else if (kernel_method == "ll"){
+    smoothed_curve <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(yearly_tempr, grid_points, h[i]))
+  } else {
+    print('Given method is currently not supported')
+  }
   cat("End point:", smoothed_curve[T_tempr], "\n")
 }
 
@@ -65,4 +71,5 @@ dev.off()
 ###############
 #Data analysis#
 ###############
+
 data_analysis(alpha, yearly_tempr, test_problem, kernel_method)

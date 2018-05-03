@@ -14,10 +14,8 @@ simulations_based_on_data <- function(N, different_T, different_alpha, a_hat, si
  
   if (kernel_t == "nw"){
     quantile_function = calculating_gaussian_quantile
-    statistic_function = psihat_statistic
   } else if (kernel_t == "ll"){
     quantile_function = calculating_gaussian_quantile_ll
-    statistic_function = psihat_statistic_ll
   } else {
     print('Given method is currently not supported')
   }
@@ -34,14 +32,14 @@ simulations_based_on_data <- function(N, different_T, different_alpha, a_hat, si
     
     for (alpha in different_alpha){
       #Calculating gaussian quantiles for given T and alpha
-      gaussian_quantile = quantile_function(T, g_t_set, test_problem, kernel_ind, alpha)
+      gaussian_quantile = calculating_gaussian_quantile(T, g_t_set, test_problem, kernel_ind, alpha, kernel_t)
       cat("Gaussian quantile = ", gaussian_quantile, "with T = ", T, "and alpha = ", alpha, "\n")
       
       #Replicating test procedure N times
       size_of_the_test_ar_1 = replicate(N, {
         y_data_ar_1 = arima.sim(model = list(ar = a_hat), n = T, innov = rnorm(T, 0, sigma_eta))
         sigmahat = estimating_sigma_for_AR1(y_data_ar_1, L1, L2)
-        result_notrend_ar1 = statistic_function(y_data_ar_1, g_t_set, kernel_ind, sigmahat)[[2]]
+        result_notrend_ar1 = psihat_statistic(y_data_ar_1, g_t_set, kernel_ind, sigmahat, kernel_t)[[2]]
         if (result_notrend_ar1 > gaussian_quantile) {d = 1} else {d = 0}
         d
       })
@@ -75,7 +73,7 @@ simulations_based_on_data <- function(N, different_T, different_alpha, a_hat, si
       
       for (alpha in different_alpha){
         #Calculating gaussian quantiles for given T and alpha
-        gaussian_quantile = quantile_function(T, g_t_set, test_problem, kernel_ind, alpha)
+        gaussian_quantile = calculating_gaussian_quantile(T, g_t_set, test_problem, kernel_ind, alpha, kernel_t)
         cat("Gaussian quantile = ", gaussian_quantile, "with T = ", T, "and alpha = ", alpha, "\n")
         
         #Replicating test procedure N times
@@ -83,7 +81,7 @@ simulations_based_on_data <- function(N, different_T, different_alpha, a_hat, si
           #Adding a function that is 0 on the first half and linear on the second half
           y_data_ar_1_with_trend = m + arima.sim(model = list(ar = a_hat), innov = rnorm(T, 0, sigma_eta), n = T)
           sigmahat = estimating_sigma_for_AR1(y_data_ar_1_with_trend, L1, L2)
-          result_with_trend = statistic_function(y_data_ar_1_with_trend, g_t_set, kernel_ind, sigmahat)[[2]]
+          result_with_trend = psihat_statistic(y_data_ar_1_with_trend, g_t_set, kernel_ind, sigmahat, kernel_t)[[2]]
           if (result_with_trend > gaussian_quantile) {d = 1} else {d = 0}
           d
         })

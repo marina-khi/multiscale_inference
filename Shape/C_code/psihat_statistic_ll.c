@@ -91,14 +91,17 @@ double psi_average_ll(double data[], int T, double u, double h, int k_function){
 	The output is one value for each u and h.
 	*/
 	int i;
-	double x, result, result_temp, k, k_norm;
+	double x, result, result_temp, k, k_norm, s_t_0_value, s_t_1_value, s_t_2_value;
 	result_temp = 0;
 	k_norm = 0;
 	k = 0;
+	s_t_2_value = s_t_2(u, h, T);
+	s_t_0_value = s_t_0(u, h, T);
+	s_t_1_value = s_t_1(u, h, T);
 	if (k_function == 1) {
 		for (i = 0; i < T; i++) {
 			x = (((i + 1) / (float)T - u) / h);
-			k = epanc(x) * (s_t_2(u, h, T) - s_t_1(u, h, T) * x);
+			k = epanc(x) * (s_t_2_value - s_t_1_value * x);
 			result_temp += k * data[i];
 			k_norm += k * k;
 /*			Rprintf("We are here, %f, %f, %f\n", k, result_temp, k_norm);*/
@@ -107,7 +110,7 @@ double psi_average_ll(double data[], int T, double u, double h, int k_function){
 	else {
 		for (i = 0; i < T; i++) {
 			x = (((i + 1) / (float)T - u) / h);
-			k = epanc(x) * (s_t_0(u, h, T) * x - s_t_1(u, h, T));
+			k = epanc(x) * (s_t_0_value * x - s_t_1_value);
 			result_temp += k * data[i];
 			k_norm += k * k;
 /*	   		Rprintf("We are here, %f, %f, %f\n", k, result_temp, k_norm); */   	
@@ -134,9 +137,9 @@ void psihat_statistic_ll(double *y_data, int *T, double *g_t_set, int *N, int *k
  	
  	for (i=0; i < N[0]; i++) {
 		tmp1 = psi_average_ll(y_data, T[0], g_t_set[i], g_t_set[i + N[0]], k_function[0]) / sigmahat[0];
-    	values[i] = awert(tmp1) - g_t_set[2 * N[0] +i];
+  	values[i] = awert(tmp1) - g_t_set[2 * N[0] +i];
 		values_with_sign[i] = tmp1;
-/*    	Rprintf("%f, %f, %f, %f\n",tmp1, tmp2, tmp3, values[i]);*/
+/*    	Rprintf("%f, %f\n",values[i], values_with_sign[i]);*/
     	if (i == 0) {
     		maximum[0] = values[i];
     	} else if (values[i] > maximum[0]) {
