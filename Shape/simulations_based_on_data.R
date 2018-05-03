@@ -11,17 +11,8 @@ simulations_based_on_data <- function(N, different_T, different_alpha, a_hat, si
   } else {
     print('Given testing problem is currently not supported')
   }
- 
-  if (kernel_t == "nw"){
-    quantile_function = calculating_gaussian_quantile
-  } else if (kernel_t == "ll"){
-    quantile_function = calculating_gaussian_quantile_ll
-  } else {
-    print('Given method is currently not supported')
-  }
 
   #Calculating the size of the test
-
   #We don't have the trend function, the null hypothesis is true and the errors are from AR(1)
   size_ar1 <- c()
   for (T in different_T){
