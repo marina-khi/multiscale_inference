@@ -127,12 +127,30 @@ creating_g_set <- function(T, kernel_method){
 #If we have already calculated quantiles and stored them in a file 'distribution.RData'
 #then no need to calculate them once more, we just load them from this file.
 #Ohterwise simulate the \Psi^star statistic 1000 times in order to calculate the quantiles
-calculating_gaussian_quantile <- function(T, g_t_set, test_problem, kernel_ind, alpha = 0.05, kernel_method){
-  filename = paste0("Shape/distribution/distr_T_", T,"_testing_", test_problem, "_type_", kernel_method, ".RData")
+calculating_gaussian_quantile <- function(T, g_t_set, test_problem, kernel_ind, alpha = 0.05){
+  filename = paste0("Shape/distribution/distr_T_", T,"_testing_", test_problem, ".RData")
   if(!file.exists(filename)) {
     gaussian_statistic_distribution <- replicate(1000, {
       z = rnorm(T, 0, 1)
-      psistar_statistic(z, g_t_set, kernel_ind, 1, kernel_method)
+      psistar_statistic(z, g_t_set, kernel_ind, 1)
+    })
+    save(gaussian_statistic_distribution, file = filename)
+  } else {
+    load(filename)
+  }
+  #Calculate the quantiles for gaussian statistic defined in the previous step
+  gaussian_quantile <- quantile(gaussian_statistic_distribution, probs = (1 - alpha), type = 1)
+  return(gaussian_quantile)
+}
+
+
+#Everything as in previous function but using local linear estimate
+calculating_gaussian_quantile_ll <- function(T, g_t_set, test_problem, kernel_ind, alpha = 0.05){
+  filename = paste0("Shape/distribution/distr_T_", T,"_testing_", test_problem, "_type_ll.RData")
+  if(!file.exists(filename)) {
+    gaussian_statistic_distribution <- replicate(1000, {
+      z = rnorm(T, 0, 1)
+      psistar_statistic_ll(z, g_t_set, kernel_ind, 1)
     })
     save(gaussian_statistic_distribution, file = filename)
   } else {

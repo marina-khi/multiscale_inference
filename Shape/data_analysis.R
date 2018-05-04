@@ -8,7 +8,18 @@ data_analysis <- function(alpha, y_data, test_problem, kernel_t){
     print('Given testing problem is currently not supported')
   }
   
-  #Length
+  if (kernel_t == "nw"){
+    quantile_function = calculating_gaussian_quantile
+    statistic_function = psihat_statistic
+    smoothing = epanechnikov_smoothing
+  } else if (kernel_t == "ll"){
+    quantile_function = calculating_gaussian_quantile_ll
+    statistic_function = psihat_statistic_ll
+    smoothing = local_linear_smoothing
+  } else {
+    print('Given method is currently not supported')
+  }
+  
   T_data = length(y_data)
   
   #Tuning parameters
@@ -16,15 +27,23 @@ data_analysis <- function(alpha, y_data, test_problem, kernel_t){
   L2 <- floor(2 * sqrt(T_data))
   sigmahat_data <- estimating_sigma_for_AR1(y_data, L1, L2)[[1]]
   
-  #Calculating gaussian quantile for T_data
-  g_t_set           <- creating_g_set(T_data, kernel_t)
-  gaussian_quantile <- calculating_gaussian_quantile(T_data, g_t_set, test_problem, kernel_ind, alpha, kernel_t)
+
+  ##########################################
+  #Calculating gaussian quantile for T_data#
+  ##########################################
   
+  g_t_set           <- creating_g_set(T_data, kernel_t)
+  gaussian_quantile <- quantile_function(T_data, g_t_set, test_problem, kernel_ind, alpha)
+  
+  
+  #########################################
   #Calculating the statistic for real data#
-  result                 <- psihat_statistic(y_data, g_t_set, kernel_ind, sigmahat_data, kernel_t)
+  #########################################
+  
+  result                 <- statistic_function(y_data, g_t_set, kernel_ind, sigmahat_data)
   g_t_set_with_values    <- result[[1]]
   psihat_statistic_value <- result[[2]]
-
+  
   #And now the testing itself
   if (psihat_statistic_value > gaussian_quantile) {
     cat("We reject H_0 with probability", alpha, "Psihat_statistic = ", psihat_statistic_value,
@@ -36,7 +55,7 @@ data_analysis <- function(alpha, y_data, test_problem, kernel_t){
     p_t_set <- subset(p_t_set, endpoint <= 2017, select = c(startpoint, endpoint, values)) 
     p_t_set <- choosing_minimal_intervals(p_t_set)
 
-    print.xtable(xtable(subset(p_t_set, select = c(startpoint, endpoint)), digits = c(0)), type="latex", file=paste0("Plots/minimal_intervals_method_", kernel_t, ".tex"))
+    print.xtable(xtable(subset(p_t_set, select = c(startpoint, endpoint)), digits = c(0)), type="latex", file="Plots/minimal_intervals.tex")
 
     #The collection of intervals where the values_with_sign > gaussian_quantile + lambda (as in (2.6))
     #a_t_set_plus <- subset(g_t_set_with_values, values_with_sign > gaussian_quantile + lambda, select = c(u, h, values_with_sign))
@@ -72,23 +91,17 @@ data_analysis <- function(alpha, y_data, test_problem, kernel_t){
   plot(NA, xlim = c(1659, 2019), ylim = c(7.5, 11), yaxp  = c(8, 10, 2), xaxp = c(1675, 2025,7), mgp=c(2,0.5,0))
   for (i in 1:5){
     #This part plots kernel smoothers for different bandwidths (all on one plot).
-    if (kernel_t == "nw"){
-      smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(y_data, grid_points, h[i]))
-    } else if (kernel_t == "ll"){
-      smoothed_curve <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(y_data, grid_points, h[i]))
-    } else {
-      print('Given method is currently not supported')
-    }
+    smoothed_curve <- mapply(smoothing, grid_points, MoreArgs = list(y_data, grid_points, h[i]))
     lines(grid_time, smoothed_curve, lty = i) 
   }
-  legend(1950, 9, legend=c("h = 0.01", "h = 0.05", "h = 0.10", "h = 0.15", "h = 0.20"), lty = 1:5, cex = 0.95, ncol=1)
+  legend(1950, 9, legend=c("h = 0.01", "h = 0.05", "h = 0.10", "h = 0.15", "h = 0.2"), lty = 1:5, cex = 0.95, ncol=1)
   
   #Plotting the minimal intervals. Do not have any negative minimal intervals, so plotting all (positive) ones
   ymaxlim = max(p_t_set$values)
   yminlim = min(p_t_set$values)
   plot(NA, xlim=c(1659,2019), xaxp = c(1675, 2025,7),  ylim = c(yminlim - 0.5, ymaxlim + 0.5), yaxp  = c(1.5, 3, 3), mgp=c(2,0.5,0))
   segments(p_t_set[['startpoint']], p_t_set[['values']], p_t_set$endpoint, p_t_set[['values']])
-  abline(h = gaussian_quantile, lty = 2) #Value of gaussian quantile
+  abline(h = gaussian_quantile, lty = 2)
   
   dev.off()
 }
