@@ -2,7 +2,7 @@
 \section{The model}\label{sec-model}
 
 
-We now describe the two model settings in detail which were briefly outlined in the Introduction. The model for the test problems considered in Sections \ref{sec-method} and \ref{sec-test-shape} is as follows: We observe a single time series $\{Y_t: 1 \le t \le T \}$ of length $T$ which satisfies the model equation 
+We now describe the model setting in detail which was briefly outlined in the Introduction. The model for the test problems considered in Sections \ref{sec-method} and \ref{sec-test-shape} is as follows: We observe a single time series $\{Y_t: 1 \le t \le T \}$ of length $T$ which satisfies the model equation 
 \begin{equation}\label{model1}
 Y_t = m \Big( \frac{t}{T} \Big) + \varepsilon_t 
 \end{equation}
@@ -32,7 +32,7 @@ The conditions \ref{C-err1}--\ref{C-err3} are fulfilled by a wide range of stati
 \section{The multiscale method}\label{sec-method}
 
 
-In this section, we introduce our multiscale test method and the underlying theory for the simple hypothesis $H_0: m = 0$ in model \eqref{model1}. As we will see in Sections \ref{sec-test-shape} and \ref{sec-test-equality}, both the method and the theory for this simple case can be easily adapted to more interesting test problems, in particular to the test problems discussed in the Introduction. 
+In this section, we introduce our multiscale test method and the underlying theory for the simple hypothesis $H_0: m = 0$ in model \eqref{model1}. As we will see in Section \ref{sec-test-shape}, both the method and the theory for this simple case can be easily adapted to more interesting test problems, in particular to the test problems discussed in the Introduction. 
 %Both the method and the theory for this simple case can be easily adapted to more interesting test problems as we will see in Sections \ref{sec-test-shape} and \ref{sec-test-equality}. 
 %The discussion can be regarded as providing a blueprint of our multiscale methods and the underlying theory, which is ready to adapt to more advanced test problems. 
 
@@ -255,7 +255,7 @@ We close the section with some additional remarks on Proposition \ref{prop-test-
 \section{Estimation of the long-run error variance}\label{sec-error-var}
 
 
-We now discuss how to estimate the long-run error variance $\sigma^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \gamma(\ell)$ with $\gamma(\ell) = \cov(\varepsilon_0,\varepsilon_{\ell})$ in model \eqref{model1}. The same methods can be applied in the context of model \eqref{model2}. A number of different methods have been established in the literature to estimate the long-run error variance $\sigma^2$ in the trend model \eqref{model1} under various assumptions on the error terms. In what follows, we give a brief overview of estimation methods which are suitable for our purposes. We in particular focus attention on difference-based methods as these have the following advantage: They do not involve a nonparametric estimator of the function $m$ and thus do not require to specify a smoothing parameter for the estimation of $m$. 
+We now discuss how to estimate the long-run error variance $\sigma^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \gamma(\ell)$ with $\gamma(\ell) = \cov(\varepsilon_0,\varepsilon_{\ell})$ in model \eqref{model1}. A number of different methods have been established in the literature to estimate the long-run error variance $\sigma^2$ in the trend model \eqref{model1} under various assumptions on the error terms. In what follows, we give a brief overview of estimation methods which are suitable for our purposes. We in particular focus attention on difference-based methods as these have the following advantage: They do not involve a nonparametric estimator of the function $m$ and thus do not require to specify a smoothing parameter for the estimation of $m$. 
 
 
 \enlargethispage{0.2cm}
@@ -298,4 +298,102 @@ The estimator $\widehat{\sigma}^2$ depends on the two tuning parameters $L_1$ an
 \[ \ex\big[\widehat{\gamma}(0)\big] = \gamma(0) - \frac{1}{L_2-L_1+1}\sum_{r=L_1}^{L_2} \gamma(r) + O\Big( \Big\{\frac{L_2}{T} \Big\}^2 \Big). \]
 The two bias terms $\sum_{r=L_1}^{L_2} \gamma(r) / (L_2-L_1+1)$ and $O(\{ L_2/T \}^2)$ can be asymptotically neglected if we choose the tuning parameters $L_1$ and $L_2$ appropriately. Since $\{ \varepsilon_t\}$ is an AR($p$) process, the autocovariances $\gamma(r)$ decay exponentially fast to zero as $r \rightarrow \infty$. Hence, the bias term $\sum_{r=L_1}^{L_2} \gamma(r) / (L_2-L_1+1)$ is asymptotically negligible if $L_1$ grows sufficiently fast with the sample size $T$. Due to the exponential decay of the autocovariances, it in particular suffices to assume that $L_1/\log T \rightarrow \infty$. For the second bias term  $O(\{ L_2/T \}^2)$ to be asymptotically negligible, we need to assume that $L_2$ grows more slowly than the sample size $T$. In practice, $L_1$ should be chosen so large that the autocovariances $\gamma(\ell)$ with $\ell \ge L_1$ can be expected to be close to zero, ensuring that the bias term $\sum_{r=L_1}^{L_2} \gamma(r) / (L_2-L_1+1)$ is sufficiently small. The choice of $L_2$ can be expected to be less important in practice than that of $L_1$ as long as we do not pick $L_2$ too close to the sample size $T$. As pointed out in \cite{Hall2003}, it can be shown that $\widehat{\sigma}^2 = \sigma^2 + O_p(T^{-1/2})$ provided that $L_1/\log T \rightarrow \infty$ and $L_2 = O(T^{1/2})$. 
 
+\subsection{Estimating variance without additional tuning parameters}\label{subsec-error-var-ar-ours}
 
+Suppose that $\{\varepsilon_t\}$ is an AR($p$) process of the form
+\begin{equation}\label{AR-errors}
+\varepsilon_t = \sum_{j=1}^p a_j \varepsilon_{t-j} + \eta_t,
+\end{equation}
+where $a_1,\ldots,a_p$ are unknown parameters and $\eta_t$ are i.i.d.\ 
+innovations with $\ex[\eta_t] = 0$ and $\ex[\eta_t^2] = \sigma_\eta^2$. 
+Throughout the section, we assume that $\{\varepsilon_t\}$ is a stationary 
+and causal AR($p$) process of known order $p$ with finite fourth moment 
+$\ex[\varepsilon_t^4] < \infty$. Moreover, we asssume that $m$ is Lipschitz 
+continuous on $[0,1]$, that is, $|m(u) - m(v)| \le L|u-v|$ for all $u,v \in 
+[0,1]$ and some positive constant $L$. Under these conditions, the first 
+differences $\Delta \varepsilon_t = \varepsilon_t - \varepsilon_{t-1}$ of 
+the error process $\{ \varepsilon_t \}$ can be well approximated by the 
+first differences $\Delta Y_t = Y_t - Y_{t-1}$ of the
+observed time series $\{Y_t\}$. In particular, it holds that
+\begin{equation}\label{diff-Y-eps}
+\Delta Y_t = \big[\varepsilon_t  - \varepsilon_{t-1} \big] + \Big[ m 
+\Big(\frac{t}{T}\Big) - m \Big(\frac{t-1}{T}\Big) \Big] = \big[ 
+\varepsilon_t  - \varepsilon_{t-1} \big] + O \Big( \frac{1}{T} \Big). 
+\end{equation}
+In the Appendix, we further prove the following result: If 
+$\{\varepsilon_t\}$ is an AR($p$) process of the form \eqref{AR-errors}, 
+then $\{ \Delta \varepsilon_t \}$ is an ARMA($p$,$1$) process of the form
+\begin{equation}\label{ARMA-errors}
+\Delta \varepsilon_t - \sum_{j=1}^p a_j \Delta \varepsilon_{t-j} = \eta_t - 
+\eta_{t-1}.
+\end{equation}
+Taken together, \eqref{diff-Y-eps} and \eqref{ARMA-errors} imply that the 
+differenced time series $\{ \Delta Y_t \}$ is approximately an ARMA($p$,$1$) 
+process of the form \eqref{ARMA-errors}. This suggests to estimate the 
+parameters
+
+$a_1,\ldots,a_p$ and the residual variance $\sigma_\eta^2$ by applying 
+standard methods for ARMA process to the time series $\{ \Delta Y_t \}$.
+We construct estimators of $a_1,\ldots,a_p$ and $\sigma_\eta^2$ as follows: 
+Let $\gamma(\ell) = \cov(\Delta \varepsilon_t, \Delta \varepsilon_{t-\ell})$ 
+and define $b_0 = 1$, $b_1 = -1$ as well as $c_{-1} = 0$, $c_0 = 1$ and $c_1 
+= a_1 + b_1$. The ARMA($p$,$1$) process $\{ \Delta \varepsilon_t \}$ 
+satisfies the difference equations
+\begin{align}
+\gamma(\ell) - \sum\limits_{j=1}^p a_j \gamma(\ell-j) & = \sigma_\eta^2 
+\sum_{k=\ell}^1 c_{k-\ell} b_k \hspace{-2cm} & & \text{for } \ell = 0,1 
+\label{diff-eq-1} \\
+\gamma(\ell) - \sum\limits_{j=1}^p a_j \gamma(\ell-j) & = 0 \hspace{-2cm} & 
+& \text{for } \ell \ge 2; \label{diff-eq-2}
+\end{align}
+cp.\ \S3.3 in \cite{BrockwellDavis1991}. The equations \eqref{diff-eq-2} for 
+$2 \le \ell \le p+1$ can be
+written more compactly as $\boldsymbol{\gamma}_p = \boldsymbol{\Gamma}_p \, 
+\boldsymbol{a}$, where $\boldsymbol{a} = (a_1,\ldots,a_p)^\top$,
+\[ \boldsymbol{\gamma}_p =
+\begin{pmatrix}
+\gamma(2) \\ \gamma(3) \\ \vdots \\ \gamma(p-1)
+\end{pmatrix}
+\qquad \text{and} \qquad
+\boldsymbol{\Gamma}_p =
+\begin{pmatrix}
+\gamma(1) & \gamma(0)  & \dots  & \gamma(p-2) \\
+\gamma(2) & \gamma(1)  & \dots  & \gamma(p-3) \\
+\vdots  & \vdots  &  \ddots & \vdots  \\
+\gamma(p) & \gamma(p-1) & \dots  & \gamma(1)
+\end{pmatrix}. \]
+To obtain an estimator of $\boldsymbol{a}$, we replace the unknown 
+quantities in the equation $\boldsymbol{a} = \boldsymbol{\Gamma}_p^{-1} 
+\boldsymbol{\gamma}_p$ by estimators. In particular, we define 
+$\widehat{\boldsymbol{a}} = (\widehat{a}_1,\ldots,\widehat{a}_p)^\top$ by
+\begin{equation}\label{est-AR-par}
+\widehat{\boldsymbol{a}} = \widehat{\boldsymbol{\Gamma}}_p^{-1}
+\widehat{\boldsymbol{\gamma}}_p,
+\end{equation}
+where $\widehat{\boldsymbol{\gamma}}_p$ and 
+$\widehat{\boldsymbol{\Gamma}}_p$ are defined analogously as 
+$\boldsymbol{\gamma}_p$ and $\boldsymbol{\Gamma}_p$ with $\gamma(\ell)$ 
+replaced by the sample autocovariance
+\begin{equation}\label{est-autocov}
+\widehat{\gamma}(\ell) = \frac{1}{T} \sum\limits_{t=1}^{T-|\ell|} \Delta Y_t 
+\, \Delta Y_{t+|\ell|}.
+\end{equation}
+The residual variance $\sigma_\eta^2$ can be estimated with the help of the 
+difference equation \eqref{diff-eq-1}: Using \eqref{diff-eq-1} with $\ell = 
+1$, we get that $\sigma_\eta^2 = \sum_{j=1}^p a_j \gamma(1-j) - \gamma(1)$, 
+which suggests to estimate $\sigma_\eta^2$ by
+\begin{equation}\label{est-var-eta}
+\widehat{\sigma}_\eta^2 = \sum_{j=1}^p \widehat{a}_j \widehat{\gamma}(1-j) - 
+\widehat{\gamma}(1).
+\end{equation}
+With the help of the estimators $\widehat{\boldsymbol{a}}$
+and $\widehat{\sigma}_\eta^2$, we can finally construct an estimator of the 
+long-run error variance $\sigma^2 = \sum_{\ell=-\infty}^{\infty} 
+\cov(\varepsilon_t,\varepsilon_{t-\ell})$: When $\{ \varepsilon_t \}$ is an 
+AR($p$) process of the form \eqref{AR-errors}, it holds that $\sigma^2 = 
+\sigma^2_\eta ( 1-\sum_{j=1}^p a_j)^{-2}$. Hence, we may estimate $\sigma^2$ 
+by
+\begin{equation}\label{est-lrv}
+\widehat{\sigma}^2 = \widehat{\sigma}^2_\eta \Big( 1-\sum_{j=1}^p 
+\widehat{a}_j\Big)^{-2}.
+\end{equation}

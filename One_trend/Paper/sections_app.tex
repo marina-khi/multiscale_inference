@@ -2,7 +2,7 @@
 \section{Simulations}\label{sec-sim}
 
 
-To assess the finite sample performance of the methods from Sections \ref{sec-test-shape} and \ref{sec-test-equality}, we conduct a number of simulations. We first investigate the test procedure from Section \ref{sec-test-shape}. The simulation design is set up to mimic the situation in the application example of Section \ref{subsec-data-1}: We generate data from the model $Y_t = m(\frac{t}{T}) + \varepsilon_t$ for different time series lengths $T$. The errors $\varepsilon_t$ are drawn from the AR(1) process $\varepsilon_t = a \varepsilon_{t-1} + \eta_t$, where $\eta_t$ are independent and normally distributed with mean $0$ and variance $\sigma_\eta^2$. We set $a = 0.267$ and $\sigma_\eta^2 = 0.35$, thus matching the estimated values obtained in the application of Section \ref{subsec-data-1}. To simulate data under the null $H_0: m^\prime = 0$, we let $m$ be a constant function. In particular, we set $m = 0$ without loss of generality. To generate data under the alternative, we consider the trend functions $m(u) = \beta \, (u - 0.6) \, 1(0.6 \le u \le 1)$ with $\beta = 1.25, 1.875, 2.5$. These functions are broken lines with a kink at $u = 0.6$ and different slopes $\beta$. The slope parameter $\beta$ corresponds to a trend with the value $m(1) = 0.4 \, \beta$ at the right endpoint $u = 1$. We thus consider broken lines with the values $m(1) = 0.5, 0.75, 1.0$. Inspecting the middle panel of Figure \ref{plot-results-app1}, the broken line with the slope $\beta = 2.5$ can be seen to resemble the local linear trend estimates in the real-data example of Section \ref{subsec-data-1} the most (where we neglect the nonlinearities of the local linear fits at the beginning of the observation period). The broken lines with the smaller slopes $\beta = 1.25$ and $\beta = 1.875$ are closer to the null making it harder for our test to detect these alternatives.
+To assess the finite sample performance of the method from Section \ref{sec-test-shape}, we conduct a number of simulations. The simulation design is set up to mimic the situation in the application example of Section \ref{subsec-data-1}: We generate data from the model $Y_t = m(\frac{t}{T}) + \varepsilon_t$ for different time series lengths $T$. The errors $\varepsilon_t$ are drawn from the AR(1) process $\varepsilon_t = a \varepsilon_{t-1} + \eta_t$, where $\eta_t$ are independent and normally distributed with mean $0$ and variance $\sigma_\eta^2$. We set $a = 0.267$ and $\sigma_\eta^2 = 0.35$, thus matching the estimated values obtained in the application of Section \ref{subsec-data-1}. To simulate data under the null $H_0: m^\prime = 0$, we let $m$ be a constant function. In particular, we set $m = 0$ without loss of generality. To generate data under the alternative, we consider the trend functions $m(u) = \beta \, (u - 0.6) \, 1(0.6 \le u \le 1)$ with $\beta = 1.25, 1.875, 2.5$. These functions are broken lines with a kink at $u = 0.6$ and different slopes $\beta$. The slope parameter $\beta$ corresponds to a trend with the value $m(1) = 0.4 \, \beta$ at the right endpoint $u = 1$. We thus consider broken lines with the values $m(1) = 0.5, 0.75, 1.0$. Inspecting the middle panel of Figure \ref{plot-results-app1}, the broken line with the slope $\beta = 2.5$ can be seen to resemble the local linear trend estimates in the real-data example of Section \ref{subsec-data-1} the most (where we neglect the nonlinearities of the local linear fits at the beginning of the observation period). The broken lines with the smaller slopes $\beta = 1.25$ and $\beta = 1.875$ are closer to the null making it harder for our test to detect these alternatives.
 
 
 To implement our test, we choose $K$ to be an Epanechnikov kernel and define the set $\mathcal{G}_T$ of location-scale points $(u,h)$ as
@@ -49,46 +49,10 @@ We thus take into account all rescaled time points $u \in [0,1]$ on an equidista
 Tables \ref{tab:size_shape} and \ref{tab:power_shape} report the simulation results for the sample sizes $T=250,350,500, 1000$ and the significance levels $\alpha = 0.01, 0.05, 0.10$. The sample size $T = 350$ is approximately equal to the time series length $359$ in the real-data example of Section \ref{subsec-data-1}. To produce our simulation results, we generate $S=1000$ samples for each time series length $T$ and carry out the multiscale test for each simulated sample. The entries of Tables \ref{tab:size_shape} and \ref{tab:power_shape} are computed as the number of simulations in which the test rejects divided by the total number of simulations. As can be seen from Table \ref{tab:size_shape}, the actual size of the test is fairly close to the nominal target $\alpha$ even for small values of $T$. Hence, the test has approximately the correct size. Inspecting Table \ref{tab:power_shape}, one can further see that the test has reasonable power properties. For the smallest value $\beta = 1.25$, the deviation from the null is quite small, making it hard for the test to detect the alternative. As a consequence, the power is only moderate for $T=250$ and $T=350$. When we move further away from the null by increasing the slope parameter $\beta$, the power of the test quickly increases. It can also be seen to rapidly get larger as the sample size grows. For the slope $\beta =2.5$ and the sample size $T=350$, which are the values that resemble the real-life data in Section \ref{subsec-data-1} the most, the power of the test is above $92.9\%$ for all significance levels $\alpha$ considered and thus comes quite close to $1$. 
 
 
-\addtocounter{table}{-1} 
-\begin{table}[t]
-\footnotesize{
-\begin{center}
-\caption{Size of the multiscale test from Section \ref{sec-test-equality} for $n=15$ time series, different sample sizes $T$ and nominal sizes $\alpha$.}
-\label{tab:size_equality}
-\renewcommand{\arraystretch}{1.2}
-\input{Plots/15_stations_sizetable_method_ll}
-\end{center}}
-\footnotesize{
-\begin{center}
-\caption{Power of the multiscale test from Section \ref{sec-test-equality} for $n=15$ time series, different sample sizes $T$ and nominal sizes $\alpha$. Each panel corresponds to a different slope parameter $\beta$.}\label{tab:power_equality}
-\begin{subtable}[b]{0.32\textwidth}
-\centering
-\caption{$\beta = 0.75$}\label{tab:power_75_equality}
-\renewcommand{\arraystretch}{1.2}
-\input{Plots/15_stations_powertable_method_ll_with_b_75}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\centering
-\caption{$\beta = 1.00$}\label{tab:power_100_equality}
-\renewcommand{\arraystretch}{1.2}
-\input{Plots/15_stations_powertable_method_ll_with_b_100}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\centering
-\caption{$\beta = 1.25$}\label{tab:power_125_equality}
-\renewcommand{\arraystretch}{1.2}
-\input{Plots/15_stations_powertable_method_ll_with_b_125}
-\end{subtable}
-\end{center}}
-\vspace{-0.4cm}
-\end{table}
-
-
 \section{Applications}\label{sec-data}
 
 
-In what follows, we illustrate the multiscale methods from Sections \ref{sec-test-shape} and \ref{sec-test-equality} by two real-data examples. In the first example, we apply the test method from Section \ref{sec-test-shape} to a long time series of temperature data from Central England. In the second, we analyse a sample of temperature time series from 34 different weather stations in Great Britain with the help of the methods from Section \ref{sec-test-equality}. 
-
+In what follows, we illustrate the multiscale method from Sections \ref{sec-test-shape} by a real-data example. In particular, we apply the test method from Section \ref{sec-test-shape} to a long time series of temperature data from Central England.
 
 \subsection{Analysis of Central England temperature data}\label{subsec-data-1} 
 

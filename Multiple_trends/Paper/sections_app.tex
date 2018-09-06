@@ -3,6 +3,39 @@
 
 We next turn to the test methods from Section \ref{sec-test-equality}. The simulation design extends the setup from above. We generate data from the model $Y_{it} = m_i(\frac{t}{T}) + \varepsilon_{it}$, where the number of time series $i$ is set to $n = 15$ and we consider different time series lengths $T$. For each $i$, the errors $\varepsilon_{it}$ are drawn from the AR(1) model $\varepsilon_{it} = a \varepsilon_{i,t-1} + \eta_{it}$, where as before $a = 0.267$ and the innovations $\eta_{it}$ are i.i.d.\ normally distributed with mean $0$ and variance $0.35$. To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ without loss of generality. To produce data under the alternative, we define $m_1(u) = \beta \, (u - 0.5) $ with $\beta = 0.75, 1, 1.25$ and set $m_i = 0$ for all $i \ne 1$. Hence, all trend functions are the same except for $m_1$ which is an increasing linear function. We here use a linear function rather than a broken line as the normalization constraint $\int_0^1 m_1(u) du = 0$ is directly satisfied in this case. 
 
+\addtocounter{table}{-1} 
+\begin{table}[t]
+\footnotesize{
+\begin{center}
+\caption{Size of the multiscale test from Section \ref{sec-test-equality} for $n=15$ time series, different sample sizes $T$ and nominal sizes $\alpha$.}
+\label{tab:size_equality}
+\renewcommand{\arraystretch}{1.2}
+\input{Plots/15_stations_sizetable_method_ll}
+\end{center}}
+\footnotesize{
+\begin{center}
+\caption{Power of the multiscale test from Section \ref{sec-test-equality} for $n=15$ time series, different sample sizes $T$ and nominal sizes $\alpha$. Each panel corresponds to a different slope parameter $\beta$.}\label{tab:power_equality}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$\beta = 0.75$}\label{tab:power_75_equality}
+\renewcommand{\arraystretch}{1.2}
+\input{Plots/15_stations_powertable_method_ll_with_b_75}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$\beta = 1.00$}\label{tab:power_100_equality}
+\renewcommand{\arraystretch}{1.2}
+\input{Plots/15_stations_powertable_method_ll_with_b_100}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$\beta = 1.25$}\label{tab:power_125_equality}
+\renewcommand{\arraystretch}{1.2}
+\input{Plots/15_stations_powertable_method_ll_with_b_125}
+\end{subtable}
+\end{center}}
+\vspace{-0.4cm}
+\end{table}
 
 The test is implemented analogously as before. We in particular use an Epanechnikov kernel, we define the grid $\mathcal{G}_T$ as in \eqref{grid-sim-app} and we set the two tuning parameters $L_1$ and $L_2$ to $\lfloor \sqrt{T} \rfloor$ and $\lfloor 2\sqrt{T} \rfloor$, respectively. In order to compute the critical values of the test, we simulate $1000$ values of the statistic $\Phi_{n,T}$ defined in Section \ref{subsec-test-equality-test} and compute their empirical $(1-\alpha)$ quantile $q_{n,T}(\alpha)$. Note that the statistic $\Phi_{n,T}$ depends on the estimators $\widehat{\sigma}_i^2$ of the long-run error variances $\sigma_i^2$. This implies that for each simulated sample, we have to recompute the empirical quantile $q_{n,T}(\alpha)$ and thus the critical value of the test. This is of course computationally extremely expensive. In order to circumvent this issue, we make the additional assumption that the long-run error variance is known to be the same across $i$, that is, $\sigma_i^2 = \sigma^2$ for all $i$. Under this assumption, we can estimate $\sigma^2$ by $\widehat{\sigma}^2 = (\sum_{i = 1}^n\widehat{\sigma_i}^2)/n$, and the Gaussian statistic $\Phi_{n,T}$ simplifies to $\Phi_{n,T} = \max_{1 \le i < j \le n} \Phi_{ij,T}$ with $\Phi_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \{ | \phi_{ij,T}(u,h)| - \lambda(h) \}$ and $\phi_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \{ (Z_{it} - \bar{Z}_i) - (Z_{jt} - \bar{Z}_j)\}$. This statistic does not depend on the estimators $\widehat{\sigma}_i^2$ anymore. We thus do not need to recompute the critical values for each simulated sample, which decreases the running time significantly.
 
