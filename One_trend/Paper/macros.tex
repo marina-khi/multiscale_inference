@@ -35,9 +35,9 @@
 \theoremstyle{plain}
 
 \newtheorem{theorem}{Theorem}[section]
-\newtheorem{prop}[theorem]{Proposition}
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{prop}{Proposition}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
 \newtheorem*{theo}{Theorem}
 \newtheorem{propA}{Proposition}[section]
 \newtheorem{lemmaA}[propA]{Lemma}
@@ -59,17 +59,17 @@
 
 % Heading
 
-\newcommand{\heading}[2]
+\newcommand{\heading}[4]
 {  \setcounter{page}{1}
    \begin{center}
 
-   %\phantom{Distance to upper boundary}
+   \phantom{Distance to upper boundary}
    %\vspace{0.5cm}
 
-   {\LARGE \textbf{#1}}
-   \vspace{0.5cm}
- 
-   {\LARGE \textbf{#2}}
+   {\LARGE \textbf{#1}}\\[0.45cm]
+   {\LARGE \textbf{#2}}\\[0.3cm]
+   {\LARGE \textbf{#3}}\\[0.3cm]
+   {\LARGE \textbf{#4}}
    \end{center}
 }
 
