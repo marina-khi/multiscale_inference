@@ -1,6 +1,8 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage{amsmath}
 \usepackage{amssymb,amsthm,graphicx}
+%\usepackage{bbm} (Do not want to use these, may create conflicts)
+%\usepackage{gensymb}
 \usepackage{enumitem}
 \usepackage{color}
 \usepackage{epsfig}
@@ -26,9 +28,9 @@
 
 
 
-\heading{Multiscale Inference for}{Nonparametric Time Trends}
+\heading{Multiscale Inference}{and Long-Run Variance Estimation}{in Nonparametric Regression}{with Time Series Errors}
 
-\vspace{-0.5cm}
+%\vspace{-0.5cm}
 
 \authors{Marina Khismatullina\renewcommand{\thefootnote}{1}\footnotemark[1]}{University of Bonn}{Michael Vogt\renewcommand{\thefootnote}{2}\footnotemark[2]}{University of Bonn} 
 \footnotetext[1]{Address: Bonn Graduate School of Economics, University of Bonn, 53113 Bonn, Germany. Email: \texttt{marina.k@uni-bonn.de}.}
@@ -37,29 +39,26 @@
 \renewcommand{\thefootnote}{\arabic{footnote}}
 \setcounter{footnote}{0}
 
-%\vspace{-0.5cm}
+\vspace{-0.5cm}
 
-%\version{\today}
+\version{\today}
 
-\vspace{-1cm}
+\vspace{-1.2cm}
 
 
 
 \renewcommand{\abstractname}{}
 \begin{abstract}
-\noindent We develop multiscale methods to test qualitative hypotheses about nonparametric time trends. In many applications, practitioners are interested in whether the observed time series has a time trend at all, that is, whether the trend function is non-constant. Moreover, they would like to get further information about the shape of the trend function. Among other things, they would like to know in which time regions there is an upward/downward movement in the trend. We design multiscale tests to formally approach these questions. We derive asymptotic theory for the proposed tests and investigate their finite sample performance by means of simulations. In addition, we illustrate the methods by an application to temperature data. 
+\noindent In this paper, we develop multiscale methods to test qualitative hypotheses about the function $m$ in the nonparametric regression model $Y_{t,T} = m(t/T) + \varepsilon_t$ with time series errors $\varepsilon_t$. In time series applications, $m$ represents a nonparametric time trend. Practitioners are often interested in whether the trend function $m$ has certain shape properties. For example, they would like to know whether $m$ is constant or whether it is increasing/decreasing in certain time regions. Our multiscale methods allow to test for such shape properties of the trend $m$. In order to perform the tests, we require an estimator of the long-run error variance $\sigma^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_0,\varepsilon_{\ell})$. We propose a new estimator of $\sigma^2$ for the case that $\{ \varepsilon_t \}$ is a general AR($p$) process. The main advantage of this estimator is that it is completely free of tuning parameters and very simple to compute. In the technical part of the paper, we derive asymptotic theory for the proposed multiscale tests and the estimator of the long-run error variance. The theory is complemented by a simulation study and two empirical examples from climatology and economics. 
+%In this paper, we develop multiscale methods to test qualitative hypotheses about the function $m$ in the nonparametric regression model $Y_{t,T} = m(t/T) + \varepsilon_t$ with time series errors $\varepsilon_t$. In time series applications, $m$ represents a nonparametric time trend. Practitioners are often interested in qualitative features of the trend $m$. For example, they would like to know whether $m$ is flat or whether it is increasing/decreasing. Our multiscale methods allow to test for such qualitative features of the trend $m$. In order to perform the tests, we require an estimator of the long-run error variance $\sigma^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_t,\varepsilon_{t+\ell})$. We develop a novel estimator of $\sigma^2$ for the case that $\{ \varepsilon_t \}$ is a general AR($p$) process. The main advantage of our estimator in comparison to existing methods is that it is completely free of tuning parameters and very simple to compute. In the technical part of the paper, we derive asymptotic theory for the proposed multiscale tests and the estimator of the long-run error variance. The theory is completed by a simulation study and two empirical examples from climatology and economics. 
 \end{abstract}
 
-\vspace{-0.1cm}
 
-\enlargethispage{0.25cm}
 \renewcommand{\baselinestretch}{1.2}\normalsize
 
-\textbf{Key words:} Multiscale statistics; nonparametric regression; time series errors; shape constraints; strong approximations; anti-concentration bounds.
+\textbf{Key words:} Multiscale statistics; long-run variance; nonparametric regression; time series errors; shape constraints; strong approximations; anti-concentration bounds.
 
 \textbf{AMS 2010 subject classifications:} 62E20; 62G10; 62G20; 62M10. 
-
-\vspace{-0.25cm}
 
 \numberwithin{equation}{section}
 \allowdisplaybreaks[1]
@@ -68,9 +67,8 @@
 
 \input{sections_intro}
 \input{sections_method}
-\input{sections_app}
+%\input{sections_app}
 \input{appendix}
-\newpage
 \bibliographystyle{ims}
 {\small
 \setlength{\bibsep}{0.55em}

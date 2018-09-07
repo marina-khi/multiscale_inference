@@ -2,14 +2,14 @@
 \section{The model}\label{sec-model}
 
 
-We now describe the model setting in detail which was briefly outlined in the Introduction. The model for the test problems considered in Sections \ref{sec-method} and \ref{sec-test-shape} is as follows: We observe a single time series $\{Y_t: 1 \le t \le T \}$ of length $T$ which satisfies the model equation 
-\begin{equation}\label{model1}
-Y_t = m \Big( \frac{t}{T} \Big) + \varepsilon_t 
+We now describe the model setting in detail which was briefly outlined in the Introduction. We observe a time series $\{Y_{t,T}: 1 \le t \le T \}$ of length $T$ which satisfies the nonparametric regression equation 
+\begin{equation}\label{model}
+Y_{t,T} = m \Big( \frac{t}{T} \Big) + \varepsilon_t 
 \end{equation}
-for $1 \le t \le T$. Here, $m$ is an unknown nonparametric trend function defined on $[0,1]$ and $\{ \varepsilon_t: 1 \le t \le T \}$ is a zero-mean stationary error process. For simplicity, we restrict attention to equidistant design points $x_t = t/T$. However, our methods and theory can also be carried over to non-equidistant designs. The stationary error process $\{\varepsilon_t\}$ is assumed to have the following properties: 
+for $1 \le t \le T$. Here, $m$ is an unknown nonparametric function defined on $[0,1]$ and $\{ \varepsilon_t: 1 \le t \le T \}$ is a zero-mean stationary error process. For simplicity, we restrict attention to equidistant design points $x_t = t/T$. However, our methods and theory can also be carried over to non-equidistant designs. The stationary error process $\{\varepsilon_t\}$ is assumed to have the following properties: 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
 
-\item \label{C-err1} The variables $\varepsilon_t$ allow for the representation $\varepsilon_t = G(\ldots,\eta_{t-1},\eta_t)$, where $\eta_t$ are i.i.d.\ random variables and $G$ is a measurable function. 
+\item \label{C-err1} The variables $\varepsilon_t$ allow for the representation $\varepsilon_t = G(\ldots,\eta_{t-1},\eta_t,\eta_{t+1},\ldots)$, where $\eta_t$ are i.i.d.\ random variables and $G$ is a measurable function. 
 
 \item \label{C-err2} It holds that $\| \varepsilon_t \|_q < \infty$ for some $q > 4$, where $\| \varepsilon_t \|_q = (\ex|\varepsilon_t|^q)^{1/q}$. 
 
@@ -19,7 +19,7 @@ Following \cite{Wu2005}, we impose conditions on the dependence structure of the
 \setcounter{enumi}{2}
 
 \item \label{C-err3} Define $\Theta_{t,q} = \sum\nolimits_{|s| \ge t} d_{s,q}$ for $t \ge 0$. It holds that 
-\[ \Theta_{t,q} = O \big( t^{-\tau_q} (\log t)^{-A} \big), \]
+\[ \Theta_{t,q} = O \big( t^{-\tau_q} (\log t)^{-A} \big), \] 
 where $A > \frac{2}{3} (1/q + 1 + \tau_q)$ and $\tau_q = \{q^2 - 4 + (q-2) \sqrt{q^2 + 20q + 4}\} / 8q$. 
 
 \end{enumerate}
@@ -27,47 +27,50 @@ The conditions \ref{C-err1}--\ref{C-err3} are fulfilled by a wide range of stati
 
 
 
+\section{The multiscale test}\label{sec-method}
 
 
-\section{The multiscale method}\label{sec-method}
+In this section, we introduce our multiscale method to test for local increases/decreases of the trend function $m$ and analyse its theoretical properties. We assume throughout that $m$ is continuously differentiable on $[0,1]$. The test problem under consideration can be formulated as follows: Let $H_0(u,h)$ be the hypothesis that $m$ is constant on the interval $[u-h,u+h]$. Since $m$ is differentiable, $H_0(u,h)$ can be reformulated as
+\[ H_0(u,h): m^\prime(w) = 0 \text { for all } w \in [u-h,u+h], \]
+where $m^\prime$ is the first derivative of $m$. We want to test the hypothesis $H_0(u,h)$ not only for a single interval $[u-h,u+h]$ but simultaneously for many different intervals. The overall null hypothesis is thus given by
+\[ H_0: \text{ The hypothesis } H_0(u,h) \text{ holds true for all } (u,h) \in \mathcal{G}_T, \]
+where $\mathcal{G}_T$ is some large set of points $(u,h)$. The details on the set $\mathcal{G}_T$ are discussed at the end of Section \ref{subsec-method-stat} below. Note that $\mathcal{G}_T$ in general depends on the sample size $T$, implying that the null hypothesis $H_0 = H_{0,T}$ depends on $T$ as well. We thus consider a sequence of null hypotheses $\{H_{0,T}: T = 1,2,\ldots \}$ as $T$ increases. For simplicity of notation, we however suppress the dependence of $H_0$ on $T$. In Sections \ref{subsec-method-stat} and \ref{subsec-method-test}, we step by step construct the multiscale test of the hypothesis $H_0$. The theoretical properties of the test are analysed in Section \ref{subsec-method-theo}. 
 
 
-In this section, we introduce our multiscale test method and the underlying theory for the simple hypothesis $H_0: m = 0$ in model \eqref{model1}. As we will see in Section \ref{sec-test-shape}, both the method and the theory for this simple case can be easily adapted to more interesting test problems, in particular to the test problems discussed in the Introduction. 
-%Both the method and the theory for this simple case can be easily adapted to more interesting test problems as we will see in Sections \ref{sec-test-shape} and \ref{sec-test-equality}. 
-%The discussion can be regarded as providing a blueprint of our multiscale methods and the underlying theory, which is ready to adapt to more advanced test problems. 
+\subsection{Construction of the multiscale statistic}\label{subsec-method-stat}
 
 
-\subsection{Construction of the test statistic}\label{subsec-method-stat}
-
-
-To construct a multiscale test statistic for the hypothesis $H_0: m = 0$ in model \eqref{model1}, we consider the kernel averages
+We first construct a test statistic for the hypothesis $H_0(u,h)$, where $[u-h,u+h]$ is a given interval. To do so, we consider the kernel average
 \begin{equation*}
-\widehat{\psi}_T(u,h) = \sum\limits_{t=1}^T w_{t,T}(u,h) Y_t, 
+\widehat{\psi}_T(u,h) = \sum\limits_{t=1}^T w_{t,T}(u,h) Y_{t,T}, 
 \end{equation*}
-where $w_{t,T}(u,h)$ is a kernel weight with $u \in [0,1]$ and the bandwidth parameter $h$. In order to avoid boundary issues, we work with a local linear weighting scheme. We in particular set 
+where $w_{t,T}(u,h)$ is a kernel weight and $h$ is the bandwidth. In order to avoid boundary issues, we work with a local linear weighting scheme. We in particular set 
 \begin{equation}\label{weights}
-w_{t,T}(u,h) = \frac{\Lambda_{t,T}(u,h)}{ \{\sum\nolimits_{t=1}^T \Lambda_{t,T}^2(u,h)\}^{1/2} }, 
+w_{t,T}(u,h) = \frac{\Lambda_{t,T}(u,h)}{ \{\sum\nolimits_{t=1}^T \Lambda_{t,T}(u,h)^2 \}^{1/2} }, 
 \end{equation}
 where
-\[ \Lambda_{t,T}(u,h) = K\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - S_{T,1}(u,h) \Big(\frac{\frac{t}{T}-u}{h}\Big) \Big], \]
+\[ \Lambda_{t,T}(u,h) = K\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,0}(u,h) \Big(\frac{\frac{t}{T}-u}{h}\Big) - S_{T,1}(u,h) \Big], \]
 $S_{T,\ell}(u,h) = (Th)^{-1} \sum\nolimits_{t=1}^T K(\frac{\frac{t}{T}-u}{h}) (\frac{\frac{t}{T}-u}{h})^\ell$ for $\ell = 0,1,2$ and $K$ is a kernel function with the following properties: 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
 \setcounter{enumi}{3}
 \item \label{C-ker} The kernel $K$ is non-negative, symmetric about zero and integrates to one. Moreover, it has compact support $[-1,1]$ and is Lipschitz continuous, that is, $|K(v) - K(w)| \le C |v-w|$ for any $v,w \in \reals$ and some constant $C > 0$. 
 \end{enumerate} 
-Alternatively to the local linear weights defined in \eqref{weights}, we could also work with local constant weights which are defined analogously with $\Lambda_{t,T}(u,h) = K(\frac{\frac{t}{T}-u}{h})$. We however prefer to use local linear weights as these have superior theoretical properties at the boundary.  
+The kernel average $\widehat{\psi}_T(u,h)$ is nothing else than a rescaled local linear estimator of the derivative $m^\prime(u)$ with bandwidth $h$.\footnote{Alternatively to the local linear weights defined in \eqref{weights}, we could also work with the weights $w_{t,T}(u,h) = K^\prime( h^{-1} [u - t/T] )/ \{ \sum\nolimits_{t=1}^T  K^\prime( h^{-1}[u - t/T] )^2 \}^{1/2}$, where the kernel function $K$ is assumed to be differentiable and $K^\prime$ is its derivative. We however prefer to use local linear weights as these have superior theoretical properties at the boundary.}  
 
 
-The kernel average $\widehat{\psi}_T(u,h)$ is a local average of the observations $Y_1,\ldots,Y_T$ which gives positive weight only to data points $Y_t$ with $t/T \in [u-h,u+h]$. Hence, only observations $Y_t$ with $t/T$ close to the location $u$ are taken into account, the amount of localization being determined by the bandwidth $h$. With the weights defined in \eqref{weights}, the kernel average $\widehat{\psi}_T(u,h)$ is nothing else than a rescaled local linear estimator of $m(u)$ with bandwidth $h$. The weights are chosen such that in the case of independent error terms $\varepsilon_t$, $\var(\widehat{\psi}_T(u,h)) = \sigma^2$ for any location $u$ and bandwidth $h$, where $\sigma^2 = \var(\varepsilon_t)$. In the more general case that the error terms satisfy the weak dependence conditions from Section \ref{sec-model}, it holds that $\var(\widehat{\psi}_T(u,h)) = \sigma^2 + o(1)$ for any location $u$ and any bandwidth $h$ with $h \rightarrow 0$ and $Th \rightarrow \infty$, where $\sigma^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_0, \varepsilon_{\ell})$ is the long-run variance of the error terms. Hence, the statistics $\widehat{\psi}_T(u,h)$ have approximately the same variance across $u$ and $h$ for sufficiently large sample sizes $T$. In what follows, we consider normalized versions $\widehat{\psi}_T(u,h)/\widehat{\sigma}$ of the kernel averages $\widehat{\psi}_T(u,h)$, where $\widehat{\sigma}^2$ is an estimator of the long-run error variance $\sigma^2$. The problem of estimating $\sigma^2$ is discussed in detail in Section \ref{sec-error-var}. There, we construct estimators $\widehat{\sigma}^2$ with the property that $\widehat{\sigma}^2 = \sigma^2 + O_p(1/\sqrt{T})$ under appropriate conditions. For the time being, we suppose that $\widehat{\sigma}^2$ is an estimator with reasonable theoretical properties. We in particular assume that $\widehat{\sigma}^2 = \sigma^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$. The convergence rate $\rho_T$ is thus allowed to be much slower than $1/\sqrt{T}$. 
+A test statistic for the hypothesis $H_0(u,h)$ is given by the normalized kernel average $\widehat{\psi}_T(u,h)/\widehat{\sigma}$, where $\widehat{\sigma}^2$ is an estimator of the long-run variance $\sigma^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_0,\varepsilon_\ell)$ of the error process $\{\varepsilon_t\}$. The problem of estimating $\sigma^2$ is discussed in detail in Section \ref{sec-error-var}. For the time being, we suppose that $\widehat{\sigma}^2$ is an estimator with reasonable theoretical properties. Specifically, we assume that $\widehat{\sigma}^2 = \sigma^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$. This is a fairly weak condition which is in particular satisfied by the estimators of $\sigma^2$ analysed in Section \ref{sec-error-var}. The kernel weights $w_{t,T}(u,h)$ are chosen such that in the case of independent errors $\varepsilon_t$, $\var(\widehat{\psi}_T(u,h)) = \sigma^2$ for any location $u$ and bandwidth $h$, where the long-run error variance $\sigma^2$ simplifies to $\sigma^2 = \var(\varepsilon_t)$. In the more general case that the error terms satisfy the weak dependence conditions from Section \ref{sec-model}, it holds that $\var(\widehat{\psi}_T(u,h)) = \sigma^2 + o(1)$ for any location $u$ and any bandwidth $h$ with $h \rightarrow 0$ and $Th \rightarrow \infty$. Hence, for sufficiently large sample sizes $T$, the test statistic $\widehat{\psi}_T(u,h)/\widehat{\sigma}$ has approximately unit variance for any such $u$ and $h$.
 
 
-Our multiscale statistic combines the kernel averages $\widehat{\psi}_T(u,h)$ for a wide range of different locations $u$ and bandwidths or scales $h$. Specifically, it is defined as
+We now combine the test statistics $\widehat{\psi}_T(u,h)/\widehat{\sigma}$ for a wide range of different locations $u$ and bandwidths or scales $h$. There are different ways to do so, leading to different types of multiscale statistics. Our multiscale statistic is defined as
 \begin{equation}\label{multiscale-stat}
 \widehat{\Psi}_T = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widehat{\psi}_T(u,h)}{\widehat{\sigma}}\Big| - \lambda(h) \Big\}, 
 \end{equation} 
-where $\lambda(h) = \sqrt{2 \log \{ 1/(2h) \}}$ and $\mathcal{G}_T$ is the set of points $(u,h)$ that are taken into consideration. The details on the set $\mathcal{G}_T$ are discussed below. As can be seen, the statistic $\widehat{\Psi}_T$ does not simply aggregate the individual statistics $\widehat{\psi}_T(u,h)/\widehat{\sigma}$ by taking the supremum over all points $(u,h) \in \mathcal{G}_T$ as in more traditional multiscale approaches. We rather follow the approach pioneered by \cite{DuembgenSpokoiny2001} and subtract the additive correction term $\lambda(h)$ from the statistics $\widehat{\psi}_T(u,h)/\widehat{\sigma}$ that correspond to the bandwidth level $h$. To see the heuristic idea behind the additive correction $\lambda(h)$, consider for a moment the uncorrected statistic
+where $\lambda(h) = \sqrt{2 \log \{ 1/(2h) \}}$ and $\mathcal{G}_T$ is the set of points $(u,h)$ that are taken into consideration. The details on the set $\mathcal{G}_T$ are given below. As can be seen, the statistic $\widehat{\Psi}_T$ does not simply aggregate the individual statistics $\widehat{\psi}_T(u,h)/\widehat{\sigma}$ by taking the supremum over all points $(u,h) \in \mathcal{G}_T$ as in more traditional multiscale approaches. We rather calibrate the statistics $\widehat{\psi}_T(u,h)/\widehat{\sigma}$ that correspond to the bandwidth $h$ by subtracting the additive correction term $\lambda(h)$. This approach was pioneered by \cite{DuembgenSpokoiny2001} and has been used in numerous other studies since then; see e.g.\ \cite{Duembgen2002}, \cite{Rohde2008}, \cite{DuembgenWalther2008}, \cite{RufibachWalther2010}, \cite{SchmidtHieber2013} and \cite{EckleBissantzDette2017}. 
+%aggregation scheme has been introduced by ?? and has been used in a variety of other multiscale approaches since then; cp.\ e.g.\ the multiscale tests in ??. 
+%We rather follow the approach pioneered by \cite{DuembgenSpokoiny2001} and subtract the additive correction term $\lambda(h)$ from the statistics $\widehat{\psi}_T(u,h)/\widehat{\sigma}$ that correspond to the bandwidth level $h$. 
+To see the heuristic idea behind the additive correction $\lambda(h)$, consider for a moment the uncorrected statistic
 \[ \widehat{\Psi}_{T,\text{uncorrected}} = \max_{(u,h) \in \mathcal{G}_T} \Big|\frac{\widehat{\psi}_T(u,h)}{\widehat{\sigma}}\Big| \]
-and suppose that the null hypothesis $H_0: m = 0$ holds true. For simplicity, assume that the errors $\varepsilon_t$ are i.i.d.\ normally distributed and neglect the estimation error in $\widehat{\sigma}$, that is, set $\widehat{\sigma} = \sigma$. Moreover, suppose that the set $\mathcal{G}_T$ only consists of the points $(u_k,h_\ell) = ((2k - 1)h_\ell,h_\ell)$ with $k = 1,\ldots,\lfloor 1/2h_\ell \rfloor$ and $\ell = 1,\ldots,L$. In this case, we can write
+and suppose that the hypothesis $H_0(u,h)$ is true for all $(u,h) \in \mathcal{G}_T$. For simplicity, assume that the errors $\varepsilon_t$ are i.i.d.\ normally distributed and neglect the estimation error in $\widehat{\sigma}$, that is, set $\widehat{\sigma} = \sigma$. Moreover, suppose that the set $\mathcal{G}_T$ only consists of the points $(u_k,h_\ell) = ((2k - 1)h_\ell,h_\ell)$ with $k = 1,\ldots,\lfloor 1/2h_\ell \rfloor$ and $\ell = 1,\ldots,L$. In this case, we can write
 \[ \widehat{\Psi}_{T,\text{uncorrected}} = \max_{1 \le \ell \le L} \max_{1 \le k \le \lfloor 1/2h_\ell \rfloor} \Big|\frac{\widehat{\psi}_T(u_k,h_\ell)}{\sigma}\Big|. \]
 Under our simplifying assumptions, the statistics $\widehat{\psi}_T(u_k,h_\ell)/\sigma$ with $k = 1,\ldots,\lfloor 1/2h_\ell \rfloor$ are independent and standard normal for any given bandwidth $h_\ell$. Since the maximum over $\lfloor 1/2h \rfloor$ independent standard normal random variables is $\lambda(h) + o_p(1)$ as $h \rightarrow 0$, we obtain that $\max_{k} \widehat{\psi}_T(u_k,h_\ell)/\sigma$ is approximately of size $\lambda(h_\ell)$ for small bandwidths $h_\ell$. As $\lambda(h) \rightarrow \infty$ for $h \rightarrow 0$, this implies that $\max_{k} \widehat{\psi}_T(u_k,h_\ell)/\sigma$ tends to be much larger in size for small than for large bandwidths $h_\ell$. As a result, the stochastic behaviour of the uncorrected statistic $\widehat{\Psi}_{T,\text{uncorrected}}$ tends to be dominated by the statistics $\widehat{\psi}_T(u_k,h_\ell)$ corresponding to small bandwidths $h_\ell$. The additively corrected statistic $\widehat{\Psi}_T$, in contrast, puts the statistics $\widehat{\psi}_T(u_k,h_\ell)$ corresponding to different bandwidths $h_\ell$ on a more equal footing, thus counteracting the dominance of small bandwidth values. 
 
@@ -78,43 +81,50 @@ The multiscale statistic $\widehat{\Psi}_T$ simultaneously takes into account al
 
 \item \label{C-grid} $|\mathcal{G}_T| = O(T^\theta)$ for some arbitrarily large but fixed constant $\theta > 0$, where $|\mathcal{G}_T|$ denotes the cardinality of $\mathcal{G}_T$. 
 
-\item \label{C-h} $h_{\min} \gg T^{-(1-\frac{2}{q})} \log T$, that is, $h_{\min} / \{ T^{-(1-\frac{2}{q})} \log T \} \rightarrow \infty$ with $q > 4$ defined in \ref{C-err2} and $h_{\max} = o(1)$.
+\item \label{C-h} $h_{\min} \gg T^{-(1-\frac{2}{q})} \log T$, that is, $h_{\min} / \{ T^{-(1-\frac{2}{q})} \log T \} \rightarrow \infty$ with $q > 4$ defined in \ref{C-err2} and $h_{\max} \le 1/2$.
 
 \end{enumerate}
 According to \ref{C-grid}, the number of points $(u,h)$ in $\mathcal{G}_T$ should not grow faster than $T^\theta$ for some arbitrarily large but fixed $\theta > 0$. This is a fairly weak restriction as it allows the set $\mathcal{G}_T$ to be extremely large as compared to the sample size $T$. For example, we may work with the set 
 \begin{align*}
 \mathcal{G}_T = \big\{ & (u,h): u = t/T \text{ for some } 1 \le t \le T \text{ and } h \in [h_{\min},h_{\max}] \\ & \text{ with } h = t/T \text{ for some } 1 \le t \le T  \big\},
 \end{align*}
-which contains more than enough points $(u,h)$ for most practical applications. Condition \ref{C-h} imposes some restrictions on the minimal and maximal bandwidths $h_{\min}$ and $h_{\max}$. These conditions are fairly weak, allowing us to choose the bandwidth window $[h_{\min},h_{\max}]$ extremely large. In particular, we can choose the minimal bandwidth $h_{\min}$ to be of the order $T^{-1/2}$ for any $q > 4$, which means that we can let $h_{\min}$ converge to $0$ very quickly. Moreover, the maximal bandwidth $h_{\max}$ is allowed to converge to $0$ arbitrarily slowly, which implies that we can pick it very large.
+which contains more than enough points $(u,h)$ for most practical applications. Condition \ref{C-h} imposes some restrictions on the minimal and maximal bandwidths $h_{\min}$ and $h_{\max}$. These conditions are fairly weak, allowing us to choose the bandwidth window $[h_{\min},h_{\max}]$ extremely large. The lower bound on $h_{\min}$ depends on the parameter $q$ defined in \ref{C-err2} which specifies the number of existing moments for the error terms $\varepsilon_t$. As one can see, we can choose $h_{\min}$ to be of the order $T^{-1/2}$ for any $q > 4$. Hence, we can let $h_{\min}$ converge to $0$ very quickly even if only the first few moments of the error terms $\varepsilon_t$ exist. If all moments exist (i.e.\ $q = \infty$), we even get that $h_{\min}$ may converge to $0$ almost as quickly as $T^{-1} \log T$. Moreover, the maximal bandwidth $h_{\max}$ is not even required to converge to $0$, which implies that we can pick it very large.
+
+
+\begin{remark}
+The above construction of the multiscale statistic can be easily adapted to hypotheses other than $H_0$. To do so, one simply needs to replace the kernel weights $w_{t,T}(u,h)$ defined in \eqref{weights} by appropriate versions which are suited to test the hypothesis of interest. For example, if one wants to test for local convexity/concavity of $m$, one may define the kernel weights $w_{t,T}(u,h)$ such that the kernel average $\widehat{\psi}_T(u,h)$ is a (rescaled) estimator of the second derivative of $m$ at the location $u$ with bandwidth $h$. 
+\end{remark}
 
 
 \subsection{The test procedure}\label{subsec-method-test}
 
 
-In order to formulate a test for the hypothesis $H_0: m = 0$, we still need to specify a critical value. To do so, we define the statistic
+In order to formulate a test for the null hypothesis $H_0$, we still need to specify a critical value. To do so, we define the statistic
 \begin{equation}\label{Phi-statistic}
 \Phi_T = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_T(u,h)}{\sigma}\Big| - \lambda(h) \Big\},
 \end{equation} 
-where $\phi_T(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \sigma Z_t$ and $Z_t$ are independent standard normal random variables. The statistic $\Phi_T$ can be regarded as a Gaussian version of the test statistic $\widehat{\Psi}_T$ under the null hypothesis $H_0$. Let $q_T(\alpha)$ be the $(1-\alpha)$-quantile of $\Phi_T$. Importantly, the quantile $q_T(\alpha)$ can be computed by Monte Carlo simulations and can thus be regarded as known. Our multiscale test of the hypothesis $H_0: m = 0$ is now defined as follows: For a given significance level $\alpha \in (0,1)$, we reject $H_0$ if $\widehat{\Psi}_T > q_T(\alpha)$. 
+where $\phi_T(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \sigma Z_t$ and $Z_t$ are independent standard normal random variables. The statistic $\Phi_T$ can be regarded as a Gaussian version of the test statistic $\widehat{\Psi}_T$ under the null hypothesis $H_0$. Let $q_T(\alpha)$ be the $(1-\alpha)$-quantile of $\Phi_T$. Importantly, the quantile $q_T(\alpha)$ can be computed by Monte Carlo simulations and can thus be regarded as known. Our multiscale test of the hypothesis $H_0$ is now defined as follows: For a given significance level $\alpha \in (0,1)$, we reject $H_0$ if $\widehat{\Psi}_T > q_T(\alpha)$. 
 
 
 \subsection{Theoretical properties of the test}\label{subsec-method-theo}
 
 
-In order to examine the theoretical properties of our multiscale test, we introduce the statistic 
+In order to examine the theoretical properties of our multiscale test, we introduce the auxiliary multiscale statistic 
 \begin{align}
 \widehat{\Phi}_T 
 % & = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\psi}_T(u,h) - \ex \widehat{\psi}_T(u,h)}{\widehat{\sigma}} \Big| - \lambda(h) \Big\} \nonumber \\
  & = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}_T(u,h)}{\widehat{\sigma}} \Big| - \lambda(h) \Big\} \label{Phi-hat-statistic}
 \end{align}
-with $\widehat{\phi}_T(u,h) = \widehat{\psi}_T(u,h) - \ex [\widehat{\psi}_T(u,h)] = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \varepsilon_t$. According to the following theorem, the (known) quantile $q_T(\alpha)$ of $\Phi_T$ defined in Section \ref{subsec-method-test} can be used as a proxy for the $(1-\alpha)$-quantile of the statistic $\widehat{\Phi}_T$.
+with $\widehat{\phi}_T(u,h) = \widehat{\psi}_T(u,h) - \ex [\widehat{\psi}_T(u,h)] = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \varepsilon_t$. The following result is central to the theoretical analysis of our multiscale test. According to it, the (known) quantile $q_T(\alpha)$ of the Gaussian statistic $\Phi_T$ defined in Section \ref{subsec-method-test} can be used as a proxy for the $(1-\alpha)$-quantile of the multiscale statistic $\widehat{\Phi}_T$.
 \begin{theorem}\label{theo-stat}
 Let \ref{C-err1}--\ref{C-h} be fulfilled and assume that $\widehat{\sigma}^2 = \sigma^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$. Then 
 \[ \pr \big( \widehat{\Phi}_T \le q_T(\alpha) \big) = (1 - \alpha) + o(1). \]
 \end{theorem}
 A full proof of Theorem \ref{theo-stat} is given in the Appendix. 
+%We here shortly outline the proof strategy which may be applied to other multiscale test problems for dependent data. The strategy splits up into two main steps. 
 %We here shortly outline the proof strategy, which is of broader interest as it can potentially be applied in the context of a variety of other statistical multiscale problems. The strategy splits up into two main steps: 
-We here shortly outline the proof strategy, which splits up into two main steps. In the first, we replace the statistic $\widehat{\Phi}_T$ for each $T \ge 1$ by a statistic $\widetilde{\Phi}_T$ with the same distribution as $\widehat{\Phi}_T$ and the property that 
+We here shortly outline the proof strategy, which splits up into two main steps. 
+In the first, we replace the statistic $\widehat{\Phi}_T$ for each $T \ge 1$ by a statistic $\widetilde{\Phi}_T$ with the same distribution as $\widehat{\Phi}_T$ and the property that 
 \begin{equation}\label{eq-theo-stat-strategy-step1}
 \big| \widetilde{\Phi}_T - \Phi_T \big| = o_p(\delta_T),
 \end{equation}
@@ -126,274 +136,195 @@ which immediately implies the statement of Theorem \ref{theo-stat}. Importantly,
 \begin{equation}\label{eq-theo-stat-strategy-step2}
 \sup_{x \in \reals} \pr \big( |\Phi_T - x| \le \delta_T \big) = o(1),
 \end{equation}
-which says that $\Phi_T$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$. The main tool for verifying \eqref{eq-theo-stat-strategy-step2} are anti-concentration results for Gaussian random vectors as derived in \cite{Chernozhukov2015}. The claim \eqref{eq-theo-stat-strategy-claim} can be proven by combining \eqref{eq-theo-stat-strategy-step1} and \eqref{eq-theo-stat-strategy-step2}, which in turn yields Theorem \ref{theo-stat}. 
+which says that $\Phi_T$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$. The main tool for verifying \eqref{eq-theo-stat-strategy-step2} are anti-concentration results for Gaussian random vectors as derived in \cite{Chernozhukov2015}. The claim \eqref{eq-theo-stat-strategy-claim} can be proven by using \eqref{eq-theo-stat-strategy-step1} together with \eqref{eq-theo-stat-strategy-step2}, which in turn yields Theorem \ref{theo-stat}. 
 
 
-With the help of Theorem \ref{theo-stat}, we can investigate the theoretical properties of our multiscale test. The first result is an immediate consequence of Theorem \ref{theo-stat}. It says that the test has the correct (asymptotic) size. 
+The main idea of our proof strategy is to combine strong approximation theory with anti-concentration bounds for Gaussian random vectors to show that the quantiles of the multiscale statistic $\widehat{\Phi}_T$ can be proxied by those of a Gaussian analogue. This strategy is quite general in nature and may be applied to other multiscale problems for dependent data. Strong approximation theory has also been used to investigate multiscale tests for independent data; see e.g.\ 
+%the multiscale analysis of densities in a deconvolution model in 
+\cite{SchmidtHieber2013}. However, it has not been combined with anti-concentration results to approximate the quantiles of the multiscale statistic. As an alternative to strong approximation theory, \cite{EckleBissantzDette2017} and \cite{ProkschWernerMunk2018} have recently used Gaussian approximation results derived in \cite{Chernozhukov2014, Chernozhukov2017} to analyse multiscale tests for independent data. Even though it might be possible to adapt these techniques to the case of dependent data, this is not trivial at all as part of the technical arguments and the Gaussian approximation tools strongly rely on the assumption of independence. 
+
+
+We now investigate the theoretical properties of our multiscale test with the help of Theorem \ref{theo-stat}. The first result is an immediate consequence of Theorem \ref{theo-stat}. It says that the test has the correct (asymptotic) size. 
 \begin{prop}\label{prop-test-1}
-Let the conditions of Theorem \ref{theo-stat} be satisfied. Under the null hypothesis $H_0: m = 0$, it holds that 
+Let the conditions of Theorem \ref{theo-stat} be satisfied. Under the null hypothesis $H_0$, it holds that 
 \[ \pr \big( \widehat{\Psi}_T \le q_T(\alpha) \big) = (1 - \alpha) + o(1). \]
 \end{prop}
 The second result characterizes the power of the multiscale test against local alternatives. To formulate it, we consider any sequence of functions $m = m_T$ with the following property: There exists $(u,h) \in \mathcal{G}_T$ with $[u-h,u+h] \subseteq [0,1]$ such that 
 \begin{equation}\label{loc-alt}
-m_T(w) \ge c_T \sqrt{\frac{\log T}{Th}} \quad \text{for all } w \in [u-h,u+h], 
+m_T^\prime(w) \ge c_T \sqrt{\frac{\log T}{Th^3}} \quad \text{for all } w \in [u-h,u+h], 
 \end{equation}
-where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$. Alternatively to \eqref{loc-alt}, we may also assume that $-m_T(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$. According to the following result, our test has asymptotic power $1$ against local alternatives of the form \eqref{loc-alt}. 
+where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$. Alternatively to \eqref{loc-alt}, we may also assume that $-m_T^\prime(w) \ge c_T \sqrt{\log T/(Th^3)}$ for all $w \in [u-h,u+h]$. According to the following result, our test has asymptotic power $1$ against local alternatives of the form \eqref{loc-alt}. 
 \begin{prop}\label{prop-test-2}
 Let the conditions of Theorem \ref{theo-stat} be satisfied and consider any sequence of functions $m_T$ with the property \eqref{loc-alt}. Then 
 \[ \pr \big( \widehat{\Psi}_T \le q_T(\alpha) \big) = o(1). \]
 \end{prop}
 The proof of Proposition \ref{prop-test-2} can be found in the Appendix. To formulate the next result, we define 
-\[ \Pi_T = \big\{ I_{u,h} = [u-h,u+h]: (u,h) \in \mathcal{A}_T \big\} \]
-with 
-\[ \mathcal{A}_T = \Big\{ (u,h) \in \mathcal{G}_T: \Big|\frac{\widehat{\psi}_T(u,h)}{\widehat{\sigma}}\Big| - \lambda(h) > q_T(\alpha) \Big\}. \]
-$\Pi_T$ is the collection of intervals $I_{u,h} = [u-h,u+h]$ for which the (corrected) test statistic $|\widehat{\psi}_T(u,h)/\widehat{\sigma}| - \lambda(h)$ lies above the critical value $q_T(\alpha)$. With this notation at hand, we consider the event 
-\[ E_T = \Big\{ \forall I_{u,h} \in \Pi_T: m(v) \ne 0 \text{ for some } v \in I_{u,h} = [u-h,u+h] \Big\}. \]
-This is the event that the null hypothesis is violated on all intervals $I_{u,h}$ for which the (corrected) test statistic $|\widehat{\psi}_T(u,h)/\widehat{\sigma}| - \lambda(h)$ is above the critical value $q_T(\alpha)$. We can make the following formal statement about the event $E_T$ whose proof is given in the Appendix. 
-\begin{prop}\label{prop-test-3}
-Under the conditions of Theorem \ref{theo-stat}, it holds that  
-\[ \pr \big( E_T \big) \ge (1-\alpha) + o(1). \] 
-\end{prop}
-According to Proposition \ref{prop-test-3}, our test procedure allows to make uniform confidence statements of the following form: With (asymptotic) probability $\ge (1-\alpha)$, the null hypothesis $H_0: m = 0$ is violated on all intervals $I_{u,h} \in \Pi_T$. Hence, our multiscale test does not only allow to check whether the null hypothesis is violated. It also allows to identify regions where violations occur with a pre-specified level of confidence. 
- 
-
-The statement of Proposition \ref{prop-test-3} suggests to graphically present the results of our multiscale test by plotting the intervals $I_{u,h} \in \Pi_T$, that is, by plotting the intervals where (with asymptotic confidence $\ge 1-\alpha$) our test detects a violation of the null hypothesis. The drawback of this graphical presentation is that the number of intervals in $\Pi_T$ is often quite large. To obtain a better graphical summary of the results, we replace $\Pi_T$ by a subset $\Pi_T^{\min}$ which is constructed as follows: As in \cite{Duembgen2002}, we call an interval $I_{u,h} \in \Pi_T$ minimal if there is no other interval $I_{u^\prime,h^\prime} \in \Pi_T$ with $I_{u^\prime,h^\prime} \subset I_{u,h}$. Let $\Pi_T^{\min}$ be the set of all minimal intervals in $\Pi_T$ and define the event 
-\[ E_T^{\min} = \Big\{ \forall I_{u,h} \in \Pi_T^{\min}: m(v) \ne 0 \text{ for some } v \in I_{u,h} = [u-h,u+h] \Big\}. \]
-It is easily seen that $E_T = E_T^{\min}$. Hence, by Proposition \ref{prop-test-3}, it holds that 
-\[ \pr \big(E_T^{\min}\big) \ge (1-\alpha) + o(1). \] 
-This suggests to plot the minimal intervals in $\Pi_T^{\min}$ rather than the whole collection of intervals $\Pi_T$ as a graphical summary of the test results. We in particular use this way of presenting the test results in our application examples of Section \ref{sec-data}. 
-
-
-
-\section{Testing for the presence of a time trend}\label{sec-test-shape}
-
-
-In what follows, we construct a multiscale test for the null hypothesis that the trend function $m$ in model \eqref{model1} is constant. To achieve this, we adapt the methodology developed in Section \ref{sec-method}. Importantly, the resulting multiscale procedure does not only allow to test whether the null hypothesis is violated. As we will see, it also allows to identify, with a pre-specified statistical confidence, time regions where violations occur. Put differently, it allows to identify, with a given confidence, intervals $I_{u,h} = [u-h,u+h]$ where $m$ is not constant over time.
-%, that is, where there is an increase/decrease in the time trend $m$. 
-It thus provides information on where the time trend is increasing/decreasing, which is important knowledge in many applications. 
-
-
-\subsection{Construction of the test statistic}\label{subsec-test-shape-stat}
-
-
-Throughout the section, we suppose that the trend $m$ is continuously differentiable. The null hypothesis that $m$ is constant can be formulated as $H_0: m^\prime = 0$, where $m^\prime$ denotes the first derivative of $m$. To construct a test statistic for the hypothesis $H_0$, we proceed analogously as in Section \ref{subsec-method-stat}. To start with, we introduce the kernel averages 
-\begin{equation*}
-\widehat{\psi}_T^\prime(u,h) = \sum\limits_{t=1}^T w_{t,T}^\prime(u,h) Y_t, 
-\end{equation*}
-where the kernel weights $w_{t,T}^\prime(u,h)$ are given by 
-\begin{equation}\label{weights-deriv}
-w_{t,T}^\prime(u,h) = \frac{\Lambda_{t,T}^\prime(u,h)}{ \{\sum\nolimits_{t=1}^T \Lambda_{t,T}^\prime(u,h)^2 \}^{1/2} } 
-\end{equation}
-with
-\[ \Lambda_{t,T}^\prime(u,h) = K\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,0}(u,h) \Big(\frac{\frac{t}{T}-u}{h}\Big) - S_{T,1}(u,h) \Big]. \]
-Here, $S_{T,\ell}(u,h)$ is defined as in Section \ref{subsec-method-stat} and $K$ is a kernel function which satisfies \ref{C-ker}. The kernel average $\widehat{\psi}_T^\prime(u,h)$ is a rescaled version of the local linear estimator of the derivative $m^\prime(u)$ with bandwidth $h$. Alternatively to the local linear weights defined in \eqref{weights-deriv}, we could employ the weights $w_{t,T}^\prime(u,h) = K^\prime( \frac{u - \frac{t}{T}}{h} )/ \{ \sum\nolimits_{t=1}^T  K^\prime( \frac{u - \frac{t}{T}}{h} )^2 \}^{1/2}$, where the kernel function $K$ is assumed to be differentiable and $K^\prime$ is its derivative. To avoid boundary problems, we however work with the local linear weights from \eqref{weights-deriv} throughout the paper. Our multiscale statistic is defined as 
-\[ \widehat{\Psi}_T^\prime = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widehat{\psi}_T^\prime(u,h)}{\widehat{\sigma}}\Big| - \lambda(h) \Big\}, \] 
-where $\lambda(h) = \sqrt{2 \log \{ 1/(2h) \}}$ and the set $\mathcal{G}_T$ has been introduced in Section \ref{subsec-method-stat}. As can be seen, the statistic $\widehat{\Psi}_T^\prime$ is very similar to that from Section \ref{sec-method}. Only the kernel averages $\widehat{\psi}_T^\prime(u,h)$ have a somewhat different form. 
-
-
-\subsection{The test procedure}\label{subsec-test-shape-test}
-
-
-As in Section \ref{subsec-method-test}, we define a Gaussian version $\Phi_T^\prime$ of the test statistic $\widehat{\Psi}_T^\prime$ under the null hypothesis $H_0$ by
-\[ \Phi_T^\prime = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_T^\prime(u,h)}{\sigma}\Big| - \lambda(h) \Big\}, \] 
-where $\phi_T^\prime(u,h) = \sum\nolimits_{t=1}^T w_{t,T}^\prime(u,h) \, \sigma Z_t$ and $Z_t$ are independent standard normal random variables. Denoting the $(1-\alpha)$-quantile of $\Phi_T^\prime$ by $q_T^\prime(\alpha)$, our multiscale test of the hypothesis $H_0$: $m^\prime = 0$ is defined as follows: For a given significance level $\alpha \in (0,1)$, we reject $H_0$ if $\widehat{\Psi}_T^\prime > q_T^\prime(\alpha)$. 
-
-
-\subsection{Theoretical properties of the test}\label{subsec-test-shape-theo}
-
-
-The theoretical analysis parallels that of Section \ref{subsec-method-theo}. We first investigate the theoretical properties of the auxiliary statistic 
 \begin{align*}
-\widehat{\Phi}_T^\prime = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}_T^\prime(u,h)}{\widehat{\sigma}} \Big| - \lambda(h) \Big\}, 
-\end{align*}
-where $\widehat{\phi}_T^\prime(u,h) = \sum_{t=1}^T w_{t,T}^\prime(u,h) \varepsilon_t$. The following result adapts Theorem \ref{theo-stat} to our current test problem. 
-\begin{theorem}\label{theo-stat-shape}
-Let \ref{C-err1}--\ref{C-h} be fulfilled and assume that $\widehat{\sigma}^2 = \sigma^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$. Then
-\[ \pr \big( \widehat{\Phi}_T^\prime \le q_T^\prime(\alpha) \big) = (1 - \alpha) + o(1). \]
-\end{theorem}
-The proof of Theorem \ref{theo-stat-shape} is essentially the same as that of Theorem \ref{theo-stat} and thus omitted. With the help of Theorem \ref{theo-stat-shape}, we can derive the following theoretical properties of our multiscale test. 
-\newpage
-\begin{prop}\label{prop-test-shape-1}
-Let the conditions of Theorem \ref{theo-stat-shape} be satisfied. 
-\begin{enumerate}[label=(\alph*),leftmargin=0.75cm]
-\item Under the null hypothesis $H_0$, it holds that 
-\[ \pr \big( \widehat{\Psi}_T^\prime \le q_T^\prime(\alpha) \big) = (1 - \alpha) + o(1). \]
-\item Consider any sequence of functions $m = m_T$ with the following property: There exists $(u,h) \in \mathcal{G}_T$ with $[u-h,u+h] \subseteq [0,1]$ such that $m_T^\prime(w) \ge c_T \sqrt{\log T/(Th^3)}$ for all $w \in [u-h,u+h]$ or $-m_T^\prime(w) \ge c_T \sqrt{\log T/(Th^3)}$ for all $w \in [u-h,u+h]$, where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$. Then 
-\[ \pr \big( \widehat{\Psi}_T^\prime \le q_T^\prime(\alpha) \big) = o(1). \]
-\end{enumerate}
-\end{prop}
-Part (a) of Proposition \ref{prop-test-shape-1} is a simple consequence of Theorem \ref{theo-stat-shape}. Part (b) can be proven by similar arguments as Proposition \ref{prop-test-2}. The details are given in the Supplementary Material. Taken together, the two parts of Proposition \ref{prop-test-shape-1} show that our multiscale test has the correct (asymptotic) size and that it is able to detect certain local alternatives with probability tending to $1$. We next consider the events
-\begin{align*}
-E_T^+ & = \Big\{ \forall I_{u,h} \in \Pi_T^+: m^\prime(v) > 0 \text{ for some } v \in I_{u,h} = [u-h,u+h] \Big\} \\
-E_T^- & = \Big\{ \forall I_{u,h} \in \Pi_T^-: m^\prime(v) < 0 \text{ for some } v \in I_{u,h} = [u-h,u+h] \Big\},
-\end{align*}
-where the sets $\Pi_T^+$ and $\Pi_T^-$ are given by
-\begin{align*}
+\Pi_T^\pm   & = \big\{ I_{u,h} = [u-h,u+h]: (u,h) \in \mathcal{A}_T^\pm \big\} \\
 \Pi_T^+ & = \big\{ I_{u,h} = [u-h,u+h]: (u,h) \in \mathcal{A}_T^+ \text{ and } I_{u,h} \subseteq [0,1] \big\} \\
 \Pi_T^- & = \big\{ I_{u,h} = [u-h,u+h]: (u,h) \in \mathcal{A}_T^- \text{ and } I_{u,h} \subseteq [0,1] \big\} 
 \end{align*}
-with 
+together with 
 \begin{align*}
-\mathcal{A}_T^+ & = \Big\{ (u,h) \in \mathcal{G}_T: \frac{\widehat{\psi}_T^\prime(u,h)}{\widehat{\sigma}} > q_T^\prime(\alpha) + \lambda(h) \Big\} \\ 
-\mathcal{A}_T^- & = \Big\{ (u,h) \in \mathcal{G}_T: -\frac{\widehat{\psi}_T^\prime(u,h)}{\widehat{\sigma}} > q_T^\prime(\alpha) + \lambda(h) \Big\}. 
+\mathcal{A}_T^\pm & = \Big\{ (u,h) \in \mathcal{G}_T: \Big|\frac{\widehat{\psi}_T(u,h)}{\widehat{\sigma}}\Big| > q_T(\alpha) + \lambda(h) \Big\} \\ 
+\mathcal{A}_T^+  & = \Big\{ (u,h) \in \mathcal{G}_T: \frac{\widehat{\psi}_T(u,h)}{\widehat{\sigma}} > q_T(\alpha) + \lambda(h) \Big\} \\ 
+\mathcal{A}_T^-  & = \Big\{ (u,h) \in \mathcal{G}_T: -\frac{\widehat{\psi}_T(u,h)}{\widehat{\sigma}} > q_T(\alpha) + \lambda(h) \Big\}. 
 \end{align*}
-$E_T^+$ is the event that for each interval $I_{u,h} \in \Pi_T^+$, there is a subset $J_{u,h} \subseteq I_{u,h}$ with $m$ being an increasing function on $J_{u,h}$. An analogous description applies to the event $E_T^-$. The following result shows that the events $E_T^+$ and $E_T^-$ occur with asymptotic probability $\ge 1-\alpha$. 
-\begin{prop}\label{prop-test-shape-2}
-Under the conditions of Theorem \ref{theo-stat-shape}, it holds that  
+$\Pi_T^\pm$ is the collection of intervals $I_{u,h} = [u-h,u+h]$ for which the (corrected) test statistic $|\widehat{\psi}_T(u,h)/\widehat{\sigma}| - \lambda(h)$ lies above the critical value $q_T(\alpha)$. $\Pi_T^+$ and $\Pi_T^-$ can be interpreted analogously but take into account the sign of the statistic $\widehat{\psi}_T(u,h)/\widehat{\sigma}$. With this notation at hand, we consider the events 
 \begin{align*}
-\pr \big( E_T^+ \big) & \ge (1-\alpha) + o(1) \\
-\pr \big( E_T^- \big) & \ge (1-\alpha) + o(1). 
+E_T^\pm & = \Big\{ \forall I_{u,h} \in \Pi_T^\pm: m^\prime(v) \ne 0 \text{ for some } v \in I_{u,h} = [u-h,u+h] \Big\} \\
+E_T^+  & = \Big\{ \forall I_{u,h} \in \Pi_T^+: m^\prime(v) > 0 \text{ for some } v \in I_{u,h} = [u-h,u+h] \Big\} \\
+E_T^-  & = \Big\{ \forall I_{u,h} \in \Pi_T^-: m^\prime(v) < 0 \text{ for some } v \in I_{u,h} = [u-h,u+h] \Big\}.
 \end{align*}
+$E_T^\pm$ ($E_T^+$, $E_T^-$) is the event that the function $m$ is non-constant (increasing, decreasing) on all intervals $I_{u,h} \in \Pi_T^\pm$ ($\Pi_T^+$, $\Pi_T^-$). More precisely, $E_T^\pm$ ($E_T^+$, $E_T^-$) is the event that for each interval $I_{u,h} \in \Pi_T^\pm$ ($\Pi_T^+$, $\Pi_T^-$), there is a subset $J_{u,h} \subseteq I_{u,h}$ with $m$ being a non-constant (increasing, decreasing) function on $J_{u,h}$. We can make the following formal statement about the events $E_T^\pm$, $E_T^+$ and $E_T^-$ whose proof is given in the Appendix. 
+\begin{prop}\label{prop-test-3}
+Let the conditions of Theorem \ref{theo-stat} be fulfilled. Then for $\ell \in \{ \pm,+,-\}$, it holds that
+\[ \pr \big( E_T^\ell \big) \ge (1-\alpha) + o(1). \]
 \end{prop}
-The proof of Proposition \ref{prop-test-shape-2} parallels that of Proposition \ref{prop-test-3}. The details are provided in the Supplementary Material. The statement of Proposition \ref{prop-test-shape-2} can be summarized as follows: With asymptotic probability $\ge 1-\alpha$, there is a subset $J_{u,h} \subseteq I_{u,h}$ for each interval $I_{u,h} \in \Pi_T^+$ such that $m$ is an increasing function on $J_{u,h}$. Put differently, with asymptotic probability $\ge 1- \alpha$, the trend $m$ is increasing on some part of the interval $I_{u,h}$ for any $I_{u,h} \in \Pi_T^+$. An analogous statement holds for the intervals in the set $\Pi_T^-$. Our multiscale procedure thus allows to identify, with a pre-specified confidence, time regions where there is an increase/decrease in the time trend $m$. 
+According to Proposition \ref{prop-test-3}, we can make uniform confidence statements of the following form: With (asymptotic) probability $\ge (1-\alpha)$, the trend function $m$ is non-constant (increasing, decreasing) on some part of the interval $I_{u,h}$ for all $I_{u,h} \in \Pi_T$ ($\Pi_T^+$, $\Pi_T^-$). Hence, our multiscale procedure allows to identify, with a pre-specified confidence, time regions where there is an increase/decrease in the time trend $m$. 
 
 
-We close the section with some additional remarks on Proposition \ref{prop-test-shape-2}: (i) The statement of Proposition \ref{prop-test-shape-2} remains to hold true when we replace the sets $\Pi_T^+$ and $\Pi_T^-$ by the corresponding sets of minimal intervals. (ii) In the sets $\Pi_T^+$ and $\Pi_T^-$, we only take into account intervals $I_{u,h} = [u-h,u+h]$ which are subsets of $[0,1]$. We thus exclude points $(u,h) \in \mathcal{A}_T^+$ and $(u,h) \in \mathcal{A}_T^-$ which lie at the boundary, that is, for which $I_{u,h} \nsubseteq [0,1]$. The reason is as follows: Let $(u,h) \in \mathcal{A}_T^+$ with $I_{u,h} \nsubseteq [0,1]$. Our technical arguments allow us to say, with asymptotic confidence $\ge 1 - \alpha$, that $m^\prime(v) \ne 0$ for some $v \in I_{u,h}$. However, we cannot say whether $m^\prime(v) > 0$ or $m^\prime(v) < 0$, that is, we cannot make confidence statements about the sign. Roughly speaking, the problem is that the local linear weights $w_{t,T}^\prime(u,h)$ behave quite differently at boundary points $(u,h)$ with $I_{u,h} \nsubseteq [0,1]$. If we are only interested in whether there is some movement in the trend on an interval $I_{u,h}$ but we do not care whether it is an upward or downward movement, we may also consider the event $E_T^\pm = \{ \forall I_{u,h} \in \Pi_T^\pm: m^\prime(v) \ne 0 \text{ for some } v \in I_{u,h} \}$, where the set $\Pi_T^\pm = \{ I_{u,h}: (u,h) \in \mathcal{A}_T^+ \cup \mathcal{A}_T^- \}$ contains all intervals $I_{u,h}$ with $(u,h) \in \mathcal{A}_T^+ \cup \mathcal{A}_T^-$, in particular those with $I_{u,h} \nsubseteq [0,1]$. With the help of the technical arguments for Proposition \ref{prop-test-shape-2}, it follows that $\pr \big( E_T^\pm \big) \ge (1-\alpha) + o(1)$.
+\begin{remark}
+Unlike $\Pi_T$, the sets $\Pi_T^+$ and $\Pi_T^-$ only contain intervals $I_{u,h} = [u-h,u+h]$ which are subsets of $[0,1]$. We thus exclude points $(u,h) \in \mathcal{A}_T^+$ and $(u,h) \in \mathcal{A}_T^-$ which lie at the boundary, that is, for which $I_{u,h} \nsubseteq [0,1]$. The reason is as follows: Let $(u,h) \in \mathcal{A}_T^+$ with $I_{u,h} \nsubseteq [0,1]$. Our technical arguments allow us to say, with asymptotic confidence $\ge 1 - \alpha$, that $m^\prime(v) \ne 0$ for some $v \in I_{u,h}$. However, we cannot say whether $m^\prime(v) > 0$ or $m^\prime(v) < 0$, that is, we cannot make confidence statements about the sign. Crudely speaking, the problem is that the local linear weights $w_{t,T}(u,h)$ behave quite differently at boundary points $(u,h)$ with $I_{u,h} \nsubseteq [0,1]$. As a consequence, we can include boundary points $(u,h)$ in $\Pi_T$ but not in $\Pi_T^+$ and $\Pi_T^-$.
+\end{remark}
+ 
+
+The statement of Proposition \ref{prop-test-3} suggests to graphically present the results of our multiscale test by plotting the intervals $I_{u,h} \in \Pi_T^\ell$ for $\ell \in \{\pm, +,-\}$, that is, by plotting the intervals where (with asymptotic confidence $\ge 1-\alpha$) our test detects a violation of the null hypothesis. The drawback of this graphical presentation is that the number of intervals in $\Pi_T^\ell$ is often quite large. To obtain a better graphical summary of the results, we replace $\Pi_T^\ell$ by a subset $\Pi_T^{\ell,\min}$ which is constructed as follows: As in \cite{Duembgen2002}, we call an interval $I_{u,h} \in \Pi_T^\ell$ minimal if there is no other interval $I_{u^\prime,h^\prime} \in \Pi_T^\ell$ with $I_{u^\prime,h^\prime} \subset I_{u,h}$. Let $\Pi_T^{\ell,\min}$ be the set of all minimal intervals in $\Pi_T^\ell$ for $\ell \in \{\pm, +,-\}$ and define the events
+\begin{align*}
+E_T^{\pm,\min} & = \Big\{ \forall I_{u,h} \in \Pi_T^{\pm,\min}: m^\prime(v) \ne 0 \text{ for some } v \in I_{u,h} = [u-h,u+h] \Big\} \\
+E_T^{+,\min} & = \Big\{ \forall I_{u,h} \in \Pi_T^{+,\min}: m^\prime(v) > 0 \text{ for some } v \in I_{u,h} = [u-h,u+h] \Big\} \\ 
+E_T^{-,\min} & = \Big\{ \forall I_{u,h} \in \Pi_T^{-,\min}: m^\prime(v) < 0 \text{ for some } v \in I_{u,h} = [u-h,u+h] \Big\}.  
+\end{align*}
+It is easily seen that $E_T^\ell = E_T^{\ell,\min}$ for $\ell \in \{\pm, +,-\}$. Hence, by Proposition \ref{prop-test-3}, it holds that 
+\[ \pr \big(E_T^{\ell,\min}\big) \ge (1-\alpha) + o(1) \] 
+for $\ell \in \{\pm, +,-\}$. This suggests to plot the minimal intervals in $\Pi_T^{\ell,\min}$ rather than the whole collection of intervals $\Pi_T^\ell$ as a graphical summary of the test results. We in particular use this way of presenting the test results in our applications of Section \ref{sec-data}. 
 
 
 
 \section{Estimation of the long-run error variance}\label{sec-error-var}
 
 
-We now discuss how to estimate the long-run error variance $\sigma^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \gamma(\ell)$ with $\gamma(\ell) = \cov(\varepsilon_0,\varepsilon_{\ell})$ in model \eqref{model1}. A number of different methods have been established in the literature to estimate the long-run error variance $\sigma^2$ in the trend model \eqref{model1} under various assumptions on the error terms. In what follows, we give a brief overview of estimation methods which are suitable for our purposes. We in particular focus attention on difference-based methods as these have the following advantage: They do not involve a nonparametric estimator of the function $m$ and thus do not require to specify a smoothing parameter for the estimation of $m$. 
+We now discuss how to estimate the long-run error variance $\sigma^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_0,\varepsilon_{\ell})$ in model \eqref{model}. There are two broad classes of estimators: residual- and difference-based estimators. Residual-based methods proceed by applying standard methods for estimating $\sigma^2$ to the time series of residuals $\widehat{\varepsilon}_t = Y_{t,T} - \widehat{m}_h(t/T)$, where $\widehat{m}_h$ is a nonparametric estimator of $m$ with the bandwidth or smoothing parameter $h$. Difference-based methods attempt to estimate $\sigma^2$ by applying statistical methods to certain differences of the observed time series $\{Y_{t,T}\}$, for example, to the first differences $\Delta Y_{t,T} = Y_{t,T} - Y_{t-1,T}$. Notably, difference-based methods do not involve a nonparametric estimator of $m$ and thus do not require to specify a smoothing parameter $h$ for the estimation of $m$. 
 
 
-\enlargethispage{0.2cm}
-In principle, it is possible to construct an estimator of $\sigma^2$ under the general conditions on the error process laid out in Section \ref{sec-model} (or at least under somewhat stronger versions of these conditions). However, as is well-known, it is quite involved to estimate the long-run variance of a time series process under general conditions, the resulting estimators often tending to be quite imprecise. From a practical point of view, one might thus prefer to impose some time series model on the error terms and to estimate $\sigma^2$ under the restrictions of this model. Of course, this will create some bias due to misspecification. However, as long as the model gives a reasonable approximation to the true error process, this bias may very well be less severe than the error stemming from the instable behaviour of a general estimator of $\sigma^2$. In what follows, we consider an autoregressive (AR) model for the error terms since this error model is widely used in practice and is also appropriate for our applications in Section \ref{sec-data}. 
+\subsection{General weakly dependent error terms}
 
 
-%In principle, it is possible to construct an estimator of $\sigma^2$ under the very general conditions on the error process laid out in Section \ref{sec-model} (or at least under somewhat stronger versions of these conditions). However, even though interesting from a theoretical point of view, such an estimator is presumably not very useful in practice. As is well-known, it is quite involved to estimate the long-run variance of a time series process under general conditions, the resulting estimators tending to be quite imprecise. From a practical point of view, it thus makes more sense to impose some time series model on the errors and to estimate $\sigma^2$ under the restrictions of this model. Of course, this may create some bias due to misspecification. However, as long as the model gives a reasonable approximation to the true error process, this bias can be expected to be less severe than the error stemming from the instabilities of a general estimator of $\sigma^2$. In what follows, we consider an autoregressive (AR) model for the error terms which is widely used in practice and which is appropriate for our applications in Section ??. 
+We first consider a general stationary error process $\{ \varepsilon_t \}$. In particular, we do not impose any time series model such as a moving average (MA) or an autoregressive (AR) model on $\{\varepsilon_t\}$ but only require that $\{\varepsilon_t\}$ satisfies certain weak dependence conditions such as those from Section \ref{sec-model}. 
 
 
-\subsection{Independent error terms}\label{subsec-error-var-iid} 
+A residual-based estimator of $\sigma^2$ can be obtained as follows: Estimating $\sigma^2$ amounts to estimating the spectral density $f_\varepsilon$ of the error process $\{\varepsilon_t\}$ at frequency $0$ (assuming that $f_\varepsilon$ exists). We may thus apply existing methods for estimating $f_\varepsilon(0)$ such as developed in \cite{LiuWu2010} to the time series of residuals $\widehat{\varepsilon}_t = Y_{t,T} - \widehat{m}_h(t/T)$. Note that the resulting estimator of $\sigma^2$ will depend on two different smoothing parameters: one for the preliminary estimation of $m$ and one for the estimation of the nonparametric density $f_\varepsilon$ at the point $0$. 
+Alternatively, $\sigma^2$ may be estimated by difference-based methods. We briefly describe an approach which goes back to ideas from \cite{Hart1989, Hart1991}. Consider the differences $\Delta Y_{t,T} = Y_{t,T} - Y_{t-1,T}$ and let $I_\Delta$ be (a tapered version of) the periodogram of $\{\Delta_t\}$.\footnote{\cite{Hart1989, Hart1991} actually considered the differences $\Delta_2 Y_{t,T} = Y_{t+1,T} - 2Y_{t,T} + Y_{t-1,T}$. However, the idea behind the estimation method is the same no matter whether $\Delta Y_{t,T}$ or $\Delta_2 Y_{t,T}$ is used.} Following \cite{Hart1989, Hart1991}, the autocovariances $\gamma_\varepsilon(\ell) = \cov(\varepsilon_0,\varepsilon_\ell)$ can be estimated by 
+\[ \widehat{\gamma}_\varepsilon(\ell) = \frac{4\pi}{T} \sum\limits_{j = j(\delta)}^{\lceil T/2 \rceil} \cos (\omega_j \ell) |1 - \exp(-i \omega_j)|^{-2} I_\Delta(\omega_j), \]
+where $\omega_j = 2\pi j/T$, $j(\delta) = \lceil n\delta/(2\pi) \rceil$ and $\delta$ is a tuning parameter satisfying $\delta \rightarrow 0$ and $T \delta \rightarrow \infty$. We may now employ HAC-type estimation procedures, as discussed in \cite{Andrews1991} or \cite{DeJong2000}, to estimate $\sigma^2$ by 
+\[ \widehat{\sigma}^2 = \sum_{|\ell| \le b_T} W \Big( \frac{\ell}{b_T} \Big) \, \widehat{\gamma}_\varepsilon(\ell), \]
+where $W: [-1,1] \rightarrow \reals$ is a kernel of Bartlett or flat-top type and $b_T$ is a bandwidth parameter with $b_T \rightarrow \infty$ and $b_T/T \rightarrow 0$. 
 
 
-Before we discuss the case of autoregressive error terms, we introduce the idea of difference-based methods for estimating $\sigma^2$ in the simple case of i.i.d.\ errors $\varepsilon_t$. In this case, $\sigma^2$ is identical to the variance of the random variables $\varepsilon_t$, that is, $\sigma^2 = \var(\varepsilon_t)$. Let $D_\ell Y_t = Y_t - Y_{t-\ell}$ denote the difference between $Y_t$ and $Y_{t-\ell}$ and suppose that $m$ is sufficiently smooth. In particular, assume that $m$ is Lipschitz continuous on $[0,1]$, that is, $|m(u) - m(v)| \le C|u - v|$ for all $u,v \in [0,1]$ and some constant $C < \infty$. Under these conditions, it holds that $|m(\frac{t}{T}) - m(\frac{t-\ell}{T})| \le C \ell/T$, which implies that $D_\ell Y_t = D_\ell \varepsilon_t + O(\ell/T)$ uniformly over $t$. Hence, the observed differences $D_\ell Y_t$ approximate the unobserved differences of the error terms $D_\ell \varepsilon_t$. This together with the fact that $\ex[ \{D_\ell \varepsilon_t\}^2]/2 = \sigma^2$ suggests to estimate $\sigma^2$ by $\widehat{\sigma}^2 = (T-\ell)^{-1} \sum\nolimits_{t=\ell+1}^T \{ D_\ell Y_t \}^2 / 2$, where most commonly $\ell = 1$. As can be easily verified, the estimator $\widehat{\sigma}^2$ has the property that $\widehat{\sigma}^2 = \sigma^2 + O_p(T^{-1/2})$. 
+Estimating the long-run error variance of $\{ \varepsilon_t \}$ under general conditions is a notoriously difficult problem and estimators of $\sigma^2$ such as those described above tend to be quite imprecise. Moreover, no matter whether residual- or difference-based methods are used, the estimators depend on one or several smoothing parameters which are quite difficult to select. For these reasons, we follow authors such as \cite{Hart1991, Hart1994} and \cite{Hall2003} and impose a time series model on the error terms $\{\varepsilon_t\}$ in model \eqref{model}. Estimating $\sigma^2$ under the restrictions of such a model may of course create some misspecification bias. However, as long as the model gives a reasonable approximation to the true error process, the produced estimates of $\sigma^2$ can be expected to be fairly reliable even though they are a bit biased. 
 
 
 \subsection{Autoregressive error terms}\label{subsec-error-var-ar}
 
 
-The differencing approach presented above can be extended to more complicated error structures. For the case of $k$-dependent error terms, estimators for $\sigma^2$ have been proposed by \cite{MuellerStadtmueller1988}, \cite{Herrmann1992} and \cite{Munk2017} among others. We here focus attention on the case of autoregressive error terms. Specifically, we suppose that $\{\varepsilon_t\}$ is an AR($p$) process of the form $\varepsilon_t = \sum_{j=1}^p a_j \varepsilon_{t-j} + \eta_t$, where $a_1,\ldots,a_p$ are unknown parameters and $\eta_t$ are i.i.d.\ innovations with $\ex[\eta_t] = 0$ and $\ex[\eta_t^2] = \sigma_\eta^2$. Throughout the discussion, we assume that $\{\varepsilon_t\}$ is a stationary and causal AR($p$) process of known order $p$ with finite fourth moment $\ex[\varepsilon_t^4] < \infty$. A difference-based method to estimate the long-run variance $\sigma^2$ of the AR($p$) error process $\{\varepsilon_t\}$ in model \eqref{model1} has been developed in \cite{Hall2003}. Their estimator $\widehat{\sigma}^2$ is constructed in the following three steps: 
-\vspace{10pt}
+A number of studies have analysed the problem of estimating $\sigma^2$ in model \eqref{model} with MA($q$) or, more generally, $q$-dependent error terms. Difference-based estimators of $\sigma^2$ for this case have been proposed in \cite{MuellerStadtmueller1988}, \cite{Herrmann1992} and \cite{Munk2017} among others. Under the assumption of $q$-dependence, $\gamma_\varepsilon(\ell) := \cov(\varepsilon_0,\varepsilon_{\ell}) = 0$ for all $|\ell| > q$. Even though $q$-dependent time series are a reasonable error model in some applications, the condition that $\gamma_\varepsilon(\ell)$ is exactly equal to $0$ for sufficiently large lags $\ell$ is quite restrictive in many situations. Presumably the most widely used error model in practice is an AR($p$) process. Methods to estimate $\sigma^2$ in model \eqref{model} with AR($p$) errors have for example been proposed in \cite{Hall2003} and \cite{ShaoYang2011}. 
 
 
-\textit{Step 1.} We first set up an estimator of the autocovariance $\gamma(\ell) = \cov(\varepsilon_t,\varepsilon_{t+\ell})$ for a given lag $\ell$. As in the case of independent errors, it holds that $D_\ell Y_t = D_\ell \varepsilon_t + O(\ell/T)$ uniformly over $t$ provided that $m$ is Lipschitz. This together with the fact that $\ex[ \{  D_\ell \varepsilon_t \}^2 ] / 2 = \gamma(0) - \gamma(\ell)$ motivates to estimate $\gamma(0)$ by
-$\widehat{\gamma}(0) = \frac{1}{L_2-L_1+1}\sum_{r=L_1}^{L_2}\frac{1}{2(T-r)}\sum_{t=r+1}^T\{D_rY_t\}^2$, 
-where $L_1\le L_2$ are tuning parameters which are discussed in more detail below. Moreover, an estimator of $\gamma(\ell)$ for $1 \le \ell \le p$ is given by 
-$\widehat{\gamma}(\ell) = \widehat{\gamma}(0) - \frac{1}{2(T-\ell)}\sum_{t=\ell+1}^T \{D_\ell Y_t\}^2$.
-As $\gamma(\ell) = \gamma(-\ell)$, we finally set $\widehat{\gamma}(-\ell) = \widehat{\gamma}(\ell)$ for $1 \le \ell \le p$. 
-\vspace{10pt}
-
-\textit{Step 2.} We next estimate the AR coefficients $(a_1,\ldots,a_p)^\top$ by the Yule-Walker estimators $(\widehat{a}_1,\ldots,\widehat{a}_p)^\top = \widehat{\Gamma}^{-1} (\widehat{\gamma}(1), \ldots, \widehat{\gamma}(p))^\top$, where $\widehat{\Gamma} = \{ \widehat{\gamma}(|k-\ell|) \}_{1 \le k,\ell \le p}$. 
-\vspace{10pt}
-
-\textit{Step 3.} Let $\widehat{d}_0 = 1$ and define the parameters $\widehat{d}_1, \widehat{d}_2, \ldots$ by the equation $1 + \sum_{\ell=1}^\infty \widehat{d}_\ell z^\ell = (1 - \sum_{j=1}^p \widehat{a}_j z^j )^{-1}$. In the AR($1$) case $\varepsilon_t = a \varepsilon_{t-1} + \eta_t$ with $|a| < 1$, for instance, it holds that $\sum_{\ell = 0}^\infty \widehat{a}^\ell z^\ell = (1 - \widehat{a}z)^{-1}$ and thus $\widehat{d}_\ell = \widehat{a}^\ell$ for $\ell \ge 1$. The variance $\sigma_\eta^2 = \ex[\eta_t^2]$ of the innovations can be estimated by $\widehat{\sigma}_\eta^2 = \widehat{\gamma}(0) / (\sum_{\ell=0}^\infty \widehat{d}_\ell^2)$. With this notation at hand, we define 
-\[\widehat{\sigma}^2 = \widehat{\sigma}^2_\eta \Big( 1-\sum_{j=1}^p \widehat{a}_j\Big)^{-2} \]
-to be our estimator of the long-run error variance $\sigma^2$.
-\vspace{10pt}
+In what follows, we introduce a simple estimator of $\sigma^2$ for the AR($p$) case which is completely free of tuning parameters. As we will see, the estimation method extends to ARMA($p,q$) errors in a straightforward way. As in \cite{Hall2003}, we consider the following situation: $\{\varepsilon_t\}$ is a stationary and causal AR($p$) process of the form 
+\begin{equation}\label{AR-errors} 
+\varepsilon_t = \sum_{j=1}^p a_j \varepsilon_{t-j} + \eta_t, 
+\end{equation} 
+where $a_1,\ldots,a_p$ are unknown parameters and $\eta_t$ are i.i.d.\ innovations with $\ex[\eta_t] = 0$ and $\ex[\eta_t^2] = \sigma_\eta^2$. The AR order $p$ is known and $m$ is Lipschitz continuous on $[0,1]$, that is, $|m(u) - m(v)| \le L|u-v|$ for all $u,v \in [0,1]$ and some constant $L < \infty$. 
 
 
-The estimator $\widehat{\sigma}^2$ depends on the two tuning parameters $L_1$ and $L_2$ which are required to compute $\widehat{\gamma}(0)$. To better understand the role of these tuning parameters, let us have a closer look at the estimator $\widehat{\gamma}(0)$. As $\ex[ \{ D_\ell Y_t \}^2 ]/2 = \ex[ \{ D_\ell \varepsilon_t \}^2 ]/2 + O( \{\ell/T\}^2 ) = \gamma(0) - \gamma(\ell) + O( \{\ell/T\}^2 )$, it can be easily shown that
-\[ \ex\big[\widehat{\gamma}(0)\big] = \gamma(0) - \frac{1}{L_2-L_1+1}\sum_{r=L_1}^{L_2} \gamma(r) + O\Big( \Big\{\frac{L_2}{T} \Big\}^2 \Big). \]
-The two bias terms $\sum_{r=L_1}^{L_2} \gamma(r) / (L_2-L_1+1)$ and $O(\{ L_2/T \}^2)$ can be asymptotically neglected if we choose the tuning parameters $L_1$ and $L_2$ appropriately. Since $\{ \varepsilon_t\}$ is an AR($p$) process, the autocovariances $\gamma(r)$ decay exponentially fast to zero as $r \rightarrow \infty$. Hence, the bias term $\sum_{r=L_1}^{L_2} \gamma(r) / (L_2-L_1+1)$ is asymptotically negligible if $L_1$ grows sufficiently fast with the sample size $T$. Due to the exponential decay of the autocovariances, it in particular suffices to assume that $L_1/\log T \rightarrow \infty$. For the second bias term  $O(\{ L_2/T \}^2)$ to be asymptotically negligible, we need to assume that $L_2$ grows more slowly than the sample size $T$. In practice, $L_1$ should be chosen so large that the autocovariances $\gamma(\ell)$ with $\ell \ge L_1$ can be expected to be close to zero, ensuring that the bias term $\sum_{r=L_1}^{L_2} \gamma(r) / (L_2-L_1+1)$ is sufficiently small. The choice of $L_2$ can be expected to be less important in practice than that of $L_1$ as long as we do not pick $L_2$ too close to the sample size $T$. As pointed out in \cite{Hall2003}, it can be shown that $\widehat{\sigma}^2 = \sigma^2 + O_p(T^{-1/2})$ provided that $L_1/\log T \rightarrow \infty$ and $L_2 = O(T^{1/2})$. 
-
-\subsection{Estimating variance without additional tuning parameters}\label{subsec-error-var-ar-ours}
-
-Suppose that $\{\varepsilon_t\}$ is an AR($p$) process of the form
-\begin{equation}\label{AR-errors}
-\varepsilon_t = \sum_{j=1}^p a_j \varepsilon_{t-j} + \eta_t,
+Our estimation method relies on the following simple observation: If $\{\varepsilon_t\}$ is an AR($p$) process of the form \eqref{AR-errors}, then the time series $\{ \Delta \varepsilon_t \}$ of the differences $\Delta \varepsilon_t = \varepsilon_t - \varepsilon_{t-1}$ is an ARMA($p,1$) process of the form 
+\begin{equation}\label{AR-diff-errors} 
+\Delta \varepsilon_t - \sum_{j=1}^p a_j \Delta \varepsilon_{t-j} = \eta_t - \eta_{t-1}. 
 \end{equation}
-where $a_1,\ldots,a_p$ are unknown parameters and $\eta_t$ are i.i.d.\ 
-innovations with $\ex[\eta_t] = 0$ and $\ex[\eta_t^2] = \sigma_\eta^2$. 
-Throughout the section, we assume that $\{\varepsilon_t\}$ is a stationary 
-and causal AR($p$) process of known order $p$ with finite fourth moment 
-$\ex[\varepsilon_t^4] < \infty$. Moreover, we asssume that $m$ is Lipschitz 
-continuous on $[0,1]$, that is, $|m(u) - m(v)| \le L|u-v|$ for all $u,v \in 
-[0,1]$ and some positive constant $L$. Under these conditions, the first 
-differences $\Delta \varepsilon_t = \varepsilon_t - \varepsilon_{t-1}$ of 
-the error process $\{ \varepsilon_t \}$ can be well approximated by the 
-first differences $\Delta Y_t = Y_t - Y_{t-1}$ of the
-observed time series $\{Y_t\}$. In particular, it holds that
+For completeness, we give a formal proof of \eqref{AR-diff-errors} in the Appendix. The differences $\Delta \varepsilon_t$ of the unobserved error process are close to the differences $\Delta Y_{t,T} = Y_{t,T} - Y_{t-1,T}$ of the observed time series in the sense that 
 \begin{equation}\label{diff-Y-eps}
-\Delta Y_t = \big[\varepsilon_t  - \varepsilon_{t-1} \big] + \Big[ m 
-\Big(\frac{t}{T}\Big) - m \Big(\frac{t-1}{T}\Big) \Big] = \big[ 
-\varepsilon_t  - \varepsilon_{t-1} \big] + O \Big( \frac{1}{T} \Big). 
-\end{equation}
-In the Appendix, we further prove the following result: If 
-$\{\varepsilon_t\}$ is an AR($p$) process of the form \eqref{AR-errors}, 
-then $\{ \Delta \varepsilon_t \}$ is an ARMA($p$,$1$) process of the form
-\begin{equation}\label{ARMA-errors}
-\Delta \varepsilon_t - \sum_{j=1}^p a_j \Delta \varepsilon_{t-j} = \eta_t - 
-\eta_{t-1}.
-\end{equation}
-Taken together, \eqref{diff-Y-eps} and \eqref{ARMA-errors} imply that the 
-differenced time series $\{ \Delta Y_t \}$ is approximately an ARMA($p$,$1$) 
-process of the form \eqref{ARMA-errors}. This suggests to estimate the 
-parameters
+\Delta Y_{t,T} = \big[\varepsilon_t  - \varepsilon_{t-1} \big] + \Big[ m \Big(\frac{t}{T}\Big) - m \Big(\frac{t-1}{T}\Big) \Big] = \Delta \varepsilon_t + O \Big( \frac{1}{T} \Big).  
+\end{equation} 
+Taken together, \eqref{AR-diff-errors} and \eqref{diff-Y-eps} imply that the differenced time series $\{ \Delta Y_{t,T} \}$ is approximately an ARMA($p,1$) process of the form \eqref{AR-diff-errors}. This suggests to estimate the parameters $a_1,\ldots,a_p$ and the residual variance $\sigma_\eta^2$ by applying standard methods for ARMA process to the time series $\{ \Delta Y_{t,T} \}$. Since $\sigma^2 = \sigma^2_\eta ( 1-\sum_{j=1}^p a_j)^{-2}$ in the AR($p$) case, this immediately yields an estimator of $\sigma^2$. 
 
-$a_1,\ldots,a_p$ and the residual variance $\sigma_\eta^2$ by applying 
-standard methods for ARMA process to the time series $\{ \Delta Y_t \}$.
-We construct estimators of $a_1,\ldots,a_p$ and $\sigma_\eta^2$ as follows: 
-Let $\gamma(\ell) = \cov(\Delta \varepsilon_t, \Delta \varepsilon_{t-\ell})$ 
-and define $b_0 = 1$, $b_1 = -1$ as well as $c_{-1} = 0$, $c_0 = 1$ and $c_1 
-= a_1 + b_1$. The ARMA($p$,$1$) process $\{ \Delta \varepsilon_t \}$ 
-satisfies the difference equations
+
+Our estimators of $a_1,\ldots,a_p$ and $\sigma_\eta^2$ are constructed as follows: Let $\gamma(\ell) = \cov(\Delta \varepsilon_t,$ $\Delta \varepsilon_{t-\ell})$ and define $b_0 = 1$, $b_1 = -1$ as well as $c_{-1} = 0$, $c_0 = 1$ and $c_1 = a_1 + b_1$. The ARMA($p,1$) process $\{ \Delta \varepsilon_t \}$ satisfies the Yule-Walker equations
 \begin{align}
-\gamma(\ell) - \sum\limits_{j=1}^p a_j \gamma(\ell-j) & = \sigma_\eta^2 
-\sum_{k=\ell}^1 c_{k-\ell} b_k \hspace{-2cm} & & \text{for } \ell = 0,1 
-\label{diff-eq-1} \\
-\gamma(\ell) - \sum\limits_{j=1}^p a_j \gamma(\ell-j) & = 0 \hspace{-2cm} & 
-& \text{for } \ell \ge 2; \label{diff-eq-2}
+\gamma(\ell) - \sum\limits_{j=1}^p a_j \gamma(\ell-j) & = \sigma_\eta^2 \sum_{k=\ell}^1 c_{k-\ell} b_k \hspace{-2cm} & & \text{for } \ell = 0,1 \label{diff-eq-1} \\
+\gamma(\ell) - \sum\limits_{j=1}^p a_j \gamma(\ell-j) & = 0 \hspace{-2cm} & & \text{for } \ell \ge 2; \label{diff-eq-2}  
 \end{align}
-cp.\ \S3.3 in \cite{BrockwellDavis1991}. The equations \eqref{diff-eq-2} for 
-$2 \le \ell \le p+1$ can be
-written more compactly as $\boldsymbol{\gamma}_p = \boldsymbol{\Gamma}_p \, 
-\boldsymbol{a}$, where $\boldsymbol{a} = (a_1,\ldots,a_p)^\top$,
-\[ \boldsymbol{\gamma}_p =
-\begin{pmatrix}
-\gamma(2) \\ \gamma(3) \\ \vdots \\ \gamma(p-1)
+cp.\ \S3.3 in \cite{BrockwellDavis1991}. The equations \eqref{diff-eq-2} for $2 \le \ell \le p+1$ can be written more compactly as $\boldsymbol{\gamma}_p = \boldsymbol{\Gamma}_p \, \boldsymbol{a}$, where $\boldsymbol{a} = (a_1,\ldots,a_p)^\top$,
+\[ \boldsymbol{\gamma}_p = 
+\begin{pmatrix} 
+\gamma(2) \\ \gamma(3) \\ \vdots \\ \gamma(p-1)    
 \end{pmatrix}
-\qquad \text{and} \qquad
-\boldsymbol{\Gamma}_p =
-\begin{pmatrix}
-\gamma(1) & \gamma(0)  & \dots  & \gamma(p-2) \\
-\gamma(2) & \gamma(1)  & \dots  & \gamma(p-3) \\
-\vdots  & \vdots  &  \ddots & \vdots  \\
-\gamma(p) & \gamma(p-1) & \dots  & \gamma(1)
-\end{pmatrix}. \]
-To obtain an estimator of $\boldsymbol{a}$, we replace the unknown 
-quantities in the equation $\boldsymbol{a} = \boldsymbol{\Gamma}_p^{-1} 
-\boldsymbol{\gamma}_p$ by estimators. In particular, we define 
-$\widehat{\boldsymbol{a}} = (\widehat{a}_1,\ldots,\widehat{a}_p)^\top$ by
-\begin{equation}\label{est-AR-par}
-\widehat{\boldsymbol{a}} = \widehat{\boldsymbol{\Gamma}}_p^{-1}
-\widehat{\boldsymbol{\gamma}}_p,
+\qquad \text{and} \qquad  
+\boldsymbol{\Gamma}_p = 
+\begin{pmatrix} 
+\gamma(1) & \gamma(0)   & \dots   & \gamma(p-2) \\
+\gamma(2) & \gamma(1)   & \dots   & \gamma(p-3) \\
+\vdots    & \vdots      &  \ddots & \vdots      \\
+\gamma(p) & \gamma(p-1) & \dots   & \gamma(1)
+\end{pmatrix}. \] 
+To obtain an estimator of $\boldsymbol{a}$, we replace the unknown quantities in the equation $\boldsymbol{a} = \boldsymbol{\Gamma}_p^{-1} \boldsymbol{\gamma}_p$ by estimators. In particular, we define $\widehat{\boldsymbol{a}} = (\widehat{a}_1,\ldots,\widehat{a}_p)^\top$ by 
+\begin{equation}\label{est-AR-par}  
+\widehat{\boldsymbol{a}} = \widehat{\boldsymbol{\Gamma}}_p^{-1} \widehat{\boldsymbol{\gamma}}_p,
 \end{equation}
-where $\widehat{\boldsymbol{\gamma}}_p$ and 
-$\widehat{\boldsymbol{\Gamma}}_p$ are defined analogously as 
-$\boldsymbol{\gamma}_p$ and $\boldsymbol{\Gamma}_p$ with $\gamma(\ell)$ 
-replaced by the sample autocovariance
+where $\widehat{\boldsymbol{\gamma}}_p$ and $\widehat{\boldsymbol{\Gamma}}_p$ are defined analogously as $\boldsymbol{\gamma}_p$ and $\boldsymbol{\Gamma}_p$ with $\gamma(\ell)$ replaced by the sample autocovariance 
 \begin{equation}\label{est-autocov}
-\widehat{\gamma}(\ell) = \frac{1}{T} \sum\limits_{t=1}^{T-|\ell|} \Delta Y_t 
-\, \Delta Y_{t+|\ell|}.
+\widehat{\gamma}(\ell) = \frac{1}{T} \sum\limits_{t=1}^{T-|\ell|} \Delta Y_{t,T} \, \Delta Y_{t+|\ell|,T}. 
 \end{equation}
-The residual variance $\sigma_\eta^2$ can be estimated with the help of the 
-difference equation \eqref{diff-eq-1}: Using \eqref{diff-eq-1} with $\ell = 
-1$, we get that $\sigma_\eta^2 = \sum_{j=1}^p a_j \gamma(1-j) - \gamma(1)$, 
-which suggests to estimate $\sigma_\eta^2$ by
+We next use equation \eqref{diff-eq-1} with $\ell = 1$ to obtain that $\sigma_\eta^2 = \sum_{j=1}^p a_j \gamma(1-j) - \gamma(1)$. This suggests to estimate the innovation variance $\sigma_\eta^2$ by 
 \begin{equation}\label{est-var-eta}
-\widehat{\sigma}_\eta^2 = \sum_{j=1}^p \widehat{a}_j \widehat{\gamma}(1-j) - 
-\widehat{\gamma}(1).
+\widehat{\sigma}_\eta^2 = \sum_{j=1}^p \widehat{a}_j \widehat{\gamma}(1-j) - \widehat{\gamma}(1).
 \end{equation}
-With the help of the estimators $\widehat{\boldsymbol{a}}$
-and $\widehat{\sigma}_\eta^2$, we can finally construct an estimator of the 
-long-run error variance $\sigma^2 = \sum_{\ell=-\infty}^{\infty} 
-\cov(\varepsilon_t,\varepsilon_{t-\ell})$: When $\{ \varepsilon_t \}$ is an 
-AR($p$) process of the form \eqref{AR-errors}, it holds that $\sigma^2 = 
-\sigma^2_\eta ( 1-\sum_{j=1}^p a_j)^{-2}$. Hence, we may estimate $\sigma^2$ 
-by
+Recalling that $\sigma^2 = \sigma^2_\eta ( 1-\sum_{j=1}^p a_j)^{-2}$, we finally define our estimator of the long-run error variance $\sigma^2$ by 
 \begin{equation}\label{est-lrv}
-\widehat{\sigma}^2 = \widehat{\sigma}^2_\eta \Big( 1-\sum_{j=1}^p 
-\widehat{a}_j\Big)^{-2}.
+\widehat{\sigma}^2 = \widehat{\sigma}^2_\eta \Big( 1-\sum_{j=1}^p \widehat{a}_j\Big)^{-2}. 
+\end{equation}  
+The estimators $\widehat{\boldsymbol{a}}$, $\widehat{\sigma}_\eta^2$ and $\widehat{\sigma}^2$ have the following formal properties. 
+\begin{prop}\label{prop-lrv}
+Let $\{ \varepsilon_t \}$ be a stationary and causal AR($p$) process of the form \eqref{AR-errors} and let $m$ be Lipschitz. Then ??. 
+\end{prop}
+
+
+We briefly compare our estimators to competing methods from the literature. Presumably closest to our method is the procedure of \cite{Hall2003}. Nevertheless, it differs from our approach in several respects, the most important difference being the following: In order to construct their estimators, \cite{Hall2003} need to compute the differences $\Delta_\ell \varepsilon_t = \varepsilon_t - \varepsilon_{t-\ell}$ for $L_1 \le \ell \le L_2$, where $L_1$ and $L_2$ are two tuning parameters that are required to fulfill the conditions $L_1 / \log T \rightarrow \infty$ and $L_2 = O(T^{1/2})$. Our approach, in contrast, is only based on the first differences $\Delta \varepsilon_t = \varepsilon_t - \varepsilon_{t-1}$ and does not involve any tuning parameters. The advantage of being completely free of tuning parameters comes, of course, at some cost: Our estimators of the AR parameters $a_1,\ldots,a_p$ (and thus also those of $\sigma_\eta^2$ and $\sigma^2$) are $\sqrt{T}$-consistent as are the estimators of \cite{Hall2003}. However, in general, they have a somewhat larger asymptotic variance than those of \cite{Hall2003} and in this sense are a bit less efficient. Hence, we trade a bit of efficiency for the practical advantage of not having to choose any tuning parameter. 
+%(ii) In order to compute the innovation variance $\sigma_\eta^2$, the procedure of \cite{Hall2003} requires to compute the parameters $\widetilde{d}_1, \widetilde{d}_2, \ldots$ in the expansion $1 + \sum_{\ell=1}^\infty \widehat{d}_\ell z^\ell = (1 - \sum_{j=1}^p \widetilde{a}_j z^j )^{-1}$, where $\widetilde{a}_j$ denote the estimators of $a_j$ from \cite{Hall2003}. Whereas it is trivial to compute the coefficients $\widetilde{d}_1, \widetilde{d}_2, \ldots$ in the AR($1$) case, this becomes quite tedious for $p > 1$. 
+
+
+Before we close the section, we discuss how to extend our methods to the ARMA case. To do so, suppose that $\{ \varepsilon_t \}$ is a stationary and causal ARMA($p,q$) process of the form 
+\begin{equation}\label{ARMA-errors} 
+\varepsilon_t - \sum_{j=1}^p a_j \varepsilon_{t-j} = \eta_t + \sum\limits_{k=1}^q b_k \eta_{t-k}, 
+\end{equation} 
+where $a_1,\ldots,a_p$ and $b_1,\ldots,b_q$ are unknown parameters and the innovations $\eta_t$ are as above. Similarly as in the AR($p$) case, we can show the following: If $\{\varepsilon_t\}$ is an ARMA($p,q$) process of the form \eqref{ARMA-errors}, then the time series $\{ \Delta \varepsilon_t \}$ of the differences $\Delta \varepsilon_t = \varepsilon_t - \varepsilon_{t-1}$ is an ARMA($p,q+1$) process of the form 
+\begin{equation}\label{ARMA-diff-errors} 
+\Delta \varepsilon_t - \sum_{j=1}^p a_j \Delta \varepsilon_{t-j} = \eta_t + \sum\limits_{k=1}^{q+1} d_k \eta_{t-k},
 \end{equation}
+where $d_k = b_k + b_{k-1}$ for $1 \le k \le q$ with $b_0 = 1$ and $d_{q+1} = b_q$. The unknown parameters $a_1,\ldots,a_p$, $d_1,\ldots,d_{q+1}$ and $\sigma_\eta^2$ can be estimated similarly as above by using the Yule-Walker equations corresponding to model \eqref{ARMA-diff-errors}. Once we have computed estimators for $d_1,\ldots,d_{q+1}$, we trivially get estimators for $b_1,\ldots,b_q$ as well and can estimate the long-run error variance $\sigma^2$ with the help of the formula $\sigma^2 = \sigma^2_\eta (1+\sum_{k=1}^q b_k)^2 / ( 1-\sum_{j=1}^p a_j)^2$. 
+
+
+% Procedure of van Keilegom and Hall:
+
+%The differencing approach presented above can be extended to more complicated error structures. For the case of $k$-dependent error terms, estimators for $\sigma^2$ have been proposed by \cite{MuellerStadtmueller1988}, \cite{Herrmann1992} and \cite{Munk2017} among others. We here focus attention on the case of autoregressive error terms. Specifically, we suppose that $\{\varepsilon_t\}$ is an AR($p$) process of the form $\varepsilon_t = \sum_{j=1}^p a_j \varepsilon_{t-j} + \eta_t$, where $a_1,\ldots,a_p$ are unknown parameters and $\eta_t$ are i.i.d.\ innovations with $\ex[\eta_t] = 0$ and $\ex[\eta_t^2] = \sigma_\eta^2$. Throughout the discussion, we assume that $\{\varepsilon_t\}$ is a stationary and causal AR($p$) process of known order $p$ with finite fourth moment $\ex[\varepsilon_t^4] < \infty$. A difference-based method to estimate the long-run variance $\sigma^2$ of the AR($p$) error process $\{\varepsilon_t\}$ in model \eqref{model} has been developed in \cite{Hall2003}. Their estimator $\widehat{\sigma}^2$ is constructed in the following three steps: 
+%\vspace{10pt}
+
+%\textit{Step 1.} We first set up an estimator of the autocovariance $\gamma(\ell) = \cov(\varepsilon_t,\varepsilon_{t+\ell})$ for a given lag $\ell$. As in the case of independent errors, it holds that $D_\ell Y_t = D_\ell \varepsilon_t + O(\ell/T)$ uniformly over $t$ provided that $m$ is Lipschitz. This together with the fact that $\ex[ \{  D_\ell \varepsilon_t \}^2 ] / 2 = \gamma(0) - \gamma(\ell)$ motivates to estimate $\gamma(0)$ by
+%$\widehat{\gamma}(0) = \frac{1}{L_2-L_1+1}\sum_{r=L_1}^{L_2}\frac{1}{2(T-r)}\sum_{t=r+1}^T\{D_rY_t\}^2$, 
+%where $L_1\le L_2$ are tuning parameters which are discussed in more detail below. Moreover, an estimator of $\gamma(\ell)$ for $1 \le \ell \le p$ is given by 
+%$\widehat{\gamma}(\ell) = \widehat{\gamma}(0) - \frac{1}{2(T-\ell)}\sum_{t=\ell+1}^T \{D_\ell Y_t\}^2$.
+%As $\gamma(\ell) = \gamma(-\ell)$, we finally set $\widehat{\gamma}(-\ell) = \widehat{\gamma}(\ell)$ for $1 \le \ell \le p$. 
+%\vspace{10pt}
+
+%\textit{Step 2.} We next estimate the AR coefficients $(a_1,\ldots,a_p)^\top$ by the Yule-Walker estimators $(\widehat{a}_1,\ldots,\widehat{a}_p)^\top = \widehat{\Gamma}^{-1} (\widehat{\gamma}(1), \ldots, \widehat{\gamma}(p))^\top$, where $\widehat{\Gamma} = \{ \widehat{\gamma}(|k-\ell|) \}_{1 \le k,\ell \le p}$. 
+%\vspace{10pt}
+
+%\textit{Step 3.} Let $\widehat{d}_0 = 1$ and define the parameters $\widehat{d}_1, \widehat{d}_2, \ldots$ by the equation $1 + \sum_{\ell=1}^\infty \widehat{d}_\ell z^\ell = (1 - \sum_{j=1}^p \widehat{a}_j z^j )^{-1}$. In the AR($1$) case $\varepsilon_t = a \varepsilon_{t-1} + \eta_t$ with $|a| < 1$, for instance, it holds that $\sum_{\ell = 0}^\infty \widehat{a}^\ell z^\ell = (1 - \widehat{a}z)^{-1}$ and thus $\widehat{d}_\ell = \widehat{a}^\ell$ for $\ell \ge 1$. The variance $\sigma_\eta^2 = \ex[\eta_t^2]$ of the innovations can be estimated by $\widehat{\sigma}_\eta^2 = \widehat{\gamma}(0) / (\sum_{\ell=0}^\infty \widehat{d}_\ell^2)$. With this notation at hand, we define 
+%\[\widehat{\sigma}^2 = \widehat{\sigma}^2_\eta \Big( 1-\sum_{j=1}^p \widehat{a}_j\Big)^{-2} \]
+%to be our estimator of the long-run error variance $\sigma^2$.
+%\vspace{10pt}
+
+%The estimator $\widehat{\sigma}^2$ depends on the two tuning parameters $L_1$ and $L_2$ which are required to compute $\widehat{\gamma}(0)$. To better understand the role of these tuning parameters, let us have a closer look at the estimator $\widehat{\gamma}(0)$. As $\ex[ \{ D_\ell Y_t \}^2 ]/2 = \ex[ \{ D_\ell \varepsilon_t \}^2 ]/2 + O( \{\ell/T\}^2 ) = \gamma(0) - \gamma(\ell) + O( \{\ell/T\}^2 )$, it can be easily shown that
+%\[ \ex\big[\widehat{\gamma}(0)\big] = \gamma(0) - \frac{1}{L_2-L_1+1}\sum_{r=L_1}^{L_2} \gamma(r) + O\Big( \Big\{\frac{L_2}{T} \Big\}^2 \Big). \]
+%The two bias terms $\sum_{r=L_1}^{L_2} \gamma(r) / (L_2-L_1+1)$ and $O(\{ L_2/T \}^2)$ can be asymptotically neglected if we choose the tuning parameters $L_1$ and $L_2$ appropriately. Since $\{ \varepsilon_t\}$ is an AR($p$) process, the autocovariances $\gamma(r)$ decay exponentially fast to zero as $r \rightarrow \infty$. Hence, the bias term $\sum_{r=L_1}^{L_2} \gamma(r) / (L_2-L_1+1)$ is asymptotically negligible if $L_1$ grows sufficiently fast with the sample size $T$. Due to the exponential decay of the autocovariances, it in particular suffices to assume that $L_1/\log T \rightarrow \infty$. For the second bias term  $O(\{ L_2/T \}^2)$ to be asymptotically negligible, we need to assume that $L_2$ grows more slowly than the sample size $T$. In practice, $L_1$ should be chosen so large that the autocovariances $\gamma(\ell)$ with $\ell \ge L_1$ can be expected to be close to zero, ensuring that the bias term $\sum_{r=L_1}^{L_2} \gamma(r) / (L_2-L_1+1)$ is sufficiently small. The choice of $L_2$ can be expected to be less important in practice than that of $L_1$ as long as we do not pick $L_2$ too close to the sample size $T$. As pointed out in \cite{Hall2003}, it can be shown that $\widehat{\sigma}^2 = \sigma^2 + O_p(T^{-1/2})$ provided that $L_1/\log T \rightarrow \infty$ and $L_2 = O(T^{1/2})$. 
+
+
