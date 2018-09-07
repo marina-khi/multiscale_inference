@@ -1,8 +1,8 @@
 # Epanechnikov kernel function, which is defined as f(x) = 3/4(1-x^2)
-# for |x|<=1 and 0 elsewhere
+# for |x|<1 and 0 elsewhere
 epanechnikov_kernel <- function(x)
 {
-  if (abs(x)<=1)
+  if (abs(x)<1)
   {
     result = 3/4 * (1 - x*x)
   } else {
@@ -174,4 +174,44 @@ creating_matrix_and_texing <- function(vect, vect_T, vect_alpha, filename){
                             "$T$ & 0.01 & 0.05 & 0.1 \\\\\n") 
   
   print.xtable(xtable(matrix_, digits = c(3), align = "cccc"), type="latex",  file=filename, add.to.row = addtorow, include.colnames = FALSE)
+}
+
+#Calculate autocovariance function for AR(1) model \varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t based on the coefficients of the model
+autocovariance_function_AR1 <- function(k, a_1, sigma_eta){
+  if (k%%1==0)
+  {
+    result = sigma_eta * sigma_eta * a_1^(abs(k)) / (1 - a_1 * a_1)
+  } else {
+    print('Check the input: k is not integer')
   }
+  return(result)
+}
+
+calculating_estimator_and_variance <- function(T_size, i_0, h, gamma, data){
+  data_matrix = matrix(data, nrow = T_size)
+  sigmahat_matrix <- matrix(data = NA, nrow =T_size, ncol =T_size)
+  w_vector = c()
+  for (i in 1:T_size){
+    for (j in 1:T_size){
+      sigmahat_matrix[i,j] = gamma[abs(i - j) + 1] * epanechnikov_kernel((i/T_size - i_0)/h) * epanechnikov_kernel((j/T_size - i_0)/h)/(h^2)
+    }
+    w_vector = c(w_vector, epanechnikov_kernel((i/T_size - i_0)/h) / h)
+  }
+  w_matrix = diag(w_vector)
+  x_matrix =  matrix(c(rep(1, T_size), seq(1/T_size - i_0, 1-i_0, by = 1/T_size)), nrow=T_size, byrow=FALSE)
+  inverse_matrix = tryCatch({inv(t(x_matrix) %*% w_matrix %*% x_matrix)},
+                            error = function(e) {print("Something is wrong, the matrix can not be inverted")})
+  variance_matrix = inverse_matrix %*% (t(x_matrix) %*% sigmahat_matrix %*% x_matrix) %*% inverse_matrix
+  estimator = inverse_matrix %*% (t(x_matrix) %*% w_matrix %*% data)
+  return(list(estimator, variance_matrix))
+}
+
+estimating_variance_of_data <- function(data){
+  T_size = length(data)
+  divided_sample = split(data, cut(seq_along(data), sqrt(T_size), labels = FALSE)) 
+  divided_sample_mean = sapply(divided_sample, FUN = mean)
+  result = sum((divided_sample_mean - mean(divided_sample_mean))^2)/ ((length(divided_sample_mean) - 1) * length(divided_sample_mean))
+  return(result)
+}
+  
+  
