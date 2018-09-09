@@ -187,8 +187,28 @@ autocovariance_function_AR1 <- function(k, a_1, sigma_eta){
   return(result)
 }
 
+#Estimate autocovariance for a given time series y_data by a sample autocovariance
+sample_autocovariance <- function(l, y_data){
+  if (l%%1==0)
+  {
+    T_size = length(y_data)
+    if (l >= T_size - 2) {
+      print("Cannot estimate autocovariance from the data: sample size is too small")
+    } else {
+      result = 0
+      for (t in 1:min(T_size - abs(l), T_size - 1)){
+        result = result + (1/T_size) * y_data[t] * y_data[t + abs(l)]
+      }
+    }
+  } else {
+    print('Check the input: l is not integer')
+  }
+  return(result)
+}
+
+
+
 calculating_estimator_and_variance <- function(T_size, i_0, h, gamma, data){
-  data_matrix = matrix(data, nrow = T_size)
   sigmahat_matrix <- matrix(data = NA, nrow =T_size, ncol =T_size)
   w_vector = c()
   for (i in 1:T_size){
@@ -213,5 +233,5 @@ estimating_variance_of_data <- function(data){
   result = sum((divided_sample_mean - mean(divided_sample_mean))^2)/ ((length(divided_sample_mean) - 1) * length(divided_sample_mean))
   return(result)
 }
-  
-  
+
+
