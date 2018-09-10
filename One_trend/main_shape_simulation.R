@@ -2,6 +2,8 @@ library(xtable)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
 source("Shape/functions.R")
+source("Shape/estimating_sigma_new.R")
+
 source("Shape/C_code/estimating_sigma.R")
 dyn.load("Shape/C_code/estimating_sigma.dll")
 dyn.load("Shape/C_code/psihat_statistic.dll")

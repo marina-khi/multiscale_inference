@@ -176,28 +176,17 @@ creating_matrix_and_texing <- function(vect, vect_T, vect_alpha, filename){
   print.xtable(xtable(matrix_, digits = c(3), align = "cccc"), type="latex",  file=filename, add.to.row = addtorow, include.colnames = FALSE)
 }
 
-#Calculate autocovariance function for AR(1) model \varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t based on the coefficients of the model
-autocovariance_function_AR1 <- function(k, a_1, sigma_eta){
-  if (k%%1==0)
-  {
-    result = sigma_eta * sigma_eta * a_1^(abs(k)) / (1 - a_1 * a_1)
-  } else {
-    print('Check the input: k is not integer')
-  }
-  return(result)
-}
-
 #Estimate autocovariance for a given time series y_data by a sample autocovariance
-sample_autocovariance <- function(l, y_data){
+sample_autocovariance <- function(l, y_data_dif){
   if (l%%1==0)
   {
-    T_size = length(y_data)
+    T_size = length(y_data_dif) + 1
     if (l >= T_size - 2) {
       print("Cannot estimate autocovariance from the data: sample size is too small")
     } else {
       result = 0
-      for (t in 1:min(T_size - abs(l), T_size - 1)){
-        result = result + (1/T_size) * y_data[t] * y_data[t + abs(l)]
+      for (t in 2:(T_size- abs(l))){
+        result = result + (1/T_size) * y_data_dif[t-1] * y_data_dif[t + abs(l)-1]
       }
     }
   } else {
@@ -206,32 +195,5 @@ sample_autocovariance <- function(l, y_data){
   return(result)
 }
 
-
-
-calculating_estimator_and_variance <- function(T_size, i_0, h, gamma, data){
-  sigmahat_matrix <- matrix(data = NA, nrow =T_size, ncol =T_size)
-  w_vector = c()
-  for (i in 1:T_size){
-    for (j in 1:T_size){
-      sigmahat_matrix[i,j] = gamma[abs(i - j) + 1] * epanechnikov_kernel((i/T_size - i_0)/h) * epanechnikov_kernel((j/T_size - i_0)/h)/(h^2)
-    }
-    w_vector = c(w_vector, epanechnikov_kernel((i/T_size - i_0)/h) / h)
-  }
-  w_matrix = diag(w_vector)
-  x_matrix =  matrix(c(rep(1, T_size), seq(1/T_size - i_0, 1-i_0, by = 1/T_size)), nrow=T_size, byrow=FALSE)
-  inverse_matrix = tryCatch({inv(t(x_matrix) %*% w_matrix %*% x_matrix)},
-                            error = function(e) {print("Something is wrong, the matrix can not be inverted")})
-  variance_matrix = inverse_matrix %*% (t(x_matrix) %*% sigmahat_matrix %*% x_matrix) %*% inverse_matrix
-  estimator = inverse_matrix %*% (t(x_matrix) %*% w_matrix %*% data)
-  return(list(estimator, variance_matrix))
-}
-
-estimating_variance_of_data <- function(data){
-  T_size = length(data)
-  divided_sample = split(data, cut(seq_along(data), sqrt(T_size), labels = FALSE)) 
-  divided_sample_mean = sapply(divided_sample, FUN = mean)
-  result = sum((divided_sample_mean - mean(divided_sample_mean))^2)/ ((length(divided_sample_mean) - 1) * length(divided_sample_mean))
-  return(result)
-}
 
 

@@ -6,7 +6,7 @@ estimating_sigma_new_method <- function(y_data, p){
   gamma_hat_temp <- sapply(0:(p+1), FUN = sample_autocovariance, y_data)
   if (p == 1){
     Gamma_matrix_hat <- gamma_hat_temp[2]
-    gamma_hat        <-  gamma_hat_temp[3]
+    gamma_hat        <- gamma_hat_temp[3]
     a_hat            <- gamma_hat / Gamma_matrix_hat     
   } else {
     Gamma_matrix_hat <- matrix(data = NA, nrow = p, ncol = p)
@@ -23,7 +23,7 @@ estimating_sigma_new_method <- function(y_data, p){
     a_hat     <- inv(Gamma_matrix_hat) %*% gamma_hat
   }
   sigma_eta_squared <- sum(a_hat * gamma_hat_temp[2:(p+1)]) - gamma_hat_temp[1]
-  sigma_eta <- sqrt(sigma_et_squared)
+  sigma_eta <- sqrt(sigma_eta_squared)
   sigma_hat <- sigma_eta / (abs(1 - sum(a_hat)))
-  return(list(a_hat, sigma_eta, sigma_hat))
+  return(list(sigma_hat, a_hat, sigma_eta))
 }
