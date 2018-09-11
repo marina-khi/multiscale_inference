@@ -48,12 +48,13 @@ calculating_estimator_and_variance <- function(T_size, i_0, h, gamma, data){
     }
     w_vector = c(w_vector, epanechnikov_kernel((i/T_size - i_0)/h) / h)
   }
-  w_matrix = diag(w_vector)
-  x_matrix =  matrix(c(rep(1, T_size), seq(1/T_size - i_0, 1-i_0, by = 1/T_size)), nrow=T_size, byrow=FALSE)
-  inverse_matrix = tryCatch({inv(t(x_matrix) %*% w_matrix %*% x_matrix)},
+  x_matrix        =  matrix(c(rep(1, T_size), seq(1/T_size - i_0, 1-i_0, by = 1/T_size)), nrow=T_size, byrow=FALSE)
+  XtW             = t(apply(x_matrix,2,function(x){x*w_vector}))# t(X) %*% diag(w) %*% X  computed faster.  :)
+  inverse_matrix  = tryCatch({inv(XtW %*% x_matrix)},  
                             error = function(e) {print("Something is wrong, the matrix can not be inverted")})
   variance_matrix = inverse_matrix %*% (t(x_matrix) %*% sigmahat_matrix %*% x_matrix) %*% inverse_matrix
-  estimator = inverse_matrix %*% (t(x_matrix) %*% w_matrix %*% data)
+  estimator       = inverse_matrix %*% (XtW %*% data)
+  
   return(list(estimator, variance_matrix))
 }
 
