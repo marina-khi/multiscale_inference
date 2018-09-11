@@ -39,23 +39,28 @@ autocovariance_function_AR1 <- function(k, a_1, sigma_eta){
   return(result)
 }
 
-calculating_estimator_and_variance <- function(T_size, i_0, h, gamma, data){
-  sigmahat_matrix <- matrix(data = NA, nrow =T_size, ncol =T_size)
-  w_vector = c()
-  for (i in 1:T_size){
-    for (j in 1:T_size){
-      sigmahat_matrix[i,j] = gamma[abs(i - j) + 1] * epanechnikov_kernel((i/T_size - i_0)/h) * epanechnikov_kernel((j/T_size - i_0)/h)/(h^2)
-    }
-    w_vector = c(w_vector, epanechnikov_kernel((i/T_size - i_0)/h) / h)
-  }
-  x_matrix        =  matrix(c(rep(1, T_size), seq(1/T_size - i_0, 1-i_0, by = 1/T_size)), nrow=T_size, byrow=FALSE)
-  XtW             = t(apply(x_matrix,2,function(x){x*w_vector}))# t(X) %*% diag(w) %*% X  computed faster.  :)
-  inverse_matrix  = tryCatch({inv(XtW %*% x_matrix)},  
-                            error = function(e) {print("Something is wrong, the matrix can not be inverted")})
-  variance_matrix = inverse_matrix %*% (t(x_matrix) %*% sigmahat_matrix %*% x_matrix) %*% inverse_matrix
-  estimator       = inverse_matrix %*% (XtW %*% data)
+calculating_estimator_and_variance <- function(T_size, i, h, gamma, data){
+  x_matrix <- matrix(c(rep(1, T_size), seq(1/T_size - i, 1-i, by = 1/T_size)), nrow=T_size, byrow=FALSE)
+  XtSigma  <- matrix(data = NA, nrow =2, ncol =T_size)
+  w_vector <- sapply(seq(1/T_size - i, 1-i, by = 1/T_size)/h, FUN = epanechnikov_kernel)/h
   
-  return(list(estimator, variance_matrix))
+  for (j in 1:T_size){      #t(X) %*% Sigma computed faster in order not to save the whole Sigma matrix (T_size * T_size) in the memory
+    XtSigma[1, j] = 0
+    XtSigma[2, j] = 0
+    for (k in 1:T_size){
+      XtSigma[1, j] = XtSigma[1, j] + gamma[abs(k - j) + 1] * w_vector[k] * w_vector[j]
+      XtSigma[2, j] = XtSigma[2, j] + gamma[abs(k - j) + 1] * w_vector[k] * w_vector[j] * (k/T_size - i)   
+    }
+  }
+
+  XtW            = t(apply(x_matrix,2,function(x){x*w_vector}))# t(X) %*% diag(w)   computed faster.  :)
+  inverse_matrix = tryCatch({solve(XtW %*% x_matrix)},  
+                            error = function(e) {print("Something is wrong, the matrix can not be inverted")})
+
+  variances_beta = diag(inverse_matrix %*% XtSigma %*% x_matrix %*% inverse_matrix)
+  estimator      = inverse_matrix %*% XtW %*% data
+  
+  return(list(estimator, variances_beta))
 }
 
 SiZer_single_estimation <- function(i, h, y_data, gamma_estimated, q_h){
@@ -63,7 +68,7 @@ SiZer_single_estimation <- function(i, h, y_data, gamma_estimated, q_h){
   
   result         <- calculating_estimator_and_variance(T_data, i, h, gamma_estimated, y_data)
   m_hat_prime    <- result[[1]][2, 1]
-  sd_m_hat_prime <- sqrt(result[[2]][2, 2])
+  sd_m_hat_prime <- sqrt(result[[2]][2])
 
   if (m_hat_prime - q_h * sd_m_hat_prime > 0){
     result = 1
@@ -79,9 +84,9 @@ SiZer_single_estimation <- function(i, h, y_data, gamma_estimated, q_h){
 #Defining necessary parameters#
 ###############################
 
-a_1       <- 0.9
+a_1       <- 0.6
 sigma_eta <- 1
-T_size    <- 500
+T_size    <- 200
 alpha     <- 0.05
 
 ####################################
@@ -96,7 +101,7 @@ h    <- 0.1
 
 y_data_ar_1       <- arima.sim(model = list(ar = a_1), n = T_size, innov = rnorm(T_size, 0, sigma_eta))
 variance_of_y_bar <- estimating_variance_of_data(y_data_ar_1)
-ESS               <- sum(sapply((i_0 - seq(0, 1, by = 1/T_size))/h, epanechnikov_kernel))/epanechnikov_kernel(0)
+ESS               <- sum(sapply((i_0 - seq(1/T_size, 1, by = 1/T_size))/h, epanechnikov_kernel))/epanechnikov_kernel(0)
 
 g_t_set        <- creating_g_set(T_size, "nw") #Here we use NW method to create the set of locations and bandwidth because we want the restriction [u-h, u+h] \in [0,1] 
 g_t_set$result <- numeric(nrow(g_t_set)) # Setting the results of SiZer method to be zero for each location and bandwidth
@@ -110,9 +115,7 @@ system.time({
   q_h      <- result_2[[1]]
   ESS_star <- result_2[[2]]
   if (ESS_star >= 5){
-    for (i in 0:T_size) {
-      SiZer_single_estimation(i/T_size, h, y_data_ar_1, gamma, q_h)
-    }
+    a <- sapply(seq(1/T_size, 1, by = 1/T_size), FUN = SiZer_single_estimation, h, y_data_ar_1, gamma, q_h)
   }
 })
 
