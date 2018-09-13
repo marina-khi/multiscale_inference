@@ -195,5 +195,29 @@ sample_autocovariance <- function(l, y_data_dif){
   return(result)
 }
 
+########################################
+#These are the SiZer-specific functions#
+########################################
+
+
+#Implementation of \widehat{Var}(\bar{Y}) from "SiZer for time series" paper
+estimating_variance_of_data <- function(data){
+  T_size = length(data)
+  divided_sample = split(data, cut(seq_along(data), sqrt(T_size), labels = FALSE)) 
+  divided_sample_mean = sapply(divided_sample, FUN = mean)
+  result = sum((divided_sample_mean - mean(divided_sample_mean))^2)/ ((length(divided_sample_mean) - 1) * length(divided_sample_mean))
+  return(result)
+}
+
+#Calculate autocovariance function for AR(1) model \varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t based on the coefficients of the model
+autocovariance_function_AR1 <- function(k, a_1, sigma_eta){
+  if (k%%1==0)
+  {
+    result = sigma_eta * sigma_eta * a_1^(abs(k)) / (1 - a_1 * a_1)
+  } else {
+    print('Check the input: k is not integer')
+  }
+  return(result)
+}
 
 
