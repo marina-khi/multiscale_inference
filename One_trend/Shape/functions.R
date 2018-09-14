@@ -11,6 +11,19 @@ epanechnikov_kernel <- function(x)
   return(result)
 }
 
+# Biweight kernel function, which is defined as f(x) = 15/16(1-u^2)^2
+# for |u|<1 and 0 elsewhere
+biweight_kernel <- function(x)
+{
+  if (abs(x)<1)
+  {
+    result = (15/16) * (1 - x*x)^2
+  } else {
+    result = 0
+  }
+  return(result)
+}
+
 #Functions needed for local linear smoothing
 s_t_1 <- function(u, h, T_size) {
   result = 0

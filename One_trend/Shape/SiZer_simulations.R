@@ -129,8 +129,8 @@ SiZer_simulations <- function(T_size, a_1, sigma_eta, alpha, N_rep, PDFpath){
   
   cat("Size of SiZer: ", (rowSums(size_of_the_test != 0)/N_rep)[1], ", size of our method: ", (rowSums(size_of_the_test != 0)/N_rep)[2], "\n")
   
-  hist(size_of_the_test[1, size_of_the_test[1, ] != 0], breaks = seq(0, 500, by = 5), main = paste0("Size of SiZer: ", (rowSums(size_of_the_test != 0)/N_rep)[1]))
-  hist(size_of_the_test[2, size_of_the_test[2, ] != 0], breaks = seq(0, 500, by = 5), main = paste0("Size of our method: ", (rowSums(size_of_the_test != 0)/N_rep)[2]))
+  hist(size_of_the_test[1, size_of_the_test[1, ] != 0], main = paste0("Size of SiZer: ", (rowSums(size_of_the_test != 0)/N_rep)[1]), breaks = seq(0, max(size_of_the_test[1, ])+5, by = 5))
+  hist(size_of_the_test[2, size_of_the_test[2, ] != 0], breaks = seq(0, max(size_of_the_test[2, ])+5, by = 5), main = paste0("Size of our method: ", (rowSums(size_of_the_test != 0)/N_rep)[2]))
   
   ##################
   #Simulating power#
@@ -180,8 +180,8 @@ SiZer_simulations <- function(T_size, a_1, sigma_eta, alpha, N_rep, PDFpath){
         ", percentage of positive rejections: ", (rowSums(power_of_the_test != 0)/N_rep)[3], "\n",
         "Our results. Percentage of total rejection: ", (rowSums(power_of_the_test != 0)/N_rep)[2],
         ", percentage of positive rejections: ", (rowSums(power_of_the_test != 0)/N_rep)[4], "\n")
-    hist(power_of_the_test[1, power_of_the_test[1, ] != 0], breaks = seq(0, 1000, by = 10), main = paste0("Linear trend. Power of SiZer: ", (rowSums(power_of_the_test != 0)/N_rep)[1], ", a = ", a))
-    hist(power_of_the_test[2, power_of_the_test[2, ] != 0], breaks = seq(0, 1000, by = 10), main = paste0("Linear trend. Power of our method: ", (rowSums(power_of_the_test != 0)/N_rep)[2], ", a = ", a))
+    hist(power_of_the_test[1, power_of_the_test[1, ] != 0], breaks = seq(0, max(power_of_the_test[1, ])+10, by = 10), main = paste0("Linear trend. Power of SiZer: ", (rowSums(power_of_the_test != 0)/N_rep)[1], ", a = ", a))
+    hist(power_of_the_test[2, power_of_the_test[2, ] != 0], breaks = seq(0, max(power_of_the_test[2, ])+10, by = 10), main = paste0("Linear trend. Power of our method: ", (rowSums(power_of_the_test != 0)/N_rep)[2], ", a = ", a))
   }
   
   for (a in c(3.5, 4, 4.5, 5)){
@@ -228,8 +228,8 @@ SiZer_simulations <- function(T_size, a_1, sigma_eta, alpha, N_rep, PDFpath){
         ", percentage of positive rejections: ", (rowSums(power_of_the_test != 0)/N_rep)[3], "\n",
         "Our results. Percentage of total rejection: ", (rowSums(power_of_the_test != 0)/N_rep)[2],
         ", percentage of positive rejections: ", (rowSums(power_of_the_test != 0)/N_rep)[4], "\n")
-    hist(power_of_the_test[1, power_of_the_test[1, ] != 0], breaks = seq(0, 1000, by = 10), main = paste0("Kink function. Power of SiZer: ", (rowSums(power_of_the_test != 0)/N_rep)[1], ", a = ", a))
-    hist(power_of_the_test[2, power_of_the_test[2, ] != 0], breaks = seq(0, 1000, by = 10), main = paste0("Kink function. Power of our method: ", (rowSums(power_of_the_test != 0)/N_rep)[2], ", a = ", a))
+    hist(power_of_the_test[1, power_of_the_test[1, ] != 0], breaks = seq(0, max(power_of_the_test[1, ])+10, by = 10), main = paste0("Kink function. Power of SiZer: ", (rowSums(power_of_the_test != 0)/N_rep)[1], ", a = ", a))
+    hist(power_of_the_test[2, power_of_the_test[2, ] != 0], breaks = seq(0, max(power_of_the_test[2, ])+10, by = 10), main = paste0("Kink function. Power of our method: ", (rowSums(power_of_the_test != 0)/N_rep)[2], ", a = ", a))
   }
   
   dev.off()
