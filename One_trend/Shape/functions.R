@@ -233,4 +233,133 @@ autocovariance_function_AR1 <- function(k, a_1, sigma_eta){
   return(result)
 }
 
+plotting_many_minimal_intervals <- function(trend_height, trend_width, T_size, SiZer_matrix, N_rep, kernel_ind, sigmahat, gaussian_quantile, a_1, sigma_eta){
+  
+  matrix_our_results   <- data.frame('startpoint' = SiZer_matrix$u - SiZer_matrix$h, 'endpoint' = SiZer_matrix$u + SiZer_matrix$h)
+  matrix_their_results <- data.frame('startpoint' = SiZer_matrix$u - SiZer_matrix$h, 'endpoint' = SiZer_matrix$u + SiZer_matrix$h)
+  
+  biweight_trend  <- numeric(T_size)
+  for (i in 1:T_size) {biweight_trend[i] = trend_height * biweight_kernel(trend_width *(i/T_size - 0.5))}
+  
+  for (col in 1:N_rep){
+    y_data_ar_1_with_trend <- arima.sim(model = list(ar = a_1), n = T_size, innov = rnorm(T_size, 0, sigma_eta)) + biweight_trend
+    
+    g_t_set     <- psihat_statistic_ll(y_data_ar_1_with_trend, SiZer_matrix, kernel_ind, sigmahat)[[1]]
+    
+    results_our   <- c()
+    results_their <- c()
+    
+    for (row in 1:nrow(g_t_set)){
+      i                = g_t_set[row, 'u']
+      h                = g_t_set[row, 'h']
+      q_h              = g_t_set[row, 'q_h']
+      sd_m_hat_prime   = g_t_set[row, 'sd']
+      XtWX_inverse_XtW = g_t_set$XtWX_inv_XtW[[row]]
+      
+      m_hat_prime <- (XtWX_inverse_XtW %*% y_data_ar_1_with_trend)[2]
+      
+      if (m_hat_prime - q_h * sd_m_hat_prime > 0){
+        results_their = c(results_their, 1)
+      } else if (m_hat_prime + q_h * sd_m_hat_prime < 0) {
+        results_their = c(results_their, -1)
+      } else {
+        results_their = c(results_their, 0)
+      }
+      
+      if (g_t_set[row, 'values_with_sign'] > g_t_set[row, 'lambda'] + gaussian_quantile){
+        results_our = c(results_our, 1)
+      } else if (-g_t_set[row, 'values_with_sign'] > g_t_set[row, 'lambda'] + gaussian_quantile){
+        results_our = c(results_our, -1)
+      } else {
+        results_our = c(results_our, 0)
+      }
+    }
+    matrix_our_results <- cbind(matrix_our_results, results_our)
+    matrix_their_results <- cbind(matrix_their_results, results_their)
+  }
+  
+  grid_points <- seq(from = 1/T_size, to = 1, length.out = T_size) #grid points for estimating
+  
+  pdffilename = paste0("Paper/Plots/min_int_with_a1_", a_1, "_sigma_eta_", sigma_eta, "_height_", trend_height, "_width_", trend_width, ".pdf")
+  pdf(pdffilename, width=10, height=10, paper="special")
+  
+  par(mfrow = c(3,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
+  par(mar = c(1, 0.5, 2, 0)) #Margins for each plot
+  par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
+  
+  plot(grid_points, y_data_ar_1_with_trend, ylim = c(-1.5, trend_height + 1), type = "l", main = paste0("a_1 = ", a_1, ", sigma_eta = ", sigma_eta, ", height = ", trend_height, ", width = ", trend_width))
+  lines(grid_points, biweight_trend)
+  
+  plot(NA, xlim=c(0,1), ylim = c(-1, N_rep +1), main = "Our result")
+  for (col in 3:(N_rep+2)){
+    a_t_set <- subset(matrix_our_results, matrix_our_results[,col] != 0, select = c(startpoint, endpoint, col))
+    colnames(a_t_set) <- c('startpoint', 'endpoint', 'values')
+    p_t_set <- choosing_minimal_intervals(a_t_set)
+    if (!is.null(p_t_set)) {segments(p_t_set$startpoint, col, p_t_set$endpoint, col)}
+  }
+  
+  plot(NA, xlim=c(0,1), ylim = c(-1, N_rep +1), main = "Their result")
+  for (col in 3:(N_rep+2)){
+    a_t_set <- subset(matrix_their_results, matrix_their_results[,col] != 0, select = c(startpoint, endpoint, col))
+    colnames(a_t_set) <- c('startpoint', 'endpoint', 'values')
+    p_t_set <- choosing_minimal_intervals(a_t_set)
+    if (!is.null(p_t_set)){segments(p_t_set$startpoint, col, p_t_set$endpoint, col)}
+  }
+  dev.off()
+}
 
+calculating_SiZer_matrix <- function(different_i, different_h, T_size, T_star, alpha, gamma){
+  
+  SiZer_matrix              <- expand.grid(u = different_i, h = different_h) #Creating a dataframe with all possible combination of i and h
+  SiZer_matrix$values       <- numeric(nrow(SiZer_matrix)) # Setting the values of the statistic to be zero
+  SiZer_matrix$sd           <- numeric(nrow(SiZer_matrix)) # Setting the values of standard deviation to be zero
+  SiZer_matrix$ESS_star     <- numeric(nrow(SiZer_matrix)) # Setting the values of ESS* to be zero
+  SiZer_matrix$q_h          <- numeric(nrow(SiZer_matrix)) # Setting the values of the gaussian quantile to be zero
+  SiZer_matrix$small_ESS    <- numeric(nrow(SiZer_matrix)) # Later we will delete all the row such that ESS* is too small
+  SiZer_matrix$lambda       <- lambda(SiZer_matrix[['h']]) # Calculating the lambda(h) in order to speed up the function psistar_statistic
+  SiZer_matrix$XtWX_inv_XtW <- I(vector(mode="list", length=nrow(SiZer_matrix)))
+  
+  
+  for (row in 1:nrow(SiZer_matrix)){
+    
+    i = SiZer_matrix[row, 'u']
+    h = SiZer_matrix[row, 'h']
+    
+    ESS      <- sum(sapply((i - seq(1/T_size, 1, by = 1/T_size))/h, epanechnikov_kernel))/epanechnikov_kernel(0)
+    ESS_star <- (T_star/T_size) * ESS 
+    l        <- T_size / ESS_star
+    q_h      <- qnorm((1 + (1 - alpha)^(1 / l))/2)
+    
+    if (ESS_star <= 5){
+      SiZer_matrix[row, 'small_ESS'] <- 1
+    } else {
+      x_matrix                     <- matrix(c(rep(1, T_size), seq(1/T_size - i, 1-i, by = 1/T_size)), nrow=T_size, byrow=FALSE)
+      w_vector                     <- sapply(seq(1/T_size - i, 1-i, by = 1/T_size)/h, FUN = epanechnikov_kernel)/h
+      XtW                          <- t(apply(x_matrix,2,function(x){x*w_vector}))   #t(X) %*% diag(w)   computed faster.  :)
+      XtWX_inverse                 <- tryCatch({solve(XtW %*% x_matrix)},  
+                                               error = function(e) {print("Something is wrong, the matrix can not be inverted")})
+      SiZer_matrix$XtWX_inv_XtW[[row]] <- XtWX_inverse %*% XtW
+      
+      XtSigma <- matrix(data = NA, nrow =2, ncol =T_size)
+      for (j in 1:T_size){      #t(X) %*% Sigma computed faster in order not to save the whole Sigma matrix (T_size * T_size) in the memory
+        XtSigma[1, j] = 0
+        XtSigma[2, j] = 0
+        for (k in 1:T_size){
+          XtSigma[1, j] = XtSigma[1, j] + gamma[abs(k - j) + 1] * w_vector[k] * w_vector[j]
+          XtSigma[2, j] = XtSigma[2, j] + gamma[abs(k - j) + 1] * w_vector[k] * w_vector[j] * (k/T_size - i)   
+        }
+      }
+      sd = sqrt((XtWX_inverse %*% XtSigma %*% x_matrix %*% XtWX_inverse)[2,2])
+      
+      SiZer_matrix[row, 'sd']       = sd
+      SiZer_matrix[row, 'q_h']      = q_h
+      SiZer_matrix[row, 'ESS_star'] = ESS_star
+    }
+  }
+  
+  SiZer_matrix           <- SiZer_matrix[SiZer_matrix$small_ESS != 1,]
+  SiZer_matrix$small_ESS <- NULL
+  SiZer_matrix$ESS_star  <- NULL
+  
+  return(SiZer_matrix)
+}
