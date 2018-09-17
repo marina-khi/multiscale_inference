@@ -190,28 +190,23 @@ creating_matrix_and_texing <- function(vect, vect_T, vect_alpha, filename){
 }
 
 #Estimate autocovariance for a given time series y_data by a sample autocovariance
-sample_autocovariance <- function(l, y_data_dif){
-  if (l%%1==0)
-  {
-    T_size = length(y_data_dif) + 1
-    if (l >= T_size - 2) {
-      print("Cannot estimate autocovariance from the data: sample size is too small")
-    } else {
-      result = 0
-      for (t in 2:(T_size- abs(l))){
-        result = result + (1/T_size) * y_data_dif[t-1] * y_data_dif[t + abs(l)-1]
-      }
-    }
-  } else {
-    print('Check the input: l is not integer')
-  }
-  return(result)
-}
-
-########################################
-#These are the SiZer-specific functions#
-########################################
-
+# sample_autocovariance <- function(l, y_data_dif){
+#   if (l%%1==0)
+#   {
+#     T_size = length(y_data_dif) + 1
+#     if (l >= T_size - 2) {
+#       print("Cannot estimate autocovariance from the data: sample size is too small")
+#     } else {
+#       result = 0
+#       for (t in 2:(T_size- abs(l))){
+#         result = result + (1/T_size) * y_data_dif[t-1] * y_data_dif[t + abs(l)-1]
+#       }
+#     }
+#   } else {
+#     print('Check the input: l is not integer')
+#   }
+#   return(result)
+# }
 
 #Implementation of \widehat{Var}(\bar{Y}) from "SiZer for time series" paper
 estimating_variance_of_data <- function(data){
@@ -222,7 +217,7 @@ estimating_variance_of_data <- function(data){
   return(result)
 }
 
-#Calculate autocovariance function for AR(1) model \varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t based on the coefficients of the model
+#Calculate autocovariance function for AR(1) model: \varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t based on the coefficients of the model
 autocovariance_function_AR1 <- function(k, a_1, sigma_eta){
   if (k%%1==0)
   {
@@ -233,8 +228,12 @@ autocovariance_function_AR1 <- function(k, a_1, sigma_eta){
   return(result)
 }
 
+#Function that compares the minimal intervals for both SiZer and our method.
+#For each run of this function the result is a pdf file with three plots:
+#1. Possible time series together with underlying time trend
+#2. Union of minimal intervals for our method for N_rep number of simulations
+#3. Union of minimal intervals for SiZer for N_rep number of simulations
 plotting_many_minimal_intervals <- function(trend_height, trend_width, T_size, SiZer_matrix, N_rep, kernel_ind, sigmahat, gaussian_quantile, a_1, sigma_eta){
-  
   matrix_our_results   <- data.frame('startpoint' = SiZer_matrix$u - SiZer_matrix$h, 'endpoint' = SiZer_matrix$u + SiZer_matrix$h)
   matrix_their_results <- data.frame('startpoint' = SiZer_matrix$u - SiZer_matrix$h, 'endpoint' = SiZer_matrix$u + SiZer_matrix$h)
   
@@ -280,14 +279,14 @@ plotting_many_minimal_intervals <- function(trend_height, trend_width, T_size, S
   
   grid_points <- seq(from = 1/T_size, to = 1, length.out = T_size) #grid points for estimating
   
-  pdffilename = paste0("Paper/Plots/min_int_with_T_", T_size, "_a1_", a_1, "_sigma_eta_", sigma_eta, "_height_", trend_height, "_width_", trend_width, ".pdf")
+  pdffilename = paste0("Paper/Plots/min_int_with_T_", T_size, "_a1_", a_1, "_height_", trend_height, "_width_", trend_width, ".pdf")
   pdf(pdffilename, width=10, height=10, paper="special")
   
   par(mfrow = c(3,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
   par(mar = c(1, 0.5, 2, 0)) #Margins for each plot
   par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
   
-  plot(grid_points, y_data_ar_1_with_trend, ylim = c(-1.5, trend_height + 1), type = "l", main = paste0("a_1 = ", a_1, ", sigma_eta = ", sigma_eta, ", height = ", trend_height, ", width = ", trend_width))
+  plot(grid_points, y_data_ar_1_with_trend, ylim = c(min(y_data_ar_1_with_trend) - 0.5, max(y_data_ar_1_with_trend)+0.5), type = "l", main = paste0("a_1 = ", a_1, ", sigma_eta = ", sigma_eta, ", height = ", trend_height, ", width = ", trend_width))
   lines(grid_points, biweight_trend)
   
   plot(NA, xlim=c(0,1), ylim = c(-1, N_rep +1), main = "Our result")
@@ -318,7 +317,6 @@ calculating_SiZer_matrix <- function(different_i, different_h, T_size, T_star, a
   SiZer_matrix$small_ESS    <- numeric(nrow(SiZer_matrix)) # Later we will delete all the row such that ESS* is too small
   SiZer_matrix$lambda       <- lambda(SiZer_matrix[['h']]) # Calculating the lambda(h) in order to speed up the function psistar_statistic
   SiZer_matrix$XtWX_inv_XtW <- I(vector(mode="list", length=nrow(SiZer_matrix)))
-  
   
   for (row in 1:nrow(SiZer_matrix)){
     
@@ -364,6 +362,7 @@ calculating_SiZer_matrix <- function(different_i, different_h, T_size, T_star, a
   return(SiZer_matrix)
 }
 
+#Calculating random variables 
 Q <- function(t, j, p, differences){
   q_t_j <- sum(differences[(p + 2 - j):(t - j)])
   if ((t - 1) >= (p + 2)){
