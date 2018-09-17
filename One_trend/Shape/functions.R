@@ -280,7 +280,7 @@ plotting_many_minimal_intervals <- function(trend_height, trend_width, T_size, S
   
   grid_points <- seq(from = 1/T_size, to = 1, length.out = T_size) #grid points for estimating
   
-  pdffilename = paste0("Paper/Plots/min_int_with_a1_", a_1, "_sigma_eta_", sigma_eta, "_height_", trend_height, "_width_", trend_width, ".pdf")
+  pdffilename = paste0("Paper/Plots/min_int_with_T_", T_size, "_a1_", a_1, "_sigma_eta_", sigma_eta, "_height_", trend_height, "_width_", trend_width, ".pdf")
   pdf(pdffilename, width=10, height=10, paper="special")
   
   par(mfrow = c(3,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
@@ -362,4 +362,14 @@ calculating_SiZer_matrix <- function(different_i, different_h, T_size, T_star, a
   SiZer_matrix$ESS_star  <- NULL
   
   return(SiZer_matrix)
+}
+
+Q <- function(t, j, p, differences){
+  q_t_j <- sum(differences[(p + 2 - j):(t - j)])
+  if ((t - 1) >= (p + 2)){
+    for (s in (p+2):(t-1)){
+      q_t_j <- q_t_j - sum(differences[(p + 2 - j):(s - j)])/t
+    }
+  }
+  return(q_t_j)
 }

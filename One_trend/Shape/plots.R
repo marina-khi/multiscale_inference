@@ -17,7 +17,7 @@ alpha       <- 0.05
 
 kernel_ind  <- 2
 
-T_size      <- 200
+T_size      <- 500
 different_i <- seq(from = 1/T_size, to = 1, by = 1/T_size)
 different_h <- seq(from = 3/T_size, to = 1/4+3/T_size, by = 5/T_size)
 
