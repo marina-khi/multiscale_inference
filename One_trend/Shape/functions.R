@@ -190,23 +190,23 @@ creating_matrix_and_texing <- function(vect, vect_T, vect_alpha, filename){
 }
 
 #Estimate autocovariance for a given time series y_data by a sample autocovariance
-# sample_autocovariance <- function(l, y_data_dif){
-#   if (l%%1==0)
-#   {
-#     T_size = length(y_data_dif) + 1
-#     if (l >= T_size - 2) {
-#       print("Cannot estimate autocovariance from the data: sample size is too small")
-#     } else {
-#       result = 0
-#       for (t in 2:(T_size- abs(l))){
-#         result = result + (1/T_size) * y_data_dif[t-1] * y_data_dif[t + abs(l)-1]
-#       }
-#     }
-#   } else {
-#     print('Check the input: l is not integer')
-#   }
-#   return(result)
-# }
+sample_autocovariance <- function(l, y_data_dif){
+  if (l%%1==0)
+  {
+    T_size = length(y_data_dif)
+    if (l >= T_size - 2) {
+      print("Cannot estimate autocovariance from the data: sample size is too small")
+    } else {
+      result = 0
+      for (t in 1:(T_size- abs(l))){
+        result = result + (1/T_size) * y_data_dif[t] * y_data_dif[t + abs(l)]
+      }
+    }
+  } else {
+    print('Check the input: l is not integer')
+  }
+  return(result)
+}
 
 #Implementation of \widehat{Var}(\bar{Y}) from "SiZer for time series" paper
 estimating_variance_of_data <- function(data){

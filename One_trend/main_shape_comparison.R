@@ -56,7 +56,7 @@ for (T_size in different_T){
     for (height in different_heights){
       for (width in different_widths){
         plotting_many_minimal_intervals(height, width, T_size, SiZer_matrix, N_min_intervals, kernel_ind = 2, sigmahat, gaussian_quantile, a_1, sigma_eta)
-        cat("a_1 = ", a_1, ", height coeffiecient = ", height, ", width coefficient = ", width, "\n")
+#        cat("a_1 = ", a_1, ", height coeffiecient = ", height, ", width coefficient = ", width, "\n")
       }
     }
   }
