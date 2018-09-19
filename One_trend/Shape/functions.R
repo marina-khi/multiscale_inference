@@ -279,17 +279,17 @@ plotting_many_minimal_intervals <- function(trend_height, trend_width, T_size, S
   
   grid_points <- seq(from = 1/T_size, to = 1, length.out = T_size) #grid points for estimating
   
-  pdffilename = paste0("Paper/Plots/min_int_with_T_", T_size, "_a1_", a_1, "_height_", trend_height, "_width_", trend_width, ".pdf")
-  pdf(pdffilename, width=10, height=10, paper="special")
+  pdffilename = paste0("Paper/Plots/min_int_with_T_", T_size, "_a1_", a_1*100, "_height_", trend_height, "_width_", trend_width, ".pdf")
+  pdf(pdffilename, width=8, height=10, paper="special")
   
   par(mfrow = c(3,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
-  par(mar = c(1, 0.5, 2, 0)) #Margins for each plot
+  par(mar = c(1.1, 0.5, 2, 0)) #Margins for each plot
   par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
   
-  plot(grid_points, y_data_ar_1_with_trend, ylim = c(min(y_data_ar_1_with_trend) - 0.5, max(y_data_ar_1_with_trend)+0.5), type = "l", main = paste0("a_1 = ", a_1, ", sigma_eta = ", sigma_eta, ", height = ", trend_height, ", width = ", trend_width))
+  plot(grid_points, y_data_ar_1_with_trend, ylim = c(min(y_data_ar_1_with_trend) - 0.2, max(y_data_ar_1_with_trend)+0.2), type = "l", main = paste0("Time series plus underlying trend function"))
   lines(grid_points, biweight_trend)
   
-  plot(NA, xlim=c(0,1), ylim = c(-1, N_rep +1), main = "Our result")
+  plot(NA, xlim=c(0,1), ylim = c(-1, N_rep +1), main = "Multiscale test")
   for (col in 3:(N_rep+2)){
     a_t_set <- subset(matrix_our_results, matrix_our_results[,col] != 0, select = c(startpoint, endpoint, col))
     colnames(a_t_set) <- c('startpoint', 'endpoint', 'values')
@@ -297,7 +297,7 @@ plotting_many_minimal_intervals <- function(trend_height, trend_width, T_size, S
     if (!is.null(p_t_set)) {segments(p_t_set$startpoint, col, p_t_set$endpoint, col)}
   }
   
-  plot(NA, xlim=c(0,1), ylim = c(-1, N_rep +1), main = "Their result")
+  plot(NA, xlim=c(0,1), ylim = c(-1, N_rep +1), main = "SiZer")
   for (col in 3:(N_rep+2)){
     a_t_set <- subset(matrix_their_results, matrix_their_results[,col] != 0, select = c(startpoint, endpoint, col))
     colnames(a_t_set) <- c('startpoint', 'endpoint', 'values')

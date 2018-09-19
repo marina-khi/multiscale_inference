@@ -17,9 +17,9 @@ N_min_intervals <- 100 #Number of replications for calculating the minimal inter
 sigma_eta   <- 1    #We keep this as a constant parameter
 alpha       <- 0.05 #Level of significance
 
-different_heights <- c(1, 2, 3) #Different strength of the signal calculated as height * 15/16
-different_widths  <- c(8, 10, 12) #Different support of the signal calculated by [0.5 - 1/width, 0.5 + 1/width]
-different_T       <- c(200, 250, 500) #Different lengths of time series for which we compare SiZer and our method
+different_heights <- c(32/15) #Different strength of the signal calculated as height * 15/16
+different_widths  <- c(10) #Different support of the signal calculated by [0.5 - 1/width, 0.5 + 1/width]
+different_T       <- c(250, 350, 500) #Different lengths of time series for which we compare SiZer and our method
 different_a       <- c(-0.5, -0.25, 0.25, 0.5) #Different a_1 in AR(1) model
 
 
@@ -56,7 +56,6 @@ for (T_size in different_T){
     for (height in different_heights){
       for (width in different_widths){
         plotting_many_minimal_intervals(height, width, T_size, SiZer_matrix, N_min_intervals, kernel_ind = 2, sigmahat, gaussian_quantile, a_1, sigma_eta)
-#        cat("a_1 = ", a_1, ", height coeffiecient = ", height, ", width coefficient = ", width, "\n")
       }
     }
   }
