@@ -24,8 +24,8 @@ test_problem  <- "constant" #Only "zero" (H_0: m = 0) or "constant" (H_0: m = co
 #Loading the data for income#
 #############################
 
-income <- read.table("Shape/data/France_income_top10.csv", header = FALSE, dec = ",")
-yearly_income <- income[, 1]
+income <- read.table("Shape/data/Europe_income_top10.csv", header = FALSE, dec = ",")
+yearly_income <- income[, 1]*100
 T_income      <- length(yearly_income)
 
 
