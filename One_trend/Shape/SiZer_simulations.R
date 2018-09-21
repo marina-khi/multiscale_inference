@@ -4,10 +4,7 @@ SiZer_simulations <- function(T_size, a_1, sigma_eta, alpha, N_rep, PDFpath){
   different_i <- seq(from = 1/T_size, to = 1, by = 1/T_size)
   different_h <- seq(from = 3/T_size, to = 1/4+3/T_size, by = 5/T_size)
   
-  #L1 = floor(sqrt(T_size))
-  #L2 = floor(2 * sqrt(T_size))
-  
-  
+
   ############################################################
   #Calculating everything that does not depend on Y for SiZer#
   ############################################################
@@ -41,8 +38,6 @@ SiZer_simulations <- function(T_size, a_1, sigma_eta, alpha, N_rep, PDFpath){
   #################
   #Simulating size#
   #################
-  
-  pdf(file=paste0(PDFPath, "_size_1.pdf"))  
   
   size_of_the_test <- replicate(N_rep, {
     y_data_ar_1 <- arima.sim(model = list(ar = a_1), n = T_size, innov = rnorm(T_size, 0, sigma_eta))
@@ -81,12 +76,6 @@ SiZer_simulations <- function(T_size, a_1, sigma_eta, alpha, N_rep, PDFpath){
   
   cat("Size of SiZer: ", (rowSums(size_of_the_test != 0)/N_rep)[1], ", size of our method: ", (rowSums(size_of_the_test != 0)/N_rep)[2], "\n")
   
-  hist(size_of_the_test[1, size_of_the_test[1, ] != 0], main = paste0("Size of SiZer: ", (rowSums(size_of_the_test != 0)/N_rep)[1]), breaks = seq(0, max(size_of_the_test[1, ])+5, by = 5))
-  dev.off()
-  
-  pdf(file=paste0(PDFPath, "_size_2.pdf"))  
-  hist(size_of_the_test[2, size_of_the_test[2, ] != 0], breaks = seq(0, max(size_of_the_test[2, ])+5, by = 5), main = paste0("Size of the multiscale method: ", (rowSums(size_of_the_test != 0)/N_rep)[2]))
-  dev.off()
   ##################
   #Simulating power#
   ##################
@@ -135,63 +124,5 @@ SiZer_simulations <- function(T_size, a_1, sigma_eta, alpha, N_rep, PDFpath){
         ", percentage of positive rejections: ", (rowSums(power_of_the_test != 0)/N_rep)[3], "\n",
         "Our results. Percentage of total rejection: ", (rowSums(power_of_the_test != 0)/N_rep)[2],
         ", percentage of positive rejections: ", (rowSums(power_of_the_test != 0)/N_rep)[4], "\n")
-
-    pdf(file=paste0(PDFPath, "power_slope_", slope*10, "_1.pdf"))  
-    hist(power_of_the_test[1, power_of_the_test[1, ] != 0], breaks = seq(0, max(power_of_the_test[1, ])+10, by = 10), main = paste0("Linear trend. Power of SiZer: ", (rowSums(power_of_the_test != 0)/N_rep)[1], ", a = ", a))
-    dev.off()
-    
-    pdf(file=paste0(PDFPath, "power_slope_", slope*10, "2.pdf"))  
-    hist(power_of_the_test[2, power_of_the_test[2, ] != 0], breaks = seq(0, max(power_of_the_test[2, ])+10, by = 10), main = paste0("Linear trend. Power of our method: ", (rowSums(power_of_the_test != 0)/N_rep)[2], ", a = ", a))
-    dev.off()
   }
-  
-  # for (a in c(3.5, 4, 4.5, 5)){
-  #   power_of_the_test <- replicate(N_rep, {
-  #     kink_function = numeric(T_size)
-  #     for (i in 1:T_size) {if (i/T_size < 0.5) {kink_function[i] = 0} else {kink_function[i] = (i - 0.5*T_size)*a/T_size}}
-  #     y_data_ar_1_with_trend <- arima.sim(model = list(ar = a_1), n = T_size, innov = rnorm(T_size, 0, sigma_eta)) + kink_function
-  #     #sigmahat    <- estimating_sigma_for_AR1(y_data_ar_1_with_trend, L1, L2)[[1]]
-  #     g_t_set     <- psihat_statistic_ll(y_data_ar_1_with_trend, SiZer_matrix, kernel_ind, sigmahat)[[1]]
-  #     
-  #     results_our   <- c()
-  #     results_their <- c()
-  #     
-  #     for (row in 1:nrow(g_t_set)){
-  #       i              = g_t_set[row, 'u']
-  #       h              = g_t_set[row, 'h']
-  #       q_h            = g_t_set[row, 'q_h']
-  #       sd_m_hat_prime = g_t_set[row, 'sd']
-  #       XtWX_inverse_XtW   = g_t_set$XtWX_inv_XtW[[row]]
-  #       
-  #       m_hat_prime <- (XtWX_inverse_XtW %*% y_data_ar_1_with_trend)[2]
-  #       
-  #       if (m_hat_prime - q_h * sd_m_hat_prime > 0){
-  #         results_their = c(results_their, 1)
-  #       } else if (m_hat_prime + q_h * sd_m_hat_prime < 0) {
-  #         results_their = c(results_their, -1)
-  #       } else {
-  #         results_their = c(results_their, 0)
-  #       }
-  #       
-  #       if (g_t_set[row, 'values_with_sign'] > g_t_set[row, 'lambda'] + gaussian_quantile){
-  #         results_our = c(results_our, 1)
-  #       } else if (-g_t_set[row, 'values_with_sign'] > g_t_set[row, 'lambda'] + gaussian_quantile){
-  #         results_our = c(results_our, -1)
-  #       } else {
-  #         results_our = c(results_our, 0)
-  #       }
-  #     }
-  #     c(sum(abs(results_their)), sum(abs(results_our)), sum(results_their == 1), sum(results_our == 1))
-  #   })
-  #   
-  #   cat("a = ", a, "\n",
-  #       "SiZer results. Percentage of total rejection: ", (rowSums(power_of_the_test != 0)/N_rep)[1],
-  #       ", percentage of positive rejections: ", (rowSums(power_of_the_test != 0)/N_rep)[3], "\n",
-  #       "Our results. Percentage of total rejection: ", (rowSums(power_of_the_test != 0)/N_rep)[2],
-  #       ", percentage of positive rejections: ", (rowSums(power_of_the_test != 0)/N_rep)[4], "\n")
-  #   hist(power_of_the_test[1, power_of_the_test[1, ] != 0], breaks = seq(0, max(power_of_the_test[1, ])+10, by = 10), main = paste0("Kink function. Power of SiZer: ", (rowSums(power_of_the_test != 0)/N_rep)[1], ", a = ", a))
-  #   hist(power_of_the_test[2, power_of_the_test[2, ] != 0], breaks = seq(0, max(power_of_the_test[2, ])+10, by = 10), main = paste0("Kink function. Power of our method: ", (rowSums(power_of_the_test != 0)/N_rep)[2], ", a = ", a))
-  # }
-  
-  dev.off()
 }

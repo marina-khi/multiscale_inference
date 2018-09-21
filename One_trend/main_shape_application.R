@@ -35,41 +35,59 @@ T_tempr      <- length(yearly_tempr)
 #####################################
 
 #Tuning parameters
-L1 <- floor(sqrt(T_tempr))
-L2 <- floor(2 * sqrt(T_tempr))
-result <- estimating_sigma_for_AR1(yearly_tempr, L1, L2)
-
-a_hat <- result[[2]] #Estimation of the AR coefficient
-sigma_eta <-result[[3]] #Estimation of the sqrt of the variance of the innovation 
+p    <- 1
+different_L1 <- (floor(sqrt(T_tempr)/2):floor(2 * sqrt(T_tempr)))
+tuning_parameter_grid <- (5:25)
+K1 <- p+1
+K2 <- 10
 
 
 ###################################################################
 #Calculating smoothed curve for the data using Epanechnikov kernel#
 ###################################################################
 
-grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points for plotting and estimating
-
-for (i in 1:length(h)){
-  if (kernel_method == "nw"){
-    smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(yearly_tempr, grid_points, h[i]))
-  } else if (kernel_method == "ll"){
-    smoothed_curve <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(yearly_tempr, grid_points, h[i]))
-  } else {
-    print('Given method is currently not supported')
-  }
-  cat("End point:", smoothed_curve[T_tempr], "\n")
-}
-
-pdf("Paper/Plots/temperature_data.pdf", width=10, height=3, paper="special")
-par(mar = c(0, 0.5, 0, 0)) #Margins for each plot
-par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
-data <- ts(yearly_tempr, start=1659, end=2017, frequency=1)
-plot(data, ylab="", xlab = "", yaxp  = c(7, 11, 4), xaxp = c(1675, 2025, 7), type = 'l', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
-dev.off()
+# grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points for plotting and estimating
+# 
+# for (i in 1:length(h)){
+#   if (kernel_method == "nw"){
+#     smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(yearly_tempr, grid_points, h[i]))
+#   } else if (kernel_method == "ll"){
+#     smoothed_curve <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(yearly_tempr, grid_points, h[i]))
+#   } else {
+#     print('Given method is currently not supported')
+#   }
+#   cat("End point:", smoothed_curve[T_tempr], "\n")
+# }
+#
+# pdf("Paper/Plots/temperature_data.pdf", width=10, height=3, paper="special")
+# par(mar = c(0, 0.5, 0, 0)) #Margins for each plot
+# par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
+# data <- ts(yearly_tempr, start=1659, end=2017, frequency=1)
+# plot(data, ylab="", xlab = "", yaxp  = c(7, 11, 4), xaxp = c(1675, 2025, 7), type = 'l', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
+# dev.off()
 
 
 ###############
 #Data analysis#
 ###############
+for (L1 in different_L1){
+  for (q in tuning_parameter_grid){
+    L2 <- L1 + q
+    result    <- estimating_sigma_for_AR1(yearly_tempr, L1, L2)
+    a_hat     <- result[[2]] #Estimation of the AR coefficient
+    sigma_eta <-result[[3]] #Estimation of the sqrt of the variance of the innovation 
 
-data_analysis(alpha, yearly_tempr, test_problem, kernel_method)
+
+    a_hat_method1         <- AR_coefficients(yearly_tempr, L1, L2, rep(0,L2), p)
+    sigma_eta_hat_method1 <- calculating_sigma_eta(yearly_tempr, a_hat_method1, p)
+    sigma_hat_method1     <- sqrt(sigma_eta_hat_method1^2 / (1 - sum(a_hat_method1))^2) 
+
+    corrections_value     <- corrections(a_hat_method1, sigma_eta_hat_method1, K2+1)
+    a_hat_method2         <- AR_coefficients(yearly_tempr, K1, K2, corrections_value, p)
+    sigma_eta_hat_method2 <- calculating_sigma_eta(yearly_tempr, a_hat_method2, p)
+    sigma_hat_method2     <- sqrt(sigma_eta_hat_method2^2 / (1 - sum(a_hat_method2))^2) 
+
+    cat("L1 = ", L1, ", L2 = ", L2, ", a_hall = ", a_hat, ", a_method1 = ", a_hat_method1, ", a_method2 = ", a_hat_method2, "\n")
+    data_analysis(alpha, yearly_tempr, test_problem, kernel_method, sigma_hat_method2, L1, L2)
+  }
+}

@@ -24,7 +24,7 @@ test_problem  <- "constant" #Only "zero" (H_0: m = 0) or "constant" (H_0: m = co
 #Loading the data for income#
 #############################
 
-income <- read.table("Shape/data/Europe_income_top10.csv", header = FALSE, dec = ",")
+income <- read.table("Shape/data/US_income_top10.csv", header = FALSE, dec = ",")
 yearly_income <- income[, 1]*100
 T_income      <- length(yearly_income)
 
@@ -34,13 +34,28 @@ T_income      <- length(yearly_income)
 #####################################
 
 #Tuning parameters
-L1_i     <- floor(sqrt(T_income))
-L2_i     <- floor(2 * sqrt(T_income))
+L1_i <- 4#floor(sqrt(T_income))
+L2_i <- 8#floor(2 * sqrt(T_income))
+p    <- 1
+K1_i <- p+1
+K2_i <- 10
+
 result_i <- estimating_sigma_for_AR1(yearly_income, L1_i, L2_i)
 
 a_hat_i     <- result_i[[2]] #Estimation of the AR coefficient
 sigma_eta_i <- result_i[[3]] #Estimation of the sqrt of the variance of the innovation 
 sigmahat_i  <- result_i[[1]]
+
+
+a_hat_method1         <- AR_coefficients(yearly_income, L1_i, L2_i, rep(0,L2_i), p)
+sigma_eta_hat_method1 <- calculating_sigma_eta(yearly_income, a_hat_method1, p)
+sigma_hat_method1     <- sqrt(sigma_eta_hat_method1^2 / (1 - sum(a_hat_method1))^2) 
+
+corrections_value     <- corrections(a_hat_method1, sigma_eta_hat_method1, K2_i+1)
+a_hat_method2         <- AR_coefficients(yearly_income, K1_i, K2_i, corrections_value, p)
+sigma_eta_hat_method2 <- calculating_sigma_eta(yearly_income, a_hat_method2, p)
+sigma_hat_method2     <- sqrt(sigma_eta_hat_method2^2 / (1 - sum(a_hat_method2))^2) 
+
 
 ###################################################################
 #Calculating smoothed curve for the data using Epanechnikov kernel#
@@ -50,7 +65,7 @@ grid_points <- seq(from = 1/T_income, to = 1, length.out = T_income) #grid point
 grid_time   <- seq(from = 1908, to = 2010, length.out = T_income) #grid points for plotting 
 
 
-plot(NA, xlim = c(1908, 2010), ylim = c(0.25, 0.5), mgp=c(2,0.5,0))
+plot(NA, xlim = c(1908, 2010), ylim = c(25, 50), mgp=c(2,0.5,0))
 
 for (i in 1:length(h)){
   if (kernel_method == "nw"){
@@ -93,7 +108,7 @@ g_t_set           <- creating_g_set(T_income, kernel_method)
 gaussian_quantile <- quantile_function(T_income, g_t_set, test_problem, kernel_ind, alpha)
   
 
-result                 <- statistic_function(yearly_income, g_t_set, kernel_ind, sigmahat_i)
+result                 <- statistic_function(yearly_income, g_t_set, kernel_ind, sigma_hat_method2)
 g_t_set_with_values    <- result[[1]]
 psihat_statistic_value <- result[[2]]
   

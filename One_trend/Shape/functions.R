@@ -189,18 +189,19 @@ creating_matrix_and_texing <- function(vect, vect_T, vect_alpha, filename){
   print.xtable(xtable(matrix_, digits = c(3), align = "cccc"), type="latex",  file=filename, add.to.row = addtorow, include.colnames = FALSE)
 }
 
-#Estimate autocovariance for a given time series y_data by a sample autocovariance
-sample_autocovariance <- function(l, y_data_dif){
+#Estimate autocovariance function \gamma_q(l) for a given time series y_data by a sample autocovariance
+sample_autocovariance <- function(l, y_data, q){
+  # computes autocovariances at lags 0 to p 
+  # for the ell-th differences of y_data
+
   if (l%%1==0)
   {
-    T_size = length(y_data_dif)
-    if (l >= T_size - 2) {
+    T_size = length(y_data)
+    y_data_diff = c(rep(0, q), diff(y_data, q))
+    if (abs(l) >= T_size - q - 1) {
       print("Cannot estimate autocovariance from the data: sample size is too small")
     } else {
-      result = 0
-      for (t in 1:(T_size- abs(l))){
-        result = result + (1/T_size) * y_data_dif[t] * y_data_dif[t + abs(l)]
-      }
+      result = sum(y_data_diff[(q + 1):(T_size - abs(l))] * y_data_diff[(q + abs(l) + 1):T_size])/(T_size - abs(l) - q)
     }
   } else {
     print('Check the input: l is not integer')
@@ -208,16 +209,52 @@ sample_autocovariance <- function(l, y_data_dif){
   return(result)
 }
 
-#Implementation of \widehat{Var}(\bar{Y}) from "SiZer for time series" paper
-estimating_variance_of_data <- function(data){
-  T_size = length(data)
-  divided_sample = split(data, cut(seq_along(data), sqrt(T_size), labels = FALSE)) 
-  divided_sample_mean = sapply(divided_sample, FUN = mean)
-  result = sum((divided_sample_mean - mean(divided_sample_mean))^2)/ ((length(divided_sample_mean) - 1) * length(divided_sample_mean))
-  return(result)
+AR_coefficients <- function(y_data, L1, L2, correction, p){
+  pos <- 0
+  a_mat <- matrix(0,ncol=L2-L1+1,nrow=p)
+  for(q in L1:L2) {
+    gamma_q_vector <- sapply(0:p, FUN = sample_autocovariance, y_data, q)
+    Gamma_q_matrix <- matrix(0, ncol=p, nrow=p)
+    for(i in 1:p){
+      for(j in 1:p)
+        Gamma_q_matrix[i,j] <- gamma_q_vector[abs(i - j)+1]
+      }
+    cov_vec <- gamma_q_vector[2:(p + 1)] + correction[(q - 1 + 1):(q - p + 1)]
+    a_mat[, q - L1 + 1] <- solve(Gamma_q_matrix) %*% cov_vec 
+  }    
+  a_hat <- rowMeans(a_mat)
+  a_hat <- as.vector(a_hat)
+  return(a_hat)
 }
 
-#Calculate autocovariance function for AR(1) model: \varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t based on the coefficients of the model
+calculating_sigma_eta <- function(y_data, coefficients, p){
+  y_diff <- c(0, diff(y_data))
+  T_size <- length(y_diff)
+  
+  res    <- rep(0, T_size)
+
+  for(i in (p+1):T_size){
+    res[i] <- y_diff[i] - sum(coefficients * y_diff[(i-1):(i-p)])
+  }
+  
+  var_eta <- mean(res^2)/2
+  return(sqrt(var_eta))
+}
+
+corrections <- function(coefficients, sigma_eta, len){
+  p        <- length(coefficients)  
+  c_vec    <- rep(0,len)
+  c_vec[1] <- 1
+  for(j in 2:len){
+    lags <- (j-1):max(j-p,1)
+    c_vec[j] <- sum(coefficients[1:length(lags)] * c_vec[lags])  
+  }
+  c_vec <- c_vec * sigma_eta * sigma_eta
+  return(c_vec)
+}
+
+
+#Calculate autocovariance function for AR(1) model: \varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t based on true coefficients of the model
 autocovariance_function_AR1 <- function(k, a_1, sigma_eta){
   if (k%%1==0)
   {
@@ -283,11 +320,13 @@ plotting_many_minimal_intervals <- function(trend_height, trend_width, T_size, S
   pdf(pdffilename, width=8, height=10, paper="special")
   
   par(mfrow = c(3,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
-  par(mar = c(1.1, 0.5, 2, 0)) #Margins for each plot
+  par(mar = c(1.5, 0.5, 0, 0)) #Margins for each plot
   par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
   
-  plot(grid_points, y_data_ar_1_with_trend, ylim = c(min(y_data_ar_1_with_trend) - 0.2, max(y_data_ar_1_with_trend)+0.2), type = "l", main = paste0("Time series plus underlying trend function"))
+  plot(grid_points, y_data_ar_1_with_trend, ylim = c(min(y_data_ar_1_with_trend) - 0.2, max(y_data_ar_1_with_trend)+0.2), type = "l")
   lines(grid_points, biweight_trend)
+
+  par(mar = c(1.5, 0.5, 2, 0)) #Margins for each plot
   
   plot(NA, xlim=c(0,1), ylim = c(-1, N_rep +1), main = "Multiscale test")
   for (col in 3:(N_rep+2)){
@@ -360,15 +399,4 @@ calculating_SiZer_matrix <- function(different_i, different_h, T_size, T_star, a
   SiZer_matrix$ESS_star  <- NULL
   
   return(SiZer_matrix)
-}
-
-#Calculating random variables 
-Q <- function(t, j, p, differences){
-  q_t_j <- sum(differences[(p + 2 - j):(t - j)])
-  if ((t - 1) >= (p + 2)){
-    for (s in (p+2):(t-1)){
-      q_t_j <- q_t_j - sum(differences[(p + 2 - j):(s - j)])/t
-    }
-  }
-  return(q_t_j)
 }
