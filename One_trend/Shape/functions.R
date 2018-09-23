@@ -189,6 +189,22 @@ creating_matrix_and_texing <- function(vect, vect_T, vect_alpha, filename){
   print.xtable(xtable(matrix_, digits = c(3), align = "cccc"), type="latex",  file=filename, add.to.row = addtorow, include.colnames = FALSE)
 }
 
+#Create a matrix (for size and power table for example) and write them in the tex file
+creating_matrix_and_texing_for_SiZer <- function(vect, vect_T, vect_alpha, filename){
+  matrix_ <- matrix(vect, nrow = length(vect_T), ncol = 2 * length(vect_alpha), byrow = TRUE)
+  rownames(matrix_) <- vect_T
+#  colnames(matrix_) <- vect_alpha
+  
+  addtorow <- list()
+  addtorow$pos <- list(0, 0, 0, 0)
+  addtorow$command <- c("& \\multicolumn{6}{|c|}{nominal size $\\alpha$} \\\\\n",
+                        "\\cline{2-7}",
+                        "$T$ & \\multicolumn{2}{|c|}{$0.01$} & \\multicolumn{2}{|c|}{$0.05$} & \\multicolumn{2}{|c|}{$0.1$} \\\\\n",
+                        " & Our method & SiZer & Our method & SiZer & Our method & SiZer \\\\\n") 
+  
+  print.xtable(xtable(matrix_, digits = c(3), align = "|c|cc|cc|cc|"), type="latex",  file=filename, add.to.row = addtorow, include.colnames = FALSE)
+}
+
 #Estimate autocovariance function \gamma_q(l) for a given time series y_data by a sample autocovariance
 sample_autocovariance <- function(l, y_data, q){
   # computes autocovariances at lags 0 to p 

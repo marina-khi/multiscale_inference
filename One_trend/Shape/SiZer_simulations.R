@@ -1,4 +1,4 @@
-SiZer_simulations <- function(T_size, a_1, sigma_eta, alpha, N_rep, PDFpath){
+SiZer_simulations <- function(T_size, a_1, sigma_eta, alpha, N_rep){
   kernel_ind  <- 2
 
   different_i <- seq(from = 1/T_size, to = 1, by = 1/T_size)
@@ -41,7 +41,6 @@ SiZer_simulations <- function(T_size, a_1, sigma_eta, alpha, N_rep, PDFpath){
   
   size_of_the_test <- replicate(N_rep, {
     y_data_ar_1 <- arima.sim(model = list(ar = a_1), n = T_size, innov = rnorm(T_size, 0, sigma_eta))
-    #sigmahat    <- estimating_sigma_for_AR1(y_data_ar_1, L1, L2)[[1]]
     g_t_set     <- psihat_statistic_ll(y_data_ar_1, SiZer_matrix, kernel_ind, sigmahat)[[1]]
   
     results_our   <- c()
@@ -73,12 +72,15 @@ SiZer_simulations <- function(T_size, a_1, sigma_eta, alpha, N_rep, PDFpath){
     }
     c(sum(abs(results_their)), sum(abs(results_our)))
   })
-  
+
   cat("Size of SiZer: ", (rowSums(size_of_the_test != 0)/N_rep)[1], ", size of our method: ", (rowSums(size_of_the_test != 0)/N_rep)[2], "\n")
+  size <- c((rowSums(size_of_the_test != 0)/N_rep)[1], (rowSums(size_of_the_test != 0)/N_rep)[2])
   
   ##################
   #Simulating power#
   ##################
+
+  power <- c()
   
   for (slope in c(3.5, 4, 4.5, 5)){
     power_of_the_test <- replicate(N_rep, {
@@ -119,10 +121,12 @@ SiZer_simulations <- function(T_size, a_1, sigma_eta, alpha, N_rep, PDFpath){
       c(sum(abs(results_their)), sum(abs(results_our)), sum(results_their == 1), sum(results_our == 1))
     })
     
-    cat("a = ", a, "\n",
+    cat("a = ", slope, "\n",
         "SiZer results. Percentage of total rejection: ", (rowSums(power_of_the_test != 0)/N_rep)[1],
         ", percentage of positive rejections: ", (rowSums(power_of_the_test != 0)/N_rep)[3], "\n",
         "Our results. Percentage of total rejection: ", (rowSums(power_of_the_test != 0)/N_rep)[2],
         ", percentage of positive rejections: ", (rowSums(power_of_the_test != 0)/N_rep)[4], "\n")
+    power <- c(power, (rowSums(power_of_the_test != 0)/N_rep)[1], (rowSums(power_of_the_test != 0)/N_rep)[2])  
   }
+  return(list(size, power))
 }
