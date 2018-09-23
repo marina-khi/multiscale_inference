@@ -1,0 +1,13 @@
+
+\section{Introduction}\label{sec-intro}
+
+When several time series $\mathcal{Y}_i = \{ Y_{it}: 1 \le t \le T \}$ are observed for $1 \le i \le n$, we similarly model each time series $\mathcal{Y}_i$ by the equation
+\begin{equation}\label{model2-intro}
+Y_{it} = m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it}
+\end{equation}
+for $1 \le t \le T$, where $m_i$ is a nonparametric time trend, $\alpha_i$ is a (random or deterministic) intercept and $\varepsilon_{it}$ are time series errors with $\ex[\varepsilon_{it}] = 0$ for all $t$.
+
+Let us now turn to the situation where multiple time series of the form \eqref{model2-intro} are observed. An important question in many applications is whether the time trends $m_i$ are the same for all $i$. When some of the trends are different, there may still be groups of time series with the same trend. In this case, it is often of interest to estimate the unknown groups from the data. In addition, when two trends $m_i$ and $m_j$ are not the same, it may also be relevant to know in which time regions they differ from each other. In Section \ref{sec-test-equality}, we construct statistical methods to approach these questions. In particular, we develop a test of the hypothesis that all time trends in model \eqref{model2-intro} are the same, that is, $m_1 = m_2 = \ldots = m_n$. Similar as before, our method does not only allow to test whether the null hypothesis is violated. It also allows to detect, with a given statistical confidence, which time trends are different and in which time regions they differ from each other. Based on our test method, we further construct an algorithm which clusters the observed time series into groups with the same trend. 
+% Based on our test method, we further construct a clustering algorithm which estimates groups of time series with the same time trend.
+
+In the second example, we analyse temperature time series measured at 25 different weather stations located in Great Britain. We in particular apply our procedure from Section \ref{sec-test-equality} to test whether the different time series have the same trend. 

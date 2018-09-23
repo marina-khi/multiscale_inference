@@ -1,0 +1,158 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb,amsthm,graphicx}
+\usepackage{enumitem}
+\usepackage{color}
+\usepackage{epsfig}
+\usepackage{graphics}
+\usepackage{pdfpages}
+\usepackage{subcaption}
+\usepackage[font=small]{caption}
+\usepackage[hang,flushmargin]{footmisc} 
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage[mathscr]{euscript}
+\usepackage{natbib}
+\usepackage{setspace}
+\usepackage{mathrsfs}
+\usepackage[left=2.7cm,right=2.7cm,bottom=2.7cm,top=2.7cm]{geometry}
+\parindent0pt 
+
+\input{macros}
+
+\usepackage{xr}
+\externaldocument{paper}
+
+
+
+\begin{document}
+
+
+
+\headingSupplement{Supplement to}{``Multiscale Inference for}{Nonparametric Time Trends''}
+\authors{Marina Khismatullina}{University of Bonn}{Michael Vogt}{University of Bonn} 
+
+%\version{\today}
+
+\vspace{-1cm}
+
+
+\renewcommand{\abstractname}{}
+\begin{abstract}
+\noindent In this supplement, we provide the proofs that are omitted in the paper. Speci\-fically, we derive the theoretical results from Section \ref{sec-error-var} and prove Proposition \ref{theo-anticon}. We employ the same notation as summarized at the beginning of the Appendix in the paper. 
+\end{abstract}
+
+
+\renewcommand{\baselinestretch}{1.2}\normalsize
+\def\theequation{S.\arabic{equation}}
+\setcounter{equation}{0}
+\allowdisplaybreaks[1]
+
+
+
+\subsection*{Proof of Proposition \ref{theo-anticon}}
+
+ 
+The proof makes use of the following three lemmas, which correspond to Lemmas 5--7 in \cite{Chernozhukov2015}. 
+\begin{lemmaS}\label{lemma1-anticon}
+Let $(W_1,\ldots,W_p)^\top$ be a (not necessarily centred) Gaussian random vector in $\reals^p$ with $\var(W_j) = 1$ for all $1 \le j \le p$. Suppose that $\textnormal{Corr}(W_j,W_k) < 1$ whenever $j \ne k$. Then the distribution of $\max_{1 \le j \le p} W_j$ is absolutely continuous with respect to Lebesgue measure and a version of the density is given by 
+\[ f(x) = f_0(x) \sum\limits_{j=1}^p e^{\ex[W_j]x - \ex[W_j]^2/2} \, \pr \big(W_k \le x \text{ for all } k \ne j \, \big| \, W_j = x \big). \]
+\end{lemmaS}
+\begin{lemmaS}\label{lemma2-anticon}
+Let $(W_0,W_1,\ldots,W_p)^\top$ be a (not necessarily centred) Gaussian random vector with $\var(W_j) = 1$ for all $0 \le j \le p$. Suppose that $\ex[W_0] \ge 0$. Then the map 
+\[ x \mapsto  e^{\ex[W_0]x - \ex[W_0]^2/2} \, \pr \big(W_j \le x \text{ for } 1 \le j \le p \, \big| \, W_0 = x \big) \]
+is non-decreasing on $\reals$. 
+\end{lemmaS}
+\begin{lemmaS}\label{lemma3-anticon}
+Let $(X_1,\ldots,X_p)^\top$ be a centred Gaussian random vector in $\reals^p$ with $\max_{1 \le j \le p} \ex[X_j^2] \le \sigma^2$ for some $\sigma^2 > 0$. Then for any $r > 0$, 
+\[ \pr \Big( \max_{1 \le j \le p} X_j \ge \ex \Big[ \max_{1 \le j \le p} X_j \Big] + r \Big) \le e^{-r^2/(2\sigma^2)}. \]
+\end{lemmaS} 
+The proof of Lemmas \ref{lemma1-anticon} and \ref{lemma2-anticon} can be found in \cite{Chernozhukov2015}. Lemma \ref{lemma3-anticon} is a standard result on Gaussian concentration whose proof is given e.g.\ in \cite{Ledoux2001}; see Theorem 7.1 therein. We now closely follow the arguments for the proof of Theorem 3 in \cite{Chernozhukov2015}. The proof splits up into three steps. 
+\vspace{7pt}
+
+
+\textit{Step 1.} %To start with, we show that the analysis can be restricted to the unit variance case. To see this, 
+Pick any $x \ge 0$ and set 
+\[ W_j = \frac{X_j - x}{\sigma_j} + \frac{\overline{\mu} + x}{\underline{\sigma}}. \]
+By construction, $\ex[W_j] \ge 0$ and $\var(W_j) = 1$. Defining $Z = \max_{1 \le j \le p} W_j$, it holds that  
+\begin{align*}
+\pr \Big( \Big| \max_{1 \le j \le p} X_j - x \Big| \le \delta \Big) 
+ & \le \pr \Big( \Big| \max_{1 \le j \le p} \frac{X_j - x}{\sigma_j} \Big| \le \frac{\delta}{\underline{\sigma}} \Big) \\
+ & \le \sup_{y \in \reals} \pr \Big( \Big| \max_{1 \le j \le p} \frac{X_j - x}{\sigma_j} + \frac{\overline{\mu} + x}{\underline{\sigma}} - y \Big| \le \frac{\delta}{\underline{\sigma}} \Big) \\
+ & = \sup_{y \in \reals} \pr \Big( |Z - y| \le \frac{\delta}{\underline{\sigma}} \Big). 
+\end{align*}
+
+
+\textit{Step 2.} We now bound the density of $Z$. Without loss of generality, we assume that $\text{Corr}(W_j,W_k) < 1$ for $k \ne j$. The marginal distribution of $W_j$ is $\normal(\nu_j,1)$ with $\nu_j = \ex[W_j] = (\mu_j/\sigma_j + \overline{\mu}/{\underline{\sigma}}) + (x/\underline{\sigma} - x/\sigma_j) \ge 0$. Hence, by Lemmas \ref{lemma1-anticon} and \ref{lemma2-anticon}, the random variable $Z$ has a density of the form
+\begin{equation}\label{eq-dens-Z}
+f_p(z) = f_0(z) G_p(z), 
+\end{equation}
+where the map $z \mapsto G_p(z)$ is non-decreasing. Define $\overline{Z} = \max_{1 \le j \le p} (W_j - \ex[W_j])$ and set $\overline{z} = 2 \overline{\mu}/\underline{\sigma} + x(1/\underline{\sigma} - 1/\overline{\sigma})$ such that $\ex[W_j] \le \overline{z}$ for any $1 \le j \le p$. With these definitions at hand, we obtain that  
+\begin{align*}
+\int_z^{\infty} f_0(u)du \, G_p(z) & \le \int_z^{\infty} f_0(u) G_p(u) du = \pr(Z > z) \\ 
+ & \le P(\overline{Z} > z - \overline{z}) \le \exp \Big( - \frac{(z - \overline{z} - \ex[\overline{Z}])^2_+}{2} \Big), 
+\end{align*}
+where the last inequality follows from Lemma \ref{lemma3-anticon}. Since $W_j - \ex[W_j] = (X_j - \mu_j)/\sigma_j$, it holds that 
+\[ \ex[\overline{Z}] = \ex \Big[ \max_{1 \le j \le p} \Big\{ \frac{X_j-\mu_j}{\sigma_j} \Big\} \Big] =: a_p. \]
+Hence, for every $z \in \reals$, 
+\begin{equation}\label{eq-bound-Gp}
+G_p(z) \le \frac{1}{1 - F_0(z)} \exp\Big( - \frac{(z - \overline{z} - a_p)_+^2}{2} \Big). 
+\end{equation}
+Mill's inequality states that for $z > 0$, 
+\[ z \le \frac{f_0(z)}{1-F_0(z)} \le z \frac{1+z^2}{z^2}. \]
+Since $(1+z^2)/z^2 \le 2$ for $z \ge 1$ and $f_0(z)/\{1-F_0(z)\} \le 1.53 \le 2$ for $z \in (-\infty,1)$, we can infer that
+\[ \frac{f_0(z)}{1-F_0(z)} \le 2 (z \vee 1) \quad \text{for any } z \in \reals. \]
+This together with \eqref{eq-dens-Z} and \eqref{eq-bound-Gp} yields that
+\[ f_p(z) \le 2 (z \vee 1)  \exp\Big( - \frac{(z - \overline{z} - a_p)_+^2}{2} \Big) \quad \text{for any } z \in \reals. \]
+ 
+
+\textit{Step 3.} By Step 2, we get that for any $y \in \reals$ and $u > 0$, 
+\[ \pr( |Z - y| \le u) = \int_{y - u}^{y + u} f_p(z) dz \le 2u \max_{z \in [y-u,y+u]} f_p(z) \le 4u (\overline{z} + a_p + 1), \] 
+where the last inequality follows from the fact that the map $z \mapsto z e^{-(z-a)^2/2}$ (with $a > 0$) is non-increasing on $[a+1,\infty)$. Combining this bound with Step 1, we further obtain that for any $x \ge 0$ and $\delta > 0$, 
+\begin{equation}\label{eq-bound1-Levy}
+\pr \Big( \Big| \max_{1 \le j \le p} X_j - x \Big| \le \delta \Big) \le 4\delta \Big\{ \frac{2\overline{\mu}}{\underline{\sigma}} + |x| \Big(\frac{1}{\underline{\sigma}} - \frac{1}{\overline{\sigma}}\Big) + a_p + 1 \Big\} \big/ \underline{\sigma}. 
+\end{equation} 
+This inequality also holds for $x < 0$ by an analogous argument, and hence for all $x \in \reals$. 
+
+
+Now let $0 < \delta \le \underline{\sigma}$ and define $b_p = \ex \max_{1 \le j \le p} \{X_j - \mu_j\}$. For any $|x| \le \delta + \overline{\mu} + b_p + \overline{\sigma} \sqrt{2\log(\underline{\sigma}/\delta)}$, \eqref{eq-bound1-Levy} yields that 
+\begin{align}
+\pr \Big( \Big| \max_{1 \le j \le p} X_j - x \Big| \le \delta \Big) 
+ & \le \frac{4 \delta}{\underline{\sigma}} \Big\{ \overline{\mu} \Big( \frac{3}{\underline{\sigma}} - \frac{1}{\overline{\sigma}} \Big) + a_p + \Big( \frac{1}{\underline{\sigma}} - \frac{1}{\overline{\sigma}} \Big) b_p \nonumber \\ & \phantom{\le \frac{4 \delta}{\underline{\sigma}} \Big\{} + \Big( \frac{\overline{\sigma}}{\underline{\sigma}} - 1 \Big) \sqrt{2\log\Big(\frac{\underline{\sigma}}{\delta}\Big)} + 2 - \frac{\underline{\sigma}}{\overline{\sigma}} \Big\} \nonumber \\[0.2cm]
+ & \le C \delta \big\{ \overline{\mu} + a_p + b_p + \sqrt{1 \vee \log(\underline{\sigma}/\delta)} \big\} \label{eq-bound2-Levy}
+\end{align}
+with a sufficiently large constant $C > 0$ that depends only on $\underline{\sigma}$ and $\overline{\sigma}$. For $|x| \ge \delta + \overline{\mu} + b_p + \overline{\sigma}\sqrt{2\log(\underline{\sigma}/\delta)}$, we obtain that 
+\begin{equation}\label{eq-bound3-Levy}
+\pr \Big( \Big| \max_{1 \le j \le p} X_j - x \Big| \le \delta \Big) \le \frac{\delta}{\underline{\sigma}}, 
+\end{equation}
+which can be seen as follows: If $x > \delta + \overline{\mu}$, then $|\max_j X_j - x| \le \delta$ implies that $|x| - \delta \le \max_j X_j \le \max_j \{ X_j - \mu_j \} + \overline{\mu}$ and thus $\max_j \{ X_j - \mu_j \} \ge |x| - \delta - \overline{\mu}$. Hence, it holds that 
+\begin{equation}\label{eq-bound3-Levy-prep1}
+\pr \Big( \Big| \max_{1 \le j \le p} X_j - x \Big| \le \delta \Big) \le \pr \Big( \max_{1 \le j \le p} \big\{ X_j - \mu_j \} \ge |x| - \delta - \overline{\mu} \Big). 
+\end{equation}
+If $x < - (\delta + \overline{\mu})$, then $|\max_j X_j - x| \le \delta$ implies that $\max_j \{ X_j - \mu_j \} \le -|x| + \delta + \overline{\mu}$. Hence, in this case,
+\begin{align}
+\pr \Big( \Big| \max_{1 \le j \le p} X_j - x \Big| \le \delta \Big) 
+ & \le \pr \Big( \max_{1 \le j \le p} \big\{ X_j - \mu_j \} \le -|x| + \delta + \overline{\mu} \Big) \nonumber \\
+ & \le \pr \Big( \max_{1 \le j \le p} \big\{ X_j - \mu_j \} \ge |x| - \delta - \overline{\mu} \Big), \label{eq-bound3-Levy-prep2}
+\end{align}
+where the last inequality follows from the fact that for centred Gaussian random variables $V_j$ and $v > 0$, $\pr(\max_j V_j \le -v) \le \pr(V_1 \le -v) = P(V_1 \ge v) \le \pr(\max_j V_j \ge v)$. With \eqref{eq-bound3-Levy-prep1} and \eqref{eq-bound3-Levy-prep2}, we obtain that for any $|x| \ge \delta + \overline{\mu} + b_p + \overline{\sigma}\sqrt{2\log(\underline{\sigma}/\delta)}$,
+\begin{align*} 
+\pr \Big( & \Big| \max_{1 \le j \le p} X_j - x \Big| \le \delta \Big) \le \pr \Big( \max_{1 \le j \le p} \big\{ X_j - \mu_j \} \ge |x| - \delta - \overline{\mu} \Big) \\
+ & \le \pr \Big( \max_{1 \le j \le p} \big\{ X_j - \mu_j \big\} \ge \ex \Big[ \max_{1 \le j \le p} \big\{ X_j-\mu_j \big\} \Big] + \overline{\sigma} \sqrt{2\log(\underline{\sigma}/\delta)} \Big) \le \frac{\delta}{\underline{\sigma}}, 
+\end{align*}
+the last inequality following from Lemma \ref{lemma3-anticon}. To sum up, we have established that for any $0 < \delta \le \underline{\sigma}$ and any $x \in \reals$, 
+\begin{equation}\label{claim-prop-anticon}
+\pr \Big( \Big| \max_{1 \le j \le p} X_j - x \Big| \le \delta \Big) \le C \delta \big\{ \overline{\mu} + a_p + b_p + \sqrt{1 \vee \log(\underline{\sigma}/\delta)} \big\} 
+\end{equation}
+with some constant $C > 0$ that does only depend on $\underline{\sigma}$ and $\overline{\sigma}$. For $\delta > \underline{\sigma}$, \eqref{claim-prop-anticon} trivially follows upon setting $C \ge 1/\underline{\sigma}$. This completes the proof. 
+
+
+
+\bibliographystyle{ims}
+{\small
+\setlength{\bibsep}{0.55em}
+\bibliography{bibliography}}
+
+
+
+\end{document}
