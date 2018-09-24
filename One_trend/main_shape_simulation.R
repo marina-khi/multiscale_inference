@@ -19,6 +19,8 @@ source("Shape/simulations_based_on_data.R")
 N               <- 1000 #Number of replications for calculating the size and the power of the test
 different_T     <- c(250, 350, 500, 1000) #Different lengths of time series for which we calculate size and power
 different_alpha <- c(0.01, 0.05, 0.1) #Different alpha for which we calculate size and power
+different_a1    <- c(-0.5, -0.25, 0.25, 0.5)
+sigma_eta       <- 1
 
 kernel_method <- "ll" #Only "nw" (Nadaraya-Watson) and "ll" (local linear) methods are currently supported
 test_problem  <- "constant" #Only "zero" (H_0: m = 0) or "constant" (H_0: m = const) testing problems are currently supported. 
@@ -31,16 +33,19 @@ temperature             <- read.table("Shape/data/cetml1659on.dat", header = TRU
 yearly_tempr            <- temperature[temperature$YEAR > -99, 'YEAR']
 
 #Tuning parameters
-T_tempr <- length(yearly_tempr)
-L1      <- floor(sqrt(T_tempr))
-L2      <- floor(2 * sqrt(T_tempr))
+#T_tempr <- length(yearly_tempr)
+#L1      <- floor(sqrt(T_tempr))
+#L2      <- floor(2 * sqrt(T_tempr))
 
-result    <- estimating_sigma_for_AR1(yearly_tempr, L1, L2)
-a_hat     <- result[[2]] #Estimation of the AR coefficient
-sigma_eta <- result[[3]] #Estimation of the sqrt of the variance of the innovation 
+#result    <- estimating_sigma_for_AR1(yearly_tempr, L1, L2)
+#a_hat     <- result[[2]] #Estimation of the AR coefficient
+#sigma_eta <- result[[3]] #Estimation of the sqrt of the variance of the innovation 
 
 
 ############################################
 #Calculating the power and size of the test#
 ############################################
-simulations_based_on_data(N, different_T, different_alpha, a_hat, sigma_eta, test_problem, kernel_method)
+for (a_hat in different_a1){
+  PDFpartialPath = paste0("Paper/Plots/finite_sample_properties_a1_", a_1*100)
+  simulations_based_on_data(N, different_T, different_alpha, a_hat, sigma_eta, test_problem, kernel_method, filename= PDFpartialPath)
+}

@@ -189,18 +189,17 @@ creating_matrix_and_texing <- function(vect, vect_T, vect_alpha, filename){
   print.xtable(xtable(matrix_, digits = c(3), align = "cccc"), type="latex",  file=filename, add.to.row = addtorow, include.colnames = FALSE)
 }
 
-#Create a matrix (for size and power table for example) and write them in the tex file
+#Create a matrix (for size and power table for example) and write them in the tex file for comparison with SiZer
 creating_matrix_and_texing_for_SiZer <- function(vect, vect_T, vect_alpha, filename){
   matrix_ <- matrix(vect, nrow = length(vect_T), ncol = 2 * length(vect_alpha), byrow = TRUE)
   rownames(matrix_) <- vect_T
-#  colnames(matrix_) <- vect_alpha
-  
+
   addtorow <- list()
   addtorow$pos <- list(0, 0, 0, 0)
   addtorow$command <- c("& \\multicolumn{6}{|c|}{nominal size $\\alpha$} \\\\\n",
                         "\\cline{2-7}",
-                        "$T$ & \\multicolumn{2}{|c|}{$0.01$} & \\multicolumn{2}{|c|}{$0.05$} & \\multicolumn{2}{|c|}{$0.1$} \\\\\n",
-                        " & Our method & SiZer & Our method & SiZer & Our method & SiZer \\\\\n") 
+                        "$T$ & \\multicolumn{2}{|c|}{$0.01$} & \\multicolumn{2}{|c|}{$0.05$} & \\multicolumn{2}{|c|}{$0.10$} \\\\\n",
+                        " & Our test & SiZer & Our test & SiZer & Our test & SiZer \\\\\n") 
   
   print.xtable(xtable(matrix_, digits = c(3), align = "|c|cc|cc|cc|"), type="latex",  file=filename, add.to.row = addtorow, include.colnames = FALSE)
 }
@@ -236,6 +235,7 @@ AR_coefficients <- function(y_data, L1, L2, correction, p){
         Gamma_q_matrix[i,j] <- gamma_q_vector[abs(i - j)+1]
       }
     cov_vec <- gamma_q_vector[2:(p + 1)] + correction[(q - 1 + 1):(q - p + 1)]
+    cat("q = ", q,", p = ", p, ", L1 = ", L1, ", L2 = ", L2, "\n")
     a_mat[, q - L1 + 1] <- solve(Gamma_q_matrix) %*% cov_vec 
   }    
   a_hat <- rowMeans(a_mat)
@@ -332,7 +332,7 @@ plotting_many_minimal_intervals <- function(trend_height, trend_width, T_size, S
   
   grid_points <- seq(from = 1/T_size, to = 1, length.out = T_size) #grid points for estimating
   
-  pdffilename = paste0("Paper/Plots/min_int_with_T_", T_size, "_a1_", a_1*100, "_height_", trend_height, "_width_", trend_width, ".pdf")
+  pdffilename = paste0("Paper/Plots/min_int_with_T_", T_size, "_a1_", a_1*100, ".pdf")
   pdf(pdffilename, width=8, height=10, paper="special")
   
   par(mfrow = c(3,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
@@ -344,7 +344,7 @@ plotting_many_minimal_intervals <- function(trend_height, trend_width, T_size, S
 
   par(mar = c(1.5, 0.5, 2, 0)) #Margins for each plot
   
-  plot(NA, xlim=c(0,1), ylim = c(-1, N_rep +1), main = "Multiscale test")
+  plot(NA, xlim=c(0,1), ylim = c(-1, N_rep +1), main = "Our test")
   for (col in 3:(N_rep+2)){
     a_t_set <- subset(matrix_our_results, matrix_our_results[,col] != 0, select = c(startpoint, endpoint, col))
     colnames(a_t_set) <- c('startpoint', 'endpoint', 'values')

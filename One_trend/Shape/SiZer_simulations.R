@@ -1,4 +1,4 @@
-SiZer_simulations <- function(T_size, a_1, sigma_eta, alpha, N_rep){
+SiZer_simulations <- function(T_size, a_1, sigma_eta, alpha, N_rep, slopes){
   kernel_ind  <- 2
 
   different_i <- seq(from = 1/T_size, to = 1, by = 1/T_size)
@@ -27,12 +27,8 @@ SiZer_simulations <- function(T_size, a_1, sigma_eta, alpha, N_rep){
   #################################################################
   
   #Gaussian statistic for our own method
-  gaussian_statistic_distribution <- replicate(1000, {
-    z = rnorm(T_size, 0, 1)
-    psistar_statistic_ll(z, SiZer_matrix, kernel_ind, 1)
-  })
-  gaussian_quantile <- quantile(gaussian_statistic_distribution, probs = (1 - alpha), type = 1)
-  
+  gaussian_quantile <- calculating_gaussian_quantile_ll(T_size, SiZer_matrix, "comparison", kernel_ind, alpha)
+
   sigmahat <- sqrt(sigma_eta^2/((1 - a_1)^2))
   
   #################
@@ -70,11 +66,11 @@ SiZer_simulations <- function(T_size, a_1, sigma_eta, alpha, N_rep){
         results_our = c(results_our, 0)
       }
     }
-    c(sum(abs(results_their)), sum(abs(results_our)))
+    c(sum(abs(results_our)), sum(abs(results_their)))
   })
 
-  cat("Size of SiZer: ", (rowSums(size_of_the_test != 0)/N_rep)[1], ", size of our method: ", (rowSums(size_of_the_test != 0)/N_rep)[2], "\n")
-  size <- c((rowSums(size_of_the_test != 0)/N_rep)[1], (rowSums(size_of_the_test != 0)/N_rep)[2])
+  cat("Size of SiZer: ", (rowSums(size_of_the_test != 0)/N_rep)[2], ", size of our method: ", (rowSums(size_of_the_test != 0)/N_rep)[1], "\n")
+  size <- c((rowSums(size_of_the_test != 0)/N_rep)[2], (rowSums(size_of_the_test != 0)/N_rep)[1])
   
   ##################
   #Simulating power#
@@ -82,12 +78,12 @@ SiZer_simulations <- function(T_size, a_1, sigma_eta, alpha, N_rep){
 
   power <- c()
   
-  for (slope in c(3.5, 4, 4.5, 5)){
+  for (slope in slopes){
     power_of_the_test <- replicate(N_rep, {
       line_trend  <- numeric(T_size)
       for (i in 1:T_size) {line_trend[i] = (i - 0.5*T_size) * slope/T_size}
       y_data_ar_1_with_trend <- arima.sim(model = list(ar = a_1), n = T_size, innov = rnorm(T_size, 0, sigma_eta)) + line_trend
-      #sigmahat    <- estimating_sigma_for_AR1(y_data_ar_1_with_trend, L1, L2)[[1]]
+      
       g_t_set     <- psihat_statistic_ll(y_data_ar_1_with_trend, SiZer_matrix, kernel_ind, sigmahat)[[1]]
       
       results_our   <- c()
@@ -121,12 +117,9 @@ SiZer_simulations <- function(T_size, a_1, sigma_eta, alpha, N_rep){
       c(sum(abs(results_their)), sum(abs(results_our)), sum(results_their == 1), sum(results_our == 1))
     })
     
-    cat("a = ", slope, "\n",
-        "SiZer results. Percentage of total rejection: ", (rowSums(power_of_the_test != 0)/N_rep)[1],
-        ", percentage of positive rejections: ", (rowSums(power_of_the_test != 0)/N_rep)[3], "\n",
-        "Our results. Percentage of total rejection: ", (rowSums(power_of_the_test != 0)/N_rep)[2],
-        ", percentage of positive rejections: ", (rowSums(power_of_the_test != 0)/N_rep)[4], "\n")
-    power <- c(power, (rowSums(power_of_the_test != 0)/N_rep)[1], (rowSums(power_of_the_test != 0)/N_rep)[2])  
+    cat("a = ", slope, "SiZer results. Percentage of total rejection: ", (rowSums(power_of_the_test != 0)/N_rep)[1], 
+        "Our results. Percentage of total rejection: ", (rowSums(power_of_the_test != 0)/N_rep)[2], "\n")
+    power <- c(power, (rowSums(power_of_the_test != 0)/N_rep)[2], (rowSums(power_of_the_test != 0)/N_rep)[1])  
   }
   return(list(size, power))
 }

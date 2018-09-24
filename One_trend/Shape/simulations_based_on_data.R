@@ -1,4 +1,4 @@
-simulations_based_on_data <- function(N, different_T, different_alpha, a_hat, sigma_eta, test_problem, kernel_t){
+simulations_based_on_data <- function(N, different_T, different_alpha, a_hat, sigma_eta, test_problem, kernel_t, filename){
   #Defining necessary parameters
   num_T     <- length(different_T)
   num_alpha <- length(different_alpha)
@@ -50,8 +50,8 @@ simulations_based_on_data <- function(N, different_T, different_alpha, a_hat, si
     }
   }
   #Creating a nice-looking matrix for size of the test and writing it to a tex file
-  filename = paste0("Paper/Plots/sizetable_", kernel_t, "_testing_", test_problem, ".tex")
-  creating_matrix_and_texing(size_ar1, different_T, different_alpha, filename)
+  filename0 = paste0(filename, "_sizetable_", kernel_t, "_testing_", test_problem, ".tex")
+  creating_matrix_and_texing(size_ar1, different_T, different_alpha, filename0)
 
   ###################################
   #Calculating the power of the test#
@@ -91,7 +91,7 @@ simulations_based_on_data <- function(N, different_T, different_alpha, a_hat, si
         cat("Ratio of rejection under H1 with partially linear trend is", sum(size_of_the_test_with_trend)/N, "with a =", a, ", T =", T, "and alpha =", alpha, "\n")
       }
     }
-    filename = paste0("Paper/Plots/powertable_", a*100, "_", kernel_t, "_testing_", test_problem, ".tex")
-    creating_matrix_and_texing(power_ar1, different_T, different_alpha, filename)
+    filename0 = paste0(PDFpartialPath, "_powertable_", a*100, "_", kernel_t, "_testing_", test_problem, ".tex")
+    creating_matrix_and_texing(power_ar1, different_T, different_alpha, filename0)
   }
 }
