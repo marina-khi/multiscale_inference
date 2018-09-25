@@ -2,7 +2,7 @@ library(xtable)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
 source("Shape/functions.R")
-source("Shape/estimating_sigma_new.R")
+#source("Shape/estimating_sigma_new.R")
 
 source("Shape/C_code/estimating_sigma.R")
 dyn.load("Shape/C_code/estimating_sigma.dll")
@@ -46,6 +46,6 @@ yearly_tempr            <- temperature[temperature$YEAR > -99, 'YEAR']
 #Calculating the power and size of the test#
 ############################################
 for (a_hat in different_a1){
-  PDFpartialPath = paste0("Paper/Plots/finite_sample_properties_a1_", a_1*100)
-  simulations_based_on_data(N, different_T, different_alpha, a_hat, sigma_eta, test_problem, kernel_method, filename= PDFpartialPath)
+  PDFpartialPath = paste0("Paper/Plots/finite_sample_properties_a1_", a_hat*100)
+  simulations_based_on_data(N, different_T, different_alpha, a_hat, sigma_eta, order = 1, test_problem, kernel_method, filename= PDFpartialPath)
 }

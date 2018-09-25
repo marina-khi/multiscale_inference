@@ -1,7 +1,10 @@
-simulations_based_on_data <- function(N, different_T, different_alpha, a_hat, sigma_eta, test_problem, kernel_t, filename){
+simulations_based_on_data <- function(N, different_T, different_alpha, a_hat, sigma_eta, order, test_problem, kernel_t, filename){
   #Defining necessary parameters
   num_T     <- length(different_T)
   num_alpha <- length(different_alpha)
+  
+  K1 <- order + 1
+  K2 <- 10
   
   #Recoding kernel functions and type of kernel estimator 
   if (test_problem == "zero"){
@@ -40,6 +43,15 @@ simulations_based_on_data <- function(N, different_T, different_alpha, a_hat, si
       #Replicating test procedure N times
       size_of_the_test_ar_1 = replicate(N, {
         y_data_ar_1 = arima.sim(model = list(ar = a_hat), n = T, innov = rnorm(T, 0, sigma_eta))
+        a_hat_method1         <- AR_coefficients(yearly_tempr, L1, L2, rep(0,L2), order)
+        sigma_eta_hat_method1 <- calculating_sigma_eta(yearly_tempr, a_hat_method1, order)
+        sigma_hat_method1     <- sqrt(sigma_eta_hat_method1^2 / (1 - sum(a_hat_method1))^2) 
+        
+        corrections_value     <- corrections(a_hat_method1, sigma_eta_hat_method1, K2+1)
+        a_hat_method2         <- AR_coefficients(yearly_tempr, K1, K2, corrections_value, order)
+        sigma_eta_hat_method2 <- calculating_sigma_eta(yearly_tempr, a_hat_method2, order)
+        sigma_hat_method2     <- sqrt(sigma_eta_hat_method2^2 / (1 - sum(a_hat_method2))^2)
+        
         sigmahat = estimating_sigma_for_AR1(y_data_ar_1, L1, L2)[[1]]
         result_notrend_ar1 = statistic_function(y_data_ar_1, g_t_set, kernel_ind, sigmahat)[[2]]
         if (result_notrend_ar1 > gaussian_quantile) {d = 1} else {d = 0}
@@ -59,7 +71,7 @@ simulations_based_on_data <- function(N, different_T, different_alpha, a_hat, si
   
 
   #This is for partly linear function + AR(1) case
-  for (a in c(1.0, 0.75, 0.5)){
+  for (slope in c(4.0, 3.5, 3.0)){
     power_ar1 = c()
     for (T in different_T){
       L1 <- floor(sqrt(T))
@@ -67,10 +79,12 @@ simulations_based_on_data <- function(N, different_T, different_alpha, a_hat, si
       g_t_set = creating_g_set(T, kernel_t)
       grid_points <- seq(from = 1/T, to = 1, length.out = T)
       
-      b = a/(0.4 * T) #Constant needed just for calculation
       m = numeric(T)
+      for (i in 1:T) {m[i] = (i - 0.5*T) * slope/T}
       
-      for (i in 1:T) {if (i/T < 0.6) {m[i] = 0} else {m[i] = (i - 0.6*T)*b}}
+      #b = a/(0.4 * T) #Constant needed just for calculation
+      #
+      #for (i in 1:T) {if (i/T < 0.6) {m[i] = 0} else {m[i] = (i - 0.6*T)*b}}
       #lines(grid_points, m, lty = i)
       
       for (alpha in different_alpha){

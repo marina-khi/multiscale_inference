@@ -235,7 +235,7 @@ AR_coefficients <- function(y_data, L1, L2, correction, p){
         Gamma_q_matrix[i,j] <- gamma_q_vector[abs(i - j)+1]
       }
     cov_vec <- gamma_q_vector[2:(p + 1)] + correction[(q - 1 + 1):(q - p + 1)]
-    cat("q = ", q,", p = ", p, ", L1 = ", L1, ", L2 = ", L2, "\n")
+    #cat("q = ", q,", p = ", p, ", L1 = ", L1, ", L2 = ", L2, "\n")
     a_mat[, q - L1 + 1] <- solve(Gamma_q_matrix) %*% cov_vec 
   }    
   a_hat <- rowMeans(a_mat)
