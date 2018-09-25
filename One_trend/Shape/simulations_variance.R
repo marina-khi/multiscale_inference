@@ -42,13 +42,14 @@ histograms_for_variance_estimators <- function(a_1, sigma_eta, T_size, p, slope,
   hist4 <- hist(a_hat_hall_vect, breaks = seq(smallest_value, biggest_value + 0.05, by = 0.01), plot = FALSE)
 
   highestCount <- max(hist1$counts, hist2$counts, hist3$counts, hist4$counts)
-
-  pdf("Paper/Plots/variance_histograms.pdf", width=10, height=5, paper="special")
+  
+  pdfname = paste0("Paper/Plots/variance_histograms_a1_", a_1, "_slope_", slope*10, ".pdf")
+  pdf(pdfname, width=10, height=5, paper="special")
   par(mfrow=c(1,4))
   par(mar = c(1.0, 1.0, 1.0, 0)) #Margins for each plot
   par(oma = c(1.5, 1.5, 0.5, 0.2)) #Outer margins
   
-  hist(a_hat_oracle_vect, main="Knowing the trend", breaks = seq(smallest_value, biggest_value + 0.05, by = 0.01), ylim=c(0,highestCount), xlab = "", mgp=c(2,0.5,0))
+  hist(a_hat_oracle_vect, main="Oracle", breaks = seq(smallest_value, biggest_value + 0.05, by = 0.01), ylim=c(0,highestCount), xlab = "", mgp=c(2,0.5,0))
   hist(a_hat_method1_vect, main = paste0("Method 1"), breaks = seq(smallest_value, biggest_value + 0.05, by = 0.01), ylim=c(0,highestCount), xlab = "", mgp=c(2,0.5,0))
   hist(a_hat_method2_vect, main = paste0("Method 2"), breaks = seq(smallest_value, biggest_value + 0.05, by = 0.01), ylim=c(0,highestCount), xlab = "", mgp=c(2,0.5,0))
   hist(a_hat_hall_vect, main = paste0("Hall and van Keilegom"), breaks = seq(smallest_value, biggest_value + 0.05, by = 0.01), ylim=c(0,highestCount), xlab = "", mgp=c(2,0.5,0))

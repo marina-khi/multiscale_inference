@@ -195,13 +195,12 @@ creating_matrix_and_texing_for_SiZer <- function(vect, vect_T, vect_alpha, filen
   rownames(matrix_) <- vect_T
 
   addtorow <- list()
-  addtorow$pos <- list(0, 0, 0, 0)
-  addtorow$command <- c("& \\multicolumn{6}{|c|}{nominal size $\\alpha$} \\\\\n",
-                        "\\cline{2-7}",
-                        "$T$ & \\multicolumn{2}{|c|}{$0.01$} & \\multicolumn{2}{|c|}{$0.05$} & \\multicolumn{2}{|c|}{$0.10$} \\\\\n",
-                        " & Our test & SiZer & Our test & SiZer & Our test & SiZer \\\\\n") 
+  addtorow$pos <- list(0, 0, 0)
+  addtorow$command <- c("& \\multicolumn{6}{c}{nominal size $\\alpha$} \\\\\n",
+                        "$T$ & \\multicolumn{2}{c}{$0.01$} & \\multicolumn{2}{c}{$0.05$} & \\multicolumn{2}{c}{$0.10$} \\\\\n",
+                        " & MT & SiZer & MT & SiZer & MT & SiZer \\\\\n") 
   
-  print.xtable(xtable(matrix_, digits = c(3), align = "|c|cc|cc|cc|"), type="latex",  file=filename, add.to.row = addtorow, include.colnames = FALSE)
+  print.xtable(xtable(matrix_, digits = c(3), align = "ccccccc"), type="latex",  file=filename, add.to.row = addtorow, include.colnames = FALSE)
 }
 
 #Estimate autocovariance function \gamma_q(l) for a given time series y_data by a sample autocovariance

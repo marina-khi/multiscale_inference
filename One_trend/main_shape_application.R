@@ -2,6 +2,7 @@ library(xtable)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
 source("Shape/functions.R")
+source("Shape/estimating_sigma_new.R")
 source("Shape/C_code/estimating_sigma.R")
 dyn.load("Shape/C_code/estimating_sigma.dll")
 dyn.load("Shape/C_code/psihat_statistic.dll")
@@ -34,8 +35,8 @@ T_tempr      <- length(yearly_tempr)
 #Checking the order of AR(p)#
 #############################
 
-L1 <- 30
-L2 <- 40
+L1 <- 20
+L2 <- 30
 
 FPE <- c()
 AIC <- c()
@@ -47,32 +48,33 @@ different_orders <- (1:9)
 for (order in different_orders){
   K1 <- order + 1
   K2 <- 10
-  cat(order, "\n")
-  a_hat_method1         <- AR_coefficients(yearly_tempr, L1, L2, rep(0,L2), order)
-  sigma_eta_hat_method1 <- calculating_sigma_eta(yearly_tempr, a_hat_method1, order)
-  sigma_hat_method1     <- sqrt(sigma_eta_hat_method1^2 / (1 - sum(a_hat_method1))^2) 
+  sigma_eta_hat_method2 <- estimating_variance_new(yearly_tempr, L1, L2, order, K1, K2)[[3]]
 
-  corrections_value     <- corrections(a_hat_method1, sigma_eta_hat_method1, K2+1)
-  a_hat_method2         <- AR_coefficients(yearly_tempr, K1, K2, corrections_value, order)
-  sigma_eta_hat_method2 <- calculating_sigma_eta(yearly_tempr, a_hat_method2, order)
-  sigma_hat_method2     <- sqrt(sigma_eta_hat_method2^2 / (1 - sum(a_hat_method2))^2) 
-  FPE_p <- (sigma_eta_hat_method2^2 * (T_tempr + order)) / (T_tempr - order)
-  FPE <- c(FPE, FPE_p)
+  FPE <- c(FPE, (sigma_eta_hat_method2^2 * (T_tempr + order)) / (T_tempr - order))
   AIC <- c(AIC, T_tempr * log(sigma_eta_hat_method2^2) + 2 * order)
   SIC <- c(SIC, log(sigma_eta_hat_method2^2) + order * log(T_tempr) / T_tempr)
   HQ <- c(HQ, log(sigma_eta_hat_method2^2) + 2 * order * log(log(T_tempr)) / T_tempr)
 }
+
+which.min(FPE)
+which.min(AIC)
+which.min(SIC)
+which.min(HQ)
+
+
 
 ###########################
 #Setting tuning parameters#
 ###########################
 
 #Tuning parameters
-p    <- 2
-#different_L1 <- c(10)
-#tuning_parameter_grid <- (5:25)
-K1 <- p+1
+p  <- which.min(AIC)
+K1 <- p + 1
 K2 <- 10
+
+different_L1          <- (11:40)
+tuning_parameter_grid <- (5:25)
+
 
 ###################################################################
 #Calculating smoothed curve for the data using Epanechnikov kernel#
@@ -106,21 +108,7 @@ K2 <- 10
 #for (L1 in different_L1){
 #  for (q in tuning_parameter_grid){
 #    L2 <- L1 + q
-    result    <- estimating_sigma_for_AR1(yearly_tempr, L1, L2)
-    a_hat     <- result[[2]] #Estimation of the AR coefficient
-    sigma_eta <- result[[3]] #Estimation of the sqrt of the variance of the innovation 
-
-
-    a_hat_method1         <- AR_coefficients(yearly_tempr, L1, L2, rep(0,L2), p)
-    sigma_eta_hat_method1 <- calculating_sigma_eta(yearly_tempr, a_hat_method1, p)
-    sigma_hat_method1     <- sqrt(sigma_eta_hat_method1^2 / (1 - sum(a_hat_method1))^2) 
-
-    corrections_value     <- corrections(a_hat_method1, sigma_eta_hat_method1, K2+1)
-    a_hat_method2         <- AR_coefficients(yearly_tempr, K1, K2, corrections_value, p)
-    sigma_eta_hat_method2 <- calculating_sigma_eta(yearly_tempr, a_hat_method2, p)
-    sigma_hat_method2     <- sqrt(sigma_eta_hat_method2^2 / (1 - sum(a_hat_method2))^2) 
-
-    cat("L1 = ", L1, ", L2 = ", L2, ", a_hall = ", a_hat, ", a_method1 = ", a_hat_method1, ", a_method2 = ", a_hat_method2, "\n")
-    data_analysis(alpha, yearly_tempr, test_problem, kernel_method, sigma_hat_method2, L1, L2)
+    sigma_hat <- estimating_variance_new(yearly_tempr, L1, L2, p, K1, K2)[[1]]
+    data_analysis(alpha, yearly_tempr, test_problem, kernel_method, sigma_hat, L1, L2)
 #  }
 #}
