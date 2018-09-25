@@ -1,29 +1,13 @@
-estimating_sigma_new_method <- function(y_data, p){
-  #Function that calculates the estimate of the square root of long-run variance sigma^2
-  #Arguments:
-  #y_data           vector of data length T 
-  #p                order of the AR(p) model    
-  gamma_hat_temp <- sapply(0:(p+1), FUN = sample_autocovariance, y_data)
-  if (p == 1){
-    Gamma_matrix_hat <- gamma_hat_temp[2]
-    gamma_hat        <- gamma_hat_temp[3]
-    a_hat            <- gamma_hat / Gamma_matrix_hat     
-  } else {
-    Gamma_matrix_hat <- matrix(data = NA, nrow = p, ncol = p)
-    for (i in 1:p){
-      for (j in 1:p){
-        if (i >= j) {
-            Gamma_matrix_hat[i, j] = gamma_hat[i - j + 2]
-        } else {
-            Gamma_matrix_hat[i, j] = gamma_hat[j - i]
-          }
-      }
-    }
-    gamma_hat <-  gamma_hat_temp[3:(p+2)]
-    a_hat     <- inv(Gamma_matrix_hat) %*% gamma_hat
-  }
-  sigma_eta_squared <- sum(a_hat * gamma_hat_temp[2:(p+1)]) - gamma_hat_temp[1]
-  sigma_eta <- sqrt(sigma_eta_squared)
-  sigma_hat <- sigma_eta / (abs(1 - sum(a_hat)))
-  return(list(sigma_hat, a_hat, sigma_eta))
+estimating_variance_new <- function(y_data, L1, L2, order, K1 = order + 1, K2 = 10){
+  
+  a_hat_method1         <- AR_coefficients(y_data, L1, L2, rep(0,L2), order)
+  sigma_eta_hat_method1 <- calculating_sigma_eta(y_data, a_hat_method1, order)
+  sigma_hat_method1     <- sqrt(sigma_eta_hat_method1^2 / (1 - sum(a_hat_method1))^2) 
+  
+  corrections_value     <- corrections(a_hat_method1, sigma_eta_hat_method1, K2+1)
+  a_hat_method2         <- AR_coefficients(y_data, K1, K2, corrections_value, order)
+  sigma_eta_hat_method2 <- calculating_sigma_eta(y_data, a_hat_method2, order)
+  sigma_hat_method2     <- sqrt(sigma_eta_hat_method2^2 / (1 - sum(a_hat_method2))^2) 
+  
+  return(list(sigma_hat_method2, a_hat_method2, sigma_eta_hat_method2))
 }

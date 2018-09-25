@@ -1,4 +1,4 @@
-data_analysis <- function(alpha, y_data, test_problem, kernel_t){
+data_analysis <- function(alpha, y_data, test_problem, kernel_t, sigmahat, L1, L2){
   #Recoding testing problem and type of kernel estimator 
   if (test_problem == "zero"){
     kernel_ind = 1
@@ -22,12 +22,6 @@ data_analysis <- function(alpha, y_data, test_problem, kernel_t){
   
   T_data = length(y_data)
   
-  #Tuning parameters
-  L1 <- floor(sqrt(T_data))
-  L2 <- floor(2 * sqrt(T_data))
-  sigmahat_data <- estimating_sigma_for_AR1(y_data, L1, L2)[[1]]
-  
-
   ##########################################
   #Calculating gaussian quantile for T_data#
   ##########################################
@@ -40,7 +34,7 @@ data_analysis <- function(alpha, y_data, test_problem, kernel_t){
   #Calculating the statistic for real data#
   #########################################
   
-  result                 <- statistic_function(y_data, g_t_set, kernel_ind, sigmahat_data)
+  result                 <- statistic_function(y_data, g_t_set, kernel_ind, sigmahat)
   g_t_set_with_values    <- result[[1]]
   psihat_statistic_value <- result[[2]]
   
@@ -55,7 +49,7 @@ data_analysis <- function(alpha, y_data, test_problem, kernel_t){
     p_t_set <- subset(p_t_set, endpoint <= 2017, select = c(startpoint, endpoint, values)) 
     p_t_set <- choosing_minimal_intervals(p_t_set)
 
-    print.xtable(xtable(subset(p_t_set, select = c(startpoint, endpoint)), digits = c(0)), type="latex", file="Plots/minimal_intervals.tex")
+    #print.xtable(xtable(subset(p_t_set, select = c(startpoint, endpoint)), digits = c(0)), type="latex", file="Paper/Plots/minimal_intervals.tex")
 
     #The collection of intervals where the values_with_sign > gaussian_quantile + lambda (as in (2.6))
     #a_t_set_plus <- subset(g_t_set_with_values, values_with_sign > gaussian_quantile + lambda, select = c(u, h, values_with_sign))
@@ -76,7 +70,7 @@ data_analysis <- function(alpha, y_data, test_problem, kernel_t){
   grid_points <- seq(from = 1/T_data, to = 1, length.out = T_data) #grid points for estimating
   grid_time <- seq(from = 1659, to = 2017, length.out = T_data) #grid points for plotting 
     
-  pdffilename = paste0("Paper/Plots/threegraphics_testing_", test_problem, "_method_", kernel_t, ".pdf")
+  pdffilename = paste0("Paper/Plots/temperature_L1_", L1, "_L2_", L2, ".pdf")
   pdf(pdffilename, width=10, height=10, paper="special")
 
   par(mfrow = c(3,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
