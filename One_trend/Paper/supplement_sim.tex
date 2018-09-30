@@ -1,0 +1,115 @@
+
+\section{Robustness checks and implementation details for the simulations in Section \ref{sec-sim}}
+
+
+\subsection*{Robustness checks for Section \ref{subsec-sim-3}}
+
+
+\begin{table}[H]
+\centering
+\footnotesize{
+\caption{Mean values and standard deviations of $S=1000$ simulated values of the estimator $\widetilde{a}_q$ for different values of $q$. The simulation design is as in Section \ref{subsec-sim-3}, where we consider the linear trend with $\beta=1$.}\label{tab:sim_supp_1}
+\newcolumntype{L}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{L{1.25} L{1.25} C{0.925} C{0.925} C{0.925} C{0.925} C{0.925} C{0.925} C{0.925}}
+\toprule
+ & & $q = 10$ & $q=15$ & $q=20$ & $q=25$ & $q=30$ & $q=35$ & $q=40$ \\
+\cmidrule[0.4pt]{1-9}
+$a = -0.95$ & $T=250$ & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   \\
+            &         & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\
+            & $T=500$ & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   \\
+            &         & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\[0.1cm]
+$a = -0.75$ & $T=250$ & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   \\
+            &         & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\
+            & $T=500$ & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   \\
+            &         & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\[0.1cm]
+$a = -0.5$  & $T=250$ & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   \\
+            &         & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\
+            & $T=500$ & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   \\
+            &         & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\[0.1cm]
+$a = -0.25$ & $T=250$ & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   \\
+            &         & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\
+            & $T=500$ & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   \\
+            &         & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\[0.1cm]
+$a = 0.25$  & $T=250$ & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   \\
+            &         & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\
+            & $T=500$ & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   \\
+            &         & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\[0.1cm]
+$a = 0.5$   & $T=250$ & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   \\
+            &         & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\
+            & $T=500$ & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   \\
+            &         & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\[0.1cm]
+$a = 0.75$  & $T=250$ & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   \\
+            &         & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\
+            & $T=500$ & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   \\
+            &         & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\[0.1cm]
+$a = 0.95$  & $T=250$ & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   \\
+            &         & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\
+            & $T=500$ & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   & 0.000   \\
+            &         & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\[0.1cm]
+\bottomrule
+\end{tabularx}}
+\end{table}
+
+\newpage
+
+\begin{table}[H]
+\centering
+\footnotesize{
+\caption{Mean values and standard deviations of $S=1000$ simulated values of the estimator $\widehat{a}$ for different values of $\overline{r}$. To compute $\widehat{a}$, we use $\widetilde{a}_q$ with $q = 20$ as a first step estimator. The simulation design is as in Section \ref{subsec-sim-3}, where we consider the linear trend with $\beta=1$.}\label{tab:sim_supp_2}
+\newcolumntype{L}[1]{>{\hsize=#1\hsize\raggedright\arraybackslash}X}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{0.8\textwidth}{L{1} L{0.7} C{1.1} C{1.1} C{1.1}}
+\toprule
+ & & $\overline{q}=5$ & $\overline{q}=10$ & $\overline{q}=15$ \\
+\cmidrule[0.4pt]{1-5}
+$a = -0.95$ & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
+            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
+$a = -0.75$ & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
+            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
+$a = -0.5$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
+            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
+$a = -0.25$ & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
+            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
+$a = 0.25$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
+            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
+$a = 0.5$   & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
+            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
+$a = 0.75$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
+            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
+$a = 0.95$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
+            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
+\bottomrule
+\end{tabularx}}
+\end{table}
+
+
+\subsection*{Implementation of SiZer in Section \ref{subsec-sim-2}}
+
+
+\begin{enumerate}[label=Step \arabic*:, leftmargin=1.5cm]
+\item Calculate $\gamma(k) = \frac{\sigma_\eta^2 }{1 - a_1^2}\cdot a_1^{|k|}$.
+\item Calculate $\var(\bar{Y}) = \frac{\gamma(0)}{T} + \frac{2}{T} \sum_{k = 1}^{T-1} \big(1 - \frac{k}{T}\big)\gamma(k)$.
+\item Calculate $T^* = \frac{\gamma(0)}{\var(\bar{Y})}$.
+\item For each location $i = 1/T, 2/T, \ldots, 1$ and each bandwidth $h = 3/T, 8/T,\ldots, 1/4 + 3/T$, calculate the following values:
+\begin{itemize}[leftmargin=0.5cm]
+	\item $ESS(i, h) = \frac{\frac{1}{h}\sum_{t =1}^T K\big(\frac{i - t/T}{h}\big)}{\frac{1}{h}K(0)}$;
+	\item $ESS^*(i, h) =\frac{T^*}{T} \cdot ESS$;
+	\item $l(i, h) = \frac{T}{ESS^*(i, h)}$;
+	\item $q(i, h) = \Phi^{-1} \Big(\frac{1 + (1 - \alpha)^{\frac{1}{l(i, h)}}}{2}\Big)$;
+	\item $(X^T W X)^{-1} X^T W$, where $W = \{diag(\frac{1}{h} K\big(\frac{i - t/T}{h}\big))\}$ and 
+	\begin{equation}
+	X =  \left( \begin{array}{c c}
+	                1 & (1/T - i) \\
+			1 & (2/T - i)  \\
+			\vdots & \vdots \\
+			1 & (1 - i)  \\
+		   \end{array} \right); \nonumber
+	\end{equation}
+	\item $sd(\widehat{m}^\prime_h(i)) = \sqrt{\big((X^T W X)^{-1} (X^T \Sigma X) (X^T W X)^{-1}\big)_{2, 2}}$, where $\Sigma$ is the kernel weighted covariance matrix of errors with generic element $$\sigma_{kl} = \gamma(|k - l|) \frac{1}{h} K\Big(\frac{i - k/T}{h}\Big) \frac{1}{h}  K\Big(\frac{i - l/T}{h}\Big).$$
+	\end{itemize}
+\item\label{discarding} Discard all pairs of location and bandwidth $(i, h)$ where $ESS^* < 5$.
+\item Based on the grid from \ref{discarding}, calculate Gaussian quantile for our method.
+\item 
+\end{enumerate}
