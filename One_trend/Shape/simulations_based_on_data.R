@@ -1,9 +1,6 @@
 simulations_general <- function(N, different_T, different_alpha, different_slopes,
                                 a_hat, sigma_eta, order, test_problem, kernel_t, L1, K1, K2){
-  #Defining necessary parameters
-  #num_T     <- length(different_T)
-  #num_alpha <- length(different_alpha)
-  
+
   #Recoding kernel functions and type of kernel estimator 
   if (test_problem == "zero"){
     kernel_ind = 1
@@ -24,16 +21,14 @@ simulations_general <- function(N, different_T, different_alpha, different_slope
   }
 
   #Calculating the size of the test
-
-  #We don't have the trend function, the null hypothesis is true and the errors are from AR(1)
   size_ar1 <- c()
   for (alpha in different_alpha){
     for (T in different_T){
       g_t_set =creating_g_set(T, kernel_t)
+
       #Calculating gaussian quantiles for given T and alpha
       gaussian_quantile = quantile_function(T, g_t_set, test_problem, kernel_ind, alpha)
-      #cat("Gaussian quantile = ", gaussian_quantile, "with T = ", T, "and alpha = ", alpha, "\n")
-      
+
       #Replicating test procedure N times
       size_of_the_test_ar_1 = replicate(N, {
         y_data_ar_1 <- arima.sim(model = list(ar = a_hat), n = T, innov = rnorm(T, 0, sigma_eta))
@@ -47,22 +42,20 @@ simulations_general <- function(N, different_T, different_alpha, different_slope
     }
   }
 
-  ###################################
   #Calculating the power of the test#
-  ###################################
   power_ar1 = c()  
   
   #This is for partly linear function + AR(1) case
   for (alpha in different_alpha){
-    for (T in different_T){
-      for (slope in different_slopes){
+    for (slope in different_slopes){
+      for (T in different_T){
         g_t_set = creating_g_set(T, kernel_t)
         m = numeric(T)
         for (i in 1:T) {if (i/T < 0.6) {m[i] = 0} else {m[i] = (i - 0.6*T)*slope/T}}
+        
         #Calculating gaussian quantiles for given T and alpha
         gaussian_quantile = quantile_function(T, g_t_set, test_problem, kernel_ind, alpha)
-        #cat("Gaussian quantile = ", gaussian_quantile, "with T = ", T, "and alpha = ", alpha, "\n")
-        
+
         #Replicating test procedure N times
         size_of_the_test_with_trend = replicate(N, {
           #Adding a function that is 0 on the first half and linear on the second half
