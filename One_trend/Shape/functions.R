@@ -117,9 +117,13 @@ choosing_minimal_intervals <- function(dataset){
 
 #Creating g_t_set over which we are taking the maximum (from Section 2.1)
 creating_g_set <- function(T, kernel_method){
-  u <- seq(from = 5/T, to = 1, by = 5/T)
-  h <- seq(from = 3/T, to = 1/4+3/T, by = 5/T)
+  #u <- seq(from = 5/T, to = 1, by = 5/T)
+  #h <- seq(from = 3/T, to = 1/4+3/T, by = 5/T)
+
+  u <- seq(from = 1/T, to = 1, by = 1/T)
+  h <- seq(from = 3/T, to = 1/4+1/T, by = 1/T)
   
+    
   g_t_set_temp                  <- expand.grid(u = u, h = h) #Creating a dataframe with all possible combination of u and h
   g_t_set_temp$values           <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
   g_t_set_temp$values_with_sign <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero

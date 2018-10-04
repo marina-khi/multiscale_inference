@@ -2,7 +2,7 @@
 \section{Simulations}\label{sec-sim}
 
 
-To assess the finite sample performance of our methods, we conduct a number of simulations. In Sections \ref{subsec-sim-1} and \ref{subsec-sim-2}, we investigate the performance of our multiscale test and compare it to the SiZer methods for time series developed in \cite{Rondonotti2004} and \cite{Rondonotti2007}. In Section \ref{subsec-sim-3}, we analyse the finite sample properties of our long-run variance estimator from Section \ref{subsec-error-var-ar} and compare it to the estimator of \cite{Hall2003}. 
+To assess the finite sample performance of our methods, we conduct a number of simulations. In Sections \ref{subsec-sim-1} and \ref{subsec-sim-2}, we investigate the performance of our multiscale test and compare it to the SiZer methods for time series developed in \cite{Rondonotti2004} and \cite{Rondonotti2007}. In Section \ref{subsec-sim-3}, we analyse the finite sample properties of our long-run variance estimator from Section \ref{subsec-error-var-AR} and compare it to the estimator of \cite{Hall2003}. 
 
 
 \subsection{Size and power properties of the multiscale test}\label{subsec-sim-1} 
@@ -19,10 +19,10 @@ We consider a simulation design which mimics the situation in the application of
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{C{2} C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ} 
 \toprule
- & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) =  (0.164,0.181)$} \\
+ & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) = (0.164,0.181)$} \\
 \cmidrule[0.4pt]{3-5} \cmidrule[0.4pt]{7-9} \cmidrule[0.4pt]{11-13} \cmidrule[0.4pt]{15-17} \cmidrule[0.4pt]{19-21}
- $T$ & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
- & &  0.01 & 0.05  & 0.1 & &  0.01 & 0.05  & 0.1  & &  0.01 & 0.05  & 0.1  & &  0.01 & 0.05  & 0.1  & &  0.01 & 0.05  & 0.1   \\
+$T$ & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
+& &  0.01 & 0.05  & 0.1 & &  0.01 & 0.05  & 0.1  & &  0.01 & 0.05  & 0.1  & &  0.01 & 0.05  & 0.1  & &  0.01 & 0.05  & 0.1   \\
 \cmidrule[0.4pt]{1-21}
 250 &  & 0.005 & 0.054 & 0.133 &  & 0.007 & 0.062 & 0.106 &  & 0.015 & 0.058 & 0.120 &  & 0.011 & 0.065 & 0.107 &  & 0.016 & 0.059 & 0.112 \\ 
   350 &  & 0.024 & 0.066 & 0.147 &  & 0.019 & 0.058 & 0.094 &  & 0.018 & 0.057 & 0.111 &  & 0.029 & 0.064 & 0.111 &  & 0.032 & 0.065 & 0.110 \\ 
@@ -36,10 +36,10 @@ We consider a simulation design which mimics the situation in the application of
 \begin{tabularx}{\textwidth}{C{2} C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ} 
 \multicolumn{21}{c}{(a) $\beta = 1.25$} \\[0.2cm]
 \toprule
- & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) =  (0.164,0.181)$} \\
+ & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) = (0.164,0.181)$} \\
 \cmidrule[0.4pt]{3-5} \cmidrule[0.4pt]{7-9} \cmidrule[0.4pt]{11-13} \cmidrule[0.4pt]{15-17} \cmidrule[0.4pt]{19-21}
- $T$ & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
-        & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1   \\
+$T$ & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
+& &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1   \\
 \cmidrule[0.4pt]{1-21}
 250 &  & 0.185 & 0.451 & 0.542 &  & 0.103 & 0.290 & 0.413 &  & 0.028 & 0.132 & 0.214 &  & 0.018 & 0.079 & 0.138 &  & 0.092 & 0.275 & 0.373 \\ 
   350 &  & 0.381 & 0.577 & 0.675 &  & 0.218 & 0.411 & 0.495 &  & 0.063 & 0.151 & 0.230 &  & 0.040 & 0.093 & 0.161 &  & 0.235 & 0.336 & 0.457 \\ 
@@ -53,8 +53,8 @@ We consider a simulation design which mimics the situation in the application of
 \toprule
  & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) = (0.164,0.181)$} \\
 \cmidrule[0.4pt]{3-5} \cmidrule[0.4pt]{7-9} \cmidrule[0.4pt]{11-13} \cmidrule[0.4pt]{15-17} \cmidrule[0.4pt]{19-21}
- $T$ & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
-        & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1   \\
+$T$ & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1   \\
 \cmidrule[0.4pt]{1-21}
 250 &  & 0.565 & 0.839 & 0.911 &  & 0.355 & 0.685 & 0.749 &  & 0.079 & 0.262 & 0.371 &  & 0.035 & 0.130 & 0.195 &  & 0.297 & 0.564 & 0.657 \\ 
   350 &  & 0.868 & 0.944 & 0.976 &  & 0.649 & 0.823 & 0.875 &  & 0.196 & 0.334 & 0.412 &  & 0.083 & 0.159 & 0.226 &  & 0.571 & 0.730 & 0.790 \\ 
@@ -66,10 +66,10 @@ We consider a simulation design which mimics the situation in the application of
 \begin{tabularx}{\textwidth}{C{2} C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ} 
 \multicolumn{21}{c}{(c) $\beta = 2.5$} \\[0.2cm]
 \toprule
- & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) =  (0.164,0.181)$} \\
+ & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) = (0.164,0.181)$} \\
 \cmidrule[0.4pt]{3-5} \cmidrule[0.4pt]{7-9} \cmidrule[0.4pt]{11-13} \cmidrule[0.4pt]{15-17} \cmidrule[0.4pt]{19-21}
- $T$ & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
-        &  &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1   \\
+$T$ & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1   \\
 \cmidrule[0.4pt]{1-21}
 250 &  & 0.930 & 0.991 & 0.995 &  & 0.731 & 0.920 & 0.948 &  & 0.220 & 0.439 & 0.541 &  & 0.065 & 0.193 & 0.280 &  & 0.570 & 0.834 & 0.897 \\ 
   350 &  & 0.995 & 0.999 & 0.999 &  & 0.949 & 0.988 & 0.989 &  & 0.414 & 0.582 & 0.648 &  & 0.161 & 0.292 & 0.351 &  & 0.871 & 0.949 & 0.978 \\ 
@@ -84,10 +84,10 @@ To implement our test, we choose $K$ to be an Epanechnikov kernel and define the
 \begin{align}
 \mathcal{G}_T = \big\{ (u, h): & \, \, u = 5k/T \text{ for some } 1 \le k \le T/5 \text{ and } \nonumber \\ & \, \, h = (3+5\ell)/T \text{ for some } 0 \le \ell \le T/20 \big\}. \label{grid-sim-app}
 \end{align}
-We thus take into account all rescaled time points $u \in [0,1]$ on an equidistant grid with step length $5/T$. For the bandwidth $h = (3 + 5\ell)/T$ and any $u \in [h,1-h]$, the local linear weights $w_{t,T}(u,h)$ are non-zero for exactly $5 + 10 \ell$ observations. Hence, the bandwidths $h$ in $\mathcal{G}_T$ correspond to effective sample sizes of $5, 15, 25, \ldots$ up to approximately $T/4$ data points. As a robustness check, we have re-run the simulations for a number of other grids. As the results are very similar, we do however not report them here. The long-run error variance $\sigma^2$ is estimated by the procedures from Section \ref{subsec-error-var-ar}. Specifically, we first compute the pilot estimator $\widetilde{\boldsymbol{a}}_q$ with $q = 20$ and then produce the second-step estimator $\widehat{\boldsymbol{a}}$ with $\overline{r} = 10$. Based on $\widehat{\boldsymbol{a}}$, we finally compute the estimator $\widehat{\sigma}^2$ of the long-run error variance $\sigma^2$. As a further robustness check, we have re-run the simulations for other choices of the tuning parameters $q$ and $\overline{r}$, which yields very similar results. The dependence of the estimators $\widetilde{\boldsymbol{a}}_q$, $\widehat{\boldsymbol{a}}$ and $\widehat{\sigma}^2$ on the tuning parameters $q$ and $\overline{r}$ is further explored in Section \ref{subsec-sim-3}. To compute the critical values of the multiscale test, we simulate $1000$ values of the statistic $\Phi_T$ defined in Section \ref{subsec-method-test} and compute their empirical $(1-\alpha)$ quantile $q_T(\alpha)$. 
+We thus take into account all rescaled time points $u \in [0,1]$ on an equidistant grid with step length $5/T$. For the bandwidth $h = (3 + 5\ell)/T$ and any $u \in [h,1-h]$, the local linear weights $w_{t,T}(u,h)$ are non-zero for exactly $5 + 10 \ell$ observations. Hence, the bandwidths $h$ in $\mathcal{G}_T$ correspond to effective sample sizes of $5, 15, 25, \ldots$ up to approximately $T/4$ data points. As a robustness check, we have re-run the simulations for a number of other grids. As the results are very similar, we do however not report them here. The long-run error variance $\sigma^2$ is estimated by the procedures from Section \ref{subsec-error-var-AR}. Specifically, we first compute the estimator $\widehat{a}$ of the AR parameter, where we set $(\underline{q},\overline{q}) = (5,10)$ and we use the pilot estimator $\widehat{a}_q$ with $q = 20$. Based on $\widehat{a}$, we then compute the estimator $\widehat{\sigma}^2$ of the long-run error variance $\sigma^2$. As a further robustness check, we have re-run the simulations for other choices of the parameters $q$, $\underline{r}$ and $\overline{r}$, which yields very similar results. The dependence of the estimators $\widehat{a}$ and $\widehat{\sigma}^2$ on the tuning parameters $q$, $\underline{r}$ and $\overline{r}$ is further explored in Section \ref{subsec-sim-3}. To compute the critical values of the multiscale test, we simulate $1000$ values of the statistic $\Phi_T$ defined in Section \ref{subsec-method-test} and compute their empirical $(1-\alpha)$ quantile $q_T(\alpha)$. 
 
 
-Tables \ref{tab:size_test} and \ref{tab:power_test} report the simulation results for the sample sizes $T=250,350,500$ and the significance levels $\alpha = 0.01, 0.05, 0.10$. The sample size $T = 350$ is approximately equal to the time series length $359$ in the real-data example of Section \ref{sec-data}. To produce our simulation results, we generate $S=1000$ samples for each model specification and carry out the multiscale test for each simulated sample. The entries of Tables \ref{tab:size_test} and \ref{tab:power_test} are computed as the number of simulations in which the test rejects divided by the total number of simulations. As can be seen from Table \ref{tab:size_test}, the actual size of the test is fairly close to the nominal target $\alpha$ even for small values of $T$. Hence, the test has approximately the correct size. Inspecting Table \ref{tab:power_test}, one can further see that the test has reasonable power properties. For the smallest value $\beta = 1.25$, the deviation from the null is quite small, making it hard for the test to detect the alternative. As a consequence, the power is only moderate for $T=250$ and $T=350$. When we move further away from the null by increasing the slope parameter $\beta$, the power of the test quickly increases. It can also be seen to rapidly get larger as the sample size grows. For the slope $\beta =2.5$, the sample size $T=350$ and the AR(2) error process, which is the model specification that resembles the real-life data in Section \ref{sec-data} the most, the power of the test is above $??\%$ for all significance levels $\alpha$ considered and thus comes quite close to $1$. 
+Tables \ref{tab:size_test} and \ref{tab:power_test} report the simulation results for the sample sizes $T=250,350,500$ and the significance levels $\alpha = 0.01, 0.05, 0.10$. The sample size $T = 350$ is approximately equal to the time series length $359$ in the real-data example of Section \ref{sec-data}. To produce our simulation results, we generate $S=1000$ samples for each model specification and carry out the multiscale test for each sample. The entries of Tables \ref{tab:size_test} and \ref{tab:power_test} are computed as the number of simulations in which the test rejects divided by the total number of simulations. As can be seen from Table \ref{tab:size_test}, the actual size of the test is fairly close to the nominal target $\alpha$ even for small values of $T$. Hence, the test has approximately the correct size. Inspecting Table \ref{tab:power_test}, one can further see that the test has reasonable power properties. For the smallest value $\beta = 1.25$, the deviation from the null is quite small, making it hard for the test to detect the alternative. As a consequence, the power is only moderate for $T=250$ and $T=350$. When we move further away from the null by increasing the slope parameter $\beta$, the power of the test quickly increases. It can also be seen to rapidly get larger as the sample size grows. For the slope $\beta =2.5$, the sample size $T=350$ and the AR(2) error process, which is the model specification that resembles the real-life data in Section \ref{sec-data} the most, the power of the test is above $??\%$ for all significance levels $\alpha$ considered and thus comes quite close to $1$. 
 
 
 %We next explore in more detail how the multiscale test is influenced by different specifications of the error process. To do so, we simulate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$ with different AR(1) processes $\{ \varepsilon_t \}$. Specifically, we let $\varepsilon_t = a \varepsilon_{t-1} + \eta_t$, where $a \in \{-0.5,-0.25,0.25,0.5\}$ and $\eta_t$ are i.i.d.\ standard normal. To explore the size properties of the test, we generate data under the null by setting $m = 0$ as before. We do not further investigate the power properties since additional simulation exercises on the power of the test are included in Section \ref{subsec-sim-2}, where we compare it with SiZer for time series. The test is implemented exactly as described above. The simulation results are reported in Table ??.  
@@ -96,14 +96,14 @@ Tables \ref{tab:size_test} and \ref{tab:power_test} report the simulation result
 \subsection{Comparison with SiZer}\label{subsec-sim-2}
 
 
-% However, their analysis is mainly methodlogical and the developed tools have an explorative character. Our multiscale method in ciontrast is a statistical rigorous test which is back up by a complete asymptotic theory. 
+% However, their analysis is mainly methodlogical and the developed tools have an explorative character. Our multiscale method in contrast is a statistical rigorous test which is back up by a complete asymptotic theory. 
 
 
 We now compare our multiscale test to SiZer for times series as described in \cite{Rondonotti2007}. Roughly speaking, the SiZer method proceeds as follows: For each location $u$ and bandwidth $h$ in a pre-specified set, SiZer computes an estimator $\widehat{m}_h^\prime(u)$ of the derivative $m^\prime(u)$ and a corresponding confidence interval. For each $(u,h)$, it then checks whether the confidence interval includes the value $0$. The set $\Pi_T^{\text{SiZer}}$ of points $(u,h)$ for which the confidence interval does not include $0$ corresponds to the set of intervals $\Pi_T^\pm$ for which our multiscale test rejects the null hypothesis $H_0$ that $m$ is constant on all intervals $[u-h,u+h]$ under consideration. %finds an increase/decrease in $m$. 
 In order to explore how our test performs in comparison to SiZer, we compare the two sets $\Pi_T^\pm$ and $\Pi_T^{\text{SiZer}}$ in different ways to each other in what follows. 
 
 
-The SiZer method is implemented as described in Section ?? of the Supplementary Material. To simplify its implementation, we assume that the autocovariance function $\gamma_\varepsilon(\cdot)$ of the error process and thus the long-run error variance $\sigma^2$ is known. Our multiscale test is implemented in the same way as in the previous section. To keep the comparison fair, we of course treat $\sigma^2$ as known also when implementing our method. Moreover, we use the same grid $\mathcal{G}_T$ of points $(u,h)$ for both methods. To achieve this, we start off with the grid $\mathcal{G}_T$ from \eqref{grid-sim-app} and then restrict attention to those points $(u,h) \in \mathcal{G}_T$ where the number of ``independent blocks'', as argued in \cite{Rondonotti2007}, is not too sparse for reasonable statistical inference. In particular, we calculate the effective sample size $\text{ESS}^*$ for correlated data and consider the grid $\mathcal{G}_T^* = \{ (u, h) \in \mathcal{G}_T \, | \, \text{ESS}^*(u, h) \geq 5 \}$. A detailed discussion of ``independent blocks'' and $\text{ESS}^*$ can be found in \cite{ChaudhuriMarron1999} and \cite{Rondonotti2007}. 
+The SiZer method is implemented as described in Section S.3 of the Supplementary Material. To simplify its implementation, we assume that the autocovariance function $\gamma_\varepsilon(\cdot)$ of the error process and thus the long-run error variance $\sigma^2$ is known. Our multiscale test is implemented in the same way as in the previous section. To keep the comparison fair, we of course treat $\sigma^2$ as known also when implementing our method. Moreover, we use the same grid $\mathcal{G}_T$ of points $(u,h)$ for both methods. To achieve this, we start off with the grid $\mathcal{G}_T$ from \eqref{grid-sim-app} and then restrict attention to those points $(u,h) \in \mathcal{G}_T$ where the number of ``independent blocks'', as argued in \cite{Rondonotti2007}, is not too sparse for reasonable statistical inference. In particular, we calculate the effective sample size $\text{ESS}^*$ for correlated data and consider the grid $\mathcal{G}_T^* = \{ (u, h) \in \mathcal{G}_T \, | \, \text{ESS}^*(u, h) \geq 5 \}$. A detailed discussion of ``independent blocks'' and $\text{ESS}^*$ can be found in \cite{ChaudhuriMarron1999} and \cite{Rondonotti2007}. 
 
 
 \begin{table}[t!]
@@ -192,12 +192,12 @@ Both our method and SiZer can be regarded as statistical tools to identify time 
 \begin{figure}[t]
 \begin{subfigure}{.5\textwidth}
 \centering
-\includegraphics[width=.9\linewidth]{Plots/min_int_with_T_500_a1_-50.pdf}
+\includegraphics[width=.9\linewidth]{Plots/Plots_Paper/min_int_with_T_500_a1_-50.pdf}
 \caption{$a_1 = -0.5$}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
 \centering
-\includegraphics[width=.9\linewidth]{Plots/min_int_with_T_500_a1_50.pdf}
+\includegraphics[width=.9\linewidth]{Plots/Plots_Paper/min_int_with_T_500_a1_50.pdf}
 \caption{$a_1 = 0.5$}
 \end{subfigure}
 \caption{Comparison of the regions $\mathcal{R}_T^\pm$ and $\mathcal{R}_T^{\text{SiZer}}$. Subfigure (a) corresponds to the model setting with the AR parameter $a_1 = -0.5$, subfigure (b) to the setting with $a_1 = 0.5$. The upper panel of each subfigure shows a simulated time series path together with the underlying trend function $m$. The middle panel depicts the regions $\mathcal{R}_T^\pm$ produced by our multiscale test for $100$ simulation runs. The lower panel presents the regions $\mathcal{R}_T^{\text{SiZer}}$ produced by SiZer.}  
@@ -218,158 +218,92 @@ All in all, we would like to regard the two methods as complementary rather than
 \subsection{Small sample properties of the long-run variance estimator}\label{subsec-sim-3}
 
 
-In the final part of the simulation study, we examine the estimators of the AR parameters and the long-run error variance from Section \ref{subsec-error-var-ar}. We simulate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$, where $\{ \varepsilon_t\}$ is an AR($1$) process of the form $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$. We consider the AR parameters $a_1 \in \{-0.95,-0.75,-0.5,-0.25,0.25,0.5,0.75,0.95\}$ and let $\eta_t$ be i.i.d.\ standard normal innovation terms. For simplicity, $m$ is chosen to be a linear function of the form $m(u) = \beta u$ with $\beta \in \{1,10\}$. The slope parameter $\beta = 1$ corresponds to a moderate trend in the data, whereas the trend becomes quite pronounced for $\beta = 10$. 
+In the final part of the simulation study, we examine the estimators of the AR parameters and the long-run error variance from Section \ref{subsec-error-var-AR}. We simulate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$, where $\{ \varepsilon_t\}$ is an AR($1$) process of the form $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$. We consider the AR parameters $a_1 \in \{-0.95,-0.75,-0.5,-0.25,0.25,0.5,0.75,0.95\}$ and let $\eta_t$ be i.i.d.\ standard normal innovation terms. For simplicity, $m$ is chosen to be a linear function of the form $m(u) = \beta u$ with the slope parameter $\beta$. For each value of $a_1$, we consider two different slopes $\beta$, one corresponding to a moderate and one to a pronounced trend $m$. In particular, we let $\beta = s_\beta / \sqrt{(1-a_1^2)} = s_\beta \sqrt{\var(\varepsilon_t)}$. When $s_\beta = 1$, the slope $\beta$ is equal to the standard deviation $\sqrt{\var(\varepsilon_t)}$ of the error process, which yields a moderate trend $m$. When $s_\beta = 10$, in contrast, the slope $\beta$ is $10$ times as large as $\sqrt{\var(\varepsilon_t)}$, which results in a quite pronounced trend $m$. 
 
 
-\begin{table}[t!]
-\centering
-\footnotesize{
-\caption{Empirical mean and standard deviation of the AR parameter estimators.}\label{tab:AR_parameters}
-\newcolumntype{L}{>{\raggedright\arraybackslash}X}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{0.925\textwidth}{LZZZZZ} 
-\multicolumn{6}{c}{(a) $\beta = 1$} \\[0.2cm]
-\toprule
- & & $\widetilde{a}$ & $\widehat{a}$ & $\widehat{a}_{\text{HvK}}$ & $\widehat{a}_{\text{oracle}}$ \\
-\cmidrule[0.4pt]{1-6}
-$a = -0.95$ & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = -0.75$ & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = -0.5$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = -0.25$ & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = 0.25$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = 0.5$   & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = 0.75$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = 0.95$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-\bottomrule
-\end{tabularx}
-\vspace{0.25cm}
+\begin{figure}[t!]
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{Plots/Plots_Paper/MSE_a_T=250_slope=1_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\end{subfigure}\hspace{0.25cm}
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{Plots/Plots_Paper/MSE_lrv_T=250_slope=1_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\end{subfigure}
 
-\begin{tabularx}{0.925\textwidth}{LZZZZZ} 
-\multicolumn{6}{c}{(b) $\beta = 10$} \\[0.2cm]
-\toprule
- & & $\widetilde{a}$ & $\widehat{a}$ & $\widehat{a}_{\text{HvK}}$ & $\widehat{a}_{\text{oracle}}$ \\
-\cmidrule[0.4pt]{1-6}
-$a = -0.95$ & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = -0.75$ & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = -0.5$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = -0.25$ & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = 0.25$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = 0.5$   & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = 0.75$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = 0.95$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-\bottomrule
-\end{tabularx}}
-\end{table}
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{Plots/Plots_Paper/MSE_a_T=500_slope=1_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\end{subfigure}\hspace{0.25cm}
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{Plots/Plots_Paper/MSE_lrv_T=500_slope=1_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\end{subfigure}
+\caption{MSE values for the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$ and $\widehat{\sigma}^2_{\text{oracle}}$ in the simulation scenarios with a moderate trend ($s_\beta=1$).}\label{fig:MSE_slope1}
+\end{figure}
 
+\begin{figure}[t!]
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{Plots/Plots_Paper/MSE_a_T=250_slope=10_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\end{subfigure}\hspace{0.25cm}
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{Plots/Plots_Paper/MSE_a_T=500_slope=10_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\end{subfigure}
 
-\begin{table}[t!]
-\centering
-\footnotesize{
-\caption{Empirical mean and standard deviation of the long-run variance estimators.}\label{tab:lrv}
-\newcolumntype{L}{>{\raggedright\arraybackslash}X}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{0.925\textwidth}{LZZZZZ} 
-\multicolumn{6}{c}{(a) $\beta = 1$} \\[0.2cm]
-\toprule
- & & $\widetilde{\sigma}^2$ & $\widehat{\sigma}^2$ & $\widehat{\sigma}^2_{\text{HvK}}$ & $\widehat{\sigma}^2_{\text{oracle}}$ \\
-\cmidrule[0.4pt]{1-6}
-$a = -0.95$ & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = -0.75$ & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = -0.5$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = -0.25$ & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = 0.25$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = 0.5$   & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = 0.75$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = 0.95$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-\bottomrule
-\end{tabularx}
-\vspace{0.25cm}
-
-\begin{tabularx}{0.925\textwidth}{LZZZZZ} 
-\multicolumn{6}{c}{(b) $\beta = 10$} \\[0.2cm]
-\toprule
- & & $\widetilde{\sigma}^2$ & $\widehat{\sigma}^2$ & $\widehat{\sigma}^2_{\text{HvK}}$ & $\widehat{\sigma}^2_{\text{oracle}}$ \\
-\cmidrule[0.4pt]{1-6}
-$a = -0.95$ & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = -0.75$ & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = -0.5$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = -0.25$ & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = 0.25$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = 0.5$   & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = 0.75$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\[0.1cm]
-$a = 0.95$  & $T=250$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-            & $T=500$ & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) \\
-\bottomrule
-\end{tabularx}}
-\end{table}
-
-
-For each model specification, we generate $S=1000$ data samples and compute the following quantities for each simulated sample: 
-\begin{enumerate}[label=(\roman*),leftmargin=0.9cm]
-\item the first step-estimator $\widetilde{a}$ from \eqref{est-AR-FS-av} with the tuning parameters $\underline{q}$ and $\overline{q}$, which nests the estimator $\widetilde{a}_q$ from \eqref{est-AR-FS} as a special case upon setting $\underline{q} = \overline{q} = q$, and the corresponding estimator $\widetilde{\sigma}^2$ of the long-run error variance. 
-\item the second-step estimator $\widehat{a}$ from \eqref{est-AR-SS-av} with the tuning parameter $\overline{r}$ and the corresponding long-run variance estimator $\widehat{\sigma}^2$. 
-\item the estimators of $a$ and $\sigma^2$ from \cite{Hall2003}, which are denoted by $\widehat{a}_{\text{HvK}}$ and $\widehat{\sigma}^2_{\text{HvK}}$ for ease of reference. The estimator $\widehat{a}_{\text{HvK}}$ is computed as described in Section 2.2 of \cite{Hall2003} and $\widehat{\sigma}^2_{\text{HvK}}$ as defined at the bottom of p.447 in Section 2.3. The estimator $\widehat{a}_{\text{HvK}}$ depends on two tuning parameters which are labelled as $m_1$ and $m_2$ in \cite{Hall2003}. As these are the exact counterparts of $\underline{q}$ and $\overline{q}$, we set $m_1 = \underline{q}$ and $m_2 = \overline{q}$. 
-\item oracle estimators $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2_{\text{oracle}}$ of $a_1$ and $\sigma^2$, which are constructed under the assumption that the error process $\{\varepsilon_t\}$ is observed. For each simulation run, we compute $\widehat{a}_{\text{oracle}}$ as the maximum likelihood estimator of $a_1$ from the time series of simulated error terms $\varepsilon_1,\ldots,\varepsilon_T$. We then calculate the residuals $r_t = \varepsilon_t - \widehat{a}_{\text{oracle}} \, \varepsilon_{t-1}$ and estimate the innovation variance $\nu^2 = \ex[\eta_t^2]$ by $\widehat{\nu}_{\text{oracle}}^2 = (T-1)^{-1} \sum_{t=2}^T r_t^2$. Finally, we set $\widehat{\sigma}^2_{\text{oracle}} = \widehat{\nu}_{\text{oracle}}^2 / (1 - \widehat{a}_{\text{oracle}})^2$. 
-\end{enumerate}
-Throughout the section, we set $\underline{q}=20$, $\overline{q}=30$ and $\overline{r} = 10$. In order to assess how sensitive our estimators are to the choice of the tuning parameters $\underline{q}$, $\overline{q}$ and $\overline{r}$, we carry out a number of robustness checks, considering a range of different values for $\underline{q}$, $\overline{q}$ and $\overline{r}$. The results are reported in Section ?? in the Supplementary Material. Inspecting the robustness checks, our estimators can be seen to be rather insensitive to the choice of tuning parameters. In particular, we obtain essentially the same results when repeating the simulation exercises of this section for the values of $\underline{q}$, $\overline{q}$ and $\overline{r}$ considered in the Supplementary Material.
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{Plots/Plots_Paper/MSE_lrv_T=250_slope=10_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\end{subfigure}\hspace{0.25cm}
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{Plots/Plots_Paper/MSE_lrv_T=500_slope=10_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\end{subfigure}
+\caption{MSE values for the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$, $\widehat{\sigma}^2_{\text{oracle}}$ in the simulation scenarios with a pronounced trend ($s_\beta=10$).}\label{fig:MSE_slope10}
+\end{figure}
 
 
 \begin{figure}[t!]
 \centering
-\includegraphics[width=\linewidth]{Plots/variance_histogram_1.pdf}
-\caption{Histograms of the simulated values of the estimators $\widetilde{a}$, $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ in the simulation scenario with $T=500$, $a_1 = 0.25$ and $\beta = 10$.}\label{fig:hist_AR_scenario1} 
-\vspace{0.25cm}
-
-\includegraphics[width=\linewidth]{Plots/variance_histogram_2.pdf}
-\caption{Histograms of the simulated values of the estimators $\widetilde{a}$, $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ in the simulation scenario with $T=500$, $a_1 = -0.95$ and $\beta = 1$.}\label{fig:hist_AR_scenario2}
+\begin{subfigure}[b]{\textwidth}
+\includegraphics[width=\textwidth]{Plots/Plots_Paper/histogram_a_a=-95_T=500_slope=1_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\end{subfigure}
+\begin{subfigure}[b]{\textwidth}
+\includegraphics[width=\textwidth]{Plots/Plots_Paper/histogram_lrv_a=-95_T=500_slope=1_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\end{subfigure}
+\caption{Histograms of the simulated values produced by the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$, $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$, $\widehat{\sigma}^2_{\text{oracle}}$ in the scenario with $T=500$, $a_1 = -0.95$ and $\beta = 1$. The vertical red lines indicate the true values of $a_1$ and $\sigma^2$.}\label{fig:hist_scenario1} 
 \end{figure}
 
 
-For each estimator $\widetilde{a}$, $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and $\widetilde{\sigma}^2$, $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$, $\widehat{\sigma}^2_{\text{oracle}}$ and for each model specification, the simulation output consists in a vector of length $S=1000$ which contains the $1000$ simulated values of the respective estimator. 
-%We denote these vectors by $v(\widetilde{a}_{\text{AV}})$, $v(\widehat{a}_{\text{AV}})$, etc.\ in what follows. 
-Tables \ref{tab:AR_parameters} and \ref{tab:lrv} report the empirical mean and standard deviation of these simulated values for each estimator. 
-%the vectors $v(\widetilde{a}_{\text{AV}})$, $v(\widehat{a}_{\text{AV}})$, etc.\ 
-Moreover, Figures \ref{fig:hist_AR_scenario1} and \ref{fig:hist_AR_scenario2} present histograms of these values for two specific simulation scenarios. The main findings can be summarized as follows: 
+\begin{figure}[t!]
+\centering
+\begin{subfigure}[b]{\textwidth}
+\includegraphics[width=\textwidth]{Plots/Plots_Paper/histogram_a_a=25_T=500_slope=10_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\end{subfigure}
+\begin{subfigure}[b]{\textwidth}
+\includegraphics[width=\textwidth]{Plots/Plots_Paper/histogram_lrv_a=25_T=500_slope=10_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\end{subfigure}
+\caption{Histograms of the simulated values produced by the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$, $\widehat{\sigma}^2_{\text{oracle}}$ in the scenario with $T=500$, $a_1 = 0.25$ and $\beta = 10$. The vertical red lines indicate the true values of $a_1$ and $\sigma^2$.}\label{fig:hist_scenario2} 
+\end{figure}
+
+
+For each model specification, we generate $S=1000$ data samples and compute the following quantities for each simulated sample: 
+\begin{enumerate}[label=(\roman*),leftmargin=0.9cm]
+\item the pilot estimator $\widetilde{a}_q$ from \eqref{est-AR-FS} with the tuning parameter $q$.
+\item the estimator $\widehat{a}$ from \eqref{est-AR} with the tuning parameters $\underline{r}$ and $\overline{r}$ as well as the long-run variance estimator $\widehat{\sigma}^2$ from \eqref{est-lrv}. 
+\item the estimators of $a$ and $\sigma^2$ from \cite{Hall2003}, which are denoted by $\widehat{a}_{\text{HvK}}$ and $\widehat{\sigma}^2_{\text{HvK}}$ for ease of reference. The estimator $\widehat{a}_{\text{HvK}}$ is computed as described in Section 2.2 of \cite{Hall2003} and $\widehat{\sigma}^2_{\text{HvK}}$ as defined at the bottom of p.447 in Section 2.3. The estimator $\widehat{a}_{\text{HvK}}$ (as well as $\widehat{\sigma}^2_{\text{HvK}}$) depends on two tuning parameters which we denote by $m_1$ and $m_2$ as in \cite{Hall2003}. 
+\item oracle estimators $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2_{\text{oracle}}$ of $a_1$ and $\sigma^2$, which are constructed under the assumption that the error process $\{\varepsilon_t\}$ is observed. For each simulation run, we compute $\widehat{a}_{\text{oracle}}$ as the maximum likelihood estimator of $a_1$ from the time series of simulated error terms $\varepsilon_1,\ldots,\varepsilon_T$. We then calculate the residuals $r_t = \varepsilon_t - \widehat{a}_{\text{oracle}} \, \varepsilon_{t-1}$ and estimate the innovation variance $\nu^2 = \ex[\eta_t^2]$ by $\widehat{\nu}_{\text{oracle}}^2 = (T-1)^{-1} \sum_{t=2}^T r_t^2$. Finally, we set $\widehat{\sigma}^2_{\text{oracle}} = \widehat{\nu}_{\text{oracle}}^2 / (1 - \widehat{a}_{\text{oracle}})^2$. 
+\end{enumerate}
+Throughout the section, we set $q = 25$, $(\underline{r},\overline{r}) = (5,10)$ and $(m_1,m_2) = (20,30)$. We in particular choose $q$ to be in the middle of $m_1$ and $m_2$ to make the tuning parameters of the estimators $\widetilde{a}_q$ and $\widehat{a}_{\text{HvK}}$ more or less comparable. In order to assess how sensitive our estimators are to the choice of $q$, $\underline{r}$ and $\overline{r}$, we carry out a number of robustness checks, considering a range of different values for $q$, $\underline{r}$ and $\overline{r}$. In addition, we vary the tuning parameters $m_1$ and $m_2$ of the estimators from \cite{Hall2003} in order to make sure that the results of our comparison study are not driven by the particular choice of any of the involved tuning parameters. The results of our robustness checks are reported in Section S.3 of the Supplementary Material. They show that the results of our comparison study are robust to %persist across 
+different choices of the parameters $q$, $(\underline{r},\overline{r})$ and $(m_1,m_2)$. Moreover, they indicate that our estimators are rather insensitive to the choice of tuning parameters. 
+
+
+For each estimator $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$, $\widehat{\sigma}^2_{\text{oracle}}$ and for each model specification, the simulation output consists in a vector of length $S=1000$ which contains the $1000$ simulated values of the respective estimator. Figures \ref{fig:MSE_slope1} and \ref{fig:MSE_slope10} report the mean squared error (MSE) of the estimators computed from these $1000$ values. The different plots in the two figures correspond to different simulation scenarios. On the $x$-axis of each plot, the various values of the AR parameter $a_1$ are listed which are considered. The solid line in each plot gives the MSE values of our estimators. The dashed and dotted lines specify the MSE values of the HvK and the oracle estimators, respectively. Note that for the long-run variance estimators, the plots report the logarithm of the MSE rather than the MSE itself since the MSE values are too different across simulation scenarios to obtain a reasonable graphic presentation. In addition to the MSE values presented in Figures \ref{fig:MSE_slope1} and \ref{fig:MSE_slope10}, we depict histograms of the $1000$ simulated values produced by the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$, $\widehat{\sigma}^2_{\text{oracle}}$ for two specific simulation scenarios in Figures \ref{fig:hist_scenario1} and \ref{fig:hist_scenario2}. The main findings can be summarized as follows:  
 \begin{enumerate}[label=(\roman*),leftmargin=0.9cm]
 
-\item The performance of our second-step estimators $\widehat{a}$ and $\widehat{\sigma}^2$ is fairly close to that of the oracle estimators $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2_{\text{oracle}}$ in all of the considered simulation scenarios. In particular, the mean values and standard deviations in Tables \ref{tab:AR_parameters} and \ref{tab:lrv} are quite similar for our estimators and the corresponding oracles. 
+%\item The performance of our second-step estimators $\widehat{a}$ and $\widehat{\sigma}^2$ is fairly close to that of the oracle estimators $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2_{\text{oracle}}$ in all of the considered simulation scenarios. In particular, the mean values and standard deviations in Tables \ref{tab:AR_parameters} and \ref{tab:lrv} are quite similar for our estimators and the corresponding oracles. 
 
-\item In the simulation scenarios with a moderate trend ($\beta = 1$), the first-step estimators $\widetilde{a}$ and $\widetilde{\sigma}^2$ produce results very similar to those of the second-step estimators $\widehat{a}$ and $\widehat{\sigma}^2$. However, in the scenarios with a pronounced trend ($\beta = 10$), the first-step estimators are strongly biased. The reason is that the trend is not eliminated appropriately by them. The second-step estimators substantially reduce this bias. This point is nicely illustrated by Figure \ref{fig:hist_AR_scenario1} which shows histograms of the simulated values of the estimators $\widetilde{a}$, $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ in the scenario with $T=500$, $a_1=0.25$ and $\beta = 10$. As one can see, the histogram produced by our second-step estimator $\widehat{a}$ is nicely centred around the true value $a_1 = 0.25$, whereas those of the estimators $\widetilde{a}$ and $\widehat{a}_{\text{HvK}}$ are strongly biased upwards. 
+\item In the simulation scenarios with a moderate trend ($\beta = 1$), the estimators $\widehat{a}_{\text{HvK}}$ and $\widehat{\sigma}^2_{\text{HvK}}$ of \cite{Hall2003} exhibit a similar performance as our estimators $\widehat{a}$ and $\widehat{\sigma}^2$ as long as the AR parameter $a_1$ is not too close to $-1$. For strongly negative values of $a_1$ (in particular for $a_1 = -0.75$ and $a_1 = -0.95$), the estimators perform much worse than ours. This can be clearly seen from the much larger MSE values of the estimators  $\widehat{a}_{\text{HvK}}$ and $\widehat{\sigma}^2_{\text{HvK}}$ for $a_1 = -0.75$ and $a_1 = -0.95$ in Figure \ref{fig:MSE_slope1}. Figure \ref{fig:hist_scenario1} gives some further insights into what is happening here. It shows the histograms of the simulated values produced by the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and the corresponding long-run variance estimators in the scenario with $T=500$, $a_1=-0.95$ and $\beta = 1$. As can be seen, the estimator $\widehat{a}_{\text{HvK}}$ does not obey the causality restriction $|a_1| \le 1$ but frequently takes values substantially smaller than $-1$. This results in a very large spread of the histogram and thus in a disastrous performance of the estimator.\footnote{One could of course set $\widehat{a}_{\text{HvK}}$ to $-(1 - \delta)$ for some small $\delta > 0$ whenever it takes a value smaller than $-1$. This modified estimator, however, is still far from performing in a satisfying way when $a_1$ is close to $-1$.} A similar point applies to the histogram of the long-run variance estimator $\widehat{\sigma}^2_{\text{HvK}}$. Our estimators $\widehat{a}$ and $\widehat{\sigma}^2$, in contrast, exhibit a stable behaviour in this case. \\ %An analogous point applies to the long-run variance estimators $\widehat{\sigma}^2$ and $\widehat{\sigma}^2_{\text{HvK}}$. 
+Interestingly, the estimator $\widehat{a}_{\text{HvK}}$ (as well as the corresponding long-run variance estimator $\widehat{\sigma}^2_{\text{HvK}}$) performs much worse than ours for large negative values but not for large positive values of $a_1$. This can be explained as follows: In the special case of an AR($1$) process, the estimator $\widehat{a}_{\text{HvK}}$ may produce estimates smaller than $-1$ but it cannot become larger than $1$. This can be easily seen upon inspecting the definition of the estimator. Hence, for large positive values of $a_1$, the estimator $\widehat{a}_{\text{HvK}}$ performs well as it satisfies the causality restriction that the estimated AR parameter should be smaller than $1$. 
 
-\item The estimators $\widehat{a}_{\text{HvK}}$ and $\widehat{\sigma}^2_{\text{HvK}}$ of \cite{Hall2003} exhibit a similar performance as our first-step estimators $\widetilde{a}$ and $\widetilde{\sigma}^2$ as long as the AR parameter $a_1$ is not too close to $-1$. For strongly negative values of $a_1$ (in particular for $a_1 = -0.75$ and $a_1 = -0.95$), the estimators perform much worse than ours. This is already indicated by the extremely large variances of the estimators $\widehat{a}_{\text{HvK}}$ and $\widehat{\sigma}^2_{\text{HvK}}$ in Tables \ref{tab:AR_parameters} and \ref{tab:lrv} in the scenarios with $a_1 \in \{-0.75,-0.95\}$. Figure \ref{fig:hist_AR_scenario1} gives some further insights into what is happening here. It presents the histograms of the simulated values of $\widetilde{a}$, $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ in the scenario with $T=500$, $a_1=-0.95$ and $\beta = 1$. As can be seen, the estimator $\widehat{a}_{\text{HvK}}$ does not obey the causality restriction $|a_1| \le 1$ but frequently takes values smaller than $-1$. This results in a very large spread of the histogram and thus in a disastrous performance of the estimator. Our estimators $\widetilde{a}$ and $\widehat{a}$, in contrast, exhibit a stable behaviour in this case.
+\item In the simulation scenarios with a pronounced trend ($\beta = 10$), the estimators of \cite{Hall2003} perform much worse than ours for most of the AR parameters $a_1$ under consideration. In particular, their MSE values reported in Figure \ref{fig:MSE_slope10} are much larger than the values produced by our estimators for most values of $a_1$. The reason is the following: The estimators have a strong bias since the pronounced trend with $\beta = 10$ is not eliminated appropriately by the underlying differencing methods. This point is nicely illustrated by Figure \ref{fig:hist_scenario2} which shows histograms of the simulated values of the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and the corresponding long-run variance estimators in the scenario with $T=500$, $a_1=0.25$ and $\beta = 10$. As can be seen, the histogram produced by our estimator $\widehat{a}$ is centred around the true value $a_1 = 0.25$, whereas that of the estimator $\widehat{a}_{\text{HvK}}$ is strongly biased upwards. A similar picture arises for the long-run variance estimators $\widehat{\sigma}^2$ and $\widehat{\sigma}^2_{\text{HvK}}$. \\
+Whereas the methods of \cite{Hall2003} perform much worse than ours for negative and moderately positive values of $a_1$, the performance is fairly similar for large values of $a_1$. In particular, the MSE values produced by the estimators of \cite{Hall2003} and ours are much closer for large positive values of $a_1$. This can be explained as follows: When the trend $m$ is not eliminated appropriately by taking differences, this creates spurious persistence in the data. Hence, the estimator $\widehat{a}_{\text{HvK}}$ tends to overestimate the AR parameter $a_1$, that is, $\widehat{a}_{\text{HvK}}$ tends to be larger in absolute value than $a_1$. Very loosely speaking, when the parameter $a_1$ is close to $1$, say $a_1 = 0.95$, there is not much room for overestimation since $\widehat{a}_{\text{HvK}}$ cannot become larger than $1$. Consequently, the effect of not eliminating the trend appropriately has a much smaller effect on $\widehat{a}_{\text{HvK}}$ for large positive values of $a_1$. 
+
+%\item In all of the simulation scenarios under consideration, in particular both when the trend is moderate ($\beta = 1$) and pronounced ($\beta = 10$), the MSE values produced by our estimators are fairly close to those of the oracle estimators as can be seen by inspecting Figures \ref{fig:MSE_slope1} and \ref{fig:MSE_slope10}. Only  
+
 \end{enumerate}
 
 
@@ -377,12 +311,12 @@ Moreover, Figures \ref{fig:hist_AR_scenario1} and \ref{fig:hist_AR_scenario2} pr
 \section{Application}\label{sec-data}
 
 
-The analysis of time trends in long temperature records is an important task in climatology. Information on the shape of the trend is needed in order to better understand long-term climate variability. The Central England temperature record is the longest instrumental temperature time series in the world. It is a valuable asset for analysing climate variability over the last few hundred years. The data is publicly available on the webpage of the UK Met Office. A detailed description of the data can be found in \cite{Parker1992}. For our analysis, we use the dataset of yearly mean temperatures which consists of $T=359$ observations covering the years from $1659$ to $2017$. We assume that the data follow the nonparametric trend model $Y_{t,T} = m(t/T) + \varepsilon_t$, where $m$ is the unknown time trend of interest. The error process $\{ \varepsilon_t \}$ is supposed to have the AR($p$) structure $\varepsilon_t = \sum_{j=1}^p a_j \varepsilon_{t-j} + \eta_t$, where $\eta_t$ are i.i.d.\ innovations with mean $0$ and variance $\nu^2$. As pointed out in \cite{Mudelsee2010} among others, this is the most widely used error model for discrete climate time series. We select the AR order $p$ by minimizing an FPE criterion, which yields the AR $p=2$. We then estimate the parameters $a_1$, $a_2$ and $\nu^2$ as described in Section \ref{subsec-error-var-ar} which yields the estimates $\widehat{a}_1 \approx ??$, $\widehat{a}_2 \approx ??$ and $\widehat{\nu}^2 \approx ??$.
+The analysis of time trends in long temperature records is an important task in climatology. Information on the shape of the trend is needed in order to better understand long-term climate variability. The Central England temperature record is the longest instrumental temperature time series in the world. It is a valuable asset for analysing climate variability over the last few hundred years. The data is publicly available on the webpage of the UK Met Office. A detailed description of the data can be found in \cite{Parker1992}. For our analysis, we use the dataset of yearly mean temperatures which consists of $T=359$ observations covering the years from $1659$ to $2017$. We assume that the data follow the nonparametric trend model $Y_{t,T} = m(t/T) + \varepsilon_t$, where $m$ is the unknown time trend of interest. The error process $\{ \varepsilon_t \}$ is supposed to have the AR($p$) structure $\varepsilon_t = \sum_{j=1}^p a_j \varepsilon_{t-j} + \eta_t$, where $\eta_t$ are i.i.d.\ innovations with mean $0$ and variance $\nu^2$. As pointed out in \cite{Mudelsee2010} among others, this is the most widely used error model for discrete climate time series. To select the AR order $p$, we proceed as follows: We estimate the AR parameters and the corresponding variance of the innovation terms for different AR orders by our methods from Section \ref{subsec-error-var-AR} and choose $p$ to be the minimizer of the final prediction error (FPE) criterion. This yields the AR order $p = 2$. We then estimate the parameters $\boldsymbol{a} = (a_1,a_2)$ and the long error run-variance $\sigma^2$ by the estimators $\widehat{\boldsymbol{a}} = (\widehat{a}_1,\widehat{a}_2)$ and $\widehat{\sigma}^2$, where we set $q = 20$ and $(\underline{r},\overline{r}) = (5,10)$ as in the simulation study of Section \ref{subsec-sim-1}. We thus obtain the estimates $\widehat{a}_1 \approx ??$, $\widehat{a}_2 \approx ??$ and $\widehat{\sigma}^2 \approx ??$.
 
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.8\textwidth]{Plots/temperature_L1_20_L2_30.pdf}
+\includegraphics[width=0.8\textwidth]{Plots/Plots_Paper/temperature_L1_20_L2_30.pdf}
 \caption{Summary of the application results for Section \ref{sec-data}. The upper panel shows the Central England mean temperature time series. The middle panel depicts local linear kernel estimates of the time trend for a number of different bandwidths $h$. The lower panel presents the minimal intervals in the set $\Pi_T^+$ produced by the multiscale test. These are $[??,??]$, $[??,??]$, $[??,??]$ and $[??,??]$.}\label{plot-results-app1}
 \end{figure}
 

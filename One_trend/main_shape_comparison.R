@@ -12,7 +12,7 @@ dyn.load("Shape/C_code/psihat_statistic_ll.dll")
 #Defining necessary parameters#
 ###############################
 
-N_rep           <- 20
+N_rep           <- 1000
 sigma_eta       <- 1    #We keep this as a constant parameter
 
 different_alpha     <- c(0.01, 0.05, 0.10) #Level of significance
@@ -80,7 +80,9 @@ for (a_1 in different_a1){
     slopes <- slopes_for_negative
   }
   result <- SiZer_simulations(a_1, sigma_eta, N_rep, slopes, different_alpha, different_T)
-  matrix_size[, (i * 7 + 2):(i * 7 + 7)]  <- result
+  tmp <- t(matrix_size[, (i * 7 + 2):(i * 7 + 7)])
+  tmp[,] <- result
+  matrix_size[, (i * 7 + 2):(i * 7 + 7)]  <- t(tmp)
   #power <- result[[2]]
   #save(power, file = paste0(PDFpartialPath, "_power.Rdata"))
   i <- i + 1

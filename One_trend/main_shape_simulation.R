@@ -25,7 +25,7 @@ test_problem  <- "constant" #Only "zero" (H_0: m = 0) or "constant" (H_0: m = co
 
 L1 <- 20
 
-PDFname <- "Paper/Plots/finite_sample_properties_"
+PDFname <- "Paper/Plots/finite_sample_properties_full_grid" #Do not forget to rerun Gaussian distribution!!!
 
 set.seed(1) #For reproducibility
 
