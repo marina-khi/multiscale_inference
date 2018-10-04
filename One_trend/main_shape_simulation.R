@@ -27,6 +27,7 @@ L1 <- 20
 
 PDFname <- "Paper/Plots/finite_sample_properties_"
 
+set.seed(1) #For reproducibility
 
 ################################################
 #Loading data and estimating parameters from it#
@@ -71,10 +72,12 @@ matrix_power[, ((length(different_alpha) + 1) * (length(different_a1) + 1) - 2):
 ##############################
 #Writing the results in files#
 ##############################
-print.xtable(xtable(matrix_size, digits = c(3), align = paste(replicate((length(different_alpha) + 1) * (length(different_a1) + 1) + 1, "c"), collapse = "")), type="latex", file="Paper/Plots/finite_sample_properties_size.tex", include.colnames = FALSE)
+print.xtable(xtable(matrix_size, digits = c(3), align = paste(replicate((length(different_alpha) + 1) * (length(different_a1) + 1) + 1, "c"), collapse = "")),
+             type="latex", file=paste0(PDFname, "size.tex"), include.colnames = FALSE)
 
 j <- 1
 for (slope in different_slopes){
-  print.xtable(xtable(matrix_power[(3 * j - 2):(3 * j),], digits = c(3), align = paste(replicate((length(different_alpha) + 1) * (length(different_a1) + 1) + 1, "c"), collapse = "")), type="latex", file=paste0(PDFpowername, slope, ".tex"), include.colnames = FALSE)
+  print.xtable(xtable(matrix_power[(3 * j - 2):(3 * j),], digits = c(3), align = paste(replicate((length(different_alpha) + 1) * (length(different_a1) + 1) + 1, "c"), collapse = "")),
+               type="latex", file=paste0(PDFname, "power_", slope, ".tex"), include.colnames = FALSE)
   j <- j + 1
 }
