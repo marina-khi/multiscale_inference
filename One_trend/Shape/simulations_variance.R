@@ -1,4 +1,4 @@
-histograms_for_variance_estimators <- function(a_1, sigma_eta, T_size, p, slope, N_rep, K1, K2, L1, L2){
+histograms_for_variance_estimators <- function(a_1, sigma_eta, T_size, p, slope, N_rep, L1, K1, K2){
   line_trend  <- numeric(T_size)
   line_trend = (1:T_size - 0.5*T_size) * slope/T_size
     
@@ -13,7 +13,7 @@ histograms_for_variance_estimators <- function(a_1, sigma_eta, T_size, p, slope,
     eps               <- arima.sim(model = list(ar = a_1), n = T_size, innov = rnorm(T_size, 0, sigma_eta))
     y_data_with_trend <- eps + line_trend
     
-    a_hat_method1         <- AR_coefficients(y_data_with_trend, L1, L2, rep(0,L2), p)
+    a_hat_method1         <- AR_coefficients(y_data_with_trend, L1, L1, rep(0,L2), p)
     sigma_eta_hat_method1 <- calculating_sigma_eta(y_data_with_trend, a_hat_method1, p)
     sigma_hat_method1     <- sqrt(sigma_eta_hat_method1^2 / (1 - sum(a_hat_method1))^2) 
     
@@ -25,7 +25,7 @@ histograms_for_variance_estimators <- function(a_1, sigma_eta, T_size, p, slope,
     a_hat_method1_vect <- c(a_hat_method1_vect, a_hat_method1)
     a_hat_method2_vect <- c(a_hat_method2_vect, a_hat_method2)
     
-    result          <- estimating_sigma_for_AR1(y_data_with_trend, L1, L2)
+    result          <- estimating_sigma_for_AR1(y_data_with_trend, L1, L1)
     a_hat_hall_vect <- c(a_hat_hall_vect, result[[2]])
 
     gamma_1 <- sum(eps[1:(T_size - 1)] * eps[2:T_size])/T_size
@@ -49,9 +49,9 @@ histograms_for_variance_estimators <- function(a_1, sigma_eta, T_size, p, slope,
   par(mar = c(1.0, 1.0, 1.0, 0)) #Margins for each plot
   par(oma = c(1.5, 1.5, 0.5, 0.2)) #Outer margins
   
+  hist(a_hat_method1_vect, main = "Method 1", breaks = seq(smallest_value, biggest_value + 0.05, by = 0.01), ylim=c(0,highestCount), xlab = "", mgp=c(2,0.5,0))
+  hist(a_hat_method2_vect, main = "Method 2", breaks = seq(smallest_value, biggest_value + 0.05, by = 0.01), ylim=c(0,highestCount), xlab = "", mgp=c(2,0.5,0))
+  hist(a_hat_hall_vect, main = "Hall and Van Keilegom", breaks = seq(smallest_value, biggest_value + 0.05, by = 0.01), ylim=c(0,highestCount), xlab = "", mgp=c(2,0.5,0))
   hist(a_hat_oracle_vect, main="Oracle", breaks = seq(smallest_value, biggest_value + 0.05, by = 0.01), ylim=c(0,highestCount), xlab = "", mgp=c(2,0.5,0))
-  hist(a_hat_method1_vect, main = paste0("Method 1"), breaks = seq(smallest_value, biggest_value + 0.05, by = 0.01), ylim=c(0,highestCount), xlab = "", mgp=c(2,0.5,0))
-  hist(a_hat_method2_vect, main = paste0("Method 2"), breaks = seq(smallest_value, biggest_value + 0.05, by = 0.01), ylim=c(0,highestCount), xlab = "", mgp=c(2,0.5,0))
-  hist(a_hat_hall_vect, main = paste0("Hall and van Keilegom"), breaks = seq(smallest_value, biggest_value + 0.05, by = 0.01), ylim=c(0,highestCount), xlab = "", mgp=c(2,0.5,0))
   dev.off()
 }
