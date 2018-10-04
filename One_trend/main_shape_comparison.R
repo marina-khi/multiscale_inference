@@ -12,14 +12,18 @@ dyn.load("Shape/C_code/psihat_statistic_ll.dll")
 #Defining necessary parameters#
 ###############################
 
-N_rep           <- 1000
+N_rep           <- 20
 sigma_eta       <- 1    #We keep this as a constant parameter
 
 different_alpha     <- c(0.01, 0.05, 0.10) #Level of significance
-different_T         <- c(250, 350, 1000) #Different lengths of time series for which we compare SiZer and our method
-different_a         <- c(-0.5, -0.25, 0.25, 0.5) #Different a_1 in AR(1) model
+different_T         <- c(250, 350, 500) #Different lengths of time series for which we compare SiZer and our method
+different_a1        <- c(-0.5, 0.5) #Different a_1 in AR(1) model
 slopes_for_negative <- c(0.5, 1.0, 1.5)
 slopes_for_positive <- c(4.0, 4.5, 5.0, 5.5, 6.0)
+
+PDFname <- "Paper/Plots/SiZer_comparison_"
+
+set.seed(1) #For reproducibility
 
 ########################################
 #Producing plots with minimal intervals#
@@ -65,18 +69,22 @@ slopes_for_positive <- c(4.0, 4.5, 5.0, 5.5, 6.0)
 #############################################
 #Calculating size and power for both methods#
 #############################################
+matrix_size  <- matrix(NA, nrow = length(different_T), ncol = (2 * length(different_alpha) + 1) * length(different_a1), byrow = TRUE)
+rownames(matrix_size)  <- different_T
 
-for (a_1 in different_a){
+i <- 0
+for (a_1 in different_a1){
   if (a_1 > 0){
     slopes <- slopes_for_positive
   } else {
     slopes <- slopes_for_negative
   }
   result <- SiZer_simulations(a_1, sigma_eta, N_rep, slopes, different_alpha, different_T)
-  PDFpartialPath = paste0("Paper/Plots/SiZer_comparison_a1_", a_1*100)
-  creating_matrix_and_texing_for_SiZer(result[[1]], different_T, different_alpha, filename = paste0(PDFpartialPath, "_size.tex"))
-  size  <- result[[1]]
-  power <- result[[2]]
-  save(size, file = paste0(PDFpartialPath, "_size.Rdata"))
-  save(power, file = paste0(PDFpartialPath, "_power.Rdata"))
+  matrix_size[, (i * 7 + 2):(i * 7 + 7)]  <- result
+  #power <- result[[2]]
+  #save(power, file = paste0(PDFpartialPath, "_power.Rdata"))
+  i <- i + 1
 }
+
+print.xtable(xtable(matrix_size, digits = c(3), align = paste(replicate((2 * length(different_alpha) + 1) * length(different_a1) + 1, "c"), collapse = "")),
+             type="latex", file=paste0(PDFname, "size.tex"), include.colnames = FALSE)
