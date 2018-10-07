@@ -19,7 +19,7 @@ different_alpha     <- c(0.01, 0.05, 0.10) #Level of significance
 different_T         <- c(250, 350, 500) #Different lengths of time series for which we compare SiZer and our method
 different_a1        <- c(-0.5, 0.5) #Different a_1 in AR(1) model
 slopes_for_negative <- c(0.5, 1.0, 1.5)
-slopes_for_positive <- c(4.0, 4.5, 5.0, 5.5, 6.0)
+slopes_for_positive <- c(3.5, 4.0, 4.5)
 
 PDFname <- "Paper/Plots/SiZer_comparison_"
 
@@ -72,6 +72,10 @@ set.seed(1) #For reproducibility
 matrix_size  <- matrix(NA, nrow = length(different_T), ncol = (2 * length(different_alpha) + 1) * length(different_a1), byrow = TRUE)
 rownames(matrix_size)  <- different_T
 
+matrix_power  <- matrix(NA, nrow = length(slopes_for_negative) * length(different_T), ncol = (2 * length(different_alpha) + 1) * length(different_a1), byrow = TRUE)
+rownames(matrix_power)  <- replicate(length(slopes_for_positive), different_T)
+
+
 i <- 0
 for (a_1 in different_a1){
   if (a_1 > 0){
@@ -79,14 +83,22 @@ for (a_1 in different_a1){
   } else {
     slopes <- slopes_for_negative
   }
-  result <- SiZer_simulations(a_1, sigma_eta, N_rep, slopes, different_alpha, different_T)
-  tmp <- t(matrix_size[, (i * 7 + 2):(i * 7 + 7)])
-  tmp[,] <- result
-  matrix_size[, (i * 7 + 2):(i * 7 + 7)]  <- t(tmp)
-  #power <- result[[2]]
-  #save(power, file = paste0(PDFpartialPath, "_power.Rdata"))
+  result_power <- SiZer_simulations_power(a_1, sigma_eta, N_rep, slopes, different_alpha, different_T)
+  tmp_power    <- matrix(result_power, nrow = length(slopes_for_negative) * length(different_T), ncol = 2 * length(different_alpha), byrow = TRUE) 
+  matrix_power[, (i * 7 + 2):(i * 7 + 7)]  <- tmp_power
+
+  #result_size <- SiZer_simulations_size(a_1, sigma_eta, N_rep, different_alpha, different_T)
+  #tmp_size <- matrix(result_size,nrow = length(slopes_for_negative) * length(different_T), ncol = 2 * length(different_alpha), byrow = TRUE)
+  #matrix_size[, (i * 7 + 2):(i * 7 + 7)]  <- tmp_size
   i <- i + 1
 }
 
-print.xtable(xtable(matrix_size, digits = c(3), align = paste(replicate((2 * length(different_alpha) + 1) * length(different_a1) + 1, "c"), collapse = "")),
-             type="latex", file=paste0(PDFname, "size.tex"), include.colnames = FALSE)
+#print.xtable(xtable(matrix_size, digits = c(3), align = paste(replicate((2 * length(different_alpha) + 1) * length(different_a1) + 1, "c"), collapse = "")),
+#             type="latex", file=paste0(PDFname, "size.tex"), include.colnames = FALSE)
+
+j <- 1
+for (slope in slopes_for_negative){
+  print.xtable(xtable(matrix_power[(length(different_T) * j - 2):(length(different_T) * j),], digits = c(3), align = paste(replicate((length(different_alpha) + 1) * (length(different_a1) + 1) + 1, "c"), collapse = "")),
+               type="latex", file=paste0(PDFname, slope*10, "_power_", slope, ".tex"), include.colnames = FALSE)
+  j <- j + 1
+}
