@@ -98,7 +98,7 @@ for (a_1 in different_a1){
 
 j <- 1
 for (slope in slopes_for_negative){
-  print.xtable(xtable(matrix_power[(length(different_T) * j - 2):(length(different_T) * j),], digits = c(3), align = paste(replicate((length(different_alpha) + 1) * (length(different_a1) + 1) + 1, "c"), collapse = "")),
+  print.xtable(xtable(matrix_power[(length(different_T) * j - 2):(length(different_T) * j),], digits = c(3), align = paste(replicate((2 * length(different_alpha) + 1) * length(different_a1) + 1, "c"), collapse = "")),
                type="latex", file=paste0(PDFname, slope*10, "_power_", slope, ".tex"), include.colnames = FALSE)
   j <- j + 1
 }
