@@ -272,7 +272,6 @@ corrections <- function(coefficients, sigma_eta, len){
   return(c_vec)
 }
 
-
 #Calculate autocovariance function for AR(1) model: \varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t based on true coefficients of the model
 autocovariance_function_AR1 <- function(k, a_1, sigma_eta){
   if (k%%1==0)
