@@ -8,8 +8,7 @@ To assess the finite sample performance of our methods, we conduct a number of s
 \subsection{Size and power properties of the multiscale test}\label{subsec-sim-1} 
 
 
-\textcolor{red}{
-Our simulation design mimics the situation in the application example of Section \ref{sec-data}. We generate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$ for different trend functions $m$, error processes $\{\varepsilon_t\}$ and time series lengths $T$. The error terms are supposed to have the AR($1$) structure $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$, where $a_1 \in \{-0.5,-0.25,0.25,0.5\}$ and $\eta_t$ are i.i.d.\ standard normal. In addition, we consider the AR($2$) specification $\varepsilon_t = a_1 \varepsilon_{t-1} + a_2 \varepsilon_{t-2} + \eta_t$, where $\eta_t$ are normally distributed with $\ex[\eta_t] = 0$ and $\ex[\eta_t^2] = \nu^2$. We set $a_1 = 0.164$, $a_2 = 0.181$ and $\nu^2 = 0.321$, thus matching the estimated values obtained in the application of Section \ref{sec-data}. To simulate data under the null hypothesis, we let $m$ be a constant function. In particular, we set $m = 0$ without loss of generality. To generate data under the alternative, we consider the trend functions $m(u) = \beta (u - 0.5) \cdot \ind(0.5 \le u \le 1)$ with $\beta = 1.5,2.0,2.5$. These functions are broken lines with a kink at $u = 0.5$ and different slopes $\beta$. Their shape roughly resembles the trend estimates in the application of Section \ref{sec-data}. The slope parameter $\beta$ corresponds to a trend with the value $m(1) = 0.5 \beta$ at the right endpoint $u = 1$. We thus consider broken lines with the values $m(1) = 0.75, 1.0, 1.25$. Inspecting the middle panel of Figure \ref{plot-results-app1}, the broken lines with the endpoints $m(1) = 1.0$ and $m(1) = 1.25$ (that is, with $\beta = 2.0$ and $\beta = 2.5$) can be seen to resemble the local linear trend estimates in the real-data example the most (where we neglect the nonlinearities of the local linear fits at the beginning of the observation period). The broken line with $\beta = 1.5$ is closer to the null, making it harder for our test to detect this alternative.}\footnote{The broken lines $m$ are obviously non-differentiable at the kink point. We could replace them by slightly smoothed versions to satisfy the differentiability assumption that is imposed in the theoretical part of the paper. However, as this leaves the simulation results essentially unchanged but only creates additional notation, we stick to the broken lines.}
+Our simulation design mimics the situation in the application example of Section \ref{sec-data}. We generate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$ for different trend functions $m$, error processes $\{\varepsilon_t\}$ and time series lengths $T$. The error terms are supposed to have the AR($1$) structure $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$, where $a_1 \in \{-0.5,-0.25,0.25,0.5\}$ and $\eta_t$ are i.i.d.\ standard normal. In addition, we consider the AR($2$) specification $\varepsilon_t = a_1 \varepsilon_{t-1} + a_2 \varepsilon_{t-2} + \eta_t$, where $\eta_t$ are normally distributed with $\ex[\eta_t] = 0$ and $\ex[\eta_t^2] = \nu^2$. We set $a_1 = 0.164$, $a_2 = 0.181$ and $\nu^2 = 0.321$, thus matching the estimated values obtained in the application of Section \ref{sec-data}. To simulate data under the null hypothesis, we let $m$ be a constant function. In particular, we set $m = 0$ without loss of generality. To generate data under the alternative, we consider the trend functions $m(u) = \beta (u - 0.5) \cdot \ind(0.5 \le u \le 1)$ with $\beta = 1.5,2.0,2.5$. These functions are broken lines with a kink at $u = 0.5$ and different slopes $\beta$. Their shape roughly resembles the trend estimates in the application of Section \ref{sec-data}. The slope parameter $\beta$ corresponds to a trend with the value $m(1) = 0.5 \beta$ at the right endpoint $u = 1$. We thus consider broken lines with the values $m(1) = 0.75, 1.0, 1.25$. Inspecting the middle panel of Figure \ref{plot-results-app1}, the broken lines with the endpoints $m(1) = 1.0$ and $m(1) = 1.25$ (that is, with $\beta = 2.0$ and $\beta = 2.5$) can be seen to resemble the local linear trend estimates in the real-data example the most (where we neglect the nonlinearities of the local linear fits at the beginning of the observation period). The broken line with $\beta = 1.5$ is closer to the null, making it harder for our test to detect this alternative.\footnote{The broken lines $m$ are obviously non-differentiable at the kink point. We could replace them by slightly smoothed versions to satisfy the differentiability assumption that is imposed in the theoretical part of the paper. However, as this leaves the simulation results essentially unchanged but only creates additional notation, we stick to the broken lines.}
 
 
 %To simulate data under the null, we let $m$ be a constant function. In parti\-cular, we set $m = 0$ without loss of generality. To generate data under the alternative, we consider trend functions of the form $m(u) = \beta \cdot (u - 0.5) \cdot \ind(0.5 \le u \le 1)$ with the slope parameter $\beta$. These functions are broken lines with a kink at $u = 0.5$. Their shape roughly resembles the trend estimates in the application of Section \ref{sec-data}. For each AR specification of the errors, we consider three different slopes $\beta = s_\beta \cdot \sigma$ with $s_\beta \in \{1.7,2.3,2.9\}$ and $\sigma^2$ being the long-run error variance. The parameter $s_\beta$ is closely related to the signal-to-noise ratio in the model $Y_{t,T} = m(t/T) + \varepsilon_t$: The larger $s_\beta$, the stronger is the trend $m$ compared to the long-run error variance $\sigma^2$. The values $s_\beta \in \{ 1.7, 2.3, 2.9\}$ are motivated by the application example in Section \ref{sec-data}: For the AR($2$) specification which mimics the data example, it holds that $\beta \approx 1.5, 2.0, 2.5$ for $s_\beta = 1.7,2.3,2.9$. As the slope parameter $\beta$ corresponds to a trend with the value $m(1) = 0.5 \cdot \beta$ at the right endpoint $u = 1$, we thus consider broken lines with the values $m(1) \approx 0.75, 1.0, 1.25$ in this case. Inspecting the middle panel of Figure \ref{plot-results-app1}, the broken lines with the endpoints $m(1) \approx 1.0$ and $m(1) \approx 1.25$ (that is, with $s_\beta = 2.3$ and $s_\beta = 2.9$) can be seen to resemble the local linear trend estimates in the real-data example the most (where we neglect the nonlinearities of the local linear fits at the beginning of the observation period). The broken line with $s_\beta = 1.7$ has a smaller slope $\beta$ and is thus closer to the null, making it harder for our test to detect this alternative.\footnote{The broken lines $m$ are obviously non-differentiable at the kink point. We could replace them by slightly smoothed versions to satisfy the differentiability assumption that is imposed in the theoretical part of the paper. However, as this leaves the simulation results essentially unchanged but only creates additional notation, we stick to the broken lines.}
@@ -28,9 +27,9 @@ Our simulation design mimics the situation in the application example of Section
 $T$ & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
 & &  0.01 & 0.05  & 0.1 & &  0.01 & 0.05  & 0.1  & &  0.01 & 0.05  & 0.1  & &  0.01 & 0.05  & 0.1  & &  0.01 & 0.05  & 0.1   \\
 \cmidrule[0.4pt]{1-21}
-250 &  & 0.005 & 0.054 & 0.133 &  & 0.007 & 0.062 & 0.106 &  & 0.015 & 0.058 & 0.120 &  & 0.011 & 0.065 & 0.107 &  & 0.016 & 0.059 & 0.112 \\ 
-  350 &  & 0.024 & 0.066 & 0.147 &  & 0.019 & 0.058 & 0.094 &  & 0.018 & 0.057 & 0.111 &  & 0.029 & 0.064 & 0.111 &  & 0.032 & 0.065 & 0.110 \\ 
-  500 &  & 0.003 & 0.074 & 0.128 &  & 0.009 & 0.068 & 0.127 &  & 0.008 & 0.070 & 0.115 &  & 0.014 & 0.070 & 0.104 &  & 0.009 & 0.067 & 0.131 \\ 
+250 &  & 0.015 & 0.060 & 0.141 &  & 0.006 & 0.054 & 0.109 &  & 0.013 & 0.050 & 0.104 &  & 0.013 & 0.053 & 0.101 &  & 0.020 & 0.048 & 0.134 \\ 
+  350 &  & 0.007 & 0.062 & 0.105 &  & 0.010 & 0.060 & 0.103 &  & 0.011 & 0.051 & 0.112 &  & 0.012 & 0.064 & 0.106 &  & 0.021 & 0.058 & 0.105 \\ 
+  500 &  & 0.004 & 0.065 & 0.109 &  & 0.007 & 0.055 & 0.101 &  & 0.008 & 0.046 & 0.117 &  & 0.009 & 0.049 & 0.114 &  & 0.011 & 0.053 & 0.101 \\ 
 \bottomrule
 \end{tabularx}
 \vspace{0.5cm}
@@ -38,46 +37,45 @@ $T$ & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nomin
 \caption{Power of our multiscale test for different AR parameters $a_1$ and $a_2$, sample sizes $T$ and nominal sizes $\alpha$. The three panels (a)--(c) corresponds to different slope parameters $\beta$ of the broken line $m$.}\label{tab:power_test}
 
 \begin{tabularx}{\textwidth}{C{2} C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ} 
-\multicolumn{21}{c}{(a) $\beta = 2.0$} \\[0.2cm]
+\multicolumn{21}{c}{(a) $\beta = 1.5$} \\[0.2cm]
 \toprule
  & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) = (0.164,0.181)$} \\
 \cmidrule[0.4pt]{3-5} \cmidrule[0.4pt]{7-9} \cmidrule[0.4pt]{11-13} \cmidrule[0.4pt]{15-17} \cmidrule[0.4pt]{19-21}
 $T$ & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
 & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1   \\
 \cmidrule[0.4pt]{1-21}
-250 &  & 0.713 & 0.859 & 0.927 &  & 0.470 & 0.687 & 0.816 &  & 0.122 & 0.262 & 0.374 &  & 0.032 & 0.121 & 0.215 &  & 0.366 & 0.595 & 0.733 \\ 
-  350 &  & 0.900 & 0.965 & 0.985 &  & 0.691 & 0.870 & 0.924 &  & 0.178 & 0.373 & 0.490 &  & 0.065 & 0.171 & 0.244 &  & 0.546 & 0.788 & 0.866 \\ 
-  500 &  & 0.987 & 0.998 & 1.000 &  & 0.896 & 0.964 & 0.983 &  & 0.268 & 0.528 & 0.628 &  & 0.084 & 0.226 & 0.312 &  & 0.778 & 0.927 & 0.947 \\
-\bottomrule
+250 &  & 0.523 & 0.745 & 0.863 &  & 0.351 & 0.557 & 0.717 &  & 0.091 & 0.197 & 0.331 &  & 0.034 & 0.102 & 0.201 &  & 0.288 & 0.460 & 0.602 \\ 
+  350 &  & 0.721 & 0.898 & 0.964 &  & 0.509 & 0.760 & 0.854 &  & 0.130 & 0.271 & 0.404 &  & 0.041 & 0.152 & 0.236 &  & 0.414 & 0.629 & 0.749 \\ 
+  500 &  & 0.915 & 0.988 & 0.997 &  & 0.729 & 0.901 & 0.957 &  & 0.182 & 0.398 & 0.515 &  & 0.057 & 0.186 & 0.260 &  & 0.591 & 0.810 & 0.898 \\ \bottomrule
 \end{tabularx}
 \vspace{0.25cm}
 
 \begin{tabularx}{\textwidth}{C{2} C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ} 
-\multicolumn{21}{c}{(b) $\beta = 2.5$} \\[0.2cm]
+\multicolumn{21}{c}{(b) $\beta = 2.0$} \\[0.2cm]
 \toprule
  & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) = (0.164,0.181)$} \\
 \cmidrule[0.4pt]{3-5} \cmidrule[0.4pt]{7-9} \cmidrule[0.4pt]{11-13} \cmidrule[0.4pt]{15-17} \cmidrule[0.4pt]{19-21}
 $T$ & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
  & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1   \\
 \cmidrule[0.4pt]{1-21}
-250 &  & 0.939 & 0.976 & 0.998 &  & 0.762 & 0.900 & 0.956 &  & 0.230 & 0.382 & 0.540 &  & 0.066 & 0.196 & 0.308 &  & 0.638 & 0.800 & 0.895 \\ 
-  350 &  & 0.992 & 0.998 & 1.000 &  & 0.931 & 0.976 & 0.994 &  & 0.330 & 0.560 & 0.682 &  & 0.114 & 0.227 & 0.370 &  & 0.841 & 0.936 & 0.970 \\ 
-  500 &  & 0.999 & 1.000 & 1.000 &  & 0.988 & 0.999 & 1.000 &  & 0.534 & 0.782 & 0.832 &  & 0.161 & 0.341 & 0.469 &  & 0.961 & 0.992 & 0.996 \\ 
+250 &  & 0.871 & 0.967 & 0.990 &  & 0.664 & 0.840 & 0.925 &  & 0.196 & 0.361 & 0.504 &  & 0.059 & 0.160 & 0.286 &  & 0.565 & 0.748 & 0.869 \\ 
+  350 &  & 0.988 & 0.999 & 0.998 &  & 0.866 & 0.970 & 0.986 &  & 0.277 & 0.477 & 0.635 &  & 0.097 & 0.219 & 0.319 &  & 0.751 & 0.910 & 0.936 \\ 
+  500 &  & 0.999 & 1.000 & 1.000 &  & 0.969 & 0.997 & 1.000 &  & 0.416 & 0.695 & 0.791 &  & 0.131 & 0.321 & 0.445 &  & 0.914 & 0.986 & 0.993 \\ 
 \bottomrule
 \end{tabularx}
 \vspace{0.25cm}
 
 \begin{tabularx}{\textwidth}{C{2} C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ} 
-\multicolumn{21}{c}{(c) $\beta = 3.0$} \\[0.2cm]
+\multicolumn{21}{c}{(c) $\beta = 2.5$} \\[0.2cm]
 \toprule
  & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) = (0.164,0.181)$} \\
 \cmidrule[0.4pt]{3-5} \cmidrule[0.4pt]{7-9} \cmidrule[0.4pt]{11-13} \cmidrule[0.4pt]{15-17} \cmidrule[0.4pt]{19-21}
 $T$ & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
  & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1   \\
 \cmidrule[0.4pt]{1-21}
-250 &  & 0.996 & 0.998 & 1.000 &  & 0.935 & 0.985 & 0.994 &  & 0.390 & 0.545 & 0.716 &  & 0.107 & 0.254 & 0.384 &  & 0.809 & 0.920 & 0.969 \\ 
-  350 &  & 1.000 & 1.000 & 1.000 &  & 0.993 & 0.998 & 0.999 &  & 0.533 & 0.749 & 0.835 &  & 0.191 & 0.367 & 0.467 &  & 0.951 & 0.988 & 0.997 \\ 
-  500 &  & 1.000 & 1.000 & 1.000 &  & 1.000 & 1.000 & 1.000 &  & 0.771 & 0.930 & 0.952 &  & 0.251 & 0.527 & 0.595 &  & 0.999 & 1.000 & 1.000 \\
+250 &  & 0.994 & 1.000 & 1.000 &  & 0.912 & 0.983 & 0.996 &  & 0.315 & 0.528 & 0.668 &  & 0.117 & 0.237 & 0.368 &  & 0.801 & 0.907 & 0.962 \\ 
+  350 &  & 0.998 & 1.000 & 1.000 &  & 0.987 & 1.000 & 0.999 &  & 0.477 & 0.739 & 0.852 &  & 0.150 & 0.345 & 0.455 &  & 0.951 & 0.985 & 1.000 \\ 
+  500 &  & 1.000 & 1.000 & 1.000 &  & 1.000 & 1.000 & 1.000 &  & 0.707 & 0.906 & 0.956 &  & 0.240 & 0.487 & 0.613 &  & 0.998 & 1.000 & 1.000 \\ 
 \bottomrule
 \end{tabularx}
 }

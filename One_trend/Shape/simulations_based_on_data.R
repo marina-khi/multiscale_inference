@@ -51,7 +51,7 @@ simulations_general <- function(N, different_T, different_alpha, different_slope
       for (T in different_T){
         g_t_set = creating_g_set(T, kernel_t)
         m = numeric(T)
-        for (i in 1:T) {if (i/T < 0.6) {m[i] = 0} else {m[i] = (i - 0.6*T)*slope/T}}
+        for (i in 1:T) {if (i/T < 0.5) {m[i] = 0} else {m[i] = (i - 0.5*T)*slope/T}}
         
         #Calculating gaussian quantiles for given T and alpha
         gaussian_quantile = quantile_function(T, g_t_set, test_problem, kernel_ind, alpha)

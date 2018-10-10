@@ -16,7 +16,7 @@ N_rep            <- 1000 #Number of replications for calculating the size and th
 different_T      <- c(250, 350, 500) #Different lengths of time series for which we calculate size and power
 different_alpha  <- c(0.01, 0.05, 0.1) #Different alpha for which we calculate size and power
 different_a1     <- c(-0.5, -0.25, 0.25, 0.5)
-different_slopes <- c(2, 2.5, 3)
+different_slopes <- c(1.5, 2.0, 2.5)
 sigma_eta        <- 1
 
 kernel_method <- "ll" #Only "nw" (Nadaraya-Watson) and "ll" (local linear) methods are currently supported
