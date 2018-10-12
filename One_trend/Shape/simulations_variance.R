@@ -31,7 +31,7 @@ histograms_for_variance_estimators <- function(a_1_star, sigma_eta_star, T_size,
     sigma_eta_hat_hall_vect <- c(sigma_eta_hat_hall_vect, sigma_eta_hat_hall)
     lrv_hat_hall_vect       <- c(lrv_hat_hall_vect, lrv_hat_hall)
 
-    res_oracle               <- lm(eps[2:T_size] ~ eps[1:(T_size-1)] - 1)
+    res_oracle                <- lm(eps[2:T_size] ~ eps[1:(T_size-1)] - 1)
     a_hat_oracle_vect         <- c(a_hat_oracle_vect, as.vector(res_oracle$coef))
     sigma_eta_hat_oracle_vect <- c(sigma_eta_hat_oracle_vect, sqrt(mean(res_oracle$residuals^2)))
     lrv_hat_oracle_vect       <- c(lrv_hat_oracle_vect, mean(res_oracle$residuals^2)/(1-sum(as.vector(res_oracle$coef)))^2)
@@ -47,6 +47,16 @@ histograms_for_variance_estimators <- function(a_1_star, sigma_eta_star, T_size,
                                  text1 = expression(widehat(sigma)[]^2), text2 = expression(widehat(sigma)[HvK]^2),
                                  text3 = expression(widehat(sigma)[oracle]^2),
                                  cutting_at_end = 'no')
+  } else if ((produce_plots == 'selected') && ((a_1_star == -0.95) || (a_1_star == 0.25)) && (q == 25) && (K2 == 10)){
+      plotting_variance_histograms(a_hat_method2_vect, a_hat_hall_vect, a_hat_oracle_vect, a_1_star, pdfname_a_hat,
+                                   text1 = expression(widehat(a)), text2 = expression(widehat(a)[HvK]),
+                                   text3 = expression(widehat(a)[oracle]),
+                                   cutting_at_end = 'yes')
+      
+      plotting_variance_histograms(lrv_hat_method2_vect, lrv_hat_hall_vect, lrv_hat_oracle_vect, lrv_star, pdfname_lrv,
+                                   text1 = expression(widehat(sigma)[]^2), text2 = expression(widehat(sigma)[HvK]^2),
+                                   text3 = expression(widehat(sigma)[oracle]^2),
+                                   cutting_at_end = 'no')
   }
   
   # compute MSE values

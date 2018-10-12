@@ -215,41 +215,41 @@ All in all, we would like to regard the two methods as complementary rather than
 \subsection{Small sample properties of the long-run variance estimator}\label{subsec-sim-3}
 
 
-In the final part of the simulation study, we examine the estimators of the AR parameters and the long-run error variance from Section \ref{subsec-error-var-AR}. We simulate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$, where $\{ \varepsilon_t\}$ is an AR($1$) process of the form $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$. We consider the AR parameters $a_1 \in \{-0.95,-0.75,-0.5,-0.25,0.25,0.5,0.75,0.95\}$ and let $\eta_t$ be i.i.d.\ standard normal innovation terms. For simplicity, $m$ is chosen to be a linear function of the form $m(u) = \beta u$ with the slope parameter $\beta$. For each value of $a_1$, we consider two different slopes $\beta$, one corresponding to a moderate and one to a pronounced trend $m$. 
+In the final part of the simulation study, we examine the estimators of the AR parameters and the long-run error variance from Section \ref{subsec-error-var-AR}. We simulate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$, where $\{ \varepsilon_t\}$ is an AR($1$) process of the form $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$. We consider the AR parameters $a_1 \in \{-0.95,-0.75,-0.5,-0.25,0.25,0.5,0.75,0.95\}$, the sample sizze $T \in \{250, 500\}$ and let $\eta_t$ be i.i.d.\ standard normal innovation terms. For simplicity, $m$ is chosen to be a linear function of the form $m(u) = \beta u$ with the slope parameter $\beta$. For each value of $a_1$, we consider two different slopes $\beta$, one corresponding to a moderate and one to a pronounced trend $m$. 
 %In particular, we let $\beta = s_\beta \cdot \sigma$ with $s_\beta = 1$ (moderate trend) and $s_\beta= 10$ (pronounced trend), where $\sigma^2$ is the long-run error variance.
 In particular, we let $\beta = s_\beta \sqrt{\var(\varepsilon_t)}$ with $s_\beta \in \{1,10\}$. When $s_\beta = 1$, the slope $\beta$ is equal to the standard deviation $\sqrt{\var(\varepsilon_t)}$ of the error process, which yields a moderate trend $m$. When $s_\beta = 10$, in contrast, the slope $\beta$ is $10$ times as large as $\sqrt{\var(\varepsilon_t)}$, which results in a quite pronounced trend $m$. 
 
 
 \begin{figure}[t!]
 \begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{Plots/MSE_a1_T=250_slope=100_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/MSE_a1_T=250_slope=1_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
 \end{subfigure}\hspace{0.25cm}
 \begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{Plots/MSE_lrv_T=250_slope=10_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/MSE_lrv_T=250_slope=1_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
 \end{subfigure}
 
 \begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{Plots/MSE_a1_T=500_slope=100_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/MSE_a1_T=500_slope=1_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
 \end{subfigure}\hspace{0.25cm}
 \begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{Plots/MSE_lrv_T=500_slope=10_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/MSE_lrv_T=500_slope=1_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
 \end{subfigure}
 \caption{MSE values for the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$ and $\widehat{\sigma}^2_{\text{oracle}}$ in the simulation scenarios with a moderate trend ($s_\beta=1$).}\label{fig:MSE_slope1}
 \end{figure}
 
 \begin{figure}[t!]
 \begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{Plots/MSE_a1_T=250_slope=100_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/MSE_a1_T=250_slope=10_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
 \end{subfigure}\hspace{0.25cm}
 \begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{Plots/MSE_a1_T=500_slope=100_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/MSE_a1_T=500_slope=10_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
 \end{subfigure}
 
 \begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{Plots/MSE_lrv_T=250_slope=100_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/MSE_lrv_T=250_slope=10_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
 \end{subfigure}\hspace{0.25cm}
 \begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{Plots/MSE_lrv_T=500_slope=100_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/MSE_lrv_T=500_slope=10_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
 \end{subfigure}
 \caption{MSE values for the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$, $\widehat{\sigma}^2_{\text{oracle}}$ in the simulation scenarios with a pronounced trend ($s_\beta=10$).}\label{fig:MSE_slope10}
 \end{figure}
@@ -258,10 +258,10 @@ In particular, we let $\beta = s_\beta \sqrt{\var(\varepsilon_t)}$ with $s_\beta
 \begin{figure}[t!]
 \centering
 \begin{subfigure}[b]{\textwidth}
-\includegraphics[width=\textwidth]{Plots/a_hat_histograms_a1=-95_T=500_slope=10_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/a_hat_histograms_a1=-95_T=500_slope=1_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
 \end{subfigure}
 \begin{subfigure}[b]{\textwidth}
-\includegraphics[width=\textwidth]{Plots/lrv_histograms_a1=-95_T=500_slope=10_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/lrv_histograms_a1=-95_T=500_slope=1_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
 \end{subfigure}
 \caption{Histograms of the simulated values produced by the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$, $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$, $\widehat{\sigma}^2_{\text{oracle}}$ in the scenario with $T=500$, $a_1 = -0.95$ and $\beta = 1$. The vertical red lines indicate the true values of $a_1$ and $\sigma^2$.}\label{fig:hist_scenario1} 
 \end{figure}
@@ -270,10 +270,10 @@ In particular, we let $\beta = s_\beta \sqrt{\var(\varepsilon_t)}$ with $s_\beta
 \begin{figure}[t!]
 \centering
 \begin{subfigure}[b]{\textwidth}
-\includegraphics[width=\textwidth]{Plots/a_hat_histograms_a1=25_T=500_slope=100_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/a_hat_histograms_a1=25_T=500_slope=10_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
 \end{subfigure}
 \begin{subfigure}[b]{\textwidth}
-\includegraphics[width=\textwidth]{Plots/lrv_histograms_a1=25_T=500_slope=100_(L1,L2,K1,K2,M1,M2)=(25,25,5,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/lrv_histograms_a1=25_T=500_slope=10_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
 \end{subfigure}
 \caption{Histograms of the simulated values produced by the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$, $\widehat{\sigma}^2_{\text{oracle}}$ in the scenario with $T=500$, $a_1 = 0.25$ and $\beta = 10$. The vertical red lines indicate the true values of $a_1$ and $\sigma^2$.}\label{fig:hist_scenario2} 
 \end{figure}
@@ -282,12 +282,12 @@ In particular, we let $\beta = s_\beta \sqrt{\var(\varepsilon_t)}$ with $s_\beta
 For each model specification, we generate $S=1000$ data samples and compute the following quantities for each simulated sample: 
 \begin{enumerate}[label=(\roman*),leftmargin=0.9cm]
 \item the pilot estimator $\widetilde{a}_q$ from \eqref{est-AR-FS} with the tuning parameter $q$.
-\item the estimator $\widehat{a}$ from \eqref{est-AR} with the tuning parameters $\underline{r}$ and $\overline{r}$ as well as the long-run variance estimator $\widehat{\sigma}^2$ from \eqref{est-lrv}. 
+\item the estimator $\widehat{a}$ from \eqref{est-AR} with the tuning parameter $\overline{r} = r$ as well as the long-run variance estimator $\widehat{\sigma}^2$ from \eqref{est-lrv}. 
 \item the estimators of $a$ and $\sigma^2$ from \cite{Hall2003}, which are denoted by $\widehat{a}_{\text{HvK}}$ and $\widehat{\sigma}^2_{\text{HvK}}$ for ease of reference. The estimator $\widehat{a}_{\text{HvK}}$ is computed as described in Section 2.2 of \cite{Hall2003} and $\widehat{\sigma}^2_{\text{HvK}}$ as defined at the bottom of p.447 in Section 2.3. The estimator $\widehat{a}_{\text{HvK}}$ (as well as $\widehat{\sigma}^2_{\text{HvK}}$) depends on two tuning parameters which we denote by $m_1$ and $m_2$ as in \cite{Hall2003}. 
 \item oracle estimators $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2_{\text{oracle}}$ of $a_1$ and $\sigma^2$, which are constructed under the assumption that the error process $\{\varepsilon_t\}$ is observed. For each simulation run, we compute $\widehat{a}_{\text{oracle}}$ as the maximum likelihood estimator of $a_1$ from the time series of simulated error terms $\varepsilon_1,\ldots,\varepsilon_T$. We then calculate the residuals $r_t = \varepsilon_t - \widehat{a}_{\text{oracle}} \, \varepsilon_{t-1}$ and estimate the innovation variance $\nu^2 = \ex[\eta_t^2]$ by $\widehat{\nu}_{\text{oracle}}^2 = (T-1)^{-1} \sum_{t=2}^T r_t^2$. Finally, we set $\widehat{\sigma}^2_{\text{oracle}} = \widehat{\nu}_{\text{oracle}}^2 / (1 - \widehat{a}_{\text{oracle}})^2$. 
 \end{enumerate}
-Throughout the section, we set $q = 25$, $(\underline{r},\overline{r}) = (5,10)$ and $(m_1,m_2) = (20,30)$. We in particular choose $q$ to be in the middle of $m_1$ and $m_2$ to make the tuning parameters of the estimators $\widetilde{a}_q$ and $\widehat{a}_{\text{HvK}}$ more or less comparable. In order to assess how sensitive our estimators are to the choice of $q$, $\underline{r}$ and $\overline{r}$, we carry out a number of robustness checks, considering a range of different values for $q$, $\underline{r}$ and $\overline{r}$. In addition, we vary the tuning parameters $m_1$ and $m_2$ of the estimators from \cite{Hall2003} in order to make sure that the results of our comparison study are not driven by the particular choice of any of the involved tuning parameters. The results of our robustness checks are reported in Section S.3 of the Supplementary Material. They show that the results of our comparison study are robust to %persist across 
-different choices of the parameters $q$, $(\underline{r},\overline{r})$ and $(m_1,m_2)$. Moreover, they indicate that our estimators are rather insensitive to the choice of tuning parameters. 
+Throughout the section, we set $q = 25$, $\underline{r} = p + 1$, where $p = 1$ is the order, $\overline{r} = r = 10$ and $(m_1,m_2) = (20,30)$. We in particular choose $q$ to be in the middle of $m_1$ and $m_2$ to make the tuning parameters of the estimators $\widetilde{a}_q$ and $\widehat{a}_{\text{HvK}}$ more or less comparable. In order to assess how sensitive our estimators are to the choice of $q$ and $r$, we carry out a number of robustness checks, considering a range of different values for $q$ and $r$. In addition, we vary the tuning parameters $m_1$ and $m_2$ of the estimators from \cite{Hall2003} in order to make sure that the results of our comparison study are not driven by the particular choice of any of the involved tuning parameters. The results of our robustness checks are reported in Section S.3 of the Supplementary Material. They show that the results of our comparison study are robust to %persist across 
+different choices of the parameters $q$, $r$ and $(m_1,m_2)$. Moreover, they indicate that our estimators are rather insensitive to the choice of tuning parameters. 
 
 
 For each estimator $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$, $\widehat{\sigma}^2_{\text{oracle}}$ and for each model specification, the simulation output consists in a vector of length $S=1000$ which contains the $1000$ simulated values of the respective estimator. Figures \ref{fig:MSE_slope1} and \ref{fig:MSE_slope10} report the mean squared error (MSE) of the estimators computed from these $1000$ values. The different plots in the two figures correspond to different simulation scenarios. On the $x$-axis of each plot, the various values of the AR parameter $a_1$ are listed which are considered. The solid line in each plot gives the MSE values of our estimators. The dashed and dotted lines specify the MSE values of the HvK and the oracle estimators, respectively. Note that for the long-run variance estimators, the plots report the logarithm of the MSE rather than the MSE itself since the MSE values are too different across simulation scenarios to obtain a reasonable graphic presentation. In addition to the MSE values presented in Figures \ref{fig:MSE_slope1} and \ref{fig:MSE_slope10}, we depict histograms of the $1000$ simulated values produced by the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$, $\widehat{\sigma}^2_{\text{oracle}}$ for two specific simulation scenarios in Figures \ref{fig:hist_scenario1} and \ref{fig:hist_scenario2}. The main findings can be summarized as follows:  

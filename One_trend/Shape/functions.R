@@ -420,6 +420,61 @@ calculating_SiZer_matrix <- function(different_i, different_h, T_size, T_star, a
   return(SiZer_matrix)
 }
 
+calculating_SiZer_matrix_1 <- function(different_i, different_h, T_size, T_star, alpha, gamma){
+  
+  SiZer_matrix              <- expand.grid(u = different_i, h = different_h) #Creating a dataframe with all possible combination of i and h
+  SiZer_matrix$values       <- numeric(nrow(SiZer_matrix)) # Setting the values of the statistic to be zero
+  SiZer_matrix$sd           <- numeric(nrow(SiZer_matrix)) # Setting the values of standard deviation to be zero
+  SiZer_matrix$ESS_star     <- numeric(nrow(SiZer_matrix)) # Setting the values of ESS* to be zero
+  SiZer_matrix$q_h          <- numeric(nrow(SiZer_matrix)) # Setting the values of the gaussian quantile to be zero
+  SiZer_matrix$small_ESS    <- numeric(nrow(SiZer_matrix)) # Later we will delete all the row such that ESS* is too small
+  SiZer_matrix$lambda       <- lambda(SiZer_matrix[['h']]) # Calculating the lambda(h) in order to speed up the function psistar_statistic
+  SiZer_matrix$XtWX_inv_XtW <- I(vector(mode="list", length=nrow(SiZer_matrix)))
+  
+  for (row in 1:nrow(SiZer_matrix)){
+    
+    i = SiZer_matrix[row, 'u']
+    h = SiZer_matrix[row, 'h']
+    
+    ESS      <- sum(sapply((i - seq(1/T_size, 1, by = 1/T_size))/h, epanechnikov_kernel))/epanechnikov_kernel(0)
+    ESS_star <- (T_star/T_size) * ESS 
+    l        <- T_size / ESS_star
+    q_h      <- qnorm((1 + (1 - alpha)^(1 / l))/2)
+    
+    if (ESS_star <= 5){
+      SiZer_matrix[row, 'small_ESS'] <- 1
+    } else {
+      x_matrix                     <- matrix(c(rep(1, T_size), seq(1/T_size - i, 1-i, by = 1/T_size)), nrow=T_size, byrow=FALSE)
+      w_vector                     <- sapply(seq(1/T_size - i, 1-i, by = 1/T_size)/h, FUN = epanechnikov_kernel)/h
+      XtW                          <- t(apply(x_matrix,2,function(x){x*w_vector}))   #t(X) %*% diag(w)   computed faster.  :)
+      XtWX_inverse                 <- tryCatch({solve(XtW %*% x_matrix)},  
+                                               error = function(e) {print("Something is wrong, the matrix can not be inverted")})
+
+      XtSigma <- matrix(data = NA, nrow =2, ncol =T_size)
+      for (j in 1:T_size){      #t(X) %*% Sigma computed faster in order not to save the whole Sigma matrix (T_size * T_size) in the memory
+        XtSigma[1, j] = 0
+        XtSigma[2, j] = 0
+        for (k in 1:T_size){
+          XtSigma[1, j] = XtSigma[1, j] + gamma[abs(k - j) + 1] * w_vector[k] * w_vector[j]
+          XtSigma[2, j] = XtSigma[2, j] + gamma[abs(k - j) + 1] * w_vector[k] * w_vector[j] * (k/T_size - i)   
+        }
+      }
+      sd = sqrt((XtWX_inverse %*% XtSigma %*% x_matrix %*% XtWX_inverse)[2,2])
+      
+      SiZer_matrix[row, 'sd']       = sd
+      SiZer_matrix[row, 'q_h']      = q_h
+      SiZer_matrix[row, 'ESS_star'] = ESS_star
+    }
+  }
+  
+  SiZer_matrix           <- SiZer_matrix[SiZer_matrix$small_ESS != 1,]
+  SiZer_matrix$small_ESS <- NULL
+  SiZer_matrix$ESS_star  <- NULL
+  
+  return(SiZer_matrix)
+}
+
+
 plotting_MSE_graphs <- function(data1, data2, data3, pdfname, margin_, legend_position,
                                 ylab_, legend_, title_, different_a, zoomed){
   data_min <- min(c(data1, data2, data3))
