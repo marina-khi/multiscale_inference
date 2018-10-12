@@ -420,7 +420,8 @@ calculating_SiZer_matrix <- function(different_i, different_h, T_size, T_star, a
   return(SiZer_matrix)
 }
 
-plotting_MSE_graphs <- function(data1, data2, data3, pdfname, margin_, legend_position, ylab_, legend_, title_, different_a){
+plotting_MSE_graphs <- function(data1, data2, data3, pdfname, margin_, legend_position,
+                                ylab_, legend_, title_, different_a, zoomed){
   data_min <- min(c(data1, data2, data3))
   data_max <- max(c(data1, data2, data3))
   
@@ -429,7 +430,11 @@ plotting_MSE_graphs <- function(data1, data2, data3, pdfname, margin_, legend_po
   par(mar = c(4, 4, margin_, 0)) #Margins for each plot
   par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins 
   
-  plot(data1,ylim=c(data_min,data_max),type="l",lty=1,xaxt='n', ylab = ylab_, xlab=expression(a[1]))
+  if (zoomed == 'yes'){
+    plot(data1, type="l", lty=1, xaxt='n', ylim = c(0.000, 0.020), ylab = ylab_, xlab=expression(a[1]))
+  } else {
+    plot(data1,ylim=c(data_min,data_max),type="l",lty=1,xaxt='n', ylab = ylab_, xlab=expression(a[1]))
+  }
   points(data1,pch=19)
   lines(data2,lty="dashed",lwd=1.5)
   points(data2,pch=19)
