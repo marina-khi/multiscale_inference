@@ -8,7 +8,7 @@ SiZer_simulations_power <- function(a_1, sigma_eta, N_rep, slopes, different_alp
 
   for (slope in slopes){  
     for (T_size in different_T){
-      different_i <- seq(from = 1/T_size, to = 1, by = 1/T_size)
+      different_i <- seq(from = 5/T_size, to = 1, by = 5/T_size)
       different_h <- seq(from = 3/T_size, to = 1/4+3/T_size, by = 5/T_size)
       gamma = c()
       for (k in 0:(T_size-1)){                                            #\gamma(k) = \sigma_\eta^2 * a_1^|k| / (1 - a_1^2)
@@ -20,8 +20,7 @@ SiZer_simulations_power <- function(a_1, sigma_eta, N_rep, slopes, different_alp
       for (k in 1:(T_size-1)){true_var = true_var + (2/T_size) * (1 - k/T_size) * gamma[k+1]}
     
       T_star   <- gamma[1]/true_var
-        
-      
+
       for (alpha in different_alpha){
         #THIS PART IS ONLY FOR FAST CALCULATIONS OF THE MATRIX. IF YOU CHANGE different_i OR different_h, YOU CAN'T USE IT!!!
         filename_aux = paste0("Shape/distribution/SiZer_matrix_T_", T_size, "_a_1_", a_1, "_sigma_eta_", sigma_eta, "_alpha_", alpha*100, ".RData")
@@ -29,7 +28,7 @@ SiZer_simulations_power <- function(a_1, sigma_eta, N_rep, slopes, different_alp
           SiZer_matrix <- calculating_SiZer_matrix(different_i, different_h, T_size, T_star, alpha, gamma)
           save(SiZer_matrix, file = filename_aux)
         } else {
-          load(filename)
+          load(filename_aux)
         }
         #USE THIS INSTEAD
         #SiZer_matrix <- calculating_SiZer_matrix(different_i, different_h, T_size, T_star, alpha, gamma)  
@@ -93,7 +92,7 @@ SiZer_simulations_size <- function(a_1, sigma_eta, N_rep, different_alpha, diffe
   size  <- c()
 
   for (T_size in different_T){
-    different_i <- seq(from = 1/T_size, to = 1, by = 1/T_size)
+    different_i <- seq(from = 1/T_size, to = 1, by = 5/T_size)
     different_h <- seq(from = 3/T_size, to = 1/4+3/T_size, by = 5/T_size)
     gamma = c()
     for (k in 0:(T_size-1)){                                            #\gamma(k) = \sigma_\eta^2 * a_1^|k| / (1 - a_1^2)
@@ -114,7 +113,7 @@ SiZer_simulations_size <- function(a_1, sigma_eta, N_rep, different_alpha, diffe
         SiZer_matrix <- calculating_SiZer_matrix(different_i, different_h, T_size, T_star, alpha, gamma)
         save(SiZer_matrix, file = filename_aux)
       } else {
-        load(filename)
+        load(filename_aux)
       }
       #USE THIS INSTEAD
       #SiZer_matrix <- calculating_SiZer_matrix(different_i, different_h, T_size, T_star, alpha, gamma)  

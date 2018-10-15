@@ -35,31 +35,40 @@ T_tempr      <- length(yearly_tempr)
 #Checking the order of AR(p)#
 #############################
 
-L1 <- 20
-L2 <- 30
+L1 <- 20:35
+L2 <- 20:45
+criterion_matrix <- expand.grid(L1 = L1, L2 = L2)
+criterion_matrix <- subset(criterion_matrix, L2 >= L1)
 
-FPE <- c()
-AIC <- c()
-SIC <- c()
-HQ <- c()
+criterion_matrix$FPE <- numeric(length = nrow(criterion_matrix))
+criterion_matrix$AIC <- numeric(length = nrow(criterion_matrix))
+criterion_matrix$SIC <- numeric(length = nrow(criterion_matrix))
+criterion_matrix$HQ  <- numeric(length = nrow(criterion_matrix))
 
-different_orders <- (1:9)
 
-for (order in different_orders){
-  K1 <- order + 1
-  K2 <- 10
-  sigma_eta_hat_method2 <- estimating_variance_new(yearly_tempr, L1, L2, order, K1, K2)[[3]]
-
-  FPE <- c(FPE, (sigma_eta_hat_method2^2 * (T_tempr + order)) / (T_tempr - order))
-  AIC <- c(AIC, T_tempr * log(sigma_eta_hat_method2^2) + 2 * order)
-  SIC <- c(SIC, log(sigma_eta_hat_method2^2) + order * log(T_tempr) / T_tempr)
-  HQ <- c(HQ, log(sigma_eta_hat_method2^2) + 2 * order * log(log(T_tempr)) / T_tempr)
+for (i in 1:nrow(criterion_matrix)){
+  FPE <- c()
+  AIC <- c()
+  SIC <- c()
+  HQ <- c()
+    
+  different_orders <- (1:9)
+  
+  for (order in different_orders){
+    K1 <- order + 1
+    K2 <- 10
+    sigma_eta_hat_method2 <- estimating_variance_new(yearly_tempr, criterion_matrix$L1[[i]], criterion_matrix$L2[[i]], order, K1, K2)[[3]]
+  
+    FPE <- c(FPE, (sigma_eta_hat_method2^2 * (T_tempr + order)) / (T_tempr - order))
+    AIC <- c(AIC, T_tempr * log(sigma_eta_hat_method2^2) + 2 * order)
+    SIC <- c(SIC, log(sigma_eta_hat_method2^2) + order * log(T_tempr) / T_tempr)
+    HQ <- c(HQ, log(sigma_eta_hat_method2^2) + 2 * order * log(log(T_tempr)) / T_tempr)
+  }
+  criterion_matrix$FPE[[i]] <- which.min(FPE)
+  criterion_matrix$AIC[[i]] <- which.min(AIC)
+  criterion_matrix$SIC[[i]] <- which.min(SIC)
+  criterion_matrix$HQ[[i]]  <- which.min(HQ)
 }
-
-which.min(FPE)
-which.min(AIC)
-which.min(SIC)
-which.min(HQ)
 
 
 
@@ -68,7 +77,9 @@ which.min(HQ)
 ###########################
 
 #Tuning parameters
-p  <- which.min(AIC)
+p  <- 2
+L1 <- 25
+L2 <- 25
 K1 <- p + 1
 K2 <- 10
 

@@ -7,8 +7,8 @@ source("Shape/SiZer_simulations.R")
 source("Shape/C_code/psihat_statistic.R")
 dyn.load("Shape/C_code/psihat_statistic_ll.dll")
 
-source("Shape/C_code/SiZer_matrix.R")
-dyn.load("Shape/C_code/SiZer_matrix.dll")
+#source("Shape/C_code/SiZer_matrix.R")
+#dyn.load("Shape/C_code/SiZer_matrix.dll")
 
 
 
@@ -22,8 +22,8 @@ sigma_eta       <- 1    #We keep this as a constant parameter
 different_alpha     <- c(0.05) #Level of significance
 different_T         <- c(500) #Different lengths of time series for which we compare SiZer and our method
 different_a1        <- c(-0.5) #Different a_1 in AR(1) model
-slopes_for_negative <- c(0.5, 1.0, 1.5)
-slopes_for_positive <- c(3.5, 4.0, 4.5)
+slopes_for_negative <- c(1.0, 1.25, 1.5)
+slopes_for_positive <- c(3.5, 3.75, 4.0)
 
 PDFname <- "Paper/Plots/SiZer_comparison_"
 
@@ -90,13 +90,11 @@ for (a_1 in different_a1){
   }
   #result_power <- SiZer_simulations_power(a_1, sigma_eta, N_rep, slopes, different_alpha, different_T)
   #tmp_power    <- matrix(result_power, nrow = length(slopes_for_negative) * length(different_T), ncol = 2 * length(different_alpha), byrow = TRUE)
-  #matrix_power[, (i * 7 + 2):(i * 7 + 7)]  <- tmp_power
+  #matrix_power[, (i * (2 * length(different_alpha) + 1) + 2):((i + 1) * (2 * length(different_alpha) + 1))]  <- tmp_power
 
   result_size <- SiZer_simulations_size(a_1, sigma_eta, N_rep, different_alpha, different_T)
-
-  
   tmp_size <- matrix(result_size,nrow = length(slopes_for_negative) * length(different_T), ncol = 2 * length(different_alpha), byrow = TRUE)
-  #matrix_size[, (i * 7 + 2):(i * 7 + 7)]  <- tmp_size
+  #matrix_size[, (i * (2 * length(different_alpha) + 1) + 2):((i + 1) * (2 * length(different_alpha) + 1))]  <- tmp_size
   i <- i + 1
 }
 

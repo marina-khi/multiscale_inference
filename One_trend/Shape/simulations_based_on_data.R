@@ -24,6 +24,7 @@ simulations_general <- function(N, different_T, different_alpha, different_slope
   size_ar1 <- c()
   for (alpha in different_alpha){
     for (T in different_T){
+      set.seed(1) #For reproducibilty
       g_t_set =creating_g_set(T, kernel_t)
 
       #Calculating gaussian quantiles for given T and alpha
@@ -49,6 +50,7 @@ simulations_general <- function(N, different_T, different_alpha, different_slope
   for (alpha in different_alpha){
     for (slope in different_slopes){
       for (T in different_T){
+        set.seed(1) #For reproducibilty
         g_t_set = creating_g_set(T, kernel_t)
         m = numeric(T)
         for (i in 1:T) {if (i/T < 0.5) {m[i] = 0} else {m[i] = (i - 0.5*T)*slope/T}}

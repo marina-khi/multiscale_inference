@@ -22,11 +22,10 @@ sigma_eta        <- 1
 kernel_method <- "ll" #Only "nw" (Nadaraya-Watson) and "ll" (local linear) methods are currently supported
 test_problem  <- "constant" #Only "zero" (H_0: m = 0) or "constant" (H_0: m = const) testing problems are currently supported. 
 
-L1 <- 20
+L1 <- 25
 
 PDFname <- "Paper/Plots/finite_sample_properties_"
 
-set.seed(1) #For reproducibility
 
 ################################################
 #Loading data and estimating parameters from it#
@@ -54,8 +53,8 @@ power <- c()
 i <- 1
 for (a_hat in different_a1){
  result      <- simulations_general(N_rep, different_T, different_alpha, different_slopes, a_hat, sigma_eta, order = 1, test_problem, kernel_method, L1, K1 = 1 + 1, K2 = 10)
- matrix_size[, (i * 4 - 2):(i * 4)]  <- result[[1]]
- matrix_power[, (i * 4 - 2):(i * 4)] <- result[[2]] 
+ matrix_size[, (i * (length(different_alpha) + 1) - (length(different_alpha) - 1)):(i * (length(different_alpha) + 1))]  <- result[[1]]
+ matrix_power[, (i * (length(different_alpha) + 1) - (length(different_alpha) - 1)):(i * (length(different_alpha) + 1))] <- result[[2]] 
  i <- i + 1
 }
 
@@ -76,7 +75,7 @@ print.xtable(xtable(matrix_size, digits = c(3), align = paste(replicate((length(
 
 j <- 1
 for (slope in different_slopes){
-  print.xtable(xtable(matrix_power[(3 * j - 2):(3 * j),], digits = c(3), align = paste(replicate((length(different_alpha) + 1) * (length(different_a1) + 1) + 1, "c"), collapse = "")),
+  print.xtable(xtable(matrix_power[(length(different_T) * j - (length(different_T) - 1)):(length(different_T) * j),], digits = c(3), align = paste(replicate((length(different_alpha) + 1) * (length(different_a1) + 1) + 1, "c"), collapse = "")),
                type="latex", file=paste0(PDFname, "power_", slope, ".tex"), include.colnames = FALSE)
   j <- j + 1
 }
