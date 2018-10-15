@@ -1,4 +1,6 @@
-SiZer_simulations_power <- function(a_1, sigma_eta, N_rep, slopes, different_a, different_T){
+SiZer_simulations_power <- function(a_1, sigma_eta, N_rep, slopes, different_alpha, different_T){
+  set.seed(1) #For reproducibility
+  
   kernel_ind <- 2
   sigmahat   <- sqrt(sigma_eta^2/((1 - a_1)^2))  
   
@@ -21,9 +23,17 @@ SiZer_simulations_power <- function(a_1, sigma_eta, N_rep, slopes, different_a, 
         
       
       for (alpha in different_alpha){
-        #SiZer_matrix      <- calculating_SiZer_matrix_1(different_i, different_h, T_size, T_star, alpha, gamma)  
+        #THIS PART IS ONLY FOR FAST CALCULATIONS OF THE MATRIX. IF YOU CHANGE different_i OR different_h, YOU CAN'T USE IT!!!
+        filename_aux = paste0("Shape/distribution/SiZer_matrix_T_", T_size, "_a_1_", a_1, "_sigma_eta_", sigma_eta, "_alpha_", alpha*100, ".RData")
+        if(!file.exists(filename_aux)) {
+          SiZer_matrix <- calculating_SiZer_matrix(different_i, different_h, T_size, T_star, alpha, gamma)
+          save(SiZer_matrix, file = filename_aux)
+        } else {
+          load(filename)
+        }
+        #USE THIS INSTEAD
+        #SiZer_matrix <- calculating_SiZer_matrix(different_i, different_h, T_size, T_star, alpha, gamma)  
         
-        SiZer_matrix      <- calculating_SiZer_matrix(different_i, different_h, T_size, T_star, alpha, gamma)  
         gaussian_quantile <- calculating_gaussian_quantile_ll(T_size, SiZer_matrix, "comparison", kernel_ind, alpha)
 
         power_of_the_test <- replicate(N_rep, {
@@ -42,17 +52,9 @@ SiZer_simulations_power <- function(a_1, sigma_eta, N_rep, slopes, different_a, 
             q_h            = g_t_set[row, 'q_h']
             sd_m_hat_prime = g_t_set[row, 'sd']
             
-            #x_matrix      <- matrix(c(rep(1, T_size), seq(1/T_size - i, 1-i, by = 1/T_size)), nrow=T_size, byrow=FALSE)
-            #w_vector      <- sapply(seq(1/T_size - i, 1-i, by = 1/T_size)/h, FUN = epanechnikov_kernel)/h
-            #XtW           <- t(apply(x_matrix,2,function(x){x*w_vector}))   #t(X) %*% diag(w)   computed faster.  :)
-            #XtWX_inverse  <- tryCatch({solve(XtW %*% x_matrix)},  
-            #                                         error = function(e) {print("Something is wrong, the matrix can not be inverted")})
-            
             XtWX_inverse_XtW   = g_t_set$XtWX_inv_XtW[[row]]
             m_hat_prime <- (XtWX_inverse_XtW %*% y_data_ar_1_with_trend)[2]
             
-            #m_hat_prime <- (XtWX_inverse %*% XtW %*% y_data_ar_1_with_trend)[2]
-
             if (m_hat_prime - q_h * sd_m_hat_prime > 0){
               results_their = c(results_their, 1)
             } else if (m_hat_prime + q_h * sd_m_hat_prime < 0) {
@@ -82,7 +84,9 @@ SiZer_simulations_power <- function(a_1, sigma_eta, N_rep, slopes, different_a, 
   return(power_vect)
 }
 
-SiZer_simulations_size <- function(a_1, sigma_eta, N_rep, different_a, different_T){
+SiZer_simulations_size <- function(a_1, sigma_eta, N_rep, different_alpha, different_T){
+  set.seed(1) #For reproducibility
+  
   kernel_ind <- 2
   sigmahat   <- sqrt(sigma_eta^2/((1 - a_1)^2))  
   
@@ -103,7 +107,18 @@ SiZer_simulations_size <- function(a_1, sigma_eta, N_rep, different_a, different
     T_star   <- gamma[1]/true_var
     
     for (alpha in different_alpha){
-      SiZer_matrix <- calculating_SiZer_matrix(different_i, different_h, T_size, T_star, alpha, gamma)  
+      
+      #THIS PART IS ONLY FOR FAST CALCULATIONS OF THE MATRIX. IF YOU CHANGE different_i OR different_h, YOU CAN'T USE IT!!!
+      filename_aux = paste0("Shape/distribution/SiZer_matrix_T_", T_size, "_a_1_", a_1, "_sigma_eta_", sigma_eta, "_alpha_", alpha*100, ".RData")
+      if(!file.exists(filename_aux)) {
+        SiZer_matrix <- calculating_SiZer_matrix(different_i, different_h, T_size, T_star, alpha, gamma)
+        save(SiZer_matrix, file = filename_aux)
+      } else {
+        load(filename)
+      }
+      #USE THIS INSTEAD
+      #SiZer_matrix <- calculating_SiZer_matrix(different_i, different_h, T_size, T_star, alpha, gamma)  
+      
       gaussian_quantile <- calculating_gaussian_quantile_ll(T_size, SiZer_matrix, "comparison", kernel_ind, alpha)
 
       #Simulating size

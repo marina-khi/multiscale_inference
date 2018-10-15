@@ -7,6 +7,10 @@ source("Shape/SiZer_simulations.R")
 source("Shape/C_code/psihat_statistic.R")
 dyn.load("Shape/C_code/psihat_statistic_ll.dll")
 
+source("Shape/C_code/SiZer_matrix.R")
+dyn.load("Shape/C_code/SiZer_matrix.dll")
+
+
 
 ###############################
 #Defining necessary parameters#
@@ -75,6 +79,7 @@ rownames(matrix_size)  <- different_T
 matrix_power  <- matrix(NA, nrow = length(slopes_for_negative) * length(different_T), ncol = (2 * length(different_alpha) + 1) * length(different_a1), byrow = TRUE)
 rownames(matrix_power)  <- replicate(length(slopes_for_positive), different_T)
 
+ptm <- proc.time()
 
 i <- 0
 for (a_1 in different_a1){
@@ -86,14 +91,16 @@ for (a_1 in different_a1){
   #result_power <- SiZer_simulations_power(a_1, sigma_eta, N_rep, slopes, different_alpha, different_T)
   #tmp_power    <- matrix(result_power, nrow = length(slopes_for_negative) * length(different_T), ncol = 2 * length(different_alpha), byrow = TRUE)
   #matrix_power[, (i * 7 + 2):(i * 7 + 7)]  <- tmp_power
-  ptm <- proc.time()
+
   result_size <- SiZer_simulations_size(a_1, sigma_eta, N_rep, different_alpha, different_T)
-  proc.time() - ptm
+
   
   tmp_size <- matrix(result_size,nrow = length(slopes_for_negative) * length(different_T), ncol = 2 * length(different_alpha), byrow = TRUE)
   #matrix_size[, (i * 7 + 2):(i * 7 + 7)]  <- tmp_size
   i <- i + 1
 }
+
+proc.time() - ptm
 
 
 ###################

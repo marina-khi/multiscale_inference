@@ -429,8 +429,7 @@ calculating_SiZer_matrix_1 <- function(different_i, different_h, T_size, T_star,
   SiZer_matrix$q_h          <- numeric(nrow(SiZer_matrix)) # Setting the values of the gaussian quantile to be zero
   SiZer_matrix$small_ESS    <- numeric(nrow(SiZer_matrix)) # Later we will delete all the row such that ESS* is too small
   SiZer_matrix$lambda       <- lambda(SiZer_matrix[['h']]) # Calculating the lambda(h) in order to speed up the function psistar_statistic
-  SiZer_matrix$XtWX_inv_XtW <- I(vector(mode="list", length=nrow(SiZer_matrix)))
-  
+
   for (row in 1:nrow(SiZer_matrix)){
     
     i = SiZer_matrix[row, 'u']
