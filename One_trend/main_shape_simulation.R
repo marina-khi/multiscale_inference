@@ -22,7 +22,7 @@ sigma_eta        <- 1
 kernel_method <- "ll" #Only "nw" (Nadaraya-Watson) and "ll" (local linear) methods are currently supported
 test_problem  <- "constant" #Only "zero" (H_0: m = 0) or "constant" (H_0: m = const) testing problems are currently supported. 
 
-L1 <- 25
+L1 <- 20
 
 PDFname <- "Paper/Plots/finite_sample_properties_"
 
