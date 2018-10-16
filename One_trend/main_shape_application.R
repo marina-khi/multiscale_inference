@@ -35,10 +35,9 @@ T_tempr      <- length(yearly_tempr)
 #Checking the order of AR(p)#
 #############################
 
-L1 <- 20:35
-L2 <- 20:45
-criterion_matrix <- expand.grid(L1 = L1, L2 = L2)
-criterion_matrix <- subset(criterion_matrix, L2 >= L1)
+q <- 20:35
+r <- 10:15
+criterion_matrix <- expand.grid(q = q, r = r)
 
 criterion_matrix$FPE <- numeric(length = nrow(criterion_matrix))
 criterion_matrix$AIC <- numeric(length = nrow(criterion_matrix))
@@ -55,9 +54,7 @@ for (i in 1:nrow(criterion_matrix)){
   different_orders <- (1:9)
   
   for (order in different_orders){
-    K1 <- order + 1
-    K2 <- 10
-    sigma_eta_hat_method2 <- estimating_variance_new(yearly_tempr, criterion_matrix$L1[[i]], criterion_matrix$L2[[i]], order, K1, K2)[[3]]
+    sigma_eta_hat_method2 <- estimating_variance_new(yearly_tempr, criterion_matrix$q[[i]], criterion_matrix$q[[i]], order, order + 1, criterion_matrix$r[[i]])[[3]]
   
     FPE <- c(FPE, (sigma_eta_hat_method2^2 * (T_tempr + order)) / (T_tempr - order))
     AIC <- c(AIC, T_tempr * log(sigma_eta_hat_method2^2) + 2 * order)
@@ -78,13 +75,8 @@ for (i in 1:nrow(criterion_matrix)){
 
 #Tuning parameters
 p  <- 2
-L1 <- 25
-L2 <- 25
-K1 <- p + 1
-K2 <- 10
-
-different_L1          <- (11:40)
-tuning_parameter_grid <- (5:25)
+q <- 25
+r <- 10
 
 
 ###################################################################
@@ -116,10 +108,5 @@ tuning_parameter_grid <- (5:25)
 #Data analysis#
 ###############
 
-#for (L1 in different_L1){
-#  for (q in tuning_parameter_grid){
-#    L2 <- L1 + q
-    sigma_hat <- estimating_variance_new(yearly_tempr, L1, L2, p, K1, K2)[[1]]
-    data_analysis(alpha, yearly_tempr, test_problem, kernel_method, sigma_hat, L1, L2)
-#  }
-#}
+sigma_hat <- estimating_variance_new(yearly_tempr, q, q, p, p+1, r)[[1]]
+data_analysis(alpha, yearly_tempr, test_problem, kernel_method, sigma_hat, q, q)

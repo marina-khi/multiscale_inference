@@ -194,19 +194,6 @@ creating_matrix_and_texing <- function(vect, vect_T, vect_alpha, filename){
   print.xtable(xtable(matrix_, digits = c(3), align = "cccc"), type="latex",  file=filename, add.to.row = addtorow, include.colnames = FALSE)
 }
 
-#Create a matrix (for size and power table for example) and write them in the tex file for comparison with SiZer
-creating_matrix_and_texing_for_SiZer <- function(vect, vect_T, vect_alpha, filename){
-  matrix_ <- matrix(vect, nrow = length(vect_T), ncol = 2 * length(vect_alpha), byrow = TRUE)
-  rownames(matrix_) <- vect_T
-
-  addtorow <- list()
-  addtorow$pos <- list(0, 0, 0)
-  addtorow$command <- c("& \\multicolumn{6}{c}{nominal size $\\alpha$} \\\\\n",
-                        "$T$ & \\multicolumn{2}{c}{$0.01$} & \\multicolumn{2}{c}{$0.05$} & \\multicolumn{2}{c}{$0.10$} \\\\\n",
-                        " & MT & SiZer & MT & SiZer & MT & SiZer \\\\\n") 
-  
-  print.xtable(xtable(matrix_, digits = c(3), align = "ccccccc"), type="latex",  file=filename, add.to.row = addtorow, include.colnames = FALSE)
-}
 
 #Estimate autocovariance function \gamma_q(l) for a given time series y_data by a sample autocovariance
 sample_autocovariance <- function(l, y_data, q){
@@ -311,15 +298,16 @@ plotting_many_minimal_intervals <- function(trend_height, trend_width, T_size, S
       sd_m_hat_prime   = g_t_set[row, 'sd']
       XtWX_inverse_XtW = g_t_set$XtWX_inv_XtW[[row]]
       
-      m_hat_prime <- (XtWX_inverse_XtW %*% y_data_ar_1_with_trend)[2]
-      
-      if (m_hat_prime - q_h * sd_m_hat_prime > 0){
-        results_their = c(results_their, 1)
-      } else if (m_hat_prime + q_h * sd_m_hat_prime < 0) {
-        results_their = c(results_their, -1)
-      } else {
-        results_their = c(results_their, 0)
-      }
+      if (!is.null(XtWX_inverse_XtW)){
+        m_hat_prime <- (XtWX_inverse_XtW %*% y_data_ar_1_with_trend)[2]
+        if (m_hat_prime - q_h * sd_m_hat_prime > 0){
+          results_their = c(results_their, 1)
+        } else if (m_hat_prime + q_h * sd_m_hat_prime < 0) {
+          results_their = c(results_their, -1)
+        } else {
+          results_their = c(results_their, 0)
+        }
+      } else {results_their = c(results_their, 0)}
       
       if (g_t_set[row, 'values_with_sign'] > g_t_set[row, 'lambda'] + gaussian_quantile){
         results_our = c(results_our, 1)
@@ -352,7 +340,8 @@ plotting_many_minimal_intervals <- function(trend_height, trend_width, T_size, S
     a_t_set <- subset(matrix_our_results, matrix_our_results[,col] != 0, select = c(startpoint, endpoint, col))
     colnames(a_t_set) <- c('startpoint', 'endpoint', 'values')
     p_t_set <- choosing_minimal_intervals(a_t_set)
-    if (!is.null(p_t_set)) {segments(p_t_set$startpoint, col, p_t_set$endpoint, col)}
+    if (nrow(p_t_set) > 0) {segments(pmax(0, p_t_set$startpoint), col-2, pmin(1, p_t_set$endpoint), col-2)}
+    #cat("Number of repetition:", col, "\n")
   }
   
   plot(NA, xlim=c(0,1), ylim = c(-1, N_rep +1), main = "SiZer")
@@ -360,13 +349,14 @@ plotting_many_minimal_intervals <- function(trend_height, trend_width, T_size, S
     a_t_set <- subset(matrix_their_results, matrix_their_results[,col] != 0, select = c(startpoint, endpoint, col))
     colnames(a_t_set) <- c('startpoint', 'endpoint', 'values')
     p_t_set <- choosing_minimal_intervals(a_t_set)
-    if (!is.null(p_t_set)){segments(p_t_set$startpoint, col, p_t_set$endpoint, col)}
+    if (nrow(p_t_set) > 0){segments(pmax(0, p_t_set$startpoint), col-2, pmin(1, p_t_set$endpoint), col-2)}
   }
   dev.off()
 }
 
+
+#Calculates most of the values for SiZer as described in the supplement
 calculating_SiZer_matrix <- function(different_i, different_h, T_size, T_star, alpha, gamma){
-  
   SiZer_matrix              <- expand.grid(u = different_i, h = different_h) #Creating a dataframe with all possible combination of i and h
   SiZer_matrix$values       <- numeric(nrow(SiZer_matrix)) # Setting the values of the statistic to be zero
   SiZer_matrix$sd           <- numeric(nrow(SiZer_matrix)) # Setting the values of standard deviation to be zero
@@ -421,7 +411,6 @@ calculating_SiZer_matrix <- function(different_i, different_h, T_size, T_star, a
 }
 
 calculating_SiZer_matrix_1 <- function(different_i, different_h, T_size, T_star, alpha, gamma){
-  
   SiZer_matrix              <- expand.grid(u = different_i, h = different_h) #Creating a dataframe with all possible combination of i and h
   SiZer_matrix$values       <- numeric(nrow(SiZer_matrix)) # Setting the values of the statistic to be zero
   SiZer_matrix$sd           <- numeric(nrow(SiZer_matrix)) # Setting the values of standard deviation to be zero
@@ -429,7 +418,8 @@ calculating_SiZer_matrix_1 <- function(different_i, different_h, T_size, T_star,
   SiZer_matrix$q_h          <- numeric(nrow(SiZer_matrix)) # Setting the values of the gaussian quantile to be zero
   SiZer_matrix$small_ESS    <- numeric(nrow(SiZer_matrix)) # Later we will delete all the row such that ESS* is too small
   SiZer_matrix$lambda       <- lambda(SiZer_matrix[['h']]) # Calculating the lambda(h) in order to speed up the function psistar_statistic
-
+  SiZer_matrix$XtWX_inv_XtW <- I(vector(mode="list", length=nrow(SiZer_matrix)))
+  
   for (row in 1:nrow(SiZer_matrix)){
     
     i = SiZer_matrix[row, 'u']
@@ -449,6 +439,8 @@ calculating_SiZer_matrix_1 <- function(different_i, different_h, T_size, T_star,
       XtWX_inverse                 <- tryCatch({solve(XtW %*% x_matrix)},  
                                                error = function(e) {print("Something is wrong, the matrix can not be inverted")})
 
+      SiZer_matrix$XtWX_inv_XtW[[row]] <- XtWX_inverse %*% XtW
+      
       XtSigma <- matrix(data = NA, nrow =2, ncol =T_size)
       for (j in 1:T_size){      #t(X) %*% Sigma computed faster in order not to save the whole Sigma matrix (T_size * T_size) in the memory
         XtSigma[1, j] = 0
@@ -466,9 +458,9 @@ calculating_SiZer_matrix_1 <- function(different_i, different_h, T_size, T_star,
     }
   }
   
-  SiZer_matrix           <- SiZer_matrix[SiZer_matrix$small_ESS != 1,]
-  SiZer_matrix$small_ESS <- NULL
-  SiZer_matrix$ESS_star  <- NULL
+  #SiZer_matrix           <- SiZer_matrix[SiZer_matrix$small_ESS != 1,]
+  #SiZer_matrix$small_ESS <- NULL
+  #SiZer_matrix$ESS_star  <- NULL
   
   return(SiZer_matrix)
 }
