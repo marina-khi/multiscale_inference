@@ -1,5 +1,5 @@
 SiZer_simulations_power <- function(a_1, sigma_eta, N_rep, slopes, different_alpha, different_T){
-  set.seed(1) #For reproducibility
+  set.seed(1) #For reproducibility  
   
   kernel_ind <- 2
   sigmahat   <- sqrt(sigma_eta^2/((1 - a_1)^2))  
@@ -22,6 +22,8 @@ SiZer_simulations_power <- function(a_1, sigma_eta, N_rep, slopes, different_alp
       T_star   <- gamma[1]/true_var
 
       for (alpha in different_alpha){
+
+        
         #THIS PART IS ONLY FOR FAST CALCULATIONS OF THE MATRIX. IF YOU CHANGE different_i OR different_h, YOU CAN'T USE IT!!!
         filename_aux = paste0("Shape/distribution/SiZer_matrix_T_", T_size, "_a_1_", a_1, "_sigma_eta_", sigma_eta, "_alpha_", alpha*100, ".RData")
         if(!file.exists(filename_aux)) {
@@ -84,7 +86,7 @@ SiZer_simulations_power <- function(a_1, sigma_eta, N_rep, slopes, different_alp
 }
 
 SiZer_simulations_size <- function(a_1, sigma_eta, N_rep, different_alpha, different_T){
-  set.seed(1) #For reproducibility
+  set.seed(1)
   
   kernel_ind <- 2
   sigmahat   <- sqrt(sigma_eta^2/((1 - a_1)^2))  
@@ -106,7 +108,6 @@ SiZer_simulations_size <- function(a_1, sigma_eta, N_rep, different_alpha, diffe
     T_star   <- gamma[1]/true_var
     
     for (alpha in different_alpha){
-      
       #THIS PART IS ONLY FOR FAST CALCULATIONS OF THE MATRIX. IF YOU CHANGE different_i OR different_h, YOU CAN'T USE IT!!!
       filename_aux = paste0("Shape/distribution/SiZer_matrix_T_", T_size, "_a_1_", a_1, "_sigma_eta_", sigma_eta, "_alpha_", alpha*100, ".RData")
       if(!file.exists(filename_aux)) {

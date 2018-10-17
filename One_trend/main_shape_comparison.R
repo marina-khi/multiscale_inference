@@ -107,8 +107,8 @@ for (a_1 in different_a1){
 ###################
 ##Producing tables#
 ###################
-#print.xtable(xtable(matrix_size, digits = c(3), align = paste(replicate((2 * length(different_alpha) + 1) * length(different_a1) + 1, "c"), collapse = "")),
-#            type="latex", file=paste0(PDFname, "_size_025.tex"), include.colnames = FALSE)
+print.xtable(xtable(matrix_size, digits = c(3), align = paste(replicate((2 * length(different_alpha) + 1) * length(different_a1) + 1, "c"), collapse = "")),
+            type="latex", file=paste0(PDFname, "_size_025.tex"), include.colnames = FALSE)
 
 j <- 1
 for (slope in slopes_for_negative){

@@ -1,33 +1,4 @@
-
-\documentclass[a4paper,12pt]{article}
-\usepackage{amsmath}
-\usepackage{amssymb,amsthm,graphicx}
-\usepackage{enumitem}
-\usepackage{color}
-\usepackage{epsfig}
-\usepackage{graphics}
-\usepackage{pdfpages}
-\usepackage{subcaption}
-\usepackage[font=small]{caption}
-\usepackage[hang,flushmargin]{footmisc} 
-\usepackage{float}
-\usepackage{rotating,tabularx}
-\usepackage{booktabs}
-\usepackage[mathscr]{euscript}
-\usepackage{natbib}
-\usepackage{setspace}
-\usepackage{mathrsfs}
-\usepackage[left=2.7cm,right=2.7cm,bottom=2.7cm,top=2.7cm]{geometry}
-\parindent0pt 
-
-\input{macros}
-
-\usepackage{xr}
-\externaldocument{paper}
-
-\begin{document}
 \section{Robustness checks and implementation details for the simulations in Section \ref{sec-sim}}\label{sec-supp-sim}
-
 
 \subsection*{Robustness checks for Section \ref{subsec-sim-3}}
 
@@ -239,17 +210,16 @@ where $T$ is the sample size.
 	\end{align*}
 	where the variance of the local linear estimator is given by 
 	$$ Var(\widehat{m}^\prime_h(u)|X)= \sqrt{\big((X^T W X)^{-1} (X^T \Sigma X) (X^T W X)^{-1}\big)_{2, 2}}$$ 
-	with $\Sigma$ being the kernel weighted covariance matrix of errors with generic element $$\sigma_{kl} = \gamma(|k - l|) \frac{1}{h} K\Big(\frac{k/T - u}{h}\Big) \frac{1}{h}  K\Big(\frac{l/T - u}{h}\Big),$$
-	$W$ being the diagonal matrix $W = \Big\{diag\big(\frac{1}{h} K\big(\frac{i - t/T}{h}\big)\big)\Big\}$ and 
+	with $\Sigma$ being the kernel weighted covariance matrix of errors with generic element $$\sigma_{kl} = \gamma_\varepsilon(k - l) \frac{1}{h} K\Big(\frac{k/T - u}{h}\Big) \frac{1}{h}  K\Big(\frac{l/T - u}{h}\Big),$$
+	$W$ being the diagonal matrix $W = \Big\{diag\big(\frac{1}{h} K\big(\frac{t/T - u}{h}\big)\big)\Big\}$ and 
 			\begin{equation}
 			X =  \left( \begin{array}{c c}
-   					1 & (1/T - i) \\
-					1 & (2/T - i)  \\
+   					1 & (1/T - u) \\
+					1 & (2/T - u)  \\
 					\vdots & \vdots \\
-					1 & (1 - i)  \\
+					1 & (1 - u)  \\
 				   \end{array} \right). \nonumber
 			\end{equation}
 	\item\label{discarding} Discard all pairs location-bandwidth $(u, h)$ where $ESS^*(u, h) < 5$.
-	\item For each of the generated $S = 1000$ samples calculate local linear estimators $\widehat{m}^\prime_h(u)$  
+	\item For each of the generated $S = 1000$ samples calculate local linear estimates $\widehat{m}^\prime_h(u)$ and the corresponding confidence intervals $[\widehat{m}^\prime_h(u) - q(u,h)sd(\widehat{m}^\prime_h(u)),\widehat{m}^\prime_h(u) + q(u,h)sd(\widehat{m}^\prime_h(u))]$. Then for each $(u, h)$ SiZer checks whether the confidence interval includes the value $0$. Finally, the set $\Pi^{\text{SiZer}}_t$ of points $(u, h)$ for which the confidence interval does not include $0$, is computed.
 \end{enumerate}
-\end{document}
