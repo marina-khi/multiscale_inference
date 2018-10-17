@@ -3,8 +3,6 @@ options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
 source("Shape/functions.R")
 source("Shape/estimating_sigma_new.R")
-source("Shape/C_code/estimating_sigma.R")
-dyn.load("Shape/C_code/estimating_sigma.dll")
 dyn.load("Shape/C_code/psihat_statistic.dll")
 dyn.load("Shape/C_code/psihat_statistic_ll.dll")
 source("Shape/C_code/psihat_statistic.R")
@@ -21,6 +19,8 @@ h     <- c(0.05, 0.1, 0.15, 0.2) #Different bandwidth for plotting. Number must 
 kernel_method <- "ll" #Only "nw" (Nadaraya-Watson) and "ll" (local linear) methods are currently supported
 test_problem  <- "constant" #Only "zero" (H_0: m = 0) or "constant" (H_0: m = const) testing problems are currently supported. 
 
+pdffilename = paste0("Paper/Plots/temperature_data.pdf") #Filename for the graph
+
 
 #########################################################
 #Loading the real data for yearly temperature in England#
@@ -31,9 +31,9 @@ yearly_tempr <- temperature[temperature$YEAR > -99, 'YEAR']
 T_tempr      <- length(yearly_tempr)
 
 
-#############################
-#Checking the order of AR(p)#
-#############################
+#################
+#Order selection#
+#################
 
 q <- 20:35
 r <- 10:15
@@ -74,7 +74,7 @@ for (i in 1:nrow(criterion_matrix)){
 ###########################
 
 #Tuning parameters
-p  <- 2
+p <- 2
 q <- 25
 r <- 10
 
@@ -107,6 +107,5 @@ r <- 10
 ###############
 #Data analysis#
 ###############
-
-sigma_hat <- estimating_variance_new(yearly_tempr, q, q, p, p+1, r)[[1]]
-data_analysis(alpha, yearly_tempr, test_problem, kernel_method, sigma_hat, q, q)
+sigma_hat <- estimating_variance_new(yearly_tempr, q, q, order = p, p+1, r)[[1]]
+data_analysis(alpha, yearly_tempr, test_problem, kernel_method, sigma_hat, pdffilename)

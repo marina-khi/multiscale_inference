@@ -41,7 +41,7 @@ for (q in different_q){
         slope <- slope_fac * sqrt(sigma_eta^2/(1 - a_1^2))
 
         mse_results <- histograms_for_variance_estimators(a_1, sigma_eta, T_size, p, slope, N_rep, pdfname_a_hat, pdfname_lrv,
-                                           q, K1, r, q - 5, q + 5, produce_plots = "selected")
+                                           q, p + 1, r, q - 5, q + 5, produce_plots = "selected")
         
         a_mat2       <- c(a_mat2, mse_results[[1]])
         a_mat_HvK    <- c(a_mat_HvK, mse_results[[2]])
