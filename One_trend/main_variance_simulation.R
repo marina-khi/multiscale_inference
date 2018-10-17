@@ -41,7 +41,7 @@ for (q in different_q){
         slope <- slope_fac * sqrt(sigma_eta^2/(1 - a_1^2))
 
         mse_results <- histograms_for_variance_estimators(a_1, sigma_eta, T_size, p, slope, N_rep, pdfname_a_hat, pdfname_lrv,
-                                           q, p + 1, r, q - 5, q + 5, produce_plots = "selected")
+                                           q, p + 1, r, q - 5, q + 5, produce_plots = "no")
         
         a_mat2       <- c(a_mat2, mse_results[[1]])
         a_mat_HvK    <- c(a_mat_HvK, mse_results[[2]])
@@ -60,34 +60,34 @@ for (q in different_q){
         pdfname = paste("Paper/Plots/Robustness/MSE_a1_zoomed_",name_spec,".pdf",sep="")
         plotting_MSE_graphs(a_mat2, a_mat_HvK, a_mat_oracle, pdfname, margin_ = 3, legend_position = "topright", 
                             ylab_ = "MSE", legend_ = c(expression(widehat(a)), expression(widehat(a)[HvK]), expression(widehat(a)[oracle])),
-                            title_ = bquote("q = " *.(q)* ", r = " *.(r)* ", (" *m[1]* ", " *m[2]* ") = (" *.(q - 5)* "," *.(q + 5)* ")"),
+                            title_ = bquote("q = " *.(q)* ", " *bar(r)* " = " *.(r)* ", (" *m[1]* ", " *m[2]* ") = (" *.(q - 5)* "," *.(q + 5)* ")"),
                             different_a, zoomed = 'yes')
       }
       
       #Graphs for the paper, not the supplement
-      if ((q == 25)&&(r == 10)){ 
-        pdfname = paste("Paper/Plots/MSE_a1_",name_spec,".pdf",sep="")
-        plotting_MSE_graphs(a_mat2, a_mat_HvK, a_mat_oracle, pdfname, margin_ = 1.5, legend_position = "topright", 
-                            ylab_ = "MSE", legend_ = c(expression(widehat(a)), expression(widehat(a)[HvK]), expression(widehat(a)[oracle])),
-                            title_ = "",  different_a, zoomed = 'no')
-        
-        pdfname = paste("Paper/Plots/MSE_lrv_",name_spec,".pdf",sep="")
-        plotting_MSE_graphs(lrv_mat2, lrv_mat_HvK, lrv_mat_oracle, pdfname, margin_ = 1.5, legend_position = "topleft", ylab_ = "log(MSE)",
-                            legend_ = c(expression(widehat(sigma)^2), expression(widehat(sigma)[HvK]^2), expression(widehat(sigma)[oracle]^2)),
-                            title_ = "", different_a, zoomed = 'no')
-      }
+      # if ((q == 25)&&(r == 10)){ 
+      #   pdfname = paste("Paper/Plots/MSE_a1_",name_spec,".pdf",sep="")
+      #   plotting_MSE_graphs(a_mat2, a_mat_HvK, a_mat_oracle, pdfname, margin_ = 1.5, legend_position = "topright", 
+      #                       ylab_ = "MSE", legend_ = c(expression(widehat(a)), expression(widehat(a)[HvK]), expression(widehat(a)[oracle])),
+      #                       title_ = "",  different_a, zoomed = 'no')
+      #   
+      #   pdfname = paste("Paper/Plots/MSE_lrv_",name_spec,".pdf",sep="")
+      #   plotting_MSE_graphs(lrv_mat2, lrv_mat_HvK, lrv_mat_oracle, pdfname, margin_ = 1.5, legend_position = "topleft", ylab_ = "log(MSE)",
+      #                       legend_ = c(expression(widehat(sigma)^2), expression(widehat(sigma)[HvK]^2), expression(widehat(sigma)[oracle]^2)),
+      #                       title_ = "", different_a, zoomed = 'no')
+      # }
       
       #Graphs for robustness check (supplement)
       pdfname = paste("Paper/Plots/Robustness/MSE_a1_",name_spec,".pdf",sep="")
       plotting_MSE_graphs(a_mat2, a_mat_HvK, a_mat_oracle, pdfname, margin_ = 3, legend_position = "topright", 
                           ylab_ = "MSE", legend_ = c(expression(widehat(a)), expression(widehat(a)[HvK]), expression(widehat(a)[oracle])),
-                          title_ = bquote("q = " *.(q)* ", r = " *.(r)* ", (" *m[1]* ", " *m[2]* ") = (" *.(q - 5)* "," *.(q + 5)* ")"),
+                          title_ = bquote("q = " *.(q)* ", " *bar(r)* " = " *.(r)* ", (" *m[1]* ", " *m[2]* ") = (" *.(q - 5)* "," *.(q + 5)* ")"),
                           different_a, zoomed = 'no')
       
       pdfname = paste("Paper/Plots/Robustness/MSE_lrv_",name_spec,".pdf",sep="")
       plotting_MSE_graphs(lrv_mat2, lrv_mat_HvK, lrv_mat_oracle, pdfname, margin_ = 3, legend_position = "topleft", ylab_ = "log(MSE)",
                           legend_ = c(expression(widehat(sigma)^2), expression(widehat(sigma)[HvK]^2), expression(widehat(sigma)[oracle]^2)),
-                          title_ = bquote("q = " *.(q)* ", r = " *.(r)* ", (" *m[1]* ", " *m[2]* ") = (" *.(q - 5)* "," *.(q + 5)* ")"),
+                          title_ = bquote("q = " *.(q)* ", " *bar(r)* " = " *.(r)* ", (" *m[1]* ", " *m[2]* ") = (" *.(q - 5)* "," *.(q + 5)* ")"),
                           different_a, zoomed = 'no')
     }
   }
