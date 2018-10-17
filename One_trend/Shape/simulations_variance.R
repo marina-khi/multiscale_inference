@@ -1,7 +1,7 @@
 histograms_for_variance_estimators <- function(a_1_star, sigma_eta_star, T_size, p, slope, N_rep,
                                                pdfname_a_hat, pdfname_lrv, q, K1, K2, M1, M2, produce_plots){
   lrv_star   <- sigma_eta_star^2/((1 - a_1_star)^2)
-  line_trend <- (1:T_size - 0.5*T_size) * slope/T_size
+  line_trend <- (1:T_size) * slope/T_size
     
   a_hat_hall_vect    <- c() 
   a_hat_method2_vect <- c()

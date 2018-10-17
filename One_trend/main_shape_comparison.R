@@ -16,7 +16,7 @@ sigma_eta       <- 1    #We keep this as a constant parameter
 
 different_alpha     <- c(0.01, 0.05, 0.10) #Level of significance
 different_T         <- c(250, 350,500) #Different lengths of time series for which we compare SiZer and our method
-different_a1        <- c(-0.5, -0.25, 0.25, 0.5) #Different a_1 in AR(1) model
+different_a1        <- c(-0.5, 0.5) #Different a_1 in AR(1) model
 slopes_for_negative <- c(1.0, 1.25, 1.5)
 slopes_for_positive <- c(3.5, 3.75, 4.0)
 
@@ -31,10 +31,10 @@ N_min_intervals   <- 100 #Number of replications for calculating the minimal int
 different_heights <- c(32/15) #Different strength of the signal calculated as height * 15/16
 different_widths  <- c(10) #Different support of the signal calculated by [0.5 - 1/width, 0.5 + 1/width]
 
-T_size <- 500
-alpha  <- 0.05
+T_size <- 500 #Sample size
+alpha  <- 0.05 #Confidence level
 
-different_i <- seq(from = 1/T_size, to = 1, by = 5/T_size)
+different_i <- seq(from = 5/T_size, to = 1, by = 5/T_size) #Starting grid G_T
 different_h <- seq(from = 3/T_size, to = 1/4+3/T_size, by = 5/T_size)
 
 for (a_1 in different_a1){
@@ -63,9 +63,11 @@ for (a_1 in different_a1){
 
   #Gaussian statistic for our own method
   gaussian_quantile <- calculating_gaussian_quantile_ll(T_size, SiZer_matrix, "comparison", kernel_ind = 2, alpha)
-
+  
+  #True sqrt of long-run variance
   sigmahat <- sqrt(sigma_eta^2/((1 - a_1)^2))
 
+  #Actually producing the  graphs with minimal intervals
   for (height in different_heights){
     for (width in different_widths){
       plotting_many_minimal_intervals(height, width, T_size, SiZer_matrix, N_min_intervals, kernel_ind = 2, sigmahat, gaussian_quantile, a_1, sigma_eta)
@@ -83,10 +85,8 @@ rownames(matrix_size)  <- different_T
 matrix_power  <- matrix(NA, nrow = length(slopes_for_negative) * length(different_T), ncol = (2 * length(different_alpha) + 1) * length(different_a1), byrow = TRUE)
 rownames(matrix_power)  <- replicate(length(slopes_for_positive), different_T)
 
-ptm <- proc.time()
-
 i <- 0
-for (a_1 in c(-0.5, 0.5)){
+for (a_1 in different_a1){
   if (a_1 > 0){
     slopes <- slopes_for_positive
   } else {
@@ -97,12 +97,11 @@ for (a_1 in c(-0.5, 0.5)){
   matrix_power[, (i * (2 * length(different_alpha) + 1) + 2):((i + 1) * (2 * length(different_alpha) + 1))]  <- tmp_power
 
   result_size <- SiZer_simulations_size(a_1, sigma_eta, N_rep, different_alpha, different_T)
-  tmp_size <- matrix(result_size,nrow = length(slopes_for_negative) * length(different_T), ncol = 2 * length(different_alpha), byrow = TRUE)
+  tmp_size    <- matrix(result_size,nrow = length(different_T), ncol = 2 * length(different_alpha), byrow = TRUE)
   matrix_size[, (i * (2 * length(different_alpha) + 1) + 2):((i + 1) * (2 * length(different_alpha) + 1))]  <- tmp_size
+  
   i <- i + 1
 }
-
-proc.time() - ptm
 
 
 ###################
@@ -115,51 +114,5 @@ j <- 1
 for (slope in slopes_for_negative){
   print.xtable(xtable(matrix_power[(length(different_T) * j - (length(different_T) - 1)):(length(different_T) * j),], digits = c(3), align = paste(replicate((2 * length(different_alpha) + 1) * length(different_a1) + 1, "c"), collapse = "")),
                type="latex", file=paste0(PDFname, "_power_", slope*100, "_050.tex"), include.colnames = FALSE)
-  j <- j + 1
-}
-
-
-
-#############################################
-#Calculating size and power for both methods#
-#############################################
-matrix_size  <- matrix(NA, nrow = length(different_T), ncol = (2 * length(different_alpha) + 1) * length(different_a1), byrow = TRUE)
-rownames(matrix_size)  <- different_T
-
-matrix_power  <- matrix(NA, nrow = length(slopes_for_negative) * length(different_T), ncol = (2 * length(different_alpha) + 1) * length(different_a1), byrow = TRUE)
-rownames(matrix_power)  <- replicate(length(slopes_for_positive), different_T)
-
-ptm <- proc.time()
-
-i <- 0
-for (a_1 in c(-0.25, 0.25)){
-  if (a_1 > 0){
-    slopes <- slopes_for_positive
-  } else {
-    slopes <- slopes_for_negative
-  }
-  result_power <- SiZer_simulations_power(a_1, sigma_eta, N_rep, slopes, different_alpha, different_T)
-  tmp_power    <- matrix(result_power, nrow = length(slopes_for_negative) * length(different_T), ncol = 2 * length(different_alpha), byrow = TRUE)
-  matrix_power[, (i * (2 * length(different_alpha) + 1) + 2):((i + 1) * (2 * length(different_alpha) + 1))]  <- tmp_power
-  
-  result_size <- SiZer_simulations_size(a_1, sigma_eta, N_rep, different_alpha, different_T)
-  tmp_size <- matrix(result_size,nrow = length(slopes_for_negative) * length(different_T), ncol = 2 * length(different_alpha), byrow = TRUE)
-  matrix_size[, (i * (2 * length(different_alpha) + 1) + 2):((i + 1) * (2 * length(different_alpha) + 1))]  <- tmp_size
-  i <- i + 1
-}
-
-proc.time() - ptm
-
-
-###################
-##Producing tables#
-###################
-print.xtable(xtable(matrix_size, digits = c(3), align = paste(replicate((2 * length(different_alpha) + 1) * length(different_a1) + 1, "c"), collapse = "")),
-             type="latex", file=paste0(PDFname, "_size_025.tex"), include.colnames = FALSE)
-
-j <- 1
-for (slope in slopes_for_negative){
-  print.xtable(xtable(matrix_power[(length(different_T) * j - (length(different_T) - 1)):(length(different_T) * j),], digits = c(3), align = paste(replicate((2 * length(different_alpha) + 1) * length(different_a1) + 1, "c"), collapse = "")),
-               type="latex", file=paste0(PDFname, "_power_", slope*100, "_025.tex"), include.colnames = FALSE)
   j <- j + 1
 }

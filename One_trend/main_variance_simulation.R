@@ -14,33 +14,25 @@ dyn.load("Shape/C_code/estimating_sigma.dll")
 p         <- 1 #Order of AR(p)
 N_rep     <- 1000 #Number of replications for comparison of the estimates
 sigma_eta <- 1 # Sqrt root of the variance of the innovation \eta_t
-T_size    <- 250
+T_size    <- 500 #Sample size considered
 
-different_a          <- c(-0.95,-0.75,-0.5,-0.25,0.25,0.5,0.75,0.95) # AR parameters
+different_a          <- c(-0.95,-0.75,-0.5,-0.25,0.25,0.5,0.75,0.95) # AR parameters a_1
 different_slope_facs <- c(1, 10) # slope of linear trend = slope_fac * sqrt(sigma_eta^2/(1-a_star^2))
-different_q          <- c(25) # tuning parameters for first-step estimator
-different_r          <- c(10) #tuning parameters for second-step estimator
-
-K1 <- p + 1 
-K2 <- 10
-M1 <- 20  # tuning parameters for HvK estimator
-M2 <- 30
+different_q          <- c(20, 25, 30, 35) # tuning parameters for first-step estimator
+different_r          <- c(10, 15) #tuning parameters for second-step estimator
 
 
 #######################################################################
 #Comparing three methods for different slope factors and different a_1#
 #######################################################################
-
-set.seed(1)
-
 for (q in different_q){
   for (r in different_r){
     for (slope_fac in different_slope_facs){
-      name_spec <- paste0("T=",T_size,"_slope=",slope_fac,"_(q,K1,K2,M1,M2)=(",q,",",K1,",",r,",",q - 5,",",q + 5,")")
+      name_spec <- paste0("T=",T_size,"_slope=",slope_fac,"_(q,K1,K2,M1,M2)=(",q,",",p + 1,",",r,",",q - 5,",",q + 5,")")
       
       set.seed(1) #This is for comparing different scenarios on the same data
       
-      a_mat2   <- a_mat_HvK <- a_mat_oracle <- numeric()
+      a_mat2   <- a_mat_HvK   <- a_mat_oracle   <- numeric()
       lrv_mat2 <- lrv_mat_HvK <- lrv_mat_oracle <- numeric()
       
       for (a_1 in different_a){

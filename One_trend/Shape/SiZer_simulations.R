@@ -92,7 +92,7 @@ SiZer_simulations_size <- function(a_1, sigma_eta, N_rep, different_alpha, diffe
   size  <- c()
 
   for (T_size in different_T){
-    different_i <- seq(from = 1/T_size, to = 1, by = 5/T_size)
+    different_i <- seq(from = 5/T_size, to = 1, by = 5/T_size)
     different_h <- seq(from = 3/T_size, to = 1/4+3/T_size, by = 5/T_size)
     gamma = c()
     for (k in 0:(T_size-1)){                                            #\gamma(k) = \sigma_\eta^2 * a_1^|k| / (1 - a_1^2)

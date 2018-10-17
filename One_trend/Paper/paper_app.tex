@@ -91,7 +91,7 @@ To implement our test, we choose $K$ to be an Epanechnikov kernel and define the
 We thus take into account all rescaled time points $u \in [0,1]$ on an equidistant grid with step length $5/T$. For the bandwidth $h = (3 + 5\ell)/T$ and any $u \in [h,1-h]$, the local linear weights $w_{t,T}(u,h)$ are non-zero for exactly $5 + 10 \ell$ observations. Hence, the bandwidths $h$ in $\mathcal{G}_T$ correspond to effective sample sizes of $5, 15, 25, \ldots$ up to approximately $T/4$ data points. As a robustness check, we have re-run the simulations for a number of other grids. As the results are very similar, we do however not report them here. The long-run error variance $\sigma^2$ is estimated by the procedures from Section \ref{subsec-error-var-AR}. Specifically, we first compute the estimator $\widehat{a}$ of the AR parameter, where we set $r = 10$ and we use the pilot estimator $\widehat{a}_q$ with $q = 20$. Based on $\widehat{a}$, we then compute the estimator $\widehat{\sigma}^2$ of the long-run error variance $\sigma^2$. As a further robustness check, we have re-run the simulations for other choices of the parameters $q$ and $r$, which yield very similar results. The dependence of the estimators $\widehat{a}$ and $\widehat{\sigma}^2$ on the tuning parameters $q$ and $r$ is further explored in Section \ref{subsec-sim-3}. To compute the critical values of the multiscale test, we simulate $1000$ values of the statistic $\Phi_T$ defined in Section \ref{subsec-method-test} and compute their empirical $(1-\alpha)$ quantile $q_T(\alpha)$. 
 
 
-Tables \ref{tab:size_test} and \ref{tab:power_test} report the simulation results for the sample sizes $T=250,350,500$ and the significance levels $\alpha = 0.01, 0.05, 0.10$. The sample size $T = 350$ is approximately equal to the time series length $359$ in the real-data example of Section \ref{sec-data}. To produce our simulation results, we generate $S=1000$ samples for each model specification and carry out the multiscale test for each sample. The entries of Tables \ref{tab:size_test} and \ref{tab:power_test} are computed as the number of simulations in which the test rejects divided by the total number of simulations. As can be seen from Table \ref{tab:size_test}, the actual size of the test is fairly close to the nominal target $\alpha$ for all the considered AR specifications and sample sizes. Hence, the test has approximately the correct size. Inspecting Table \ref{tab:power_test}, one can further see that the test has reasonable power properties. For all the considered AR specifications, the power increases quickly (i) as the sample size gets larger and (ii) as we move away from the null by increasing the slope parameter $\beta$. The power is of course quite different across the various AR specifications. In particular, it is much lower for positive than for negative values of $a_1$ in the AR($1$) case. This reflects the fact that it is more difficult to detect a trend when there is strong positive autocorrelation in the data. For the AR($2$) specification of the errors, the power is quite high in all of the considered simulation scenarios. In particular, for the sample size $T=350$ and the slopes $\beta = 2.0$ and $\beta = 2.5$, which yield the model specification that resembles the real-life data in Section \ref{sec-data} the most, the power of the test is above $72\%$ even for the smallest all significance level $\alpha = 0.01$ and comes close to $1$ for $\alpha = 0.05$ and $\alpha = 0.1$.
+Tables \ref{tab:size_test} and \ref{tab:power_test} report the simulation results for the sample sizes $T=250,350,500$ and the significance levels $\alpha = 0.01, 0.05, 0.10$. The sample size $T = 350$ is approximately equal to the time series length $359$ in the real-data example of Section \ref{sec-data}. To produce our simulation results, we generate $S=1000$ samples for each model specification and carry out the multiscale test for each sample. The entries of Tables \ref{tab:size_test} and \ref{tab:power_test} are computed as the number of simulations in which the test rejects divided by the total number of simulations. As can be seen from Table \ref{tab:size_test}, the actual size of the test is fairly close to the nominal target $\alpha$ for all the considered AR specifications and sample sizes. Hence, the test has approximately the correct size. Inspecting Table \ref{tab:power_test}, one can further see that the test has reasonable power properties. For all the considered AR specifications, the power increases quickly (i) as the sample size gets larger and (ii) as we move away from the null by increasing the slope parameter $\beta$. The power is of course quite different across the various AR specifications. In particular, it is much lower for positive than for negative values of $a_1$ in the AR($1$) case. This reflects the fact that it is more difficult to detect a trend when there is strong positive autocorrelation in the data. For the AR($2$) specification of the errors, the power is quite high in all of the considered simulation scenarios. In particular, for the sample size $T=350$ and the slopes $\beta = 2.0$ and $\beta = 2.5$, which yield the model specification that resembles the real-life data in Section \ref{sec-data} the most, the power of the test is above $72\%$ even for the smallest significance level $\alpha = 0.01$ and comes close to $1$ for $\alpha = 0.05$ and $\alpha = 0.1$.
 
 
 \subsection{Comparison with SiZer}\label{subsec-sim-2}
@@ -118,7 +118,9 @@ The SiZer method is implemented as described in Section S.3 of the Supplementary
     $T$    & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
         & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
 \cmidrule[0.4pt]{1-15}
-
+250 &  & 0.014 & 0.360 & 0.051 & 0.812 & 0.125 & 0.953 &  & 0.010 & 0.057 & 0.036 & 0.206 & 0.086 & 0.311\\ 
+  350 &  & 0.013 & 0.435 & 0.062 & 0.863 & 0.105 & 0.974 &  & 0.009 & 0.068 & 0.047 & 0.264 & 0.076 & 0.407\\ 
+  500 &  & 0.010 & 0.496 & 0.052 & 0.917 & 0.126 & 0.993 &  & 0.008 & 0.094 & 0.034 & 0.303 & 0.104 & 0.493\\ 
 \bottomrule
 \end{tabularx}
 \vspace{0.5cm}
@@ -135,7 +137,9 @@ The SiZer method is implemented as described in Section S.3 of the Supplementary
        & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
         & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
 \cmidrule[0.4pt]{1-15}
-
+250 &  & 0.360 & 0.954 & 0.662 & 0.999 & 0.835 & 1.000 &  & 0.556 & 0.793 & 0.825 & 0.963 & 0.949 & 0.995\\ 
+  350 &  & 0.639 & 0.992 & 0.861 & 1.000 & 0.928 & 1.000 &  & 0.845 & 0.954 & 0.969 & 0.997 & 0.985 & 1.000\\ 
+  500 &  & 0.877 & 1.000 & 0.976 & 1.000 & 0.995 & 1.000 &  & 0.980 & 0.999 & 1.000 & 1.000 & 1.000 & 1.000\\ 
 \bottomrule
 \end{tabularx}
 \vspace{0.25cm}
@@ -148,7 +152,9 @@ The SiZer method is implemented as described in Section S.3 of the Supplementary
       & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
         & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
 \cmidrule[0.4pt]{1-15}
-
+250 &  & 0.670 & 0.995 & 0.912 & 1.000 & 0.985 & 1.000 &  & 0.654 & 0.874 & 0.904 & 0.990 & 0.983 & 0.999\\ 
+  350 &  & 0.919 & 1.000 & 0.991 & 1.000 & 0.999 & 1.000 &  & 0.914 & 0.982 & 0.988 & 0.999 & 0.998 & 1.000\\ 
+  500 &  & 0.996 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 &  & 0.995 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000\\ 
 \bottomrule
 \end{tabularx}
 \vspace{0.25cm}
@@ -162,15 +168,83 @@ The SiZer method is implemented as described in Section S.3 of the Supplementary
        & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
         & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
 \cmidrule[0.4pt]{1-15}
+250 &  & 0.914 & 1.000 & 0.991 & 1.000 & 0.999 & 1.000 &  & 0.778 & 0.924 & 0.940 & 0.996 & 0.996 & 1.000\\ 
+  350 &  & 0.996 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 &  & 0.967 & 0.994 & 0.999 & 1.000 & 1.000 & 1.000\\ 
+  500 &  & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 &  & 0.999 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000\\ 
+\bottomrule
+\end{tabularx}
+}
+\end{table}
+
+\begin{table}[t!]
+\centering
+\footnotesize{
+\caption{Size of our multiscale test (MT) and SiZer for different model specifications.}\label{tab:size_comparison}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{C{2} C{0.0001} ZZZZZZ C{0.0001} ZZZZZZ} 
+\toprule
+        & & \multicolumn{6}{c}{$a_1 = -0.25$} & & \multicolumn{6}{c}{$a_1 = 0.25$} \\ 
+\cmidrule[0.4pt]{3-8} \cmidrule[0.4pt]{10-15}
+        & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} 
+    $T$    & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
+        & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
+\cmidrule[0.4pt]{1-15}
+
+\bottomrule
+\end{tabularx}
+\vspace{0.5cm}
+
+\caption{Power of our multiscale test (MT) and SiZer for different model specifications. The three panels (a)--(c) corresponds to different slope parameters $\beta$ of the linear tend $m$.}\label{tab:power_comparison}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{C{2} C{0.0001} ZZZZZZ C{0.0001} ZZZZZZ} 
+\multicolumn{15}{c}{(a) $\beta = 1.0$ for negative $a_1$ and $\beta = 3.5$ for positive $a_1$} \\[0.2cm]
+\toprule
+        & & \multicolumn{6}{c}{$a_1 = -0.25$} & & \multicolumn{6}{c}{$a_1 = 0.25$} \\ 
+\cmidrule[0.4pt]{3-8} \cmidrule[0.4pt]{10-15}
+   $T$      & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} 
+       & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
+        & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
+\cmidrule[0.4pt]{1-15}
+
+\bottomrule
+\end{tabularx}
+\vspace{0.25cm}
+
+\begin{tabularx}{\textwidth}{C{2} C{0.0001} ZZZZZZ C{0.0001} ZZZZZZ} 
+\multicolumn{15}{c}{(b) $\beta = 1.25$ for negative $a_1$ and $\beta = 3.75$ for positive $a_1$} \\[0.2cm]
+\toprule        & & \multicolumn{6}{c}{$a_1 = -0.25$} & & \multicolumn{6}{c}{$a_1 = 0.25$} \\ 
+\cmidrule[0.4pt]{3-8} \cmidrule[0.4pt]{10-15}
+     $T$     & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} 
+      & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
+        & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
+\cmidrule[0.4pt]{1-15}
+
+\bottomrule
+\end{tabularx}
+\vspace{0.25cm}
+
+\begin{tabularx}{\textwidth}{C{2} C{0.0001} ZZZZZZ C{0.0001} ZZZZZZ} 
+\multicolumn{15}{c}{(c) $\beta = 1.5$ for negative $a_1$ and $\beta = 4.0$ for positive $a_1$} \\[0.2cm]
+\toprule
+        & & \multicolumn{6}{c}{$a_1 = -0.25$} & & \multicolumn{6}{c}{$a_1 = 0.25$} \\ 
+\cmidrule[0.4pt]{3-8} \cmidrule[0.4pt]{10-15}
+     $T$    & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} 
+       & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
+        & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
+\cmidrule[0.4pt]{1-15}
 
 \bottomrule
 \end{tabularx}
 }
 \end{table}
 
-
-In the first part of the comparison study, we analyse the size and power of the two methods. To do so, we treat SiZer as a rigorous multiple testing method which rejects the null hypothesis $H_0$ if the set $\Pi_T^{\text{SiZer}}$ is non-empty, that is, if the value $0$ is not included in the confidence interval for at least one point $(u,h) \in \mathcal{G}_T^*$. We simulate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$ with different AR($1$) error processes and different trends $m$. In particular, we let $\{\varepsilon_t\}$ be an AR($1$) process of the form $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$ with $a_1 \in \{ -0.5,0.5\}$ and i.i.d.\ standard normal innovations $\eta_t$. To simulate data under the null, we set $m = 0$ as in the previous section. To generate data under the alternative, we consider the linear trends $m(u) = \beta (u - 0.5)$ with different slopes $\beta$. As it is more difficult to detect a trend $m$ in the data when the error terms are positively autocorrelated, we choose the slopes $\beta$ larger in the AR($1$) case with $a_1 = 0.5$ than in the case with $a_1 = -0.5$. In particular, we let $\beta \in \{ 1.0,1.25,1.5 \}$ when $a_1 = -0.5$ and $\beta \in \{ 3.5, 3.75, 4.0 \}$ when $a_1 = 0.5$. Further model specifications with nonlinear trends are considered in the second part of the comparison study. To produce our simulation results, we generate $S=1000$ samples for each model specification and carry out the two methods for each sample. 
+\textcolor{red}{In the first part of the comparison study, we analyse the size and power of the two methods. To do so, we treat SiZer as a rigorous multiple testing method which rejects the null hypothesis $H_0$ if the set $\Pi_T^{\text{SiZer}}$ is non-empty, that is, if the value $0$ is not included in the confidence interval for at least one point $(u,h) \in \mathcal{G}_T^*$. We simulate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$ with different AR($1$) error processes and different trends $m$. In particular, we let $\{\varepsilon_t\}$ be an AR($1$) process of the form $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$ with $a_1 \in \{ -0.5,0.5\}$ and i.i.d.\ standard normal innovations $\eta_t$. To simulate data under the null, we set $m = 0$ as in the previous section. To generate data under the alternative, we consider the linear trends $m(u) = \beta (u - 0.5)$ with different slopes $\beta$. As it is more difficult to detect a trend $m$ in the data when the error terms are positively autocorrelated, we choose the slopes $\beta$ larger in the AR($1$) case with $a_1 = 0.5$ than in the case with $a_1 = -0.5$. In particular, we let $\beta \in \{ 1.0,1.25,1.5 \}$ when $a_1 = -0.5$ and $\beta \in \{ 3.5, 3.75, 4.0 \}$ when $a_1 = 0.5$. Further model specifications with nonlinear trends are considered in the second part of the comparison study. To produce our simulation results, we generate $S=1000$ samples for each model specification and carry out the two methods for each sample.} 
 %Similar as in the previous section, we let $\beta = s_\beta \cdot \sigma$ with $s_\beta \in \{1.7,2.0,2.3\}$ and $\sigma^2$ being the long-run error variance. Note that the parameter $s_\beta$ is not completely analogous to that in the previous section, where $s_\beta$ determines the slope of a broken line rather than a linear function. The values of $s_\beta$ in this and the previous section thus do not indicate the same signal-to-noise ratios. Further model specifications with nonlinear trends are considered in the second part of the comparison study. To produce our simulation results, we generate $S=1000$ samples for each model specification and carry out the two methods for each sample. 
+
+\textcolor{red}{In the first part of the comparison study, we analyse the size and power of the two methods. To do so, we treat SiZer as a rigorous multiple testing method which rejects the null hypothesis $H_0$ if the set $\Pi_T^{\text{SiZer}}$ is non-empty, that is, if the value $0$ is not included in the confidence interval for at least one point $(u,h) \in \mathcal{G}_T^*$. We simulate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$ with different AR($1$) error processes and different trends $m$. In particular, we let $\{\varepsilon_t\}$ be an AR($1$) process of the form $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$ with $a_1 \in \{ -0.25,0.25\}$ and i.i.d.\ standard normal innovations $\eta_t$. To simulate data under the null, we set $m = 0$ as in the previous section. To generate data under the alternative, we consider the linear trends $m(u) = \beta (u - 0.5)$ with different slopes $\beta$. As it is more difficult to detect a trend $m$ in the data when the error terms are positively autocorrelated, we choose the slopes $\beta$ larger in the AR($1$) case with $a_1 = 0.25$ than in the case with $a_1 = -0.25$. In particular, we let $\beta \in \{ ?? \}$ when $a_1 = -0.25$ and $\beta \in \{ ?? \}$ when $a_1 = 0.25$. Further model specifications with nonlinear trends are considered in the second part of the comparison study. To produce our simulation results, we generate $S=1000$ samples for each model specification and carry out the two methods for each sample.}
+
 
 
 The simulation results are reported in Tables \ref{tab:size_comparison} and \ref{tab:power_comparison}. Both for our multiscale test and SiZer, the entries in the tables are computed as the number of simulations in which the respective method rejects the null hypothesis $H_0$ divided by the total number of simulations. As can be seen from Table \ref{tab:size_comparison}, our test has approximately correct size in all of the considered settings, whereas SiZer is very liberal and rejects the null way too often. Examining Table \ref{tab:power_comparison}, one can further see that our procedure has reasonable power against the considered alternatives. The power of the SiZer method is somewhat higher, which is a trivial consequence of it being extremely liberal and should thus be treated with caution. All in all, the simulations suggest that SiZer can hardly be regarded as a rigorous statistical test of the null hypothesis $H_0$ that $m$ is constant on all intervals $[u-h,u+h]$ with $(u,h) \in \mathcal{G}_T^*$. This is not very surprising as SiZer is not designed to be such a test but to produce informative SiZer maps. In what follows, we thus attempt to compare the two methods in a different way which goes beyond mere size and power comparisons. 
@@ -194,11 +268,26 @@ Both our method and SiZer can be regarded as statistical tools to identify time 
 \label{fig:comparison_SiZer}
 \end{figure}
 
+\begin{figure}[t]
+\begin{subfigure}{.5\textwidth}
+\centering
+\includegraphics[width=.9\linewidth]{Plots/min_int_with_T_500_a1_-25.pdf}
+\caption{$a_1 = -0.25$}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+\centering
+\includegraphics[width=.9\linewidth]{Plots/min_int_with_T_500_a1_25.pdf}
+\caption{$a_1 = 0.25$}
+\end{subfigure}
+\caption{Comparison of the regions $\mathcal{R}_T^\pm$ and $\mathcal{R}_T^{\text{SiZer}}$. Subfigure (a) corresponds to the model setting with the AR parameter $a_1 = -0.25$, subfigure (b) to the setting with $a_1 = 0.25$. The upper panel of each subfigure shows a simulated time series path together with the underlying trend function $m$. The middle panel depicts the regions $\mathcal{R}_T^\pm$ produced by our multiscale test for $100$ simulation runs. The lower panel presents the regions $\mathcal{R}_T^{\text{SiZer}}$ produced by SiZer.}  
+\label{fig:comparison_SiZer}
+\end{figure}
 
-We consider the same simulation setup as in the first part of the study, only the trend function $m$ is different. We let $m$ be defined as $m(u) = 2 \cdot \ind(u \in [0.4,0.6]) \cdot (1 - 100 \{u-0.5\}^2)^2$, which implies that $\mathcal{R} = [0.4,0.5) \cup (0.5,0.6]$. The function $m$ is plotted in the two upper panels of Figure \ref{fig:comparison_SiZer}. We set the significance level to $\alpha= 0.05$ and the sample size to $T=500$. For each AR parameter $a_1 \in \{ -0.5,0.5 \}$, we simulate $S=100$ samples and compute $\mathcal{R}_T^\pm$ and $\mathcal{R}_T^{\text{SiZer}}$ for each sample. The simulation results are depicted in Figure \ref{fig:comparison_SiZer}, the two subfigures (a) and (b) corresponding to different AR parameters. The upper panel of each subfigure displays the time series path of a representative simulation together with the trend function $m$. The middle panel shows the regions $\mathcal{R}_T^\pm$ produced by our multiscale approach for the $100$ simulation runs: On the $y$-axis, the simulation runs $i$ are enumerated for $1 \le i \le 100$, and the black line at $y$-level $i$ represents $\mathcal{R}_T^\pm$ for the $i$-th simulation. Finally, the lower panel of each subfigure depicts the regions $\mathcal{R}_T^{\text{SiZer}}$ in an analogous way. 
+
+We consider the same simulation setup as in the first part of the study, only the trend function $m$ is different. We let $m$ be defined as $m(u) = 2 \cdot \ind(u \in [0.4,0.6]) \cdot (1 - 100 \{u-0.5\}^2)^2$, which implies that $\mathcal{R} = [0.4,0.5) \cup (0.5,0.6]$. The function $m$ is plotted in the two upper panels of Figure \ref{fig:comparison_SiZer}. We set the significance level to $\alpha= 0.05$ and the sample size to $T=500$. For each AR parameter \textcolor{red}{$a_1 \in \{ -0.5,0.5 \}$ $a_1 \in \{ -0.25,0.25 \}$}, we simulate $S=100$ samples and compute $\mathcal{R}_T^\pm$ and $\mathcal{R}_T^{\text{SiZer}}$ for each sample. The simulation results are depicted in Figure \ref{fig:comparison_SiZer}, the two subfigures (a) and (b) corresponding to different AR parameters. The upper panel of each subfigure displays the time series path of a representative simulation together with the trend function $m$. The middle panel shows the regions $\mathcal{R}_T^\pm$ produced by our multiscale approach for the $100$ simulation runs: On the $y$-axis, the simulation runs $i$ are enumerated for $1 \le i \le 100$, and the black line at $y$-level $i$ represents $\mathcal{R}_T^\pm$ for the $i$-th simulation. Finally, the lower panel of each subfigure depicts the regions $\mathcal{R}_T^{\text{SiZer}}$ in an analogous way. 
 
 
-Inspecting Figure \ref{fig:comparison_SiZer}, our multiscale method can be seen to approximate the region $\mathcal{R}$ fairly well in both simulation scenarios under consideration. Especially for the negative AR parameter $a_1 = -0.5$, it performs substantially better than SiZer: For most simulations, $\mathcal{R}_T^\pm$ gives a good approximation to the region $\mathcal{R}$, whereas SiZer identifies regions of decrease/increase all over the unit interval $[0, 1]$. SiZer thus frequently mistakes fluctuations in the time series which are due to the dependence in the error terms for increases/decreases in $m$. For the positive AR parameter $a_1 = 0.5$, the difference in performance is not so pronounced. Nevertheless, also here, SiZer appears to spuriously detect increases/decreases in $m$ outside $\mathcal{R}$ more often than our method. 
+Inspecting Figure \ref{fig:comparison_SiZer}, our multiscale method can be seen to approximate the region $\mathcal{R}$ fairly well in both simulation scenarios under consideration. Especially for the negative AR parameter \textcolor{red}{$a_1 = -0.5$ $a_1 = -0.25$}, it performs substantially better than SiZer: For most simulations, $\mathcal{R}_T^\pm$ gives a good approximation to the region $\mathcal{R}$, whereas SiZer identifies regions of decrease/increase all over the unit interval $[0, 1]$. SiZer thus frequently mistakes fluctuations in the time series which are due to the dependence in the error terms for increases/decreases in $m$. For the positive AR parameter \textcolor{red}{$a_1 = 0.5$ $a_1 = 0.25$}, the difference in performance is not so pronounced. Nevertheless, also here, SiZer appears to spuriously detect increases/decreases in $m$ outside $\mathcal{R}$ more often than our method. 
 
 
 To sum up, our multiscale test exhibits good size and power properties in the simulations, and the minimal intervals produced by it identify the time regions where $m$ increases/decreases in a quite reliable way. SiZer performs considerably worse in these respects. Nevertheless, it may still produce informative SiZer plots. % (which is what it is designed for anyway). 
@@ -208,7 +297,7 @@ All in all, we would like to regard the two methods as complementary rather than
 \subsection{Small sample properties of the long-run variance estimator}\label{subsec-sim-3}
 
 
-In the final part of the simulation study, we examine the estimators of the AR parameters and the long-run error variance from Section \ref{subsec-error-var-AR}. We simulate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$, where $\{ \varepsilon_t\}$ is an AR($1$) process of the form $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$. We consider the AR parameters $a_1 \in \{-0.95,-0.75,-0.5,-0.25,0.25,0.5,0.75,0.95\}$, the sample sizze $T \in \{250, 500\}$ and let $\eta_t$ be i.i.d.\ standard normal innovation terms. For simplicity, $m$ is chosen to be a linear function of the form $m(u) = \beta u$ with the slope parameter $\beta$. For each value of $a_1$, we consider two different slopes $\beta$, one corresponding to a moderate and one to a pronounced trend $m$. 
+In the final part of the simulation study, we examine the estimators of the AR parameters and the long-run error variance from Section \ref{subsec-error-var-AR}. We simulate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$, where $\{ \varepsilon_t\}$ is an AR($1$) process of the form $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$. We consider the AR parameters $a_1 \in \{-0.95,-0.75,-0.5,-0.25,0.25,0.5,0.75,0.95\}$ and let $\eta_t$ be i.i.d.\ standard normal innovation terms. We report our findings for the sample size $T=500$ due to the fact that the results for other sample sizes are very similar. For simplicity, $m$ is chosen to be a linear function of the form $m(u) = \beta u$ with the slope parameter $\beta$. For each value of $a_1$, we consider two different slopes $\beta$, one corresponding to a moderate and one to a pronounced trend $m$. 
 %In particular, we let $\beta = s_\beta \cdot \sigma$ with $s_\beta = 1$ (moderate trend) and $s_\beta= 10$ (pronounced trend), where $\sigma^2$ is the long-run error variance.
 In particular, we let $\beta = s_\beta \sqrt{\var(\varepsilon_t)}$ with $s_\beta \in \{1,10\}$. When $s_\beta = 1$, the slope $\beta$ is equal to the standard deviation $\sqrt{\var(\varepsilon_t)}$ of the error process, which yields a moderate trend $m$. When $s_\beta = 10$, in contrast, the slope $\beta$ is $10$ times as large as $\sqrt{\var(\varepsilon_t)}$, which results in a quite pronounced trend $m$. 
 
@@ -224,7 +313,7 @@ In particular, we let $\beta = s_\beta \sqrt{\var(\varepsilon_t)}$ with $s_\beta
 
 \begin{figure}[t!]
 \begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{Plots/MSE_lrv_T=250_slope=10_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/MSE_a1_T=500_slope=10_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
 \end{subfigure}\hspace{0.25cm}
 \begin{subfigure}[b]{0.475\textwidth}
 \includegraphics[width=\textwidth]{Plots/MSE_lrv_T=500_slope=10_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
@@ -260,11 +349,11 @@ In particular, we let $\beta = s_\beta \sqrt{\var(\varepsilon_t)}$ with $s_\beta
 For each model specification, we generate $S=1000$ data samples and compute the following quantities for each simulated sample: 
 \begin{enumerate}[label=(\roman*),leftmargin=0.9cm]
 \item the pilot estimator $\widetilde{a}_q$ from \eqref{est-AR-FS} with the tuning parameter $q$.
-\item the estimator $\widehat{a}$ from \eqref{est-AR} with the tuning parameter $\overline{r} = r$ as well as the long-run variance estimator $\widehat{\sigma}^2$ from \eqref{est-lrv}. 
+\item the estimator $\widehat{a}$ from \eqref{est-AR} with the tuning parameter $r$ as well as the long-run variance estimator $\widehat{\sigma}^2$ from \eqref{est-lrv}. 
 \item the estimators of $a$ and $\sigma^2$ from \cite{Hall2003}, which are denoted by $\widehat{a}_{\text{HvK}}$ and $\widehat{\sigma}^2_{\text{HvK}}$ for ease of reference. The estimator $\widehat{a}_{\text{HvK}}$ is computed as described in Section 2.2 of \cite{Hall2003} and $\widehat{\sigma}^2_{\text{HvK}}$ as defined at the bottom of p.447 in Section 2.3. The estimator $\widehat{a}_{\text{HvK}}$ (as well as $\widehat{\sigma}^2_{\text{HvK}}$) depends on two tuning parameters which we denote by $m_1$ and $m_2$ as in \cite{Hall2003}. 
 \item oracle estimators $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2_{\text{oracle}}$ of $a_1$ and $\sigma^2$, which are constructed under the assumption that the error process $\{\varepsilon_t\}$ is observed. For each simulation run, we compute $\widehat{a}_{\text{oracle}}$ as the maximum likelihood estimator of $a_1$ from the time series of simulated error terms $\varepsilon_1,\ldots,\varepsilon_T$. We then calculate the residuals $r_t = \varepsilon_t - \widehat{a}_{\text{oracle}} \, \varepsilon_{t-1}$ and estimate the innovation variance $\nu^2 = \ex[\eta_t^2]$ by $\widehat{\nu}_{\text{oracle}}^2 = (T-1)^{-1} \sum_{t=2}^T r_t^2$. Finally, we set $\widehat{\sigma}^2_{\text{oracle}} = \widehat{\nu}_{\text{oracle}}^2 / (1 - \widehat{a}_{\text{oracle}})^2$. 
 \end{enumerate}
-Throughout the section, we set $q = 25$, $\underline{r} = p + 1$, where $p = 1$ is the order, $\overline{r} = r = 10$ and $(m_1,m_2) = (20,30)$. We in particular choose $q$ to be in the middle of $m_1$ and $m_2$ to make the tuning parameters of the estimators $\widetilde{a}_q$ and $\widehat{a}_{\text{HvK}}$ more or less comparable. In order to assess how sensitive our estimators are to the choice of $q$ and $r$, we carry out a number of robustness checks, considering a range of different values for $q$ and $r$. In addition, we vary the tuning parameters $m_1$ and $m_2$ of the estimators from \cite{Hall2003} in order to make sure that the results of our comparison study are not driven by the particular choice of any of the involved tuning parameters. The results of our robustness checks are reported in Section S.3 of the Supplementary Material. They show that the results of our comparison study are robust to %persist across 
+Throughout the section, we set $q = 25$, $r = 10$ and $(m_1,m_2) = (20,30)$. We in particular choose $q$ to be in the middle of $m_1$ and $m_2$ to make the tuning parameters of the estimators $\widetilde{a}_q$ and $\widehat{a}_{\text{HvK}}$ more or less comparable. In order to assess how sensitive our estimators are to the choice of $q$ and $r$, we carry out a number of robustness checks, considering a range of different values for $q$ and $r$. In addition, we vary the tuning parameters $m_1$ and $m_2$ of the estimators from \cite{Hall2003} in order to make sure that the results of our comparison study are not driven by the particular choice of any of the involved tuning parameters. The results of our robustness checks are reported in Section S.3 of the Supplementary Material. They show that the results of our comparison study are robust to %persist across 
 different choices of the parameters $q$, $r$ and $(m_1,m_2)$. Moreover, they indicate that our estimators are rather insensitive to the choice of tuning parameters. 
 
 
@@ -288,7 +377,7 @@ Whereas the methods of \cite{Hall2003} perform much worse than ours for negative
 \section{Application}\label{sec-data}
 
 
-The analysis of time trends in long temperature records is an important task in climatology. Information on the shape of the trend is needed in order to better understand long-term climate variability. The Central England temperature record is the longest instrumental temperature time series in the world. It is a valuable asset for analysing climate variability over the last few hundred years. The data is publicly available on the webpage of the UK Met Office. A detailed description of the data can be found in \cite{Parker1992}. For our analysis, we use the dataset of yearly mean temperatures which consists of $T=359$ observations covering the years from $1659$ to $2017$. We assume that the data follow the nonparametric trend model $Y_{t,T} = m(t/T) + \varepsilon_t$, where $m$ is the unknown time trend of interest. The error process $\{ \varepsilon_t \}$ is supposed to have the AR($p$) structure $\varepsilon_t = \sum_{j=1}^p a_j \varepsilon_{t-j} + \eta_t$, where $\eta_t$ are i.i.d.\ innovations with mean $0$ and variance $\nu^2$. As pointed out in \cite{Mudelsee2010} among others, this is the most widely used error model for discrete climate time series. To select the AR order $p$, we proceed as follows: We estimate the AR parameters and the corresponding variance of the innovation terms for different AR orders by our methods from Section \ref{subsec-error-var-AR} and choose $p$ to be the minimizer of the final prediction error (FPE) criterion. This yields the AR order $p = 2$. We then estimate the parameters $\boldsymbol{a} = (a_1,a_2)$ and the long error run-variance $\sigma^2$ by the estimators $\widehat{\boldsymbol{a}} = (\widehat{a}_1,\widehat{a}_2)$ and $\widehat{\sigma}^2$, where we set $q = 20$ and $(\underline{r},\overline{r}) = (5,10)$ as in the simulation study of Section \ref{subsec-sim-1}. We thus obtain the estimates $\widehat{a}_1 \approx ??$, $\widehat{a}_2 \approx ??$ and $\widehat{\sigma}^2 \approx ??$.
+The analysis of time trends in long temperature records is an important task in climatology. Information on the shape of the trend is needed in order to better understand long-term climate variability. The Central England temperature record is the longest instrumental temperature time series in the world. It is a valuable asset for analysing climate variability over the last few hundred years. The data is publicly available on the webpage of the UK Met Office. A detailed description of the data can be found in \cite{Parker1992}. For our analysis, we use the dataset of yearly mean temperatures which consists of $T=359$ observations covering the years from $1659$ to $2017$. We assume that the data follow the nonparametric trend model $Y_{t,T} = m(t/T) + \varepsilon_t$, where $m$ is the unknown time trend of interest. The error process $\{ \varepsilon_t \}$ is supposed to have the AR($p$) structure $\varepsilon_t = \sum_{j=1}^p a_j \varepsilon_{t-j} + \eta_t$, where $\eta_t$ are i.i.d.\ innovations with mean $0$ and variance $\nu^2$. As pointed out in \cite{Mudelsee2010} among others, this is the most widely used error model for discrete climate time series. To select the AR order $p$, we proceed as follows: We estimate the AR parameters and the corresponding variance of the innovation terms for different AR orders by our methods from Section \ref{subsec-error-var-AR} and choose $p$ to be the minimizer of the final prediction error (FPE) criterion. This yields the AR order $p = 2$. We then estimate the parameters $\boldsymbol{a} = (a_1,a_2)$ and the long error run-variance $\sigma^2$ by the estimators $\widehat{\boldsymbol{a}} = (\widehat{a}_1,\widehat{a}_2)$ and $\widehat{\sigma}^2$, where we set $q = 25$ and $r =10$ as in the simulation study of Section \ref{subsec-sim-1}. We thus obtain the estimates $\widehat{a}_1 = 0.167$, $\widehat{a}_2 = 0.184$ and $\widehat{\sigma}^2 = $. We repeated order selection and parameter estimation for other criterions (AIC, SIC, HQ) and other specifications for $q$ and $r$, and the findings were very similar to the ones reported here.
 
 
 \begin{figure}[t]
