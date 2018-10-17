@@ -15,28 +15,16 @@ source("Shape/simulations_based_on_data.R")
 N_rep            <- 1000 #Number of replications for calculating the size and the power of the test
 different_T      <- c(250, 350, 500) #Different lengths of time series for which we calculate size and power
 different_alpha  <- c(0.01, 0.05, 0.1) #Different alpha for which we calculate size and power
-different_a1     <- c(-0.5, -0.25, 0.25, 0.5)
-different_slopes <- c(1.5, 2.0, 2.5)
-sigma_eta        <- 1
+different_a1     <- c(-0.5, -0.25, 0.25, 0.5) #Different AR(1) parameters
+different_slopes <- c(1.5, 2.0, 2.5) #Slopes for power simulations
+sigma_eta        <- 1 #Sqrt(variance) for the innovation \eta_t
 
 kernel_method <- "ll" #Only "nw" (Nadaraya-Watson) and "ll" (local linear) methods are currently supported
 test_problem  <- "constant" #Only "zero" (H_0: m = 0) or "constant" (H_0: m = const) testing problems are currently supported. 
 
-L1 <- 20
+q <- 25 #Parameter q for the pilot estimator \widehat{a}_q
 
-PDFname <- "Paper/Plots/finite_sample_properties_"
-
-
-################################################
-#Loading data and estimating parameters from it#
-################################################
-temperature             <- read.table("Shape/data/cetml1659on.dat", header = TRUE, skip = 6)
-yearly_tempr            <- temperature[temperature$YEAR > -99, 'YEAR']
-
-results            <- estimating_variance_new(yearly_tempr, L1, L1, order = 2, K1 = 2 + 1, K2 = 10)
-sigma_hat_data     <- results[[1]]
-a_hat_data         <- results[[2]]
-sigma_eta_hat_data <- results[[3]]
+PDFname <- "Paper/Plots/finite_sample_properties_" #Where to store the tables
 
 
 ######################################################
@@ -52,17 +40,31 @@ power <- c()
 
 i <- 1
 for (a_hat in different_a1){
- result      <- simulations_general(N_rep, different_T, different_alpha, different_slopes, a_hat, sigma_eta, order = 1, test_problem, kernel_method, L1, K1 = 1 + 1, K2 = 10)
+ result <- simulations_general(N_rep, different_T, different_alpha, different_slopes, a_hat, sigma_eta, order = 1, test_problem, kernel_method, q, K1 = 1 + 1, K2 = 10)
+ 
  matrix_size[, (i * (length(different_alpha) + 1) - (length(different_alpha) - 1)):(i * (length(different_alpha) + 1))]  <- result[[1]]
  matrix_power[, (i * (length(different_alpha) + 1) - (length(different_alpha) - 1)):(i * (length(different_alpha) + 1))] <- result[[2]] 
  i <- i + 1
 }
 
 
+############################################################
+#Loading temperature data and estimating parameters from it#
+############################################################
+temperature             <- read.table("Shape/data/cetml1659on.dat", header = TRUE, skip = 6)
+yearly_tempr            <- temperature[temperature$YEAR > -99, 'YEAR']
+
+results            <- estimating_variance_new(yearly_tempr, q, q, order = 2, K1 = 2 + 1, K2 = 10)
+sigma_hat_data     <- results[[1]]
+a_hat_data         <- results[[2]]
+sigma_eta_hat_data <- results[[3]]
+
+
 ################################################################################
 #Calculating the power and size of the test for one specification based on data#
 ################################################################################
-result_data <- simulations_general(N_rep, different_T, different_alpha, different_slopes, a_hat_data, sigma_eta_hat_data, order = 2, test_problem, kernel_method, L1, K1 = 2 + 1, K2 = 10)
+result_data <- simulations_general(N_rep, different_T, different_alpha, different_slopes, a_hat_data, sigma_eta_hat_data, order = 2, test_problem, kernel_method, q, K1 = 2 + 1, K2 = 10)
+
 matrix_size[, ((length(different_alpha) + 1) * (length(different_a1) + 1) - 2):((length(different_alpha) + 1) * (length(different_a1) + 1))]  <- result_data[[1]]
 matrix_power[, ((length(different_alpha) + 1) * (length(different_a1) + 1) - 2):((length(different_alpha) + 1) * (length(different_a1) + 1))] <- result_data[[2]] 
 
