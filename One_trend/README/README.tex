@@ -76,11 +76,15 @@ All the dynamic libraries are already provided, additional  compilation is not n
 \setlength{\parskip}{0.3cm}
 \everypar{\hangafter=1\hangindent=1.45cm\relax}
 
-\verb|main_shape_simulation.R| \hspace{1pt} produces the simulation results for the test method from Section 4, in particular Tables 1 and 2 in Section 7. If you use Linux or MacOS, please change the extension of dynamic libraries in the very beginning of the main file to \verb|.so|. The size and power results in Tables 1 and 2 are calculated from $1000$ simulated samples. This number can be set as \verb|N| in \verb|main_shape_simulation.R|. The running time for $1000$ simulations is quite small, amounting to a few minutes. 
+\verb|main_shape_simulation.R| \hspace{1pt} produces the simulation results for the test method from Section 3, in particular Tables 1 and 2 in Section 5.1. If you use Linux or MacOS, please change the extension of dynamic libraries in the very beginning of the main file to \verb|.so|. The size and power results in Tables 1 and 2 are calculated from $1000$ simulated samples. This number can be set as \verb|N| in \verb|main_shape_simulation.R|. The running time for $1000$ simulations is quite small, amounting to a few minutes. 
 
-\verb|main_shape_application.R| \hspace{1pt} produces the application results from Section 8.1, in particular Figure 1. As above, please change the extension of dynamic libraries if you use Linux or MacOS.
+\verb|main_shape_comparison.R| \hspace{1pt} produces the simulation results for comparison between our multiscale method and SiZer from Section 5.2, in particular Tables 3 and 4 and Figure 2. As above, please change the extension of dynamic libraries if you use Linux or MacOS.
 
-\verb|Shape| \hspace{1pt} is a directory that contains all the necessary functions, data and simulated distributions to run the two main files \verb|main_shape_simulation.R| and \verb|main_shape_application.R|.
+\verb|main_variance_simulation.R| \hspace{1pt} produces the simulation results for the long-run variance estimator from Section 4, in particular Figures 3, 4, 5 and 6 from Section 5.3. As above, please change the extension of dynamic libraries if you use Linux or MacOS.
+
+\verb|main_shape_application.R| \hspace{1pt} produces the application results from Section 6, in particular Figure 7. As above, please change the extension of dynamic libraries if you use Linux or MacOS.
+
+\verb|Shape| \hspace{1pt} is a directory that contains all the necessary functions, data and simulated distributions to run the four main files \verb|main_shape_simulation.R|, \verb|main_shape_comparison.R|, \verb|main_variance_simulation.R|  and \linebreak \verb|main_shape_application.R|.
 
 \verb|Shape\C_code| \hspace{1pt} is a folder that contains the dynamic libraries and R-wrappers of the C functions.
 
@@ -88,7 +92,5 @@ All the dynamic libraries are already provided, additional  compilation is not n
 
 \verb|Shape\data| \hspace{1pt} is a folder with the file \verb|cetml1659on.dat| which contains the monthly and yearly mean central England temperature from 1659 up to 2017. It was downloaded from \verb|https://www.metoffice.gov.uk/hadobs/hadcet/data| \verb|/download.html|. A full description of the data can be accessed on the website of the UK Met Office \verb|https://www.metoffice.gov.uk|. 
 
-\verb|Shape\distribution| \hspace{1pt} is a folder that  contains simulated distributions of the Gaussian statistic $\Phi'_{T}$ for various time series lengths $T$. In order to recalculate these distributions, the stored files need to be deleted or removed; the computation is then done automatically while running the main file. The distribution of the Gaussian statistic $\Phi'_T$ used to calculate the critical values of the test in the application in Section 8.1 is stored in the file \verb|distr_T_359_testing_constant_type_ll.RData|. As before, the distribution of $\Phi'_T$ can be recalculated by removing or deleting this file before running \verb|main_shape_application.R|.  
-\vspace{0.2cm}
-
+\verb|Shape\distribution| \hspace{1pt} is a folder that  contains simulated distributions of the Gaussian statistic $\Phi'_{T}$ for various time series lengths $T$ and for different grids as well as some deterministic variables for SiZer that are stored in order to decrease running time of \verb|main_shape_comparison.R|. The names of the fles with the simulated distributions for Section 5.1 (calculated on the grid $\mathcal{G}_T$) end with \verb|..._constant_type_ll.RData| whereas the names of the files with the simulated distributions for Section 5.2, that are based on the abridged grid $\mathcal{G}^*_T$, end with \verb|..._comparison_type_ll.RData|. In order to recalculate these distributions, the stored files need to be deleted or removed; the computation is then done automatically while running the main file. The distribution of the Gaussian statistic $\Phi'_T$ used to calculate the critical values of the test in the application in Section 6 is stored in the file \verb|distr_T_359_testing_constant_type_ll.RData|. As before, the distribution of $\Phi'_T$ can be recalculated by removing or deleting this file before running \verb|main_shape_application.R|. 
 \end{document}
