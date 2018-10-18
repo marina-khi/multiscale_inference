@@ -1,5 +1,5 @@
 
-\section{Proofs of the results from Section \ref{sec-method}}
+\section{Proofs of the results from Section \ref{sec-method}}\label{sec-supp-proofs1}
 
 
 In this section, we prove the theoretical results from Section \ref{sec-method}. We use the following notation: The symbol $C$ denotes a universal real constant which may take a different value on each occurrence. For $a,b \in \reals$, we write $a_+ = \max \{0,a\}$ and $a \vee b = \max\{a,b\}$. For any set $A$, the symbol $|A|$ denotes the cardinality of $A$. The notation $X \stackrel{\mathcal{D}}{=} Y$ means that the two random variables $X$ and $Y$ have the same distribution. Finally, $f_0(\cdot)$ and $F_0(\cdot)$ denote the density and distribution function of the standard normal distribution, respectively.
@@ -307,4 +307,96 @@ with some constant $C > 0$ that does only depend on $\underline{\sigma}$ and $\o
 
 
 
-\section{Proofs of the results from Section \ref{sec-error-var}}
+\section{Proofs of the results from Section \ref{sec-error-var}}\label{sec-supp-proofs2}
+
+
+In what follows, we prove Proposition \ref{prop-lrv} from Section \ref{sec-error-var}. The notation is the same as in the previous section. In particular, we use the symbol $C$ to denote a generic constant which may take a different value on each occurrence. 
+
+
+\subsection*{Auxiliary results}
+
+
+To start with, we derive some auxiliary results needed for the proof of Proposition \ref{prop-lrv}. The first lemma analyses the term 
+\[ \xi(\ell_1,\ell_2,L) =  \frac{1}{T-L} \sum\limits_{t=L+1}^{T} \varepsilon_{t-\ell_1} \varepsilon_{t-\ell_2}, \]
+where $\ell_1,\ell_2$ and $L$ are natural numbers with $0 \le \ell_1 + \ell_2 \le L$. 
+\begin{lemmaA}\label{lemma-lrv-1} 
+For any $L = L_T$ with $L_T/T \rightarrow 0$, it holds that 
+\[ \ex \Big[ \big\{ \xi(\ell_1,\ell_2,L) - \gamma_\varepsilon(\ell_2-\ell_1) \big\}^2 \Big] = O(T^{-1}), \]
+where $\gamma_\varepsilon(\ell) = \cov(\varepsilon_t,\varepsilon_{t-\ell})$.
+\end{lemmaA}
+\begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{lemma-lrv-1}}}] 
+Since the variables $\varepsilon_t$ have the expansion $\varepsilon_t = \sum_{k=0}^{\infty} c_k \eta_{t-k}$ and $\gamma_\varepsilon(\ell) = (\sum_{k=0}^\infty c_k c_{k+\ell}) \nu^2$, it holds that 
+\[ \ex \big[ \xi^2(\ell_1,\ell_2,L)\big] = \frac{1}{(T-L)^2} \sum\limits_{t,t^\prime=L+1}^T \ex \big[ \varepsilon_{t-\ell_1} \varepsilon_{t-\ell_2} \varepsilon_{t^\prime-\ell_1} \varepsilon_{t^\prime-\ell_2} \big], \]
+where
+\begin{align*} 
+ & \ex \big[ \varepsilon_{t-\ell_1} \varepsilon_{t-\ell_2} \varepsilon_{t^\prime-\ell_1} \varepsilon_{t^\prime-\ell_2} \big] \\
+ & = \Big( \sum_{k=0}^{\infty} c_k c_{k-\ell_2+\ell_1} c_{k+t^\prime-t} c_{k+t^\prime-t+\ell_1-\ell_2} \Big) \kappa +  \Big( \sum_{k=0}^{\infty} c_k c_{k+\ell_1-\ell_2} \Big)^2 \nu^4 \\
+ & \quad + \Big( \sum_{k=0}^{\infty} c_k c_{k+t^\prime-t} \Big)^2 \nu^4 + \Big( \sum_{k=0}^{\infty} c_k c_{k+t^\prime-t-\ell_1+\ell_2} \Big) \Big( \sum_{k=0}^{\infty} c_k c_{k+t^\prime-t+\ell_1-\ell_2} \Big) \nu^4 \\
+ & = \Big( \sum_{k=0}^{\infty} c_k c_{k-\ell_2+\ell_1} c_{k+t^\prime-t} c_{k+t^\prime-t+\ell_1-\ell_2} \Big) \kappa + \gamma_\varepsilon^2(\ell_1-\ell_2) \\
+ & \quad + \gamma_\varepsilon^2(t^\prime-t) + \gamma_\varepsilon(t^\prime-t-\ell_1+\ell_2) \gamma_\varepsilon(t^\prime-t+\ell_1-\ell_2)
+\end{align*}
+with $\kappa=\ex[\eta_0^4] - 3 \nu^4$. Noting that 
+\[  \ex \Big[ \big\{ \xi(\ell_1,\ell_2,L) - \gamma_\varepsilon(\ell_1-\ell_2) \big\}^2 \Big] = \ex \big[\xi^2(\ell_1,\ell_2,L)\big] - \gamma_\varepsilon^2(\ell_1-\ell_2), \]
+we can infer that
+\begin{align*} 
+ & \ex \Big[ \big\{ \xi(\ell_1,\ell_2,L) - \gamma_\varepsilon(\ell_1-\ell_2) \big\}^2 \Big] \\
+ & = \frac{1}{(T-L)^2} \sum\limits_{t,t^\prime=L+1}^T \Big( \sum_{k=0}^{\infty} c_k c_{k-\ell_2+\ell_1} c_{k+t^\prime-t} c_{k+t^\prime-t+\ell_1-\ell_2} \Big) \kappa + \frac{1}{(T-L)^2} \sum\limits_{t,t^\prime=L+1}^T \gamma_\varepsilon^2(t^\prime-t) \\
+ & \quad + \frac{1}{(T-L)^2} \sum\limits_{t,t^\prime=L+1}^T  \gamma_\varepsilon(t^\prime-t-\ell_1+\ell_2) \gamma_\varepsilon(t^\prime-t+\ell_1-\ell_2) \\
+ & = O(T^{-1}),
+\end{align*} 
+the last equality following from the fact that the autocovariances $\gamma_\varepsilon(\ell)$ are absolutely summable and the coefficients $c_k$ decay exponentially fast to zero. 
+\end{proof}
+
+
+We next show that the empirical autocovariances 
+\[ \widehat{\gamma}_q(\ell) = \frac{1}{T-\ell-q} \sum_{t=q+\ell+1}^T \Delta_q Y_{t,T} \, \Delta_q Y_{t-\ell,T} \]
+of the process $\{ \Delta_q Y_{t,T} \}$ have the following property. 
+\begin{lemmaA}\label{lemma-lrv-2}
+For any $q = q_T$ with $q_T/\sqrt{T} \rightarrow 0$ and any $1 \le \ell \le p + 1$, it holds that  
+\[ \widehat{\gamma}_q(\ell) - \gamma_q(\ell) = O_p(T^{-1/2}), \]
+where $\gamma_q(\ell) = \cov(\Delta_q \varepsilon_t,\Delta_q \varepsilon_{t-\ell})$. 
+\end{lemmaA}
+\begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{lemma-lrv-2}}}] 
+To analyse the term $\widehat{\gamma}_q(\ell)$, we decompose it as follows:  
+\[ \widehat{\gamma}_q(\ell) = \widehat{\gamma}_q^*(\ell) + R_A + R_B + R_C, \]
+where 
+\[ \widehat{\gamma}_q^*(\ell) =  \frac{1}{T-\ell-q} \sum\limits_{t=q+\ell+1}^T \Delta_q \varepsilon_t \, \Delta_q \varepsilon_{t-\ell} \]
+and 
+\begin{align*}
+R_A & = \frac{1}{T-\ell-q} \sum\limits_{t=q+\ell+1}^T \Delta_q m_t \, \Delta_q \varepsilon_{t-\ell} \\ 
+R_B & = \frac{1}{T-\ell-q} \sum\limits_{t=q+\ell+1}^T \Delta_q \varepsilon_t \, \Delta_q m_{t-\ell} \\ 
+R_C & = \frac{1}{T-\ell-q} \sum\limits_{t=q+\ell+1}^T\Delta_q m_t \, \Delta_q m_{t-\ell}  
+\end{align*} 
+with $\Delta_q m_t = m(t/T) - m(\{t-q\}/T)$. With the help of Lemma \ref{lemma-lrv-1}, it is straightforward to show that  
+\[ \widehat{\gamma}_q^*(\ell) - \gamma_q(\ell) = O_p(T^{-1/2}). \]
+Moreover, the Cauchy-Schwarz inequality yields that 
+\[ \ex [R_A^2] \le \Big\{ \frac{1}{T-\ell-q} \sum\limits_{t=q+\ell+1}^T (\Delta_q m_t)^2 \Big\} \ex \Big[ \frac{1}{T-\ell-q} \sum\limits_{t=q+\ell+1}^T (\Delta_q \varepsilon_{t+\ell})^2 \Big]. \]
+Since $m$ is Lipschitz continuous by assumption, we immediately get that $(T-\ell-q)^{-1} \sum_{t=q+\ell+1}^T (\Delta_q m_t)^2 \le C (q/T)^2$. With the help of Lemma \ref{lemma-lrv-1}, we further obtain that 
+\[ \ex \Big[ \frac{1}{T-\ell-q} \sum\limits_{t=q+\ell+1}^T (\Delta_q \varepsilon_{t+\ell})^2 \Big] = O(1). \] 
+Hence, we can infer that 
+\[ \ex [R_A^2] = O\Big(\frac{q^2}{T}\Big) = o(1), \]
+which immediately implies that $R_A = o_p(T^{-1/2})$. Similar arguments yield that $R_j = o_p(T^{-1/2})$ for $j = B,C$ as well. Putting everything together, we arrive at the statement of Lemma \ref{lemma-lrv-2}. 
+\end{proof} 
+
+
+
+\subsection*{Proof of Proposition \ref{prop-lrv}}
+
+
+We first show that the pilot estimator $\widetilde{\boldsymbol{a}}_q$ converges to $\boldsymbol{a}$. In particular, we verify that $\widetilde{\boldsymbol{a}}_q - \boldsymbol{a} = O_p(T^{-1/2})$. By Lemma \ref{lemma-lrv-2}, it holds that $\widehat{\boldsymbol{\Gamma}}_q = \boldsymbol{\Gamma}_q + O_p(T^{-1/2})$ and $\widehat{\boldsymbol{\gamma}}_q = \boldsymbol{\gamma}_q + O_p(T^{-1/2})$. Since $\boldsymbol{\Gamma}_q$ is invertible, this implies that 
+\[ \widetilde{\boldsymbol{a}}_q = \boldsymbol{\Gamma}_q^{-1} \boldsymbol{\gamma}_q + O_p(T^{-1/2}). \]
+With the help of equation \eqref{YW-eq}, we can further infer that 
+\[ \widetilde{\boldsymbol{a}}_q - \boldsymbol{a} = \nu^2 \boldsymbol{\Gamma}_q^{-1} \boldsymbol{c}_q + O_p(T^{-1/2}). \]
+As already noted in Section \ref{subsec-error-var-AR}, the entries of the vector $\boldsymbol{c}_q = (c_{q-1},\ldots,c_{c-p})^\top$ decay exponentially fast to zero, that is, $|c_k| \le C \rho^k$ for some $0 < \rho < 1$. Moreover, it holds that $\gamma_q(\ell) \rightarrow 2 \gamma_\varepsilon(\ell)$ for any fixed $\ell$ as $q \rightarrow \infty$. Consequently, $\| \nu^2 \boldsymbol{\Gamma}_q^{-1} \boldsymbol{c}_q \|_\infty = o(T^{-1/2})$, where $\| \cdot \|_\infty$ denotes the usual supremum norm for vectors. As a result, we obtain that $\widetilde{\boldsymbol{a}}_q - \boldsymbol{a} = O_p(T^{-1/2})$.  
+  
+
+We next show that $\widehat{\boldsymbol{a}}_r - \boldsymbol{a} = O_p(T^{-1/2})$, where $r > p$ is any fixed integer that does not grow with the sample size $T$. By definition, it holds that $\widehat{\boldsymbol{a}}_r = \widehat{\boldsymbol{\Gamma}}_r^{-1} (\widehat{\boldsymbol{\gamma}}_r + \widetilde{\nu}^2 \widetilde{\boldsymbol{c}}_r)$.  From Lemma \ref{lemma-lrv-2}, it follows that $\widehat{\boldsymbol{\Gamma}}_r^{-1} = \boldsymbol{\Gamma}_r^{-1} + O_p(T^{-1/2})$ and $\widehat{\boldsymbol{\gamma}}_r = \boldsymbol{\gamma}_r + O_p(T^{-1/2})$. Moreover, with the help of the fact that $\widetilde{\boldsymbol{a}}_q - \boldsymbol{a} = O_p(T^{-1/2})$, it is straightforward to verify that $\widetilde{\nu}^2 - \nu^2 = O_p(T^{-1/2})$ and $\widetilde{\boldsymbol{c}}_r - \boldsymbol{c}_r =  O_p(T^{-1/2})$. Hence, we arrive at  
+\begin{equation}\label{eq-conv-est-AR-SS}
+\widehat{\boldsymbol{a}}_r = \boldsymbol{\Gamma}_r^{-1} (\boldsymbol{\gamma}_r + \nu^2 \boldsymbol{c}_r) + O_p(T^{-1/2}) = \boldsymbol{a} + O_p(T^{-1/2}), 
+\end{equation}
+where the last equality is due to equation \eqref{YW-eq}.
+
+
+From \eqref{eq-conv-est-AR-SS}, it immediately follows that $\widehat{\boldsymbol{a}} - \boldsymbol{a} = O_p(T^{-1/2})$, which in turn allows us to infer that $\widehat{\nu}^2 - \nu^2 = O_p(T^{-1/2})$ and $\widehat{\sigma}^2 = \sigma^2 + O_p(T^{-1/2})$ by straightforward arguments. 
+
+

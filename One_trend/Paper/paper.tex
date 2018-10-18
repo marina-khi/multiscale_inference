@@ -1,6 +1,8 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage{amsmath}
 \usepackage{amssymb,amsthm,graphicx}
+%\usepackage{bbm} (Do not want to use these, may create conflicts)
+%\usepackage{gensymb}
 \usepackage{enumitem}
 \usepackage{color}
 \usepackage{epsfig}
@@ -48,7 +50,7 @@
 
 \renewcommand{\abstractname}{}
 \begin{abstract}
-\noindent In this paper, we develop new multiscale methods to test qualitative hypotheses about the function $m$ in the nonparametric regression model $Y_{t,T} = m(t/T) + \varepsilon_t$ with time series errors $\varepsilon_t$. In time series applications, $m$ represents a nonparametric time trend. Practitioners are often interested in whether the trend $m$ has certain shape properties. For example, they would like to know whether $m$ is constant or whether it is increasing/decreasing in certain time regions. Our multiscale methods allow to test for such shape properties of the trend $m$. In order to perform the tests, we require an estimator of the long-run error variance $\sigma^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_0,\varepsilon_{\ell})$. We propose a new difference-based estimator of $\sigma^2$ for the case that $\{ \varepsilon_t \}$ is a general AR($p$) process. In the technical part of the paper, we derive asymptotic theory for the proposed multiscale tests and the estimator of the long-run error variance. The theory is complemented by a simulation study and an empirical application to climate data. 
+\noindent In this paper, we develop new multiscale methods to test qualitative hypotheses about the function $m$ in the nonparametric regression model $Y_{t,T} = m(t/T) + \varepsilon_t$ with time series errors $\varepsilon_t$. In time series applications, $m$ represents a nonparametric time trend. Practitioners are often interested in whether the trend $m$ has certain shape properties. For example, they would like to know whether $m$ is constant or whether it is increasing/decreasing in certain time regions. Our multiscale methods allow to test for such shape properties of the trend $m$. In order to perform the methods, we require an estimator of the long-run error variance $\sigma^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_0,\varepsilon_{\ell})$. We propose a new difference-based estimator of $\sigma^2$ for the case that $\{ \varepsilon_t \}$ is an AR($p$) process. In the technical part of the paper, we derive asymptotic theory for the proposed multiscale test and the estimator of the long-run error variance. The theory is complemented by a simulation study and an empirical application to climate data. 
 \end{abstract}
 
 

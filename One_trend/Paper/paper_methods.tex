@@ -7,6 +7,7 @@ We now describe the model setting in detail which was briefly outlined in the In
 Y_{t,T} = m \Big( \frac{t}{T} \Big) + \varepsilon_t 
 \end{equation}
 for $1 \le t \le T$. Here, $m$ is an unknown nonparametric function defined on $[0,1]$ and $\{ \varepsilon_t: 1 \le t \le T \}$ is a zero-mean stationary error process. For simplicity, we restrict attention to equidistant design points $x_t = t/T$. However, our methods and theory can also be carried over to non-equidistant designs. The stationary error process $\{\varepsilon_t\}$ is assumed to have the following properties: 
+\newpage
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
 
 \item \label{C-err1} The variables $\varepsilon_t$ allow for the representation $\varepsilon_t = G(\ldots,\eta_{t-1},\eta_t,\eta_{t+1},\ldots)$, where $\eta_t$ are i.i.d.\ random variables and $G$ is a measurable function. 
@@ -204,7 +205,7 @@ for $\ell \in \{\pm, +,-\}$. This suggests to plot the minimal intervals in $\Pi
 \section{Estimation of the long-run error variance}\label{sec-error-var}
 
 
-In this section, we discuss how to estimate the long-run variance $\sigma^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_0,\varepsilon_{\ell})$ of the error terms in model \eqref{model}. There are two broad classes of estimators: residual- and difference-based estimators. In residual-based approaches, $\sigma^2$ is estimated from the residuals $\widehat{\varepsilon}_t = Y_{t,T} - \widehat{m}_h(t/T)$, where $\widehat{m}_h$ is a nonparametric estimator of $m$ with the bandwidth or smoothing parameter $h$. Difference-based methods proceed by estimating $\sigma^2$ from the $\ell$-th differences $Y_{t,T} - Y_{t-\ell,T}$ of the observed time series $\{Y_{t,T}\}$ for certain orders $\ell$. In what follows, we focus attention on difference-based methods since these do not involve a nonparametric estimator of the function $m$ and thus do not require to specify a smoothing parameter $h$ for the estimation of $m$. To simplify notation, we let $\Delta_\ell Z_t = Z_t - Z_{t-\ell}$ denote the $\ell$-th differences of a general time series $\{Z_t\}$ throughout the section. 
+In this section, we discuss how to estimate the long-run variance $\sigma^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_0,\varepsilon_{\ell})$ of the error terms in model \eqref{model}. There are two broad classes of estimators: residual- and difference-based estimators. In residual-based approaches, $\sigma^2$ is estimated from the residuals $\widehat{\varepsilon}_t = Y_{t,T} - \widehat{m}_h(t/T)$, where $\widehat{m}_h$ is a nonparametric estimator of $m$ with the bandwidth or smoothing parameter $h$. Difference-based methods proceed by estimating $\sigma^2$ from the $\ell$-th differences $Y_{t,T} - Y_{t-\ell,T}$ of the observed time series $\{Y_{t,T}\}$ for certain orders $\ell$. In what follows, we focus attention on difference-based methods as these do not involve a nonparametric estimator of the function $m$ and thus do not require to specify a bandwidth $h$ for the estimation of $m$. To simplify notation, we let $\Delta_\ell Z_t = Z_t - Z_{t-\ell}$ denote the $\ell$-th differences of a general time series $\{Z_t\}$ throughout the section. 
 
 
 \subsection{Weakly dependent error processes}
@@ -299,9 +300,9 @@ When the trend $m$ is very pronounced, in contrast, even moderate values of $q$ 
 \end{equation} 
 where $r$ is any fixed number with $r > p$. In particular, $r$ need not diverge to infinity but can be fixed. As one can see, the estimator $\widehat{\boldsymbol{a}}_r$ is based on differences of some small order $r$; only the pilot estimator $\widetilde{\boldsymbol{a}}_q$ relies on differences of a larger order $q$. As a consequence, $\widehat{\boldsymbol{a}}_r$ should eliminate the trend $m$ more appropriately and should thus be less biased than the pilot estimator $\widetilde{\boldsymbol{a}}_q$. In order to make the method more robust against estimation errors in $\widetilde{\boldsymbol{c}}_r$, we finally average the estimators $\widehat{\boldsymbol{a}}_r$ for a few small values of $r$. In particular, we define  
 \begin{equation}\label{est-AR}
-\widehat{\boldsymbol{a}} = \frac{1}{\overline{r}-\underline{r}+1} \sum\limits_{r=\underline{r}}^{\overline{r}} \widehat{\boldsymbol{a}}_r, 
+\widehat{\boldsymbol{a}} = \frac{1}{\overline{r}-p} \sum\limits_{r=p+1}^{\overline{r}} \widehat{\boldsymbol{a}}_r, 
 \end{equation}
-where $\underline{r}$ and $\overline{r}$ are small natural numbers with $p < \underline{r} \le \overline{r}$. For ease of notation, we suppress the dependence of $\widehat{\boldsymbol{a}}$ on the parameters $\underline{r}$ and $\overline{r}$. Once $\widehat{\boldsymbol{a}} =(\widehat{a}_1,\ldots,\widehat{a}_p)^\top$ is computed, the long-run variance $\sigma^2$ can be estimated by 
+where $\overline{r}$ is a small natural number with $p < \overline{r}$. For ease of notation, we suppress the dependence of $\widehat{\boldsymbol{a}}$ on the parameter $\overline{r}$. Once $\widehat{\boldsymbol{a}} =(\widehat{a}_1,\ldots,\widehat{a}_p)^\top$ is computed, the long-run variance $\sigma^2$ can be estimated by 
 \begin{equation} \label{est-lrv}
 \widehat{\sigma}^2 = \frac{\widehat{\nu}^2}{(1 - \sum_{j=1}^p \widehat{a}_j)^2}, 
 \end{equation}
@@ -340,30 +341,5 @@ It can also be shown that $\widetilde{\boldsymbol{a}}_q$, $\widehat{\boldsymbol{
 %where $\boldsymbol{\Gamma}_\varepsilon = (\gamma_\varepsilon(i-j):1 \le i,j \le p)$ is the $p \times p$ covariance matrix of $\{\varepsilon_t\}$.
 %\end{prop}
 %The statement of Proposition \ref{prop-lrv-2} can be read as an oracle-type result: In the oracle case where the error process $\{\varepsilon_t\}$ is directly observed, the maximum likelihood estimator $\widehat{\boldsymbol{a}}^{\text{ML}}$ of $\boldsymbol{a}$ is asymptotically normal with the covariance matrix $\nu^2 \boldsymbol{\Gamma}_\varepsilon^{-1}$. Hence, the estimator $\widetilde{\boldsymbol{a}}$ has the same limit distribution as the oracle estimator $\widehat{\boldsymbol{a}}^{\text{ML}}$. The estimator $\widetilde{\boldsymbol{a}}_q$, in contrast, does not have this property. Its asymptotic variance is in general different from $\nu^2 \boldsymbol{\Gamma}_\varepsilon^{-1}$.  
-
-
-% Procedure of van Keilegom and Hall:
-
-%The differencing approach presented above can be extended to more complicated error structures. For the case of $k$-dependent error terms, estimators for $\sigma^2$ have been proposed by \cite{MuellerStadtmueller1988}, \cite{Herrmann1992} and \cite{Munk2017} among others. We here focus attention on the case of autoregressive error terms. Specifically, we suppose that $\{\varepsilon_t\}$ is an AR($p$) process of the form $\varepsilon_t = \sum_{j=1}^p a_j \varepsilon_{t-j} + \eta_t$, where $a_1,\ldots,a_p$ are unknown parameters and $\eta_t$ are i.i.d.\ innovations with $\ex[\eta_t] = 0$ and $\ex[\eta_t^2] = \sigma_\eta^2$. Throughout the discussion, we assume that $\{\varepsilon_t\}$ is a stationary and causal AR($p$) process of known order $p$ with finite fourth moment $\ex[\varepsilon_t^4] < \infty$. A difference-based method to estimate the long-run variance $\sigma^2$ of the AR($p$) error process $\{\varepsilon_t\}$ in model \eqref{model} has been developed in \cite{Hall2003}. Their estimator $\widehat{\sigma}^2$ is constructed in the following three steps: 
-%\vspace{10pt}
-
-%\textit{Step 1.} We first set up an estimator of the autocovariance $\gamma(\ell) = \cov(\varepsilon_t,\varepsilon_{t+\ell})$ for a given lag $\ell$. As in the case of independent errors, it holds that $D_\ell Y_t = D_\ell \varepsilon_t + O(\ell/T)$ uniformly over $t$ provided that $m$ is Lipschitz. This together with the fact that $\ex[ \{  D_\ell \varepsilon_t \}^2 ] / 2 = \gamma(0) - \gamma(\ell)$ motivates to estimate $\gamma(0)$ by
-%$\widehat{\gamma}(0) = \frac{1}{L_2-L_1+1}\sum_{r=L_1}^{L_2}\frac{1}{2(T-r)}\sum_{t=r+1}^T\{D_rY_t\}^2$, 
-%where $L_1\le L_2$ are tuning parameters which are discussed in more detail below. Moreover, an estimator of $\gamma(\ell)$ for $1 \le \ell \le p$ is given by 
-%$\widehat{\gamma}(\ell) = \widehat{\gamma}(0) - \frac{1}{2(T-\ell)}\sum_{t=\ell+1}^T \{D_\ell Y_t\}^2$.
-%As $\gamma(\ell) = \gamma(-\ell)$, we finally set $\widehat{\gamma}(-\ell) = \widehat{\gamma}(\ell)$ for $1 \le \ell \le p$. 
-%\vspace{10pt}
-
-%\textit{Step 2.} We next estimate the AR coefficients $(a_1,\ldots,a_p)^\top$ by the Yule-Walker estimators $(\widehat{a}_1,\ldots,\widehat{a}_p)^\top = \widehat{\Gamma}^{-1} (\widehat{\gamma}(1), \ldots, \widehat{\gamma}(p))^\top$, where $\widehat{\Gamma} = \{ \widehat{\gamma}(|k-\ell|) \}_{1 \le k,\ell \le p}$. 
-%\vspace{10pt}
-
-%\textit{Step 3.} Let $\widehat{d}_0 = 1$ and define the parameters $\widehat{d}_1, \widehat{d}_2, \ldots$ by the equation $1 + \sum_{\ell=1}^\infty \widehat{d}_\ell z^\ell = (1 - \sum_{j=1}^p \widehat{a}_j z^j )^{-1}$. In the AR($1$) case $\varepsilon_t = a \varepsilon_{t-1} + \eta_t$ with $|a| < 1$, for instance, it holds that $\sum_{\ell = 0}^\infty \widehat{a}^\ell z^\ell = (1 - \widehat{a}z)^{-1}$ and thus $\widehat{d}_\ell = \widehat{a}^\ell$ for $\ell \ge 1$. The variance $\sigma_\eta^2 = \ex[\eta_t^2]$ of the innovations can be estimated by $\widehat{\sigma}_\eta^2 = \widehat{\gamma}(0) / (\sum_{\ell=0}^\infty \widehat{d}_\ell^2)$. With this notation at hand, we define 
-%\[\widehat{\sigma}^2 = \widehat{\sigma}^2_\eta \Big( 1-\sum_{j=1}^p \widehat{a}_j\Big)^{-2} \]
-%to be our estimator of the long-run error variance $\sigma^2$.
-%\vspace{10pt}
-
-%The estimator $\widehat{\sigma}^2$ depends on the two tuning parameters $L_1$ and $L_2$ which are required to compute $\widehat{\gamma}(0)$. To better understand the role of these tuning parameters, let us have a closer look at the estimator $\widehat{\gamma}(0)$. As $\ex[ \{ D_\ell Y_t \}^2 ]/2 = \ex[ \{ D_\ell \varepsilon_t \}^2 ]/2 + O( \{\ell/T\}^2 ) = \gamma(0) - \gamma(\ell) + O( \{\ell/T\}^2 )$, it can be easily shown that
-%\[ \ex\big[\widehat{\gamma}(0)\big] = \gamma(0) - \frac{1}{L_2-L_1+1}\sum_{r=L_1}^{L_2} \gamma(r) + O\Big( \Big\{\frac{L_2}{T} \Big\}^2 \Big). \]
-%The two bias terms $\sum_{r=L_1}^{L_2} \gamma(r) / (L_2-L_1+1)$ and $O(\{ L_2/T \}^2)$ can be asymptotically neglected if we choose the tuning parameters $L_1$ and $L_2$ appropriately. Since $\{ \varepsilon_t\}$ is an AR($p$) process, the autocovariances $\gamma(r)$ decay exponentially fast to zero as $r \rightarrow \infty$. Hence, the bias term $\sum_{r=L_1}^{L_2} \gamma(r) / (L_2-L_1+1)$ is asymptotically negligible if $L_1$ grows sufficiently fast with the sample size $T$. Due to the exponential decay of the autocovariances, it in particular suffices to assume that $L_1/\log T \rightarrow \infty$. For the second bias term  $O(\{ L_2/T \}^2)$ to be asymptotically negligible, we need to assume that $L_2$ grows more slowly than the sample size $T$. In practice, $L_1$ should be chosen so large that the autocovariances $\gamma(\ell)$ with $\ell \ge L_1$ can be expected to be close to zero, ensuring that the bias term $\sum_{r=L_1}^{L_2} \gamma(r) / (L_2-L_1+1)$ is sufficiently small. The choice of $L_2$ can be expected to be less important in practice than that of $L_1$ as long as we do not pick $L_2$ too close to the sample size $T$. As pointed out in \cite{Hall2003}, it can be shown that $\widehat{\sigma}^2 = \sigma^2 + O_p(T^{-1/2})$ provided that $L_1/\log T \rightarrow \infty$ and $L_2 = O(T^{1/2})$. 
 
 
