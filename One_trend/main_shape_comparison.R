@@ -1,7 +1,9 @@
 library(xtable)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
-source("Shape/functions.R")
+#source("Shape/functions.R")
+source("Shape/functions_new_SiZer.R")
+
 source("Shape/SiZer_simulations.R")
 source("Shape/C_code/psihat_statistic.R")
 dyn.load("Shape/C_code/psihat_statistic_ll.dll")
@@ -49,15 +51,15 @@ for (a_1 in different_a1){
   T_star   <- gamma[1]/true_var
 
   #THIS PART IS ONLY FOR FAST CALCULATIONS OF THE MATRIX. IF YOU CHANGE different_i OR different_h, YOU CAN'T USE IT!!!
-  filename_aux = paste0("Shape/distribution/SiZer_matrix_T_", T_size, "_a_1_", a_1, "_sigma_eta_", sigma_eta, "_alpha_", alpha*100, ".RData")
+  filename_aux = paste0("Shape/distribution/New_SiZer/SiZer_matrix_T_", T_size, "_a_1_", a_1, "_sigma_eta_", sigma_eta, "_alpha_", alpha*100, ".RData")
   if(!file.exists(filename_aux)) {
-    SiZer_matrix <- calculating_SiZer_matrix(different_i, different_h, T_size, T_star, alpha, gamma)
+    SiZer_matrix <- calculating_SiZer_matrix(different_i, different_h, T_size, T_star, alpha, gamma, a_1, sigma_eta)
     save(SiZer_matrix, file = filename_aux)
   } else {
     load(filename_aux)
   }
   #USE THIS INSTEAD
-  #SiZer_matrix <- calculating_SiZer_matrix(different_i, different_h, T_size, T_star, alpha, gamma)
+  #SiZer_matrix <- calculating_SiZer_matrix(different_i, different_h, T_size, T_star, alpha, gamma, a_1, sigma_eta)
 
   #Gaussian statistic for our own method
   gaussian_quantile <- calculating_gaussian_quantile_ll(T_size, SiZer_matrix, "comparison", kernel_ind = 2, alpha)
@@ -97,7 +99,7 @@ for (a_1 in different_a1){
   result_size <- SiZer_simulations_size(a_1, sigma_eta, N_rep, different_alpha, different_T)
   tmp_size    <- matrix(result_size,nrow = length(different_T), ncol = 2 * length(different_alpha), byrow = TRUE)
   matrix_size[, (i * (2 * length(different_alpha) + 1) + 2):((i + 1) * (2 * length(different_alpha) + 1))]  <- tmp_size
-  
+
   i <- i + 1
 }
 
