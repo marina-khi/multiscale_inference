@@ -10,9 +10,8 @@ dyn.load("Shape/C_code/psihat_statistic_ll.dll")
 ###############################
 #Defining necessary parameters#
 ###############################
-
-N_rep           <- 1000
-sigma_eta       <- 1    #We keep this as a constant parameter
+N_rep           <- 1000 #Number of simulations
+sigma_eta       <- 1    #Standard deviation of the innovation term
 
 different_alpha     <- c(0.01, 0.05, 0.10) #Level of significance
 different_T         <- c(250, 350,500) #Different lengths of time series for which we compare SiZer and our method
@@ -20,13 +19,12 @@ different_a1        <- c(-0.25, 0.25) #Different a_1 in AR(1) model
 slopes_for_negative <- c(1.0, 1.25, 1.5) #Slopes for power calculations for negative a_1
 slopes_for_positive <- c(2.5, 2.75, 3.0)#Slopes for power calculations for positive a_1
 
-PDFname <- "Paper/Plots/SiZer_comparison_"
+PDFname <- "Paper/Plots/SiZer_comparison_" #Path for tables
 
 
 ########################################
 #Producing plots with minimal intervals#
 ########################################
-
 N_min_intervals   <- 100 #Number of replications for calculating the minimal intervals and producing plots
 different_heights <- c(32/15) #Different strength of the signal calculated as height * 15/16
 different_widths  <- c(10) #Different support of the signal calculated by [0.5 - 1/width, 0.5 + 1/width]
@@ -34,7 +32,7 @@ different_widths  <- c(10) #Different support of the signal calculated by [0.5 -
 T_size <- 500 #Sample size for plotting minimal intervals
 alpha  <- 0.05 #Confidence level
 
-different_i <- seq(from = 5/T_size, to = 1, by = 5/T_size) #Starting grid G_T
+different_i <- seq(from = 5/T_size, to = 1, by = 5/T_size) #Grid G_T from Section 5.1
 different_h <- seq(from = 3/T_size, to = 1/4+3/T_size, by = 5/T_size)
 
 for (a_1 in different_a1){
@@ -96,17 +94,17 @@ for (a_1 in different_a1){
   tmp_power    <- matrix(result_power, nrow = length(slopes_for_negative) * length(different_T), ncol = 2 * length(different_alpha), byrow = TRUE)
   matrix_power[, (i * (2 * length(different_alpha) + 1) + 2):((i + 1) * (2 * length(different_alpha) + 1))]  <- tmp_power
 
-  #result_size <- SiZer_simulations_size(a_1, sigma_eta, N_rep, different_alpha, different_T)
-  #tmp_size    <- matrix(result_size,nrow = length(different_T), ncol = 2 * length(different_alpha), byrow = TRUE)
-  #matrix_size[, (i * (2 * length(different_alpha) + 1) + 2):((i + 1) * (2 * length(different_alpha) + 1))]  <- tmp_size
+  result_size <- SiZer_simulations_size(a_1, sigma_eta, N_rep, different_alpha, different_T)
+  tmp_size    <- matrix(result_size,nrow = length(different_T), ncol = 2 * length(different_alpha), byrow = TRUE)
+  matrix_size[, (i * (2 * length(different_alpha) + 1) + 2):((i + 1) * (2 * length(different_alpha) + 1))]  <- tmp_size
   
   i <- i + 1
 }
 
 
-###################
-##Producing tables#
-###################
+##################
+#Producing tables#
+##################
 print.xtable(xtable(matrix_size, digits = c(3), align = paste(replicate((2 * length(different_alpha) + 1) * length(different_a1) + 1, "c"), collapse = "")),
             type="latex", file=paste0(PDFname, "_size_025.tex"), include.colnames = FALSE)
 

@@ -65,17 +65,17 @@ for (q in different_q){
       }
       
       #Graphs for the paper, not the supplement
-      # if ((q == 25)&&(r == 10)){ 
-      #   pdfname = paste("Paper/Plots/MSE_a1_",name_spec,".pdf",sep="")
-      #   plotting_MSE_graphs(a_mat2, a_mat_HvK, a_mat_oracle, pdfname, margin_ = 1.5, legend_position = "topright", 
-      #                       ylab_ = "MSE", legend_ = c(expression(widehat(a)), expression(widehat(a)[HvK]), expression(widehat(a)[oracle])),
-      #                       title_ = "",  different_a, zoomed = 'no')
-      #   
-      #   pdfname = paste("Paper/Plots/MSE_lrv_",name_spec,".pdf",sep="")
-      #   plotting_MSE_graphs(lrv_mat2, lrv_mat_HvK, lrv_mat_oracle, pdfname, margin_ = 1.5, legend_position = "topleft", ylab_ = "log(MSE)",
-      #                       legend_ = c(expression(widehat(sigma)^2), expression(widehat(sigma)[HvK]^2), expression(widehat(sigma)[oracle]^2)),
-      #                       title_ = "", different_a, zoomed = 'no')
-      # }
+       if ((q == 25)&&(r == 10)){ 
+         pdfname = paste("Paper/Plots/MSE_a1_",name_spec,".pdf",sep="")
+         plotting_MSE_graphs(a_mat2, a_mat_HvK, a_mat_oracle, pdfname, margin_ = 1.5, legend_position = "topright", 
+                             ylab_ = "MSE", legend_ = c(expression(widehat(a)), expression(widehat(a)[HvK]), expression(widehat(a)[oracle])),
+                             title_ = "",  different_a, zoomed = 'no')
+         
+         pdfname = paste("Paper/Plots/MSE_lrv_",name_spec,".pdf",sep="")
+         plotting_MSE_graphs(lrv_mat2, lrv_mat_HvK, lrv_mat_oracle, pdfname, margin_ = 1.5, legend_position = "topleft", ylab_ = "log(MSE)",
+                             legend_ = c(expression(widehat(sigma)^2), expression(widehat(sigma)[HvK]^2), expression(widehat(sigma)[oracle]^2)),
+                             title_ = "", different_a, zoomed = 'no')
+      }
       
       #Graphs for robustness check (supplement)
       pdfname = paste("Paper/Plots/Robustness/MSE_a1_",name_spec,".pdf",sep="")
