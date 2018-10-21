@@ -98,84 +98,12 @@ Tables \ref{tab:size_test} and \ref{tab:power_test} report the simulation result
 \subsection{Comparison with SiZer}\label{subsec-sim-2}
 
 
-We now compare our multiscale test to SiZer for times series which was introduced in \cite{Rondonotti2004} and \cite{Rondonotti2007}. Roughly speaking, the SiZer method proceeds as follows: For each location $u$ and bandwidth $h$ in a pre-specified set, SiZer computes an estimator $\widehat{m}_h^\prime(u)$ of the derivative $m^\prime(u)$ and a corresponding confidence interval. For each $(u,h)$, it then checks whether the confidence interval includes the value $0$. The set $\Pi_T^{\text{SiZer}}$ of points $(u,h)$ for which the confidence interval does not include $0$ corresponds to the set of intervals $\Pi_T^\pm$ on which our multiscale test finds an increase/decrease in the trend $m$. %rejects the null hypothesis $H_0$ that $m$ is constant on all intervals $[u-h,u+h]$ under consideration. 
+We now compare our multiscale test to SiZer for times series which was introduced in \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. Roughly speaking, the SiZer method proceeds as follows: For each location $u$ and bandwidth $h$ in a pre-specified set, SiZer computes an estimator $\widehat{m}_h^\prime(u)$ of the derivative $m^\prime(u)$ and a corresponding confidence interval. For each $(u,h)$, it then checks whether the confidence interval includes the value $0$. The set $\Pi_T^{\text{SiZer}}$ of points $(u,h)$ for which the confidence interval does not include $0$ corresponds to the set of intervals $\Pi_T^\pm$ on which our multiscale test finds an increase/decrease in the trend $m$. %rejects the null hypothesis $H_0$ that $m$ is constant on all intervals $[u-h,u+h]$ under consideration. 
 In order to explore how our test performs in comparison to SiZer, we compare the two sets $\Pi_T^\pm$ and $\Pi_T^{\text{SiZer}}$ in different ways to each other in what follows. 
 
 
-The SiZer method is implemented as described in Section S.3 of the Supplementary Material. To simplify its implementation, we assume that the autocovariance function $\gamma_\varepsilon(\cdot)$ of the error process and thus the long-run error variance $\sigma^2$ is known. Our multiscale test is implemented in the same way as in the previous section. To keep the comparison fair, we treat $\sigma^2$ as known also when implementing our method. Moreover, we use the same grid $\mathcal{G}_T$ of points $(u,h)$ for both methods. To achieve this, we start off with the grid $\mathcal{G}_T$ from \eqref{grid-sim-app}. We then follow \cite{Rondonotti2007} and restrict attention to those points $(u,h) \in \mathcal{G}_T$ for which the effective sample size $\text{ESS}^*(u,h)$ for correlated data is not smaller than $5$. This yields the grid $\mathcal{G}_T^* = \{ (u, h) \in \mathcal{G}_T : \text{ESS}^*(u, h) \geq 5 \}$. A detailed discussion of the effective sample size $\text{ESS}^*(u,h)$ for correlated data can be found in \cite{Rondonotti2007}.   
+The SiZer method is implemented as described in Section S.3 of the Supplementary Material. To simplify its implementation, we assume that the autocovariance function $\gamma_\varepsilon(\cdot)$ of the error process and thus the long-run error variance $\sigma^2$ is known. Our multiscale test is implemented in the same way as in the previous section. To keep the comparison fair, we treat $\sigma^2$ as known also when implementing our method. Moreover, we use the same grid $\mathcal{G}_T$ of points $(u,h)$ for both methods. To achieve this, we start off with the grid $\mathcal{G}_T$ from \eqref{grid-sim-app}. We then follow \cite{Rondonotti2007} and \cite{ParkHannigKang2009} and restrict attention to those points $(u,h) \in \mathcal{G}_T$ for which the effective sample size $\text{ESS}^*(u,h)$ for correlated data is not smaller than $5$. This yields the grid $\mathcal{G}_T^* = \{ (u, h) \in \mathcal{G}_T : \text{ESS}^*(u, h) \geq 5 \}$. A detailed discussion of the effective sample size $\text{ESS}^*(u,h)$ for correlated data can be found in \cite{Rondonotti2007}.   
 
-
-%\begin{table}[t!]
-%\centering
-%\footnotesize{
-%\caption{Size of our multiscale test (MT) and SiZer for different model specifications.}\label{tab:size_comparison}
-%\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-%\newcolumntype{Z}{>{\centering\arraybackslash}X}
-%\begin{tabularx}{\textwidth}{C{2} C{0.0001} ZZZZZZ C{0.0001} ZZZZZZ} 
-%\toprule
-%        & & \multicolumn{6}{c}{$a_1 = -0.5$} & & \multicolumn{6}{c}{$a_1 = 0.5$} \\ 
-%\cmidrule[0.4pt]{3-8} \cmidrule[0.4pt]{10-15}
-%        & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} 
-% $T$    & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
-%        & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
-%\cmidrule[0.4pt]{1-15}
-%250 &  & 0.014 & 0.360 & 0.051 & 0.812 & 0.125 & 0.953 &  & 0.010 & 0.057 & 0.036 & 0.206 & 0.086 & 0.311 \\ 
-%350 &  & 0.013 & 0.435 & 0.062 & 0.863 & 0.105 & 0.974 &  & 0.009 & 0.068 & 0.047 & 0.264 & 0.076 & 0.407 \\ 
-%500 &  & 0.009 & 0.496 & 0.050 & 0.911 & 0.120 & 0.993 &  & 0.007 & 0.094 & 0.032 & 0.301 & 0.099 & 0.493 \\ 
-%\bottomrule
-%\end{tabularx}
-%\vspace{0.5cm}
-
-%\caption{Power of our multiscale test (MT) and SiZer for different model specifications. The three panels (a)--(c) corresponds to different slope parameters $\beta$ of the linear tend $m$.}\label{tab:power_comparison}
-%\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-%\newcolumntype{Z}{>{\centering\arraybackslash}X}
-%\begin{tabularx}{\textwidth}{C{2} C{0.0001} ZZZZZZ C{0.0001} ZZZZZZ} 
-%\multicolumn{15}{c}{(a) $\beta = 1.0$ for negative $a_1$ and $\beta = 3.5$ for positive $a_1$} \\[0.2cm]
-%\toprule
-%        & & \multicolumn{6}{c}{$a_1 = -0.5$} & & \multicolumn{6}{c}{$a_1 = 0.5$} \\ 
-%\cmidrule[0.4pt]{3-8} \cmidrule[0.4pt]{10-15}
-% $T$    & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} 
-%        & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
-%        & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
-%\cmidrule[0.4pt]{1-15}
-%250 &  & 0.355 & 0.942 & 0.648 & 1.000 & 0.849 & 1.000 &  & 0.556 & 0.793 & 0.825 & 0.963 & 0.949 & 0.995 \\ 
-%350 &  & 0.639 & 0.995 & 0.854 & 1.000 & 0.933 & 1.000 &  & 0.845 & 0.954 & 0.969 & 0.997 & 0.985 & 1.000 \\ 
-%500 &  & 0.868 & 1.000 & 0.983 & 1.000 & 0.999 & 1.000 &  & 0.979 & 0.999 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
-%\bottomrule
-%\end{tabularx}
-%\vspace{0.25cm}
-
-%\begin{tabularx}{\textwidth}{C{2} C{0.0001} ZZZZZZ C{0.0001} ZZZZZZ} 
-%\multicolumn{15}{c}{(b) $\beta = 1.25$ for negative $a_1$ and $\beta = 3.75$ for positive $a_1$} \\[0.2cm]
-%\toprule        & & \multicolumn{6}{c}{$a_1 = -0.5$} & & \multicolumn{6}{c}{$a_1 = 0.5$} \\ 
-%\cmidrule[0.4pt]{3-8} \cmidrule[0.4pt]{10-15}
-% $T$   & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} 
-%       & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
-%       & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
-%\cmidrule[0.4pt]{1-15}
-%250 &  & 0.678 & 0.997 & 0.894 & 1.000 & 0.978 & 1.000 &  & 0.654 & 0.874 & 0.904 & 0.990 & 0.983 & 0.999 \\ 
-%350 &  & 0.926 & 1.000 & 0.988 & 1.000 & 1.000 & 1.000 &  & 0.914 & 0.982 & 0.988 & 0.999 & 0.998 & 1.000 \\ 
-%500 &  & 0.995 & 1.000 & 0.999 & 1.000 & 1.000 & 1.000 &  & 0.995 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
-%\bottomrule
-%\end{tabularx}
-%\vspace{0.25cm}
-
-%\begin{tabularx}{\textwidth}{C{2} C{0.0001} ZZZZZZ C{0.0001} ZZZZZZ} 
-%\multicolumn{15}{c}{(c) $\beta = 1.5$ for negative $a_1$ and $\beta = 4.0$ for positive $a_1$} \\[0.2cm]
-%\toprule
-%        & & \multicolumn{6}{c}{$a_1 = -0.5$} & & \multicolumn{6}{c}{$a_1 = 0.5$} \\ 
-%\cmidrule[0.4pt]{3-8} \cmidrule[0.4pt]{10-15}
-% $T$    & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} 
-%        & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
-%        & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
-%\cmidrule[0.4pt]{1-15}
-%250 &  & 0.914 & 1.000 & 0.992 & 1.000 & 0.999 & 1.000 &  & 0.778 & 0.924 & 0.940 & 0.996 & 0.996 & 1.000 \\ 
-%350 &  & 0.996 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 &  & 0.967 & 0.994 & 0.999 & 1.000 & 1.000 & 1.000 \\ 
-%500 &  & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 &  & 0.999 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
-%\bottomrule
-%\end{tabularx}
-%}
-%\end{table}
 
 \begin{table}[t!]
 \centering
@@ -191,9 +119,9 @@ The SiZer method is implemented as described in Section S.3 of the Supplementary
         & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
         & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
 \cmidrule[0.4pt]{1-15}
-$T=250$ &  & 0.018 & 0.236 & 0.040 & 0.644 & 0.104 & 0.855 &  & 0.017 & 0.106 & 0.034 & 0.344 & 0.092 & 0.519 \\ 
-$T=350$ &  & 0.016 & 0.294 & 0.056 & 0.731 & 0.080 & 0.910 &  & 0.014 & 0.135 & 0.045 & 0.410 & 0.074 & 0.592 \\ 
-$T=500$ &  & 0.005 & 0.327 & 0.041 & 0.783 & 0.097 & 0.941 &  & 0.006 & 0.149 & 0.039 & 0.470 & 0.097 & 0.673 \\ 
+$T = 250$ &  & 0.018 & 0.112 & 0.040 & 0.374 & 0.104 & 0.575 &  & 0.017 & 0.106 & 0.034 & 0.347 & 0.092 & 0.522 \\ 
+ $T=  350$ &  & 0.012 & 0.140 & 0.058 & 0.426 & 0.080 & 0.621 &  & 0.012 & 0.130 & 0.046 & 0.399 & 0.074 & 0.578 \\ 
+  $ T = 500$ &  & 0.005 & 0.140 & 0.041 & 0.489 & 0.097 & 0.680 &  & 0.006 & 0.136 & 0.039 & 0.452 & 0.097 & 0.639 \\ 
 \bottomrule
 \end{tabularx}
 \vspace{0.5cm}
@@ -210,10 +138,10 @@ $T=500$ &  & 0.005 & 0.327 & 0.041 & 0.783 & 0.097 & 0.941 &  & 0.006 & 0.149 & 
         & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
         & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
 \cmidrule[0.4pt]{1-15}
-$T=250$ &  & 0.218 & 0.758 & 0.454 & 0.982 & 0.664 & 0.996 &  & 0.676 & 0.933 & 0.896 & 0.998 & 0.979 & 1.000 \\ 
-$T=350$ &  & 0.426 & 0.895 & 0.657 & 0.997 & 0.758 & 0.999 &  & 0.931 & 0.994 & 0.988 & 1.000 & 0.994 & 1.000 \\ 
-$T=500$ &  & 0.581 & 0.978 & 0.862 & 1.000 & 0.949 & 1.000 &  & 0.995 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
-\bottomrule
+$T=250$ &  & 0.199 & 0.523 & 0.448 & 0.866 & 0.650 & 0.949 &  & 0.676 & 0.927 & 0.896 & 0.996 & 0.979 & 0.999 \\ 
+  $T=350$ &  & 0.355 & 0.714 & 0.642 & 0.947 & 0.755 & 0.993 &  & 0.910 & 0.993 & 0.990 & 1.000 & 0.994 & 1.000 \\ 
+ $T= 500$ &  & 0.603 & 0.899 & 0.843 & 0.993 & 0.950 & 0.999 &  & 0.995 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\
+ \bottomrule
 \end{tabularx}
 \vspace{0.25cm}
 
@@ -226,9 +154,9 @@ $T=500$ &  & 0.581 & 0.978 & 0.862 & 1.000 & 0.949 & 1.000 &  & 0.995 & 1.000 & 
       & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
       & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
 \cmidrule[0.4pt]{1-15}
-$T=250$ &  & 0.426 & 0.927 & 0.705 & 1.000 & 0.878 & 1.000 &  & 0.837 & 0.980 & 0.968 & 1.000 & 0.994 & 1.000 \\ 
-$T=350$ &  & 0.689 & 0.982 & 0.873 & 1.000 & 0.954 & 1.000 &  & 0.978 & 0.998 & 0.999 & 1.000 & 1.000 & 1.000 \\ 
-$T=500$ &  & 0.915 & 1.000 & 0.993 & 1.000 & 0.998 & 1.000 &  & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
+$T=250$ &  & 0.438 & 0.785 & 0.696 & 0.964 & 0.875 & 0.989 &  & 0.837 & 0.979 & 0.968 & 1.000 & 0.994 & 1.000 \\ 
+ $T= 350$ &  & 0.640 & 0.922 & 0.907 & 0.997 & 0.953 & 1.000 &  & 0.972 & 0.998 & 0.999 & 1.000 & 1.000 & 1.000 \\ 
+  $T=500$ &  & 0.905 & 0.996 & 0.985 & 1.000 & 0.999 & 1.000 &  & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
 \bottomrule
 \end{tabularx}
 \vspace{0.25cm}
@@ -242,17 +170,14 @@ $T=500$ &  & 0.915 & 1.000 & 0.993 & 1.000 & 0.998 & 1.000 &  & 1.000 & 1.000 & 
        & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
        & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
 \cmidrule[0.4pt]{1-15}
-$T=250$ &  & 0.701 & 0.995 & 0.911 & 1.000 & 0.972 & 1.000 &  & 0.927 & 0.999 & 0.987 & 1.000 & 1.000 & 1.000 \\ 
-$T=350$ &  & 0.910 & 0.998 & 0.981 & 1.000 & 0.996 & 1.000 &  & 0.996 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
-$T=500$ &  & 0.995 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 &  & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
+$T=250$ &  & 0.681 & 0.938 & 0.887 & 0.997 & 0.967 & 0.999 &  & 0.927 & 0.999 & 0.987 & 1.000 & 1.000 & 1.000 \\ 
+ $T= 350$ &  & 0.899 & 0.994 & 0.994 & 1.000 & 0.998 & 1.000 &  & 0.995 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
+  $T=500$ &  & 0.994 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 &  & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
 \bottomrule
 \end{tabularx}
 }
 \end{table}
 
-
-%In the first part of the comparison study, we analyse the size and power of the two methods. To do so, we treat SiZer as a rigorous multiple testing method which rejects the null hypothesis $H_0$ if the set $\Pi_T^{\text{SiZer}}$ is non-empty, that is, if the value $0$ is not included in the confidence interval for at least one point $(u,h) \in \mathcal{G}_T^*$. We simulate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$ with different AR($1$) error processes and different trends $m$. In particular, we let $\{\varepsilon_t\}$ be an AR($1$) process of the form $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$ with $a_1 \in \{ -0.5,0.5\}$ and i.i.d.\ standard normal innovations $\eta_t$. To simulate data under the null, we set $m = 0$ as in the previous section. To generate data under the alternative, we consider the linear trends $m(u) = \beta (u - 0.5)$ with different slopes $\beta$. As it is more difficult to detect a trend $m$ in the data when the error terms are positively autocorrelated, we choose the slopes $\beta$ larger in the AR($1$) case with $a_1 = 0.5$ than in the case with $a_1 = -0.5$. In particular, we let $\beta \in \{ 1.0,1.25,1.5 \}$ when $a_1 = -0.5$ and $\beta \in \{ 3.5, 3.75, 4.0 \}$ when $a_1 = 0.5$. Further model specifications with nonlinear trends are considered in the second part of the comparison study. To produce our simulation results, we generate $S=1000$ samples for each model specification and carry out the two methods for each sample.
-%Similar as in the previous section, we let $\beta = s_\beta \cdot \sigma$ with $s_\beta \in \{1.7,2.0,2.3\}$ and $\sigma^2$ being the long-run error variance. Note that the parameter $s_\beta$ is not completely analogous to that in the previous section, where $s_\beta$ determines the slope of a broken line rather than a linear function. The values of $s_\beta$ in this and the previous section thus do not indicate the same signal-to-noise ratios. Further model specifications with nonlinear trends are considered in the second part of the comparison study. To produce our simulation results, we generate $S=1000$ samples for each model specification and carry out the two methods for each sample. 
 
 
 In the first part of the comparison study, we analyse the size and power of the two methods. To do so, we treat SiZer as a rigorous statistical test of the null hypothesis $H_0$ that $m$ is constant on all intervals $[u-h,u+h]$ with $(u,h) \in \mathcal{G}_T^*$. In particular, we let SiZer reject the null if the set $\Pi_T^{\text{SiZer}}$ is non-empty, that is, if the value $0$ is not included in the confidence interval for at least one point $(u,h) \in \mathcal{G}_T^*$. We simulate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$ with different AR($1$) error processes and different trends $m$. In particular, we let $\{\varepsilon_t\}$ be an AR($1$) process of the form $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$ with $a_1 \in \{ -0.25,0.25\}$ and i.i.d.\ standard normal innovations $\eta_t$. To simulate data under the null, we set $m = 0$ as in the previous section. To generate data under the alternative, we consider the linear trends $m(u) = \beta (u - 0.5)$ with different slopes $\beta$. As it is more difficult to detect a trend $m$ in the data when the error terms are positively autocorrelated, we choose the slopes $\beta$ larger in the AR($1$) case with $a_1 = 0.25$ than in the case with $a_1 = -0.25$. In particular, we let $\beta \in \{ 1.0,1.25,1.5 \}$ when $a_1 = -0.25$ and $\beta \in \{ 2.5,2.75,3.0 \}$ when $a_1 = 0.25$. Further model specifications with nonlinear trends are considered in the second part of the comparison study. To produce our simulation results, we generate $S=1000$ samples for each model specification and carry out the two methods for each sample.

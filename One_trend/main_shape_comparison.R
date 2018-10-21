@@ -17,9 +17,9 @@ sigma_eta       <- 1    #Standard deviation of the innovation term
 
 different_alpha     <- c(0.01, 0.05, 0.10) #Level of significance
 different_T         <- c(250, 350,500) #Different lengths of time series for which we compare SiZer and our method
-different_a1        <- c(-0.5, 0.5) #Different a_1 in AR(1) model
+different_a1        <- c(-0.25, 0.25) #Different a_1 in AR(1) model
 slopes_for_negative <- c(1.0, 1.25, 1.5) #Slopes for power calculations for negative a_1
-slopes_for_positive <- c(3.5, 3.75, 4.0)#Slopes for power calculations for positive a_1
+slopes_for_positive <- c(2.5, 2.75, 3.0)#Slopes for power calculations for positive a_1
 
 PDFname <- "Paper/Plots/SiZer_comparison_" #Path for tables
 
@@ -51,7 +51,7 @@ for (a_1 in different_a1){
   T_star   <- gamma[1]/true_var
 
   #THIS PART IS ONLY FOR FAST CALCULATIONS OF THE MATRIX. IF YOU CHANGE different_i OR different_h, YOU CAN'T USE IT!!!
-  filename_aux = paste0("Shape/distribution/New_SiZer/SiZer_matrix_T_", T_size, "_a_1_", a_1, "_sigma_eta_", sigma_eta, "_alpha_", alpha*100, ".RData")
+  filename_aux = paste0("Shape/distribution/SiZer_matrix_T_", T_size, "_a_1_", a_1, "_sigma_eta_", sigma_eta, "_alpha_", alpha*100, ".RData")
   if(!file.exists(filename_aux)) {
     SiZer_matrix <- calculating_SiZer_matrix(different_i, different_h, T_size, T_star, alpha, gamma, a_1, sigma_eta)
     save(SiZer_matrix, file = filename_aux)
@@ -108,11 +108,11 @@ for (a_1 in different_a1){
 #Producing tables#
 ##################
 print.xtable(xtable(matrix_size, digits = c(3), align = paste(replicate((2 * length(different_alpha) + 1) * length(different_a1) + 1, "c"), collapse = "")),
-            type="latex", file=paste0(PDFname, "_size_050.tex"), include.colnames = FALSE)
+            type="latex", file=paste0(PDFname, "_size_025.tex"), include.colnames = FALSE)
 
 j <- 1
 for (slope in slopes_for_negative){
   print.xtable(xtable(matrix_power[(length(different_T) * j - (length(different_T) - 1)):(length(different_T) * j),], digits = c(3), align = paste(replicate((2 * length(different_alpha) + 1) * length(different_a1) + 1, "c"), collapse = "")),
-               type="latex", file=paste0(PDFname, "_power_", slope*100, "_050_newslopes.tex"), include.colnames = FALSE)
+               type="latex", file=paste0(PDFname, "_power_", slope*100, "_025.tex"), include.colnames = FALSE)
   j <- j + 1
 }

@@ -323,7 +323,7 @@ plotting_many_minimal_intervals <- function(trend_height, trend_width, T_size, S
   
   grid_points <- seq(from = 1/T_size, to = 1, length.out = T_size) #grid points for estimating
   
-  pdffilename = paste0("Paper/Plots/New_SiZer/min_int_with_T_", T_size, "_a1_", a_1*100, ".pdf")
+  pdffilename = paste0("Paper/Plots/min_int_with_T_", T_size, "_a1_", a_1*100, ".pdf")
   pdf(pdffilename, width=8, height=10, paper="special")
   
   par(mfrow = c(3,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
