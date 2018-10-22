@@ -230,8 +230,12 @@ $W$ is a $T \times T$ diagonal matrix with the diagonal entries $K_h(t/T-u)$ and
 \newpage
 \item Computation of the confidence intervals:  
 
-For each $(u,h) \in \mathcal{G}_T^*$, we compute the Gaussian quantile for the confidence level $\alpha$
-\[ q(u,h) = \Phi^{-1} \Big(\frac{1 + (1 - \alpha)^{\frac{1}{l(u, h)}}}{2}\Big), \]
-where $l(u,h) = T/\text{ESS}^*(u, h)$ and $\Phi$ is the distribution function of a standard normal random variable. The confidence interval of $\widehat{m}^\prime_h(u)$ is then computed as $[\widehat{m}^\prime_h(u) - q(u,h) \, \text{sd}(\widehat{m}^\prime_h(u)),\widehat{m}^\prime_h(u) + q(u,h) \, \text{sd}(\widehat{m}^\prime_h(u))]$. 
+For a given confidence level $\alpha$ and for each bandwidth value $h$ with $(u,h) \in \mathcal{G}_T^*$, we compute the Gaussian quantile 
+\[ q(h) = \Phi^{-1} \Big( \Big( 1 - \frac{\alpha}{2} \Big)^{1/(\theta g)} \Big), \]
+where $\Phi$ is the distribution function of a standard normal random variable, $g$ is the number of locations $u$ in the grid $\mathcal{G}_T^*$, and the cluster index $\theta$ is defined on p.1519 in \cite{ParkHannigKang2009}. The confidence interval of $\widehat{m}^\prime_h(u)$ is then computed as $[\widehat{m}^\prime_h(u) - q(h) \, \text{sd}(\widehat{m}^\prime_h(u)),\widehat{m}^\prime_h(u) + q(h) \, \text{sd}(\widehat{m}^\prime_h(u))]$. 
+
+%For each $(u,h) \in \mathcal{G}_T^*$, we compute the Gaussian quantile for the confidence level $\alpha$
+%\[ q(u,h) = \Phi^{-1} \Big(\frac{1 + (1 - \alpha)^{\frac{1}{l(u, h)}}}{2}\Big), \]
+%where $l(u,h) = T/\text{ESS}^*(u, h)$ and $\Phi$ is the distribution function of a standard normal random variable. The confidence interval of $\widehat{m}^\prime_h(u)$ is then computed as $[\widehat{m}^\prime_h(u) - q(u,h) \, \text{sd}(\widehat{m}^\prime_h(u)),\widehat{m}^\prime_h(u) + q(u,h) \, \text{sd}(\widehat{m}^\prime_h(u))]$. 
 
 \end{enumerate}
