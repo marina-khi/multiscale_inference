@@ -8,7 +8,7 @@ To assess the finite sample performance of our methods, we conduct a number of s
 \subsection{Size and power properties of the multiscale test}\label{subsec-sim-1} 
 
 
-Our simulation design mimics the situation in the application example of Section \ref{sec-data}. We generate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$ for different trend functions $m$, error processes $\{\varepsilon_t\}$ and time series lengths $T$. The error terms are supposed to have the AR($1$) structure $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$, where $a_1 \in \{-0.5,-0.25,0.25,0.5\}$ and $\eta_t$ are i.i.d.\ standard normal. In addition, we consider the AR($2$) specification $\varepsilon_t = a_1 \varepsilon_{t-1} + a_2 \varepsilon_{t-2} + \eta_t$, where $\eta_t$ are normally distributed with $\ex[\eta_t] = 0$ and $\ex[\eta_t^2] = \nu^2$. We set $a_1 = 0.167$, $a_2 = 0.184$ and $\nu^2 = 0.322$, thus matching the estimated values obtained in the application of Section \ref{sec-data}. To simulate data under the null hypothesis, we let $m$ be a constant function. In particular, we set $m = 0$ without loss of generality. To generate data under the alternative, we consider the trend functions $m(u) = \beta (u - 0.5) \cdot \ind(0.5 \le u \le 1)$ with $\beta = 1.5,2.0,2.5$. These functions are broken lines with a kink at $u = 0.5$ and different slopes $\beta$. Their shape roughly resembles the trend estimates in the application of Section \ref{sec-data}. The slope parameter $\beta$ corresponds to a trend with the value $m(1) = 0.5 \beta$ at the right endpoint $u = 1$. We thus consider broken lines with the values $m(1) = 0.75, 1.0, 1.25$. Inspecting the middle panel of Figure \ref{plot-results-app1}, the broken lines with the endpoints $m(1) = 1.0$ and $m(1) = 1.25$ (that is, with $\beta = 2.0$ and $\beta = 2.5$) can be seen to resemble the local linear trend estimates in the real-data example the most (where we neglect the nonlinearities of the local linear fits at the beginning of the observation period). The broken line with $\beta = 1.5$ is closer to the null, making it harder for our test to detect this alternative.\footnote{The broken lines $m$ are obviously non-differentiable at the kink point. We could replace them by slightly smoothed versions to satisfy the differentiability assumption that is imposed in the theoretical part of the paper. However, as this leaves the simulation results essentially unchanged but only creates additional notation, we stick to the broken lines.}
+Our simulation design mimics the situation in the application example of Section \ref{sec-data}. We generate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$ for different trend functions $m$, error processes $\{\varepsilon_t\}$ and time series lengths $T$. The error terms are supposed to have the AR($1$) structure $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$, where $a_1 \in \{-0.5,-0.25,0.25,0.5\}$ and $\eta_t$ are i.i.d.\ standard normal. In addition, we consider the AR($2$) specification $\varepsilon_t = a_1 \varepsilon_{t-1} + a_2 \varepsilon_{t-2} + \eta_t$, where $\eta_t$ are normally distributed with $\ex[\eta_t] = 0$ and $\ex[\eta_t^2] = \nu^2$. We set $a_1 = 0.167$, $a_2 = 0.178$ and $\nu^2 = 0.322$, thus matching the estimated values obtained in the application of Section \ref{sec-data}. To simulate data under the null hypothesis, we let $m$ be a constant function. In particular, we set $m = 0$ without loss of generality. To generate data under the alternative, we consider the trend functions $m(u) = \beta (u - 0.5) \cdot \ind(0.5 \le u \le 1)$ with $\beta = 1.5,2.0,2.5$. These functions are broken lines with a kink at $u = 0.5$ and different slopes $\beta$. Their shape roughly resembles the trend estimates in the application of Section \ref{sec-data}. The slope parameter $\beta$ corresponds to a trend with the value $m(1) = 0.5 \beta$ at the right endpoint $u = 1$. We thus consider broken lines with the values $m(1) = 0.75, 1.0, 1.25$. Inspecting the middle panel of Figure \ref{plot-results-app1}, the broken lines with the endpoints $m(1) = 1.0$ and $m(1) = 1.25$ (that is, with $\beta = 2.0$ and $\beta = 2.5$) can be seen to resemble the local linear trend estimates in the real-data example the most (where we neglect the nonlinearities of the local linear fits at the beginning of the observation period). The broken line with $\beta = 1.5$ is closer to the null, making it harder for our test to detect this alternative.\footnote{The broken lines $m$ are obviously non-differentiable at the kink point. We could replace them by slightly smoothed versions to satisfy the differentiability assumption that is imposed in the theoretical part of the paper. However, as this leaves the simulation results essentially unchanged but only creates additional notation, we stick to the broken lines.}
 
 
 %To simulate data under the null, we let $m$ be a constant function. In parti\-cular, we set $m = 0$ without loss of generality. To generate data under the alternative, we consider trend functions of the form $m(u) = \beta \cdot (u - 0.5) \cdot \ind(0.5 \le u \le 1)$ with the slope parameter $\beta$. These functions are broken lines with a kink at $u = 0.5$. Their shape roughly resembles the trend estimates in the application of Section \ref{sec-data}. For each AR specification of the errors, we consider three different slopes $\beta = s_\beta \cdot \sigma$ with $s_\beta \in \{1.7,2.3,2.9\}$ and $\sigma^2$ being the long-run error variance. The parameter $s_\beta$ is closely related to the signal-to-noise ratio in the model $Y_{t,T} = m(t/T) + \varepsilon_t$: The larger $s_\beta$, the stronger is the trend $m$ compared to the long-run error variance $\sigma^2$. The values $s_\beta \in \{ 1.7, 2.3, 2.9\}$ are motivated by the application example in Section \ref{sec-data}: For the AR($2$) specification which mimics the data example, it holds that $\beta \approx 1.5, 2.0, 2.5$ for $s_\beta = 1.7,2.3,2.9$. As the slope parameter $\beta$ corresponds to a trend with the value $m(1) = 0.5 \cdot \beta$ at the right endpoint $u = 1$, we thus consider broken lines with the values $m(1) \approx 0.75, 1.0, 1.25$ in this case. Inspecting the middle panel of Figure \ref{plot-results-app1}, the broken lines with the endpoints $m(1) \approx 1.0$ and $m(1) \approx 1.25$ (that is, with $s_\beta = 2.3$ and $s_\beta = 2.9$) can be seen to resemble the local linear trend estimates in the real-data example the most (where we neglect the nonlinearities of the local linear fits at the beginning of the observation period). The broken line with $s_\beta = 1.7$ has a smaller slope $\beta$ and is thus closer to the null, making it harder for our test to detect this alternative.\footnote{The broken lines $m$ are obviously non-differentiable at the kink point. We could replace them by slightly smoothed versions to satisfy the differentiability assumption that is imposed in the theoretical part of the paper. However, as this leaves the simulation results essentially unchanged but only creates additional notation, we stick to the broken lines.}
@@ -22,14 +22,14 @@ Our simulation design mimics the situation in the application example of Section
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{C{2} C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ} 
 \toprule
- & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) = (0.167,0.184)$} \\
+ & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) = (0.167,0.178)$} \\
 \cmidrule[0.4pt]{3-5} \cmidrule[0.4pt]{7-9} \cmidrule[0.4pt]{11-13} \cmidrule[0.4pt]{15-17} \cmidrule[0.4pt]{19-21}
  & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
  & &  0.01 & 0.05  & 0.1 & &  0.01 & 0.05  & 0.1  & &  0.01 & 0.05  & 0.1  & &  0.01 & 0.05  & 0.1  & &  0.01 & 0.05  & 0.1   \\
 \cmidrule[0.4pt]{1-21}
-$T=250$ &  & 0.015 & 0.052 & 0.129 &  & 0.014 & 0.057 & 0.119 &  & 0.011 & 0.045 & 0.115 &  & 0.013 & 0.045 & 0.102 &  & 0.014 & 0.054 & 0.120 \\ 
-$T=350$ &  & 0.014 & 0.065 & 0.123 &  & 0.011 & 0.054 & 0.100 &  & 0.010 & 0.056 & 0.099 &  & 0.010 & 0.045 & 0.091 &  & 0.015 & 0.045 & 0.094 \\ 
-$T=500$ &  & 0.010 & 0.055 & 0.112 &  & 0.010 & 0.048 & 0.091 &  & 0.015 & 0.051 & 0.092 &  & 0.010 & 0.043 & 0.093 &  & 0.007 & 0.049 & 0.097 \\ 
+$T = 250$ &  & 0.015 & 0.050 & 0.127 &  & 0.014 & 0.057 & 0.120 &  & 0.011 & 0.046 & 0.116 &  & 0.013 & 0.042 & 0.108 &  & 0.011 & 0.052 & 0.117 \\ 
+ $T= 350$ &  & 0.009 & 0.067 & 0.120 &  & 0.010 & 0.055 & 0.095 &  & 0.009 & 0.055 & 0.096 &  & 0.010 & 0.049 & 0.090 &  & 0.010 & 0.059 & 0.114 \\ 
+ $T= 500$ &  & 0.015 & 0.053 & 0.128 &  & 0.015 & 0.047 & 0.100 &  & 0.018 & 0.048 & 0.101 &  & 0.015 & 0.042 & 0.106 &  & 0.015 & 0.056 & 0.107 \\ 
 \bottomrule
 \end{tabularx}
 \vspace{0.5cm}
@@ -39,14 +39,14 @@ $T=500$ &  & 0.010 & 0.055 & 0.112 &  & 0.010 & 0.048 & 0.091 &  & 0.015 & 0.051
 \begin{tabularx}{\textwidth}{C{2} C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ} 
 \multicolumn{21}{c}{(a) $\beta = 1.5$} \\[0.2cm]
 \toprule
- & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) = (0.167,0.184)$} \\
+ & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) = (0.167,0.178)$} \\
 \cmidrule[0.4pt]{3-5} \cmidrule[0.4pt]{7-9} \cmidrule[0.4pt]{11-13} \cmidrule[0.4pt]{15-17} \cmidrule[0.4pt]{19-21}
  & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
  & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1   \\
 \cmidrule[0.4pt]{1-21}
-$T=250$ &  & 0.486 & 0.729 & 0.853 &  & 0.325 & 0.550 & 0.705 &  & 0.077 & 0.176 & 0.327 &  & 0.036 & 0.097 & 0.179 &  & 0.254 & 0.428 & 0.596 \\ 
-$T=350$ &  & 0.747 & 0.910 & 0.959 &  & 0.480 & 0.745 & 0.838 &  & 0.121 & 0.262 & 0.392 &  & 0.053 & 0.136 & 0.219 &  & 0.381 & 0.599 & 0.741 \\ 
-$T=500$ &  & 0.928 & 0.988 & 0.997 &  & 0.744 & 0.932 & 0.969 &  & 0.167 & 0.395 & 0.523 &  & 0.049 & 0.164 & 0.263 &  & 0.581 & 0.819 & 0.893 \\ 
+$T=250$ &  & 0.484 & 0.726 & 0.853 &  & 0.319 & 0.548 & 0.702 &  & 0.077 & 0.177 & 0.324 &  & 0.036 & 0.097 & 0.181 &  & 0.269 & 0.460 & 0.612 \\ 
+ $T= 350$ &  & 0.735 & 0.913 & 0.955 &  & 0.463 & 0.753 & 0.834 &  & 0.116 & 0.273 & 0.385 &  & 0.050 & 0.141 & 0.221 &  & 0.390 & 0.654 & 0.770 \\ 
+  $T=500$ &  & 0.945 & 0.988 & 0.997 &  & 0.775 & 0.925 & 0.972 &  & 0.195 & 0.389 & 0.551 &  & 0.060 & 0.162 & 0.285 &  & 0.623 & 0.815 & 0.907 \\ 
 \bottomrule
 \end{tabularx}
 \vspace{0.25cm}
@@ -54,14 +54,14 @@ $T=500$ &  & 0.928 & 0.988 & 0.997 &  & 0.744 & 0.932 & 0.969 &  & 0.167 & 0.395
 \begin{tabularx}{\textwidth}{C{2} C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ} 
 \multicolumn{21}{c}{(b) $\beta = 2.0$} \\[0.2cm]
 \toprule
- & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) = (0.167,0.184)$} \\
+ & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) = (0.167,0.178)$} \\
 \cmidrule[0.4pt]{3-5} \cmidrule[0.4pt]{7-9} \cmidrule[0.4pt]{11-13} \cmidrule[0.4pt]{15-17} \cmidrule[0.4pt]{19-21}
  & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
  & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1   \\
 \cmidrule[0.4pt]{1-21}
-$T=250$ &  & 0.872 & 0.963 & 0.985 &  & 0.672 & 0.849 & 0.918 &  & 0.162 & 0.334 & 0.514 &  & 0.062 & 0.143 & 0.258 &  & 0.528 & 0.719 & 0.852 \\ 
-$T=350$ &  & 0.981 & 0.997 & 1.000 &  & 0.871 & 0.968 & 0.987 &  & 0.272 & 0.470 & 0.624 &  & 0.094 & 0.220 & 0.337 &  & 0.729 & 0.900 & 0.952 \\ 
-$T=500$ &  & 1.000 & 1.000 & 1.000 &  & 0.978 & 0.997 & 0.999 &  & 0.426 & 0.718 & 0.811 &  & 0.110 & 0.313 & 0.421 &  & 0.928 & 0.985 & 0.992 \\ 
+$T = 250$ &  & 0.869 & 0.961 & 0.985 &  & 0.663 & 0.846 & 0.916 &  & 0.164 & 0.340 & 0.520 &  & 0.062 & 0.143 & 0.259 &  & 0.549 & 0.724 & 0.851 \\ 
+$T=  350$ &  & 0.979 & 0.997 & 1.000 &  & 0.863 & 0.969 & 0.986 &  & 0.262 & 0.483 & 0.615 &  & 0.092 & 0.231 & 0.334 &  & 0.759 & 0.922 & 0.958 \\ 
+ $T= 500$ &  & 1.000 & 1.000 & 1.000 &  & 0.983 & 0.997 & 0.999 &  & 0.469 & 0.716 & 0.821 &  & 0.137 & 0.309 & 0.451 &  & 0.933 & 0.983 & 0.994 \\ 
 \bottomrule
 \end{tabularx}
 \vspace{0.25cm}
@@ -69,14 +69,14 @@ $T=500$ &  & 1.000 & 1.000 & 1.000 &  & 0.978 & 0.997 & 0.999 &  & 0.426 & 0.718
 \begin{tabularx}{\textwidth}{C{2} C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ} 
 \multicolumn{21}{c}{(c) $\beta = 2.5$} \\[0.2cm]
 \toprule
- & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) = (0.167,0.184)$} \\
+ & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) = (0.167,0.178)$} \\
 \cmidrule[0.4pt]{3-5} \cmidrule[0.4pt]{7-9} \cmidrule[0.4pt]{11-13} \cmidrule[0.4pt]{15-17} \cmidrule[0.4pt]{19-21}
  & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
  & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1   \\
 \cmidrule[0.4pt]{1-21}
-$T=250$ &  & 0.990 & 1.000 & 1.000 &  & 0.904 & 0.971 & 0.993 &  & 0.325 & 0.535 & 0.706 &  & 0.096 & 0.215 & 0.361 &  & 0.785 & 0.916 & 0.963 \\ 
-$T=350$ &  & 1.000 & 1.000 & 1.000 &  & 0.991 & 1.000 & 1.000 &  & 0.478 & 0.720 & 0.840 &  & 0.169 & 0.345 & 0.482 &  & 0.945 & 0.983 & 0.996 \\ 
-$T=500$ &  & 1.000 & 1.000 & 1.000 &  & 0.999 & 1.000 & 1.000 &  & 0.740 & 0.923 & 0.964 &  & 0.238 & 0.476 & 0.624 &  & 0.994 & 0.999 & 0.999 \\ 
+$T=250$ &  & 0.989 & 1.000 & 1.000 &  & 0.901 & 0.971 & 0.993 &  & 0.322 & 0.543 & 0.703 &  & 0.100 & 0.224 & 0.367 &  & 0.804 & 0.918 & 0.958 \\ 
+ $T= 350$ &  & 1.000 & 1.000 & 1.000 &  & 0.990 & 1.000 & 1.000 &  & 0.470 & 0.737 & 0.833 &  & 0.162 & 0.361 & 0.481 &  & 0.950 & 0.988 & 0.997 \\ 
+ $T= 500$ &  & 1.000 & 1.000 & 1.000 &  & 0.999 & 1.000 & 1.000 &  & 0.773 & 0.919 & 0.968 &  & 0.285 & 0.473 & 0.649 &  & 0.994 & 0.999 & 1.000 \\ 
 \bottomrule
 \end{tabularx}
 }
@@ -92,7 +92,7 @@ To implement our test, we choose $K$ to be an Epanechnikov kernel and define the
 We thus take into account all rescaled time points $u \in [0,1]$ on an equidistant grid with step length $5/T$. For the bandwidth $h = (3 + 5\ell)/T$ and any $u \in [h,1-h]$, the local linear weights $w_{t,T}(u,h)$ are non-zero for exactly $5 + 10 \ell$ observations. Hence, the bandwidths $h$ in $\mathcal{G}_T$ correspond to effective sample sizes of $5, 15, 25, \ldots$ up to approximately $T/4$ data points. As a robustness check, we have re-run the simulations for a number of other grids. As the results are very similar, we do however not report them here. The long-run error variance $\sigma^2$ is estimated by the procedures from Section \ref{subsec-error-var-AR}: We first compute the estimator $\widehat{\boldsymbol{a}}$ of the AR parameter(s), where we use $\overline{r} = 10$ and the pilot estimator $\widehat{\boldsymbol{a}}_q$ with $q = 25$. Based on $\widehat{\boldsymbol{a}}$, we then compute the estimator $\widehat{\sigma}^2$ of the long-run error variance $\sigma^2$. As a further robustness check, we have re-run the simulations for other choices of $q$ and $\overline{r}$, which yields very similar results. The dependence of the estimators $\widehat{\boldsymbol{a}}$ and $\widehat{\sigma}^2$ on $q$ and $\overline{r}$ is further explored in Section \ref{subsec-sim-3}. To compute the critical values of the multiscale test, we simulate $1000$ values of the statistic $\Phi_T$ defined in Section \ref{subsec-method-test} and compute their empirical $(1-\alpha)$ quantile $q_T(\alpha)$. 
 
 
-Tables \ref{tab:size_test} and \ref{tab:power_test} report the simulation results for the sample sizes $T=250,350,500$ and the significance levels $\alpha = 0.01, 0.05, 0.10$. The sample size $T = 350$ is approximately equal to the time series length $359$ in the real-data example of Section \ref{sec-data}. To produce our simulation results, we generate $S=1000$ samples for each model specification and carry out the multiscale test for each sample. The entries of Tables \ref{tab:size_test} and \ref{tab:power_test} are computed as the number of simulations in which the test rejects divided by the total number of simulations. As can be seen from Table \ref{tab:size_test}, the actual size of the test is fairly close to the nominal target $\alpha$ for all the considered AR specifications and sample sizes. Hence, the test has approximately the correct size. Inspecting Table \ref{tab:power_test}, one can further see that the test has reasonable power properties. For all the considered AR specifications, the power increases quickly (i) as the sample size gets larger and (ii) as we move away from the null by increasing the slope parameter $\beta$. The power is of course quite different across the various AR specifications. In particular, it is much lower for positive than for negative values of $a_1$ in the AR($1$) case, the lowest power numbers being obtained for the largest positive value $a_1 = 0.5$ under consideration. This reflects the fact that it is more difficult to detect a trend when there is strong positive autocorrelation in the data. For the AR($2$) specification of the errors, the sample size $T=350$ and the slopes $\beta = 2.0$ and $\beta = 2.5$, which yield the two model specifications that resemble the real-life data in Section \ref{sec-data} the most, the power of the test is above $90\%$ for the significance levels $\alpha = 0.05$ and $\alpha = 0.1$ and above $72\%$ for $\alpha = 0.01$. Hence, our method has substantial power in the two simulation scenarios which are closest to the situation in the application. 
+Tables \ref{tab:size_test} and \ref{tab:power_test} report the simulation results for the sample sizes $T=250,350,500$ and the significance levels $\alpha = 0.01, 0.05, 0.10$. The sample size $T = 350$ is approximately equal to the time series length $359$ in the real-data example of Section \ref{sec-data}. To produce our simulation results, we generate $S=1000$ samples for each model specification and carry out the multiscale test for each sample. The entries of Tables \ref{tab:size_test} and \ref{tab:power_test} are computed as the number of simulations in which the test rejects divided by the total number of simulations. As can be seen from Table \ref{tab:size_test}, the actual size of the test is fairly close to the nominal target $\alpha$ for all the considered AR specifications and sample sizes. Hence, the test has approximately the correct size. Inspecting Table \ref{tab:power_test}, one can further see that the test has reasonable power properties. For all the considered AR specifications, the power increases quickly (i) as the sample size gets larger and (ii) as we move away from the null by increasing the slope parameter $\beta$. The power is of course quite different across the various AR specifications. In particular, it is much lower for positive than for negative values of $a_1$ in the AR($1$) case, the lowest power numbers being obtained for the largest positive value $a_1 = 0.5$ under consideration. This reflects the fact that it is more difficult to detect a trend when there is strong positive autocorrelation in the data. For the AR($2$) specification of the errors, the sample size $T=350$ and the slopes $\beta = 2.0$ and $\beta = 2.5$, which yield the two model specifications that resemble the real-life data in Section \ref{sec-data} the most, the power of the test is above$90\%$ for the significance levels $\alpha = 0.05$ and $\alpha = 0.1$ and above $75\%$ for $\alpha = 0.01$. Hence, our method has substantial power in the two simulation scenarios which are closest to the situation in the application. 
 
 
 \subsection{Comparison with SiZer}\label{subsec-sim-2}
@@ -120,8 +120,8 @@ In order to implement SiZer for time series, we follow the exposition in \cite{P
         & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
 \cmidrule[0.4pt]{1-15}
 $T = 250$ &  & 0.018 & 0.112 & 0.040 & 0.374 & 0.104 & 0.575 &  & 0.017 & 0.106 & 0.034 & 0.347 & 0.092 & 0.522 \\ 
- $T=  350$ &  & 0.012 & 0.140 & 0.058 & 0.426 & 0.080 & 0.621 &  & 0.012 & 0.130 & 0.046 & 0.399 & 0.074 & 0.578 \\ 
-  $ T = 500$ &  & 0.005 & 0.140 & 0.041 & 0.489 & 0.097 & 0.680 &  & 0.006 & 0.136 & 0.039 & 0.452 & 0.097 & 0.639 \\ 
+  $T= 350$ &  & 0.012 & 0.140 & 0.058 & 0.426 & 0.080 & 0.621 &  & 0.012 & 0.130 & 0.046 & 0.399 & 0.074 & 0.578 \\ 
+  $T=500$ &  & 0.005 & 0.140 & 0.041 & 0.489 & 0.097 & 0.680 &  & 0.006 & 0.136 & 0.039 & 0.452 & 0.097 & 0.639 \\ 
 \bottomrule
 \end{tabularx}
 \vspace{0.5cm}
@@ -130,7 +130,7 @@ $T = 250$ &  & 0.018 & 0.112 & 0.040 & 0.374 & 0.104 & 0.575 &  & 0.017 & 0.106 
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{C{2} C{0.0001} ZZZZZZ C{0.0001} ZZZZZZ} 
-\multicolumn{15}{c}{(a) $\beta = 1.0$ for negative $a_1$ and $\beta = 2.5$ for positive $a_1$} \\[0.2cm]
+\multicolumn{15}{c}{(a) $\beta = 1.0$ for negative $a_1$ and $\beta = 2.0$ for positive $a_1$} \\[0.2cm]
 \toprule
         & & \multicolumn{6}{c}{$a_1 = -0.25$} & & \multicolumn{6}{c}{$a_1 = 0.25$} \\ 
 \cmidrule[0.4pt]{3-8} \cmidrule[0.4pt]{10-15}
@@ -138,15 +138,15 @@ $T = 250$ &  & 0.018 & 0.112 & 0.040 & 0.374 & 0.104 & 0.575 &  & 0.017 & 0.106 
         & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
         & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
 \cmidrule[0.4pt]{1-15}
-$T=250$ &  & 0.199 & 0.523 & 0.448 & 0.866 & 0.650 & 0.949 &  & 0.676 & 0.927 & 0.896 & 0.996 & 0.979 & 0.999 \\ 
-  $T=350$ &  & 0.355 & 0.714 & 0.642 & 0.947 & 0.755 & 0.993 &  & 0.910 & 0.993 & 0.990 & 1.000 & 0.994 & 1.000 \\ 
- $T= 500$ &  & 0.603 & 0.899 & 0.843 & 0.993 & 0.950 & 0.999 &  & 0.995 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\
+$T = 250$ &  & 0.218 & 0.544 & 0.454 & 0.869 & 0.664 & 0.949 &  & 0.359 & 0.717 & 0.653 & 0.947 & 0.829 & 0.989 \\ 
+ $T= 350$ &  & 0.385 & 0.707 & 0.665 & 0.958 & 0.753 & 0.986 &  & 0.599 & 0.888 & 0.864 & 0.995 & 0.913 & 0.998 \\ 
+  $T=500$ &  & 0.581 & 0.899 & 0.862 & 0.993 & 0.949 & 0.999 &  & 0.851 & 0.981 & 0.983 & 1.000 & 0.999 & 1.000 \\ 
  \bottomrule
 \end{tabularx}
 \vspace{0.25cm}
 
 \begin{tabularx}{\textwidth}{C{2} C{0.0001} ZZZZZZ C{0.0001} ZZZZZZ} 
-\multicolumn{15}{c}{(b) $\beta = 1.25$ for negative $a_1$ and $\beta = 2.75$ for positive $a_1$} \\[0.2cm]
+\multicolumn{15}{c}{(b) $\beta = 1.25$ for negative $a_1$ and $\beta = 2.25$ for positive $a_1$} \\[0.2cm]
 \toprule
       & & \multicolumn{6}{c}{$a_1 = -0.25$} & & \multicolumn{6}{c}{$a_1 = 0.25$} \\ 
 \cmidrule[0.4pt]{3-8} \cmidrule[0.4pt]{10-15}
@@ -154,15 +154,15 @@ $T=250$ &  & 0.199 & 0.523 & 0.448 & 0.866 & 0.650 & 0.949 &  & 0.676 & 0.927 & 
       & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
       & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
 \cmidrule[0.4pt]{1-15}
-$T=250$ &  & 0.438 & 0.785 & 0.696 & 0.964 & 0.875 & 0.989 &  & 0.837 & 0.979 & 0.968 & 1.000 & 0.994 & 1.000 \\ 
- $T= 350$ &  & 0.640 & 0.922 & 0.907 & 0.997 & 0.953 & 1.000 &  & 0.972 & 0.998 & 0.999 & 1.000 & 1.000 & 1.000 \\ 
-  $T=500$ &  & 0.905 & 0.996 & 0.985 & 1.000 & 0.999 & 1.000 &  & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
+$T=250$ &  & 0.426 & 0.771 & 0.705 & 0.969 & 0.878 & 0.996 &  & 0.537 & 0.861 & 0.791 & 0.987 & 0.932 & 0.999 \\ 
+  $T=350$ &  & 0.645 & 0.912 & 0.882 & 0.993 & 0.954 & 1.000 &  & 0.773 & 0.955 & 0.948 & 0.999 & 0.985 & 1.000 \\ 
+ $T= 500$ &  & 0.915 & 0.994 & 0.993 & 1.000 & 0.998 & 1.000 &  & 0.962 & 0.999 & 1.000 & 1.000 & 0.999 & 1.000 \\ 
 \bottomrule
 \end{tabularx}
 \vspace{0.25cm}
 
 \begin{tabularx}{\textwidth}{C{2} C{0.0001} ZZZZZZ C{0.0001} ZZZZZZ} 
-\multicolumn{15}{c}{(c) $\beta = 1.5$ for negative $a_1$ and $\beta = 3.0$ for positive $a_1$} \\[0.2cm]
+\multicolumn{15}{c}{(c) $\beta = 1.5$ for negative $a_1$ and $\beta = 2.5$ for positive $a_1$} \\[0.2cm]
 \toprule
        & & \multicolumn{6}{c}{$a_1 = -0.25$} & & \multicolumn{6}{c}{$a_1 = 0.25$} \\ 
 \cmidrule[0.4pt]{3-8} \cmidrule[0.4pt]{10-15}
@@ -170,9 +170,9 @@ $T=250$ &  & 0.438 & 0.785 & 0.696 & 0.964 & 0.875 & 0.989 &  & 0.837 & 0.979 & 
        & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
        & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
 \cmidrule[0.4pt]{1-15}
-$T=250$ &  & 0.681 & 0.938 & 0.887 & 0.997 & 0.967 & 0.999 &  & 0.927 & 0.999 & 0.987 & 1.000 & 1.000 & 1.000 \\ 
- $T= 350$ &  & 0.899 & 0.994 & 0.994 & 1.000 & 0.998 & 1.000 &  & 0.995 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
-  $T=500$ &  & 0.994 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 &  & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
+$T=250$ &  & 0.701 & 0.942 & 0.911 & 0.992 & 0.972 & 1.000 &  & 0.698 & 0.941 & 0.908 & 0.993 & 0.970 & 1.000 \\ 
+ $T= 350$ &  & 0.895 & 0.994 & 0.981 & 1.000 & 0.996 & 1.000 &  & 0.893 & 0.993 & 0.980 & 1.000 & 0.996 & 1.000 \\ 
+  $T=500$ &  & 0.995 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 &  & 0.995 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
 \bottomrule
 \end{tabularx}
 }
@@ -252,10 +252,10 @@ different choices of the parameters $q$, $\overline{r}$ and $(m_1,m_2)$. Moreove
 
 \begin{figure}[t!]
 \begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{Plots/MSE_a1_T=500_slope=1_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/MSE_a1_T=500_slope=1_(q,r,M1,M2)=(25,10,20,30).pdf}
 \end{subfigure}\hspace{0.25cm}
 \begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{Plots/MSE_lrv_T=500_slope=1_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/MSE_lrv_T=500_slope=1_(q,r,M1,M2)=(25,10,20,30).pdf}
 \end{subfigure}
 \caption{MSE values for the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$, $\widehat{\sigma}^2_{\text{oracle}}$ in the simulation scenarios with a moderate trend ($s_\beta=1$).}\label{fig:MSE_slope1}
 \end{figure}
@@ -263,10 +263,10 @@ different choices of the parameters $q$, $\overline{r}$ and $(m_1,m_2)$. Moreove
 
 \begin{figure}[t!]
 \begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{Plots/MSE_a1_T=500_slope=10_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/MSE_a1_T=500_slope=10_(q,r,M1,M2)=(25,10,20,30).pdf}
 \end{subfigure}\hspace{0.25cm}
 \begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{Plots/MSE_lrv_T=500_slope=10_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/MSE_lrv_T=500_slope=10_(q,r,M1,M2)=(25,10,20,30).pdf}
 \end{subfigure}
 \caption{MSE values for the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$, $\widehat{\sigma}^2_{\text{oracle}}$ in the simulation scenarios with a pronounced trend ($s_\beta=10$).}\label{fig:MSE_slope10}
 \end{figure}
@@ -275,10 +275,10 @@ different choices of the parameters $q$, $\overline{r}$ and $(m_1,m_2)$. Moreove
 \begin{figure}[t!]
 \centering
 \begin{subfigure}[b]{\textwidth}
-\includegraphics[width=\textwidth]{Plots/a_hat_histograms_a1=-95_T=500_slope=1_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/a_hat_histograms_a1=-95_T=500_slope=1_(q,r,M1,M2)=(25,10,20,30).pdf}
 \end{subfigure}
 \begin{subfigure}[b]{\textwidth}
-\includegraphics[width=\textwidth]{Plots/lrv_histograms_a1=-95_T=500_slope=1_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/lrv_histograms_a1=-95_T=500_slope=1_(q,r,M1,M2)=(25,10,20,30).pdf}
 \end{subfigure}
 \caption{Histograms of the simulated values produced by the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$, $\widehat{\sigma}^2_{\text{oracle}}$ in the scenario with $a_1 = -0.95$ and $s_\beta = 1$. The vertical red lines indicate the true values of $a_1$ and $\sigma^2$.}\label{fig:hist_scenario1} 
 \end{figure}
@@ -287,10 +287,10 @@ different choices of the parameters $q$, $\overline{r}$ and $(m_1,m_2)$. Moreove
 \begin{figure}[t!]
 \centering
 \begin{subfigure}[b]{\textwidth}
-\includegraphics[width=\textwidth]{Plots/a_hat_histograms_a1=25_T=500_slope=10_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/a_hat_histograms_a1=25_T=500_slope=10_(q,r,M1,M2)=(25,10,20,30).pdf}
 \end{subfigure}
 \begin{subfigure}[b]{\textwidth}
-\includegraphics[width=\textwidth]{Plots/lrv_histograms_a1=25_T=500_slope=10_(q,K1,K2,M1,M2)=(25,2,10,20,30).pdf}
+\includegraphics[width=\textwidth]{Plots/lrv_histograms_a1=25_T=500_slope=10_(q,r,M1,M2)=(25,10,20,30).pdf}
 \end{subfigure}
 \caption{Histograms of the simulated values produced by the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$, $\widehat{\sigma}^2_{\text{oracle}}$ in the scenario with $a_1 = 0.25$ and $s_\beta = 10$. The vertical red lines indicate the true values of $a_1$ and $\sigma^2$.}\label{fig:hist_scenario2} 
 \end{figure}
@@ -316,13 +316,13 @@ Whereas the methods of \cite{Hall2003} perform much worse than ours for negative
 \section{Application}\label{sec-data}
 
 
-The analysis of time trends in long temperature records is an important task in climatology. Information on the shape of the trend is needed in order to better understand long-term climate variability. The Central England temperature record is the longest instrumental temperature time series in the world. It is a valuable asset for analysing climate variability over the last few hundred years. The data is publicly available on the webpage of the UK Met Office. A detailed description of the data can be found in \cite{Parker1992}. For our analysis, we use the dataset of yearly mean temperatures which consists of $T=359$ observations covering the years from $1659$ to $2017$. We assume that the data follow the nonparametric trend model $Y_{t,T} = m(t/T) + \varepsilon_t$, where $m$ is the unknown time trend of interest. The error process $\{ \varepsilon_t \}$ is supposed to have the AR($p$) structure $\varepsilon_t = \sum_{j=1}^p a_j \varepsilon_{t-j} + \eta_t$, where $\eta_t$ are i.i.d.\ innovations with mean $0$ and variance $\nu^2$. As pointed out in \cite{Mudelsee2010} among others, this is the most widely used error model for discrete climate time series. To select the AR order $p$, we proceed as follows: We estimate the AR parameters and the corresponding variance of the innovation terms for different AR orders by our methods from Section \ref{subsec-error-var-AR} and choose $p$ to be the minimizer of the final prediction error (FPE) criterion. This yields the AR order $p = 2$. We then estimate the parameters $\boldsymbol{a} = (a_1,a_2)$ and the long error run-variance $\sigma^2$ by the estimators $\widehat{\boldsymbol{a}} = (\widehat{a}_1,\widehat{a}_2)$ and $\widehat{\sigma}^2$, which yields the values  $\widehat{a}_1 = 0.167$, $\widehat{a}_2 = 0.184$ and $\widehat{\sigma}^2 = 0.764$. To select the AR order $p$ and produce the estimators $\widehat{\boldsymbol{a}}$ and $\widehat{\sigma}^2$, we have set $q = 25$ and $\overline{r} = 10$ as in the simulation study of Section \ref{subsec-sim-1}.\footnote{We have repeated the process of order selection and parameter estimation for other criterions such as AIC, SIC, HQ and other values of the parameters $q$ and $\overline{r}$. The estimation results are very similar in most cases. In particular, for most of the considered robustness checks, we get $p=2$ as an AR order.} 
+The analysis of time trends in long temperature records is an important task in climatology. Information on the shape of the trend is needed in order to better understand long-term climate variability. The Central England temperature record is the longest instrumental temperature time series in the world. It is a valuable asset for analysing climate variability over the last few hundred years. The data is publicly available on the webpage of the UK Met Office. A detailed description of the data can be found in \cite{Parker1992}. For our analysis, we use the dataset of yearly mean temperatures which consists of $T=359$ observations covering the years from $1659$ to $2017$. We assume that the data follow the nonparametric trend model $Y_{t,T} = m(t/T) + \varepsilon_t$, where $m$ is the unknown time trend of interest. The error process $\{ \varepsilon_t \}$ is supposed to have the AR($p$) structure $\varepsilon_t = \sum_{j=1}^p a_j \varepsilon_{t-j} + \eta_t$, where $\eta_t$ are i.i.d.\ innovations with mean $0$ and variance $\nu^2$. As pointed out in \cite{Mudelsee2010} among others, this is the most widely used error model for discrete climate time series. To select the AR order $p$, we proceed as follows: We estimate the AR parameters and the corresponding variance of the innovation terms for different AR orders by our methods from Section \ref{subsec-error-var-AR} and choose $p$ to be the minimizer of the Schwartz information criterion (SIC) criterion. This yields the AR order $p = 2$. We then estimate the parameters $\boldsymbol{a} = (a_1,a_2)$ and the long error run-variance $\sigma^2$ by the estimators $\widehat{\boldsymbol{a}} = (\widehat{a}_1,\widehat{a}_2)$ and $\widehat{\sigma}^2$, which yields the values  $\widehat{a}_1 = 0.167$, $\widehat{a}_2 = 0.178$ and $\widehat{\sigma}^2 = 0.749$. To select the AR order $p$ and produce the estimators $\widehat{\boldsymbol{a}}$ and $\widehat{\sigma}^2$, we have set $q = 25$ and $\overline{r} = 10$ as in the simulation study of Section \ref{subsec-sim-1}.\footnote{We have repeated the process of order selection and parameter estimation for other criterions such as FPE, AIC, HQ and other values of the parameters $q$ and $\overline{r}$. The estimation results are very similar.} 
 
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.8\textwidth]{Plots/temperature_data.pdf}
-\caption{Summary of the application results. The upper panel shows the Central England mean temperature time series. The middle panel depicts local linear kernel estimates of the time trend for a number of different bandwidths $h$. The lower panel presents the minimal intervals in the set $\Pi_T^+$ produced by the multiscale test. These are $[1676,1742]$, $[1681,1747]$, $[1831,2007]$, $[1856, 2012]$ and $[1871,2017]$.}\label{plot-results-app1}
+\caption{Summary of the application results. The upper panel shows the Central England mean temperature time series. The middle panel depicts local linear kernel estimates of the time trend for a number of different bandwidths $h$. The lower panel presents the minimal intervals in the set $\Pi_T^+$ produced by the multiscale test. These are $[1686,1742]$, $[1831,2007]$, $[1866, 2012]$ and $[1871,2017]$.}\label{plot-results-app1}
 \end{figure}
 
 
