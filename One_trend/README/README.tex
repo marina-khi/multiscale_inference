@@ -44,13 +44,13 @@ This document describes the R code that can be used to replicate the empirical r
 \vspace{0.2cm}
 
 \everypar{\hangafter=1\hangindent=1.45cm\relax}
-\verb|main_shape_simulation.R| \hspace{1pt} produces the simulation results for our multiscale method, that are reported in Section 5.1.
+\verb|main_shape_simulation.R| \hspace{1pt} produces the simulation results for our multiscale \linebreak method, that are reported in Section 5.1.
 
 \verb|main_shape_comparison.R| \hspace{1pt} produces the simulation results on comparison between our multiscale test and SiZer, that we report in Section 5.2.
 
 \verb|main_variance_simulation.R| \hspace{1pt} produces the simulation results for our long-run variance estimator and its comparison with the estimator from Hall and Van Keilegom (2003) and the oracle one. These results are presented in Section 5.3.
 
-\verb|main_shape_application.R| \hspace{1pt} produces the application results from Section 6, where our multsicale test of the hypothesis $H_0: m^\prime = 0$ is applied.
+\verb|main_shape_application.R| \hspace{1pt} produces the application results from Section 6, where our multiscale test of the hypothesis $H_0: m^\prime = 0$ is applied.
 
 
 \everypar{\hangafter=0\relax}
@@ -70,7 +70,7 @@ All the dynamic libraries are already provided, additional  compilation is not n
 
 
 \newpage
-\section*{Description of the files provided}
+\section*{Description of files}
 
 
 \setlength{\parskip}{0.3cm}
@@ -92,5 +92,5 @@ All the dynamic libraries are already provided, additional  compilation is not n
 
 \verb|Shape\data| \hspace{1pt} is a folder with the file \verb|cetml1659on.dat| which contains the monthly and yearly mean central England temperature from 1659 up to 2017. It was downloaded from \verb|https://www.metoffice.gov.uk/hadobs/hadcet/data| \verb|/download.html|. A full description of the data can be accessed on the website of the UK Met Office \verb|https://www.metoffice.gov.uk|. 
 
-\verb|Shape\distribution| \hspace{1pt} is a folder that  contains simulated distributions of the Gaussian statistic $\Phi'_{T}$ for various time series lengths $T$ and for different grids as well as some deterministic variables for SiZer that are stored in order to decrease running time of \verb|main_shape_comparison.R|. The names of the fles with the simulated distributions for Section 5.1 (calculated on the grid $\mathcal{G}_T$) end with \verb|..._constant_type_ll.RData| whereas the names of the files with the simulated distributions for Section 5.2, that are based on the abridged grid $\mathcal{G}^*_T$, end with \verb|..._comparison_type_ll.RData|. In order to recalculate these distributions, the stored files need to be deleted or removed; the computation is then done automatically while running the main file. The distribution of the Gaussian statistic $\Phi'_T$ used to calculate the critical values of the test in the application in Section 6 is stored in the file \verb|distr_T_359_testing_constant_type_ll.RData|. As before, the distribution of $\Phi'_T$ can be recalculated by removing or deleting this file before running \verb|main_shape_application.R|. 
+\verb|Shape\distribution| \hspace{1pt} is a folder that  contains simulated distributions of the Gaussian statistic $\Phi_{T}$ for various time series lengths $T$ and for different grids as well as some deterministic variables for SiZer that are stored in order to decrease running time of \verb|main_shape_comparison.R|. The names of the files with the simulated distributions for Section 5.1 (calculated on the grid $\mathcal{G}_T$) end with \verb|..._constant_type_ll.RData| whereas the names of the files with the simulated distributions for Section 5.2, that are based on the abridged grid $\mathcal{G}^*_T$, end with \verb|..._comparison_type_ll.RData|. In order to recalculate these distributions, the stored files need to be deleted or removed; the computation is then done automatically while running the main file. The distribution of the Gaussian statistic $\Phi_T$ used to calculate the critical values of the test in the application in Section 6 is stored in the file \verb|distr_T_359_testing_constant_type_ll.RData|. As before, the distribution of $\Phi_T$ can be recalculated by removing or deleting this file before running \verb|main_shape_application.R|. 
 \end{document}
