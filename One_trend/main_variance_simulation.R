@@ -18,8 +18,8 @@ T_size    <- 500 #Sample size considered
 
 different_a          <- c(-0.95,-0.75,-0.5,-0.25,0.25,0.5,0.75,0.95) # AR parameters a_1
 different_slope_facs <- c(1, 10) # slope of linear trend = slope_fac * sqrt(sigma_eta^2/(1-a_star^2))
-different_q          <- c(20, 25, 30, 35) # tuning parameters for first-step estimator
-different_r          <- c(10, 15) #tuning parameters for second-step estimator
+different_q          <- c(25) # tuning parameters for first-step estimator
+different_r          <- c(10) #tuning parameters for second-step estimator
 
 
 #######################################################################
@@ -28,7 +28,7 @@ different_r          <- c(10, 15) #tuning parameters for second-step estimator
 for (q in different_q){
   for (r in different_r){
     for (slope_fac in different_slope_facs){
-      name_spec <- paste0("T=",T_size,"_slope=",slope_fac,"_(q,K1,K2,M1,M2)=(",q,",",1,",",r,",",q - 5,",",q + 5,")")
+      name_spec <- paste0("T=",T_size,"_slope=",slope_fac,"_(q,r,M1,M2)=(",q,",",r,",",q - 5,",",q + 5,")")
       
       set.seed(1) #This is for comparing different scenarios on the same data
       
@@ -41,7 +41,7 @@ for (q in different_q){
         slope <- slope_fac * sqrt(sigma_eta^2/(1 - a_1^2))
 
         mse_results <- histograms_for_variance_estimators(a_1, sigma_eta, T_size, p, slope, N_rep, pdfname_a_hat, pdfname_lrv,
-                                           q, r, q - 5, q + 5, produce_plots = "no")
+                                           q, r, q - 5, q + 5, produce_plots = "selected")
         
         a_mat2       <- c(a_mat2, mse_results[[1]])
         a_mat_HvK    <- c(a_mat_HvK, mse_results[[2]])
@@ -65,7 +65,7 @@ for (q in different_q){
       }
       
       #Graphs for the paper, not the supplement
-       if ((q == 25)&&(r == 10)){ 
+      if ((q == 25)&&(r == 10)){ 
          pdfname = paste("Paper/Plots/MSE_a1_",name_spec,".pdf",sep="")
          plotting_MSE_graphs(a_mat2, a_mat_HvK, a_mat_oracle, pdfname, margin_ = 1.5, legend_position = "topright", 
                              ylab_ = "MSE", legend_ = c(expression(widehat(a)), expression(widehat(a)[HvK]), expression(widehat(a)[oracle])),

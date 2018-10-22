@@ -1,5 +1,5 @@
 simulations_general <- function(N, different_T, different_alpha, different_slopes,
-                                a_hat, sigma_eta, order, test_problem, kernel_t, L1, K1, K2){
+                                a_hat, sigma_eta, order, test_problem, kernel_t, L1, K2){
 
   #Recoding kernel functions and type of kernel estimator 
   if (test_problem == "zero"){
@@ -33,7 +33,7 @@ simulations_general <- function(N, different_T, different_alpha, different_slope
       #Replicating test procedure N times
       size_of_the_test_ar_1 = replicate(N, {
         y_data_ar_1 <- arima.sim(model = list(ar = a_hat), n = T, innov = rnorm(T, 0, sigma_eta))
-        sigmahat    <- estimating_variance_new(y_data_ar_1, L1, L1, order, K1, K2)[[1]]
+        sigmahat    <- estimating_variance_new(y_data_ar_1, L1, order, K2)[[1]]
         result_notrend_ar1 = statistic_function(y_data_ar_1, g_t_set, kernel_ind, sigmahat)[[2]]
         if (result_notrend_ar1 > gaussian_quantile) {d = 1} else {d = 0}
         d
@@ -62,7 +62,7 @@ simulations_general <- function(N, different_T, different_alpha, different_slope
         size_of_the_test_with_trend = replicate(N, {
           #Adding a function that is 0 on the first half and linear on the second half
           y_data_ar_1_with_trend = m + arima.sim(model = list(ar = a_hat), innov = rnorm(T, 0, sigma_eta), n = T)
-          sigmahat <- estimating_variance_new(y_data_ar_1_with_trend, L1, L1, order, K1, K2)[[1]]
+          sigmahat <- estimating_variance_new(y_data_ar_1_with_trend, L1, order, K2)[[1]]
           result_with_trend = statistic_function(y_data_ar_1_with_trend, g_t_set, kernel_ind, sigmahat)[[2]]
           if (result_with_trend > gaussian_quantile) {d = 1} else {d = 0}
           d
