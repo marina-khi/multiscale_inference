@@ -1,5 +1,5 @@
 histograms_for_variance_estimators <- function(a_1_star, sigma_eta_star, T_size, p, slope, N_rep,
-                                               pdfname_a_hat, pdfname_lrv, q, K1, K2, M1, M2, produce_plots){
+                                               pdfname_a_hat, pdfname_lrv, q, K2, M1, M2, produce_plots){
   lrv_star   <- sigma_eta_star^2/((1 - a_1_star)^2)
   line_trend <- (1:T_size) * slope/T_size
     
@@ -19,7 +19,7 @@ histograms_for_variance_estimators <- function(a_1_star, sigma_eta_star, T_size,
     eps               <- arima.sim(model = list(ar = a_1_star), n = T_size, innov = rnorm(T_size, 0, sigma_eta_star))
     y_data_with_trend <- eps + line_trend
     
-    results_our_method         <- estimating_variance_new(y_data_with_trend, q, q, p, K1, K2)
+    results_our_method         <- estimating_variance_new(y_data_with_trend, q, p, K2)
     a_hat_method2_vect         <- c(a_hat_method2_vect, results_our_method[[2]])
     sigma_eta_hat_method2_vect <- c(sigma_eta_hat_method2_vect, results_our_method[[3]])
     lrv_hat_method2_vect       <- c(lrv_hat_method2_vect, results_our_method[[1]]^2)

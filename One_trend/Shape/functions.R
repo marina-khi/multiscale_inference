@@ -126,8 +126,8 @@ creating_g_set <- function(T, kernel_method){
   #h <- seq(from = 3/T, to = 1/4+1/T, by = 1/T)
   
   g_t_set_temp                  <- expand.grid(u = u, h = h) #Creating a dataframe with all possible combination of u and h
-  g_t_set_temp$values           <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
-  g_t_set_temp$values_with_sign <-numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
+  g_t_set_temp$values           <- numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
+  g_t_set_temp$values_with_sign <- numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
 
   if (kernel_method == "nw"){
     g_t_set <- subset(g_t_set_temp, u - h >= 0 & u + h <= 1, select = c(u, h, values, values_with_sign)) #Subsetting u and h such that [u-h, u+h] lies in [0,1]
@@ -207,7 +207,7 @@ sample_autocovariance <- function(l, y_data, q){
     if (abs(l) >= T_size - q - 1) {
       print("Cannot estimate autocovariance from the data: sample size is too small")
     } else {
-      result = sum(y_data_diff[(q + 1):(T_size - abs(l))] * y_data_diff[(q + abs(l) + 1):T_size])/(T_size - abs(l) - q)
+      result = sum(y_data_diff[(q + 1):(T_size - abs(l))] * y_data_diff[(q + abs(l) + 1):T_size])/(T_size - q)
     }
   } else {
     print('Check the input: l is not integer')
@@ -222,11 +222,16 @@ AR_coefficients <- function(y_data, L1, L2, correction, p){
     gamma_q_vector <- sapply(0:p, FUN = sample_autocovariance, y_data, q)
     Gamma_q_matrix <- matrix(0, ncol=p, nrow=p)
     for(i in 1:p){
-      for(j in 1:p)
+      for(j in 1:p){
         Gamma_q_matrix[i,j] <- gamma_q_vector[abs(i - j)+1]
       }
-    cov_vec <- gamma_q_vector[2:(p + 1)] + correction[(q - 1 + 1):(q - p + 1)]
-    #cat("q = ", q,", p = ", p, ", L1 = ", L1, ", L2 = ", L2, "\n")
+    }
+    if (q >= p) {
+      correction_tmp <- correction[(q - 1 + 1):(q - p + 1)]
+    } else {
+      correction_tmp <- c(correction[(q - 1 + 1):1], rep(0, p - q))
+    } 
+    cov_vec <- gamma_q_vector[2:(p + 1)] + correction_tmp
     a_mat[, q - L1 + 1] <- solve(Gamma_q_matrix) %*% cov_vec 
   }    
   a_hat <- rowMeans(a_mat)
@@ -262,12 +267,12 @@ corrections <- function(coefficients, sigma_eta, len){
 
 #Calculate autocovariance function for AR(1) model: \varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t based on true coefficients of the model
 autocovariance_function_AR1 <- function(k, a_1, sigma_eta){
-  if (k%%1==0)
-  {
+  #if (k%%1==0)
+  #{
     result = sigma_eta * sigma_eta * a_1^(abs(k)) / (1 - a_1 * a_1)
-  } else {
-    print('Check the input: k is not integer')
-  }
+  #} else {
+  #  print('Check the input: k is not integer')
+  #}
   return(result)
 }
 
@@ -276,6 +281,7 @@ autocovariance_function_AR1 <- function(k, a_1, sigma_eta){
 #1. Possible time series together with underlying time trend
 #2. Union of minimal intervals for our method for N_rep number of simulations
 #3. Union of minimal intervals for SiZer for N_rep number of simulations
+#The output file is hardcoded!
 plotting_many_minimal_intervals <- function(trend_height, trend_width, T_size, SiZer_matrix, N_rep, kernel_ind, sigmahat, gaussian_quantile, a_1, sigma_eta){
   matrix_our_results   <- data.frame('startpoint' = SiZer_matrix$u - SiZer_matrix$h, 'endpoint' = SiZer_matrix$u + SiZer_matrix$h)
   matrix_their_results <- data.frame('startpoint' = SiZer_matrix$u - SiZer_matrix$h, 'endpoint' = SiZer_matrix$u + SiZer_matrix$h)
@@ -366,19 +372,32 @@ calculating_SiZer_matrix <- function(different_i, different_h, T_size, T_star, a
   SiZer_matrix$lambda       <- lambda(SiZer_matrix[['h']]) # Calculating the lambda(h) in order to speed up the function psistar_statistic
   SiZer_matrix$XtWX_inv_XtW <- I(vector(mode="list", length=nrow(SiZer_matrix)))
   
+  delta     <- 1/T_size
+  delta_hat <- 5/T_size
+  g         <- T_size/5
+  
   for (row in 1:nrow(SiZer_matrix)){
-    
     i = SiZer_matrix[row, 'u']
     h = SiZer_matrix[row, 'h']
     
     ESS      <- sum(sapply((i - seq(1/T_size, 1, by = 1/T_size))/h, epanechnikov_kernel))/epanechnikov_kernel(0)
     ESS_star <- (T_star/T_size) * ESS 
-    l        <- T_size / ESS_star
-    q_h      <- qnorm((1 + (1 - alpha)^(1 / l))/2)
-    
+
     if (ESS_star <= 5){
       SiZer_matrix[row, 'small_ESS'] <- 1
     } else {
+      integrand_1 <- function(s, h_, delta_, a_1_, sigma_eta_) {autocovariance_function_AR1(floor(s * h / delta), a_1, sigma_eta) * exp(-s^2/4) * (12 - 12 * s^2+ s^4)/16}
+      I_gamma_num <- integrate(integrand_1, lower = -Inf, upper = Inf, h_ = h, delta_ = delta, a_1_ = a_1, sigma_eta_ = sigma_eta)[[1]]
+      
+      integrand_2 <- function(s, h_, delta_, a_1_, sigma_eta_) {autocovariance_function_AR1(floor(s * h / delta), a_1, sigma_eta) * exp(-s^2/4) * (1 - s^2/2)}
+      I_gamma_denom <- integrate(integrand_2, lower = -Inf, upper = Inf, h_ = h, delta_ = delta, a_1_ = a_1, sigma_eta_ = sigma_eta)[[1]]
+      I_gamma <- I_gamma_num/I_gamma_denom
+      
+      theta <- 2 * pnorm(sqrt(I_gamma * log(g)) * delta_hat / h) - 1
+      q_h   <- qnorm((1 - alpha/2)^(1/(theta* g)))
+      
+      
+      
       x_matrix                     <- matrix(c(rep(1, T_size), seq(1/T_size - i, 1-i, by = 1/T_size)), nrow=T_size, byrow=FALSE)
       w_vector                     <- sapply(seq(1/T_size - i, 1-i, by = 1/T_size)/h, FUN = epanechnikov_kernel)/h
       XtW                          <- t(apply(x_matrix,2,function(x){x*w_vector}))   #t(X) %*% diag(w)   computed faster.  :)
@@ -406,61 +425,6 @@ calculating_SiZer_matrix <- function(different_i, different_h, T_size, T_star, a
   SiZer_matrix           <- SiZer_matrix[SiZer_matrix$small_ESS != 1,]
   SiZer_matrix$small_ESS <- NULL
   SiZer_matrix$ESS_star  <- NULL
-  
-  return(SiZer_matrix)
-}
-
-calculating_SiZer_matrix_1 <- function(different_i, different_h, T_size, T_star, alpha, gamma){
-  SiZer_matrix              <- expand.grid(u = different_i, h = different_h) #Creating a dataframe with all possible combination of i and h
-  SiZer_matrix$values       <- numeric(nrow(SiZer_matrix)) # Setting the values of the statistic to be zero
-  SiZer_matrix$sd           <- numeric(nrow(SiZer_matrix)) # Setting the values of standard deviation to be zero
-  SiZer_matrix$ESS_star     <- numeric(nrow(SiZer_matrix)) # Setting the values of ESS* to be zero
-  SiZer_matrix$q_h          <- numeric(nrow(SiZer_matrix)) # Setting the values of the gaussian quantile to be zero
-  SiZer_matrix$small_ESS    <- numeric(nrow(SiZer_matrix)) # Later we will delete all the row such that ESS* is too small
-  SiZer_matrix$lambda       <- lambda(SiZer_matrix[['h']]) # Calculating the lambda(h) in order to speed up the function psistar_statistic
-  SiZer_matrix$XtWX_inv_XtW <- I(vector(mode="list", length=nrow(SiZer_matrix)))
-  
-  for (row in 1:nrow(SiZer_matrix)){
-    
-    i = SiZer_matrix[row, 'u']
-    h = SiZer_matrix[row, 'h']
-    
-    ESS      <- sum(sapply((i - seq(1/T_size, 1, by = 1/T_size))/h, epanechnikov_kernel))/epanechnikov_kernel(0)
-    ESS_star <- (T_star/T_size) * ESS 
-    l        <- T_size / ESS_star
-    q_h      <- qnorm((1 + (1 - alpha)^(1 / l))/2)
-    
-    if (ESS_star <= 5){
-      SiZer_matrix[row, 'small_ESS'] <- 1
-    } else {
-      x_matrix                     <- matrix(c(rep(1, T_size), seq(1/T_size - i, 1-i, by = 1/T_size)), nrow=T_size, byrow=FALSE)
-      w_vector                     <- sapply(seq(1/T_size - i, 1-i, by = 1/T_size)/h, FUN = epanechnikov_kernel)/h
-      XtW                          <- t(apply(x_matrix,2,function(x){x*w_vector}))   #t(X) %*% diag(w)   computed faster.  :)
-      XtWX_inverse                 <- tryCatch({solve(XtW %*% x_matrix)},  
-                                               error = function(e) {print("Something is wrong, the matrix can not be inverted")})
-
-      SiZer_matrix$XtWX_inv_XtW[[row]] <- XtWX_inverse %*% XtW
-      
-      XtSigma <- matrix(data = NA, nrow =2, ncol =T_size)
-      for (j in 1:T_size){      #t(X) %*% Sigma computed faster in order not to save the whole Sigma matrix (T_size * T_size) in the memory
-        XtSigma[1, j] = 0
-        XtSigma[2, j] = 0
-        for (k in 1:T_size){
-          XtSigma[1, j] = XtSigma[1, j] + gamma[abs(k - j) + 1] * w_vector[k] * w_vector[j]
-          XtSigma[2, j] = XtSigma[2, j] + gamma[abs(k - j) + 1] * w_vector[k] * w_vector[j] * (k/T_size - i)   
-        }
-      }
-      sd = sqrt((XtWX_inverse %*% XtSigma %*% x_matrix %*% XtWX_inverse)[2,2])
-      
-      SiZer_matrix[row, 'sd']       = sd
-      SiZer_matrix[row, 'q_h']      = q_h
-      SiZer_matrix[row, 'ESS_star'] = ESS_star
-    }
-  }
-  
-  #SiZer_matrix           <- SiZer_matrix[SiZer_matrix$small_ESS != 1,]
-  #SiZer_matrix$small_ESS <- NULL
-  #SiZer_matrix$ESS_star  <- NULL
   
   return(SiZer_matrix)
 }

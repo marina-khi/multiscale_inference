@@ -50,7 +50,7 @@ for (i in 1:nrow(criterion_matrix)){
   different_orders <- (1:9)
   
   for (order in different_orders){
-    sigma_eta_hat_method2 <- estimating_variance_new(yearly_tempr, criterion_matrix$q[[i]], criterion_matrix$q[[i]], order, order + 1, criterion_matrix$r[[i]])[[3]]
+    sigma_eta_hat_method2 <- estimating_variance_new(yearly_tempr, criterion_matrix$q[[i]], order, criterion_matrix$r[[i]])[[3]]
     FPE <- c(FPE, (sigma_eta_hat_method2^2 * (T_tempr + order)) / (T_tempr - order))
     AIC <- c(AIC, T_tempr * log(sigma_eta_hat_method2^2) + 2 * order)
     SIC <- c(SIC, log(sigma_eta_hat_method2^2) + order * log(T_tempr) / T_tempr)
@@ -99,5 +99,5 @@ dev.off()
 ###############
 #Data analysis#
 ###############
-sigma_hat <- estimating_variance_new(yearly_tempr, q, q, order = p, p+1, r)[[1]]
+sigma_hat <- estimating_variance_new(yearly_tempr, q, order = p, r)[[1]]
 data_analysis(alpha, yearly_tempr, test_problem, kernel_method, sigma_hat, pdffilename)

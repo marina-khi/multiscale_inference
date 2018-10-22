@@ -28,7 +28,7 @@ different_r          <- c(10, 15) #tuning parameters for second-step estimator
 for (q in different_q){
   for (r in different_r){
     for (slope_fac in different_slope_facs){
-      name_spec <- paste0("T=",T_size,"_slope=",slope_fac,"_(q,K1,K2,M1,M2)=(",q,",",p + 1,",",r,",",q - 5,",",q + 5,")")
+      name_spec <- paste0("T=",T_size,"_slope=",slope_fac,"_(q,K1,K2,M1,M2)=(",q,",",1,",",r,",",q - 5,",",q + 5,")")
       
       set.seed(1) #This is for comparing different scenarios on the same data
       
@@ -41,7 +41,7 @@ for (q in different_q){
         slope <- slope_fac * sqrt(sigma_eta^2/(1 - a_1^2))
 
         mse_results <- histograms_for_variance_estimators(a_1, sigma_eta, T_size, p, slope, N_rep, pdfname_a_hat, pdfname_lrv,
-                                           q, p + 1, r, q - 5, q + 5, produce_plots = "no")
+                                           q, r, q - 5, q + 5, produce_plots = "no")
         
         a_mat2       <- c(a_mat2, mse_results[[1]])
         a_mat_HvK    <- c(a_mat_HvK, mse_results[[2]])
