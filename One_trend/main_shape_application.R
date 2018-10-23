@@ -49,9 +49,9 @@ for (i in 1:nrow(criterion_matrix)){
   AICC <- c()
   SIC <- c()
   HQ <- c()
-    
+
   different_orders <- (1:9)
-  
+
   for (order in different_orders){
     sigma_eta_hat_method2 <- estimating_variance_new(yearly_tempr, criterion_matrix$q[[i]], order, criterion_matrix$r[[i]])[[3]]
     FPE <- c(FPE, (sigma_eta_hat_method2^2 * (T_tempr + order)) / (T_tempr - order))

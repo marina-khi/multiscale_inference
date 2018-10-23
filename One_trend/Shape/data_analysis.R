@@ -92,7 +92,7 @@ data_analysis <- function(alpha, y_data, test_problem, kernel_t, sigmahat, pdffi
   #Plotting the minimal intervals. Do not have any negative minimal intervals, so plotting all (positive) ones
   ymaxlim = max(p_t_set$values)
   yminlim = min(p_t_set$values)
-  plot(NA, xlim=c(1659,2019), xaxp = c(1675, 2025,7),  ylim = c(yminlim - 0.5, ymaxlim + 0.5), yaxp  = c(1.5, 3, 3), mgp=c(2,0.5,0))
+  plot(NA, xlim=c(1659,2019), xaxp = c(1675, 2025,7),  ylim = c(yminlim - 0.2, ymaxlim + 0.2), yaxp  = c(1.75, 2.5, 3), mgp=c(2,0.5,0))
   segments(p_t_set[['startpoint']], p_t_set[['values']], p_t_set$endpoint, p_t_set[['values']])
   abline(h = gaussian_quantile, lty = 2)
   
