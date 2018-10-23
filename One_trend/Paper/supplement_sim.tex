@@ -11,7 +11,7 @@ In what follows, we carry out some robustness checks to assess how sensitive the
 To start with, we consider the simulation scenarios with a moderate trend ($s_\beta = 1$). The MSE values of the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$, $\widehat{\sigma}^2_{\text{oracle}}$ for these scenarios are presented in Figure \ref{fig:MSE_slope1} of Section \ref{subsec-sim-3}. These MSEs are re-calculated in Figures \ref{fig:MSE_slope1_AR_robust} and \ref{fig:MSE_slope1_lrv_robust} for a range of different choices of $q$, $\overline{r}$ and $(m_1,m_2)$. As one can see, the MSEs in the different plots of Figures \ref{fig:MSE_slope1_AR_robust} and \ref{fig:MSE_slope1_lrv_robust} are very similar. Hence, the MSE results reported in Section \ref{subsec-sim-3} for the scenarios with a moderate trend appear to be fairly robust to different choices of the tuning parameters. In particular, our estimators $\widehat{a}$ and $\widehat{\sigma}^2$ seem to be quite insensitive to the choice of tuning parameters, at least as far as their MSEs are concerned.
 
 
-We next turn to the simulation designs with a pronounced trend ($s_\beta = 10$). The MSE values of the estimators in these scenarios are reported in Figure \ref{fig:MSE_slope10} of Section \ref{subsec-sim-3}. Analogously as before, we re-calculate these MSEs for different tuning parameters in Figures \ref{fig:MSE_slope10_AR_robust}--\ref{fig:MSE_slope10_lrv_robust}. Figure \ref{fig:MSE_slope10_AR_zoom_robust} is a zoomed-in version of Figure \ref{fig:MSE_slope10_AR_robust} which is added for better visibility. As can be seen, our estimators appear to be barely influenced by the choice of $q$. However, the MSE values become somewhat larger when $\overline{r}$ is chosen bigger. This is of course not very suprising: The main reason why the estimator $\widehat{a}$ works well in the presence of a strong trend is that it is only based on differences of small orders. If we increase $\overline{r}$, we use larger differences to compute $\widehat{a}$, which results in not eliminating the trend $m$ appropriately any more. This becomes visible in somewhat larger MSE values. Nevertheless, our estimators appear not to be strongly influenced by the choice of tuning parameters (in terms of MSE) as long as these are chosen within reasonable bounds. 
+We next turn to the simulation designs with a pronounced trend ($s_\beta = 10$). The MSE values of the estimators in these scenarios are reported in Figure \ref{fig:MSE_slope10} of Section \ref{subsec-sim-3}. Analogously as before, we re-calculate these MSEs for different tuning parameters in Figures \ref{fig:MSE_slope10_AR_robust}--\ref{fig:MSE_slope10_lrv_robust}. Figure \ref{fig:MSE_slope10_AR_zoom_robust} is a zoomed-in version of Figure \ref{fig:MSE_slope10_AR_robust} which is added for better visibility. As can be seen, our estimators appear to be barely influenced by the choice of $q$. However, the MSE values become somewhat larger when $\overline{r}$ is chosen bigger. This is of course not very surprising: The main reason why the estimator $\widehat{a}$ works well in the presence of a strong trend is that it is only based on differences of small orders. If we increase $\overline{r}$, we use larger differences to compute $\widehat{a}$, which results in not eliminating the trend $m$ appropriately any more. This becomes visible in somewhat larger MSE values. Nevertheless, overall, our estimators appear not to be strongly influenced by the choice of tuning parameters (in terms of MSE) as long as these are chosen within reasonable bounds. 
 
 
 \begin{figure}[h!]
@@ -154,7 +154,7 @@ We next turn to the simulation designs with a pronounced trend ($s_\beta = 10$).
 \begin{subfigure}[b]{0.45\textwidth}
 \includegraphics[width=\textwidth]{Plots/Robustness/MSE_a1_zoomed_T=500_slope=10_(q,r,M1,M2)=(35,15,30,40).pdf}
 \end{subfigure}
-\caption{MSE values for the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$ and $\widehat{a}_{\text{oracle}}$ in the scenario with a pronounced trend ($s_\beta=10$).}\label{fig:MSE_slope10_AR_zoom_robust}
+\caption{MSE values for the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$ and $\widehat{a}_{\text{oracle}}$ in the scenario with a pronounced trend ($s_\beta=10$). The plots are zoomed-in versions of the respective plots in Figure \ref{fig:MSE_slope10_AR_robust}.}\label{fig:MSE_slope10_AR_zoom_robust}
 \end{figure}
 
 
@@ -200,13 +200,13 @@ We next turn to the simulation designs with a pronounced trend ($s_\beta = 10$).
 
 
 The SiZer methods for the comparison study in Section \ref{subsec-sim-2} are implemented as follows:
-\begin{enumerate}[leftmargin=0.75cm,label=(\alph*)]
+\begin{enumerate}[leftmargin=0.7cm,label=(\alph*)]
 
 \item Computation of the grid $\mathcal{G}_T^*$:
 
 To start with, we compute the variance of $\bar{Y} = T^{-1} \sum_{t=1}^T Y_{t,T}$, which is given by
 \[ \var(\bar{Y}) = \frac{\gamma_\varepsilon(0)}{T} + \frac{2}{T} \sum_{k = 1}^{T-1} \Big(1 - \frac{k}{T}\Big)\gamma_\varepsilon(k). \]
-Since the autocovariance function $\gamma_{\varepsilon}(\cdot)$ is known by assumption, we obtain $\var(\bar{Y})$ by using the formula $\gamma_\varepsilon(k) = \nu^2 a_1^{|k|} / (1 - a_1^2)$ together with the true para\-meters $a_1$ and $\nu^2 = \ex[\eta_t^2]$. We next compute 
+Since the autocovariance function $\gamma_{\varepsilon}(\cdot)$ is known by assumption, we can calculate the value of $\var(\bar{Y})$ by using the formula $\gamma_\varepsilon(k) = \nu^2 a_1^{|k|} / (1 - a_1^2)$ together with the true para\-meters $a_1$ and $\nu^2 = \ex[\eta_t^2]$. We next compute 
 \[ T^* = \frac{\gamma_\varepsilon(0)}{\var(\bar{Y})}, \]
 which can be interpreted as a measure of information in the data. For each point $(u,h) \in \mathcal{G}_T$ from \eqref{grid-sim-app}, we finally calculate the effective sample size for dependent data 
 \[ \text{ESS}^*(u, h) = \frac{T^*}{T} \frac{\sum_{t=1}^T K_h(t/T - u)}{K_h(0)} \]
@@ -230,9 +230,9 @@ $W$ is a $T \times T$ diagonal matrix with the diagonal entries $K_h(t/T-u)$ and
 \newpage
 \item Computation of the confidence intervals:  
 
-For a given confidence level $\alpha$ and for each bandwidth value $h$ with $(u,h) \in \mathcal{G}_T^*$, we compute the Gaussian quantile 
+For a given confidence level $\alpha$ and for each bandwidth value $h$ with $(u,h) \in \mathcal{G}_T^*$, we compute the quantile 
 \[ q(h) = \Phi^{-1} \Big( \Big( 1 - \frac{\alpha}{2} \Big)^{1/(\theta g)} \Big), \]
-where $\Phi$ is the distribution function of a standard normal random variable, $g$ is the number of locations $u$ in the grid $\mathcal{G}_T^*$, and the cluster index $\theta$ is defined on p.1519 in \cite{ParkHannigKang2009}. The confidence interval of $\widehat{m}^\prime_h(u)$ is then computed as $[\widehat{m}^\prime_h(u) - q(h) \, \text{sd}(\widehat{m}^\prime_h(u)),\widehat{m}^\prime_h(u) + q(h) \, \text{sd}(\widehat{m}^\prime_h(u))]$. 
+where $\Phi$ is the distribution function of a standard normal random variable, $g$ is the number of locations $u$ in the grid $\mathcal{G}_T$, and the cluster index $\theta$ is defined on p.1519 in \cite{ParkHannigKang2009}. The confidence interval of $\widehat{m}^\prime_h(u)$ is then computed as $[\widehat{m}^\prime_h(u) - q(h) \, \text{sd}(\widehat{m}^\prime_h(u)),\widehat{m}^\prime_h(u) + q(h) \, \text{sd}(\widehat{m}^\prime_h(u))]$. 
 
 %For each $(u,h) \in \mathcal{G}_T^*$, we compute the Gaussian quantile for the confidence level $\alpha$
 %\[ q(u,h) = \Phi^{-1} \Big(\frac{1 + (1 - \alpha)^{\frac{1}{l(u, h)}}}{2}\Big), \]
