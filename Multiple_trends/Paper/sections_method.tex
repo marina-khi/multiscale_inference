@@ -1,21 +1,23 @@
 
 \section{The model}\label{sec-model}
 
-The model setting for the test problem analysed in Section \ref{sec-test-equality} is closely related to the setting discussed above. The main difference is that we observe multiple rather than only one time series. In particular, we observe time series $\mathcal{Y}_i = \{Y_{it}: 1 \le t \le T \}$ of length $T$ for $1 \le i \le n$. Each time series $\mathcal{Y}_i$ satisfies the model equation \begin{equation}\label{model2}
-Y_{it} = m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
+The model setting is as follows. We observe time series $\mathcal{Y}_i = \{Y_{it}: 1 \le t \le T \}$ of length $T$ for $1 \le i \le n$. Each time series $\mathcal{Y}_i$ satisfies the model equation \begin{equation}\label{model_full}
+Y_{it} = \beta^\prime X_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
 \end{equation}
-for $1 \le t \le T$, where $m_i$ is an unknown nonparametric trend function defined on $[0,1]$, $\alpha_i$ is a (deterministic or random) intercept term and $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ is a zero-mean stationary error process. For identification, we normalize the functions $m_i$ such that $\int_0^1 m_i(u) du = 0$ for all $1 \le i \le n$. The term $\alpha_i$ can also be regarded as an additional error component. In the econometrics literature, it is commonly called a fixed effect error term. It can be interpreted as capturing unobserved characteristics of the time series $\mathcal{Y}_i$ which remain constant over time. We allow the error terms $\alpha_i$ to be dependent across $i$ in an arbitrary way. Hence, by including them in model equation \eqref{model2}, we allow the $n$ time series $\mathcal{Y}_i$ in our sample to be correlated with each other. Whereas the terms $\alpha_i$ may be correlated, the error processes $\mathcal{E}_i$ are assumed to be independent across $i$. In addition, each process $\mathcal{E}_i$ is supposed to satisfy the conditions \ref{C-err1}--\ref{C-err3}. Finally note that throughout the paper, we restrict attention to the case where the number of time series $n$ in model \eqref{model2} is bounded. It is however possible to extend our theoretical results to the case where $n$ slowly grows with the sample size $T$.
+for $1 \le t \le T$, where $\beta$ is a $d \times 1$ vector of unknown parameters, $X_{it}$ is a $d\times 1$ vector of individual covariates, $m_i$ is an unknown nonparametric trend function defined on $[0,1]$, $\alpha_i$ is a (deterministic or random) intercept term and $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ is a zero-mean stationary error process. For identification, we normalize the functions $m_i$ such that $\int_0^1 m_i(u) du = 0$ for all $1 \le i \le n$. The term $\alpha_i$ can also be regarded as an additional error component. In the econometrics literature, it is commonly called a fixed effect error term. It can be interpreted as capturing unobserved characteristics of the time series $\mathcal{Y}_i$ which remain constant over time. We allow the error terms $\alpha_i$ to be dependent across $i$ in an arbitrary way. Hence, by including them in model equation \eqref{model_full}, we allow the $n$ time series $\mathcal{Y}_i$ in our sample to be correlated with each other. Whereas the terms $\alpha_i$ may be correlated, the error processes $\mathcal{E}_i$ are assumed to be independent across $i$. In addition, each process $\mathcal{E}_i$ is supposed to satisfy the conditions \ref{C-err1}--\ref{C-err3}. Finally note that throughout the paper, we restrict attention to the case where the number of time series $n$ in model \eqref{model} is fixed. Extending our theoretical results to the case where $n$ slowly grows with the sample size $T$ is a possible topic for further research.
 
 \section{Testing for equality of time trends}\label{sec-test-equality}
 
-
-In this section, we adapt the multiscale method developed in Section \ref{sec-method} to test the hypothesis that the trend functions in model \eqref{model2} are all the same. More formally, we test the null hypothesis $H_0: m_1 = m_2 = \ldots = m_n$ in model \eqref{model2}. As we will see, the proposed multiscale method does not only allow to test whether the null hypothesis is violated. It also provides information on where violations occur. More specifically, it allows to identify, with a pre-specified confidence, (i) trend functions which are different from each other and (ii) time intervals where these trend functions differ.
-
-
-\subsection{Construction of the test statistic}\label{subsec-test-equality-stat}
+In this section, we adapt the multiscale method developed in Section \ref{sec-method} to test the hypothesis that the trend functions in model \eqref{model} are all the same. More formally, we test the null hypothesis $H_0: m_1 = m_2 = \ldots = m_n$ in model \eqref{model_full}. As we will see, the proposed multiscale method does not only allow to test whether the null hypothesis is violated. It also provides information on where violations occur. More specifically, it allows to identify, with a pre-specified confidence, (i) trend functions which are different from each other and (ii) time intervals where these trend functions differ.
 
 
-To start with, we introduce some notation. The $i$-th time series in model \eqref{model2} satisfies the equation $Y_{it} = m_i(\frac{t}{T}) + \alpha_i + \varepsilon_{it}$, where $\varepsilon_{it}$ are zero-mean error terms and $\alpha_i$ are (random or deterministic) intercepts. Defining $Y_{it}^\circ = Y_{it} - \alpha_i$, this equation can be rewritten as $Y_{it}^\circ = m_i(\frac{t}{T}) + \varepsilon_{it}$, which is a standard nonparametric regression equation. The variables $Y_{it}^\circ$ are not observed, but they can be approximated by $\widehat{Y}_{it} = Y_{it} - \widehat{\alpha}_i$, where $\widehat{\alpha}_i = T^{-1} \sum_{t=1}^T Y_{it}$ is an estimator of the intercept $\alpha_i$. By construction, $\widehat{\alpha}_i - \alpha_i = T^{-1} \sum_{t=1}^T \varepsilon_{it} + T^{-1} \sum_{t=1}^T m_i(\frac{t}{T}) = O_p(T^{-1/2}) + T^{-1} \sum_{t=1}^T m_i(\frac{t}{T})$. Hence, $\widehat{\alpha}_i$ is a reasonable estimator of $\alpha_i$ if $T^{-1} \sum_{t=1}^T m_i(\frac{t}{T})$ converges to zero as $T \rightarrow \infty$. To ensure this, we suppose throughout the section that the functions $m_i$ are Lipschitz continuous, that is, $|m_i(v) - m_i(w)| \le L|v - w|$ for all $v,w \in [0,1]$ and some constant $L < \infty$. Since $\int_0^1 m_i(u) du = 0$ by normalization, this implies that $T^{-1} \sum_{t=1}^T m_i(\frac{t}{T}) = O(T^{-1})$. We further let $\widehat{\sigma}_i^2$ be an estimator of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_{i0}, \varepsilon_{i\ell})$ which is computed from the constructed sample $\{ \widehat{Y}_{it}: 1 \le t \le T \}$. We thus regard $\widehat{\sigma}_i^2 = \widehat{\sigma}_i^2(\widehat{Y}_{i1},\ldots,\widehat{Y}_{iT})$ as a function of the variables $\widehat{Y}_{it}$ for $1 \le t \le T$. Throughout the section, we assume that $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$. Details on how to construct estimators of $\sigma_i^2$ are deferred to Section \ref{sec-error-var}. 
+\subsection{Construction of the test statistic in the absence of exogenous regressors}\label{subsec-test-equality-stat-without-regs}
+
+As a starting point we will first provide a test for common trends in the absence of exogenous covariates $X_{it}$. So we begin with a model
+\begin{equation}\label{model}
+Y_{it} = m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it},
+\end{equation} 
+where $\varepsilon_{it}$ are zero-mean error terms and $\alpha_i$ are (random or deterministic) intercepts. Defining $Y_{it}^\circ = Y_{it} - \alpha_i$, this equation can be rewritten as $Y_{it}^\circ = m_i(\frac{t}{T}) + \varepsilon_{it}$, which is a standard nonparametric regression equation. The variables $Y_{it}^\circ$ are not observed, but they can be approximated by $\widehat{Y}_{it} = Y_{it} - \widehat{\alpha}_i$, where $\widehat{\alpha}_i = T^{-1} \sum_{t=1}^T Y_{it}$ is an estimator of the intercept $\alpha_i$. By construction, $\widehat{\alpha}_i - \alpha_i = T^{-1} \sum_{t=1}^T \varepsilon_{it} + T^{-1} \sum_{t=1}^T m_i(\frac{t}{T}) = O_p(T^{-1/2}) + T^{-1} \sum_{t=1}^T m_i(\frac{t}{T})$. Hence, $\widehat{\alpha}_i$ is a reasonable estimator of $\alpha_i$ if $T^{-1} \sum_{t=1}^T m_i(\frac{t}{T})$ converges to zero as $T \rightarrow \infty$. To ensure this, we suppose throughout the section that the functions $m_i$ are Lipschitz continuous, that is, $|m_i(v) - m_i(w)| \le L|v - w|$ for all $v,w \in [0,1]$ and some constant $L < \infty$. Since $\int_0^1 m_i(u) du = 0$ by normalization, this implies that $T^{-1} \sum_{t=1}^T m_i(\frac{t}{T}) = O(T^{-1})$. We further let $\widehat{\sigma}_i^2$ be an estimator of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_{i0}, \varepsilon_{i\ell})$ which is computed from the constructed sample $\{ \widehat{Y}_{it}: 1 \le t \le T \}$. We thus regard $\widehat{\sigma}_i^2 = \widehat{\sigma}_i^2(\widehat{Y}_{i1},\ldots,\widehat{Y}_{iT})$ as a function of the variables $\widehat{Y}_{it}$ for $1 \le t \le T$. Throughout the section, we assume that $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$. Details on how to construct estimators of $\sigma_i^2$ are deferred to Section \ref{sec-error-var}. 
 
 
 We are now ready to introduce the multiscale statistic for testing the hypothesis $H_0: m_1 = m_2 = \ldots = m_n$. For any pair of time series $i$ and $j$, we define the kernel averages
@@ -50,7 +52,6 @@ Suppose that the error processes $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \
 \[ \pr \big( \widehat{\Phi}_{n,T} \le q_{n,T}(\alpha) \big) = (1 - \alpha) + o(1). \]
 \end{theorem}
 Theorem \ref{theo-stat-equality} is the main stepping stone to derive the theoretical properties of our multiscale test. It can be proven by slightly modifying the arguments for Theorem \ref{theo-stat}. The details are provided in the Supplementary Material. The following proposition characterizes the behaviour of our multiscale test under the null hypothesis and under local alternatives. 
-\newpage
 \begin{prop}\label{prop-test-equality}
 Let the conditions  of Theorem \ref{theo-stat-equality} be satisfied. 
 \begin{enumerate}[label=(\alph*),leftmargin=0.75cm]
@@ -62,7 +63,24 @@ Let the conditions  of Theorem \ref{theo-stat-equality} be satisfied.
 \end{prop}
 Part (a) of Proposition \ref{prop-test-equality} is a direct consequence of Theorem \ref{theo-stat-equality}. The proof of part (b) is very similar to that of Proposition \ref{prop-test-2} and thus omitted. 
 
+\subsection{Construction of the test statistic in the presence of exogenous regressors}\label{subsec-test-equality-stat-with-regs}
 
+We now extend the model \eqref{model} to include the exogenous regressors:
+\begin{equation}
+Y_{it} = \beta^\prime X_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
+\end{equation}
+It is obvious that if $\beta$ is known, the problem of testing for the common time trend would be reduced to the one discussed before. That is, we would test $H_0: m_1 = m_2 = \ldots = m_n$ in the model
+\begin{align*}
+Y_{it} - \beta^\prime X_{it} & =: V_{it}\\
+					& = m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
+\end{align*}
+replacing $Y_{it}$ by $V_{it}$ in the construction of test statistic. However, $\beta$ is not known, so given an estimator $\widehat{\beta}$ we then consider
+\begin{align*}
+	\widehat{V}_{it} =: Y_{it} - \widehat{\beta}^\prime X_{it} =(\widehat{\beta} - \beta)^\prime X_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it}. 
+\end{align*}
+SO we need to find an appropriate estimator $\widehat{\beta}$ of $\beta$
+
+\section{Clustering}
 \subsection{Clustering of time trends}\label{subsec-test-equality-clustering}
 
 
