@@ -6,6 +6,15 @@ Y_{it} = \beta^\prime X_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsi
 \end{equation}
 for $1 \le t \le T$, where $\beta$ is a $d \times 1$ vector of unknown parameters, $X_{it}$ is a $d\times 1$ vector of individual covariates, $m_i$ is an unknown nonparametric trend function defined on $[0,1]$, $\alpha_i$ is a (deterministic or random) intercept term and $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ is a zero-mean stationary error process. For identification, we normalize the functions $m_i$ such that $\int_0^1 m_i(u) du = 0$ for all $1 \le i \le n$. The term $\alpha_i$ can also be regarded as an additional error component. In the econometrics literature, it is commonly called a fixed effect error term. It can be interpreted as capturing unobserved characteristics of the time series $\mathcal{Y}_i$ which remain constant over time. We allow the error terms $\alpha_i$ to be dependent across $i$ in an arbitrary way. Hence, by including them in model equation \eqref{model_full}, we allow the $n$ time series $\mathcal{Y}_i$ in our sample to be correlated with each other. Whereas the terms $\alpha_i$ may be correlated, the error processes $\mathcal{E}_i$ are assumed to be independent across $i$. In addition, each process $\mathcal{E}_i$ is supposed to satisfy the conditions \ref{C-err1}--\ref{C-err3}. Finally note that throughout the paper, we restrict attention to the case where the number of time series $n$ in model \eqref{model} is fixed. Extending our theoretical results to the case where $n$ slowly grows with the sample size $T$ is a possible topic for further research.
 
+The stationary error processes $\{\varepsilon_{it}\}$ are assumed to have the following properties: 
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+
+\item \label{C-err1} For each $i$ the variables $\varepsilon_{it}$ allow for the representation $\varepsilon_{it} = G_i(\ldots,\eta_{it-1},\eta_{it},\eta_{it+1},\ldots)$, where $\eta_{it}$ are i.i.d.\ random variables across $t$ and $G_i: \reals^\integers \rightarrow \reals$ is a measurable function. 
+
+\item \label{C-err2} It holds that $\ex[\varepsilon_{it}] =0$ and $\| \varepsilon_{it} \|_q < \infty$ for some $q > 4$, where $\| \varepsilon_{it} \|_q = (\ex|\varepsilon_t|^q)^{1/q}$. 
+
+\end{enumerate}
+
 \section{Testing for equality of time trends}\label{sec-test-equality}
 
 In this section, we adapt the multiscale method developed in Section \ref{sec-method} to test the hypothesis that the trend functions in model \eqref{model} are all the same. More formally, we test the null hypothesis $H_0: m_1 = m_2 = \ldots = m_n$ in model \eqref{model_full}. As we will see, the proposed multiscale method does not only allow to test whether the null hypothesis is violated. It also provides information on where violations occur. More specifically, it allows to identify, with a pre-specified confidence, (i) trend functions which are different from each other and (ii) time intervals where these trend functions differ.
@@ -67,18 +76,104 @@ Part (a) of Proposition \ref{prop-test-equality} is a direct consequence of Theo
 
 We now extend the model \eqref{model} to include the exogenous regressors:
 \begin{equation}
-Y_{it} = \beta^\prime X_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
+Y_{it} = \beta_i^\prime X_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
 \end{equation}
-It is obvious that if $\beta$ is known, the problem of testing for the common time trend would be reduced to the one discussed before. That is, we would test $H_0: m_1 = m_2 = \ldots = m_n$ in the model
+It is obvious that if $\beta_i$ is known, the problem of testing for the common time trend would be reduced to the one discussed before. That is, we would test $H_0: m_1 = m_2 = \ldots = m_n$ in the model
 \begin{align*}
-Y_{it} - \beta^\prime X_{it} & =: V_{it}\\
+Y_{it} - \beta_i^\prime X_{it} & =: V_{it}\\
 					& = m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
 \end{align*}
-replacing $Y_{it}$ by $V_{it}$ in the construction of test statistic. However, $\beta$ is not known, so given an estimator $\widehat{\beta}$ we then consider
+replacing $Y_{it}$ by $V_{it}$ in the construction of the test statistic. However, $\beta_i$ is not known so we need to estimate it first. Given an estimator $\widehat{\beta}_i$, we then consider
 \begin{align*}
-	\widehat{V}_{it} =: Y_{it} - \widehat{\beta}^\prime X_{it} =(\widehat{\beta} - \beta)^\prime X_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it}. 
+	\widehat{V}_{it} := Y_{it} - \widehat{\beta}_i^\prime X_{it} =(\widehat{\beta}_i - \beta_i)^\prime X_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
 \end{align*}
-SO we need to find an appropriate estimator $\widehat{\beta}$ of $\beta$
+and construct the kernel averages $\widehat{\psi}_{ij, T}(u, h)$ based on $\widehat{V}_{it}$ instead of $\widehat{Y}_{it}$. Specifically, for any pair of time series $i$ and $j$ we define the kernel averages
+\begin{align*}
+	\widehat{\psi}^{\prime}_{ij, T}(u, h) = \sum_{t=1}^T w_{t, T}(u, h)(\widehat{V}_{it} - \widehat{V}_{jt})
+\end{align*}
+with the kernel weights defined in ??. Similar as in Section \ref{subsec-test-equality-stat-without-regs}, we aggregate the kernel averages $\widehat{\psi}^{\prime}_{ij, T}(u, h)$ for all $(u, h)\in \mathcal{G}_T$ by the multiscale test statistic
+\[ \widehat{\Psi}^\prime_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widehat{\psi}^\prime_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\}. \]
+
+We now focus on finding an appropriate estimator $\widehat{\beta}$ of $\beta$. For that purpose, we consider the time series $\{\Delta Y_{it}\}$ of the differences $\Delta Y_{it} = Y_{it} - Y_{i t-1}$ for each $i$. We then have
+\begin{align*}
+	\Delta Y_{it} = Y_{it} - Y_{i t-1} =\beta_i^\prime \Delta X_{it} + \bigg(m_i \Big( \frac{t}{T} \Big) - m_i \Big(\frac{t-1}{T}\Big)\bigg) + \Delta \varepsilon_{it},
+\end{align*}
+where $\Delta X_{it} = X_{it} - X_{it-1}$ and $ \Delta \varepsilon_{it} = \varepsilon_{it} - \varepsilon_{i t-1}$. Since $m_i(\cdot)$ is Lipschitz, we can use the fact that $ \big|m_i \big( \frac{t}{T} \big) - m_i \big(\frac{t-1}{T}\big) \big| = O\big(\frac{1}{T}\big)$ and rewrite 
+\begin{align*}
+	\Delta Y_{it} = \beta_i^\prime \Delta X_{it} + \Delta \varepsilon_{it} + O\Big(\frac{1}{T}\Big).
+\end{align*}
+
+For a class of stochastic processes $\{\mathbf{L}(v, \mathcal{F}_t)\}_{t\in\integers}$, we say that the process is $\mathcal{L}^q$ \textit{stochastic Lipschitz-continuous} over $[0,1]$ if
+\[ \sup_{0\leq v_1 < v_2 \leq 1} \frac{||\mathbf{L}(v_2, \mathcal{F}_0) - \mathbf{L}(v_1, \mathcal{F}_0)||_q}{|v_2 - v_1|} < \infty.
+\]
+We denote the collection of $\mathcal{L}^q$ \textit{stochastic Lipschitz-continuous} over $[0,1]$ classes by $Lip_q$.
+
+We need the following assumptions on the independent variables $X_{it}$ for each $i$:
+
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+\setcounter{enumi}{2}
+
+\item \label{C-reg1} The covariates $X_{it}$ allow for the representation $X_{it} = \mathbf{H}_i(t/T, \mathcal{U}_{it})$, where $\mathcal{U}_{it} =(\ldots,u_{it-1},u_{it})$ with $u_{it}$ being i.i.d.\ random variables and $\mathbf{H}_i := (H_{i1}, H_{i2}, \ldots, H_{id})^T: [0, 1] \times \reals^\integers \rightarrow \reals^d$ is a measurable function such that $\mathbf{H}_i(v, \mathcal{U}_{it})$ is well defined for each $v\in [0,1]$. 
+
+\item \label{C-reg2} Let $N_i(v)$ be the $d\times d$ matrix with $kl$-th entry $n_{i, kl}(v) = \ex[H_{ik}(v, \mathcal{U}_{i0}), H_{il}(v, \mathcal{U}_{i0})]$. We assume that the smallest eigenvalue of $N_i(v)$ is bounded away from $0$ on $v\in[0,1]$.
+
+\item \label{C-reg3} Let $\mathbf{H}_{i}(v, \mathcal{U}_{it}) \in Lip_2$ and $\sup_{0\leq v\leq 1}||\mathbf{H}_{i}(v, \mathcal{U}_{it})||_4 <\infty$.
+\end{enumerate}
+
+We define the first-differenced regressors as follows.
+\[ \Delta \mathbf{X}_{it} =\mathbf{H}_i(v_t, \mathcal{U}_{it}) - \mathbf{H}_i(v_{t-1}, \mathcal{U}_{it-1}) := \Delta \mathbf{H}_i(v_t, \mathcal{U}_{it}) \]
+where $v_t = t/T$. Similarly, 
+\[\Delta \varepsilon_{it} = \varepsilon_{it} - \varepsilon_{it-1} = G_i(\ldots, \eta_{it-1}, \eta_{it}) - G_i(\ldots, \eta_{it-2}, \eta_{it-1}) = \Delta G_i()
+\]
+ 
+With these assumptions we can prove the following proposition.
+\begin{prop}\label{prop-reg-1}
+Under Assumptions \ref{C-reg1} - \ref{C-reg3},
+\[ \Delta \mathbf{H}_i(v_t, \mathcal{U}_{it}) \in Lip_2 \text{ and } \sup_{0\leq v \leq 1} || \Delta \mathbf{H}_i(v, \mathcal{U}_{it})||_4 < \infty
+\]
+\end{prop}
+
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{prop-reg-1}}}]
+Note the following 
+\begin{align*}
+&\sup_{0\leq v_t < v_s \leq 1} \frac{||\Delta \mathbf{H}_i(v_s, \mathcal{U}_{i0}) - \Delta \mathbf{H}_i(v_t, \mathcal{U}_{i0}) ||_2}{|v_s - v_t|} \leq \\
+\leq &\sup_{0\leq v_t < v_s \leq 1} \frac{||\mathbf{H}_i(v_s, \mathcal{U}_{i0}) - \mathbf{H}_i(v_{s-1}, \mathcal{U}_{i0}) - |\mathbf{H}_i(v_t, \mathcal{U}_{i0}) - \mathbf{H}_i(v_{t-1}, \mathcal{U}_{i0})| ||_2}{|v_s - v_t|} \leq\\
+\leq &\sup_{0\leq v_t < v_s \leq 1} \frac{||\mathbf{H}_i(v_s, \mathcal{U}_{i0}) - \mathbf{H}_i(v_t, \mathcal{U}_{i0}) ||_2}{|v_s - v_t|} + \sup_{0\leq v_{t-1} < v_{s-1} \leq 1} \frac{||\mathbf{H}_i(v_{s-1}, \mathcal{U}_{i0}) - \mathbf{H}_i(v_{t-1}, \mathcal{U}_{i0}) ||_2}{|v_{s-1} - v_{t-1}|},
+\end{align*}
+where $v_s - v_t = v_{s-1} - v_{t-1}$ by definition. By Assumption \ref{C-reg3},
+\[\sup_{0\leq v_t < v_s \leq 1} \frac{||\mathbf{H}_i(v_s, \mathcal{U}_{i0}) - \mathbf{H}_i(v_t, \mathcal{U}_{i0}) ||_2}{|v_s - v_t|} < \infty
+\]
+and 
+\[\sup_{0\leq v_{t-1} < v_{s-1} \leq 1} \frac{||\mathbf{H}_i(v_{s-1}, \mathcal{U}_{i0}) - \mathbf{H}_i(v_{t-1}, \mathcal{U}_{i0}) ||_2}{|v_{s-1} - v_{t-1}|} < \infty.
+\]
+Thus, 
+\[
+\sup_{0\leq v_t < v_s \leq 1} \frac{||\Delta \mathbf{H}_i(v_s, \mathcal{U}_{i0}) - \Delta \mathbf{H}_i(v_t, \mathcal{U}_{i0}) ||_2}{|v_s - v_t|} < \infty
+\]
+and $\Delta \mathbf{H}_i(v_t, \mathcal{U}_{it}) \in Lip_2$. Moreover, by Assumption \ref{C-reg3},
+\[
+ \sup_{0\leq v_t \leq 1} || \Delta \mathbf{H}_i(v_t, \mathcal{U}_{it})||_4 \leq  \sup_{0\leq v_t \leq 1} ||\mathbf{H}_i(v, \mathcal{U}_{it})||_4 +  \sup_{0\leq v_{t-1} \leq 1} || \mathbf{H}_i(v_{t-1}, \mathcal{U}_{it-1})||_4 < \infty,
+\]
+which completes the proof.
+\end{proof} 
+
+To be able to prove the next proposition, we need an additional assumption on the relationship between the covariates and the error process.
+
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+\setcounter{enumi}{5}
+\item \label{C-reg4} For each $i$ $\{\eta_{it}\}_{t\in\integers}$ from Assumption \ref{C-err1} and $\{u_{it}\}_{t\in\integers}$ from Assumption \ref{C-reg1} are independent of each other.
+\end{enumerate}
+
+
+\begin{prop}\label{prop-reg-2}
+Under Assumptions \ref{C-err1} - \ref{C-reg3},
+\[ \big| \frac{1}{\sqrt{T}}\sum_{t=1}^T \Delta \mathbf{X}_{it}\Delta \varepsilon_{it} \big| = O_P(1)
+\]
+\end{prop}
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{prop-reg-2}}}]
+\end{proof}
+
+
 
 \section{Clustering}
 \subsection{Clustering of time trends}\label{subsec-test-equality-clustering}
