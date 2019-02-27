@@ -326,8 +326,21 @@ Recall the differencing estimator $\widehat{\bm{\beta}}_i$:
 This leads to
 \begin{align*}
 \sqrt{T}( \widehat{\bm{\beta}}_i - \bm{\beta}_i) &=  \Big(\frac{1}{T} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^T \Big)^{-1}\frac{1}{\sqrt{T}} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \varepsilon_{it} +\\
-&+  O\Big(\frac{1}{\sqrt{T}}\Big) \Big( \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^T \Big)^{-1} \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it}. 
+&+  O\Big(\frac{1}{\sqrt{T}}\Big) \Big( \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^T \Big)^{-1} \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it}.
 \end{align*}
+By Proposition \ref{prop-reg-1}, we know that for each $t\in\{1, \ldots, T\}$ $|\Delta \mathbf{X}_{it}| = O_P(1)$, which lead to 
+\begin{align}\label{proof-1}
+\Big|\frac{1}{T}\sum_{t=1}^T\Delta \mathbf{X}_{it}\Big| = O_P(1).
+\end{align}
+Similarly, by Proposition \ref{prop-reg-1}
+\begin{align}\label{proof-2}
+\Big|\Big|\frac{1}{T}\sum_{t=1}^T\Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^T\Big|\Big| = O_P(1),
+\end{align}
+where $||A||$ with $A$ being a matrix is a matrix norm induced by the Euslidean norm on a vector.
+
+By Assumption \ref{C-reg2}, we know that $\ex [\Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^T]$ is invertible, thus, 
+\[\Bigg| \Bigg| \Big(\frac{1}{T}\sum_{t=1}^T\Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^T\Big)^{-1}\Bigg|\Bigg| = O_P(1).\]
+By applyting Proposition \ref{prop-reg-2}, \eqref{proof-1} and \eqref{proof-2}, the statement of the theorem follows.
 \end{proof}
 
 %\section{Clustering}
