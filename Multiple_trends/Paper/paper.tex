@@ -259,16 +259,17 @@ and $\Delta \mathbf{H}_i(v_t, \mathcal{U}_{it}) \in Lip_2$. Moreover, by Assumpt
 which completes the proof.
 \end{proof} 
 
-To be able to prove the next proposition, we need an additional assumption on the relationship between the covariates and the error process.
+To be able to prove the next propositions, we need additional assumptions on the relationship between the covariates and the error process.
 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
 \setcounter{enumi}{6}
 \item \label{C-reg4} For each $i$ $\{\eta_{it}\}_{t\in\integers}$ from Assumption \ref{C-err1} and $\{u_{it}\}_{t\in\integers}$ from Assumption \ref{C-reg1} are independent of each other.
+\item \label{C-reg5} Let $\zeta_{i, t} = (u_{it}, \eta_{it})^T$. Define $\mathcal{I}_{i, t} = (\ldots, \zeta_{i, t-1}, \zeta_{i, t})$ and $\mathbf{U}(v, \mathcal{I}_{i, t}) =  \mathbf{H}_i(v, \mathcal{U}_{it})G_i(\mathcal{Z}_{it})$. Then, $\sum_{s=0}^\infty \delta_2(\mathbf{U}, k)<\infty$.
 \end{enumerate}
 
 
 \begin{prop}\label{prop-reg-2}
-Under Assumptions \ref{C-err1} - \ref{C-reg4},
+Under Assumptions \ref{C-err1} - \ref{C-reg5},
 \[ \Big| \frac{1}{\sqrt{T}}\sum_{t=1}^T \Delta \mathbf{X}_{it}\Delta \varepsilon_{it} \Big| = O_P(1)
 \]
 \end{prop}
@@ -304,7 +305,7 @@ Moreover,
 &= \frac{1}{T}\sum_{t=1}^T \sum_{s=0}^\infty \big( \ex ( \Delta \mathbf{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i,t-s} ) - \ex ( \Delta \mathbf{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i,t-s-1} )  \big) =\\
 &= \frac{1}{T}\sum_{t=1}^T \sum_{s=0}^\infty \mathcal{P}_{i, t-s} (\Delta \mathbf{X}_{it}\Delta \varepsilon_{it}) = \sum_{s=0}^\infty \kappa_{i, s}^{\mathcal{P}}.
 \end{align*}
-Thus, by {\color{red} Assumption ??}
+Thus, by Assumption \eqref{C-reg5}
 \[ || \kappa_i - \ex \kappa_i || \leq \sum_{s=0}^\infty ||\kappa_{i, s}^{\mathcal{P}} || \leq \frac{1}{\sqrt{T}}\sum_{s=0}^\infty \delta_2(\Delta \mathbf{U}, s) = O\Big(\frac{1}{\sqrt{T}}\Big)
 \]
 Since $\ex \kappa_i = 0$, we conclude that
