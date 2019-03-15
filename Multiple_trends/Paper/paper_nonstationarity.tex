@@ -75,13 +75,13 @@ for $1 \le t \le T$, where $\beta$ is a $d \times 1$ vector of unknown parameter
 The stationary error processes $\{\varepsilon_{it}\}_{t\in\integers}$ are assumed to have the following properties: 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
 
-\item \label{C-err1} For each $i$ the variables $\varepsilon_{it}$ allow for the representation $\varepsilon_{it} = G_i(\ldots,\eta_{it-1},\eta_{it})$, where $\eta_{it}$ are i.i.d.\ random variables across $t$ and $G_i: \reals^\integers \rightarrow \reals$ is a measurable function. Denote $\mathcal{Z}_{it} = (\ldots,\eta_{it-2},\eta_{it-1},\eta_{it})$.
+\item \label{C-err1} For each $i$ the variables $\varepsilon_{it}$ allow for the representation $\varepsilon_{it} = G_i(\ldots,\eta_{it-1},\eta_{it},\eta_{it+1},\ldots)$, where $\eta_{it}$ are i.i.d.\ random variables across $t$ and $G_i: \reals^\integers \rightarrow \reals$ is a measurable function. Denote $\mathcal{Z}_{it} = (\ldots,\eta_{it-2},\eta_{it-1},\eta_{it})$.
 
 \item \label{C-err2} It holds that $\ex[\varepsilon_{it}] =0$ and $\| \varepsilon_{it} \|_q < \infty$ for some $q > 4$, where $\| \varepsilon_{it} \|_q = (\ex|\varepsilon_t|^q)^{1/q}$. 
 
 \end{enumerate}
 
-Following \cite{Wu2005}, we impose conditions on the dependence structure of the error process $\{\varepsilon_{it}\}_{t\in\integers}$ in terms of the physical dependence measure $d_{i, t,q} = \| \varepsilon_{it} - \varepsilon_{it}^\prime \|_q$, where $\varepsilon_{it}^\prime = G(\ldots,\eta_{i(-1)},\eta_{i0}^\prime,\eta_{i1},\ldots,\eta_{it-1},\eta_{it})$ with $\{\eta_{it}^\prime\}$ being an i.i.d.\ copy of $\{\eta_{it}\}$. In particular, we assume the following: 
+Following \cite{Wu2005}, we impose conditions on the dependence structure of the error process $\{\varepsilon_{it}\}_{t\in\integers}$ in terms of the physical dependence measure $d_{i, t,q} = \| \varepsilon_{it} - \varepsilon_{it}^\prime \|_q$, where $\varepsilon_{it}^\prime = G(\ldots,\eta_{i(-1)},\eta_{i0}^\prime,\eta_{i1},\ldots,\eta_{it-1},\eta_{it},\eta_{it+1},\ldots)$ with $\{\eta_{it}^\prime\}$ being an i.i.d.\ copy of $\{\eta_{it}\}$. In particular, we assume the following: 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
 \setcounter{enumi}{2}
 
@@ -156,16 +156,16 @@ In this section, we adapt the multiscale method developed in Section \ref{sec-me
 
 We now extend the model \eqref{model} to include the exogenous regressors:
 \begin{equation}
-Y_{it} = \bm{\beta}_i^\prime \mathbf{X}_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
+Y_{it} = \beta_i^\prime X_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
 \end{equation}
-It is obvious that if $\bm{\beta}_i$ is known, the problem of testing for the common time trend would be reduced to the one discussed before. That is, we would test $H_0: m_1 = m_2 = \ldots = m_n$ in the model
+It is obvious that if $\beta_i$ is known, the problem of testing for the common time trend would be reduced to the one discussed before. That is, we would test $H_0: m_1 = m_2 = \ldots = m_n$ in the model
 \begin{align*}
-Y_{it} - \bm{\beta}_i^\prime \mathbf{X}_{it} & =: V_{it}\\
+Y_{it} - \beta_i^\prime X_{it} & =: V_{it}\\
 					& = m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
 \end{align*}
-replacing $Y_{it}$ by $V_{it}$ in the construction of the test statistic. However, $\bm{\beta}_i$ is not known so we need to estimate it first. Given an estimator $\widehat{\bm{\beta}}_i$, we then consider
+replacing $Y_{it}$ by $V_{it}$ in the construction of the test statistic. However, $\beta_i$ is not known so we need to estimate it first. Given an estimator $\widehat{\beta}_i$, we then consider
 \begin{align*}
-	\widehat{V}_{it} := Y_{it} - \widehat{\bm{\beta}}_i^\prime \mathbf{X}_{it} =(\widehat{\bm{\beta}}_i - \bm{\beta}_i)^\prime \mathbf{X}_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
+	\widehat{V}_{it} := Y_{it} - \widehat{\beta}_i^\prime X_{it} =(\widehat{\beta}_i - \beta_i)^\prime X_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
 \end{align*}
 and construct the kernel averages $\widehat{\psi}_{ij, T}(u, h)$ based on $\widehat{V}_{it}$ instead of $\widehat{Y}_{it}$. Specifically, for any pair of time series $i$ and $j$ we define the kernel averages
 \begin{align*}
@@ -174,37 +174,19 @@ and construct the kernel averages $\widehat{\psi}_{ij, T}(u, h)$ based on $\wide
 with the kernel weights defined in ??. Similar as in Section \ref{subsec-test-equality-stat-without-regs}, we aggregate the kernel averages $\widehat{\psi}^{\prime}_{ij, T}(u, h)$ for all $(u, h)\in \mathcal{G}_T$ by the multiscale test statistic
 \[ \widehat{\Psi}^\prime_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widehat{\psi}^\prime_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\}. \]
 
-We now focus on finding an appropriate estimator $\widehat{\bm{\beta}}_i$ of $\bm{\beta}_i$. For that purpose, we consider the time series $\{\Delta Y_{it}\}$ of the differences $\Delta Y_{it} = Y_{it} - Y_{i t-1}$ for each $i$. We then have
+We now focus on finding an appropriate estimator $\widehat{\beta}$ of $\beta$. For that purpose, we consider the time series $\{\Delta Y_{it}\}$ of the differences $\Delta Y_{it} = Y_{it} - Y_{i t-1}$ for each $i$. We then have
 \begin{align*}
-	\Delta Y_{it} = Y_{it} - Y_{i t-1} =\bm{\beta}_i^\prime \Delta \mathbf{X}_{it} + \bigg(m_i \Big( \frac{t}{T} \Big) - m_i \Big(\frac{t-1}{T}\Big)\bigg) + \Delta \varepsilon_{it},
+	\Delta Y_{it} = Y_{it} - Y_{i t-1} =\beta_i^\prime \Delta X_{it} + \bigg(m_i \Big( \frac{t}{T} \Big) - m_i \Big(\frac{t-1}{T}\Big)\bigg) + \Delta \varepsilon_{it},
 \end{align*}
-where $\Delta  \mathbf{X}_{it} =  \mathbf{X}_{it} -  \mathbf{X}_{it-1}$ and $ \Delta \varepsilon_{it} = \varepsilon_{it} - \varepsilon_{i t-1}$. Since $m_i(\cdot)$ is Lipschitz, we can use the fact that $ \big|m_i \big( \frac{t}{T} \big) - m_i \big(\frac{t-1}{T}\big) \big| = O\big(\frac{1}{T}\big)$ and rewrite 
+where $\Delta X_{it} = X_{it} - X_{it-1}$ and $ \Delta \varepsilon_{it} = \varepsilon_{it} - \varepsilon_{i t-1}$. Since $m_i(\cdot)$ is Lipschitz, we can use the fact that $ \big|m_i \big( \frac{t}{T} \big) - m_i \big(\frac{t-1}{T}\big) \big| = O\big(\frac{1}{T}\big)$ and rewrite 
 \begin{align}\label{model_with_regs}
-	\Delta Y_{it} = \bm{\beta}_i^\prime \Delta \mathbf{X}_{it} + \Delta \varepsilon_{it} + O\Big(\frac{1}{T}\Big).
+	\Delta Y_{it} = \beta_i^\prime \Delta X_{it} + \Delta \varepsilon_{it} + O\Big(\frac{1}{T}\Big).
 \end{align}
 
 In particular, for each $i$ we employ the least squares estimation method to estimate $\bm{\beta}_i$ in \eqref{model_with_regs}, treating $\Delta \mathbf{X}_{it}$ as the regressors and $\Delta Y_{it}$ as the response variable. That is, we propose the following differencing estimator:
 \begin{align}\label{dif-est}
 \widehat{\bm{\beta}}_i = \Big( \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^T \Big)^{-1} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta Y_{it}
 \end{align}
-
-Define the \textit{physical dependence measure} for the process $\mathbf{L}(\mathcal{F}_t)$ as the following:
-\[ \delta_q(\mathbf{L}, t) = || \mathbf{L}(\mathcal{F}_t) - \mathbf{L}(\mathcal{F}_t^\prime) ||_q,
-\]
-where $\mathcal{F}_t^\prime  = (\ldots, \epsilon_{-1}, \epsilon^\prime_0, \epsilon_1, \ldots, \epsilon_{t-1}, \epsilon_t)$ is a coupled process with $\epsilon_0^\prime$ being an i.i.d. copy of $\epsilon_0$.
-
-We need the following assumptions on the independent variables $ \mathbf{X}_{it}$ for each $i$:
-
-\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
-\setcounter{enumi}{3}
-
-\item \label{C-reg1} The covariates $ \mathbf{X}_{it}$ allow for the representation $ \mathbf{X}_{it} = \mathbf{H}_i(\mathcal{U}_{it})$, where $\mathcal{U}_{it} =(\ldots,u_{it-1},u_{it})$ with $u_{it}$ being i.i.d.\ random variables and $\mathbf{H}_i := (H_{i1}, H_{i2}, \ldots, H_{id})^T: \reals^\integers \rightarrow \reals^d$ is a measurable function such that $\mathbf{H}_i(\mathcal{U}_{it})$ is well defined. 
-
-\item \label{C-reg2} Let $N_i$ be the $d\times d$ matrix with $kl$-th entry $n_{i, kl}= \ex[H_{ik}(\mathcal{U}_{i0})H_{il}(\mathcal{U}_{i0})]$. We assume that the smallest eigenvalue of $N_i$ is strictly bigger than $0$.
-
-\item \label{C-reg3} Let $||\mathbf{H}_{i}(\mathcal{U}_{it})||_4 <\infty$.
-\end{enumerate}
-
 The asymptotic consistency for this differencing estimator is given by the following theorem:
 
 \begin{theorem}\label{thm-reg-1}
@@ -217,82 +199,85 @@ where $\widehat{\bm{\beta}}_i$ is the differencing estimator given by \eqref{dif
 
 
 \subsection{Proof}
+For a class of stochastic processes $\{\mathbf{L}(v, \mathcal{F}_t)\}_{t\in\integers}$, we say that the process is $\mathcal{L}^q$ \textit{stochastic Lipschitz-continuous} over $[0,1]$ if
+\[ \sup_{0\leq v_1 < v_2 \leq 1} \frac{||\mathbf{L}(v_2, \mathcal{F}_0) - \mathbf{L}(v_1, \mathcal{F}_0)||_q}{|v_2 - v_1|} < \infty.
+\]
+We denote the collection of $\mathcal{L}^q$ \textit{stochastic Lipschitz-continuous} over $[0,1]$ classes by $Lip_q$.
+
+Define the \textit{physical dependence measure} for the process $\mathbf{L}(v, \mathcal{F}_t)$ as the following:
+\[ \delta_q(\mathbf{L}, t) = \sup_{v\in[0,1]} || \mathbf{L}(v, \mathcal{F}_t) - \mathbf{L}(v, \mathcal{F}_t^\prime) ||_q,
+\]
+where $\mathcal{F}_t^\prime  = (\ldots, \epsilon_{-1}, \epsilon^\prime_0, \epsilon_1, \ldots, \epsilon_{t-1}, \epsilon_t)$ is a coupled process with $\epsilon_0^\prime$ being an i.i.d. copy of $\epsilon_0$.
+
+
+We need the following assumptions on the independent variables $X_{it}$ for each $i$:
+
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+\setcounter{enumi}{3}
+
+\item \label{C-reg1} The covariates $X_{it}$ allow for the representation $X_{it} = \mathbf{H}_i(t/T, \mathcal{U}_{it})$, where $\mathcal{U}_{it} =(\ldots,u_{it-1},u_{it})$ with $u_{it}$ being i.i.d.\ random variables and $\mathbf{H}_i := (H_{i1}, H_{i2}, \ldots, H_{id})^T: [0, 1] \times \reals^\integers \rightarrow \reals^d$ is a measurable function such that $\mathbf{H}_i(v, \mathcal{U}_{it})$ is well defined for each $v\in [0,1]$. 
+
+\item \label{C-reg2} Let $N_i(v)$ be the $d\times d$ matrix with $kl$-th entry $n_{i, kl}(v) = \ex[H_{ik}(v, \mathcal{U}_{i0}), H_{il}(v, \mathcal{U}_{i0})]$. We assume that the smallest eigenvalue of $N_i(v)$ is bounded away from $0$ on $v\in[0,1]$.
+
+\item \label{C-reg3} Let $\mathbf{H}_{i}(v, \mathcal{U}_{it}) \in Lip_2$ and $\sup_{0\leq v\leq 1}||\mathbf{H}_{i}(v, \mathcal{U}_{it})||_4 <\infty$.
+\end{enumerate}
 
 We define the first-differenced regressors as follows.
-\[ \Delta \mathbf{X}_{it} =\mathbf{H}_i(\mathcal{U}_{it}) - \mathbf{H}_i(\mathcal{U}_{it-1}) := \Delta \mathbf{H}_i(\mathcal{U}_{it}). \]
-Similarly, 
+\[ \Delta \mathbf{X}_{it} =\mathbf{H}_i(v_t, \mathcal{U}_{it}) - \mathbf{H}_i(v_{t-1}, \mathcal{U}_{it-1}) := \Delta \mathbf{H}_i(v_t, \mathcal{U}_{it}) \]
+where $v_t = t/T$. Similarly, 
 \[\Delta \varepsilon_{it} = \varepsilon_{it} - \varepsilon_{it-1} = G_i(\mathcal{Z}_{it}) - G_i(\mathcal{Z}_{it-1}) = \Delta G_i(\mathcal{Z}_{it}).
 \]
  
 With these assumptions we can prove the following proposition.
 \begin{prop}\label{prop-reg-1}
-Under Assumptions \ref{C-reg1} - \ref{C-reg3}, $|| \Delta \mathbf{H}_i(\mathcal{U}_{it})||_4 < \infty$.
+Under Assumptions \ref{C-reg1} - \ref{C-reg3},
+\[ \Delta \mathbf{H}_i(v_t, \mathcal{U}_{it}) \in Lip_2 \text{ and } \sup_{0\leq v \leq 1} || \Delta \mathbf{H}_i(v, \mathcal{U}_{it})||_4 < \infty
+\]
 \end{prop}
 
 \begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{prop-reg-1}}}]
-By Assumption \ref{C-reg3},
-\[
- || \Delta \mathbf{H}_i(\mathcal{U}_{it})||_4 \leq  ||\mathbf{H}_i(\mathcal{U}_{it})||_4 +  || \mathbf{H}_i(\mathcal{U}_{it-1})||_4 < \infty.
+Note the following 
+\begin{align*}
+&\sup_{0\leq v_t < v_s \leq 1} \frac{||\Delta \mathbf{H}_i(v_s, \mathcal{U}_{i0}) - \Delta \mathbf{H}_i(v_t, \mathcal{U}_{i0}) ||_2}{|v_s - v_t|} \leq \\
+\leq &\sup_{0\leq v_t < v_s \leq 1} \frac{||\mathbf{H}_i(v_s, \mathcal{U}_{i0}) - \mathbf{H}_i(v_{s-1}, \mathcal{U}_{i0}) - |\mathbf{H}_i(v_t, \mathcal{U}_{i0}) - \mathbf{H}_i(v_{t-1}, \mathcal{U}_{i0})| ||_2}{|v_s - v_t|} \leq\\
+\leq &\sup_{0\leq v_t < v_s \leq 1} \frac{||\mathbf{H}_i(v_s, \mathcal{U}_{i0}) - \mathbf{H}_i(v_t, \mathcal{U}_{i0}) ||_2}{|v_s - v_t|} + \sup_{0\leq v_{t-1} < v_{s-1} \leq 1} \frac{||\mathbf{H}_i(v_{s-1}, \mathcal{U}_{i0}) - \mathbf{H}_i(v_{t-1}, \mathcal{U}_{i0}) ||_2}{|v_{s-1} - v_{t-1}|},
+\end{align*}
+where $v_s - v_t = v_{s-1} - v_{t-1}$ by definition. By Assumption \ref{C-reg3},
+\[\sup_{0\leq v_t < v_s \leq 1} \frac{||\mathbf{H}_i(v_s, \mathcal{U}_{i0}) - \mathbf{H}_i(v_t, \mathcal{U}_{i0}) ||_2}{|v_s - v_t|} < \infty
 \]
+and 
+\[\sup_{0\leq v_{t-1} < v_{s-1} \leq 1} \frac{||\mathbf{H}_i(v_{s-1}, \mathcal{U}_{i0}) - \mathbf{H}_i(v_{t-1}, \mathcal{U}_{i0}) ||_2}{|v_{s-1} - v_{t-1}|} < \infty.
+\]
+Thus, 
+\[
+\sup_{0\leq v_t < v_s \leq 1} \frac{||\Delta \mathbf{H}_i(v_s, \mathcal{U}_{i0}) - \Delta \mathbf{H}_i(v_t, \mathcal{U}_{i0}) ||_2}{|v_s - v_t|} < \infty
+\]
+and $\Delta \mathbf{H}_i(v_t, \mathcal{U}_{it}) \in Lip_2$. Moreover, by Assumption \ref{C-reg3},
+\[
+ \sup_{0\leq v_t \leq 1} || \Delta \mathbf{H}_i(v_t, \mathcal{U}_{it})||_4 \leq  \sup_{0\leq v_t \leq 1} ||\mathbf{H}_i(v, \mathcal{U}_{it})||_4 +  \sup_{0\leq v_{t-1} \leq 1} || \mathbf{H}_i(v_{t-1}, \mathcal{U}_{it-1})||_4 < \infty,
+\]
+which completes the proof.
 \end{proof} 
 
-To be able to prove the next proposition, we need additional assumptions on the relationship between the covariates and the error process.
+To be able to prove the next propositions, we need additional assumptions on the relationship between the covariates and the error process.
 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
 \setcounter{enumi}{6}
 \item \label{C-reg4} For each $i$ $\{\eta_{it}\}_{t\in\integers}$ from Assumption \ref{C-err1} and $\{u_{it}\}_{t\in\integers}$ from Assumption \ref{C-reg1} are independent of each other.
-\item \label{C-reg5} Let $\zeta_{i, t} = (u_{it}, \eta_{it})^T$. Define $\mathcal{I}_{i, t} = (\ldots, \zeta_{i, t-1}, \zeta_{i, t})$ and $\mathbf{U}_i(\mathcal{I}_{i, t}) =  \mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{Z}_{it})$. Then, $\sum_{s=0}^\infty \delta_2(\mathbf{U}_i, s)<\infty$.
-\item \label{C-reg6} $\sum_{s=0}^\infty \delta_4(\mathbf{H}_i, s)<\infty$.
+\item \label{C-reg5} Let $\zeta_{i, t} = (u_{it}, \eta_{it})^T$. Define $\mathcal{I}_{i, t} = (\ldots, \zeta_{i, t-1}, \zeta_{i, t})$ and $\mathbf{U}(v, \mathcal{I}_{i, t}) =  \mathbf{H}_i(v, \mathcal{U}_{it})G_i(\mathcal{Z}_{it})$. Then, $\sum_{s=0}^\infty \delta_2(\mathbf{U}, k)<\infty$.
 \end{enumerate}
 
+
 \begin{prop}\label{prop-reg-2}
-Define 
-\[ \Delta \mathbf{U}_i(\mathcal{I}_{i, t}) := \Delta \mathbf{H}_i(\mathcal{U}_{it}) \Delta G_i(\mathcal{Z}_{it}).
+Under Assumptions \ref{C-err1} - \ref{C-reg5},
+\[ \Big| \frac{1}{\sqrt{T}}\sum_{t=1}^T \Delta \mathbf{X}_{it}\Delta \varepsilon_{it} \Big| = O_P(1)
 \]
-Under Assumptions \ref{C-err3}, \ref{C-reg5} - \ref{C-reg6}, we have that $\sum_{s=0}^\infty \delta_2(\Delta \mathbf{U}_i, s) < \infty$.
 \end{prop}
-
 \begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{prop-reg-2}}}]
-Note the following
-\begin{align*}
- &\delta_2(\Delta \mathbf{U}_i, t) = || \Delta\mathbf{U}_i(\mathcal{I}_{i, t}) - \Delta \mathbf{U}_i(\mathcal{I}_{i,t}^\prime) ||_2 =\\
- &= || \Delta \mathbf{H}_i(\mathcal{U}_{it}) \Delta G_i(\mathcal{Z}_{it}) -  \Delta \mathbf{H}_i(\mathcal{U}_{it}^\prime) \Delta G_i(\mathcal{Z}_{it}^\prime) ||_2 =\\
- & = ||\big(\mathbf{H}_i(\mathcal{U}_{it}) - \mathbf{H}_i(\mathcal{U}_{it-1})\big)\big(G_i(\mathcal{Z}_{it}) - G_i(\mathcal{Z}_{it-1})\big) - \big(\mathbf{H}_i(\mathcal{U}_{it}^\prime) - \mathbf{H}_i(\mathcal{U}_{it-1}^\prime)\big)\big(G_i(\mathcal{Z}_{it}^\prime) - G_i(\mathcal{Z}_{it-1}^\prime)\big)||_2 =\\
- &= ||\mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{Z}_{it}) - \mathbf{H}_i(\mathcal{U}_{it-1})G_i(\mathcal{Z}_{it}) - \mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{Z}_{it-1})  + \mathbf{H}_i(\mathcal{U}_{it-1})G_i(\mathcal{Z}_{it-1}) - \\
- &\quad - \mathbf{H}_i(\mathcal{U}_{it}^\prime)G_i(\mathcal{Z}_{it}^\prime) + \mathbf{H}_i(\mathcal{U}_{it-1}^\prime)G_i(\mathcal{Z}_{it}^\prime) + \mathbf{H}_i(\mathcal{U}_{it}^\prime)G_i(\mathcal{Z}_{it-1}^\prime)  - \mathbf{H}_i(\mathcal{U}_{it-1}^\prime)G_i(\mathcal{Z}_{it-1}^\prime) ||_2\leq \\
- &\leq ||\mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{Z}_{it}) - \mathbf{H}_i(\mathcal{U}_{it}^\prime)G_i(\mathcal{Z}_{it}^\prime) ||_2 + ||\mathbf{H}_i(\mathcal{U}_{it-1})G_i(\mathcal{Z}_{it-1}) -  \mathbf{H}_i(\mathcal{U}_{it-1}^\prime)G_i(\mathcal{Z}_{it-1}^\prime)||_2 + \\
- &\quad + ||\mathbf{H}_i(\mathcal{U}_{it-1})G_i(\mathcal{Z}_{it}) -\mathbf{H}_i(\mathcal{U}_{it-1}^\prime)G_i(\mathcal{Z}_{it}^\prime)    ||_2
- + ||\mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{Z}_{it-1}) -  \mathbf{H}_i(\mathcal{U}_{it}^\prime)G_i(\mathcal{Z}_{it-1}^\prime) ||_2 = \\
- & = \delta_2(\mathbf{U}_i, t) + \delta_2(\mathbf{U}_i, t-1)  +\\
- &\quad + ||\mathbf{H}_i(\mathcal{U}_{it-1})G_i(\mathcal{Z}_{it}) - \mathbf{H}_i(\mathcal{U}_{it-1}^\prime)G_i(\mathcal{Z}_{it}) + \mathbf{H}_i(\mathcal{U}_{it-1}^\prime)G_i(\mathcal{Z}_{it}) - \mathbf{H}_i(\mathcal{U}_{it-1}^\prime)G_i(\mathcal{Z}_{it}^\prime)    ||_2+\\
- &\quad + ||\mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{Z}_{it-1}) -\mathbf{H}_i(\mathcal{U}_{it}^\prime)G_i(\mathcal{Z}_{it-1})+ \mathbf{H}_i(\mathcal{U}_{it}^\prime)G_i(\mathcal{Z}_{it-1})-  \mathbf{H}_i(\mathcal{U}_{it}^\prime)G_i(\mathcal{Z}_{it-1}^\prime) ||_2 \leq\\
-  &\leq \delta_2(\mathbf{U}_i, t) + \delta_2(\mathbf{U}_i, t-1)  + \\
-  &\quad +||\big(\mathbf{H}_i(\mathcal{U}_{it-1}) - \mathbf{H}_i(\mathcal{U}_{it-1}^\prime)\big) G_i(\mathcal{Z}_{it})||_2 +  ||\mathbf{H}_i(\mathcal{U}_{it-1}^\prime)\big(G_i(\mathcal{Z}_{it}) - G_i(\mathcal{Z}_{it}^\prime)\big)    ||_2+\\
- &\quad + ||\big(\mathbf{H}_i(\mathcal{U}_{it}) -\mathbf{H}_i(\mathcal{U}_{it}^\prime)\big)G_i(\mathcal{Z}_{it-1})||_2 + ||\mathbf{H}_i(\mathcal{U}_{it}^\prime)\big(G_i(\mathcal{Z}_{it-1}) -G_i(\mathcal{Z}_{it-1}^\prime)\big) ||_2 \leq \\
- &\leq \delta_2(\mathbf{U}_i, t) + \delta_2(\mathbf{U}_i, t-1)  + \big(\delta_2(\mathbf{H}_i, t-1) +  \delta_2(\mathbf{H}_i, t)\big) ||G_i ||_2+ \big( \delta_2(G_i, t-1) +  \delta_2(G_i, t)\big)||\mathbf{H}_i ||_2  
-\end{align*}
-
-Here $\mathcal{U}_{it}^\prime  = (\ldots, u_{i(-1)}, u^\prime_{i0}, u_{i1}, \ldots, u_{it-1}, u_{it})$, $\mathcal{U}_{it-1}^\prime  = (\ldots, u_{i(-1)}, u^\prime_{i0}, u_{i1}, \ldots, u_{it-1})$, $\mathcal{Z}_{it}^\prime  = (\ldots, \eta_{i(-1)}, \eta^\prime_{i0}, \eta_{i1}, \ldots, \eta_{it-1}, \eta_{it})$, $\mathcal{Z}_{it-1}^\prime  = (\ldots, \eta_{i(-1)}, \eta^\prime_{i0}, \eta_{i1}, \ldots, \eta_{it-1})$ are coupled processes with $u_{i0}^\prime$ being an i.i.d. copy of $u_{i0}$ and $\eta_{i0}^\prime$ being an i.i.d. copy of $\eta_{i0}$.
-
-This leads us to 
-\begin{align*}
- &\sum_{s=0}^\infty \delta_2(\Delta \mathbf{U}_i, s) \leq \sum_{s=0}^\infty \delta_2(\mathbf{U}_i, s) + \sum_{s=1}^\infty\delta_2(\mathbf{U}_i, s-1)  +\\
- &\quad + \sum_{s=1}^\infty\big(\delta_2(\mathbf{H}_i, s-1) +  \delta_2(\mathbf{H}_i, s)\big) ||G_i ||_2 + \sum_{s=1}^\infty\big( \delta_2(G_i, s-1) +  \delta_2(G_i, s)\big)||\mathbf{H}_i ||_2 <\infty 
-\end{align*}
-
-
-\end{proof}
-
-
-\begin{prop}\label{prop-reg-3}
-Under Assumptions \ref{C-err1} - \ref{C-reg6},
-\[ \Big| \frac{1}{\sqrt{T}}\sum_{t=1}^T \Delta \mathbf{X}_{it}\Delta \varepsilon_{it} \Big| = O_P(1).
-\]
-\end{prop}
-
-\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{prop-reg-3}}}]
-We need the following notation:
+Let $\zeta_{i,t} = (u_{it}, \eta_{it})^T$. We need the following notation:
 \begin{alignat*}{2}
+&\mathcal{I}_{i,t} &&:= (\ldots, \zeta_{i, t-2}, \zeta_{i, t-1}, \zeta_{i,t}),\\
+&\Delta \mathbf{U}_i(v, \mathcal{I}_{i, t}) &&:= \Delta \mathbf{H}_i(v, \mathcal{U}_{it}) \Delta G_i(\mathcal{Z}_{it}),\\
 &\mathcal{P}_{i,t}(\cdot) &&:= \ex[\cdot|\mathcal{I}_{i, t}] -\ex[\cdot|\mathcal{I}_{i, t-1}], \\
 &\kappa_{i} && := \frac{1}{T}\sum_{t=1}^T  \Delta \mathbf{X}_{it}\Delta \varepsilon_{it}, \\
 &\kappa_{i, s}^{\mathcal{P}} && := \frac{1}{T}\sum_{t=1}^T \mathcal{P}_{i, t-s}\big( \Delta \mathbf{X}_{it}\Delta \varepsilon_{it}\big).
@@ -307,8 +292,9 @@ where $\Delta \mathbf{X}_{it, s}^\prime\Delta \varepsilon_{it, s}^\prime$ denote
 \begin{align*}
 ||\kappa_{i, s}^{\mathcal{P}}||^2 &\leq \frac{1}{T^2} \sum_{t=1}^T \Big|\Big| \ex (\Delta \mathbf{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i, t-s}) -\ex (\Delta \mathbf{X}_{it, s}^\prime\Delta \varepsilon_{it, s}^\prime|\mathcal{I}_{i, t-s}) \Big|\Big|^2 \leq \\
 &\leq \frac{1}{T^2} \sum_{t=1}^T \Big|\Big| \Delta \mathbf{X}_{it}\Delta \varepsilon_{it} -\Delta \mathbf{X}_{it, s}^\prime\Delta \varepsilon_{it, s}^\prime\Big|\Big|^2 =\\
-& = \frac{1}{T^2} \sum_{t=1}^T \Big|\Big| \Delta \mathbf{H}_i(\mathcal{U}_{it})  \Delta G_i(\mathcal{Z}_{it}) - \Delta \mathbf{H}_i(\mathcal{U}_{it, s}^\prime)  \Delta G_i(\mathcal{Z}_{it, s}^\prime)\Big|\Big|^2 =\\
-& = \frac{1}{T^2} \sum_{t=1}^T \Big|\Big| \Delta \mathbf{U}_i(\mathcal{I}_{i,t})  - \Delta \mathbf{U}_i(\mathcal{I}_{i,t, s}^\prime) \Big|\Big|^2 \leq \frac{1}{T^2} \sum_{i=1}^T \delta_2^2(\Delta \mathbf{U}_i, s) = \frac{1}{T}\delta_2^2(\Delta \mathbf{U}_i, s)
+& = \frac{1}{T^2} \sum_{t=1}^T \Big|\Big| \Delta \mathbf{H}_i(v_t, \mathcal{U}_{it})  \Delta G_i(\mathcal{Z}_{it}) - \Delta \mathbf{H}_i(v_t, \mathcal{U}_{it, s}^\prime)  \Delta G_i(\mathcal{Z}_{it, s}^\prime)\Big|\Big|^2 =\\
+& = \frac{1}{T^2} \sum_{t=1}^T \Big|\Big| \Delta \mathbf{U}_i(v_t, \mathcal{I}_{it})  - \Delta \mathbf{U}_i(v_t, \mathcal{I}_{it, s}^\prime) \Big|\Big|^2 \leq \\
+&\leq \frac{1}{T^2} \sum_{i=1}^T \delta_2^2(\Delta \mathbf{U}, s) = \frac{1}{T}\delta_2^2(\Delta \mathbf{U}, s)
 \end{align*}
 with $\mathcal{U}_{it, s}^\prime = (\ldots, u_{it-s-1}, u^\prime_{it-s}, u_{it-s+1}, \ldots, u_{it})$, $\mathcal{Z}_{it, s}^\prime = (\ldots, \eta_{it-s-1}, \eta^\prime_{it-s}, \eta_{it-s+1}, \ldots, \eta_{it})$, $\zeta^\prime_{it} = (u_{it}^\prime, \eta_{it}^\prime)^T$ and $\mathcal{I}_{i,t,s}^\prime =(\ldots, \zeta_{it-s-1}, \zeta^\prime_{it-s}, \zeta_{it-s+1}, \ldots, \zeta_{it})$.
 
@@ -319,8 +305,8 @@ Moreover,
 &= \frac{1}{T}\sum_{t=1}^T \sum_{s=0}^\infty \big( \ex ( \Delta \mathbf{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i,t-s} ) - \ex ( \Delta \mathbf{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i,t-s-1} )  \big) =\\
 &= \frac{1}{T}\sum_{t=1}^T \sum_{s=0}^\infty \mathcal{P}_{i, t-s} (\Delta \mathbf{X}_{it}\Delta \varepsilon_{it}) = \sum_{s=0}^\infty \kappa_{i, s}^{\mathcal{P}}.
 \end{align*}
-Thus, by Proposition \ref{prop-reg-2},
-\[ || \kappa_i - \ex \kappa_i || \leq \sum_{s=0}^\infty ||\kappa_{i, s}^{\mathcal{P}} || \leq \frac{1}{\sqrt{T}}\sum_{s=0}^\infty \delta_2(\Delta \mathbf{U}_i, s) = O\Big(\frac{1}{\sqrt{T}}\Big)
+Thus, by Assumption \eqref{C-reg5}
+\[ || \kappa_i - \ex \kappa_i || \leq \sum_{s=0}^\infty ||\kappa_{i, s}^{\mathcal{P}} || \leq \frac{1}{\sqrt{T}}\sum_{s=0}^\infty \delta_2(\Delta \mathbf{U}, s) = O\Big(\frac{1}{\sqrt{T}}\Big)
 \]
 Since $\ex \kappa_i = 0$, we conclude that
 \[  \Big|\Big| \frac{1}{T}\sum_{t=1}^T  \Delta \mathbf{X}_{it}\Delta \varepsilon_{it} \Big|\Big| = O\Big(\frac{1}{\sqrt{T}}\Big).
@@ -343,7 +329,7 @@ This leads to
 \sqrt{T}( \widehat{\bm{\beta}}_i - \bm{\beta}_i) &=  \Big(\frac{1}{T} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^T \Big)^{-1}\frac{1}{\sqrt{T}} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \varepsilon_{it} +\\
 &+  O\Big(\frac{1}{\sqrt{T}}\Big) \Big( \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^T \Big)^{-1} \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it}.
 \end{align*}
-By Proposition \ref{prop-reg-1}, we know that for each $t\in\{1, \ldots, T\}$ $|\Delta \mathbf{X}_{it}| = O_P(1)$, which leads to 
+By Proposition \ref{prop-reg-1}, we know that for each $t\in\{1, \ldots, T\}$ $|\Delta \mathbf{X}_{it}| = O_P(1)$, which lead to 
 \begin{align}\label{proof-1}
 \Big|\frac{1}{T}\sum_{t=1}^T\Delta \mathbf{X}_{it}\Big| = O_P(1).
 \end{align}
@@ -351,11 +337,11 @@ Similarly, by Proposition \ref{prop-reg-1}
 \begin{align}\label{proof-2}
 \Big|\Big|\frac{1}{T}\sum_{t=1}^T\Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^T\Big|\Big| = O_P(1),
 \end{align}
-where $||A||$ with $A$ being a matrix is any matrix norm.
+where $||A||$ with $A$ being a matrix is a matrix norm induced by the Euslidean norm on a vector.
 
 By Assumption \ref{C-reg2}, we know that $\ex [\Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^T]$ is invertible, thus, 
 \[\Bigg| \Bigg| \Big(\frac{1}{T}\sum_{t=1}^T\Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^T\Big)^{-1}\Bigg|\Bigg| = O_P(1).\]
-By applying Proposition \ref{prop-reg-2}, \eqref{proof-1} and \eqref{proof-2}, the statement of the theorem follows.
+By applyting Proposition \ref{prop-reg-2}, \eqref{proof-1} and \eqref{proof-2}, the statement of the theorem follows.
 \end{proof}
 
 %\section{Clustering}
