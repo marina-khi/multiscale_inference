@@ -67,6 +67,13 @@
 
 \section{The model}\label{sec-model}
 
+Before we proceed any further, we need to introduce some notation used throughout the paper. For a vector $\mathbf{v} = (v_1, \ldots, v_m)\in\reals^m$, we write $|\mathbf{v}| = \big(\sum_{i=1}^m v_i^2\big)^{1/2}$. For a random vector $\mathbf{V}$, we define it's $\mathcal{L}^q, q>1$ norm as $||\mathbf{V}||_q = \big(\ex |\mathbf{V}|^q\big)^{1/q}$. For a patricular case $q = 2$, we write $||\mathbf{V}|| := ||\mathbf{V}||_2$.
+
+Following \cite{Wu2005}, we define the \textit{physical dependence measure} for the process $\mathbf{L}(\mathcal{F}_t)$ as the following:
+\[ \delta_q(\mathbf{L}, t) = || \mathbf{L}(\mathcal{F}_t) - \mathbf{L}(\mathcal{F}_t^\prime) ||_q,
+\]
+where $\mathcal{F}_t  = (\ldots, \epsilon_{-1}, \epsilon_0, \epsilon_1, \ldots, \epsilon_{t-1}, \epsilon_t)$ and $\mathcal{F}_t^\prime  = (\ldots, \epsilon_{-1}, \epsilon^\prime_0, \epsilon_1, \ldots, \epsilon_{t-1}, \epsilon_t)$ is a coupled process of $\mathcal{F}_t$ with $\epsilon_0^\prime$ being an i.i.d. copy of $\epsilon_0$.
+
 The model setting is as follows. We observe time series $\mathcal{Y}_i = \{Y_{it}: 1 \le t \le T \}$ of length $T$ for $1 \le i \le n$. Each time series $\mathcal{Y}_i$ satisfies the model equation \begin{equation}\label{model_full}
 Y_{it} = \beta^\prime X_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
 \end{equation}
@@ -77,15 +84,15 @@ The stationary error processes $\{\varepsilon_{it}\}_{t\in\integers}$ are assume
 
 \item \label{C-err1} For each $i$ the variables $\varepsilon_{it}$ allow for the representation $\varepsilon_{it} = G_i(\ldots,\eta_{it-1},\eta_{it})$, where $\eta_{it}$ are i.i.d.\ random variables across $t$ and $G_i: \reals^\integers \rightarrow \reals$ is a measurable function. Denote $\mathcal{Z}_{it} = (\ldots,\eta_{it-2},\eta_{it-1},\eta_{it})$.
 
-\item \label{C-err2} It holds that $\ex[\varepsilon_{it}] =0$ and $\| \varepsilon_{it} \|_q < \infty$ for some $q > 4$, where $\| \varepsilon_{it} \|_q = (\ex|\varepsilon_t|^q)^{1/q}$. 
+\item \label{C-err2} It holds that $\ex[\varepsilon_{it}] =0$ and $\| \varepsilon_{it} \|_q < \infty$ for some $q > 4$. 
 
 \end{enumerate}
 
-Following \cite{Wu2005}, we impose conditions on the dependence structure of the error process $\{\varepsilon_{it}\}_{t\in\integers}$ in terms of the physical dependence measure $d_{i, t,q} = \| \varepsilon_{it} - \varepsilon_{it}^\prime \|_q$, where $\varepsilon_{it}^\prime = G(\ldots,\eta_{i(-1)},\eta_{i0}^\prime,\eta_{i1},\ldots,\eta_{it-1},\eta_{it})$ with $\{\eta_{it}^\prime\}$ being an i.i.d.\ copy of $\{\eta_{it}\}$. In particular, we assume the following: 
+Following \cite{Wu2005}, we impose conditions on the dependence structure of the error process $\{\varepsilon_{it}\}_{t\in\integers}$ in terms of the physical dependence measure $\delta_q(G_i, t)$. In particular, we assume the following: 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
 \setcounter{enumi}{2}
 
-\item \label{C-err3} Define $\Theta_{i, t,q} = \sum\nolimits_{|s| \ge t} d_{i, s,q}$ for $t \ge 0$. It holds that 
+\item \label{C-err3} Define $\Theta_{i, t,q} = \sum\nolimits_{s \ge t} \delta_q(G_i, s)$ for $t \ge 0$. It holds that 
 $\Theta_{i, t,q} = O ( t^{-\tau_q} (\log t)^{-A} )$,  
 where $A > \frac{2}{3} (1/q + 1 + \tau_q)$ and $\tau_q = \{q^2 - 4 + (q-2) \sqrt{q^2 + 20q + 4}\} / 8q$. 
 
@@ -96,6 +103,7 @@ The conditions \ref{C-err1}--\ref{C-err3} are fulfilled by a wide range of stati
 \section{Testing for equality of time trends}\label{sec-test-equality}
 
 In this section, we adapt the multiscale method developed in Section \ref{sec-method} to test the hypothesis that the trend functions in model \eqref{model} are all the same. More formally, we test the null hypothesis $H_0: m_1 = m_2 = \ldots = m_n$ in model \eqref{model_full}. As we will see, the proposed multiscale method does not only allow to test whether the null hypothesis is violated. It also provides information on where violations occur. More specifically, it allows to identify, with a pre-specified confidence, (i) trend functions which are different from each other and (ii) time intervals where these trend functions differ.
+
 
 
 %\subsection{Construction of the test statistic in the absence of exogenous regressors}\label{subsec-test-equality-stat-without-regs}
@@ -188,11 +196,6 @@ In particular, for each $i$ we employ the least squares estimation method to est
 \widehat{\bm{\beta}}_i = \Big( \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^T \Big)^{-1} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta Y_{it}
 \end{align}
 
-Define the \textit{physical dependence measure} for the process $\mathbf{L}(\mathcal{F}_t)$ as the following:
-\[ \delta_q(\mathbf{L}, t) = || \mathbf{L}(\mathcal{F}_t) - \mathbf{L}(\mathcal{F}_t^\prime) ||_q,
-\]
-where $\mathcal{F}_t^\prime  = (\ldots, \epsilon_{-1}, \epsilon^\prime_0, \epsilon_1, \ldots, \epsilon_{t-1}, \epsilon_t)$ is a coupled process with $\epsilon_0^\prime$ being an i.i.d. copy of $\epsilon_0$.
-
 We need the following assumptions on the independent variables $ \mathbf{X}_{it}$ for each $i$:
 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
@@ -205,7 +208,16 @@ We need the following assumptions on the independent variables $ \mathbf{X}_{it}
 \item \label{C-reg3} Let $||\mathbf{H}_{i}(\mathcal{U}_{it})||_4 <\infty$.
 \end{enumerate}
 
-The asymptotic consistency for this differencing estimator is given by the following theorem:
+To be able to prove the main theorem in this section, we need additional assumptions on the relationship between the covariates and the error process.
+
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+\setcounter{enumi}{6}
+\item \label{C-reg4} For each $i$ $\{\eta_{it}\}_{t\in\integers}$ from Assumption \ref{C-err1} and $\{u_{it}\}_{t\in\integers}$ from Assumption \ref{C-reg1} are independent of each other.
+\item \label{C-reg5} Let $\zeta_{i, t} = (u_{it}, \eta_{it})^T$. Define $\mathcal{I}_{i, t} = (\ldots, \zeta_{i, t-1}, \zeta_{i, t})$ and $\mathbf{U}_i(\mathcal{I}_{i, t}) =  \mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{Z}_{it})$. Then, $\sum_{s=0}^\infty \delta_2(\mathbf{U}_i, s)<\infty$.
+\item \label{C-reg6} $\sum_{s=0}^\infty \delta_4(\mathbf{H}_i, s)<\infty$.
+\end{enumerate}
+
+Then the asymptotic consistency for this differencing estimator is given by the following theorem:
 
 \begin{theorem}\label{thm-reg-1}
 Under Assumptions \ref{C-err1} - \ref{C-reg3}, we have
@@ -235,15 +247,6 @@ By Assumption \ref{C-reg3},
  || \Delta \mathbf{H}_i(\mathcal{U}_{it})||_4 \leq  ||\mathbf{H}_i(\mathcal{U}_{it})||_4 +  || \mathbf{H}_i(\mathcal{U}_{it-1})||_4 < \infty.
 \]
 \end{proof} 
-
-To be able to prove the next proposition, we need additional assumptions on the relationship between the covariates and the error process.
-
-\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
-\setcounter{enumi}{6}
-\item \label{C-reg4} For each $i$ $\{\eta_{it}\}_{t\in\integers}$ from Assumption \ref{C-err1} and $\{u_{it}\}_{t\in\integers}$ from Assumption \ref{C-reg1} are independent of each other.
-\item \label{C-reg5} Let $\zeta_{i, t} = (u_{it}, \eta_{it})^T$. Define $\mathcal{I}_{i, t} = (\ldots, \zeta_{i, t-1}, \zeta_{i, t})$ and $\mathbf{U}_i(\mathcal{I}_{i, t}) =  \mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{Z}_{it})$. Then, $\sum_{s=0}^\infty \delta_2(\mathbf{U}_i, s)<\infty$.
-\item \label{C-reg6} $\sum_{s=0}^\infty \delta_4(\mathbf{H}_i, s)<\infty$.
-\end{enumerate}
 
 \begin{prop}\label{prop-reg-2}
 Define 
@@ -308,7 +311,7 @@ where $\Delta \mathbf{X}_{it, s}^\prime\Delta \varepsilon_{it, s}^\prime$ denote
 ||\kappa_{i, s}^{\mathcal{P}}||^2 &\leq \frac{1}{T^2} \sum_{t=1}^T \Big|\Big| \ex (\Delta \mathbf{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i, t-s}) -\ex (\Delta \mathbf{X}_{it, s}^\prime\Delta \varepsilon_{it, s}^\prime|\mathcal{I}_{i, t-s}) \Big|\Big|^2 \leq \\
 &\leq \frac{1}{T^2} \sum_{t=1}^T \Big|\Big| \Delta \mathbf{X}_{it}\Delta \varepsilon_{it} -\Delta \mathbf{X}_{it, s}^\prime\Delta \varepsilon_{it, s}^\prime\Big|\Big|^2 =\\
 & = \frac{1}{T^2} \sum_{t=1}^T \Big|\Big| \Delta \mathbf{H}_i(\mathcal{U}_{it})  \Delta G_i(\mathcal{Z}_{it}) - \Delta \mathbf{H}_i(\mathcal{U}_{it, s}^\prime)  \Delta G_i(\mathcal{Z}_{it, s}^\prime)\Big|\Big|^2 =\\
-& = \frac{1}{T^2} \sum_{t=1}^T \Big|\Big| \Delta \mathbf{U}_i(\mathcal{I}_{i,t})  - \Delta \mathbf{U}_i(\mathcal{I}_{i,t, s}^\prime) \Big|\Big|^2 \leq \frac{1}{T^2} \sum_{i=1}^T \delta_2^2(\Delta \mathbf{U}_i, s) = \frac{1}{T}\delta_2^2(\Delta \mathbf{U}_i, s)
+& = \frac{1}{T^2} \sum_{t=1}^T \Big|\Big| \Delta \mathbf{U}_i(\mathcal{I}_{i,t})  - \Delta \mathbf{U}_i(\mathcal{I}_{i,t, s}^\prime) \Big|\Big|^2 \leq \frac{1}{T^2} \sum_{t=1}^T \delta_2^2(\Delta \mathbf{U}_i, s) = \frac{1}{T}\delta_2^2(\Delta \mathbf{U}_i, s)
 \end{align*}
 with $\mathcal{U}_{it, s}^\prime = (\ldots, u_{it-s-1}, u^\prime_{it-s}, u_{it-s+1}, \ldots, u_{it})$, $\mathcal{Z}_{it, s}^\prime = (\ldots, \eta_{it-s-1}, \eta^\prime_{it-s}, \eta_{it-s+1}, \ldots, \eta_{it})$, $\zeta^\prime_{it} = (u_{it}^\prime, \eta_{it}^\prime)^T$ and $\mathcal{I}_{i,t,s}^\prime =(\ldots, \zeta_{it-s-1}, \zeta^\prime_{it-s}, \zeta_{it-s+1}, \ldots, \zeta_{it})$.
 
