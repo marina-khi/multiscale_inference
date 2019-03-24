@@ -346,10 +346,17 @@ This leads to
 \sqrt{T}( \widehat{\bm{\beta}}_i - \bm{\beta}_i) &=  \Big(\frac{1}{T} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^T \Big)^{-1}\frac{1}{\sqrt{T}} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \varepsilon_{it} +\\
 &+  O\Big(\frac{1}{\sqrt{T}}\Big) \Big( \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^T \Big)^{-1} \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it}.
 \end{align*}
-By Proposition \ref{prop-reg-1}, we know that for each $t\in\{1, \ldots, T\}$ $|\Delta \mathbf{X}_{it}| = O_P(1)$, which leads to 
+
+Since 
+\[\ex \Big[ \frac{1}{T}\sum_{t=1}^T \Delta H_{ij}(\mathcal{U}_{it})\Big] = 0\]
+and 
+\[\var \Big[ \frac{1}{T}\sum_{t=1}^T \Delta H_{ij}(\mathcal{U}_{it})\Big] \leq \frac{4}{T^2} \ex\big[H_{ij}^2(\mathcal{U}_{it})\big],\]
+by Chebyshev's inequality we have that $\Big|\frac{1}{T}\sum_{t=1}^T \Delta H_{ij}(\mathcal{U}_{it})\Big| = O_P(1)$. And $\Big|\frac{1}{T}\sum_{t=1}^T \Delta H_{ij}(\mathcal{U}_{it})\Big| = O_P(1)$ for each $j\in\{1, \ldots, d\} $ implies that
 \begin{align}\label{proof-1}
-\Big|\frac{1}{T}\sum_{t=1}^T\Delta \mathbf{X}_{it}\Big| = O_P(1).
+\Big|\frac{1}{T}\sum_{t=1}^T \Delta \mathbf{H}_i (\mathcal{U}_{it}) \Big| = \Big| \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it}\Big| = O_P(1).
 \end{align}
+
+
 Similarly, by Proposition \ref{prop-reg-1}
 \begin{align}\label{proof-2}
 \Big|\Big|\frac{1}{T}\sum_{t=1}^T\Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^T\Big|\Big| = O_P(1),
