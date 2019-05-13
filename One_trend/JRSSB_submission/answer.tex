@@ -1,0 +1,99 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb,amsthm,graphicx}
+\usepackage{titlesec}
+\usepackage{textcomp}
+\usepackage{enumitem}
+\usepackage{color}
+\usepackage{epsfig}
+\usepackage{graphics}
+\usepackage{pdfpages}
+\usepackage{subcaption}
+\usepackage[font=small]{caption}
+\usepackage[hang,flushmargin]{footmisc} 
+\usepackage{float}
+\usepackage{rotating,tabularx}
+\usepackage{booktabs}
+\usepackage[mathscr]{euscript}
+\usepackage{natbib}
+\usepackage{setspace}
+\usepackage{mathrsfs}
+\usepackage[official]{eurosym}
+\usepackage[left=2.8cm,right=2.8cm,bottom=2.8cm,top=2.5cm]{geometry}
+
+\setcounter{secnumdepth}{4}
+\renewcommand{\baselinestretch}{1.2}
+
+\input{macros}
+
+
+
+\begin{document}
+
+ 
+
+\noindent {\Large \bf Answer to the Referee Report I} 
+\vspace{0.25cm}
+
+\begin{itemize}
+\item A consistency result of Proposition 3.3.
+
+I believe that the following type of result can be obtained: $\Pr (E^l_T) \to 1$. Theorem 3.1 is for testing purpose. In certain application one might be interested in such consistency result. Basically one needs to study the behavior of $q_T (\alpha)$ when $\alpha \to 0$.
+\item Estimation of long run variance using autoregressive processes.
+
+The authors considered estimating $\sigma^2$ using AR processes. A limitation is that the order $p$ is fixed and finite. It appears that the latter limitation can be relaxed. For a stationary process $\varepsilon_t$ (not necessarily linear), one can fit an AR process with large $p$
+$$ \varepsilon_t = \sum_{j=1}^p a_j \varepsilon_{t-j} + \eta_t,$$
+properties of fitted $\widehat{a}_1, \ldots, \widehat{a}_p$ can be obtained from the results in the fol-
+lowing papers
+\begin{itemize}
+\item W. B. Wu and Mohsen Pourahmadi (2009): Banding Sample Covari-
+ance Matrices of Stationary Processes, Statistica Sinica 19 1755-1768
+
+\item H. Xiao and W. B. Wu (2012). Covariance Matrix Estimation for
+Stationary Time Series. Annals of Statistics, Volume 40, Number 1
+(2012), 466-493.
+\end{itemize}
+A similar version of the authors estimate (4.14) can be used. Rate of convergence (cf. Proposition 4.1) can be derived with rate $T^{-1/2}$ therein possibly replaced by a larger term of the form $T^{-c}$ with $c < 1/2$.
+
+\item Real data application.
+
+The authors analyzed the yearly mean Central England temperature data. It will be interesting to apply their approach to the global temperature data. In the paper ” Isotonic regression: another look at the change point problem. Biometrika, 88, 793-804, 2001”, an increasing trend function is fitted. It will be important to know which period the sequence in increasing/decreasing.
+
+\item Simulation Study
+
+In the simulation study the authors considered AR(1) processes with relatively weaker dependence: $a_1 \in \{-0.5, -0.25, 0.25, 0.5\}$. One should consider the stronger positive/negative dependence case with $a = \pm 0.9$ (say). How does the strength of dependence affect the performance of the procedure?
+
+\end{itemize}
+
+\noindent {\Large \bf Answer to the Referee Report II} 
+\vspace{0.25cm}
+
+\begin{enumerate}
+\item Section 3.2: The authors recommend computing the quantiles for the
+independent Gaussian case by simulation. This suggestion is already in
+the original SiZer paper (Chaudhuri and Marron, 1999). However in the
+late 1990s computing power was not sufficient to make this suggestion
+feasible. This led to the use of approximation such as in Hannig and
+Marron (2006). I would like to ask how does the simulation based
+quantile compare to the approximation in Hannig and Marron (2006).
+\item Page 12, line 15: What is random here? After a spending some time I believe that it is the $\Pi_T$ but on first reading I thought $E_T$s are non-random. Please explain these various objects better.
+\item Page 18, line 52: Please remove the speculative statements about
+what can be shown unless you actually show it in this paper.
+\item Section 4.1: This section does not contain any truly new material and
+should be removed.
+\item Section 5.2: I understand that you are doing comparisons to SiZer out
+of the box. However, some of the comparison might not be quite fair.
+SiZer is adjusting multiplicity ”row-wise” while the proposed method
+is attempting a global multiple control. What would happen if your
+GT only focused on one scale?
+\item Page 25, line 1-26: I do not quite understand this figure. Would it
+be possible to rather reproduce the colorful SiZer figures that show the
+results of the test at various scales and locations? Also you should use
+several different signals. I believe that a single relatively large bump
+is not sufficient test bed. A good collection of signals can be found in Donoho and Johnstone (1995). Also, would Hannig et al. (2013) be
+helpful in comparing the results?
+\item Page 31, line 1-39: Can you plot the SiZer results on this data?
+\end{enumerate}
+
+
+\end{document}

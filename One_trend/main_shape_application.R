@@ -15,9 +15,7 @@ source("Shape/data_analysis.R")
 alpha <- 0.05 #alpha for calculating quantiles
 h     <- c(0.05, 0.1, 0.15, 0.2) #Different bandwidth for plotting. Number must be <=6 in order for the plot to be readable
 
-kernel_method <- "ll" #Only "nw" (Nadaraya-Watson) and "ll" (local linear) methods are currently supported
 test_problem  <- "constant" #Only "zero" (H_0: m = 0) or "constant" (H_0: m = const) testing problems are currently supported. 
-
 pdffilename = paste0("Paper/Plots/temperature_data.pdf") #Filename for the graph
 
 
@@ -29,9 +27,9 @@ yearly_tempr <- temperature[temperature$YEAR > -99, 'YEAR']
 T_tempr      <- length(yearly_tempr)
 
 
-#################
-#Order selection#
-#################
+#############################
+#Order selection for England#
+#############################
 q <- 20:35
 r <- 10:15
 criterion_matrix <- expand.grid(q = q, r = r)
@@ -80,13 +78,7 @@ r <- 10
 grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points for plotting and estimating
 
 for (i in 1:length(h)){
-  if (kernel_method == "nw"){
-    smoothed_curve <- mapply(epanechnikov_smoothing, grid_points, MoreArgs = list(yearly_tempr, grid_points, h[i]))
-  } else if (kernel_method == "ll"){
-    smoothed_curve <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(yearly_tempr, grid_points, h[i]))
-  } else {
-    print('Given method is currently not supported')
-  }
+  smoothed_curve <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(yearly_tempr, grid_points, h[i]))
   cat("End point:", smoothed_curve[T_tempr], "\n")
 }
 
@@ -102,4 +94,4 @@ dev.off()
 #Data analysis#
 ###############
 sigma_hat <- estimating_variance_new(yearly_tempr, q, order = p, r)[[1]]
-data_analysis(alpha, yearly_tempr, test_problem, kernel_method, sigma_hat, pdffilename)
+data_analysis(alpha, yearly_tempr, test_problem, sigma_hat, pdffilename)

@@ -117,7 +117,7 @@ choosing_minimal_intervals <- function(dataset){
 
 
 #Creating g_t_set over which we are taking the maximum (from Section 2.1)
-creating_g_set <- function(T, kernel_method){
+creating_g_set <- function(T){
   u <- seq(from = 5/T, to = 1, by = 5/T)
   h <- seq(from = 3/T, to = 1/4+3/T, by = 5/T)
 
@@ -129,14 +129,8 @@ creating_g_set <- function(T, kernel_method){
   g_t_set_temp$values           <- numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
   g_t_set_temp$values_with_sign <- numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
 
-  if (kernel_method == "nw"){
-    g_t_set <- subset(g_t_set_temp, u - h >= 0 & u + h <= 1, select = c(u, h, values, values_with_sign)) #Subsetting u and h such that [u-h, u+h] lies in [0,1]
-  } else if (kernel_method == "ll"){
-    g_t_set <- subset(g_t_set_temp, u >= 0 & u <= 1, select = c(u, h, values, values_with_sign)) #Subsetting u and h such that [u-h, u+h] lies in [0,1]
-  } else {
-    print('Given method is currently not supported')
-  }
-  
+  g_t_set <- subset(g_t_set_temp, u >= 0 & u <= 1, select = c(u, h, values, values_with_sign)) #Subsetting u and h such that [u-h, u+h] lies in [0,1]
+
   g_t_set$lambda <- lambda(g_t_set[['h']]) #Calculating the lambda(h) in order to speed up the function psistar_statistic
   return(g_t_set)
 }
