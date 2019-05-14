@@ -158,16 +158,16 @@ calculating_gaussian_quantile <- function(T, g_t_set, test_problem, kernel_ind, 
 
 #Everything as in previous function but using local linear estimate
 calculating_gaussian_quantile_ll <- function(T, g_t_set, test_problem, kernel_ind, alpha = 0.05){
-  filename = paste0("Shape/distribution/distr_T_", T,"_testing_", test_problem, "_type_ll.RData")
-  if(!file.exists(filename)) {
+  filename = paste0("Shape/distribution/distr_T_", T,"_testing_", test_problem, ".RData")
+  #if(!file.exists(filename)) {
     gaussian_statistic_distribution <- replicate(1000, {
       z = rnorm(T, 0, 1)
       psistar_statistic_ll(z, g_t_set, kernel_ind, 1)
     })
-    save(gaussian_statistic_distribution, file = filename)
-  } else {
-    load(filename)
-  }
+  #  save(gaussian_statistic_distribution, file = filename)
+  #} else {
+  #  load(filename)
+  #}
   #Calculate the quantiles for gaussian statistic defined in the previous step
   gaussian_quantile <- quantile(gaussian_statistic_distribution, probs = (1 - alpha), type = 1)
   return(gaussian_quantile)
@@ -416,9 +416,9 @@ calculating_SiZer_matrix <- function(different_i, different_h, T_size, T_star, a
     }
   }
   
-  SiZer_matrix           <- SiZer_matrix[SiZer_matrix$small_ESS != 1,]
-  SiZer_matrix$small_ESS <- NULL
-  SiZer_matrix$ESS_star  <- NULL
+  #SiZer_matrix           <- SiZer_matrix[SiZer_matrix$small_ESS != 1,]
+  #SiZer_matrix$small_ESS <- NULL
+  #SiZer_matrix$ESS_star  <- NULL
   
   return(SiZer_matrix)
 }
@@ -491,3 +491,24 @@ plotting_variance_histograms <- function(data1, data2, data3, star_value, pdfnam
   segments(x0=star_value,y0=0,x1=star_value,y1=highestCount,col="red",lwd=1.5)
   dev.off()
 }
+
+plot.SiZer <- function(results, different_i, different_h, ylab=expression(log[10](h)), 
+                       colorlist=c('red', 'purple', 'blue', 'grey'), title = "Results", ...){
+  temp <- factor(results);
+  final.colorlist <- NULL;
+  if( is.element( '-1', levels(temp) ) )
+    final.colorlist <- c(final.colorlist, colorlist[1]);
+  if( is.element( '0', levels(temp) ) )
+    final.colorlist <- c(final.colorlist, colorlist[2]);
+  if( is.element( '1', levels(temp) ) )
+    final.colorlist <- c(final.colorlist, colorlist[3]);
+  if( is.element( '2', levels(temp) ) )
+    final.colorlist <- c(final.colorlist, colorlist[4]);
+  
+  # Convert the slopes to a factor list to match up with final.colorlist
+  temp <- matrix( as.integer(factor(results)), nrow=length(different_h), byrow = TRUE) 
+  
+  graphics::image( different_i, log(different_h,10), t(temp), 
+                   col=final.colorlist, ylab=ylab, main = title, ...)
+}	
+

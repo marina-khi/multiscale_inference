@@ -59,9 +59,9 @@ data_analysis <- function(alpha, y_data, test_problem, sigmahat, pdffilename){
   grid_points <- seq(from = 1/T_data, to = 1, length.out = T_data) #grid points for estimating
   grid_time <- seq(from = 1659, to = 2017, length.out = T_data) #grid points for plotting 
     
-  pdf(pdffilename, width=10, height=10, paper="special")
+  pdf(pdffilename, width=10, height=6, paper="special")
 
-  par(mfrow = c(3,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
+  par(mfrow = c(2,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
   par(mar = c(0, 0.5, 0, 0)) #Margins for each plot
   par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
   
@@ -72,9 +72,9 @@ data_analysis <- function(alpha, y_data, test_problem, sigmahat, pdffilename){
   h <- c(0.01, 0.05, 0.1, 0.15, 0.2)
   plot(NA, xlim = c(1659, 2019), ylim = c(7.5, 11), yaxp  = c(8, 10, 2), xaxp = c(1675, 2025,7), mgp=c(2,0.5,0))
   for (i in 1:5){
-    #This part plots kernel smoothers for different bandwidths (all on one plot).
-    smoothed_curve <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(y_data, grid_points, h[i]))
-    lines(grid_time, smoothed_curve, lty = i) 
+   #This part plots kernel smoothers for different bandwidths (all on one plot).
+   smoothed_curve <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(y_data, grid_points, h[i]))
+   lines(grid_time, smoothed_curve, lty = i) 
   }
   legend(1950, 9, legend=c("h = 0.01", "h = 0.05", "h = 0.10", "h = 0.15", "h = 0.2"), lty = 1:5, cex = 0.95, ncol=1)
   
