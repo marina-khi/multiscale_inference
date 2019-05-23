@@ -1,6 +1,3 @@
-library(xtable)
-options(xtable.floating = FALSE)
-options(xtable.timestamp = "")
 source("Shape/functions.R")
 source("Shape/estimating_sigma_new.R")
 dyn.load("Shape/C_code/psihat_statistic_ll.dll")
@@ -95,106 +92,135 @@ set.seed(1) #For reproducibility
 #Defining necessary parameters
 sigma_eta           <- 1    #Standard deviation of the innovation term
 alpha               <- 0.05  #Level of significance
-different_T         <- c(250) #Different lengths of time series for which we compare SiZer and our method
-different_a1        <- c(-0.25, 0.25) #Different a_1 in AR(1) model
-slopes_for_negative <- c(1.0, 1.25, 1.5) #Slopes for power calculations for negative a_1
-slopes_for_positive <- c(2.0, 2.25, 2.5) #Slopes for power calculations for positive a_1
+#different_T         <- c(250) #Different lengths of time series for which we compare SiZer and our method
+#different_a1        <- c(-0.25, 0, 0.25) #Different a_1 in AR(1) model
+#slopes_for_negative <- c(1.0) #Slopes for power calculations for negative a_1
+#slopes_for_positive <- c(2.0) #Slopes for power calculations for positive a_1
 
-colorlist  <- c('red', 'purple', 'blue', 'grey')
 kernel_ind <- 2
 
-pdffilename <- "JRSSB_submission/Plots/SiZer_comparison_without_adjustment.pdf" #Path 
-
-pdf(pdffilename)
-
-par(mfrow = c(length(different_a1)*length(different_T)*length(slopes_for_negative),2), cex = 0.5, tck = -0.025) #Setting the layout of the graphs
-par(mar = c(1, 1, 0, 0)) #Margins for each plot
-par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
+#method = 'rowwise'
+method = 'global'
 
 
-for (a_1 in different_a1){
-  sigmahat   <- sqrt(sigma_eta^2/((1 - a_1)^2))
-  if (a_1 > 0){
-    slopes <- slopes_for_positive
-  } else {
-    slopes <- slopes_for_negative
-  }
-  for (slope in slopes){
-    for (T_size in different_T){
-      different_i <- seq(from = 5/T_size, to = 1, by = 5/T_size)
-      different_h <- seq(from = 3/T_size, to = 1/4+3/T_size, by = 5/T_size)
-      gamma = c()
-      for (k in 0:(T_size-1)){                                            #\gamma(k) = \sigma_\eta^2 * a_1^|k| / (1 - a_1^2)
-        gamma = c(gamma, autocovariance_function_AR1(k, a_1, sigma_eta))  #Note that gamma[i] := \gamma(i-1)
-      }
-        
-      #Calculating \Var(\bar{Y}) based on the true values of gamma(k)
-      true_var <- gamma[1] / T_size
-      for (k in 1:(T_size-1)){true_var = true_var + (2/T_size) * (1 - k/T_size) * gamma[k+1]}
-        
-      T_star   <- gamma[1]/true_var
-      
-      SiZer_matrix      <- calculating_SiZer_matrix(different_i, different_h, T_size, T_star, alpha, gamma, a_1, sigma_eta)  
-          
-      line_trend  <- numeric(T_size)
-      for (i in 1:T_size) {line_trend[i] = (i - 0.5*T_size) * slope/T_size}
-      y_data_ar_1_with_trend <- arima.sim(model = list(ar = a_1), n = T_size, innov = rnorm(T_size, 0, sigma_eta)) + line_trend
-          
-      #g_t_set <- psihat_statistic_ll(y_data_ar_1_with_trend, SiZer_matrix, kernel_ind, sigmahat)[[1]]
-      
+#THIS IS FOR PLOTTING SIZER MAPS
+#h_for_blocks <- c(4, -5, 3, -4, 5, -4.2, 2.1, 4.3, -3.1, 2.1, -4.2)
+#t_for_blocks <- c(0.1, 0.13, 0.15, 0.23, 0.25, 0.4, 0.4, 0.65, 0.76, 0.78, 0.81)
+#
+#colorlist  <- c('red', 'purple', 'blue', 'grey')
+#
+# pdffilename <- paste0("JRSSB_submission/Plots/SiZer_comparison_blocks_", method, ".pdf")
+# 
+# pdf(pdffilename)
+# 
+# par(mfrow = c(length(different_a1)*length(different_T)*length(slopes_for_negative),2), cex = 0.5, tck = -0.025) #Setting the layout of the graphs
+# par(mar = c(1, 1, 2, 0)) #Margins for each plot
+# par(oma = c(1.5, 1.5, 3, 0.2)) #Outer margins
+# 
+# for (a_1 in different_a1){
+#   sigmahat   <- sqrt(sigma_eta^2/((1 - a_1)^2))
+#   if (a_1 > 0){
+#     slopes <- slopes_for_positive
+#   } else {
+#     slopes <- slopes_for_negative
+#   }
+#   for (slope in slopes){
+#     for (T_size in different_T){
+#       different_i <- seq(from = 5/T_size, to = 1, by = 5/T_size)
+#       different_h <- seq(from = 3/T_size, to = 1/4+3/T_size, by = 5/T_size)
+# 
+#       trend_function  <- numeric(T_size)
+#       for (i in 1:T_size) {trend_function[i] = 4 * sum(h_for_blocks*(1 + sign(i/T_size - t_for_blocks)))/2}
+#       #for (i in 1:T_size) {trend_function[i] = 0}
+#       #for (i in 1:T_size) {trend_function[i] = sinpi(6*i/T_size)}
+# 
+#       results <- comparing_us_and_Sizer(different_i, different_h, alpha, T_size, a_1, sigma_eta, sigmahat, trend_function, method)
+#       plot.SiZer(results[[1]]$results_their, different_i, different_h, ylab=expression(log[10](h)), 
+#                       colorlist=colorlist, title = paste0("SiZer results, T=", T_size, ", a1 = ", a_1))    
+# 
+#       plot.SiZer(results[[2]]$results_our, different_i, different_h, ylab=expression(log[10](h)), 
+#                       colorlist=colorlist, title = paste0("Our results, T=", T_size, ", a1 = ", a_1))    
+#     }
+#   }
+# }
+# mtext(paste0('Blocks plus AR(1), ', method, ' method'), outer = TRUE, cex = 1.0)
+# dev.off()
 
+num_of_reps <- 1000
+T_size      <- 250
+different_i <- seq(from = 5/T_size, to = 1, by = 5/T_size)
+different_h <- seq(from = 3/T_size, to = 1/4+3/T_size, by = 5/T_size)
 
-      g_t_set_temp <- NULL
-      for (bandwidth in different_h){
-        SiZer_matrix_temp <- subset(SiZer_matrix, h == bandwidth, select = c(u, h, values, lambda))
-        gaussian_quantile <- calculating_gaussian_quantile_ll(T_size, SiZer_matrix_temp, "comparison", kernel_ind, alpha)
-        g_t_set_temp_temp <- psihat_statistic_ll(y_data_ar_1_with_trend, SiZer_matrix_temp, kernel_ind, sigmahat)[[1]]
-        g_t_set_temp_temp$gaussian_quantile <- gaussian_quantile
-        g_t_set_temp      <- rbind(g_t_set_temp, g_t_set_temp_temp)
-      }
-      
-      SiZer_matrix$values <- NULL
-      g_t_set <- merge(SiZer_matrix, g_t_set_temp, by = c('h', 'u', 'lambda'))      
-                  
-      for (row in 1:nrow(g_t_set)){
-        i              = g_t_set[row, 'u']
-        h              = g_t_set[row, 'h']
-        q_h            = g_t_set[row, 'q_h']
-        sd_m_hat_prime = g_t_set[row, 'sd']
-        
-        XtWX_inverse_XtW   = g_t_set$XtWX_inv_XtW[[row]]
-            
-        if (!is.null(XtWX_inverse_XtW)) {
-          m_hat_prime <- (XtWX_inverse_XtW %*% y_data_ar_1_with_trend)[2]
-          
-          if (m_hat_prime - q_h * sd_m_hat_prime > 0){
-            g_t_set$results_their[[row]] = 1
-          } else if (m_hat_prime + q_h * sd_m_hat_prime < 0) {
-            g_t_set$results_their[[row]] = -1
-          } else {
-            g_t_set$results_their[[row]] = 0
-          }
-        } else {
-          g_t_set$results_their[[row]] = 2
-        }
-        
-        if (g_t_set[row, 'values_with_sign'] > g_t_set[row, 'lambda'] + gaussian_quantile){
-          g_t_set$results_our[[row]] = 1
-        } else if (-g_t_set[row, 'values_with_sign'] > g_t_set[row, 'lambda'] + gaussian_quantile){
-          g_t_set$results_our[[row]] = -1
-        } else {
-          g_t_set$results_our[[row]] = 0
-        }
-      }
-    }
+#CALCULATING SIZE OF THE TESTS
+trend_function  <- numeric(T_size)
+for (i in 1:T_size) {trend_function[i] = 0}
 
-    
-        
-    plot.SiZer(g_t_set$results_their, different_i, different_h, ylab=expression(log[10](h)), 
-                      colorlist=colorlist, title = paste0("SiZer results, T=", T_size, ", a1 = ", a_1, ", slope = ", slope))    
+a_1      <- 0.25
+sigmahat <- sqrt(sigma_eta^2/((1 - a_1)^2))
 
-    plot.SiZer(g_t_set$results_our, different_i, different_h, ylab=expression(log[10](h)), 
-                      colorlist=colorlist, title = paste0("Our results, T=", T_size, ", a1 = ", a_1, ", slope = ", slope))    
-  }
+testing_SiZer_null_a1_pos <- expand.grid(u = different_i, h = different_h)
+testing_ours_null_a1_pos  <- expand.grid(u = different_i, h = different_h)
+
+for (i in 1:num_of_reps){
+  results <- comparing_us_and_Sizer(different_i, different_h, alpha, T_size, a_1, sigma_eta, sigmahat, trend_function, method)
+  
+  testing_SiZer_null_a1_pos <- cbind(testing_SiZer_null_a1_pos, results[[1]]$results_their)
+  colnames(testing_SiZer_null_a1_pos)[i+2] <- paste0('test', i)
+
+  testing_ours_null_a1_pos  <- cbind(testing_ours_null_a1_pos, results[[2]]$results_our)
+  colnames(testing_ours_null_a1_pos)[i+2] <- paste0('test', i)
 }
-dev.off()
+
+a_1      <- -0.25
+sigmahat <- sqrt(sigma_eta^2/((1 - a_1)^2))
+
+testing_SiZer_null_a1_neg <- expand.grid(u = different_i, h = different_h)
+testing_ours_null_a1_neg  <- expand.grid(u = different_i, h = different_h)
+
+for (i in 1:num_of_reps){
+  results <- comparing_us_and_Sizer(different_i, different_h, alpha, T_size, a_1, sigma_eta, sigmahat, trend_function, method)
+  
+  testing_SiZer_null_a1_neg <- cbind(testing_SiZer_null_a1_neg, results[[1]]$results_their)
+  colnames(testing_SiZer_null_a1_neg)[i+2] <- paste0('test', i)
+  
+  testing_ours_null_a1_neg  <- cbind(testing_ours_null_a1_neg, results[[2]]$results_our)
+  colnames(testing_ours_null_a1_neg)[i+2] <- paste0('test', i)
+}
+
+#CALCULATING POWER OF THE TESTS
+
+a_1      <- 0.25
+sigmahat <- sqrt(sigma_eta^2/((1 - a_1)^2))
+trend_function  <- numeric(T_size)
+for (i in 1:T_size) {trend_function[i] = (i - 0.5*T_size) * 2.25/T_size}
+
+testing_SiZer_altern_a1_pos <- expand.grid(u = different_i, h = different_h)
+testing_ours_altern_a1_pos  <- expand.grid(u = different_i, h = different_h)
+
+for (i in 1:num_of_reps){
+  results <- comparing_us_and_Sizer(different_i, different_h, alpha, T_size, a_1, sigma_eta, sigmahat, trend_function, method)
+  
+  testing_SiZer_altern_a1_pos <- cbind(testing_SiZer_altern_a1_pos, results[[1]]$results_their)
+  colnames(testing_SiZer_altern_a1_pos)[i+2] <- paste0('test', i)
+  
+  testing_ours_altern_a1_pos  <- cbind(testing_ours_altern_a1_pos, results[[2]]$results_our)
+  colnames(testing_ours_altern_a1_pos)[i+2] <- paste0('test', i)
+}
+
+a_1      <- -0.25
+sigmahat <- sqrt(sigma_eta^2/((1 - a_1)^2))
+trend_function  <- numeric(T_size)
+for (i in 1:T_size) {trend_function[i] = (i - 0.5*T_size) * 1.25/T_size}
+
+testing_SiZer_altern_a1_neg <- expand.grid(u = different_i, h = different_h)
+testing_ours_altern_a1_neg  <- expand.grid(u = different_i, h = different_h)
+
+for (i in 1:num_of_reps){
+  results <- comparing_us_and_Sizer(different_i, different_h, alpha, T_size, a_1, sigma_eta, sigmahat, trend_function, method)
+  
+  testing_SiZer_altern_a1_neg <- cbind(testing_SiZer_altern_a1_neg, results[[1]]$results_their)
+  colnames(testing_SiZer_altern_a1_neg)[i+2] <- paste0('test', i)
+  
+  testing_ours_altern_a1_neg  <- cbind(testing_ours_altern_a1_neg, results[[2]]$results_our)
+  colnames(testing_ours_altern_a1_neg)[i+2] <- paste0('test', i)
+}

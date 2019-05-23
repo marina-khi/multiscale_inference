@@ -510,5 +510,74 @@ plot.SiZer <- function(results, different_i, different_h, ylab=expression(log[10
   
   graphics::image( different_i, log(different_h,10), t(temp), 
                    col=final.colorlist, ylab=ylab, main = title, ...)
-}	
+}
 
+comparing_us_and_Sizer<- function(different_i, different_h, alpha, T_size, a_1, sigma_eta, sigmahat, trend_function, method = "global"){
+  #set.seed(1)
+  gamma = c()
+  for (k in 0:(T_size-1)){                                            #\gamma(k) = \sigma_\eta^2 * a_1^|k| / (1 - a_1^2)
+    gamma = c(gamma, autocovariance_function_AR1(k, a_1, sigma_eta))  #Note that gamma[i] := \gamma(i-1)
+  }
+  
+  #Calculating \Var(\bar{Y}) based on the true values of gamma(k)
+  true_var <- gamma[1] / T_size
+  for (k in 1:(T_size-1)){true_var = true_var + (2/T_size) * (1 - k/T_size) * gamma[k+1]}
+  
+  T_star   <- gamma[1]/true_var
+  
+  SiZer_matrix      <- calculating_SiZer_matrix(different_i, different_h, T_size, T_star, alpha, gamma, a_1, sigma_eta)  
+  
+  y_data_ar_1_with_trend <- arima.sim(model = list(ar = a_1), n = T_size, innov = rnorm(T_size, 0, sigma_eta)) + trend_function
+  
+  if (method == 'rowwise'){
+    g_t_set_temp <- NULL
+    for (bandwidth in different_h){
+      SiZer_matrix_temp <- subset(SiZer_matrix, h == bandwidth, select = c(u, h, values, lambda))
+      gaussian_quantile <- calculating_gaussian_quantile_ll(T_size, SiZer_matrix_temp, "comparison", kernel_ind, alpha)
+      g_t_set_temp_temp <- psihat_statistic_ll(y_data_ar_1_with_trend, SiZer_matrix_temp, kernel_ind, sigmahat)[[1]]
+      g_t_set_temp_temp$gaussian_quantile <- gaussian_quantile
+      g_t_set_temp      <- rbind(g_t_set_temp, g_t_set_temp_temp)
+    }
+    SiZer_matrix$values <- NULL
+    g_t_set <- merge(SiZer_matrix, g_t_set_temp, by = c('h', 'u', 'lambda'))
+  } else if (method == "global"){
+    g_t_set <- psihat_statistic_ll(y_data_ar_1_with_trend, SiZer_matrix, kernel_ind, sigmahat)[[1]]
+    gaussian_quantile <- calculating_gaussian_quantile_ll(T_size, SiZer_matrix, "comparison", kernel_ind, alpha)
+    g_t_set$gaussian_quantile <- gaussian_quantile
+  } else {
+    print('Method is not recognized')
+  }
+  
+  for (row in 1:nrow(g_t_set)){
+    i              = g_t_set[row, 'u']
+    h              = g_t_set[row, 'h']
+    q_h            = g_t_set[row, 'q_h']
+    sd_m_hat_prime = g_t_set[row, 'sd']
+    
+    XtWX_inverse_XtW = g_t_set$XtWX_inv_XtW[[row]]
+    
+    if (!is.null(XtWX_inverse_XtW)) {
+      m_hat_prime <- (XtWX_inverse_XtW %*% y_data_ar_1_with_trend)[2]
+      if (m_hat_prime - q_h * sd_m_hat_prime > 0){
+        g_t_set$results_their[[row]] = 1
+      } else if (m_hat_prime + q_h * sd_m_hat_prime < 0) {
+        g_t_set$results_their[[row]] = -1
+      } else {
+        g_t_set$results_their[[row]] = 0
+      }
+    } else {
+      g_t_set$results_their[[row]] = 2
+    }
+    
+    if (g_t_set[row, 'values_with_sign'] > g_t_set[row, 'lambda'] + g_t_set[row, 'gaussian_quantile']){
+      g_t_set$results_our[[row]] = 1
+    } else if (-g_t_set[row, 'values_with_sign'] > g_t_set[row, 'lambda'] + g_t_set[row, 'gaussian_quantile']){
+      g_t_set$results_our[[row]] = -1
+    } else {
+      g_t_set$results_our[[row]] = 0
+    }
+  }
+  result_SiZer <- subset(g_t_set, select = c(u, h, results_their))
+  result_our   <- subset(g_t_set, select = c(u, h, results_our))
+  return(list(result_SiZer, result_our))
+}
