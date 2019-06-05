@@ -120,7 +120,7 @@ choosing_minimal_intervals <- function(dataset){
 creating_g_set <- function(T){
   u <- seq(from = 5/T, to = 1, by = 5/T)
   h <- seq(from = 3/T, to = 1/4+3/T, by = 5/T)
-
+  
   #This is for full grid
   #u <- seq(from = 1/T, to = 1, by = 1/T)
   #h <- seq(from = 3/T, to = 1/4+1/T, by = 1/T)
@@ -128,9 +128,9 @@ creating_g_set <- function(T){
   g_t_set_temp                  <- expand.grid(u = u, h = h) #Creating a dataframe with all possible combination of u and h
   g_t_set_temp$values           <- numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
   g_t_set_temp$values_with_sign <- numeric(nrow(g_t_set_temp)) # Setting the values of the statistic to be zero
-
+  
   g_t_set <- subset(g_t_set_temp, u >= 0 & u <= 1, select = c(u, h, values, values_with_sign)) #Subsetting u and h such that [u-h, u+h] lies in [0,1]
-
+  
   g_t_set$lambda <- lambda(g_t_set[['h']]) #Calculating the lambda(h) in order to speed up the function psistar_statistic
   return(g_t_set)
 }
@@ -139,8 +139,8 @@ creating_g_set <- function(T){
 #If we have already calculated gaussian distribution and stored it in a file 'distribution.RData'
 #then there is no need to calculate it once more, we just load it from this file.
 #Ohterwise simulate the \Psi^star statistic 1000 times in order to calculate the quantiles
-calculating_gaussian_quantile_ll <- function(T, g_t_set, test_problem, kernel_ind, alpha = 0.05){
-  filename = paste0("Shape/distribution/distr_T_", T,"_testing_", test_problem, ".RData")
+calculating_gaussian_quantile <- function(T, g_t_set, test_problem, kernel_ind, alpha = 0.05){
+  filename = paste0("JRSSB_submission/distribution/distr_T_", T,"_testing_", test_problem, ".RData")
   if(!file.exists(filename)) {
     gaussian_statistic_distribution <- replicate(1000, {
       z = rnorm(T, 0, 1)
@@ -165,7 +165,7 @@ creating_matrix_and_texing <- function(vect, vect_T, vect_alpha, filename){
   addtorow <- list()
   addtorow$pos <- list(0, 0)
   addtorow$command <- c("& \\multicolumn{3}{c}{nominal size $\\alpha$} \\\\\n",
-                            "$T$ & 0.01 & 0.05 & 0.1 \\\\\n") 
+                        "$T$ & 0.01 & 0.05 & 0.1 \\\\\n") 
   
   print.xtable(xtable(matrix_, digits = c(3), align = "cccc"), type="latex",  file=filename, add.to.row = addtorow, include.colnames = FALSE)
 }
@@ -175,7 +175,7 @@ creating_matrix_and_texing <- function(vect, vect_T, vect_alpha, filename){
 sample_autocovariance <- function(l, y_data, q){
   # computes autocovariances at lags 0 to p 
   # for the ell-th differences of y_data
-
+  
   if (l%%1==0)
   {
     T_size = length(y_data)
@@ -220,7 +220,7 @@ calculating_sigma_eta <- function(y_data, coefficients, p){
   T_size <- length(y_diff)
   
   res    <- rep(0, T_size)
-
+  
   for(i in (p+1):T_size){
     res[i] <- y_diff[i] - sum(coefficients * y_diff[(i-1):(i-p)])
   }
@@ -245,7 +245,7 @@ corrections <- function(coefficients, sigma_eta, len){
 autocovariance_function_AR1 <- function(k, a_1, sigma_eta){
   #if (k%%1==0)
   #{
-    result = sigma_eta * sigma_eta * a_1^(abs(k)) / (1 - a_1 * a_1)
+  result = sigma_eta * sigma_eta * a_1^(abs(k)) / (1 - a_1 * a_1)
   #} else {
   #  print('Check the input: k is not integer')
   #}
@@ -314,7 +314,7 @@ plotting_many_minimal_intervals <- function(trend_height, trend_width, T_size, S
   
   plot(grid_points, y_data_ar_1_with_trend, ylim = c(min(y_data_ar_1_with_trend) - 0.2, max(y_data_ar_1_with_trend)+0.2), type = "l")
   lines(grid_points, biweight_trend)
-
+  
   par(mar = c(1.5, 0.5, 2, 0)) #Margins for each plot
   
   plot(NA, xlim=c(0,1), ylim = c(-1, N_rep +1), main = "Our test")
@@ -358,14 +358,14 @@ calculating_SiZer_matrix <- function(different_i, different_h, T_size, T_star, a
     
     ESS      <- sum(sapply((i - seq(1/T_size, 1, by = 1/T_size))/h, epanechnikov_kernel))/epanechnikov_kernel(0)
     ESS_star <- (T_star/T_size) * ESS 
-
+    
     if (ESS_star <= 5){
       SiZer_matrix[row, 'small_ESS'] <- 1
     } else {
-      integrand_1 <- function(s, h_, delta_, a_1_, sigma_eta_) {autocovariance_function_AR1(floor(s * h / delta), a_1, sigma_eta) * exp(-s^2/4) * (12 - 12 * s^2+ s^4)/16}
+      integrand_1 <- function(s, h_, delta_, a_1_, sigma_eta_) {100 * autocovariance_function_AR1(floor(s * h / delta), a_1, sigma_eta) * exp(-s^2/4) * (12 - 12 * s^2+ s^4)/16}
       I_gamma_num <- integrate(integrand_1, lower = -Inf, upper = Inf, h_ = h, delta_ = delta, a_1_ = a_1, sigma_eta_ = sigma_eta)[[1]]
       
-      integrand_2 <- function(s, h_, delta_, a_1_, sigma_eta_) {autocovariance_function_AR1(floor(s * h / delta), a_1, sigma_eta) * exp(-s^2/4) * (1 - s^2/2)}
+      integrand_2 <- function(s, h_, delta_, a_1_, sigma_eta_) {100 * autocovariance_function_AR1(floor(s * h / delta), a_1, sigma_eta) * exp(-s^2/4) * (1 - s^2/2)}
       I_gamma_denom <- integrate(integrand_2, lower = -Inf, upper = Inf, h_ = h, delta_ = delta, a_1_ = a_1, sigma_eta_ = sigma_eta)[[1]]
       I_gamma <- I_gamma_num/I_gamma_denom
       
@@ -495,7 +495,7 @@ plot.SiZer <- function(results, different_i, different_h, ylab=expression(log[10
 }
 
 comparing_us_and_Sizer<- function(different_i, different_h, alpha, T_size, a_1, sigma_eta, sigmahat, trend_function, method = "global"){
-  #set.seed(1000)
+  set.seed(1)
   gamma = c()
   for (k in 0:(T_size-1)){                                            #\gamma(k) = \sigma_\eta^2 * a_1^|k| / (1 - a_1^2)
     gamma = c(gamma, autocovariance_function_AR1(k, a_1, sigma_eta))  #Note that gamma[i] := \gamma(i-1)
@@ -518,7 +518,7 @@ comparing_us_and_Sizer<- function(different_i, different_h, alpha, T_size, a_1, 
     g_t_set_temp <- NULL
     for (bandwidth in different_h){
       SiZer_matrix_temp <- subset(SiZer_matrix, h == bandwidth, select = c(u, h, values, lambda))
-      gaussian_quantile <- calculating_gaussian_quantile_ll(T_size, SiZer_matrix_temp, paste0("comparison_rowwise_h_", bandwidth*1000), kernel_ind, alpha)
+      gaussian_quantile <- calculating_gaussian_quantile(T_size, SiZer_matrix_temp, paste0("comparison_rowwise_h_", bandwidth*1000), kernel_ind, alpha)
       g_t_set_temp_temp <- psihat_statistic_ll(y_data_ar_1_with_trend, SiZer_matrix_temp, kernel_ind, sigmahat)[[1]]
       g_t_set_temp_temp$gaussian_quantile <- gaussian_quantile
       g_t_set_temp      <- rbind(g_t_set_temp, g_t_set_temp_temp)
@@ -527,7 +527,7 @@ comparing_us_and_Sizer<- function(different_i, different_h, alpha, T_size, a_1, 
     g_t_set <- merge(SiZer_matrix, g_t_set_temp, by = c('h', 'u', 'lambda'))
   } else if (method == "global"){
     g_t_set <- psihat_statistic_ll(y_data_ar_1_with_trend, SiZer_matrix, kernel_ind, sigmahat)[[1]]
-    gaussian_quantile <- calculating_gaussian_quantile_ll(T_size, SiZer_matrix, "comparison_global", kernel_ind, alpha)
+    gaussian_quantile <- calculating_gaussian_quantile(T_size, SiZer_matrix, "comparison_global", kernel_ind, alpha)
     g_t_set$gaussian_quantile <- gaussian_quantile
   } else {
     print('Method is not recognized')
@@ -565,4 +565,87 @@ comparing_us_and_Sizer<- function(different_i, different_h, alpha, T_size, a_1, 
   result_SiZer <- subset(g_t_set, select = c(u, h, results_their))
   result_our   <- subset(g_t_set, select = c(u, h, results_our))
   return(list(result_SiZer, result_our))
+}
+
+comparing_us_and_Sizer_global_and_rowwise<- function(different_i, different_h, alpha, T_size, a_1, sigma_eta, sigmahat, trend_function){
+  gamma = c()
+  for (k in 0:(T_size-1)){                                            #\gamma(k) = \sigma_\eta^2 * a_1^|k| / (1 - a_1^2)
+    gamma = c(gamma, autocovariance_function_AR1(k, a_1, sigma_eta))  #Note that gamma[i] := \gamma(i-1)
+  }
+  #cat("Autocovariance function:", gamma, "\n")
+  
+  #Calculating \Var(\bar{Y}) based on the true values of gamma(k)
+  true_var <- gamma[1] / T_size
+  for (k in 1:(T_size-1)){true_var = true_var + (2/T_size) * (1 - k/T_size) * gamma[k+1]}
+  
+  T_star   <- gamma[1]/true_var
+  
+  SiZer_matrix      <- calculating_SiZer_matrix(different_i, different_h, T_size, T_star, alpha, gamma, a_1, sigma_eta)  
+  
+  y_data_ar_1_with_trend <- arima.sim(model = list(ar = a_1), n = T_size, innov = rnorm(T_size, 0, sigma_eta)) + trend_function
+  #plot(seq(from = 1/T_size, to = 1, length.out = T_size), y_data_ar_1_with_trend, ylim = c(0.0, 1.0), ylab = 'data')
+  #lines(seq(from = 1/T_size, to = 1, length.out = T_size), trend_function, type = 'l')
+  
+  g_t_set_temp <- NULL
+  
+  for (bandwidth in different_h){
+    SiZer_matrix_temp                           <- subset(SiZer_matrix, h == bandwidth, select = c(u, h, values, lambda))
+    if (nrow(SiZer_matrix_temp)>0){
+      gaussian_quantile_rowwise                   <- calculating_gaussian_quantile(T_size, SiZer_matrix_temp, paste0("comparison_rowwise_without_grey_h_", bandwidth*1000, "_a1_", a_1*100), kernel_ind, alpha)
+      g_t_set_temp_temp                           <- psihat_statistic_ll(y_data_ar_1_with_trend, SiZer_matrix_temp, kernel_ind, sigmahat)[[1]]
+      g_t_set_temp_temp$gaussian_quantile_rowwise <- gaussian_quantile_rowwise
+      g_t_set_temp                                <- rbind(g_t_set_temp, g_t_set_temp_temp)
+    }
+  }
+  
+  SiZer_matrix$values <- NULL
+  g_t_set_rowwise <- merge(SiZer_matrix, g_t_set_temp, by = c('h', 'u', 'lambda'))
+  
+  g_t_set_global                          <- psihat_statistic_ll(y_data_ar_1_with_trend, SiZer_matrix, kernel_ind, sigmahat)[[1]]
+  gaussian_quantile_global                <- calculating_gaussian_quantile(T_size, SiZer_matrix, paste0("comparison_global_without_grey_a1_", a_1*100), kernel_ind, alpha)
+  g_t_set_global$gaussian_quantile_global <- gaussian_quantile_global
+
+  for (row in 1:nrow(g_t_set_rowwise)){
+    i              = g_t_set_rowwise[row, 'u']
+    h              = g_t_set_rowwise[row, 'h']
+    q_h            = g_t_set_rowwise[row, 'q_h']
+    sd_m_hat_prime = g_t_set_rowwise[row, 'sd']
+    
+    XtWX_inverse_XtW = g_t_set_rowwise$XtWX_inv_XtW[[row]]
+    
+    if (!is.null(XtWX_inverse_XtW)) {
+      m_hat_prime <- (XtWX_inverse_XtW %*% y_data_ar_1_with_trend)[2]
+      if (m_hat_prime - q_h * sd_m_hat_prime > 0){
+        g_t_set_rowwise$results_their[[row]] = 1
+      } else if (m_hat_prime + q_h * sd_m_hat_prime < 0) {
+        g_t_set_rowwise$results_their[[row]] = -1
+      } else {
+        g_t_set_rowwise$results_their[[row]] = 0
+      }
+    } else {
+      g_t_set_rowwise$results_their[[row]] = 2
+    }
+    
+    if (g_t_set_rowwise[row, 'values_with_sign'] > g_t_set_rowwise[row, 'lambda'] + g_t_set_rowwise[row, 'gaussian_quantile_rowwise']){
+      g_t_set_rowwise$results_our_rowwise[[row]] = 1
+    } else if (-g_t_set_rowwise[row, 'values_with_sign'] > g_t_set_rowwise[row, 'lambda'] + g_t_set_rowwise[row, 'gaussian_quantile_rowwise']){
+      g_t_set_rowwise$results_our_rowwise[[row]] = -1
+    } else {
+      g_t_set_rowwise$results_our_rowwise[[row]] = 0
+    }
+    
+    if (g_t_set_global[row, 'values_with_sign'] > g_t_set_global[row, 'lambda'] + g_t_set_global[row, 'gaussian_quantile_global']){
+      g_t_set_global$results_our_global[[row]] = 1
+    } else if (-g_t_set_global[row, 'values_with_sign'] > g_t_set_global[row, 'lambda'] + g_t_set_global[row, 'gaussian_quantile_global']){
+      g_t_set_global$results_our_global[[row]] = -1
+    } else {
+      g_t_set_global$results_our_global[[row]] = 0
+    }
+    
+  }
+  result_SiZer       <- subset(g_t_set_rowwise, select = c(u, h, results_their))
+  result_our_global  <- subset(g_t_set_global, select = c(u, h, results_our_global))
+  result_our_rowwise <- subset(g_t_set_rowwise, select = c(u, h, results_our_rowwise))
+  
+  return(list(result_SiZer, result_our_global, result_our_rowwise))
 }

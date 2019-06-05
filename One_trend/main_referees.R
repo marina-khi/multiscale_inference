@@ -1,4 +1,4 @@
-source("Shape/functions.R")
+source("Shape/functions_for_referees.R")
 source("Shape/estimating_sigma_new.R")
 dyn.load("Shape/C_code/psihat_statistic_ll.dll")
 source("Shape/C_code/psihat_statistic.R")
@@ -87,140 +87,172 @@ source("Shape/data_analysis.R")
 #############################
 #Point 5 in Referee Report 1#
 #############################
-set.seed(1) #For reproducibility
 
-#Defining necessary parameters
-sigma_eta           <- 1    #Standard deviation of the innovation term
-alpha               <- 0.05  #Level of significance
-#different_T         <- c(250) #Different lengths of time series for which we compare SiZer and our method
-#different_a1        <- c(-0.25, 0, 0.25) #Different a_1 in AR(1) model
-#slopes_for_negative <- c(1.0) #Slopes for power calculations for negative a_1
-#slopes_for_positive <- c(2.0) #Slopes for power calculations for positive a_1
-
-kernel_ind <- 2
-
-#method = 'rowwise'
-method = 'global'
-
-
-#THIS IS FOR PLOTTING SIZER MAPS
-#h_for_blocks <- c(4, -5, 3, -4, 5, -4.2, 2.1, 4.3, -3.1, 2.1, -4.2)
-#t_for_blocks <- c(0.1, 0.13, 0.15, 0.23, 0.25, 0.4, 0.4, 0.65, 0.76, 0.78, 0.81)
-#
-#colorlist  <- c('red', 'purple', 'blue', 'grey')
-#
-# pdffilename <- paste0("JRSSB_submission/Plots/SiZer_comparison_blocks_", method, ".pdf")
+# #PLOTTING SIZER MAPS FOR COMPARISON
+# 
+# #Defining necessary parameters
+# sigma_eta           <- 0.1     #Standard deviation of the innovation term, for blocks = 0.1, for other signals = 1
+# alpha               <- 0.05    #Level of significance
+# different_T         <- c(1000) #Different lengths of time series for which we compare SiZer and our method
+# different_a1        <- c(-0.25, 0, 0.25) #Different a_1 in AR(1) model
+# 
+# kernel_ind <- 2
+# 
+# #method = 'rowwise'
+# method = 'global'
+# 
+# 
+# #THIS IS FOR PLOTTING SIZER MAPS
+# h_for_blocks <- c(4, -5, 3, -4, 5, -4.2, 2.1, 4.3, -3.1, 2.1, -4.2)
+# t_for_blocks <- c(0.1, 0.13, 0.15, 0.23, 0.25, 0.4, 0.4, 0.65, 0.76, 0.78, 0.81)
+# 
+# colorlist  <- c('red', 'purple', 'blue', 'grey')
+# 
+# pdffilename <- paste0("JRSSB_submission/Plots/SiZer_comparison_blocks_", method, "_T_", T_size, ".pdf")
 # 
 # pdf(pdffilename)
 # 
-# par(mfrow = c(length(different_a1)*length(different_T)*length(slopes_for_negative),2), cex = 0.5, tck = -0.025) #Setting the layout of the graphs
-# par(mar = c(1, 1, 2, 0)) #Margins for each plot
+# par(mfrow = c(length(different_a1)*length(different_T),3), cex = 0.5, tck = -0.025) #Setting the layout of the graphs
+# par(mar = c(1, 2, 3, 0.5)) #Margins for each plot
 # par(oma = c(1.5, 1.5, 3, 0.2)) #Outer margins
 # 
 # for (a_1 in different_a1){
 #   sigmahat   <- sqrt(sigma_eta^2/((1 - a_1)^2))
+#   for (T_size in different_T){
+#     different_i <- seq(from = 5/T_size, to = 1, by = 5/T_size)
+#     different_h <- seq(from = 3/T_size, to = 1/5+3/T_size, by = 5/T_size)
+# 
+#     trend_function  <- numeric(T_size)
+#     for (i in 1:T_size) {trend_function[i] = (0.6 / 9.2) * (sum(h_for_blocks*(1 + sign(i/T_size - t_for_blocks))/2) + 2) + 0.2}
+#     #for (i in 1:T_size) {trend_function[i] = 0}
+#     #for (i in 1:T_size) {trend_function[i] = sinpi(6*i/T_size)}
+# 
+#     results <- comparing_us_and_Sizer(different_i, different_h, alpha, T_size, a_1, sigma_eta, sigmahat, trend_function, method)
+#     plot.SiZer(results[[1]]$results_their, different_i, different_h, ylab=expression(log[10](h)),
+#                     colorlist=colorlist, title = paste0("SiZer results, T=", T_size, ", a1 = ", a_1))
+# 
+#     plot.SiZer(results[[2]]$results_our, different_i, different_h, ylab=expression(log[10](h)),
+#                     colorlist=colorlist, title = paste0("Our results, T=", T_size, ", a1 = ", a_1))
+#   }
+# }
+# 
+# mtext(paste0('Blocks plus AR(1), ', method, ' method'), outer = TRUE, cex = 1.0)
+# dev.off()
+
+
+#CALCULATING "SIZE" AND "POWER" FOR COMPARISON
+
+#Defining necessary parameters
+sigma_eta           <- 1    #Standard deviation of the innovation term
+alpha               <- 0.05  #Level of significance
+
+kernel_ind <- 2
+
+num_of_reps  <- 1000
+T_size       <- 250
+different_i  <- seq(from = 5/T_size, to = 1, by = 5/T_size)
+different_h  <- seq(from = 3/T_size, to = 1/4+3/T_size, by = 5/T_size)
+different_a1 <- c(-0.25) #Different a_1 in AR(1) model
+
+slopes_for_negative <- c(1.25) #Slopes for power calculations for negative a_1
+slopes_for_positive <- c(2.25) #Slopes for power calculations for positive a_1
+
+
+path <- "JRSSB_submission/Plots/testing_"
+
+
+for (a_1 in different_a1){
+  sigmahat <- sqrt(sigma_eta^2/((1 - a_1)^2))
+
+  if (a_1 > 0){
+    slopes <- slopes_for_positive
+  } else {
+    slopes <- slopes_for_negative
+  }
+  for (slope in slopes){
+    set.seed(1)
+    trend_function  <- numeric(T_size)
+    for (i in 1:T_size) {trend_function[i] = (i - 0.5*T_size) * slope/T_size}
+
+    testing_SiZer        <- expand.grid(u = different_i, h = different_h)
+    testing_ours_global  <- expand.grid(u = different_i, h = different_h)
+    testing_ours_rowwise <- expand.grid(u = different_i, h = different_h)
+    for (i in 1:num_of_reps){
+      results <- comparing_us_and_Sizer_global_and_rowwise(different_i, different_h, alpha, T_size, a_1, sigma_eta, sigmahat, trend_function)
+
+      testing_SiZer <-  merge(testing_SiZer, results[[1]], by = c('h', 'u'))
+      colnames(testing_SiZer)[i+2] <- paste0('test', i)
+
+      testing_ours_global  <- merge(testing_ours_global, results[[2]], by = c('h', 'u'))
+      colnames(testing_ours_global)[i+2] <- paste0('test', i)
+
+      testing_ours_rowwise  <- merge(testing_ours_rowwise, results[[3]], by = c('h', 'u'))
+      colnames(testing_ours_rowwise)[i+2] <- paste0('test', i)
+    }
+
+    save(testing_SiZer, file = paste0(path, "SiZer_slope_", slope*100, "_a1_", a_1*100, ".RData"))
+    save(testing_ours_global, file = paste0(path, "ours_global_slope_", slope*100, "_a1_", a_1*100, ".RData"))
+    save(testing_ours_rowwise, file = paste0(path, "ours_rowwise_slope_", slope*100, "_a1_", a_1*100, ".RData"))
+
+    rm(testing_SiZer, testing_ours_global, testing_ours_rowwise)
+  }
+}
+
+# 
+# 
+# for (a_1 in different_a1){
 #   if (a_1 > 0){
 #     slopes <- slopes_for_positive
 #   } else {
 #     slopes <- slopes_for_negative
 #   }
 #   for (slope in slopes){
-#     for (T_size in different_T){
-#       different_i <- seq(from = 5/T_size, to = 1, by = 5/T_size)
-#       different_h <- seq(from = 3/T_size, to = 1/4+3/T_size, by = 5/T_size)
-# 
-#       trend_function  <- numeric(T_size)
-#       for (i in 1:T_size) {trend_function[i] = 4 * sum(h_for_blocks*(1 + sign(i/T_size - t_for_blocks)))/2}
-#       #for (i in 1:T_size) {trend_function[i] = 0}
-#       #for (i in 1:T_size) {trend_function[i] = sinpi(6*i/T_size)}
-# 
-#       results <- comparing_us_and_Sizer(different_i, different_h, alpha, T_size, a_1, sigma_eta, sigmahat, trend_function, method)
-#       plot.SiZer(results[[1]]$results_their, different_i, different_h, ylab=expression(log[10](h)), 
-#                       colorlist=colorlist, title = paste0("SiZer results, T=", T_size, ", a1 = ", a_1))    
-# 
-#       plot.SiZer(results[[2]]$results_our, different_i, different_h, ylab=expression(log[10](h)), 
-#                       colorlist=colorlist, title = paste0("Our results, T=", T_size, ", a1 = ", a_1))    
-#     }
+#     load(file = paste0(path, "SiZer_slope_", slope*100, "_a1_", a_1*100, ".RData"))
+#     load(file = paste0(path, "ours_global_slope_", slope*100, "_a1_", a_1*100, ".RData"))
+#     load(file = paste0(path, "ours_rowwise_slope_", slope*100, "_a1_", a_1*100, ".RData"))
+#     
+#     results_SiZer          <- aggregate(. ~ h, testing_SiZer, FUN = function(x) sum(abs(x)) > 0)
+#     results_ours_global    <- aggregate(. ~ h, testing_ours_global, FUN = function(x) sum(abs(x)) > 0)
+#     results_ours_rowwise   <- aggregate(. ~ h, testing_ours_rowwise, FUN = function(x) sum(abs(x)) > 0)
+#     
+#     results_SiZer$u        <- NULL
+#     results_ours_global$u  <- NULL
+#     results_ours_rowwise$u <- NULL
+#     
+#     plot(results_ours_global$h, rowMeans(results_ours_global[, -1])*100, ylim = c(0, 10), xlab = 'bandwidth',
+#       ylab = "Rowwise % sig.", main = paste0("Percentage of realizations of the data for T = ", T_size, ", a_1 = ", a_1, ", slope = ", slope),
+#       type = 'l')
+#     points(results_SiZer$h, rowMeans(results_SiZer[, -1])*100, type = 'l', lty = 2)
+#     points(results_ours_rowwise$h, rowMeans(results_ours_rowwise[, -1])*100, type = 'l', lty = 3)
 #   }
 # }
-# mtext(paste0('Blocks plus AR(1), ', method, ' method'), outer = TRUE, cex = 1.0)
-# dev.off()
 
-num_of_reps <- 1000
-T_size      <- 250
-different_i <- seq(from = 5/T_size, to = 1, by = 5/T_size)
-different_h <- seq(from = 3/T_size, to = 1/4+3/T_size, by = 5/T_size)
 
-#CALCULATING SIZE OF THE TESTS
-trend_function  <- numeric(T_size)
-for (i in 1:T_size) {trend_function[i] = 0}
-
-a_1      <- 0.25
-sigmahat <- sqrt(sigma_eta^2/((1 - a_1)^2))
-
-testing_SiZer_null_a1_pos <- expand.grid(u = different_i, h = different_h)
-testing_ours_null_a1_pos  <- expand.grid(u = different_i, h = different_h)
-
-for (i in 1:num_of_reps){
-  results <- comparing_us_and_Sizer(different_i, different_h, alpha, T_size, a_1, sigma_eta, sigmahat, trend_function, method)
-  
-  testing_SiZer_null_a1_pos <- cbind(testing_SiZer_null_a1_pos, results[[1]]$results_their)
-  colnames(testing_SiZer_null_a1_pos)[i+2] <- paste0('test', i)
-
-  testing_ours_null_a1_pos  <- cbind(testing_ours_null_a1_pos, results[[2]]$results_our)
-  colnames(testing_ours_null_a1_pos)[i+2] <- paste0('test', i)
-}
-
-a_1      <- -0.25
-sigmahat <- sqrt(sigma_eta^2/((1 - a_1)^2))
-
-testing_SiZer_null_a1_neg <- expand.grid(u = different_i, h = different_h)
-testing_ours_null_a1_neg  <- expand.grid(u = different_i, h = different_h)
-
-for (i in 1:num_of_reps){
-  results <- comparing_us_and_Sizer(different_i, different_h, alpha, T_size, a_1, sigma_eta, sigmahat, trend_function, method)
-  
-  testing_SiZer_null_a1_neg <- cbind(testing_SiZer_null_a1_neg, results[[1]]$results_their)
-  colnames(testing_SiZer_null_a1_neg)[i+2] <- paste0('test', i)
-  
-  testing_ours_null_a1_neg  <- cbind(testing_ours_null_a1_neg, results[[2]]$results_our)
-  colnames(testing_ours_null_a1_neg)[i+2] <- paste0('test', i)
-}
-
-#CALCULATING POWER OF THE TESTS
-
-a_1      <- 0.25
-sigmahat <- sqrt(sigma_eta^2/((1 - a_1)^2))
-trend_function  <- numeric(T_size)
-for (i in 1:T_size) {trend_function[i] = (i - 0.5*T_size) * 2.25/T_size}
-
-testing_SiZer_altern_a1_pos <- expand.grid(u = different_i, h = different_h)
-testing_ours_altern_a1_pos  <- expand.grid(u = different_i, h = different_h)
-
-for (i in 1:num_of_reps){
-  results <- comparing_us_and_Sizer(different_i, different_h, alpha, T_size, a_1, sigma_eta, sigmahat, trend_function, method)
-  
-  testing_SiZer_altern_a1_pos <- cbind(testing_SiZer_altern_a1_pos, results[[1]]$results_their)
-  colnames(testing_SiZer_altern_a1_pos)[i+2] <- paste0('test', i)
-  
-  testing_ours_altern_a1_pos  <- cbind(testing_ours_altern_a1_pos, results[[2]]$results_our)
-  colnames(testing_ours_altern_a1_pos)[i+2] <- paste0('test', i)
-}
-
-a_1      <- -0.25
-sigmahat <- sqrt(sigma_eta^2/((1 - a_1)^2))
-trend_function  <- numeric(T_size)
-for (i in 1:T_size) {trend_function[i] = (i - 0.5*T_size) * 1.25/T_size}
-
-testing_SiZer_altern_a1_neg <- expand.grid(u = different_i, h = different_h)
-testing_ours_altern_a1_neg  <- expand.grid(u = different_i, h = different_h)
-
-for (i in 1:num_of_reps){
-  results <- comparing_us_and_Sizer(different_i, different_h, alpha, T_size, a_1, sigma_eta, sigmahat, trend_function, method)
-  
-  testing_SiZer_altern_a1_neg <- cbind(testing_SiZer_altern_a1_neg, results[[1]]$results_their)
-  colnames(testing_SiZer_altern_a1_neg)[i+2] <- paste0('test', i)
-  
-  testing_ours_altern_a1_neg  <- cbind(testing_ours_altern_a1_neg, results[[2]]$results_our)
-  colnames(testing_ours_altern_a1_neg)[i+2] <- paste0('test', i)
-}
+#PLOTTING REPRESENTATIVE SIZER MAPS
+#colorlist  <- c('red', 'purple', 'blue', 'grey')
+#grid_for_plotting <- expand.grid(u = different_i, h = different_h)
+#    
+#load(file = paste0(path, "SiZer_slope_", slope*100, "_a1_", a_1*100, ".RData"))
+#SiZer_maps_for_plotting <- merge(grid_for_plotting, testing_SiZer, by = c('u', 'h'), all = TRUE) 
+#SiZer_maps_for_plotting[is.na(SiZer_maps_for_plotting)] <- 2
+#SiZer_maps_for_plotting <- SiZer_maps_for_plotting[order(SiZer_maps_for_plotting$h, SiZer_maps_for_plotting$u), ]
+#plot.SiZer(SiZer_maps_for_plotting$test1, different_i, different_h, ylab=expression(log[10](h)),
+#                                colorlist=colorlist, title = paste0("SiZer results, T=", T_size, ", a1 = ", a_1))
+#
+# 
+# plot(results_ours_null_a1_pos$h, rowMeans(results_ours_null_a1_pos[, -1])*100, ylim = c(0, 20), xlab = 'bandwidth',
+#      ylab = "Rowwise % sig.", main = paste0("Under the null for T = ", T_size, ", a_1 = 0.25, method = global"))
+# points(results_SiZer_null_a1_pos$h, rowMeans(results_SiZer_null_a1_pos[, -1])*100, type = 'l')
+# 
+# plot(results_ours_null_a1_neg$h, rowMeans(results_ours_null_a1_neg[, -1])*100, ylim = c(0, 20), xlab = 'bandwidth',
+#      ylab = "Rowwise % sig.", main = paste0("Under the null for T = ", T_size, ", a_1 = -0.25, method = global"))
+# points(results_SiZer_null_a1_neg$h, rowMeans(results_SiZer_null_a1_neg[, -1])*100, type = 'l')
+# 
+# plot(results_ours_altern_a1_pos$h, rowMeans(results_ours_altern_a1_pos[, -1])*100, ylim = c(0, 100), xlab = 'bandwidth',
+#      ylab = "Rowwise % sig.", main = paste0("Under the alternative for T = ", T_size, ", a_1 = 0.25, method = global"))
+# points(results_SiZer_altern_a1_pos$h, rowMeans(results_SiZer_altern_a1_pos[, -1])*100, type = 'l')
+# 
+# plot(results_ours_altern_a1_neg$h, rowMeans(results_ours_altern_a1_neg[, -1])*100, ylim = c(0, 100), xlab = 'bandwidth',
+#      ylab = "Rowwise % sig.", main = paste0("Under the alternative for T = ", T_size, ", a_1 = -0.25, method = global"))
+# points(results_SiZer_altern_a1_neg$h, rowMeans(results_SiZer_altern_a1_neg[, -1])*100, type = 'l')
+# 
