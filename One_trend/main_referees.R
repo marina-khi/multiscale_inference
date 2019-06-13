@@ -151,7 +151,7 @@ kernel_ind <- 2
 
 num_of_reps  <- 1000
 different_T  <- c(250)
-different_a1 <- c(-0.5, -0.25) #Different a_1 in AR(1) model
+different_a1 <- c(-0.5, 0, 0.25) #Different a_1 in AR(1) model
 
 slopes_for_negative <- c(0, 1.25) #Slopes for power calculations for negative a_1
 slopes_for_positive <- c(0, 2.25) #Slopes for power calculations for positive a_1
@@ -247,7 +247,7 @@ for (T_size in different_T){
       pdffilename <- paste0(path, "rowwise_sig_comparison_T_", T_size, "_a1_", a_1*100, "_slope_", slope*100, ".pdf")
       pdf(pdffilename)
 
-      if (slope == 0) {ymax <- 25} else {ymax <- 100}
+      if (slope == 0) {ymax <- 15} else {ymax <- 100}
       
       plot(results_ours_global$h, rowMeans(results_ours_global[, -1])*100, ylim = c(0, ymax), xlab = 'bandwidth',
         ylab = "Rowwise % sig.", main = paste0("Percentage of blue/red pixels for T = ", T_size, ", a_1 = ", a_1, ", slope = ", slope),
@@ -259,21 +259,24 @@ for (T_size in different_T){
       dev.off()
       
       if (slope == 0){
-        ordered_SiZer <- order(colSums(abs(testing_SiZer[-c(1, 2)])))
-        ordered_ours_global <- order(colSums(abs(testing_ours_global[-c(1, 2)])))
-        ordered_ours_rowwise <- order(colSums(abs(testing_ours_rowwise[-c(1, 2)])))
+
+        ordered_SiZer               <- order(colSums(abs(testing_SiZer[-c(1, 2)])))
+        ordered_ours_global         <- order(colSums(abs(testing_ours_global[-c(1, 2)])))
+        ordered_ours_rowwise        <- order(colSums(abs(testing_ours_rowwise[-c(1, 2)])))
+        ordered_ours_without_lambda <- order(colSums(abs(testing_ours_without_lambda[-c(1, 2)])))
         
         pdffilename <- paste0(path, "representatives_T_", T_size, "_a1_", a_1*100, "_slope_0.pdf")
         pdf(pdffilename)
         
-        par(mfrow = c(length(percentiles),3), cex = 0.5, tck = -0.025) #Setting the layout of the graphs
+        par(mfrow = c(length(percentiles),4), cex = 0.5, tck = -0.025) #Setting the layout of the graphs
         par(mar = c(1, 2, 3, 0.5)) #Margins for each plot
         par(oma = c(1.5, 1.5, 3, 0.2)) #Outer margins
         
         for (percentile in percentiles) {
           plot.SiZer.representatives(different_i, different_h, testing_SiZer, ordered_SiZer[percentile]+2, colorlist, title ="SiZer, ")
-          plot.SiZer.representatives(different_i, different_h, testing_ours_global, ordered_ours_global[percentile]+2, colorlist, title ="Ours global, ")
-          plot.SiZer.representatives(different_i, different_h, testing_ours_rowwise, ordered_ours_rowwise[percentile]+2, colorlist, title ="Ours rowwise, ")
+          plot.SiZer.representatives(different_i, different_h, testing_ours_global, ordered_ours_global[percentile]+2, colorlist, title ="Global, ")
+          plot.SiZer.representatives(different_i, different_h, testing_ours_rowwise, ordered_ours_rowwise[percentile]+2, colorlist, title ="Rowwise, ")
+          plot.SiZer.representatives(different_i, different_h, testing_ours_without_lambda, ordered_ours_without_lambda[percentile]+2, colorlist, title ="Without lambda, ")
         }
         mtext(paste0('Under the null plus AR(1), T = ', T_size, ', a1 = ', a_1), outer = TRUE, cex = 1.0)
         dev.off()
