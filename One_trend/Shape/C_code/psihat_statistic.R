@@ -1,6 +1,6 @@
 psihat_statistic <- function(y_data, g_t_set, kernel_ind, sigmahat){
   #Wrapper of a C function from psihat_statistic.C
-  #Function that calculates the multiscale statistic \hat{\Psi}_T.
+  #Function that calculates the multiscale statistic \hat{\Psi}_T  under local linear kernel assumption.
   #Arguments:
   # y_data          vector of length T 
   # g_t_set         dataframe with columns "u", "h", "values" (equal to 0), "lambda"
@@ -21,20 +21,17 @@ psihat_statistic <- function(y_data, g_t_set, kernel_ind, sigmahat){
   maximum           <- vector(mode = "double", length = 1)
   
   result <- .C("psihat_statistic", y_data, T, g_t_set_vec, N, kernel, sigmahat, maximum, values, values_with_sign)
-
-#  cat("kernel = ", result[[5]], ", T=", result[[2]], ", N=", result[[4]], ", sigmahat = ", result[[6]],
-#      "maximum = ", result[[7]], "len of values = ", length(result[[8]]), sep=" ")
   
   g_t_set$values           <- result[[8]]
   g_t_set$values_with_sign <- result[[9]]
   statistic                <- result[[7]]
-
+  
   return(list(g_t_set, statistic)) 
 }
 
 psistar_statistic <- function(y_data, g_t_set, kernel_ind, sigmahat){
   #Wrapper of a C function from psihat_statistic.C
-  #Function that calculates the auxiliary statistic \Psi^star_T.
+  #Function that calculates the auxiliary statistic \Psi^star_T under local linear kernel assumption.
   #The only difference with the previous function is in the return values.
   #Arguments:
   # y_data          vector of length T 
@@ -59,9 +56,8 @@ psistar_statistic <- function(y_data, g_t_set, kernel_ind, sigmahat){
   return(statistic) 
 }
 
-
-psihat_statistic_ll <- function(y_data, g_t_set, kernel_ind, sigmahat){
-  #Wrapper of a C function from psihat_statistic_ll.C
+psihat_statistic_without_lambda <- function(y_data, g_t_set, kernel_ind, sigmahat){
+  #Wrapper of a C function from psihat_statistic.C
   #Function that calculates the multiscale statistic \hat{\Psi}_T  under local linear kernel assumption.
   #Arguments:
   # y_data          vector of length T 
@@ -82,7 +78,7 @@ psihat_statistic_ll <- function(y_data, g_t_set, kernel_ind, sigmahat){
   values_with_sign  <- vector(mode = "double",length = N)
   maximum           <- vector(mode = "double", length = 1)
   
-  result <- .C("psihat_statistic_ll", y_data, T, g_t_set_vec, N, kernel, sigmahat, maximum, values, values_with_sign)
+  result <- .C("psihat_statistic_without_lambda", y_data, T, g_t_set_vec, N, kernel, sigmahat, maximum, values, values_with_sign)
   
   g_t_set$values           <- result[[8]]
   g_t_set$values_with_sign <- result[[9]]
@@ -91,8 +87,8 @@ psihat_statistic_ll <- function(y_data, g_t_set, kernel_ind, sigmahat){
   return(list(g_t_set, statistic)) 
 }
 
-psistar_statistic_ll <- function(y_data, g_t_set, kernel_ind, sigmahat){
-  #Wrapper of a C function from psihat_statistic_ll.C
+psistar_statistic_without_lambda <- function(y_data, g_t_set, kernel_ind, sigmahat){
+  #Wrapper of a C function from psihat_statistic.C
   #Function that calculates the auxiliary statistic \Psi^star_T under local linear kernel assumption.
   #The only difference with the previous function is in the return values.
   #Arguments:
@@ -112,8 +108,11 @@ psistar_statistic_ll <- function(y_data, g_t_set, kernel_ind, sigmahat){
   values_with_sign  <- vector(mode = "double",length = N)
   maximum           <- vector(mode = "double", length = 1)
   
-  result    <- .C("psihat_statistic_ll", y_data, T, g_t_set_vec, N, kernel_ind, sigmahat, maximum, values, values_with_sign)
+  result    <- .C("psihat_statistic_without_lambda", y_data, T, g_t_set_vec, N, kernel_ind, sigmahat, maximum, values, values_with_sign)
   statistic <- result[[7]]
   
   return(statistic) 
 }
+
+
+

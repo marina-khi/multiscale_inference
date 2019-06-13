@@ -1,6 +1,7 @@
 source("Shape/functions_for_referees.R")
 source("Shape/estimating_sigma_new.R")
-dyn.load("Shape/C_code/psihat_statistic_ll.dll")
+dyn.load("Shape/C_code/psihat_statistic.dll")
+dyn.load("Shape/C_code/psihat_statistic_without_lambda.dll")
 source("Shape/C_code/psihat_statistic.R")
 source("Shape/data_analysis.R")
 
@@ -87,7 +88,7 @@ source("Shape/data_analysis.R")
 #############################
 #Point 5 in Referee Report 1#
 #############################
-
+# 
 # #PLOTTING SIZER MAPS FOR COMPARISON
 # 
 # #Defining necessary parameters
@@ -149,110 +150,171 @@ alpha               <- 0.05  #Level of significance
 kernel_ind <- 2
 
 num_of_reps  <- 1000
-T_size       <- 250
-different_i  <- seq(from = 5/T_size, to = 1, by = 5/T_size)
-different_h  <- seq(from = 3/T_size, to = 1/4+3/T_size, by = 5/T_size)
-different_a1 <- c(-0.25) #Different a_1 in AR(1) model
+different_T  <- c(250)
+different_a1 <- c(-0.5, -0.25) #Different a_1 in AR(1) model
 
-slopes_for_negative <- c(1.25) #Slopes for power calculations for negative a_1
-slopes_for_positive <- c(2.25) #Slopes for power calculations for positive a_1
+slopes_for_negative <- c(0, 1.25) #Slopes for power calculations for negative a_1
+slopes_for_positive <- c(0, 2.25) #Slopes for power calculations for positive a_1
+
+colorlist   <- c('red', 'purple', 'blue', 'grey')
+percentiles <- c(500, 750, 850, 950)
+
+path <- "JRSSB_submission/Plots/"
 
 
-path <- "JRSSB_submission/Plots/testing_"
+#1000 simulations for SiZer, our global method and our rowwise method simultaneously
+for (T_size in different_T){
+  different_i  <- seq(from = 5/T_size, to = 1, by = 5/T_size)
+  different_h  <- seq(from = 3/T_size, to = 1/4+3/T_size, by = 5/T_size)
 
+  for (a_1 in different_a1){
+    sigmahat <- sqrt(sigma_eta^2/((1 - a_1)^2))
 
-for (a_1 in different_a1){
-  sigmahat <- sqrt(sigma_eta^2/((1 - a_1)^2))
-
-  if (a_1 > 0){
-    slopes <- slopes_for_positive
-  } else {
-    slopes <- slopes_for_negative
-  }
-  for (slope in slopes){
-    set.seed(1)
-    trend_function  <- numeric(T_size)
-    for (i in 1:T_size) {trend_function[i] = (i - 0.5*T_size) * slope/T_size}
-
-    testing_SiZer        <- expand.grid(u = different_i, h = different_h)
-    testing_ours_global  <- expand.grid(u = different_i, h = different_h)
-    testing_ours_rowwise <- expand.grid(u = different_i, h = different_h)
-    for (i in 1:num_of_reps){
-      results <- comparing_us_and_Sizer_global_and_rowwise(different_i, different_h, alpha, T_size, a_1, sigma_eta, sigmahat, trend_function)
-
-      testing_SiZer <-  merge(testing_SiZer, results[[1]], by = c('h', 'u'))
-      colnames(testing_SiZer)[i+2] <- paste0('test', i)
-
-      testing_ours_global  <- merge(testing_ours_global, results[[2]], by = c('h', 'u'))
-      colnames(testing_ours_global)[i+2] <- paste0('test', i)
-
-      testing_ours_rowwise  <- merge(testing_ours_rowwise, results[[3]], by = c('h', 'u'))
-      colnames(testing_ours_rowwise)[i+2] <- paste0('test', i)
+    if (a_1 > 0){
+      slopes <- slopes_for_positive
+    } else {
+      slopes <- slopes_for_negative
     }
+    for (slope in slopes){
+      set.seed(1)
 
-    save(testing_SiZer, file = paste0(path, "SiZer_slope_", slope*100, "_a1_", a_1*100, ".RData"))
-    save(testing_ours_global, file = paste0(path, "ours_global_slope_", slope*100, "_a1_", a_1*100, ".RData"))
-    save(testing_ours_rowwise, file = paste0(path, "ours_rowwise_slope_", slope*100, "_a1_", a_1*100, ".RData"))
+      trend_function  <- numeric(T_size)
+      for (i in 1:T_size) {trend_function[i] = (i - 0.5*T_size) * slope/T_size}
 
-    rm(testing_SiZer, testing_ours_global, testing_ours_rowwise)
+      testing_SiZer        <- expand.grid(u = different_i, h = different_h)
+      testing_ours_global  <- expand.grid(u = different_i, h = different_h)
+      testing_ours_rowwise <- expand.grid(u = different_i, h = different_h)
+      testing_ours_without_lambda <- expand.grid(u = different_i, h = different_h)
+      
+      for (i in 1:num_of_reps){
+        results <- comparing_us_and_Sizer_global_and_rowwise(different_i, different_h, alpha, T_size, a_1, sigma_eta, sigmahat, trend_function)
+
+        testing_SiZer <-  merge(testing_SiZer, results[[1]], by = c('h', 'u'))
+        colnames(testing_SiZer)[i+2] <- paste0('test', i)
+
+        testing_ours_global  <- merge(testing_ours_global, results[[2]], by = c('h', 'u'))
+        colnames(testing_ours_global)[i+2] <- paste0('test', i)
+
+        testing_ours_rowwise  <- merge(testing_ours_rowwise, results[[3]], by = c('h', 'u'))
+        colnames(testing_ours_rowwise)[i+2] <- paste0('test', i)
+        
+        testing_ours_without_lambda <- merge(testing_ours_without_lambda, results[[4]], by = c('h', 'u'))
+        colnames(testing_ours_without_lambda)[i+2] <- paste0('test', i)
+      }
+
+      save(testing_SiZer, file = paste0(path, "testing_SiZer_T_", T_size, "_slope_", slope*100, "_a1_", a_1*100, ".RData"))
+      save(testing_ours_global, file = paste0(path, "testing_ours_global_T_", T_size, "_slope_", slope*100, "_a1_", a_1*100, ".RData"))
+      save(testing_ours_rowwise, file = paste0(path, "testing_ours_rowwise_T_", T_size, "_slope_", slope*100, "_a1_", a_1*100, ".RData"))
+      save(testing_ours_without_lambda, file = paste0(path, "testing_ours_without_lambda_T_", T_size, "_slope_", slope*100, "_a1_", a_1*100, ".RData"))
+
+      rm(testing_SiZer, testing_ours_global, testing_ours_rowwise, testing_ours_without_lambda)
+    }
   }
 }
 
-# 
-# 
-# for (a_1 in different_a1){
-#   if (a_1 > 0){
-#     slopes <- slopes_for_positive
-#   } else {
-#     slopes <- slopes_for_negative
-#   }
-#   for (slope in slopes){
-#     load(file = paste0(path, "SiZer_slope_", slope*100, "_a1_", a_1*100, ".RData"))
-#     load(file = paste0(path, "ours_global_slope_", slope*100, "_a1_", a_1*100, ".RData"))
-#     load(file = paste0(path, "ours_rowwise_slope_", slope*100, "_a1_", a_1*100, ".RData"))
-#     
-#     results_SiZer          <- aggregate(. ~ h, testing_SiZer, FUN = function(x) sum(abs(x)) > 0)
-#     results_ours_global    <- aggregate(. ~ h, testing_ours_global, FUN = function(x) sum(abs(x)) > 0)
-#     results_ours_rowwise   <- aggregate(. ~ h, testing_ours_rowwise, FUN = function(x) sum(abs(x)) > 0)
-#     
-#     results_SiZer$u        <- NULL
-#     results_ours_global$u  <- NULL
-#     results_ours_rowwise$u <- NULL
-#     
-#     plot(results_ours_global$h, rowMeans(results_ours_global[, -1])*100, ylim = c(0, 10), xlab = 'bandwidth',
-#       ylab = "Rowwise % sig.", main = paste0("Percentage of realizations of the data for T = ", T_size, ", a_1 = ", a_1, ", slope = ", slope),
-#       type = 'l')
-#     points(results_SiZer$h, rowMeans(results_SiZer[, -1])*100, type = 'l', lty = 2)
-#     points(results_ours_rowwise$h, rowMeans(results_ours_rowwise[, -1])*100, type = 'l', lty = 3)
-#   }
-# }
+#Based on those simulations, we are interpreting the results.
+#Parallel coordinate plots and represnetative SiZer maps under the null
+for (T_size in different_T){
+  different_i  <- seq(from = 5/T_size, to = 1, by = 5/T_size)
+  different_h  <- seq(from = 3/T_size, to = 1/4+3/T_size, by = 5/T_size)
 
+  grid_for_plotting <- expand.grid(u = different_i, h = different_h)
 
-#PLOTTING REPRESENTATIVE SIZER MAPS
-#colorlist  <- c('red', 'purple', 'blue', 'grey')
-#grid_for_plotting <- expand.grid(u = different_i, h = different_h)
-#    
-#load(file = paste0(path, "SiZer_slope_", slope*100, "_a1_", a_1*100, ".RData"))
-#SiZer_maps_for_plotting <- merge(grid_for_plotting, testing_SiZer, by = c('u', 'h'), all = TRUE) 
-#SiZer_maps_for_plotting[is.na(SiZer_maps_for_plotting)] <- 2
-#SiZer_maps_for_plotting <- SiZer_maps_for_plotting[order(SiZer_maps_for_plotting$h, SiZer_maps_for_plotting$u), ]
-#plot.SiZer(SiZer_maps_for_plotting$test1, different_i, different_h, ylab=expression(log[10](h)),
-#                                colorlist=colorlist, title = paste0("SiZer results, T=", T_size, ", a1 = ", a_1))
-#
+  for (a_1 in different_a1){
+    if (a_1 > 0){
+      slopes <- slopes_for_positive
+    } else {
+      slopes <- slopes_for_negative
+    }
+    for (slope in slopes){
+
+      load(file = paste0(path, "testing_SiZer_T_", T_size, "_slope_", slope*100, "_a1_", a_1*100, ".RData"))
+      load(file = paste0(path, "testing_ours_global_T_", T_size, "_slope_", slope*100, "_a1_", a_1*100, ".RData"))
+      load(file = paste0(path, "testing_ours_rowwise_T_", T_size, "_slope_", slope*100, "_a1_", a_1*100, ".RData"))
+      load(file = paste0(path, "testing_ours_without_lambda_T_", T_size, "_slope_", slope*100, "_a1_", a_1*100, ".RData"))
+      
+      results_SiZer                 <- aggregate(. ~ h, testing_SiZer, FUN = function(x) sum(abs(x)) > 0)
+      results_ours_global           <- aggregate(. ~ h, testing_ours_global, FUN = function(x) sum(abs(x)) > 0)
+      results_ours_rowwise          <- aggregate(. ~ h, testing_ours_rowwise, FUN = function(x) sum(abs(x)) > 0)
+      results_ours_without_lambda   <- aggregate(. ~ h, testing_ours_without_lambda, FUN = function(x) sum(abs(x)) > 0)
+      
+      results_SiZer$u               <- NULL
+      results_ours_global$u         <- NULL
+      results_ours_rowwise$u        <- NULL
+      results_ours_without_lambda$u <- NULL
+      
+
+      pdffilename <- paste0(path, "rowwise_sig_comparison_T_", T_size, "_a1_", a_1*100, "_slope_", slope*100, ".pdf")
+      pdf(pdffilename)
+
+      if (slope == 0) {ymax <- 25} else {ymax <- 100}
+      
+      plot(results_ours_global$h, rowMeans(results_ours_global[, -1])*100, ylim = c(0, ymax), xlab = 'bandwidth',
+        ylab = "Rowwise % sig.", main = paste0("Percentage of blue/red pixels for T = ", T_size, ", a_1 = ", a_1, ", slope = ", slope),
+        type = 'l')
+      points(results_ours_rowwise$h, rowMeans(results_ours_rowwise[, -1])*100, type = 'l', lty = 2)
+      points(results_ours_without_lambda$h, rowMeans(results_ours_without_lambda[, -1])*100, type = 'l', lty = 3)
+      points(results_SiZer$h, rowMeans(results_SiZer[, -1])*100, type = 'l', lty = 4)
+      legend(0.03, ymax, legend=c("Our global method", "Our rowwise method", "Our method without lambda", "SiZer"), lty=1:4, cex=0.8)
+      dev.off()
+      
+      if (slope == 0){
+        ordered_SiZer <- order(colSums(abs(testing_SiZer[-c(1, 2)])))
+        ordered_ours_global <- order(colSums(abs(testing_ours_global[-c(1, 2)])))
+        ordered_ours_rowwise <- order(colSums(abs(testing_ours_rowwise[-c(1, 2)])))
+        
+        pdffilename <- paste0(path, "representatives_T_", T_size, "_a1_", a_1*100, "_slope_0.pdf")
+        pdf(pdffilename)
+        
+        par(mfrow = c(length(percentiles),3), cex = 0.5, tck = -0.025) #Setting the layout of the graphs
+        par(mar = c(1, 2, 3, 0.5)) #Margins for each plot
+        par(oma = c(1.5, 1.5, 3, 0.2)) #Outer margins
+        
+        for (percentile in percentiles) {
+          plot.SiZer.representatives(different_i, different_h, testing_SiZer, ordered_SiZer[percentile]+2, colorlist, title ="SiZer, ")
+          plot.SiZer.representatives(different_i, different_h, testing_ours_global, ordered_ours_global[percentile]+2, colorlist, title ="Ours global, ")
+          plot.SiZer.representatives(different_i, different_h, testing_ours_rowwise, ordered_ours_rowwise[percentile]+2, colorlist, title ="Ours rowwise, ")
+        }
+        mtext(paste0('Under the null plus AR(1), T = ', T_size, ', a1 = ', a_1), outer = TRUE, cex = 1.0)
+        dev.off()
+      }
+      
+      rm(testing_SiZer, testing_ours_global, testing_ours_rowwise)
+    }
+  }
+}
+
+#############################
+#Point 7 in Referee Report 1#
+#############################
 # 
-# plot(results_ours_null_a1_pos$h, rowMeans(results_ours_null_a1_pos[, -1])*100, ylim = c(0, 20), xlab = 'bandwidth',
-#      ylab = "Rowwise % sig.", main = paste0("Under the null for T = ", T_size, ", a_1 = 0.25, method = global"))
-# points(results_SiZer_null_a1_pos$h, rowMeans(results_SiZer_null_a1_pos[, -1])*100, type = 'l')
+# #Defining necessary parameters
+# alpha <- 0.05 #alpha for calculating quantiles
 # 
-# plot(results_ours_null_a1_neg$h, rowMeans(results_ours_null_a1_neg[, -1])*100, ylim = c(0, 20), xlab = 'bandwidth',
-#      ylab = "Rowwise % sig.", main = paste0("Under the null for T = ", T_size, ", a_1 = -0.25, method = global"))
-# points(results_SiZer_null_a1_neg$h, rowMeans(results_SiZer_null_a1_neg[, -1])*100, type = 'l')
+# test_problem  <- "constant" #Only "zero" (H_0: m = 0) or "constant" (H_0: m = const) testing problems are currently supported. 
+# pdffilename = paste0("JRSSB_submission/Plots/temperature_data.pdf") #Filename for the graph
 # 
-# plot(results_ours_altern_a1_pos$h, rowMeans(results_ours_altern_a1_pos[, -1])*100, ylim = c(0, 100), xlab = 'bandwidth',
-#      ylab = "Rowwise % sig.", main = paste0("Under the alternative for T = ", T_size, ", a_1 = 0.25, method = global"))
-# points(results_SiZer_altern_a1_pos$h, rowMeans(results_SiZer_altern_a1_pos[, -1])*100, type = 'l')
 # 
-# plot(results_ours_altern_a1_neg$h, rowMeans(results_ours_altern_a1_neg[, -1])*100, ylim = c(0, 100), xlab = 'bandwidth',
-#      ylab = "Rowwise % sig.", main = paste0("Under the alternative for T = ", T_size, ", a_1 = -0.25, method = global"))
-# points(results_SiZer_altern_a1_neg$h, rowMeans(results_SiZer_altern_a1_neg[, -1])*100, type = 'l')
+# #Loading the real data for yearly temperature in England
+# temperature  <- read.table("Shape/data/cetml1659on.dat", header = TRUE, skip = 6)
+# yearly_tempr <- temperature[temperature$YEAR > -99, 'YEAR']
+# T_tempr      <- length(yearly_tempr)
 # 
+# different_i <- seq(from = 5/T, to = 1, by = 5/T)
+# different_h <- seq(from = 3/T, to = 1/4+3/T, by = 5/T)
+# 
+# #Setting tuning parameters for testing
+# p <- 2
+# q <- 25
+# r <- 10
+# 
+# 
+# #Data analysis
+# sigma_hat <- estimating_variance_new(yearly_tempr, q, order = p, r)[[1]]
+# a_hat     <- estimating_variance_new(yearly_tempr, q, order = p, r)[[2]]
+# sigma_eta <- estimating_variance_new(yearly_tempr, q, order = p, r)[[3]]
+# 
+# 
+# calculating_SiZer_matrix(different_i, different_h, T_tempr, T_star, alpha, gamma, a_1, sigma_eta)
+#   
+

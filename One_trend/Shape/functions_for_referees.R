@@ -144,7 +144,23 @@ calculating_gaussian_quantile <- function(T, g_t_set, test_problem, kernel_ind, 
   if(!file.exists(filename)) {
     gaussian_statistic_distribution <- replicate(1000, {
       z = rnorm(T, 0, 1)
-      psistar_statistic_ll(z, g_t_set, kernel_ind, 1)
+      psistar_statistic(z, g_t_set, kernel_ind, 1)
+    })
+    save(gaussian_statistic_distribution, file = filename)
+  } else {
+    load(filename)
+  }
+  #Calculate the quantiles for gaussian statistic defined in the previous step
+  gaussian_quantile <- quantile(gaussian_statistic_distribution, probs = (1 - alpha), type = 1)
+  return(gaussian_quantile)
+}
+
+calculating_gaussian_quantile_without_lambda <- function(T, g_t_set, test_problem, kernel_ind, alpha = 0.05){
+  filename = paste0("JRSSB_submission/distribution/distr_T_", T,"_testing_", test_problem, ".RData")
+  if(!file.exists(filename)) {
+    gaussian_statistic_distribution <- replicate(1000, {
+      z = rnorm(T, 0, 1)
+      psistar_statistic_without_lambda(z, g_t_set, kernel_ind, 1)
     })
     save(gaussian_statistic_distribution, file = filename)
   } else {
@@ -268,7 +284,7 @@ plotting_many_minimal_intervals <- function(trend_height, trend_width, T_size, S
   for (col in 1:N_rep){
     y_data_ar_1_with_trend <- arima.sim(model = list(ar = a_1), n = T_size, innov = rnorm(T_size, 0, sigma_eta)) + biweight_trend
     
-    g_t_set     <- psihat_statistic_ll(y_data_ar_1_with_trend, SiZer_matrix, kernel_ind, sigmahat)[[1]]
+    g_t_set     <- psihat_statistic(y_data_ar_1_with_trend, SiZer_matrix, kernel_ind, sigmahat)[[1]]
     
     results_our   <- c()
     results_their <- c()
@@ -362,40 +378,40 @@ calculating_SiZer_matrix <- function(different_i, different_h, T_size, T_star, a
     if (ESS_star <= 5){
       SiZer_matrix[row, 'small_ESS'] <- 1
     } else {
-      integrand_1 <- function(s, h_, delta_, a_1_, sigma_eta_) {100 * autocovariance_function_AR1(floor(s * h / delta), a_1, sigma_eta) * exp(-s^2/4) * (12 - 12 * s^2+ s^4)/16}
-      I_gamma_num <- integrate(integrand_1, lower = -Inf, upper = Inf, h_ = h, delta_ = delta, a_1_ = a_1, sigma_eta_ = sigma_eta)[[1]]
-      
-      integrand_2 <- function(s, h_, delta_, a_1_, sigma_eta_) {100 * autocovariance_function_AR1(floor(s * h / delta), a_1, sigma_eta) * exp(-s^2/4) * (1 - s^2/2)}
-      I_gamma_denom <- integrate(integrand_2, lower = -Inf, upper = Inf, h_ = h, delta_ = delta, a_1_ = a_1, sigma_eta_ = sigma_eta)[[1]]
+      integrand_1 <- function(s, h_, delta_, a_1_, sigma_eta_) {1000 * autocovariance_function_AR1(floor(s * h / delta), a_1, sigma_eta) * exp(-s^2/4) * (12 - 12 * s^2+ s^4)/16}
+      I_gamma_num <- integrate(integrand_1, lower = -Inf, upper = Inf, h_ = h, delta_ = delta, a_1_ = a_1, sigma_eta_ = sigma_eta, subdivisions=2000)[[1]]
+
+      integrand_2 <- function(s, h_, delta_, a_1_, sigma_eta_) {1000 * autocovariance_function_AR1(floor(s * h / delta), a_1, sigma_eta) * exp(-s^2/4) * (1 - s^2/2)}
+      I_gamma_denom <- integrate(integrand_2, lower = -Inf, upper = Inf, h_ = h, delta_ = delta, a_1_ = a_1, sigma_eta_ = sigma_eta, subdivisions=2000)[[1]]
       I_gamma <- I_gamma_num/I_gamma_denom
-      
+
       theta <- 2 * pnorm(sqrt(I_gamma * log(g)) * delta_hat / h) - 1
       q_h   <- qnorm((1 - alpha/2)^(1/(theta* g)))
-      
-      
-      
+
+
+
       x_matrix                     <- matrix(c(rep(1, T_size), seq(1/T_size - i, 1-i, by = 1/T_size)), nrow=T_size, byrow=FALSE)
       w_vector                     <- sapply(seq(1/T_size - i, 1-i, by = 1/T_size)/h, FUN = epanechnikov_kernel)/h
       XtW                          <- t(apply(x_matrix,2,function(x){x*w_vector}))   #t(X) %*% diag(w)   computed faster.  :)
-      XtWX_inverse                 <- tryCatch({solve(XtW %*% x_matrix)},  
+      XtWX_inverse                 <- tryCatch({solve(XtW %*% x_matrix)},
                                                error = function(e) {print("Something is wrong, the matrix can not be inverted")})
       SiZer_matrix$XtWX_inv_XtW[[row]] <- XtWX_inverse %*% XtW
-      
+
       XtSigma <- matrix(data = NA, nrow =2, ncol =T_size)
       for (j in 1:T_size){      #t(X) %*% Sigma computed faster in order not to save the whole Sigma matrix (T_size * T_size) in the memory
         XtSigma[1, j] = 0
         XtSigma[2, j] = 0
         for (k in 1:T_size){
           XtSigma[1, j] = XtSigma[1, j] + gamma[abs(k - j) + 1] * w_vector[k] * w_vector[j]
-          XtSigma[2, j] = XtSigma[2, j] + gamma[abs(k - j) + 1] * w_vector[k] * w_vector[j] * (k/T_size - i)   
+          XtSigma[2, j] = XtSigma[2, j] + gamma[abs(k - j) + 1] * w_vector[k] * w_vector[j] * (k/T_size - i)
         }
       }
       sd = sqrt((XtWX_inverse %*% XtSigma %*% x_matrix %*% XtWX_inverse)[2,2])
-      
+
       SiZer_matrix[row, 'sd']       = sd
       SiZer_matrix[row, 'q_h']      = q_h
       SiZer_matrix[row, 'ESS_star'] = ESS_star
-    }
+      }
   }
   
   SiZer_matrix           <- SiZer_matrix[SiZer_matrix$small_ESS != 1,]
@@ -519,14 +535,14 @@ comparing_us_and_Sizer<- function(different_i, different_h, alpha, T_size, a_1, 
     for (bandwidth in different_h){
       SiZer_matrix_temp <- subset(SiZer_matrix, h == bandwidth, select = c(u, h, values, lambda))
       gaussian_quantile <- calculating_gaussian_quantile(T_size, SiZer_matrix_temp, paste0("comparison_rowwise_h_", bandwidth*1000), kernel_ind, alpha)
-      g_t_set_temp_temp <- psihat_statistic_ll(y_data_ar_1_with_trend, SiZer_matrix_temp, kernel_ind, sigmahat)[[1]]
+      g_t_set_temp_temp <- psihat_statistic(y_data_ar_1_with_trend, SiZer_matrix_temp, kernel_ind, sigmahat)[[1]]
       g_t_set_temp_temp$gaussian_quantile <- gaussian_quantile
       g_t_set_temp      <- rbind(g_t_set_temp, g_t_set_temp_temp)
     }
     SiZer_matrix$values <- NULL
     g_t_set <- merge(SiZer_matrix, g_t_set_temp, by = c('h', 'u', 'lambda'))
   } else if (method == "global"){
-    g_t_set <- psihat_statistic_ll(y_data_ar_1_with_trend, SiZer_matrix, kernel_ind, sigmahat)[[1]]
+    g_t_set <- psihat_statistic(y_data_ar_1_with_trend, SiZer_matrix, kernel_ind, sigmahat)[[1]]
     gaussian_quantile <- calculating_gaussian_quantile(T_size, SiZer_matrix, "comparison_global", kernel_ind, alpha)
     g_t_set$gaussian_quantile <- gaussian_quantile
   } else {
@@ -592,7 +608,7 @@ comparing_us_and_Sizer_global_and_rowwise<- function(different_i, different_h, a
     SiZer_matrix_temp                           <- subset(SiZer_matrix, h == bandwidth, select = c(u, h, values, lambda))
     if (nrow(SiZer_matrix_temp)>0){
       gaussian_quantile_rowwise                   <- calculating_gaussian_quantile(T_size, SiZer_matrix_temp, paste0("comparison_rowwise_without_grey_h_", bandwidth*1000, "_a1_", a_1*100), kernel_ind, alpha)
-      g_t_set_temp_temp                           <- psihat_statistic_ll(y_data_ar_1_with_trend, SiZer_matrix_temp, kernel_ind, sigmahat)[[1]]
+      g_t_set_temp_temp                           <- psihat_statistic(y_data_ar_1_with_trend, SiZer_matrix_temp, kernel_ind, sigmahat)[[1]]
       g_t_set_temp_temp$gaussian_quantile_rowwise <- gaussian_quantile_rowwise
       g_t_set_temp                                <- rbind(g_t_set_temp, g_t_set_temp_temp)
     }
@@ -601,9 +617,14 @@ comparing_us_and_Sizer_global_and_rowwise<- function(different_i, different_h, a
   SiZer_matrix$values <- NULL
   g_t_set_rowwise <- merge(SiZer_matrix, g_t_set_temp, by = c('h', 'u', 'lambda'))
   
-  g_t_set_global                          <- psihat_statistic_ll(y_data_ar_1_with_trend, SiZer_matrix, kernel_ind, sigmahat)[[1]]
+  g_t_set_global                          <- psihat_statistic(y_data_ar_1_with_trend, SiZer_matrix, kernel_ind, sigmahat)[[1]]
   gaussian_quantile_global                <- calculating_gaussian_quantile(T_size, SiZer_matrix, paste0("comparison_global_without_grey_a1_", a_1*100), kernel_ind, alpha)
   g_t_set_global$gaussian_quantile_global <- gaussian_quantile_global
+
+  g_t_set_without_lambda                                  <- psihat_statistic_without_lambda(y_data_ar_1_with_trend, SiZer_matrix, kernel_ind, sigmahat)[[1]]
+  gaussian_quantile_without_lambda                        <- calculating_gaussian_quantile_without_lambda(T_size, SiZer_matrix, paste0("comparison_without_lambda_without_grey_a1_", a_1*100), kernel_ind, alpha)
+  g_t_set_without_lambda$gaussian_quantile_without_lambda <- gaussian_quantile_without_lambda
+  
 
   for (row in 1:nrow(g_t_set_rowwise)){
     i              = g_t_set_rowwise[row, 'u']
@@ -642,10 +663,28 @@ comparing_us_and_Sizer_global_and_rowwise<- function(different_i, different_h, a
       g_t_set_global$results_our_global[[row]] = 0
     }
     
+    if (g_t_set_without_lambda[row, 'values_with_sign'] > g_t_set_without_lambda[row, 'gaussian_quantile_without_lambda']){
+      g_t_set_without_lambda$results_our_without_lambda[[row]] = 1
+    } else if (-g_t_set_without_lambda[row, 'values_with_sign'] > g_t_set_without_lambda[row, 'gaussian_quantile_without_lambda']){
+      g_t_set_without_lambda$results_our_without_lambda[[row]] = -1
+    } else {
+      g_t_set_without_lambda$results_our_without_lambda[[row]] = 0
+    }
+    
   }
-  result_SiZer       <- subset(g_t_set_rowwise, select = c(u, h, results_their))
-  result_our_global  <- subset(g_t_set_global, select = c(u, h, results_our_global))
-  result_our_rowwise <- subset(g_t_set_rowwise, select = c(u, h, results_our_rowwise))
+  result_SiZer              <- subset(g_t_set_rowwise, select = c(u, h, results_their))
+  result_our_global         <- subset(g_t_set_global, select = c(u, h, results_our_global))
+  result_our_rowwise        <- subset(g_t_set_rowwise, select = c(u, h, results_our_rowwise))
+  result_our_without_lambda <- subset(g_t_set_without_lambda, select = c(u, h, results_our_without_lambda))
   
-  return(list(result_SiZer, result_our_global, result_our_rowwise))
+  return(list(result_SiZer, result_our_global, result_our_rowwise, result_our_without_lambda))
+}
+
+plot.SiZer.representatives <- function(different_i, different_h, map, colnumber, colorlist_, title_){
+  grid                                      <- expand.grid(u = different_i, h = different_h)
+  map_for_plotting                          <- merge(grid, map[c(1, 2, colnumber)], by = c('u', 'h'), all = TRUE)
+  map_for_plotting[is.na(map_for_plotting)] <- 2
+  map_for_plotting                          <- map_for_plotting[order(map_for_plotting$h, map_for_plotting$u), ]
+  plot.SiZer(map_for_plotting[[3]], different_i, different_h, ylab=expression(log[10](h)),
+             colorlist=colorlist_, title = paste0(title_, percentile, "th representative"))
 }
