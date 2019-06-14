@@ -298,7 +298,16 @@ alpha <- 0.05 #alpha for calculating quantiles
 
 test_problem  <- "constant" #Only "zero" (H_0: m = 0) or "constant" (H_0: m = const) testing problems are currently supported.
 pdffilename = paste0("JRSSB_submission/Plots/temperature_data.pdf") #Filename for the graph
+colorlist   <- c('red', 'purple', 'blue', 'grey')
 
+#Recoding testing problem and type of kernel estimator 
+if (test_problem == "zero"){
+  kernel_ind = 1
+} else if (test_problem == "constant"){
+  kernel_ind = 2
+} else {
+  print('Given testing problem is currently not supported')
+}
 
 #Loading the real data for yearly temperature in England
 temperature  <- read.table("Shape/data/cetml1659on.dat", header = TRUE, skip = 6)
@@ -309,7 +318,7 @@ different_i <- seq(from = 5/T_tempr, to = 1, by = 5/T_tempr)
 different_h <- seq(from = 3/T_tempr, to = 1/4+3/T_tempr, by = 5/T_tempr)
 
 #Setting tuning parameters for testing
-p <- 1
+p <- 2
 q <- 25
 r <- 10
 
@@ -322,8 +331,9 @@ a_hat     <- parameters[[2]]
 sigma_eta <- parameters[[3]]
 
 gamma = c()
-for (k in 0:(T_tempr-1)){                                             #\gamma(k) = \sigma_\eta^2 * a_1^|k| / (1 - a_1^2)
-  gamma = c(gamma, autocovariance_function_AR1(k, a_hat, sigma_eta))  #Note that gamma[i] := \gamma(i-1)
+for (k in 0:(T_tempr-1)){
+  gamma_temp <- gamma
+  gamma = c(gamma, autocovariance_function_AR2(k, a_hat[[1]], a_hat[[2]], sigma_eta, gamma_temp))  #Note that gamma[i] := \gamma(i-1)
 }
 
 #cat("Autocovariance function:", gamma, "\n")
@@ -336,9 +346,73 @@ T_star   <- gamma[1]/true_var
 
 SiZer_matrix      <- calculating_SiZer_matrix(different_i, different_h, T_tempr, T_star, alpha, gamma, a_hat, sigma_eta)  
 
+g_t_set <- psihat_statistic(yearly_tempr, SiZer_matrix, kernel_ind, sigma_hat)[[1]]
+gaussian_quantile <- calculating_gaussian_quantile(T_tempr, SiZer_matrix, "data", kernel_ind, alpha)
+g_t_set$gaussian_quantile <- gaussian_quantile
+
+g_t_set_temp <- NULL
+
+for (bandwidth in different_h){
+  SiZer_matrix_temp                           <- subset(SiZer_matrix, h == bandwidth, select = c(u, h, lambda))
+  if (nrow(SiZer_matrix_temp)>0){
+    gaussian_quantile_rowwise                   <- calculating_gaussian_quantile(T_tempr, SiZer_matrix_temp, paste0("data_h_", bandwidth*1000, "_a1_", a_hat*100), kernel_ind, alpha)
+    g_t_set_temp_temp                           <- psihat_statistic(yearly_tempr, SiZer_matrix_temp, kernel_ind, sigma_hat)[[1]]
+    g_t_set_temp_temp$gaussian_quantile_rowwise <- gaussian_quantile_rowwise
+    g_t_set_temp                                <- rbind(g_t_set_temp, g_t_set_temp_temp)
+  }
+}
+
+g_t_set_rowwise <- merge(SiZer_matrix, g_t_set_temp, by = c('h', 'u', 'lambda'))
 
 
+for (row in 1:nrow(g_t_set)){
+  i              = g_t_set[row, 'u']
+  h              = g_t_set[row, 'h']
+  q_h            = g_t_set[row, 'q_h']
+  sd_m_hat_prime = g_t_set[row, 'sd']
+  
+  XtWX_inverse_XtW = g_t_set$XtWX_inv_XtW[[row]]
+  
+  if (!is.null(XtWX_inverse_XtW)) {
+    m_hat_prime <- (XtWX_inverse_XtW %*% yearly_tempr)[2]
+    if (m_hat_prime - q_h * sd_m_hat_prime > 0){
+      g_t_set$results_their[[row]] = 1
+    } else if (m_hat_prime + q_h * sd_m_hat_prime < 0) {
+      g_t_set$results_their[[row]] = -1
+    } else {
+      g_t_set$results_their[[row]] = 0
+    }
+  } else {
+    g_t_set$results_their[[row]] = 2
+  }
+  
+  if (g_t_set[row, 'values_with_sign'] > g_t_set[row, 'lambda'] + g_t_set[row, 'gaussian_quantile']){
+    g_t_set$results_our[[row]] = 1
+  } else if (-g_t_set[row, 'values_with_sign'] > g_t_set[row, 'lambda'] + g_t_set[row, 'gaussian_quantile']){
+    g_t_set$results_our[[row]] = -1
+  } else {
+    g_t_set$results_our[[row]] = 0
+  }
+  
+  if (g_t_set_rowwise[row, 'values_with_sign'] > g_t_set_rowwise[row, 'lambda'] + g_t_set_rowwise[row, 'gaussian_quantile_rowwise']){
+    g_t_set_rowwise$results_our_rowwise[[row]] = 1
+  } else if (-g_t_set_rowwise[row, 'values_with_sign'] > g_t_set_rowwise[row, 'lambda'] + g_t_set_rowwise[row, 'gaussian_quantile_rowwise']){
+    g_t_set_rowwise$results_our_rowwise[[row]] = -1
+  } else {
+    g_t_set_rowwise$results_our_rowwise[[row]] = 0
+  }
+  
+}
+result_SiZer <- subset(g_t_set, select = c(u, h, results_their))
+result_our   <- subset(g_t_set, select = c(u, h, results_our))
+result_our_rowwise        <- subset(g_t_set_rowwise, select = c(u, h, results_our_rowwise))
 
-calculating_SiZer_matrix(different_i, different_h, T_tempr, T_star, alpha, gamma, a_1, sigma_eta)
+plot.SiZer(result_SiZer$results_their, different_i, different_h, ylab=expression(log[10](h)),
+           colorlist=colorlist, title = paste0("SiZer results, T=", T_tempr, ", a1 = ", a_hat))
 
+plot.SiZer(result_our$results_our, different_i, different_h, ylab=expression(log[10](h)),
+           colorlist=colorlist, title = paste0("Our global results, T=", T_tempr, ", a1 = ", a_hat))
+
+plot.SiZer(result_our_rowwise$results_our_rowwise, different_i, different_h, ylab=expression(log[10](h)),
+           colorlist=colorlist, title = paste0("Our rowwise results, T=", T_tempr, ", a1 = ", a_hat))
 
