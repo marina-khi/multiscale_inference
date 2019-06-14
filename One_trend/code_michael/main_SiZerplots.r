@@ -1,7 +1,7 @@
 rm(list=ls())
 
 source("functions/grid_construction.r")
-dyn.load("functions/kernel_weights.so")
+dyn.load("functions/kernel_weights.dll")
 source("functions/kernel_weights.r")
 source("functions/multiscale_statistics.r")
 source("functions/critical_value.r")
@@ -11,7 +11,7 @@ source("functions/inputs_for_plots.r")
 
 # Parameters
 
-T          <- 500             # sample size
+T          <- 2000           # sample size
 a1         <- -0.25           # AR parameter 
 sigma_eta  <- 1               # standard deviation of the innovation term in the AR model
 sim.design <- "spike"         # trend specification: "constant", "blocks", ...
@@ -20,7 +20,7 @@ sim.design <- "spike"         # trend specification: "constant", "blocks", ...
 ## spike: 0-1, a1=-0.25, sigma_eta=1.2
 
 alpha      <- 0.05                  # significance level
-SimRuns    <- 1000                  # number of simulation runs to produce critical values
+SimRuns    <- 2000                  # number of simulation runs to produce critical values
 kappa      <- 0.1                   # parameter to determine order statistic for the version
                                     # of the multiscale statistic from Section ?? 
 grid       <- grid_construction(T)  # grid of location-bandwidth points 
