@@ -1,7 +1,7 @@
 rm(list=ls())
 
 source("functions/grid_construction.r")
-dyn.load("functions/kernel_weights.so")
+dyn.load("functions/kernel_weights.dll")
 source("functions/kernel_weights.r")
 source("functions/multiscale_statistics.r")
 source("functions/critical_value.r")
@@ -11,7 +11,7 @@ source("functions/inputs_for_plots.r")
 
 # Parameters
 
-T          <- 500            # sample size
+T          <- 1000            # sample size
 a1         <- -0.25          # AR parameter 
 sigma_eta  <- 1              # standard deviation of the innovation term in the AR model
 sim.design <- "spike"        # trend specification: "constant", "blocks", ...

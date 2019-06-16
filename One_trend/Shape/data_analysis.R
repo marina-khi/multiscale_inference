@@ -1,5 +1,4 @@
 data_analysis <- function(alpha, y_data, test_problem, sigmahat, pdffilename){
-  kernel_t ='ll'
   #Recoding testing problem and type of kernel estimator 
   if (test_problem == "zero"){
     kernel_ind = 1
@@ -90,7 +89,6 @@ data_analysis <- function(alpha, y_data, test_problem, sigmahat, pdffilename){
 
 
 data_analysis_global <- function(alpha, y_data, test_problem, sigmahat, pdffilename){
-  kernel_t ='ll'
   #Recoding testing problem and type of kernel estimator 
   if (test_problem == "zero"){
     kernel_ind = 1

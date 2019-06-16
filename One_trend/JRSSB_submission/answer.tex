@@ -213,13 +213,26 @@ Different signals: \\
 \caption{$a_1 = -0.5$, slope = $1,25$}
 \end{subfigure}\\
 \begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{Plots/rowwise_sig_comparison_T_250_a1_-25_slope_0.pdf}
+\caption{$a_1 = -0.25$, slope = $0$}
+\end{subfigure}\hspace{0.25cm}
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{Plots/rowwise_sig_comparison_T_250_a1_-25_slope_125.pdf}
+\caption{$a_1 = -0.25$, slope = $1.25$}
+\end{subfigure}\\
+\begin{subfigure}[b]{0.475\textwidth}
 \includegraphics[width=\textwidth]{Plots/rowwise_sig_comparison_T_250_a1_0_slope_0.pdf}
 \caption{$a_1 = 0$, slope = $0$}
 \end{subfigure}\hspace{0.25cm}
 \begin{subfigure}[b]{0.475\textwidth}
 \includegraphics[width=\textwidth]{Plots/rowwise_sig_comparison_T_250_a1_0_slope_125.pdf}
 \caption{$a_1 = 0$, slope = $1.25$}
-\end{subfigure}\\
+\end{subfigure}
+\caption{Parallel coordinate plots for $T = 250$ and different AR(1) parameters $a_1 = -0.5, -0.25, 0, 0.25$ in the simulation scenarios with a pronounced trend and without the trend respectively.}\label{fig:PCP}
+\end{figure}
+
+\begin{figure}[t]
+    \ContinuedFloat
 \begin{subfigure}[b]{0.475\textwidth}
 \includegraphics[width=\textwidth]{Plots/rowwise_sig_comparison_T_250_a1_25_slope_0.pdf}
 \caption{$a_1 = 0.25$, slope = $0$}
@@ -228,7 +241,7 @@ Different signals: \\
 \includegraphics[width=\textwidth]{Plots/rowwise_sig_comparison_T_250_a1_25_slope_225.pdf}
 \caption{$a_1 = 0.25$, slope = $2.25$}
 \end{subfigure}
-\caption{Parallel coordinate plots for $T = 250$ and different AR(1) parameters $a_1 = -0.5, 0, 0.25$ in the simulation scenarios with a pronounced trend and without the trend respectively.}\label{fig:PCP}
+\caption{Parallel coordinate plots for $T = 250$ and different AR(1) parameters $a_1 = -0.5, -0.25, 0, 0.25$ in the simulation scenarios with a pronounced trend and without the trend respectively.}\label{fig:PCP}
 \end{figure}
 
 \begin{figure}[t!]
@@ -237,14 +250,54 @@ Different signals: \\
 \caption{$a_1 = -0.5$}
 \end{subfigure}\hspace{0.25cm}
 \begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{Plots/representatives_T_250_a1_-25_slope_0.pdf}
+\caption{$a_1 = -0.25$}
+\end{subfigure}\\
+\begin{subfigure}[b]{0.475\textwidth}
 \includegraphics[width=\textwidth]{Plots/representatives_T_250_a1_0_slope_0.pdf}
 \caption{$a_1 = 0$}
-\end{subfigure}\\
+\end{subfigure}\hspace{0.25cm}
 \begin{subfigure}[b]{0.475\textwidth}
 \includegraphics[width=\textwidth]{Plots/representatives_T_250_a1_25_slope_0.pdf}
 \caption{$a_1 = 0.25$}
 \end{subfigure}
-\caption{Representative SiZer maps $T = 250$ and different AR(1) parameters $a_1 = -0.5, 0, 0.25$ in the simulation scenario under the null.}\label{fig:Representative_SiZer_maps}
+\caption{Representative SiZer maps $T = 250$ and different AR(1) parameters $a_1 = -0.5, -0.25, 0, 0.25$ in the simulation scenario under the null.}\label{fig:Representative_SiZer_maps}
+\end{figure}
+
+\begin{figure}[t!]
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{Plots/SiZer_comparison_under_null_global_T_250.pdf}
+\caption{Global method}
+\end{subfigure}\hspace{0.25cm}
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{Plots/SiZer_comparison_under_null_rowwise_T_250.pdf}
+\caption{Rowwise method}
+\end{subfigure}
+\caption{Comparative SiZer maps for $T = 250$ and different AR(1) parameters $a_1 = -0.25, 0, 0.25$ in the simulation scenario under the null}\label{fig:SiZer_maps_comparison_null}
+\end{figure}
+
+\begin{figure}[t!]
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{Plots/SiZer_comparison_sin_global_T_250.pdf}
+\caption{Global method}
+\end{subfigure}\hspace{0.25cm}
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{Plots/SiZer_comparison_sin_rowwise_T_250.pdf}
+\caption{Rowwise method}
+\end{subfigure}
+\caption{Comparative SiZer maps for $T = 250$ and different AR(1) parameters $a_1 = -0.25, 0, 0.25$ in the simulation scenario with sine curve as the trend function}\label{fig:SiZer_maps_comparison_null}
+\end{figure}
+
+\begin{figure}[t!]
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{Plots/SiZer_comparison_blocks_global_T_1000.pdf}
+\caption{Global method}
+\end{subfigure}\hspace{0.25cm}
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{Plots/SiZer_comparison_blocks_rowwise_T_1000.pdf}
+\caption{Rowwise method}
+\end{subfigure}
+\caption{Comparative SiZer maps for $T = 1000$ and different AR(1) parameters $a_1 = -0.25, 0, 0.25$ in the simulation scenario with blocks as the trends function}\label{fig:SiZer_maps_comparison_blocks}
 \end{figure}
 
 

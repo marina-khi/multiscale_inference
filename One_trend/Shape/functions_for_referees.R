@@ -268,6 +268,19 @@ autocovariance_function_AR1 <- function(k, a_1, sigma_eta){
   return(result)
 }
 
+autocovariance_function_AR2 <- function(k, a_1, a_2, sigma_eta, gamma_previous){
+  len <- length(gamma_previous)
+  if (k == 0) {
+    result = ((1 - a_2) / (1 + a_2))* (sigma_eta * sigma_eta / ((1 - a_2)^2 - a_1^2))
+  } else if (k == 1){
+    result = (a_1 / (1 - a_2))*((1 - a_2) / (1 + a_2))* (sigma_eta * sigma_eta / ((1 - a_2)^2 - a_1^2))
+  } else {
+    result = a_1 * gamma_previous[len] + a_2 * gamma_previous[len - 1]
+  }
+  return(result)
+}
+
+
 #Function that compares the minimal intervals for both SiZer and our method.
 #For each run of this function the result is a pdf file with three plots:
 #1. Possible time series together with underlying time trend
@@ -378,10 +391,10 @@ calculating_SiZer_matrix <- function(different_i, different_h, T_size, T_star, a
     if (ESS_star <= 5){
       SiZer_matrix[row, 'small_ESS'] <- 1
     } else {
-      integrand_1 <- function(s, h_, delta_, a_1_, sigma_eta_) {1000 * autocovariance_function_AR1(floor(s * h / delta), a_1, sigma_eta) * exp(-s^2/4) * (12 - 12 * s^2+ s^4)/16}
+      integrand_1 <- function(s, h_, delta_, a_1_, sigma_eta_) {1000 * gamma[floor(s * h / delta)] * exp(-s^2/4) * (12 - 12 * s^2+ s^4)/16}
       I_gamma_num <- integrate(integrand_1, lower = -Inf, upper = Inf, h_ = h, delta_ = delta, a_1_ = a_1, sigma_eta_ = sigma_eta, subdivisions=2000)[[1]]
 
-      integrand_2 <- function(s, h_, delta_, a_1_, sigma_eta_) {1000 * autocovariance_function_AR1(floor(s * h / delta), a_1, sigma_eta) * exp(-s^2/4) * (1 - s^2/2)}
+      integrand_2 <- function(s, h_, delta_, a_1_, sigma_eta_) {1000 * gamma[floor(s * h / delta)]  * exp(-s^2/4) * (1 - s^2/2)}
       I_gamma_denom <- integrate(integrand_2, lower = -Inf, upper = Inf, h_ = h, delta_ = delta, a_1_ = a_1, sigma_eta_ = sigma_eta, subdivisions=2000)[[1]]
       I_gamma <- I_gamma_num/I_gamma_denom
 
@@ -414,7 +427,7 @@ calculating_SiZer_matrix <- function(different_i, different_h, T_size, T_star, a
       }
   }
   
-  SiZer_matrix           <- SiZer_matrix[SiZer_matrix$small_ESS != 1,]
+  #SiZer_matrix           <- SiZer_matrix[SiZer_matrix$small_ESS != 1,]
   SiZer_matrix$small_ESS <- NULL
   SiZer_matrix$ESS_star  <- NULL
   
