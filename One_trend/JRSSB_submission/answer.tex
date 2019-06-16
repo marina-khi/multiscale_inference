@@ -23,6 +23,7 @@
 
 \setcounter{secnumdepth}{4}
 \renewcommand{\baselinestretch}{1.2}
+\parindent0pt
 
 \input{macros}
 
@@ -30,10 +31,99 @@
 
 \begin{document}
 
+
+
+\begin{center} 
+{\large \bf Revision of the paper} \\[0.1cm]
+{\large \bf ``Multiscale inference and long-run variance estimation} \\[0.1cm]
+{\large \bf in nonparametric regression with time series errors''} 
+\end{center}
+\vspace{7pt}
+
+
+
+First of all, we would like to thank the editor, the associate editor and the reviewers for their many comments and suggestions which were very helpful in improving the paper. In the revision, we have addressed all comments and have rewritten the paper accordingly. Please find our point-by-point responses below. 
+%Since the revised paper includes additional material as requested by the referees (e.g. ??), it is a bit longer than the original submission. However, we are of course happy and willing to reduce the length of the paper by shifting parts of it into the online supplement if this is needed. 
+Before we reply to the specific comments of the referees, we summarize the major changes in the revision.
+\vspace{10pt}
+
+
+\textbf{Generalization of the theoretical results.} We have extended the theoretical results as suggested by Referee 1:
+\begin{enumerate}[label=(\roman*), leftmargin=0.8cm]
+
+\item We provide a generalization of Proposition 3.3 which shows that $\mathbb{P}({E}_T^{\ell}) = (1 - \alpha_T) + o(1)$ for any sequence $\{\alpha_T\}$ of significance levels $\alpha_T \in (0,1)$. In particular, for $\alpha_T \rightarrow 0$, we get the consistency result that $\mathbb{P}({E}_T^{\ell}) \rightarrow 1$. 
+
+\item We have generalized our estimator of the long-run error variance. The estimation procedure is shown to be valid not only for AR($p$) processes of known order $p$ but for any stationary error process $\{\varepsilon_t\}$ with an AR($\infty$) representation. This greatly extends the applicability of the estimator. 
+\end{enumerate}
+\vspace{3pt}
+
+
+\textbf{Comparison to SiZer.} As requested by the Associate Editor, we give a clear account of the main contributions and innovations of our paper relative to the SiZer approach in the revision. Please see the new Section ?? for the details. In what follows, we summarize the main points of the new Section ??. 
+
+Informally speaking, both our approach and SiZer (for time series) are methods to test for local increases/decreases of a nonparametric trend function $m$. The formal problem is to test the hypothesis
+\[ H_0(u,h): \text{The trend } m \text{ is constant on the time interval } [u-h,u+h] \]
+simultaneously for a large number of different time intervals $[u-h,u+h]$, in particular, for all intervals with $u \in I$ and $h \in H$, where $I$ is the set of locations and $H$ the set of bandwidths or scales $H$ under consideration. 
+
+There are two versions of SiZer, a global and a row-wise one. We here discuss the global version as it is closer in spirit to our approach. We comment on the row-wise version later on. The test statistic of the global SiZer approach has the form $S_T = \max_{h \in H} S_T(h)$, where $S_T(h) = \max_{u \in I} |s_T(u,h)|$ for each scale $h$ and $s_T(u,h)$ is a test statistic for $H_0(u,h)$. As shown in Chaudhuri \& Marron (2000) for the i.i.d.\ case and in Park et al.\ (2009) for the dependent data case, $S_T$ weakly converges to some limit process $S$ under the overall null hypothesis $H_0$ that $H_0(u,h)$ is fulfilled for all $u \in I$ and $h \in H$. Using this result, one can take the $(1-\alpha)$-quantile of $S$ as a critical value of the SiZer test. (As this quantile can usually not be determined analytically, it has to be approximated, e.g., by the bootstrap procedures of Chaudhuri \& Marron (2000) or the extreme value theory based procedure of Hannig \& Marron (2006).)
+
+Even though related, our methods and theory are very different from those in the SiZer literature:
+\begin{itemize}[leftmargin=0.5cm]
+
+\item Theory for SiZer is derived under the assumption that $H$ is a compact subset of $(0,1)$. As already pointed out in Chaudhuri \& Marron (2000), this is a quite severe/substantial restriction: Only bandwidths $h$ are taken into account that remain bounded away from zero as the sample size $T$ grows. Bandwidths $h$ that converge to zero as $T$ increases are excluded. As Chaudhuri \& Marron (2000) put it (p.420): 
+\vspace{-0.4cm}
+
+\begin{spacing}{1.0}
+{\small \textit{Note that all the weak convergence results in this section have been established under the assumption that both $H$ and $I$ are fixed compact subintervals of $(0,\infty)$ and $(-\infty,\infty)$ respectively. Compactness of the set $H \times I$ enables us to exploit standard results on weak convergence of a sequence of probability measures on a space of continuous functions defined on a common compact metric space. However, conventional asymptotics for nonparametric curve estimates allows the smoothing parameter $h$ to shrink with growing sample size. There frequently one assumes that $h_n$ is of the order $n^{-\gamma}$ for some appropriate choice of $0 < \gamma < 1$ so that the estimate $\hat{f}_{h_n}(x)$ converges to the ``true function'' $f(x)$ at an ``optimal rate''. This makes one wonder about the asymptotic behaviour of the empirical scale space surface when $h$ varies in $H_n = [a n^{-\gamma},b]$, where $a,b > 0$ are fixed constants. Extension of our weak convergence results along that direction will be quite interesting, and we leave it as a challenging open problem here.} }
+\end{spacing} 
+\vspace{0.2cm}
+
+The theory of our paper allows to deal with this problem. In particular, it allows to simultaneously consider scales $h$ that remain bounded away from zero and scales $h = h_T$ that converge to zero at various different rates $T^{-\gamma}$. In order to achieve this, we come up with a proof strategy which is very different from that in the SiZer literature: Whereas Chaudhuri and Marron (2000) show that the SiZer statistic $S_T$ weakly converges to a limit process $S$, our proof technique does not even require our test statistic to have a weak limit and is thus not restricted by the limitations of classic weak convergence theory. 
+
+\item There are different ways to combine the test statistics $S_T(h) = \max_{u \in I} |s_T(u,h)|$ for different scales $h \in H$. One way is to take their maximum, which leads to the SiZer statistic $S_T = \max_{h \in H} S_T(h)$. As argued in D\"umbgen \& Spokoiny (2001), this aggregation scheme is not optimal when the set $H = H_T$ contains scales $h$ of many different orders $T^{-\gamma}$ with $\gamma \in [0,c]$ for some $c > 0$. Following their lead, we consider a test statistic of the form $M_T = \max_{h \in H} \{ M_T(h) - \lambda(h) \}$ with appropriate additive correction terms $\lambda(h)$. Here, $M_T(h) = \max_{u \in I} |m_T(u,h)|$ and $m_T(u,h)$ is a test statistic for $H_0(u,h)$ which is somewhat different but closely related to $s_T(u,h)$. Deriving distribution theory for the statistic $M_T$ is highly non-trivial. In particular, no theory for nonparametric regression models under general dependence conditions has been available so far. The main technical contribution of our paper is to derive such a theory. %In our paper, we provide such a theory. 
+
+\item The main complication in carrying out our multiscale test and SiZer is to determine the critical values, that is, the quantiles of the test statistics under the null. Our theoretical results show that the $(1-\alpha)$-quantile of the multiscale statistic $M_T$ under the null can be approximated by the $(1-\alpha)$-quantile of a Gaussian version of $M_T$ that can be computed by simulation. It is far from obvious that this approximation is valid. To see this, deep strong approximation theory for dependent data (as derived in Berkes et al.\ (2014)) is needed. Importantly, our simulation-based procedure is not the same as the bootstrap procedures proposed in Chaudhuri \& Marron (1999, 2000) to compute quantiles of the SiZer statistic. Both procedures are of course resampling methods. However, the resampling is done in a quite different way in our case. 
+
+\item In practice, SiZer is usually implemented in its row-wise rather than its global form, that is, the test is carried out separately for each scale $h$ based on the statistic $S_T(h) = \max_{u \in U} |s_T(u,h)|$. The main reason for applying the row-wise version of SiZer is to gain some power. However, this gain of power comes at a cost: The row-wise version of SiZer ignores the simultaneous test problem across scales $h$ and thus does not allow to make rigorous simultaneous inference across both locations $u$ and scales $h$. \\
+The aim of our paper is to provide a multiscale test which allows to make rigorous simultaneous inference across locations $u$ and scales $h$ and, at the same time, has as much power as possible. In the new empirical comparison study of Section ??, we examine the size and power properties of our multiscale test and compare it with SiZer. We in particular show that it has better power properties than a more classical multiscale test which is based on the statistic $M_T = \max_{h \in H} M_T(h)$ without additive correction terms. As explained in more detail in Section ??, this more classical multiscale test can be regarded as a version of global SiZer whose critical values are computed by our simulation-based procedure.  
+
+\end{itemize}
+
+We hope this summary shows that the methodological and theoretical contributions of our paper are quite substantial relative to the SiZer methodology. As already mentioned above, more details are provided in the new Section ??.
+
+
+%\textit{Row-wise SiZer:} Usually, SiZer is carried out row-wise, that is, separately for each bandwidth or scale $h$. More formally, for each $h$, one considers the test statistics $S_T^{\text{SiZer}}(h) = \max_{u \in U} |s_T^{\text{SiZer}}(u,h)|$ and carries out a test separately for each $h$ based on the statistic $S_T(h)$. This approach of course ignores the simultaneous test problem across scales $h$. Nevertheless, this row-wise procedure has proven very useful to obtain informative SiZer plots for explorative data analysis. 
+%\vspace{10pt}
+
+%\textit{Global SiZer:} To take into account the simultaneous test problem across scales $h$, one can consider a global version of SiZer. The corresponding test statistic is given by $S_T^{\text{SiZer}} = \max_{h \in H} S_T^{\text{SiZer}}(h)$. Approximating the quantiles of the statistic $S_T$ under the null and thus to derive critical values for a test based on $S_T$ is highly non-trivial. Some advanced distribution theory to approximate the distribution of $S_T^{\text{SiZer}}$ under the null and thus to obtain critical values has been derived in Hannig \& Marron (2006). However, as explained there, this approximation of the critical values is quite conservative and thus comes at the cost of a substantial loss of power. From a theoretical perspective, the main issue is the following: the test statistics $S_T(h)^{\text{SiZer}}$ corresponding to different scales $h$ are treated as independent, that is, the strong dependence between these statistics across scales $h$ is completely disregarded, which renders the test very conservative. As formulated on p.489 in Hannig \& Marron (2006): ``It is worth pointing out that Theorem 2 [which provides the approximation results just discussed] can be thought of as a first-order approximation. In fact, SiZer rows are correlated, and it would be beneficial to study the second-order asymptotic properties of the maximum of the SiZer map. However, the probability theory necessary for this is not yet available, because we would need second-order extreme value theory for nonstationary Gaussian random fields.'' 
+%\vspace{10pt}
+
+%\textit{Our multiscale method:} With the theoretical results of our paper, these difficulties can be overcome. In particular, let us consider the statistic $S_T = \max_{h \in H} S_T(h)$ with $S_T(h) = \max_{u \in U} |s_T(u,h)|$. Note that the our test statistics $s_T(u,h)$ are closely related to the SiZer statistics $s_T^{\text{SiZer}}(u,h)$. Indeed, both are rescaled version of a local linear estimator of the derivative $m^\prime$ at location $u$ with bandwidth $h$. Hence, $S_T$ is very close to the global SiZer statistic $S_T^{\text{SiZer}}$ (and we could make the same formal statements about $S_T^{\text{SiZer}}$. 
+
+%The theoretical contribution of our paper is to overcome these difficulties and to provide a multiscale test which corresponds to a global version of SiZer but which takes into account the correlation between scales ignored by SiZer. We are thus able to obtain a test which allows to make rigorous confidence statements of the form ($*$) without suffering from substatinal looss of power. INdeed, as showsn in our new simulation exercises in Section ??, our multiscale test has very good power properties even though uit is a global method which allows to make rigorosu confidence staements. The good power properties can be explained as follows: 
+
+%Our multiscale statistic has the form $M_T = \max_{h \in H} \{M_T(h) - \lambda(h)\}$, where $M_T(h) = \max_{u \in \mathcal{U}} |\theta_T(u,h)|$ for each scale $h$ and $\lambda(h)$ is an additive correction term. The critical value of the test is obtained by simulating the quantile of an appropriate Gaussian version $M_T^{\text{Gaussian}}$ of the statistic $M_T$. The main theoretical contribution of the paper is to formally prove that this quantile gives an (asymptotcially) valid approximationm to the true quantile of $M_T$ under general conditions. As a consequence, we can construct a multiscale method based on the statistic $M_T$ which allows to make rigorous confidence statements of the following form for a given significance level $\alpha \in (0,1)$: 
+%\begin{itemize}[leftmargin=0.75cm]
+%\item[($*$)] We can claim, with statistical confidence $1-\alpha$, that there is an increase/decrease in the trend $m$ on all time windows $[u-h,u+h]$ for which our test rejects $H_0(u,h)$. 
+%\end{itemize}
+%\vspace{10pt}
+
+
+%Informally speaking, both our approach and SiZer (for time series) are methods to test for local increases/decreases of a nonparametric trend function $m$ in the model $Y_{t,T} = m(t/T) + \varepsilon_t$. The formal test problem is as follows: We want to test the hypothesis
+%\[ H_0(u,h): \text{The trend } m \text{ is constant on the time interval } [u-h,u+h] \]
+%simultaneously for a large number of different (rescaled) time intervals $[u-h,u+h]$, that is, for a large number of locations $u$ and bandwidths or scales $h$. The main contribution of our paper is to construct a multiscale method for this test problem which allows to make rigorous statistical confidence statements of the following form: 
+%\begin{itemize}[leftmargin=0.75cm]
+%\item[($*$)] For a given significance level $\alpha \in (0,1)$, we can claim, with statistical confidence $1-\alpha$, that there is an increase/decrease in the trend $m$ on all time windows $[u-h,u+h]$ for which our test rejects $H_0(u,h)$. 
+%\end{itemize}
+%We formally prove that our method allows to make simultaneous confidence statements of the form ($*$) under general dependence conditions in the model $Y_{t,T} = m(t/T) + \varepsilon_t$. To the best of our knowledge, there is no method available in the literature which is formally proven to have this property under general dependence conditions.  
+
  
 
-\noindent {\Large \bf Answer to the Referee Report I} 
-\vspace{0.25cm}
+\newpage
+\begin{center}
+{\large \bf Reply to Referee 1} 
+\end{center}
+
+
 
 \begin{itemize}
 \item A consistency result of Proposition 3.3.
@@ -63,8 +153,10 @@ In the simulation study the authors considered AR(1) processes with relatively w
 
 
 \newpage
-\noindent {\Large \bf Answer to the Referee Report II} 
-\vspace{0.25cm}
+\begin{center}
+{\large \bf Reply to Referee 2} 
+\end{center}
+
 
 \begin{enumerate}
 \item Section 3.2: The authors recommend computing the quantiles for the independent Gaussian case by simulation. This suggestion is already in the original SiZer paper (Chaudhuri and Marron, 1999). However in the late 1990s computing power was not sufficient to make this suggestion feasible. This led to the use of approximation such as in Hannig and Marron (2006). I would like to ask how does the simulation based quantile compare to the approximation in Hannig and Marron (2006). 
