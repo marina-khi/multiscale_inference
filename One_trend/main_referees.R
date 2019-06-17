@@ -293,11 +293,14 @@ dev.off()
 #Point 7 in Referee Report 1#
 #############################
 
+
+source("Shape/functions_for_referees.R")
+
 #Defining necessary parameters
 alpha <- 0.05 #alpha for calculating quantiles
 
 test_problem  <- "constant" #Only "zero" (H_0: m = 0) or "constant" (H_0: m = const) testing problems are currently supported.
-pdffilename = paste0("JRSSB_submission/Plots/temperature_data.pdf") #Filename for the graph
+pdffilename = paste0("JRSSB_submission/Plots/temperature_data_SiZer_maps.pdf") #Filename for the graph
 colorlist   <- c('red', 'purple', 'blue', 'grey')
 
 #Recoding testing problem and type of kernel estimator 
@@ -335,8 +338,8 @@ for (k in 0:(T_tempr-1)){
   gamma_temp <- gamma
   gamma = c(gamma, autocovariance_function_AR2(k, a_hat[[1]], a_hat[[2]], sigma_eta, gamma_temp))  #Note that gamma[i] := \gamma(i-1)
 }
+rm(gamma_temp)
 
-#cat("Autocovariance function:", gamma, "\n")
 
 #Calculating \Var(\bar{Y}) based on the true values of gamma(k)
 true_var <- gamma[1] / T_tempr
@@ -344,7 +347,7 @@ for (k in 1:(T_tempr-1)){true_var = true_var + (2/T_tempr) * (1 - k/T_tempr) * g
 
 T_star   <- gamma[1]/true_var
 
-SiZer_matrix      <- calculating_SiZer_matrix(different_i, different_h, T_tempr, T_star, alpha, gamma, a_hat, sigma_eta)  
+SiZer_matrix      <- calculating_SiZer_matrix(different_i, different_h, T_tempr, T_star, alpha, gamma)  
 
 g_t_set <- psihat_statistic(yearly_tempr, SiZer_matrix, kernel_ind, sigma_hat)[[1]]
 gaussian_quantile <- calculating_gaussian_quantile(T_tempr, SiZer_matrix, "data", kernel_ind, alpha)
@@ -355,7 +358,7 @@ g_t_set_temp <- NULL
 for (bandwidth in different_h){
   SiZer_matrix_temp                           <- subset(SiZer_matrix, h == bandwidth, select = c(u, h, lambda))
   if (nrow(SiZer_matrix_temp)>0){
-    gaussian_quantile_rowwise                   <- calculating_gaussian_quantile(T_tempr, SiZer_matrix_temp, paste0("data_h_", bandwidth*1000, "_a1_", a_hat*100), kernel_ind, alpha)
+    gaussian_quantile_rowwise                   <- calculating_gaussian_quantile(T_tempr, SiZer_matrix_temp, paste0("data_h_", bandwidth*1000), kernel_ind, alpha)
     g_t_set_temp_temp                           <- psihat_statistic(yearly_tempr, SiZer_matrix_temp, kernel_ind, sigma_hat)[[1]]
     g_t_set_temp_temp$gaussian_quantile_rowwise <- gaussian_quantile_rowwise
     g_t_set_temp                                <- rbind(g_t_set_temp, g_t_set_temp_temp)
@@ -407,12 +410,18 @@ result_SiZer <- subset(g_t_set, select = c(u, h, results_their))
 result_our   <- subset(g_t_set, select = c(u, h, results_our))
 result_our_rowwise        <- subset(g_t_set_rowwise, select = c(u, h, results_our_rowwise))
 
+pdf(pdffilename, width = 7, height = 3)
+       
+par(mfrow = c(1, 3), cex = 0.5, tck = -0.025) #Setting the layout of the graphs
+par(mar = c(1, 2, 3, 0.5)) #Margins for each plot
+par(oma = c(1.5, 1.5, 3, 0.2)) #Outer margins
+
 plot.SiZer(result_SiZer$results_their, different_i, different_h, ylab=expression(log[10](h)),
-           colorlist=colorlist, title = paste0("SiZer results, T=", T_tempr, ", a1 = ", a_hat))
+           colorlist=colorlist, title = "SiZer results for the data")
 
 plot.SiZer(result_our$results_our, different_i, different_h, ylab=expression(log[10](h)),
-           colorlist=colorlist, title = paste0("Our global results, T=", T_tempr, ", a1 = ", a_hat))
+           colorlist=colorlist, title = "Our global results for the data")
 
 plot.SiZer(result_our_rowwise$results_our_rowwise, different_i, different_h, ylab=expression(log[10](h)),
-           colorlist=colorlist, title = paste0("Our rowwise results, T=", T_tempr, ", a1 = ", a_hat))
-
+           colorlist=colorlist, title = "Our rowwise results for the data")
+dev.off()

@@ -367,7 +367,7 @@ plotting_many_minimal_intervals <- function(trend_height, trend_width, T_size, S
 
 
 #Calculates most of the values for SiZer as described in the supplement
-calculating_SiZer_matrix <- function(different_i, different_h, T_size, T_star, alpha, gamma, a_1, sigma_eta){
+calculating_SiZer_matrix <- function(different_i, different_h, T_size, T_star, alpha, gamma){
   SiZer_matrix              <- expand.grid(u = different_i, h = different_h) #Creating a dataframe with all possible combination of i and h
   SiZer_matrix$values       <- numeric(nrow(SiZer_matrix)) # Setting the values of the statistic to be zero
   SiZer_matrix$sd           <- numeric(nrow(SiZer_matrix)) # Setting the values of standard deviation to be zero
@@ -391,11 +391,13 @@ calculating_SiZer_matrix <- function(different_i, different_h, T_size, T_star, a
     if (ESS_star <= 5){
       SiZer_matrix[row, 'small_ESS'] <- 1
     } else {
-      integrand_1 <- function(s, h_, delta_, a_1_, sigma_eta_) {1000 * gamma[floor(s * h / delta)] * exp(-s^2/4) * (12 - 12 * s^2+ s^4)/16}
-      I_gamma_num <- integrate(integrand_1, lower = -Inf, upper = Inf, h_ = h, delta_ = delta, a_1_ = a_1, sigma_eta_ = sigma_eta, subdivisions=2000)[[1]]
+      integrand_1 <- function(s, h_, delta_, gamma_, T_size_) {gamma_[floor(s * h_ / delta_) + 1] * exp(-s^2/4) * (12 - 12 * s^2+ s^4)/16}
+      
+      I_gamma_num <- 2 * integrate(integrand_1, lower = 0, upper = (T_tempr - 1) * delta / h, h_ = h, delta_ = delta, gamma_ = gamma, T_size_ = T_size)[[1]]
 
-      integrand_2 <- function(s, h_, delta_, a_1_, sigma_eta_) {1000 * gamma[floor(s * h / delta)]  * exp(-s^2/4) * (1 - s^2/2)}
-      I_gamma_denom <- integrate(integrand_2, lower = -Inf, upper = Inf, h_ = h, delta_ = delta, a_1_ = a_1, sigma_eta_ = sigma_eta, subdivisions=2000)[[1]]
+      integrand_2 <- function(s, h_, delta_, gamma_, T_size_) {gamma_[floor(s * h_ / delta_) + 1] * exp(-s^2/4) * (1 - s^2/2)}
+
+      I_gamma_denom <- 2 * integrate(integrand_2, lower = 0, upper = (T_tempr - 1) * delta / h, h_ = h, delta_ = delta, gamma_ = gamma, T_size_ = T_size)[[1]]
       I_gamma <- I_gamma_num/I_gamma_denom
 
       theta <- 2 * pnorm(sqrt(I_gamma * log(g)) * delta_hat / h) - 1
