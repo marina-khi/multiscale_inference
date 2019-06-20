@@ -9,25 +9,6 @@ source("functions/multiscale_test.r")
 source("functions/inputs_for_plots.r")
 
 
-# Parameters
-
-T          <- 1000            # sample size
-a1         <- -0.25          # AR parameter 
-sigma_eta  <- 1              # standard deviation of the innovation term in the AR model
-sim.design <- "spike"        # trend specification: "constant", "blocks", ...
-
-alpha      <- 0.05                  # significance level
-SimRuns    <- 1000                  # number of simulation runs to produce critical values
-kappa      <- 0.1                   # parameter to determine order statistic for the version
-                                    # of the multiscale statistic from Section ?? 
-grid       <- grid_construction(T)  # grid of location-bandwidth points 
-                                    # the grid should be constructed via the function 
-                                    # 'grid construction'. See the corresponding R-file 
-                                    # the function definition for details 
-
-Nsim       <- 1000   # number of simulation runs for size/power calculations
-
-
 # Size/power calculations
 
 sizepower.ms    <- 0
@@ -50,8 +31,6 @@ plus.right  <- 1
 minus.left  <- 0
 minus.right <- 1
 
-source("simulations/sim.r")  # implicitly specifies plus.left, plus.right, ...
-                             # for the simulation design under consideration 
 gset <- grid$gset
 N    <- dim(gset)[1]
 pos.power.plus  <- rep(1,N)
@@ -64,13 +43,11 @@ for(i in 1:N)
      pos.power.minus[i] <- 0
 }   
 
-wghts <- kernel_weights(T=T,grid=grid)
+
 
 for(loops in 1:Nsim)
 
 {  # Simulate data
-
-   source("simulations/sim.r") 
 
    # Compute test results 
 
