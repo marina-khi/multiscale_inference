@@ -111,14 +111,6 @@ for (T_size in different_T){
   gset <- grid$gset
   N    <- dim(gset)[1]
   
-  pdffilename <- paste0("JRSSB_submission/Plots/SiZer_comparison_", sim.design, "_T_", T_size, "_new.pdf")
-  
-  pdf(pdffilename, width = 14, height = 7)
-  
-  par(mfrow = c(length(different_a1)*length(different_T),6), cex = 0.5, tck = -0.025) #Setting the layout of the graphs
-  par(mar = c(1, 2, 3, 0.5)) #Margins for each plot
-  par(oma = c(1.5, 1.5, 3, 0.2)) #Outer margins
-  
   for (a_1 in different_a1){
     g_set <- grid$gset
     
