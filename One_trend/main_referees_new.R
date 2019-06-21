@@ -20,15 +20,15 @@ source("Shape/simulating_data.r")
 #PLOTTING SIZER MAPS FOR COMPARISON
 
 #Defining necessary parameters
-different_T      <- c(250) #Different lengths of time series for which we calculate size and power
+different_T      <- c(500) #Different lengths of time series for which we calculate size and power
 alpha            <- 0.05 #Different alpha for which we calculate size and power
 different_a1     <- c(-0.25, 0.25) #Different AR(1) parameters
 different_slopes <- c(1.5) #Slopes for power simulations
 sigma_eta        <- 1 #Sqrt(variance) for the innovation \eta_t
 kappa            <- 0.1                   # parameter to determine order statistic for the version
 colorlist        <- c('red', 'purple', 'blue', 'grey')
-sim.design       <- "spike"
-
+sim.design       <- "constant"
+SimRuns          <- 1000
 
 for (T_size in different_T){
   grid  <- grid_construction(T_size)  # grid of location-bandwidth points 
