@@ -66,13 +66,35 @@ double s_t_1(double u, double h, int T){
    if(t_max > T) t_max = T;
 
    for(t = t_min; t < (t_max+1); t++){
-      result += epanc((t / (float)T - u) / h) * ((t / (float)T - u) / h);
+      result += epanc((t / (float)T - u) / h) * ((t/(float)T - u) / h);
    }
    return(result / (T * h));
 }
 
 
-void kernel_weights(int *T, double *gset, int *N, double *weight){
+double s_t_2(double u, double h, int T){
+ 
+   /* This function computes the kernel constant S_T2 needed for the local linear weights 
+      of the kernel average hat(psi)_T(u,h) */ 
+
+   int t, t_min, t_max;
+   double result;
+
+   result = 0.0;
+
+   t_min = (int)(floor((u - h) * (float)T));      
+   if(t_min < 1) t_min = 1;
+   t_max = (int)(ceil((u + h) * (float)T));      
+   if(t_max > T) t_max = T;
+
+   for(t = t_min; t < (t_max+1); t++){
+      result += epanc((t / (float)T - u) / h) * ((t/(float)T - u) / h) * ((t/(float)T - u) / h);
+   }
+   return(result / (T * h));
+}
+
+
+void sizer_weights(int *T, double *gset, int *N, double *weight){
 
    /* Inputs: 
       T        	  length of time series
@@ -80,12 +102,12 @@ void kernel_weights(int *T, double *gset, int *N, double *weight){
       N           number of location-bandwidth points in gset
        
       Outputs: 
-      weight      vector of kernel weights ( w_1(u_1,h_1),...,w_T(u_1,h_1),   
-                  w_1(u_2,h_2),...,w_T(u_2,h_2),...,w_1(u_N,h_N),...,w_T(u_N,h_N) )  
+      weight      vector of local linear weights ( w_1(u_1,h_1),...,w_T(u_1,h_1),   
+                  w_1(u_2,h_2),...,w_T(u_2,h_2),...,w_1(u_N,h_N),...,w_T(u_N,h_N) ) 
    */
 
    int i, t, pos, pos1, pos2, t_min, t_max;
-   double u, h, x, temp;
+   double u, h, x;
    double *weight1, *weight2; 
 
    weight1 = (double*) malloc(sizeof(double) * N[0] * T[0]);
@@ -112,18 +134,16 @@ void kernel_weights(int *T, double *gset, int *N, double *weight){
   
       if(u > h && u < 1.0-h){
         for(t = t_min; t < (t_max+1); t++){
-           x = ((t / (float)T[0] - u) / h);           
-           temp = epanc(x) * x;
-           weight1[pos1 + (t_min-1)] = temp;
-           weight2[pos2] += temp * temp;
+           x = ((t  / (float)T[0] - u) / h);           
+           weight1[pos1 + (t_min-1)] = epanc(x) * x;
+           weight2[pos2] += epanc(x) * x * x;
 	   pos1++;
 	}
       } else {
         for(t = t_min; t < (t_max+1); t++){
            x = ((t / (float)T[0] - u) / h);
-           temp = epanc(x) * (s_t_0(u, h, T[0]) * x - s_t_1(u, h, T[0]));
-           weight1[pos1 + (t_min-1)] = temp;
-           weight2[pos2] += temp * temp;
+           weight1[pos1 + (t_min-1)] = epanc(x) * (s_t_0(u, h, T[0]) * x - s_t_1(u, h, T[0]));
+           weight2[pos2] += epanc(x) * (s_t_2(u, h, T[0]) - s_t_1(u, h, T[0]) * x);
 	   pos1++;
 	}
       }
@@ -134,7 +154,7 @@ void kernel_weights(int *T, double *gset, int *N, double *weight){
     
    for(i = 0; i < N[0]; i++){
       for(t = 0; t < T[0]; t++){
- 	 weight[pos] = weight1[pos] / sqrt(weight2[i]);     
+ 	 weight[pos] =  weight1[pos] / weight2[i];     
          pos++;
       }
     }     

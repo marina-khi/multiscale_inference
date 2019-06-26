@@ -23,9 +23,12 @@ if(sim.design == "constant")
 # linear trend function
 
 if(sim.design == "linear")
-{ #slope <- slope.fac * sqrt(sigma_eta^2/(1-a1^2))
+{ slope <- slope.fac * sqrt(sigma_eta^2/(1-a1^2))
   trend <- slope * (1:T/T)
 }
+
+if(sim.design == "line")
+  trend <- slope * (1:T/T)
 
 
 # trend function of blocks example
@@ -63,7 +66,24 @@ if(sim.design == "spike")
   int.minus <- c(0.5,u.upper)
 
   trend.fct <- function(u,u.lower,u.upper){ as.double(u >= u.lower & u <= 0.5) * (u-u.lower) / (0.5-u.lower) + as.double(u > 0.5 & u <= u.upper) * (u.upper-u) / (u.upper-0.5)}
-  trend <- trend.fct(seq(1/T,1,by=1/T),u.lower,u.upper) 
+  trend <- 0.75 * trend.fct(seq(1/T,1,by=1/T),u.lower,u.upper) 
+} 
+
+
+# trend function which is a bump
+ 
+if(sim.design == "bump")
+{ u.lower <- 0.45
+  u.upper <- 0.55 
+
+  int.plus <- c(u.lower,0.5)
+  int.minus <- c(0.5,u.upper)
+
+  bump  <- function(u)
+  {  arg <- (u-0.5)/(u.upper-0.5)
+     return(0.5 * as.double(u >= u.lower & u <= u.upper) * (1-arg^2)^2)
+  }
+  trend <- bump((1:T)/T)
 } 
 
   
