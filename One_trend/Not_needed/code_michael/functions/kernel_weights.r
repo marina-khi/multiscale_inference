@@ -1,7 +1,7 @@
 kernel_weights <- function(T, grid){
 
 
-  # Function that calculates the kernel weights  
+  # Function that calculates the kernel weights for the local linear derivative estimator. 
   #
   # Arguments:
   # T          sample size 
