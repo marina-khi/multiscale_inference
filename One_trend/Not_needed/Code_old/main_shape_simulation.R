@@ -1,10 +1,10 @@
 library(xtable)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
-source("Shape/estimating_sigma_new.R")
-dyn.load("Shape/C_code/psihat_statistic.dll")
-source("Shape/C_code/psihat_statistic.R")
-source("Shape/simulations_based_on_data.R")
+source("functions/estimating_sigma_new.R")
+dyn.load("functions/C_code/psihat_statistic.dll")
+source("functions/C_code/psihat_statistic.R")
+source("functions/simulations_based_on_data.R")
 
 
 ###############################
@@ -13,7 +13,7 @@ source("Shape/simulations_based_on_data.R")
 N_rep            <- 1000 #Number of replications for calculating the size and the power of the test
 different_T      <- c(250, 350, 500) #Different lengths of time series for which we calculate size and power
 different_alpha  <- c(0.01, 0.05, 0.1) #Different alpha for which we calculate size and power
-different_a1     <- c(-0.5, -0.25, 0.25, 0.5) #Different AR(1) parameters
+different_a1     <- c(-0.9, 0.9) #Different AR(1) parameters
 different_slopes <- c(1.5, 2.0, 2.5) #Slopes for power simulations
 sigma_eta        <- 1 #Sqrt(variance) for the innovation \eta_t
 
@@ -21,20 +21,20 @@ test_problem  <- "constant" #Only "zero" (H_0: m = 0) or "constant" (H_0: m = co
 
 q <- 25 #Parameter q for the pilot estimator \widehat{a}_q
 
-source("Shape/functions.R")
-PDFname <- "Paper/Plots/finite_sample_properties_" #Where to store the tables
+source("functions/functions.R")
+#PDFname <- "Paper/Plots/finite_sample_properties_" #Where to store the tables
 
 
 ############################################################
 #Loading temperature data and estimating parameters from it#
 ############################################################
-temperature             <- read.table("Shape/data/cetml1659on.dat", header = TRUE, skip = 6)
-yearly_tempr            <- temperature[temperature$YEAR > -99, 'YEAR']
-
-results            <- estimating_variance_new(yearly_tempr, q, order = 2, K2 = 10)
-sigma_hat_data     <- results[[1]]
-a_hat_data         <- results[[2]]
-sigma_eta_hat_data <- results[[3]]
+# temperature             <- read.table("Shape/data/cetml1659on.dat", header = TRUE, skip = 6)
+# yearly_tempr            <- temperature[temperature$YEAR > -99, 'YEAR']
+# 
+# results            <- estimating_variance_new(yearly_tempr, q, order = 2, K2 = 10)
+# sigma_hat_data     <- results[[1]]
+# a_hat_data         <- results[[2]]
+# sigma_eta_hat_data <- results[[3]]
 
 
 ######################################################
@@ -53,7 +53,7 @@ for (a_hat in different_a1){
  result <- simulations_general(N_rep, different_T, different_alpha, different_slopes, a_hat, sigma_eta, order = 1, test_problem, q, K2 = 10)
  
  matrix_size[, (i * (length(different_alpha) + 1) - (length(different_alpha) - 1)):(i * (length(different_alpha) + 1))]  <- result[[1]]
- matrix_power[, (i * (length(different_alpha) + 1) - (length(different_alpha) - 1)):(i * (length(different_alpha) + 1))] <- result[[2]] 
+ #matrix_power[, (i * (length(different_alpha) + 1) - (length(different_alpha) - 1)):(i * (length(different_alpha) + 1))] <- result[[2]] 
  i <- i + 1
 }
 

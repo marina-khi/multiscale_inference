@@ -19,14 +19,14 @@ source("functions/simulating_data.r")
 #PLOTTING SIZER MAPS FOR COMPARISON
 
 #Defining necessary parameters
-different_T      <- c(1000) #Different lengths of time series for which we calculate size and power
+different_T      <- c(250) #Different lengths of time series for which we calculate size and power
 alpha            <- 0.05 #Different alpha for which we calculate size and power
-different_a1     <- c(-0.25, 0.25) #Different AR(1) parameters
+different_a1     <- c(-0.25) #Different AR(1) parameters
 different_slopes <- c(1.5) #Slopes for power simulations
-sigma_eta        <- 1 #Sqrt(variance) for the innovation \eta_t
+sigma_eta        <- 0.3 #Sqrt(variance) for the innovation \eta_t
 kappa            <- 0.1                   # parameter to determine order statistic for the version
 colorlist        <- c('red', 'purple', 'blue', 'grey')
-sim.design       <- "constant"
+sim.design       <- "bump"
 SimRuns          <- 1000
 
 for (T_size in different_T){
@@ -188,8 +188,11 @@ for (T_size in different_T){
     for (slope in slopes){
       
       testing_results <- readRDS(file = paste0(path, "testing_results_T_", T_size, "_slope_", slope*100, "_a1_", a_1*100, ".RData"))
-
-      results_SiZer  <- aggregate(. ~ h, testing_results[[1]], FUN = function(x) sum(abs(x)) > 0)
+      
+      testing_results_SiZer<-testing_results[[1]]
+      testing_results_SiZer[testing_results_SiZer == 2] <- NA
+      
+      results_SiZer  <- aggregate(. ~ h, testing_results_SiZer, FUN = function(x) sum(abs(x)) > 0)
       results_ms     <- aggregate(. ~ h, testing_results[[2]], FUN = function(x) sum(abs(x)) > 0)
       results_uncor  <- aggregate(. ~ h, testing_results[[3]], FUN = function(x) sum(abs(x)) > 0)
       results_order  <- aggregate(. ~ h, testing_results[[4]], FUN = function(x) sum(abs(x)) > 0)

@@ -23,7 +23,8 @@ simulations_general <- function(N, different_T, different_alpha, different_slope
       #Replicating test procedure N times
       size_of_the_test_ar_1 = replicate(N, {
         y_data_ar_1 <- arima.sim(model = list(ar = a_hat), n = T, innov = rnorm(T, 0, sigma_eta))
-        sigmahat    <- estimating_variance_new(y_data_ar_1, L1, order, K2)[[1]]
+        sigmahat <- sqrt(sigma_eta^2/((1 - a_hat)^2))
+        #sigmahat    <- estimating_variance_new(y_data_ar_1, L1, order, K2)[[1]]
         result_notrend_ar1 = psihat_statistic(y_data_ar_1, g_t_set, kernel_ind, sigmahat)[[2]]
         if (result_notrend_ar1 > gaussian_quantile) {d = 1} else {d = 0}
         d
@@ -35,33 +36,33 @@ simulations_general <- function(N, different_T, different_alpha, different_slope
 
   #Calculating the power of the test#
   power_ar1 = c()  
-  
-  #This is for partly linear function + AR(1) case
-  for (alpha in different_alpha){
-    for (slope in different_slopes){
-      for (T in different_T){
-        set.seed(1) #For reproducibilty
-        g_t_set = creating_g_set(T)
-        m = numeric(T)
-        for (i in 1:T) {if (i/T < 0.5) {m[i] = 0} else {m[i] = (i - 0.5*T)*slope/T}}
-        
-        #Calculating gaussian quantiles for given T and alpha
-        gaussian_quantile = calculating_gaussian_quantile(T, g_t_set, test_problem, kernel_ind, alpha)
-
-        #Replicating test procedure N times
-        size_of_the_test_with_trend = replicate(N, {
-          #Adding a function that is 0 on the first half and linear on the second half
-          y_data_ar_1_with_trend = m + arima.sim(model = list(ar = a_hat), innov = rnorm(T, 0, sigma_eta), n = T)
-          sigmahat <- estimating_variance_new(y_data_ar_1_with_trend, L1, order, K2)[[1]]
-          result_with_trend = psihat_statistic(y_data_ar_1_with_trend, g_t_set, kernel_ind, sigmahat)[[2]]
-          if (result_with_trend > gaussian_quantile) {d = 1} else {d = 0}
-          d
-        })
-        power_ar1 = c(power_ar1, sum(size_of_the_test_with_trend)/N)
-        cat("a_1 = ", a_hat, ". Ratio of rejection under H1 is", sum(size_of_the_test_with_trend)/N, "with slope =", slope, ", T =", T, "and alpha =", alpha, "\n")
-      }
-    }
-  }
+  # 
+  # #This is for partly linear function + AR(1) case
+  # for (alpha in different_alpha){
+  #   for (slope in different_slopes){
+  #     for (T in different_T){
+  #       set.seed(1) #For reproducibilty
+  #       g_t_set = creating_g_set(T)
+  #       m = numeric(T)
+  #       for (i in 1:T) {if (i/T < 0.5) {m[i] = 0} else {m[i] = (i - 0.5*T)*slope/T}}
+  #       
+  #       #Calculating gaussian quantiles for given T and alpha
+  #       gaussian_quantile = calculating_gaussian_quantile(T, g_t_set, test_problem, kernel_ind, alpha)
+  # 
+  #       #Replicating test procedure N times
+  #       size_of_the_test_with_trend = replicate(N, {
+  #         #Adding a function that is 0 on the first half and linear on the second half
+  #         y_data_ar_1_with_trend = m + arima.sim(model = list(ar = a_hat), innov = rnorm(T, 0, sigma_eta), n = T)
+  #         sigmahat <- estimating_variance_new(y_data_ar_1_with_trend, L1, order, K2)[[1]]
+  #         result_with_trend = psihat_statistic(y_data_ar_1_with_trend, g_t_set, kernel_ind, sigmahat)[[2]]
+  #         if (result_with_trend > gaussian_quantile) {d = 1} else {d = 0}
+  #         d
+  #       })
+  #       power_ar1 = c(power_ar1, sum(size_of_the_test_with_trend)/N)
+  #       cat("a_1 = ", a_hat, ". Ratio of rejection under H1 is", sum(size_of_the_test_with_trend)/N, "with slope =", slope, ", T =", T, "and alpha =", alpha, "\n")
+  #     }
+  #   }
+  # }
   return(list(size_ar1, power_ar1))
 }
 

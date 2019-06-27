@@ -469,7 +469,7 @@ plot.SiZer <- function(results, different_i, different_h, ylab=expression(log[10
 Sizer_test<- function(g_set, SiZer_matrix, data){
   results_SiZer <- numeric(length = nrow(g_set)) 
 
-  for (row in 1:nrow(g_set)){
+  for (row in 1:nrow(SiZer_matrix)){
     i              = g_set[row, 'u']
     h              = g_set[row, 'h']
     q_h            = SiZer_matrix[row, 'q_h']
