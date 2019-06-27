@@ -56,6 +56,21 @@ simulating_data <- function(T, a1, sigma_eta, sim.design, slope = 0){
     for (i in 1:T_size) {trend[i] = (i - 0.5*T) * slope/T}
   }
   
+  if(sim.design == "bump")
+  { u.lower <- 0.45
+  u.upper <- 0.55 
+  
+  int.plus <- c(u.lower,0.5)
+  int.minus <- c(0.5,u.upper)
+  
+  bump  <- function(u)
+  {  arg <- (u-0.5)/(u.upper-0.5)
+  return(0.5 * as.double(u >= u.lower & u <= u.upper) * (1-arg^2)^2)
+  }
+  trend <- bump((1:T)/T)
+  } 
+  
+  
     
   #simulated time series
   data <- trend + eps

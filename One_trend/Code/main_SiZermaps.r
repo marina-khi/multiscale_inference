@@ -3,20 +3,25 @@ rm(list=ls())
 source("functions/grid_construction.r")
 source("functions/multiscale_test.r")
 
-dyn.load("functions/SiZer_functions.so")
+dyn.load("functions/SiZer_functions.dll")
 source("functions/SiZer_functions.r")
 
 source("functions/long_run_variance.r")
 
 source("functions/SiZermap.r")
+dyn.load("functions/kernel_weights.dll")
+source("functions/kernel_weights.r")
+source("functions/multiscale_statistics.r")
+source("functions/multiscale_testing.r")
 
+source("simulations/sim.r") 
 
 # Parameters
 
-T          <- 500                   # sample size
-a1         <- 0.5                   # AR parameter 
-sigma_eta  <- 1                     # standard deviation of the innovation term in the AR model
-sim.design <- "bump"                # trend specification: "constant", "blocks", "spike", ...
+T          <- 1000                   # sample size
+a1         <- 0.25                   # AR parameter 
+sigma_eta  <- 0.1                     # standard deviation of the innovation term in the AR model
+sim.design <- "blocks"                # trend specification: "constant", "blocks", "spike", ...
 lrv.type   <- "true"                # long-run error variance: "true" or "estimated"
 
 ## spike: 0.49-0.51, a1=-0.25,sigma_eta=0.3
@@ -26,12 +31,15 @@ alpha      <- 0.05                  # significance level
 SimRuns    <- 1000                  # number of simulation runs to produce critical values
 kappa      <- 0.1                   # parameter to determine order statistic for the version
                                     # of the multiscale statistic from Section ?? 
+set.seed(1)
 
+# Simulating data
+data.simulated <- simulating_data(T, a1, sigma_eta, sim.design)
+data           <- data.simulated$data
+trend          <- data.simulated$trend
+sigma_hat      <- data.simulated$sigma
 
-# Simulate data
-
-source("simulations/sim.r") 
-
+autocov <- (sigma_eta^2/(1-a1^2)) * (a1^seq(0,T-1,by=1))
 
 # Construct grid with effective sample size ESS.star(u,h) >= 5 for any (u,h)
 

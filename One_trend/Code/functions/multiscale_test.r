@@ -34,7 +34,7 @@ multiscale_test <- function(alpha, data, sigmahat, grid=NULL, kappa=0.1, SimRuns
   T <- length(data) 
 
   if(is.null(grid))
-  { source("functions/grid_construction.r")
+  { 
     grid <- grid_construction(T)
   }
 
@@ -46,14 +46,11 @@ multiscale_test <- function(alpha, data, sigmahat, grid=NULL, kappa=0.1, SimRuns
 
   # Compute kernel weights for local linear derivative estimator
 
-  dyn.load("functions/kernel_weights.so")
-  source("functions/kernel_weights.r")
   wghts <- kernel_weights(T=T, grid=grid)
 
 
   # Compute multiscale statistics
 
-  source("functions/multiscale_statistics.r")
   results <- multiscale_statistics(data=data, weights=wghts, sigmahat=sigmahat, grid=grid) 
   vals    <- results$values
   
@@ -102,7 +99,6 @@ multiscale_test <- function(alpha, data, sigmahat, grid=NULL, kappa=0.1, SimRuns
   
   # Compute test results
 
-  source("functions/multiscale_testing.r")
   results <- multiscale_testing(alpha=alpha, quantiles=quantiles, values=vals, grid=grid)  
 
 
