@@ -5,7 +5,6 @@
 To assess the finite sample performance of our methods, we conduct a number of simulations. In Sections \ref{subsec-sim-1}, we investigate the performance of our multiscale test and compare it to the SiZer methods for time series developed in \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. In Section \ref{subsec-sim-3}, we analyse the finite sample properties of our long-run variance estimator from Section \ref{subsec-error-var-AR} and compare it to the estimator of \cite{Hall2003}. 
 
 
-\newpage
 \subsection{Small sample properties of the multiscale test}
 
 
@@ -103,7 +102,6 @@ Spurious power & & 0.000 & 0.000 & 0.000 & 0.000 & & 0.000 & 0.000 & 0.000 & 0.0
 
 
 
-\newpage
 \subsection{Size and power properties of the multiscale test}\label{subsec-sim-1} 
 
 
@@ -180,8 +178,6 @@ $T=250$ &  & 0.989 & 1.000 & 1.000 &  & 0.901 & 0.971 & 0.993 &  & 0.322 & 0.543
 \end{tabularx}
 }
 \end{sidewaystable}
-
-\newpage 
 
 
 To implement our test, we choose $K$ to be an Epanechnikov kernel and define the set $\mathcal{G}_T$ of location-scale points $(u,h)$ as
@@ -428,7 +424,6 @@ We assume that the data follow the nonparametric trend model $Y_{t,T} = m(t/T) +
 \end{figure}
 
 
-\newpage
 With the help of our multiscale method from Section \ref{sec-method}, we now test the null hypothesis $H_0$ that $m$ is constant on all intervals $[u-h,u+h]$ with $(u,h) \in \mathcal{G}_T$, where we use the grid $\mathcal{G}_T$ defined in \eqref{grid-sim-app}. To do so, we set the significance level to $\alpha = 0.05$ and implement the test in exactly the same way as in the simulations of Section \ref{subsec-sim-1}. The results are presented in Figure \ref{plot-results-app1}. The upper panel shows the raw temperature time series, whereas the middle panel depicts local linear kernel estimates of the trend $m$ for different bandwidths $h$. As one can see, the shape of the estimated time trend strongly differs with the chosen bandwidth. When the bandwidth is small, there are many local increases and decreases in the estimated trend. When the bandwidth is large, most of these local variations get smoothed out. Hence, by themselves, the nonparametric fits do not give much information on whether the trend $m$ is increasing or decreasing in certain time regions. 
 
 
