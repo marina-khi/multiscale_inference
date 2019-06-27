@@ -199,7 +199,36 @@ E_T^{-,\min} & = \Big\{ \forall I_{u,h} \in \Pi_T^{-,\min}: m^\prime(v) < 0 \tex
 \end{align*}
 It is easily seen that $E_T^\ell = E_T^{\ell,\min}$ for $\ell \in \{\pm, +,-\}$. Hence, by Proposition \ref{prop-test-3}, it holds that 
 \[ \pr \big(E_T^{\ell,\min}\big) \ge (1-\alpha) + o(1) \] 
-for $\ell \in \{\pm, +,-\}$. This suggests to plot the minimal intervals in $\Pi_T^{\ell,\min}$ rather than the whole collection of intervals $\Pi_T^\ell$ as a graphical summary of the test results. We in particular use this way of presenting the test results in our application in Section \ref{sec-data}. 
+for $\ell \in \{\pm, +,-\}$. This suggests to plot the minimal intervals in $\Pi_T^{\ell,\min}$ rather than the whole collection of intervals $\Pi_T^\ell$ as a graphical summary of the test results. We in particular use this way of presenting the test results in our application in Section \ref{sec-data}.
+
+
+\subsection{\textcolor{red}{Comparison to SiZer methods}}\label{subsec-method-comparison} 
+
+
+As already mentioned in the introduction, some SiZer methods for dependent data have been introduced in \cite{Rondonotti2004} and \cite{Rondonotti2007}, which we refer to as dependent SiZer for short. Informally speaking, both our approach and dependent SiZer are methods to test for local increases/decreases of a nonparametric trend function $m$. The formal problem is to test the hypothesis $H_0(u,h)$ simultaneously for all $(u,h) \in \mathcal{G}_T$, where we assume that $\mathcal{G}_T = U_T \times H_T$ with $U = U_T$ being the set of locations and $H = H_T$ the set of bandwidths or scales. In what follows, we compare our approach to dependent SiZer and point out the most important differences. 
+
+
+Dependent SiZer is based on the statistics $s_T(u,h) = \widehat{m}^\prime(u,h)/\widehat{\text{sd}}(\widehat{m}^\prime(u,h))$, where $\widehat{m}^\prime(u,h)$ is a local linear kernel estimator of $m^\prime(u)$ with bandwidth $h$ and $\widehat{\text{sd}}(\widehat{m}^\prime(u,h))$ an estimator of its standard deviation. The statistic $s_T(u,h)$ parallels the statistic $\widehat{\psi}_T(u,h)/\widehat{\sigma}$ in our approach. In particular, both can be regarded as test statistics of the hypothesis $H_0(u,h)$. There are two versions of dependent SiZer: 
+\begin{enumerate}[label=(\alph*), leftmargin=0.75cm]
+
+\item The global version aggegrates the individual statistics $s_T(u,h)$ into the overall statistic $S_T = \max_{h \in H} S_T(h)$, where $S_T(h) = \max_{u \in U} |s_T(u,h)|$. The statistic $S_T$ is the counterpart to the multiscale statistic $\widehat{\Psi}_T$ in our approach. 
+
+\item The row-wise SiZer version considers each scale $h \in H$ separately. In particular, for each bandwidth $h \in H$, a test is carried out based on the statistic $S_T(h)$. A row-wise analogue of our approach would be obtained by carrying out a test for each scale $h \in H$ separately based on the statistic $\widehat{\Psi}_T(h) = \max_{u \in U} |\widehat{\psi}_T(u,h)/\widehat{\sigma}|$.\footnote{Note that we can drop the correction term $\lambda(h)$ in this case as it is a fixed constant if only a single bandwidth $h$ is taken into account.}
+
+\end{enumerate}
+In practice, SiZer is commonly implemented in its row-wise form. The main reason is that it has more power than the global version by construction. However, this gain of power comes at a cost: Row-wise SiZer carries out a test \textit{separately} for each scale $h \in H$, thus ignoring the simultaneous test problem across scales $h$. Hence, it is not a rigorous level-$\alpha$-test of the null $H_0$. For this reason, we focus on global SiZer in the rest of this section. 
+
+
+Even though related, our methods and theory are markedly different from those of the SiZer approach:
+\begin{enumerate}[label=(\roman*), leftmargin=0.75cm]
+
+\item Theory for SiZer is derived under the assumption that the set of bandwidths $H$ is a compact subset of $(0,1)$. As already pointed out in \cite{ChaudhuriMarron2000} on p.420, this is a quite severe restriction: Only bandwidths $h$ are taken into account that remain bounded away from zero as the sample size $T$ grows. Bandwidths $h$ that converge to zero as $T$ increases are excluded. Our theory, in contrast, allows to simultaneously consider bandwidths $h$ of fixed size and bandwidths $h$ that converge to zero at various different rates. To achieve this, we come up with a proof strategy which is very different from that in the SiZer literature:  As proven in \cite{ChaudhuriMarron2000} for the i.i.d.\ case and in \cite{ParkHannigKang2009} for the dependent data case, $S_T$ weakly converges to some limit process $S$ under the overall null hypothesis $H_0$. This is the central technical result on which the theoretical properties of SiZer are based. In contrast to this, our proof strategy (which is outlined in Section \ref{subsec-method-theo}) does not even require the statistic $\widehat{\Psi}_T$ to have a weak limit and is thus not restricted by the limitations of classic weak convergence theory. 
+
+\item There are different ways to combine the test statistics $S_T(h) = \max_{u \in I} |s_T(u,h)|$ for different scales $h \in H$. One way is to take their maximum, which leads to the SiZer statistic $S_T = \max_{h \in H} S_T(h)$. We could proceed analogously and consider the multiscale statistic $\widehat{\Psi}_{T,\text{uncorrected}} = \max_{h \in H} \widehat{\Psi}_T(h) = \max_{(u,h) \in U \times H} |\widehat{\psi}_T(u,h)/\widehat{\sigma}|$. However, as argued in \cite{DuembgenSpokoiny2001} and as discussed in Section \ref{subsec-method-stat}, this aggregation scheme is not optimal when the set $H = H_T$ contains scales $h$ of many different rates. Following the lead of \cite{DuembgenSpokoiny2001}, we consider the test statistic $\widehat{\Psi}_T = \max_{(u,h) \in U \times H} \{ |\widehat{\psi}_T(u,h)/\widehat{\sigma}| - \lambda(h) \}$ with the additive correction terms $\lambda(h)$. Hence, even though related, our multiscale test statistic $\widehat{\Psi}_T$ differs from the SiZer statistic $S_T$ in important ways. 
+
+\item The main complication in carrying out both our multiscale test and SiZer is to determine the critical values, that is, the quantiles of the test statistics $\widehat{\Psi}_T$ and $S_T$ under $H_0$. In order to approximate the quantiles, we proceed quite differently than in the SiZer literature. The quantiles of the SiZer statistic $S_T$ can be approximated by those of the weak limit process $S$. Usually, however, the quantiles of $S$ cannot be determined analytically but have to be approximated themselves (e.g.\ by the bootstrap procedures of \cite{ChaudhuriMarron1999, ChaudhuriMarron2000}). Alternatively, the quantiles of $S_T$ can be approximated by procedures based on extreme value theory (as proposed in \cite{HannigMarron2006} and \cite{ParkHannigKang2009}). In our approach, the quantiles of $\widehat{\Psi}_T$ under $H_0$ are approximated by those of a suitably constructed Gaussian analogue of $\widehat{\Psi}_T$. It is far from obvious that this Gaussian approximation is valid when the data are dependent. To see this, deep strong approximation theory for dependent data (as derived in \cite{BerkesLiuWu2014}) is needed. It is important to note that our Gaussian approximation procedure is not the same as the bootstrap procedures proposed in \cite{ChaudhuriMarron1999, ChaudhuriMarron2000}. Both procedures can of course be regarded as resampling methods. However, the resampling is done in a quite different way in our case.
+
+\end{enumerate}
 
 
 
