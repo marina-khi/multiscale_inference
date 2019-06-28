@@ -235,9 +235,103 @@ Even though related, our methods and theory are markedly different from those of
 \section{Estimation of the long-run error variance}\label{sec-error-var}
 
 
-In this section, we discuss how to estimate the long-run variance $\sigma^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_0,\varepsilon_{\ell})$ of the error terms in model \eqref{model}. There are two broad classes of estimators: residual- and difference-based estimators. In residual-based approaches, $\sigma^2$ is estimated from the residuals $\widehat{\varepsilon}_t = Y_{t,T} - \widehat{m}_h(t/T)$, where $\widehat{m}_h$ is a nonparametric estimator of $m$ with the bandwidth or smoothing parameter $h$. Difference-based methods proceed by estimating $\sigma^2$ from the $\ell$-th differences $Y_{t,T} - Y_{t-\ell,T}$ of the observed time series $\{Y_{t,T}\}$ for certain orders $\ell$. In what follows, we focus attention on difference-based methods as these do not involve a nonparametric estimator of the function $m$ and thus do not require to specify a bandwidth $h$ for the estimation of $m$. To simplify notation, we let $\Delta_\ell Z_t = Z_t - Z_{t-\ell}$ denote the $\ell$-th differences of a general time series $\{Z_t\}$ throughout the section. 
+In this section, we discuss how to estimate the long-run variance $\sigma^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_0,\varepsilon_{\ell})$ of the error terms in model \eqref{model}. There are two broad classes of estimators: residual- and difference-based estimators. In residual-based approaches, $\sigma^2$ is estimated from the residuals $\widehat{\varepsilon}_t = Y_{t,T} - \widehat{m}_h(t/T)$, where $\widehat{m}_h$ is a nonparametric estimator of $m$ with the bandwidth or smoothing parameter $h$. Difference-based methods proceed by estimating $\sigma^2$ from the $\ell$-th differences $Y_{t,T} - Y_{t-\ell,T}$ of the observed time series $\{Y_{t,T}\}$ for certain orders $\ell$. In what follows, we focus attention on difference-based methods as these do not involve a nonparametric estimator of the function $m$ and thus do not require to specify a bandwidth $h$ for the estimation of $m$. 
+%To simplify notation, we let $\Delta_\ell Z_t = Z_t - Z_{t-\ell}$ denote the $\ell$-th differences of a general time series $\{Z_t\}$ throughout the section. 
 
 
+So far, we have assumed that $\{ \varepsilon_t \}$ is a general stationary error process which fulfills the weak dependence conditions ??. Estimating the long-run error variance $\sigma^2$ in model \eqref{model} under general weak dependence conditions is known to be a notoriously difficult problem. Estimators of $\sigma^2$ usually tend to be quite imprecise. To circumvent this issue in practice, it may be beneficial to impose a time series model on the error process $\{\varepsilon_t\}$. Estimating $\sigma^2$ under the restrictions of such a model may of course create some misspecification bias. However, as long as the model gives a reasonable approximation to the true error process, the produced estimates of $\sigma^2$ can be expected to be fairly reliable even though they are a bit biased. 
+
+
+Estimators of the long-run error variance $\sigma^2$ in model \eqref{model} have been developed for different kinds of error models. A number of authors have analysed the case of MA($m$) or, more generally, $m$-dependent error terms. Difference-based estimators of $\sigma^2$ for this case were proposed in \cite{MuellerStadtmueller1988}, \cite{Herrmann1992} and \cite{Munk2017} among others. Under the assumption of $m$-dependence, $\gamma_\varepsilon(\ell) = 0$ for all $|\ell| > m$. 
+%Even though $m$-dependent time series are a reasonable error model in some applications, the condition that $\gamma_\varepsilon(\ell)$ is exactly equal to $0$ for sufficiently large lags $\ell$ is quite restrictive in many situations. 
+Presumably the most widely used error model in practice is an AR($p$) process. Residual-based methods to estimate $\sigma^2$ in model \eqref{model} with AR($p$) errors can be found for example in \cite{Truong1991}, \cite{ShaoYang2011} and \cite{QiuShaoYang2013}. A difference-based method was proposed in \cite{Hall2003}. 
+
+
+In what follows, we consider the class of AR($\infty$) processes as a model for the error process $\{ \varepsilon_t \}$. AR($\infty$) processes form a quite large and important subclass of linear time series processes. Formally speaking, we let $\{\varepsilon_t\}$ be an AR($\infty$) process of the form 
+\begin{equation}\label{AR-errors} 
+\varepsilon_t = \sum_{j=1}^\infty a_j \varepsilon_{t-j} + \eta_t, 
+\end{equation} 
+where $a_1,a_2,a_3,\ldots$ are unknown parameters and $\eta_t$ are i.i.d.\ innovations with $\ex[\eta_t] = 0$ and $\ex[\eta_t^2] = \nu^2$. We assume that $A(z) = 1 - \sum_{j=1}^{\infty} a_j z^j \ne 0$ for all complex $|z| \le 1 + \delta$ with some small $\delta > 0$, which implies that $\{ \varepsilon_t \}$ is stationary and causal. As a special case, we allow that $a_{p^*} \ne 0$ and $a_j = 0$ for all $j > p^*$ for some $p^* \in \naturals$. In this case, $\{ \varepsilon_t \}$ is an AR($p^*$) process of finite order $p^*$. Hence, the class of error processes we consider nests AR processes of any finite (unknown) order as a subclass. Moreover, it nests all ARMA($p$,$q$) processes that are causal and invertible. 
+
+
+The AR($\infty$) process $\{\varepsilon_t\}$ has the following properties: Since $A(z) \ne 0$ for all $|z| \le 1 + \delta$, it immediately follows that the coefficients $a_j$ decay to zero sufficiently hast. Specifically, $|a_j| \le C \rho^{-j}$ with some $C > 0$ and $0 < \rho < 1$. Moreover, $\{ \varepsilon_t\}$ can be shown to have an MA($\infty$) representation of the form of the form $\varepsilon_t =  \sum_{k=0}^\infty c_k \eta_{t-k}$. The coefficients $c_k$ can be computed iteratively from the equations 
+\begin{equation}\label{c-recursion}
+c_k - \sum_{j=1}^k a_j c_{k-j} = b_k 
+\end{equation}
+for $k = 0,1,2,\ldots$, where $b_0 = 1$, $b_k = 0$ for $k > 0$ and $c_k = 0$ for $ k < 0$. Moreover, the coefficients $c_k$ can be shown to decay exponentially fast to zero as $k \rightarrow \infty$, in particular, $|c_k| \le C \rho^k$ with some $C > 0$ and $0 < \rho < 1$. 
+
+
+In what follows, we construct a new difference-based estimator of $\sigma^2$ for the AR($\infty$) case. To simplify notation, we let $\Delta_\ell Z_t = Z_t - Z_{t-\ell}$ denote the $\ell$-th differences of a general time series $\{Z_t\}$. Our estimation method relies on the following simple observation: If $\{\varepsilon_t\}$ is an AR($\infty$) process of the form \eqref{AR-errors}, then the time series $\{ \Delta_q \varepsilon_t \}$ of the differences $\Delta_q \varepsilon_t = \varepsilon_t - \varepsilon_{t-q}$ is an ARMA($\infty,q$) process of the form 
+\begin{equation}\label{AR-diff-errors} 
+\Delta_q \varepsilon_t - \sum_{j=1}^\infty a_j \Delta_q \varepsilon_{t-j} = \eta_t - \eta_{t-q}. 
+\end{equation}
+As $m$ is Lipschitz, the differences $\Delta_q \varepsilon_t$ of the unobserved error process are close to the differences $\Delta_q Y_{t,T}$ of the observed time series in the sense that 
+\begin{equation}\label{diff-Y-eps}
+\Delta_q Y_{t,T} = \big[\varepsilon_t  - \varepsilon_{t-q} \big] + \Big[ m \Big(\frac{t}{T}\Big) - m \Big(\frac{t-q}{T}\Big) \Big] = \Delta_q \varepsilon_t + O \Big( \frac{q}{T} \Big).  
+\end{equation} 
+Taken together, \eqref{AR-diff-errors} and \eqref{diff-Y-eps} imply that the differenced time series $\{ \Delta_q Y_{t,T} \}$ is approximately an ARMA($\infty,q$) process of the form \eqref{AR-diff-errors}. It is precisely this point which is exploited by our estimation methods. 
+
+
+In order to estimate the infinite sequence of AR coefficients $a_1,a_2,a_3,\ldots$, we consider AR models of growing order $p = p_T$, that is, $p_T \rightarrow \infty$. We first describe our procedure to estimate the parameter vector $\boldsymbol{a} = \boldsymbol{a}_p = (a_1,\ldots,a_p)^\top$. For any $q \ge 1$, the ARMA($\infty,q$) process $\{ \Delta_q \varepsilon_t \}$ satisfies the Yule-Walker equations
+\begin{align}
+\gamma_q(\ell) - \sum\limits_{j=1}^\infty a_j \gamma_q(\ell-j) & = -\nu^2 c_{q-\ell} \hspace{-1.5cm} & & \text{for } 1 \le \ell < q+1 \label{diff-eq-1} \\
+\gamma_q(\ell) - \sum\limits_{j=1}^\infty a_j \gamma_q(\ell-j) & = 0 \hspace{-1.5cm} & & \text{for } \ell \ge q+1, \label{diff-eq-2}  
+\end{align}
+where $\gamma_q(\ell) = \cov(\Delta_q \varepsilon_t,$ $\Delta_q \varepsilon_{t-\ell})$ and $c_k$ are the coefficients from the MA($\infty$) expansion of $\{ \varepsilon_t \}$. From \eqref{diff-eq-1} and \eqref{diff-eq-2}, we get that 
+\begin{equation}\label{YW-eq} 
+\boldsymbol{\Gamma}_q \boldsymbol{a} = \boldsymbol{\gamma}_q + \nu^2 \boldsymbol{c}_q + \boldsymbol{\rho}_q,  
+\end{equation} 
+where $\boldsymbol{c}_q = (c_{q-1},\dots,c_{q-p})^\top$, $\boldsymbol{\gamma}_q = (\gamma_q(1),\dots,\gamma_q(p))^\top$ and $\boldsymbol{\Gamma}_q$ denotes the $p \times p$ covariance matrix $\boldsymbol{\Gamma}_q = (\gamma_q(i-j): 1 \le i,j \le p)$. Moreover, $\boldsymbol{\rho}_q = (\rho_q(1),\ldots,\rho_q(p))^\top$ with $\rho_q(\ell) = \sum_{j=p+1}^{\infty} a_j \gamma_q(\ell-j)$. Since the AR coefficients $a_j$ as well as the MA coefficients $c_k$ decay exponentially fast to zero, $\boldsymbol{\rho}_q \approx \boldsymbol{0}$ and $\boldsymbol{c}_q \approx \boldsymbol{0}$ for large values of $q$, implying that $\boldsymbol{\Gamma}_q \boldsymbol{a} \approx \boldsymbol{\gamma}_q$. This suggests to estimate $\boldsymbol{a}$ by 
+\begin{equation}\label{est-AR-FS}
+\widetilde{\boldsymbol{a}}_q = \widehat{\boldsymbol{\Gamma}}_q^{-1} \widehat{\boldsymbol{\gamma}}_q, 
+\end{equation}
+where $\widehat{\boldsymbol{\Gamma}}_q$ and $\widehat{\boldsymbol{\gamma}}_q$ are defined analogously as $\boldsymbol{\Gamma}_q$ and $\boldsymbol{\gamma}_q$ with $\gamma_q(\ell)$ replaced by the sample autocovariances $\widehat{\gamma}_q(\ell) = (T-q)^{-1} \sum_{t=q+\ell+1}^T \Delta_q Y_{t,T} \Delta_q Y_{t-\ell,T}$ and $q = q_T$ goes to infinity as $T \rightarrow \infty$. Moreo formally speaking, we impose the following conditions on the growth rates of $q = q_T$ and $p = p_T$: 
+\begin{equation}
+C \log T \le p \ll q \quad \text{and} \quad \log T \ll q \ll \sqrt{T} 
+\end{equation}
+for some sufficiently large constant $C$, where the symbol $v_T \ll w_T$ means that $v_T/w_T \rightarrow 0$ as $T \rightarrow \infty$. 
+
+
+The estimator $\widetilde{\boldsymbol{a}}_q$ depends on the tuning parameter $q$, that is, on the chosen order of differences. %, which is very similar in nature to the two tuning parameters of the methods in \cite{Hall2003}. 
+An appropriate choice of $q$ needs to take care of the following two points: 
+(i) $q$ should be chosen large enough to ensure that the vector $\boldsymbol{c}_q = (c_{q-1},\dots,c_{q-p})^\top$ is close to zero. As we have already seen, the constants $c_k$ decay exponentially fast to zero and can be computed from the recursive equations \eqref{c-recursion} for given AR parameters $a_1,a_2,a_3,\ldots$. In the AR($1$) case, for example, one can readily calculate that $c_k \le 0.0035$ for any $k \ge 20$ and any $|a_1| \le 0.75$. Hence, if we have an AR($1$) model for the errors $\varepsilon_t$ and the error process is not too persistent, choosing $q$ such that $q \ge 20$ should make sure that $\boldsymbol{c}_q$ is close to zero. Generally speaking, the recursive equations \eqref{c-recursion} can be used to get some idea for which values of $q$ the vector $\boldsymbol{c}_q$ can be expected to be approximately zero. 
+(ii) $q$ should not be chosen too large in order to ensure that the trend $m$ is appropriately eliminated by taking $q$-th differences. As long as the trend $m$ is not very strong, the two requirements (i) and (ii) can be fulfilled without much difficulty. For example, by choosing $q = 20$ in the AR($1$) case just discussed, we do not only take care of (i) but also make sure that moderate trends $m$ are differenced out appropriately. 
+
+
+When the trend $m$ is very pronounced, in contrast, even moderate values of $q$ may be too large to eliminate the trend appropriately. As a result, the estimator $\widetilde{\boldsymbol{a}}_q$ will have a strong bias. In order to reduce this bias, we refine our estimation procedure as follows: By solving the recursive equations \eqref{c-recursion} with $\boldsymbol{a}$ replaced by $\widetilde{\boldsymbol{a}}_q$, we can compute estimators $\widetilde{c}_k$ of the coefficients $c_k$ and thus estimators $\widetilde{\boldsymbol{c}}_r$ of the vectors $\boldsymbol{c}_r$ for any $r \ge 1$. Moreover, the innovation variance $\nu^2$ can be estimated by $\widetilde{\nu}^2 = (2T)^{-1} \sum_{t=p+1}^T \widetilde{r}_{t,T}^2$, where $\widetilde{r}_{t,T} = \Delta_1 Y_{t,T} - \sum_{j=1}^p \widetilde{a}_j \Delta_1 Y_{t-j,T}$ and $\widetilde{a}_j$ is the $j$-th entry of the vector $\widetilde{\boldsymbol{a}}_q$. Plugging the expressions $\widehat{\boldsymbol{\Gamma}}_r$, $\widehat{\boldsymbol{\gamma}}_r$, $\widetilde{\boldsymbol{c}}_r$ and $\widetilde{\nu}^2$ into \eqref{YW-eq}, we can estimate $\boldsymbol{a}$ by 
+\begin{equation}\label{est-AR-SS} 
+\widehat{\boldsymbol{a}}_r = \widehat{\boldsymbol{\Gamma}}_r^{-1} (\widehat{\boldsymbol{\gamma}}_r + \widetilde{\nu}^2 \widetilde{\boldsymbol{c}}_r),
+\end{equation} 
+where $r$ is any fixed number with $r \ge 1$. In particular, unlike $q$, the parameter $r$ does not diverge to infinity but remains fixed as the sample size $T$ increases. As one can see, the estimator $\widehat{\boldsymbol{a}}_r$ is based on differences of some small order $r$; only the pilot estimator $\widetilde{\boldsymbol{a}}_q$ relies on differences of a larger order $q$. As a consequence, $\widehat{\boldsymbol{a}}_r$ should eliminate the trend $m$ more appropriately and should thus be less biased than the pilot estimator $\widetilde{\boldsymbol{a}}_q$. In order to make the method more robust against estimation errors in $\widetilde{\boldsymbol{c}}_r$, we finally average the estimators $\widehat{\boldsymbol{a}}_r$ for a few small values of $r$. In particular, we define  
+\begin{equation}\label{est-AR}
+\widehat{\boldsymbol{a}} = \frac{1}{\overline{r}} \sum\limits_{r=1}^{\overline{r}} \widehat{\boldsymbol{a}}_r, 
+\end{equation}
+where $\overline{r}$ is a small natural number. For ease of notation, we suppress the dependence of $\widehat{\boldsymbol{a}}$ on the parameter $\overline{r}$. Once $\widehat{\boldsymbol{a}} =(\widehat{a}_1,\ldots,\widehat{a}_p)^\top$ is computed, the long-run variance $\sigma^2$ can be estimated by 
+\begin{equation} \label{est-lrv}
+\widehat{\sigma}^2 = \frac{\widehat{\nu}^2}{(1 - \sum_{j=1}^p \widehat{a}_j)^2}, 
+\end{equation}
+where $\widehat{\nu}^2 = (2T)^{-1} \sum_{t=p+1}^T \widehat{r}_{t,T}^2$ with $\widehat{r}_{t,T} = \Delta_1 Y_{t,T} - \sum_{j=1}^p \widehat{a}_j \Delta_1 Y_{t-j,T}$ is an estimator of the innovation variance $\nu^2$ and we make use of the fact that $\sigma^2 = \nu^2 / (1 - \sum_{j=1}^\infty a_j)^2$ for the AR($\infty$) process $\{\varepsilon_t\}$. 
+
+
+
+We briefly compare the estimator $\widehat{\boldsymbol{a}}$ to competing methods. Presumably closest to our approach is the procedure of \cite{Hall2003} which is designed for AR($p^*$) error processes of known finite order $p^*$. For this reason, we assume $\{\varepsilon_t\}$ to be an AR($p^*$) process with known $p^*$. The two main advantages of our method are as follows: 
+\begin{enumerate}[label=(\alph*),leftmargin=0.7cm]
+\item Our estimator produces accurate estimation results even when the AR process $\{\varepsilon_t\}$ is quite persistent, that is, even when the AR polynomial $A(z) = 1 - \sum_{j=1}^{p^*} a_j z^j$ has a root close to the unit circle. The estimator of \cite{Hall2003}, in contrast, may have very high variance and may thus produce unreliable results when the AR polynomial $A(z)$ is close to having a unit root. This difference in behaviour can be explained as follows: Our pilot estimator $\widetilde{\boldsymbol{a}}_q = (\widetilde{a}_1,\ldots,\widetilde{a}_{p^*})^\top$ has the property that the estimated AR polynomial $\widetilde{A}(z) = 1 - \sum_{j=1}^{p^*} \widetilde{a}_j z^j$ has no root inside the unit disc, that is, $\widetilde{A}(z) \ne 0$ for all complex numbers $z$ with $|z| \le 1$.\footnote{More precisely, $\widetilde{A}(z) \ne 0$ for all $z$ with $|z| \le 1$, whenever the covariance matrix $(\widehat{\gamma}_q(i-j): 1 \le i,j \le p^*+1)$ is non-singular. Moreover, $(\widehat{\gamma}_q(i-j): 1 \le i,j \le p^*+1)$ is non-singular whenever $\widehat{\gamma}_q(0) > 0$, which is the generic case.} Hence, the fitted AR model with the coefficients $\widetilde{\boldsymbol{a}}_q$ is ensured to be stationary and causal. Even though this may seem to be a minor technical detail, it has a huge effect on the performance of the estimator: It keeps the estimator stable even when the AR process is very persistent and the AR polynomial $A(z)$ has almost a unit root. This in turn results in a reliable behaviour of the estimator $\widehat{\boldsymbol{a}}$ in the case of high persistence. The estimator of \cite{Hall2003}, in contrast, may produce non-causal results when the AR polynomial $A(z)$ is close to having a unit root. As a consequence, it may have unnecessarily high variance in the case of high persistence. We illustrate this difference between the estimators by the simulation exercises in Section \ref{subsec-sim-3}. A striking example is Figure \ref{fig:hist_scenario1}, which presents the simulation results for the case of an AR($1$) process $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$ with $a_1 = -0.95$ and clearly shows the much better performance of our method.  
+\item Both our pilot estimator $\widetilde{\boldsymbol{a}}_q$ and the estimator of \cite{Hall2003} tend to have a substantial bias when the trend $m$ is pronounced. Our estimator $\widehat{\boldsymbol{a}}$ reduces this bias considerably as demonstrated in the simulations of Section \ref{subsec-sim-3}. Unlike the estimator of \cite{Hall2003}, it thus produces accurate results even in the presence of a very strong trend. 
+\end{enumerate}
+
+
+We finally derive some basic asymptotic properties of the estimators $\widetilde{\boldsymbol{a}}_q$, $\widehat{\boldsymbol{a}}$ and $\widehat{\sigma}^2$. The following proposition shows that they are $\sqrt{T}$-consistent. 
+\begin{prop}\label{prop-lrv}
+Let $\{\varepsilon_t\}$ be a causal AR($p$) process of the form \eqref{AR-errors}. Suppose that the innovations $\eta_t$ have a finite fourth moment and let $m$ be Lipschitz continuous. If $q \rightarrow \infty$ with $q/\log T \rightarrow \infty$ and $q/\sqrt{T} \rightarrow 0$, then $\widetilde{\boldsymbol{a}}_q - \boldsymbol{a} = O_p(T^{-1/2})$ as well as $\widehat{\boldsymbol{a}} - \boldsymbol{a} = O_p(T^{-1/2})$ and $\widehat{\sigma}^2 - \sigma^2 = O_p(T^{-1/2})$.
+\end{prop}
+%It can also be shown that $\widetilde{\boldsymbol{a}}_q$, $\widehat{\boldsymbol{a}}$ and $\widehat{\sigma}^2$ are asymptotically normal. In general, their asymptotic variance is somewhat larger than that of the estimators in \cite{Hall2003}. They are thus a bit less efficient in terms of asymptotic variance. However, this theoretical loss of efficiency is more than compensated by the advantages discussed in (a) and (b) above, which lead to a substantially better small sample performance as demonstrated in the simulations of Section \ref{subsec-sim-3}. 
+
+
+
+
+
+\newpage
 \subsection{Weakly dependent error processes}
 
 
