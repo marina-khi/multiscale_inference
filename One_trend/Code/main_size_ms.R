@@ -46,7 +46,7 @@ for (a1 in different_a1){
     # Compute kernel weights and critical value for multiscale test  
     wghts  <- kernel_weights(T=T, grid=grid)
     
-    filename = paste0("quantiles/distr_T_", T,"_ms.RData")
+    filename = paste0("quantiles/distr_T_", T,".RData")
     if(!file.exists(filename)) {
       quants <- multiscale_quantiles(T=T, grid=grid, weights=wghts, kappa=kappa, SimRuns=SimRuns)
       save(quants, file = filename)
@@ -68,8 +68,7 @@ for (a1 in different_a1){
       a.hat     <- AR.struc$ahat 
       vareta    <- AR.struc$vareta   
       sigma_hat <- sqrt(AR.struc$lrv)
-      autocov   <- AR_acf(coefs=a.hat, var.eta=vareta, len=T)
-      
+
       stats    <- multiscale_statistics(data=data, weights=wghts, sigmahat=sigma_hat, grid=grid) 
       vals     <- stats$values
       
@@ -108,8 +107,9 @@ k <- 1
 for (a1 in different_a1){
   size_ms <- numeric(length(different_alpha))
   for (T in different_T){
-    #set.seed(1)
-    # Construct grid with effective sample size ESS.star(u,h) >= 5 for any (u,h)
+    set.seed(1)
+    
+    #Construct the grid
     grid      <- grid_construction(T)
     gset      <- grid$gset
     u.grid    <- sort(unique(gset[,1]))
@@ -118,7 +118,7 @@ for (a1 in different_a1){
     # Compute kernel weights and critical value for multiscale test  
     wghts  <- kernel_weights(T=T, grid=grid)
     
-    filename = paste0("quantiles/distr_T_", T,"_ms.RData")
+    filename = paste0("quantiles/distr_T_", T,".RData")
     if(!file.exists(filename)) {
       quants <- multiscale_quantiles(T=T, grid=grid, weights=wghts, kappa=kappa, SimRuns=SimRuns)
       save(quants, file = filename)
@@ -135,14 +135,13 @@ for (a1 in different_a1){
       trend          <- data.simulated$trend
       sigma_true     <- data.simulated$sigma
       
-      #Estimating the coefficients for the ts and the long-run variance
-      AR.struc  <- AR_lrv(data=data, q=25, r.bar=10, p=1)    
-      a.hat     <- AR.struc$ahat 
-      vareta    <- AR.struc$vareta   
-      sigma_hat <- sqrt(AR.struc$lrv)
-      autocov   <- AR_acf(coefs=a.hat, var.eta=vareta, len=T)
-      
-      stats    <- multiscale_statistics(data=data, weights=wghts, sigmahat=sigma_hat, grid=grid) 
+      # #Estimating the coefficients for the ts and the long-run variance
+      # AR.struc  <- AR_lrv(data=data, q=25, r.bar=10, p=1)    
+      # a.hat     <- AR.struc$ahat 
+      # vareta    <- AR.struc$vareta   
+      # sigma_hat <- sqrt(AR.struc$lrv)
+
+      stats    <- multiscale_statistics(data=data, weights=wghts, sigmahat=sigma_true, grid=grid) 
       vals     <- stats$values
       
       #Based on the same values of the test statistic, perform the test at dife
@@ -160,5 +159,5 @@ for (a1 in different_a1){
 }
 
 print.xtable(xtable(size_matrix_ms_big_samples, digits = c(3), align = paste(replicate(number_of_cols + 1, "c"), collapse = "")),
-               type="latex", file="plots/size_big_samples.tex", include.colnames = FALSE)
+               type="latex", file="plots/size_big_samples_true_lrv.tex", include.colnames = FALSE)
 
