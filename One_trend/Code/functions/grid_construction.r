@@ -30,7 +30,7 @@ grid_construction <- function(T, u.grid=NULL, h.grid=NULL, deletions=NULL){
   grid.type <- "non-default"
   if(is.null(u.grid) & is.null(h.grid) & is.null(deletions))
   { grid.type <- "default"
-    Tlen <- min(T,1000)    
+    Tlen <- min(T,1000)
     u.grid <- seq(from = 5/Tlen, to = 1, by = 5/Tlen)
     h.grid <- seq(from = 5/Tlen, to = 1/4, by = 5/Tlen)
   }
