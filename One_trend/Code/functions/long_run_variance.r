@@ -25,7 +25,7 @@ variance_eta <- function(data,coefs,p)
     y.diff <- y.diff[(p+1):len]      
 
     resid   <- y.diff - as.vector(x.diff %*% coefs)
-    var.eta <- sum(resid^2)/(2*T)
+    var.eta <- mean(resid^2)/2
     return(var.eta)
 }
 
