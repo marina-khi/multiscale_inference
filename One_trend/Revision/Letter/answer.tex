@@ -51,9 +51,10 @@ Before we reply to the specific comments of the referees, we summarize the major
 \textbf{Generalization of the theoretical results.} We have extended the theoretical results as suggested by Referee 1:
 \begin{enumerate}[label=(\roman*), leftmargin=0.8cm]
 
-\item We provide a generalization of Proposition 3.3 which shows that $\mathbb{P}({E}_T^{\ell}) = (1 - \alpha_T) + o(1)$ for any sequence $\{\alpha_T\}$ of significance levels $\alpha_T \in (0,1)$. In particular, for $\alpha_T \rightarrow 0$, we get the consistency result that $\mathbb{P}({E}_T^{\ell}) \rightarrow 1$. 
+\item We have derived the following consistency result in addition to Proposition 3.3: Let the significance level $\alpha = \alpha_T \in (0,1)$ depend on the sample size $T$. If $\alpha_T \rightarrow 0$, then $\mathbb{P}({E}_T^{\ell}) \rightarrow 1$. 
+%We provide a generalization of Proposition 3.3 which shows that $\mathbb{P}({E}_T^{\ell}) = (1 - \alpha_T) + o(1)$ for any sequence $\{\alpha_T\}$ of significance levels $\alpha_T \in (0,1)$. In particular, for $\alpha_T \rightarrow 0$, we get the consistency result that $\mathbb{P}({E}_T^{\ell}) \rightarrow 1$. 
 
-\item We have generalized our estimator of the long-run error variance. The estimation procedure is shown to be valid not only for AR($p$) processes of known order $p$ but for any stationary error process $\{\varepsilon_t\}$ with an AR($\infty$) representation. This greatly extends the applicability of the estimator. 
+\item We have generalized our estimator of the long-run error variance. The estimation procedure is shown to be valid not only for AR($p$) processes of known finite order $p$ but for any stationary error process $\{\varepsilon_t\}$ with an AR($\infty$) representation. This greatly extends the applicability of the estimator. 
 \end{enumerate}
 \vspace{3pt}
 
@@ -142,12 +143,16 @@ We hope the above points make clear that the methodological and theoretical cont
 \end{center}
 
 
+Thank you very much for the constructive and helpful comments. In our revision, we have addressed all of them. Please see our replies to your comments below.
+
 
 \begin{enumerate}[label=(\arabic*),leftmargin=0.8cm]
 
 \item \textit{A consistency result of Proposition 3.3.}
 
 \textit{I believe that the following type of result can be obtained: $\mathbb{P} (E^{\ell}_T) \to 1$. Theorem 3.1 is for testing purpose. In certain application one might be interested in such consistency result. Basically one needs to study the behavior of $q_T(\alpha)$ when $\alpha \to 0$.}
+
+Under our regularity conditions, it can indeed be proven that $\mathbb{P} (E^{\ell}_T) \to 1$ as $\alpha=\alpha_T \rightarrow 1$. We have added this consistency result as Corollary ?? to the paper. The proof is provided in the Supplementary Material.
 
 
 \item \textit{Estimation of long run variance using autoregressive processes.}
@@ -160,6 +165,14 @@ We hope the above points make clear that the methodological and theoretical cont
 %\item H. Xiao and W. B. Wu (2012). Covariance Matrix Estimation for Stationary Time Series. Annals of Statistics, Volume 40, Number 1 (2012), 466-493.
 %\end{itemize}
 A similar version of the authors' estimate (4.14) can be used. Rate of convergence (cf.\ Proposition 4.1) can be derived with rate $T^{-1/2}$ therein possibly replaced by a larger term of the form $T^{-c}$ with $c < 1/2$.}
+
+Many thanks for this interesting suggestion. We have generalized our procedure for estimating the long-run variance $\sigma^2$ along the lines suggested by you: Rather than considering AR($p$) processes of known finite order $p$, we consider the much more general case of AR($\infty$) processes. We thus assume the error process $\{\varepsilon_t\}$ to have the form
+\begin{equation}\label{AR-inf}
+\varepsilon_t = \sum\limits_{j=1}^\infty a_j \varepsilon_{t-j} + \eta_t, \tag{$*$} 
+\end{equation}
+where $a_1,a_2,a_3,\ldots$ are unknown parameters and $\eta_t$ are i.i.d.\ innovations (which fulfill certain regularity conditions as detailed in the revised Section 4). Notably, the model \eqref{AR-inf} for the error terms nests AR($p^*$) processes of any finite (unknown) order $p^*$ as a special case: If $a_{p^*} = 0$ and $a_j = 0$ for all $j > p^*$, then $\{ \varepsilon_t \}$ is an AR process of order $p^*$. 
+
+In order to generalize our theory to the case that $\{\varepsilon_t\}$ has an AR($\infty$) representation of the form \eqref{AR-inf}, we proceed as follows: We fit AR($p$) processes to the data whose order $p=p_T$ grows with the sample size $T$. We thus approximate the AR($\infty$) process $\{\varepsilon_t\}$ by a sequence of AR($p$) processes whose order $p=p_T$ goes to infinity. This is somewhat different but related to the banding techniques developed in \cite{WuPourahmadi2009} and \cite{XiaoWu2012}. As you mention yourself in your comment, the resulting estimators are not $\sqrt{T}$-consistent any more. Their convergence rate is somewhat slower than $1/\sqrt{T}$, in particular, it is of the form $p^c/\sqrt{T}$ with some $c > 0$. Please see the revised Proposition 4.1 and its proof in the Supplementary Material for the details. 
 
 
 \item \textit{Real data application.}
@@ -181,55 +194,63 @@ A similar version of the authors' estimate (4.14) can be used. Rate of convergen
 \end{center}
 
 
+Thank you very much for the constructive and useful suggestions. In our revision, we have addressed all of them. Please see our replies to your comments below.
+
 
 \begin{enumerate}[label=(\arabic*),leftmargin=0.8cm]
 
 \item \textit{Section 3.2: The authors recommend computing the quantiles for the independent Gaussian case by simulation. This suggestion is already in the original SiZer paper \citep{ChaudhuriMarron1999}. However in the late 1990s computing power was not sufficient to make this suggestion feasible. This led to the use of approximation such as in \cite{HannigMarron2006}. I would like to ask how does the simulation based quantile compare to the approximation in \cite{HannigMarron2006}.} 
 
--- Compare multiscale test with and without additive correction terms $\lambda(h)$ by ``parallel coordinate plots'' as in Figure 5 of Hannig \& Marron (2006). 
+%-- Compare multiscale test with and without additive correction terms $\lambda(h)$ by ``parallel coordinate plots'' as in Figure 5 of Hannig \& Marron (2006). 
 
 
 \item \textit{Page 12, line 15: What is random here? After a spending some time I believe that it is the $\Pi_T$ but on first reading I thought $E_T$s are non-random. Please explain these various objects better.}
 
+We have rewritten the text concerning the objects $\Pi_T^\ell$ and $E_T^\ell$ for $\ell \in \{\pm,+,-\}$ as suggested. We have in particular attempted to explain these objects in a clearer way and to clarify the question what is random here. (The collection of intervals $\Pi_T^\ell$ is indeed random.) Please see p.?? for the details. We hope the new exposition of the material makes things clearer.  
+
 
 \item \textit{Page 18, line 52: Please remove the speculative statements about what can be shown unless you actually show it in this paper.}
+
+We have removed the speculative statements following Proposition 4.1.
 
 
 \item \textit{Section 4.1: This section does not contain any truly new material and should be removed.}
 
+We have removed Section 4.1 from the paper. Moreover, we have thoroughly revised Section 4 on the estimation of the long-run error variance according to the suggestions of Referee 1. Please see our reply to comment (2) of Referee 1 for the details. 
+
 
 \item \textit{Section 5.2: I understand that you are doing comparisons to SiZer out of the box. However, some of the comparison might not be quite fair. SiZer is adjusting multiplicity ”row-wise” while the proposed method is attempting a global multiple control. What would happen if your $G_T$ only focused on one scale?}
 
-What's done (here $\alpha$ is always taken to be $0.05$):
-\begin{itemize}
-\item For each setting, each sample size, and each bandwidth row we report the percentage of realizations of the data in which there were some red or blue pixels in that row. The reports are given in ``parallel coordinate plots'' as in Figure 5 of \cite*{HannigMarron2006}. Each plot has the results of SiZer, the results of our global method and the results of our rowwise method respectively. The settings are as follows:
-\begin{enumerate}
-\item Under the null for $a_1 = -0.25, 0, 0.25$ and sample size $T = 250$.
-\item Under the alternative for $a_1 = -0.25, 0$ and sample size $T = 250$. The trend function is linear increasing on the whole interval with the slope $\beta = 1.25$. 
-\item Under the alternative for $a_1 = 0.25$ and sample size $T = 250$. The trend function is linear increasing on the whole interval with the slope $\beta = 2.25$. 
-\end{enumerate}
-\item Representative SiZer maps (for SiZer, our global method and our rowwise method) for simulated data from the null distribution for $a_1 = -0.25, 0, 0.25$. Sample size is $T = 250$. $1,000$ such SiZer maps were simulated for each setting and the population of them was ordered in terms of number of pixels that flag significant structure by being red or blue. For each setting and for each method we show 500th of these maps (essentially the median of the population), the 750th (the third quartile), the 850th and the 950th member of the ordered population.
-\end{itemize}
+%What's done (here $\alpha$ is always taken to be $0.05$):
+%\begin{itemize}
+%\item For each setting, each sample size, and each bandwidth row we report the percentage of realizations of the data in which there were some red or blue pixels in that row. The reports are given in ``parallel coordinate plots'' as in Figure 5 of \cite*{HannigMarron2006}. Each plot has the results of SiZer, the results of our global method and the results of our rowwise method respectively. The settings are as follows:
+%\begin{enumerate}
+%\item Under the null for $a_1 = -0.25, 0, 0.25$ and sample size $T = 250$.
+%\item Under the alternative for $a_1 = -0.25, 0$ and sample size $T = 250$. The trend function is linear increasing on the whole interval with the slope $\beta = 1.25$. 
+%\item Under the alternative for $a_1 = 0.25$ and sample size $T = 250$. The trend function is linear increasing on the whole interval with the slope $\beta = 2.25$. 
+%\end{enumerate}
+%\item Representative SiZer maps (for SiZer, our global method and our rowwise method) for simulated data from the null distribution for $a_1 = -0.25, 0, 0.25$. Sample size is $T = 250$. $1,000$ such SiZer maps were simulated for each setting and the population of them was ordered in terms of number of pixels that flag significant structure by being red or blue. For each setting and for each method we show 500th of these maps (essentially the median of the population), the 750th (the third quartile), the 850th and the 950th member of the ordered population.
+%\end{itemize}
 
 
 \item \textit{Page 25, line 1-26: I do not quite understand this figure. Would it be possible to rather reproduce the colorful SiZer figures that show the results of the test at various scales and locations? Also you should use several different signals. I believe that a single relatively large bump is not sufficient test bed. A good collection of signals can be found in \cite{DonohoJohnstone1995}. Also, would \cite{HannigLeePark2013} be helpful in comparing the results?}
 
-What's done (here $\alpha$ is always taken to be $0.05$):
-\begin{itemize}
-\item Plots comparing SiZer maps under the null:
-\begin{enumerate}
-\item Plots comparing SiZer and global method and rowwise methods respectively for sample size is $T=250$. AR(1) parameters are $a_1 = -0.25, 0, 0.25$ and $\sigma_\eta^2 = 1$.
-\end{enumerate}
-\item Plots comparing SiZer maps under the alternative:
-\begin{enumerate}
-\item Plots comparing SiZer and global method and rowwise methods respectively for sine curve plus AR(1) noise (as in \cite*{ParkHannigKang2009}) for sample size $T=250$. AR(1) parameters are $a_1 = -0.25, 0, 0.25$ and $\sigma_\eta^2 = 1$.
-\item Plots comparing SiZer and global method and rowwise methods respectively for blocks plus AR(1) noise (signal from \cite*{Donoho1995}, recentered and normalized as in \cite*{HannigMarron2006}) for sample size $T=250$. AR(1) parameters are $a_1 = -0.25, 0, 0.25$ and $\sigma_\eta^2 = 0.01$.
-\item Plots comparing SiZer and global method and rowwise methods respectively for blocks plus AR(1) noise (signal from \cite*{Donoho1995}, recentered and normalized as in \cite*{HannigMarron2006}) for sample size $T=1000$. AR(1) parameters are $a_1 = -0.25, 0, 0.25$ and $\sigma_\eta^2 = 0.01$.
-\end{enumerate}
-\end{itemize}
+%What's done (here $\alpha$ is always taken to be $0.05$):
+%\begin{itemize}
+%\item Plots comparing SiZer maps under the null:
+%\begin{enumerate}
+%\item Plots comparing SiZer and global method and rowwise methods respectively for sample size is $T=250$. AR(1) parameters are $a_1 = -0.25, 0, 0.25$ and $\sigma_\eta^2 = 1$.
+%\end{enumerate}
+%\item Plots comparing SiZer maps under the alternative:
+%\begin{enumerate}
+%\item Plots comparing SiZer and global method and rowwise methods respectively for sine curve plus AR(1) noise (as in \cite*{ParkHannigKang2009}) for sample size $T=250$. AR(1) parameters are $a_1 = -0.25, 0, 0.25$ and $\sigma_\eta^2 = 1$.
+%\item Plots comparing SiZer and global method and rowwise methods respectively for blocks plus AR(1) noise (signal from \cite*{Donoho1995}, recentered and normalized as in \cite*{HannigMarron2006}) for sample size $T=250$. AR(1) parameters are $a_1 = -0.25, 0, 0.25$ and $\sigma_\eta^2 = 0.01$.
+%\item Plots comparing SiZer and global method and rowwise methods respectively for blocks plus AR(1) noise (signal from \cite*{Donoho1995}, recentered and normalized as in \cite*{HannigMarron2006}) for sample size $T=1000$. AR(1) parameters are $a_1 = -0.25, 0, 0.25$ and $\sigma_\eta^2 = 0.01$.
+%\end{enumerate}
+%\end{itemize}
 
-Different signals: \\
--- Power results could be reported in terms of ability to find the jump points in the blocks example. 
+%Different signals: \\
+%-- Power results could be reported in terms of ability to find the jump points in the blocks example. 
 
 
 \item \textit{Page 31, line 1-39: Can you plot the SiZer results on this data?}
@@ -336,10 +357,13 @@ Different signals: \\
 %\end{figure}
 
 
+
+\newpage
 \bibliographystyle{ims}
 {\small
 \setlength{\bibsep}{0.55em}
 \bibliography{bibliography}}
+
 
 
 \end{document}
