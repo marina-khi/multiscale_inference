@@ -91,7 +91,7 @@ SiZer_weights <- function(T, grid)
 }
 
 
-SiZer_statistics <- function(data, weights, autocov)
+SiZer_std <- function(weights, autocov, T)
 
 { # compute local linear derivative estimator and its standard deviation on the
   # location-bandwidth grid.
@@ -107,9 +107,6 @@ SiZer_statistics <- function(data, weights, autocov)
   # std       vector of standard deviations (length = number of location-bandwidth
   #           points in the grid)
 
-  values   <- weights %*% data
-  values   <- as.vector(values)
-  
   autocov.mat <- matrix(NA,ncol=T,nrow=T)
   for(ell in 1:(T-1))
      autocov.mat[ell,] <- c(autocov[ell:1],autocov[2:(T-ell+1)])
@@ -122,7 +119,7 @@ SiZer_statistics <- function(data, weights, autocov)
   std.devs <- sqrt(temp)
   std.devs <- as.vector(std.devs)
 
-  return(list(vals=values,std=std.devs))
+  return(std=std.devs)
 }
 
 
