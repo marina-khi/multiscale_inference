@@ -13,11 +13,9 @@ source("functions/multiscale_testing.r")
 
 source("functions/long_run_variance.r")
 source("functions/sim.r")
-
-
-#source("functions/estimating_sigma_HvK.R")
-#dyn.load("functions/estimating_sigma_HvK.dll")
-
+source("functions/calculating_size.r")
+source("functions/SiZer_functions.r")
+dyn.load("functions/SiZer_functions.dll")
 
 
 # Parameters
@@ -31,266 +29,108 @@ SimRuns    <- 1000                  # number of simulation runs to produce criti
 kappa      <- 0.1                   # parameter to determine order statistic for the version
                                     # of the multiscale statistic from Section ?? 
 
-
-#Constructing necessary auxiliary parameters
+#Calculating size for the estimated sigma for small sample sizes
 number_of_cols            <- length(different_a1) * (length(different_alpha) + 1)
 size_matrix_ms            <- matrix(NA, nrow = length(different_T), ncol = number_of_cols)
 rownames(size_matrix_ms)  <- different_T
 
 k <- 1
 for (a1 in different_a1){
-  size_ms <- numeric(length(different_alpha))
-  for (T in different_T){
-    set.seed(1)
-    # Construct grid
-    grid      <- grid_construction(T)
-    gset      <- grid$gset
-    u.grid    <- sort(unique(gset[,1]))
-    h.grid    <- sort(unique(gset[,2]))
-
-    # Compute kernel weights and critical value for multiscale test
-    wghts  <- kernel_weights(T=T, grid=grid)
-
-    filename = paste0("quantiles/distr_T_", T,".RData")
-    if(!file.exists(filename)) {
-      quants <- multiscale_quantiles(T=T, grid=grid, weights=wghts, kappa=kappa, SimRuns=SimRuns)
-      save(quants, file = filename)
-    } else {
-      load(filename)
-    }
-
-    size_matrix_temp <- matrix(NA, nrow = Nsim, ncol = length(different_alpha))
-
-    for (i in 1:Nsim){
-      #Simulating the time series
-      data.simulated <- simulating_data(T, a1, sigma_eta, sim.design = 'constant')
-      data           <- data.simulated$data
-      trend          <- data.simulated$trend
-      sigma_true     <- data.simulated$sigma
-
-      #Estimating the coefficients for the ts and the long-run variance
-      AR.struc  <- AR_lrv(data=data, q=25, r.bar=10, p=1)
-      a.hat     <- AR.struc$ahat
-      vareta    <- AR.struc$vareta
-      sigma_hat <- sqrt(AR.struc$lrv)
-
-      stats    <- multiscale_statistics(data=data, weights=wghts, sigmahat=sigma_hat, grid=grid)
-      vals     <- stats$values
-
-      #Based on the same values of the test statistic, perform the test at dife
-      for (j in 1:length(different_alpha)){
-        alpha <- different_alpha[j]
-        test.res <- multiscale_testing(alpha=alpha, quantiles=quants, values=vals, grid=grid)
-        if (sum(abs(test.res$test_ms)) >0) {size_matrix_temp[i, j] <- 1} else {size_matrix_temp[i, j] <- 0}
-      }
-    }
-    size_ms <- cbind(size_ms, colSums(size_matrix_temp)/Nsim)
-    rm(size_matrix_temp)
-  }
-  size_matrix_ms[, (k * (length(different_alpha) + 1) - (length(different_alpha) - 1)):(k * (length(different_alpha) + 1))] <- t(size_ms[, -1])
+  size <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, kappa =kappa, SimRuns =SimRuns, type_of_sigma = 'estimated', q_ = 25, remove.small.ess = 'false')
+  size_matrix_ms[, (k * (length(different_alpha) + 1) - (length(different_alpha) - 1)):(k * (length(different_alpha) + 1))] <- size
   k <- k + 1
 }
 
-print.xtable(xtable(size_matrix_ms, digits = c(3), align = paste(replicate(number_of_cols/2 + 1, "c"), collapse = "")),
-  type="latex", file=paste0("plots/size.tex"), include.colnames = FALSE)
+print.xtable(xtable(size_matrix_ms, digits = c(3), align = paste(replicate(number_of_cols + 1, "c"), collapse = "")),
+  type="latex", file=paste0("plots/size_estimated_sigma.tex"), include.colnames = FALSE)
 
 
-#Constructing necessary auxiliary parameters
+#Calculating size for the true sigma for small sample sizes
 size_matrix_ms            <- matrix(NA, nrow = length(different_T), ncol = number_of_cols)
 rownames(size_matrix_ms)  <- different_T
 
 k <- 1
 for (a1 in different_a1){
-  size_ms <- numeric(length(different_alpha))
-  for (T in different_T){
-    set.seed(1)
-    # Construct grid with effective sample size ESS.star(u,h) >= 5 for any (u,h)
-    grid      <- grid_construction(T)
-    gset      <- grid$gset
-    u.grid    <- sort(unique(gset[,1]))
-    h.grid    <- sort(unique(gset[,2]))
-    
-    # Compute kernel weights and critical value for multiscale test
-    wghts  <- kernel_weights(T=T, grid=grid)
-    
-    filename = paste0("quantiles/distr_T_", T,".RData")
-    if(!file.exists(filename)) {
-      quants <- multiscale_quantiles(T=T, grid=grid, weights=wghts, kappa=kappa, SimRuns=SimRuns)
-      save(quants, file = filename)
-    } else {
-      load(filename)
-    }
-    
-    size_matrix_temp <- matrix(NA, nrow = Nsim, ncol = length(different_alpha))
-    
-    for (i in 1:Nsim){
-      #Simulating the time series
-      data.simulated <- simulating_data(T, a1, sigma_eta, sim.design = 'constant')
-      data           <- data.simulated$data
-      trend          <- data.simulated$trend
-      sigma_true     <- data.simulated$sigma
-
-      stats    <- multiscale_statistics(data=data, weights=wghts, sigmahat=sigma_true, grid=grid)
-      vals     <- stats$values
-      
-      #Based on the same values of the test statistic, perform the test at dife
-      for (j in 1:length(different_alpha)){
-        alpha <- different_alpha[j]
-        test.res <- multiscale_testing(alpha=alpha, quantiles=quants, values=vals, grid=grid)
-        if (sum(abs(test.res$test_ms)) >0) {size_matrix_temp[i, j] <- 1} else {size_matrix_temp[i, j] <- 0}
-      }
-    }
-    size_ms <- cbind(size_ms, colSums(size_matrix_temp)/Nsim)
-    rm(size_matrix_temp)
-  }
-  size_matrix_ms[, (k * (length(different_alpha) + 1) - (length(different_alpha) - 1)):(k * (length(different_alpha) + 1))] <- t(size_ms[, -1])
+  size <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, kappa =kappa, SimRuns =SimRuns, type_of_sigma = 'true', q_ = 25, remove.small.ess = 'false')[[1]]
+  size_matrix_ms[, (k * (length(different_alpha) + 1) - (length(different_alpha) - 1)):(k * (length(different_alpha) + 1))] <- size
   k <- k + 1
 }
 
-print.xtable(xtable(size_matrix_ms, digits = c(3), align = paste(replicate(number_of_cols/2 + 1, "c"), collapse = "")),
+print.xtable(xtable(size_matrix_ms, digits = c(3), align = paste(replicate(number_of_cols + 1, "c"), collapse = "")),
              type="latex", file=paste0("plots/size_true_sigma.tex"), include.colnames = FALSE)
 
 
-# Parameters
-different_T     <- seq(1000, 10000, by = 1000)
+
+
+
+#Calculating size for the estimated sigma for a_1 = +-0.9
+different_T     <- c(250, 500, 1000, 2000, 3000, 4000, 5000)
 different_a1    <- c(-0.9, 0.9)
 
-
-#Constructing necessary auxiliary parameters
-number_of_cols                       <- length(different_a1) * (length(different_alpha) + 1)
-size_matrix_ms_big_samples           <- matrix(NA, nrow = length(different_T), ncol = number_of_cols)
-rownames(size_matrix_ms_big_samples) <- different_T
+number_of_cols              <- length(different_a1) * (length(different_T) + 1)
+size_ms_est_sigma           <- matrix(NA, nrow = length(different_alpha), ncol = number_of_cols)
+rownames(size_ms_est_sigma) <- different_alpha
 
 k <- 1
 for (a1 in different_a1){
-  size_ms <- numeric(length(different_alpha))
-  for (T in different_T){
-    set.seed(1)
-    
-    #Construct the grid
-    grid      <- grid_construction(T)
-    gset      <- grid$gset
-    u.grid    <- sort(unique(gset[,1]))
-    h.grid    <- sort(unique(gset[,2]))
-    
-    # Compute kernel weights and critical value for multiscale test  
-    wghts  <- kernel_weights(T=T, grid=grid)
-    
-    filename = paste0("quantiles/distr_T_", T,".RData")
-    if(!file.exists(filename)) {
-      quants <- multiscale_quantiles(T=T, grid=grid, weights=wghts, kappa=kappa, SimRuns=SimRuns)
-      save(quants, file = filename)
-    } else {
-      load(filename)
-    }
-    
-    size_matrix_temp <- matrix(NA, nrow = Nsim, ncol = length(different_alpha))
-    
-    for (i in 1:Nsim){
-      #Simulating the time series
-      data.simulated <- simulating_data(T, a1, sigma_eta, sim.design = 'constant')
-      data           <- data.simulated$data
-      trend          <- data.simulated$trend
-      sigma_true     <- data.simulated$sigma
-      
-      #Estimating the coefficients for the ts and the long-run variance
-      AR.struc  <- AR_lrv(data=data, q=100, r.bar=10, p=1)    
-      a.hat     <- AR.struc$ahat 
-      vareta    <- AR.struc$vareta   
-      sigma_hat <- sqrt(AR.struc$lrv)
-      
-      #res_oracle         <- lm(data[2:T] ~ data[1:(T-1)] - 1)
-      #a_hat_oracle       <- as.vector(res_oracle$coef)
-      #var_eta_hat_oracle <- mean(res_oracle$residuals^2)
-      #sigma_hat_oracle   <- sqrt(var_eta_hat_oracle/(1-sum(a_hat_oracle))^2)
-      
-      #result_HvK       <- estimating_sigma_for_AR1(data, 20, 30)
-      #a_hat_hall       <- result_HvK[[2]]
-      #var_eta_hat_hall <- variance_eta(data, result_HvK[[2]], p = 1)
-      #sigma_hat_hall   <- sqrt(var_eta_hat_hall/((1 - sum(a_hat_hall))^2))
-
-      stats    <- multiscale_statistics(data=data, weights=wghts, sigmahat=sigma_hat, grid=grid) 
-      vals     <- stats$values
-      
-      #Based on the same values of the test statistic, perform the test at dife
-      for (j in 1:length(different_alpha)){
-        alpha <- different_alpha[j]
-        test.res <- multiscale_testing(alpha=alpha, quantiles=quants, values=vals, grid=grid)
-        if (sum(abs(test.res$test_ms)) >0) {size_matrix_temp[i, j] <- 1} else {size_matrix_temp[i, j] <- 0}
-      }
-    }
-    size_ms <- cbind(size_ms, colSums(size_matrix_temp)/Nsim)
-    rm(size_matrix_temp)
-  cat("T = ", T, ", a_1 = ", a1, "\n")
-  }
-  size_matrix_ms_big_samples[, (k * (length(different_alpha) + 1) - (length(different_alpha) - 1)):(k * (length(different_alpha) + 1))] <- t(size_ms[, -1])
+  result <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, kappa =kappa, SimRuns =SimRuns, type_of_sigma = 'estimated', q_ = 50, remove.small.ess = 'false')[[1]]
+  size_ms_est_sigma[, (k * (length(different_T) + 1) - (length(different_T) - 1)):(k * (length(different_T) + 1))] <- t(result)
   k <- k + 1
 }
 
-print.xtable(xtable(size_matrix_ms_big_samples, digits = c(3), align = paste(replicate(number_of_cols + 1, "c"), collapse = "")),
-               type="latex", file="plots/size_big_samples_estimated_sigma.tex", include.colnames = FALSE)
+print.xtable(xtable(size_ms_est_sigma, digits = c(3), align = paste(replicate(number_of_cols + 1, "c"), collapse = "")),
+             type="latex", file=paste0("plots/size_persistent_estimated_sigma.tex"), include.colnames = FALSE)
 
 
-
-#Constructing necessary auxiliary parameters
-size_matrix_ms_big_samples           <- matrix(NA, nrow = length(different_T), ncol = number_of_cols)
-rownames(size_matrix_ms_big_samples) <- different_T
+#Calculating size for the true sigma for for a_1 = +-0.9
+size_ms_true_sigma           <- matrix(NA, nrow = length(different_alpha), ncol = number_of_cols)
+rownames(size_ms_true_sigma) <- different_alpha
 
 k <- 1
 for (a1 in different_a1){
-  size_ms <- numeric(length(different_alpha))
-  for (T in different_T){
-    set.seed(1)
-    
-    #Construct the grid
-    grid      <- grid_construction(T)
-    gset      <- grid$gset
-    u.grid    <- sort(unique(gset[,1]))
-    h.grid    <- sort(unique(gset[,2]))
-    
-    # Compute kernel weights and critical value for multiscale test  
-    wghts  <- kernel_weights(T=T, grid=grid)
-    
-    filename = paste0("quantiles/distr_T_", T,".RData")
-    if(!file.exists(filename)) {
-      quants <- multiscale_quantiles(T=T, grid=grid, weights=wghts, kappa=kappa, SimRuns=SimRuns)
-      save(quants, file = filename)
-    } else {
-      load(filename)
-    }
-    
-    size_matrix_temp <- matrix(NA, nrow = Nsim, ncol = length(different_alpha))
-    
-    for (i in 1:Nsim){
-      #Simulating the time series
-      data.simulated <- simulating_data(T, a1, sigma_eta, sim.design = 'constant')
-      data           <- data.simulated$data
-      trend          <- data.simulated$trend
-      sigma_true     <- data.simulated$sigma
-      
-      #Estimating the coefficients for the ts and the long-run variance
-      AR.struc  <- AR_lrv(data=data, q=100, r.bar=10, p=1)    
-      a.hat     <- AR.struc$ahat 
-      vareta    <- AR.struc$vareta   
-      sigma_hat <- sqrt(AR.struc$lrv)
-      
-      stats    <- multiscale_statistics(data=data, weights=wghts, sigmahat=sigma_true, grid=grid) 
-      vals     <- stats$values
-      
-      #Based on the same values of the test statistic, perform the test at dife
-      for (j in 1:length(different_alpha)){
-        alpha <- different_alpha[j]
-        test.res <- multiscale_testing(alpha=alpha, quantiles=quants, values=vals, grid=grid)
-        if (sum(abs(test.res$test_ms)) >0) {size_matrix_temp[i, j] <- 1} else {size_matrix_temp[i, j] <- 0}
-      }
-    }
-    size_ms <- cbind(size_ms, colSums(size_matrix_temp)/Nsim)
-    rm(size_matrix_temp)
-    cat("T = ", T, ", a_1 = ", a1, "\n")
-  }
-  size_matrix_ms_big_samples[, (k * (length(different_alpha) + 1) - (length(different_alpha) - 1)):(k * (length(different_alpha) + 1))] <- t(size_ms[, -1])
+  result <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, kappa =kappa, SimRuns =SimRuns, type_of_sigma = 'true', q_ = 50, remove.small.ess = 'false')[[1]]
+  size_ms_true_sigma[, (k * (length(different_T) + 1) - (length(different_T) - 1)):(k * (length(different_T) + 1))] <- t(result)
   k <- k + 1
 }
 
-print.xtable(xtable(size_matrix_ms_big_samples, digits = c(3), align = paste(replicate(number_of_cols + 1, "c"), collapse = "")),
-             type="latex", file="plots/size_big_samples_true_sigma.tex", include.colnames = FALSE)
+print.xtable(xtable(size_ms_true_sigma, digits = c(3), align = paste(replicate(number_of_cols + 1, "c"), collapse = "")),
+             type="latex", file=paste0("plots/size_persistent_true_sigma.tex"), include.colnames = FALSE)
+
+
+
+# Parameters
+different_T     <- c(1000)
+different_a1    <- c(-0.5, 0.5)
+different_alpha <- c(0.05)
+
+Nsim       <- 1000                  # number of simulation runs for size/power calculations
+sigma_eta  <- 1                     # standard deviation of the innovation term in the AR model
+SimRuns    <- 1000                  # number of simulation runs to produce critical values
+kappa      <- 0.1                   # parameter to determine order statistic for the version
+# of the multiscale statistic from Section ?? 
+
+#Calculating size for the true sigma and for different versions of the test
+number_of_cols         <- length(different_a1) * 5
+size_matrix            <- matrix(NA, nrow = length(different_T), ncol = number_of_cols)
+rownames(size_matrix)  <- different_T
+
+k <- 1
+for (a1 in different_a1){
+  # size <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, kappa =kappa, SimRuns =SimRuns, type_of_sigma = 'true', q_ = 25, remove.small.ess = 'true')
+  # size_matrix[, (k-1)*5 + 2] <- size[[1]]
+  # size_matrix[, (k-1)*5 + 3] <- size[[2]]
+  # size_matrix[, (k-1)*5 + 4] <- size[[3]]
+  size.SiZer <- calculating_size_for_SiZer(a1, different_T, different_alpha, sigma_eta, Nsim = 1000, SimRuns =1000)
+  size_matrix[, (k-1)*5 + 5] <- size.SiZer
+  k <- k + 1
+}
+
+print.xtable(xtable(size_matrix, digits = c(3), align = paste(replicate(number_of_cols + 1, "c"), collapse = "")),
+             type="latex", file=paste0("plots/comparing_size.tex"), include.colnames = FALSE)
+
+
+
+
+
+
+
