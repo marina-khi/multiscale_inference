@@ -5,7 +5,7 @@ calculating_size <- function(a1, different_T, different_alpha, sigma_eta, Nsim =
   size_rows  <- numeric(length(different_alpha))
   
   for (T in different_T){
-  set.seed(1)  
+  set.seed(T)  
     # Construct grid
     grid      <- grid_construction(T)
     gset      <- grid$gset
@@ -36,7 +36,6 @@ calculating_size <- function(a1, different_T, different_alpha, sigma_eta, Nsim =
     size_matrix_temp_uncor <- matrix(NA, nrow = Nsim, ncol = length(different_alpha))
     size_matrix_temp_rows  <- matrix(NA, nrow = Nsim, ncol = length(different_alpha))
     
-    set.seed(1)
     for (i in 1:Nsim){
       #Simulating the time series
       data.simulated <- simulating_data(T, a1, sigma_eta, sim.design = 'constant')
@@ -85,7 +84,7 @@ calculating_size <- function(a1, different_T, different_alpha, sigma_eta, Nsim =
 calculating_size_for_SiZer <- function(a1, different_T, alpha, sigma_eta, Nsim = 1000, SimRuns =1000){
     size    <- c()
   for (T in different_T){
-    set.seed(1)
+    set.seed(T)
     # Construct grid
     grid      <- grid_construction(T)
     gset      <- grid$gset
@@ -127,7 +126,7 @@ calculating_size_for_SiZer <- function(a1, different_T, alpha, sigma_eta, Nsim =
 
 calculating_size_rowwise <- function(a1, T, alpha, sigma_eta, Nsim = 1000, SimRuns =1000){
   
-  set.seed(1)
+  set.seed(T)
   # Construct grid
   grid      <- grid_construction(T)
   gset      <- grid$gset

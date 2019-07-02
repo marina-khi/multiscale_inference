@@ -60,7 +60,7 @@ simulating_data <- function(T, a1, sigma_eta, sim.design, slope.fac = 0){
       arg <- (u-0.5)/(u.upper-0.5)
       return(0.5 * as.double(u >= u.lower & u <= u.upper) * (1-arg^2)^2)
     }
-    trend <- bump((1:T)/T)
+    trend <- bump((1:T)/T) * slope.fac
   } else {cat("Unrecognized sim.design \n")}
   
   #simulated time series

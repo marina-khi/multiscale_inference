@@ -40,7 +40,7 @@ rownames(size_matrix_ms)  <- different_T
 #estimated lrv
 k <- 1
 for (a1 in different_a1){
-  size <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, kappa =0.1, SimRuns =SimRuns, type_of_sigma = 'estimated', q_ = 25, remove.small.ess = 'false')
+  size <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, kappa =0.1, SimRuns =SimRuns, type_of_sigma = 'estimated', q_ = 25, remove.small.ess = 'false')[[1]]
   size_matrix_ms[, (k * (length(different_alpha) + 1) - (length(different_alpha) - 1)):(k * (length(different_alpha) + 1))] <- size
   k <- k + 1
 }
