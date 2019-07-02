@@ -5,7 +5,7 @@ calculating_size <- function(a1, different_T, different_alpha, sigma_eta, Nsim =
   size_rows  <- numeric(length(different_alpha))
   
   for (T in different_T){
-    
+  set.seed(1)  
     # Construct grid
     grid      <- grid_construction(T)
     gset      <- grid$gset
@@ -83,8 +83,9 @@ calculating_size <- function(a1, different_T, different_alpha, sigma_eta, Nsim =
 
 
 calculating_size_for_SiZer <- function(a1, different_T, alpha, sigma_eta, Nsim = 1000, SimRuns =1000){
-  size    <- c()
+    size    <- c()
   for (T in different_T){
+    set.seed(1)
     # Construct grid
     grid      <- grid_construction(T)
     gset      <- grid$gset
@@ -124,8 +125,9 @@ calculating_size_for_SiZer <- function(a1, different_T, alpha, sigma_eta, Nsim =
   return(size.results.sizer = size)
 }
 
-calculating_size_rowwise <- function(a1, T, alpha, sigma_eta, Nsim = 1000, kappa =0.1, SimRuns =1000){
+calculating_size_rowwise <- function(a1, T, alpha, sigma_eta, Nsim = 1000, SimRuns =1000){
   
+  set.seed(1)
   # Construct grid
   grid      <- grid_construction(T)
   gset      <- grid$gset
@@ -146,13 +148,13 @@ calculating_size_rowwise <- function(a1, T, alpha, sigma_eta, Nsim = 1000, kappa
 
   # Compute kernel weights and critical value for multiscale test
   wghts  <- kernel_weights(T=T, grid=grid)
-  quants <- multiscale_quantiles(T=T, grid=grid, weights=wghts, kappa=kappa, SimRuns=SimRuns)
+  quants <- multiscale_quantiles(T=T, grid=grid, weights=wghts, kappa=0.1, SimRuns=SimRuns)
 
   sizer.wghts  <- SiZer_weights(T=T, grid=grid)
   sizer.std    <- SiZer_std(weights=sizer.wghts, autocov=autocov, T)
   sizer.quants <- SiZer_quantiles(alpha=alpha, T=T, grid=grid, autocov=autocov)
   
-  set.seed(1)
+  #set.seed(1)
   for (i in 1:Nsim){
     #Simulating the time series
     data.simulated <- simulating_data(T, a1, sigma_eta, sim.design = 'constant')

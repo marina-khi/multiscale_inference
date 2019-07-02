@@ -144,24 +144,32 @@ SiZer_quantiles <- function(alpha, T, grid, autocov=NULL)
     }
   } 
 
+  
   if(!is.null(autocov))
   { for(i in 1:length(h.vec))
-    {  gg       <- sum(gset[,2] == h.vec[i])
-       arg      <- seq(-(T-1),(T-2),by=1)/(T*h.vec[i])
-       autocovs <- c(autocov[T:2],autocov[1:(T-1)])
-       int1     <- sum(autocovs * exp(-arg^2/4) * (12 - 12*arg^2 + arg^4) / 16) 
-       int2     <- sum(autocovs * exp(-arg^2/4) * (1 - arg^2/2))
+    { gg       <- sum(gset[,2] == h.vec[i])
+       #arg      <- seq(-(T-1),(T-2),by=1)/(T*h.vec[i])
+       #autocovs <- c(autocov[T:2],autocov[1:(T-1)])
+       #int1     <- sum(autocovs * exp(-arg^2/4) * (12 - 12*arg^2 + arg^4) / 16) 
+       #int2     <- sum(autocovs * exp(-arg^2/4) * (1 - arg^2/2))
 
-       arg      <- seq(-(T-2),(T-1),by=1)/(T*h.vec[i])
-       autocovs <- c(autocov[(T-1):2],autocov[1:T])
-       int1     <- int1 + sum(autocovs * exp(-arg^2/4) * (12 - 12*arg^2 + arg^4) / 16) 
-       int2     <- int2 + sum(autocovs * exp(-arg^2/4) * (1 - arg^2/2))
+       #arg      <- seq(-(T-2),(T-1),by=1)/(T*h.vec[i])
+       #autocovs <- c(autocov[(T-1):2],autocov[1:T])
+       #int1     <- int1 + sum(autocovs * exp(-arg^2/4) * (12 - 12*arg^2 + arg^4) / 16) 
+       #int2     <- int2 + sum(autocovs * exp(-arg^2/4) * (1 - arg^2/2))
+      integrand_1 <- function(s, h_, delta_, gamma_) {100* gamma_[floor(s * h_ / delta_) + 1] * exp(-s^2/4) * (12 - 12 * s^2+ s^4)/16}
+        
+      I_gamma_num <- 2 * integrate(integrand_1, lower = 0, upper = (T - 1) / (T * h.vec[i]), h_ = h.vec[i], delta_ = 1/T, gamma_ = autocov, subdivisions = 300)[[1]]
+        
+      integrand_2 <- function(s, h_, delta_, gamma_) {100 *gamma_[floor(s * h_ / delta_) + 1] * exp(-s^2/4) * (1 - s^2/2)}
+        
+      I_gamma_denom <- 2 * integrate(integrand_2, lower = 0, upper = (T - 1) / (T * h.vec[i]), h_ = h.vec[i], delta_ = 1/T, gamma_ = autocov, subdivisions = 300)[[1]]
+      I.gamma <- I_gamma_num/I_gamma_denom
  
-       I.gamma <- int1/int2
-       theta   <- 2 * pnorm( sqrt(I.gamma) * sqrt(log(gg)) * Delta.tilde/h.vec[i] ) - 1
+      theta   <- 2 * pnorm( sqrt(I.gamma) * sqrt(log(gg)) * Delta.tilde/h.vec[i] ) - 1
  
-       arg       <- (1-alpha/2)^(1/(theta*gg))
-       quants[i] <- qnorm(arg)
+      arg       <- (1-alpha/2)^(1/(theta*gg))
+      quants[i] <- qnorm(arg)
     }
   }
 
