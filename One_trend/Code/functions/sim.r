@@ -61,6 +61,8 @@ simulating_data <- function(T, a1, sigma_eta, sim.design, slope.fac = 0){
       return(0.5 * as.double(u >= u.lower & u <= u.upper) * (1-arg^2)^2)
     }
     trend <- bump((1:T)/T) * slope.fac
+  } else if (sim.design == 'sine'){
+    trend <- sin(6*pi*(1:T)/T)
   } else {cat("Unrecognized sim.design \n")}
   
   #simulated time series
