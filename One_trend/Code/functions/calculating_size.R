@@ -1,4 +1,5 @@
-calculating_size <- function(a1, different_T, different_alpha, sigma_eta, Nsim = 1000, kappa =0.1, SimRuns =1000, type_of_sigma = 'estimated', q_ = 25, remove.small.ess = 'false'){
+calculating_size <- function(a1, different_T, different_alpha, sigma_eta, Nsim = 1000, kappa =0.1,
+                             SimRuns =1000, type_of_sigma = 'estimated', q_ = 25, remove.small.ess = 'false'){
 
   size_ms    <- numeric(length(different_alpha))
   size_uncor <- numeric(length(different_alpha))

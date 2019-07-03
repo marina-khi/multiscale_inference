@@ -18,12 +18,11 @@ source("functions/SiZer_functions.r")
 dyn.load("functions/SiZer_functions.dll")
 
 
-
 # Parameters
-Nsim       <- 5000                  # number of simulation runs for size/power calculations
-sigma_eta  <- 1                     # standard deviation of the innovation term in the AR model
-SimRuns    <- 5000                  # number of simulation runs to produce critical values
-
+Nsim          <- 1000        # number of simulation runs for size/power calculations
+sigma_eta     <- 1           # standard deviation of the innovation term in the AR model
+SimRuns       <- 5000        # number of simulation runs to produce critical values
+type_of_sigma <- 'estimated' # Estimating the long-run variance \sigma^2 or plugging the true theoretical value
 
 ##########################################
 #Calculating size for small parameters a1#
@@ -37,75 +36,42 @@ number_of_cols            <- length(different_a1) * (length(different_alpha) + 1
 size_matrix_ms            <- matrix(NA, nrow = length(different_T), ncol = number_of_cols)
 rownames(size_matrix_ms)  <- different_T
 
-#estimated lrv
 k <- 1
 for (a1 in different_a1){
-  size <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, kappa =0.1, SimRuns =SimRuns, type_of_sigma = 'estimated', q_ = 25, remove.small.ess = 'false')[[1]]
+  size <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, kappa =0.1, SimRuns =SimRuns, type_of_sigma = type_of_sigma, q_ = 25, remove.small.ess = 'false')[[1]]
   size_matrix_ms[, (k * (length(different_alpha) + 1) - (length(different_alpha) - 1)):(k * (length(different_alpha) + 1))] <- size
   k <- k + 1
 }
 
 print.xtable(xtable(size_matrix_ms, digits = c(3), align = paste(replicate(number_of_cols + 1, "c"), collapse = "")),
-  type="latex", file=paste0("plots/size_estimated_sigma.tex"), include.colnames = FALSE)
-
-
-#true lrv
-size_matrix_ms            <- matrix(NA, nrow = length(different_T), ncol = number_of_cols)
-rownames(size_matrix_ms)  <- different_T
-
-k <- 1
-for (a1 in different_a1){
-  size <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, kappa =0.1, SimRuns =SimRuns, type_of_sigma = 'true', q_ = 25, remove.small.ess = 'false')[[1]]
-  size_matrix_ms[, (k * (length(different_alpha) + 1) - (length(different_alpha) - 1)):(k * (length(different_alpha) + 1))] <- size
-  k <- k + 1
-}
-
-print.xtable(xtable(size_matrix_ms, digits = c(3), align = paste(replicate(number_of_cols + 1, "c"), collapse = "")),
-             type="latex", file=paste0("plots/size_true_sigma.tex"), include.colnames = FALSE)
-
+  type="latex", file=paste0("plots/size_", type_of_sigma, "_sigma.tex"), include.colnames = FALSE)
 
 
 ######################################
 #Calculating size for for a_1 = +-0.9#
 ######################################
 
-different_T     <- c(250, 500, 1000, 2000, 3000, 4000, 5000)
+different_T     <- c(250, 500, 1000, 2000, 3000)
 different_a1    <- c(-0.9, 0.9)
 
-number_of_cols              <- length(different_a1) * (length(different_T) + 1)
-size_ms_est_sigma           <- matrix(NA, nrow = length(different_alpha), ncol = number_of_cols)
-rownames(size_ms_est_sigma) <- different_alpha
-
-#estimated lrv
-k <- 1
-for (a1 in different_a1){
-  result <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, kappa =0.1, SimRuns =SimRuns, type_of_sigma = 'estimated', q_ = 50, remove.small.ess = 'false')[[1]]
-  size_ms_est_sigma[, (k * (length(different_T) + 1) - (length(different_T) - 1)):(k * (length(different_T) + 1))] <- t(result)
-  k <- k + 1
-}
-
-print.xtable(xtable(size_ms_est_sigma, digits = c(3), align = paste(replicate(number_of_cols + 1, "c"), collapse = "")),
-             type="latex", file=paste0("plots/size_persistent_estimated_sigma.tex"), include.colnames = FALSE)
-
-
-#true lrv
-size_ms_true_sigma           <- matrix(NA, nrow = length(different_alpha), ncol = number_of_cols)
-rownames(size_ms_true_sigma) <- different_alpha
+number_of_cols    <- length(different_a1) * (length(different_T) + 1)
+size_ms           <- matrix(NA, nrow = length(different_alpha), ncol = number_of_cols)
+rownames(size_ms) <- different_alpha
 
 k <- 1
 for (a1 in different_a1){
-  result <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, kappa =0.1, SimRuns =SimRuns, type_of_sigma = 'true', q_ = 50, remove.small.ess = 'false')[[1]]
-  size_ms_true_sigma[, (k * (length(different_T) + 1) - (length(different_T) - 1)):(k * (length(different_T) + 1))] <- t(result)
+  result <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, kappa =0.1, SimRuns =SimRuns, type_of_sigma = type_of_sigma, q_ = 50, remove.small.ess = 'false')[[1]]
+  size_ms[, (k * (length(different_T) + 1) - (length(different_T) - 1)):(k * (length(different_T) + 1))] <- t(result)
   k <- k + 1
 }
 
-print.xtable(xtable(size_ms_true_sigma, digits = c(3), align = paste(replicate(number_of_cols + 1, "c"), collapse = "")),
-             type="latex", file=paste0("plots/size_persistent_true_sigma.tex"), include.colnames = FALSE)
+print.xtable(xtable(size_ms, digits = c(3), align = paste(replicate(number_of_cols + 1, "c"), collapse = "")),
+             type="latex", file=paste0("plots/size_persistent_", type_of_sigma, "_sigma.tex"), include.colnames = FALSE)
 
 
-#########################
-#Calculating global size#
-#########################
+########################################
+#Calculating global size for comparison#
+########################################
 
 different_T     <- c(250, 500, 1000)
 different_a1    <- c(-0.5, 0.5)
@@ -117,7 +83,9 @@ rownames(size_matrix)  <- different_T
 
 k <- 1
 for (a1 in different_a1){
-  size <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, kappa =0.1, SimRuns =SimRuns, type_of_sigma = 'true', q_ = 25, remove.small.ess = 'true')
+  #Here we are plugging the true long-run variance to make the comparison between the method fair.
+  #Therefore, all the differences in power and in size come from the methods themselves
+  size <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, SimRuns =SimRuns, type_of_sigma = 'true', remove.small.ess = 'true')
   size_matrix[, (k-1)*5 + 2] <- size[[1]]
   size_matrix[, (k-1)*5 + 3] <- size[[2]]
   size_matrix[, (k-1)*5 + 4] <- size[[3]]
@@ -142,29 +110,25 @@ for (a1 in different_a1){
   result <- calculating_size_rowwise(a1, T, alpha, sigma_eta, Nsim = Nsim, SimRuns =SimRuns)
   h.grid <- result$h.grid
   
-  pdffilename <- paste0("plots/pcp_rowwise_T_", T, "_a1_", a1*100, "_new_look.pdf")
+  pdffilename <- paste0("plots/pcp_size_T_", T, "_a1_", a1*100, ".pdf")
   pdf(pdffilename, width=5.5, height=4.16, paper="special")
   
-  par(mar = c(4, 4, 1.5, 0)) #Margins for each plot
+  par(mfrow = c(1, 1), cex = 1,  tck = -0.025) #Setting the layout of the graphs
+
+  par(mar = c(3.5, 3.5, 0, 0)) #Margins for each plot
   par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins 
   
-  plot(x = h.grid, y = result$size_ms*100, ylim=c(0, 17), yaxp = c(0, 15, 3), type="l", lty=1, xaxt='n', ylab = "Rowwise % sig.", xlab='bandwidth')
-  points(x = h.grid, y = result$size_ms*100, pch=19, cex = 0.6)
+  plot(x = h.grid, y = result$size_ms*100, ylim=c(0, 17), yaxp = c(0, 15, 3), type="l", lty=1, xaxt='n', ylab = "Percentage (%)", xlab='bandwidth h',mgp=c(2,0.5,0))
+  points(x = h.grid, y = result$size_ms*100, pch=19, cex = 0.8)
   
-  lines(x = h.grid, y = result$size_uncor*100, lwd=1.5)#lty="dashed", 
-  points(x = h.grid, y = result$size_uncor*100, pch=15, cex = 0.6)
+  lines(x = h.grid, y = result$size_uncor*100, lwd=1.5, lty = 'dashed')
+  lines(x = h.grid, y = result$size_rows*100, lwd=1.5, lty = 'dotted') 
+  lines(x = h.grid, y = result$size_SiZer*100, lwd=1.5)
   
-  lines(x = h.grid, y = result$size_rows*100, lwd=1.5)#lty="dotted", 
-  points(x = h.grid, y = result$size_rows*100, pch=17, cex = 0.6)
-
-  lines(x = h.grid, y = result$size_SiZer*100, lwd=1.5)#lty="dotdash", 
-  points(x = h.grid, y = result$size_SiZer*100, pch=8, cex = 0.6)
+  abline(h = alpha*100, lty = 'dashed', col = 'grey')
   
-  abline(h = alpha*100, lty = 'dashed')
-  
-  axis(1, at=h.grid)
-  legend('topleft', cex = 0.65, bty = "n", legend = c(expression(italic(T)[MS]), expression(italic(T)[UC]), expression(italic(T)[RW]), expression(italic(T)[SiZer])),
-         #lty=c("solid","dashed","dotted", 'dotdash'),
-         pch = c(19, 15, 17, 8), lwd=1.5, y.intersp=1.25)
+  axis(1, at=h.grid,mgp=c(1.8,0.5,0))
+  legend('topleft', cex = 0.8, bty = "n", legend = c(expression(italic(T)[MS]), expression(italic(T)[UC]), expression(italic(T)[RW]), expression(italic(T)[SiZer])),
+         pch = c(19, NA, NA, NA), lty = c('solid', 'dashed', 'dotted', 'solid'), y.intersp=1.25)
   dev.off()
 }
