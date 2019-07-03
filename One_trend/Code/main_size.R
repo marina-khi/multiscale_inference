@@ -102,7 +102,7 @@ print.xtable(xtable(size_matrix, digits = c(3), align = paste(replicate(number_o
 #Calculating rowwise size and creating parallel coordinate plots#
 #################################################################
 
-T            <- 500
+T            <- 1000
 different_a1 <- c(-0.5, 0.5)
 alpha        <- 0.05
 
