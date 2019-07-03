@@ -70,10 +70,10 @@ simultaneously for a large number of different time intervals $[u-h,u+h]$, in pa
 Let $s_T(u,h)$ be the SiZer statistic to test $H_0(u,h)$, which corresponds to the statistic $\widehat{\psi}_T(u,h)$ in our approach and which is properly defined in Section ??. There are two versions of dependent SiZer: 
 \begin{enumerate}[label=(\alph*), leftmargin=0.8cm]
 
-\item The global version aggegrates the individual statistics $s_T(u,h)$ into the overall statistic $S_T = \max_{h \in H} S_T(h)$, where $S_T(h) = \max_{u \in U} |s_T(u,h)|$. The statistic $S_T$ is the counterpart to the multiscale statistic $\widehat{\Psi}_T$ in our approach. 
+\item The global version aggegrates the individual statistics $s_T(u,h)$ into the overall statistic $S_T = \max_{h \in H} S_T(h)$, where $S_T(h) = \max_{u \in I} |s_T(u,h)|$. The statistic $S_T$ is the counterpart to the multiscale statistic $\widehat{\Psi}_T$ in our approach. 
 
 \item The row-wise SiZer version considers each scale $h \in H$ separately. In particular, for each bandwidth $h \in H$, a test is carried out based on the statistic $S_T(h)$. 
-%A row-wise analogue of our approach would be obtained by carrying out a test for each scale $h \in H$ separately based on the statistic $\widehat{\Psi}_T(h) = \max_{u \in U} |\widehat{\psi}_T(u,h)/\widehat{\sigma}|$. (Note that we can drop the correction term $\lambda(h)$ in this case as it is a fixed constant if only a single bandwidth $h$ is taken into account.)
+%A row-wise analogue of our approach would be obtained by carrying out a test for each scale $h \in H$ separately based on the statistic $\widehat{\Psi}_T(h) = \max_{u \in I} |\widehat{\psi}_T(u,h)/\widehat{\sigma}|$. (Note that we can drop the correction term $\lambda(h)$ in this case as it is a fixed constant if only a single bandwidth $h$ is taken into account.)
 
 \end{enumerate}
 In practice, SiZer is commonly implemented in its row-wise form. The main reason is that it has more power than the global version by construction. However, this gain of power comes at a cost: Row-wise SiZer carries out a test \textit{separately} for each scale $h \in H$, thus ignoring the simultaneous test problem across scales $h$. Hence, it is not a rigorous level-$\alpha$-test of the overall null hypothesis $H_0$. For this reason, we focus on global SiZer in what follows. 
@@ -92,12 +92,16 @@ Even though related, our methods and theory are markedly different from those of
 
 The theory of our paper allows to deal with this problem. In particular, it allows to simultaneously consider scales $h$ that remain bounded away from zero and scales $h = h_T$ that converge to zero at various different rates $T^{-\gamma}$. To achieve this, we come up with a proof strategy which is very different from that in the SiZer literature:  As proven in \cite{ChaudhuriMarron2000} for the i.i.d.\ case and in \cite{ParkHannigKang2009} for the dependent data case, $S_T$ weakly converges to some limit process $S$ under the overall null hypothesis $H_0$. This is the central technical result on which the theoretical properties of SiZer are based. In contrast to this, our proof strategy does not even require the statistic $\widehat{\Psi}_T$ to have a weak limit and is thus not restricted by the limitations of classic weak convergence theory. 
 
-\item There are different ways to combine the test statistics $S_T(h) = \max_{u \in I} |s_T(u,h)|$ for different scales $h \in H$. One way is to take their maximum, which leads to the SiZer statistic $S_T = \max_{h \in H} S_T(h)$. We could proceed analogously and consider the multiscale statistic $\widehat{\Psi}_{T,\text{uncorrected}} = \max_{h \in H} \widehat{\Psi}_T(h) = \max_{(u,h) \in U \times H} |\widehat{\psi}_T(u,h)/\widehat{\sigma}|$. However, as argued in \cite{DuembgenSpokoiny2001} and as discussed in Section ?? of our paper, this aggregation scheme is not optimal when the set $H = H_T$ contains scales $h$ of many different rates. Following the lead of \cite{DuembgenSpokoiny2001}, we consider the test statistic $\widehat{\Psi}_T = \max_{(u,h) \in U \times H} \{ |\widehat{\psi}_T(u,h)/\widehat{\sigma}| - \lambda(h) \}$ with the additive correction terms $\lambda(h)$. Hence, even though related, our multiscale test statistic $\widehat{\Psi}_T$ differs from the SiZer statistic $S_T$ in important ways. 
+\item There are different ways to combine the test statistics $S_T(h) = \max_{u \in I} |s_T(u,h)|$ for different scales $h \in H$. One way is to take their maximum, which leads to the SiZer statistic $S_T = \max_{h \in H} S_T(h)$. We could proceed analogously and consider the multiscale statistic $\widehat{\Psi}_{T,\text{uncorrected}} = \max_{h \in H} \widehat{\Psi}_T(h) = \max_{(u,h) \in I \times H} |\widehat{\psi}_T(u,h)/\widehat{\sigma}|$. However, as argued in \cite{DuembgenSpokoiny2001} and as discussed in Section ?? of our paper, this aggregation scheme is not optimal when the set $H = H_T$ contains scales $h$ of many different rates. Following the lead of \cite{DuembgenSpokoiny2001}, we consider the test statistic $\widehat{\Psi}_T = \max_{(u,h) \in I \times H} \{ |\widehat{\psi}_T(u,h)/\widehat{\sigma}| - \lambda(h) \}$ with the additive correction terms $\lambda(h)$. Hence, even though related, our multiscale test statistic $\widehat{\Psi}_T$ differs from the SiZer statistic $S_T$ in important ways. 
 
 \item The main complication in carrying out both our multiscale test and SiZer is to determine the critical values, that is, the quantiles of the test statistics $\widehat{\Psi}_T$ and $S_T$ under $H_0$. In order to approximate the quantiles, we proceed quite differently than in the SiZer literature. The quantiles of the SiZer statistic $S_T$ can be approximated by those of the weak limit process $S$. Usually, however, the quantiles of $S$ cannot be determined analytically but have to be approximated themselves (e.g.\ by the bootstrap procedures of \cite{ChaudhuriMarron1999, ChaudhuriMarron2000}). Alternatively, the quantiles of $S_T$ can be approximated by procedures based on extreme value theory (as proposed in \cite{HannigMarron2006} and \cite{ParkHannigKang2009}). In our approach, the quantiles of $\widehat{\Psi}_T$ under $H_0$ are approximated by those of a suitably constructed Gaussian analogue of $\widehat{\Psi}_T$. It is far from obvious that this Gaussian approximation is valid when the data are dependent. To see this, deep strong approximation theory for dependent data (as derived in \cite{BerkesLiuWu2014}) is needed. It is important to note that our Gaussian approximation procedure is not the same as the bootstrap procedures proposed in \cite{ChaudhuriMarron1999, ChaudhuriMarron2000}. Both procedures can of course be regarded as resampling methods. However, the resampling is done in a quite different way in our case.
 
 \end{enumerate}
 We hope the above points make clear that the methodological and theoretical contributions of our paper are quite substantial relative to the SiZer methodology. 
+\vspace{10pt}
+
+
+\textbf{Simulations and applications.} We have thoroughly revised the simulation study in Section ??. In particular, we have re-designed large parts of the comparison study with SiZer according to the suggestions of Referee 2. Moreover, we have analyzed our multiscale test for the case of strongly autocorrelated errors (in particular for AR($1$) errors with parameter $\pm 0.9$) as suggested by Referee 1. Note that we have skipped the simulation scenario which mimics the situation in the application section in order to keep the simulation study to a reasonable length. Finally, we have added a second application example to global temeprature data as requested by Referee 1. 
 
 
 %Old version: 
@@ -184,6 +188,8 @@ In order to generalize our theory to the case that $\{\varepsilon_t\}$ has an AR
 
 \textit{In the simulation study, the authors considered AR(1) processes with relatively weaker dependence: $a_1 \in \{-0.5, -0.25, 0.25, 0.5\}$. One should consider the \linebreak stronger positive/negative dependence case with $a = \pm 0.9$ (say). How does the strength of dependence affect the performance of the procedure?}
 
+We have added the AR($1$) case with $a = \pm 0.9$ to our revised simulation study in Section ??. In particular, we have carried out additional size simulations for the case that $a = \pm 0.9$. The results are reported in Table 2 on p.?? and can be summarized as follows: For the negative parameter $a = -0.9$, the size of the multiscale test is close to the nominal target $\alpha$ for sample sizes $T \ge 1000$. However, for the smaller sample sizes $T=250$ and $T=500$ there are substantial size distortions. In the case of $a = 0.9$, a similar picture arises, however, with somewhat smaller size distortions. Hence, when the error terms are strongly (positively or negatively) autocorrelated, our test method has good size properties only for sufficiently large sample sizes. In our opinion, this is not so surprising: Statistical inference in the presence of strongly autocorrelated data is a very difficult problem in general and satisfying results can only be expected for sufficiently large sample sizes.
+
 \end{enumerate}
 
 
@@ -194,12 +200,37 @@ In order to generalize our theory to the case that $\{\varepsilon_t\}$ has an AR
 \end{center}
 
 
-Thank you very much for the constructive and useful suggestions. In our revision, we have addressed all of them. Please see our replies to your comments below.
+Thank you very much for the constructive and useful suggestions. In our revision, we have addressed all of them. In particular, we have thoroughly revised the simulation study which compares our multiscale test with SiZer according to your suggestions. Here are our point-by-point responses to your comments. 
 
 
 \begin{enumerate}[label=(\arabic*),leftmargin=0.8cm]
 
 \item \textit{Section 3.2: The authors recommend computing the quantiles for the independent Gaussian case by simulation. This suggestion is already in the original SiZer paper \citep{ChaudhuriMarron1999}. However in the late 1990s computing power was not sufficient to make this suggestion feasible. This led to the use of approximation such as in \cite{HannigMarron2006}. I would like to ask how does the simulation based quantile compare to the approximation in \cite{HannigMarron2006}.} 
+
+In the revised simulation study of Section ??, we consider a row-wise version $\mathcal{T}_{\text{RW}}$ of our multiscale test, which is the direct counterpart to the row-wise dependent SiZer method $\mathcal{T}_{\text{SiZer}}$ developed in \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. The quantiles of $\mathcal{T}_{\text{RW}}$ under the null are approximated by our simulation-based procedure, whereas the quantiles of $\mathcal{T}_{\text{SiZer}}$ are approximated by the method of \cite{HannigMarron2006} and \cite{ParkHannigKang2009} which is based on extreme value theory. In our simulation study, we compare the size and power properties of $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$. This shows how our simulation-based procedure compares to the approximation in \cite{HannigMarron2006} and \cite{ParkHannigKang2009}.
+
+
+At this point, we would like to add two remarks on our simulation-based procedure to compute the quantiles of the multiscale test under the null: 
+\begin{itemize}[leftmargin=0.5cm]
+\item As already mentioned when summarizing the main differences between our multiscale approach and SiZer at the beginning of this letter, the Gaussian approximation procedure that we use for simulating the quantiles of the multiscale statistic under the null is not the same as the bootstrap procedures proposed in \cite{ChaudhuriMarron1999, ChaudhuriMarron2000}. Both procedures are of course resampling methods. However,the resampling is done in a quite different way. 
+\item It far from clear that our simulation-based procedure is theoretically valid and provides an adequate critical value such that our test has asymptotically the correct size under the null. One of the main theoretical contributions of the paper is that this is indeed the case. 
+\end{itemize}
+
+
+%compare the size and power properties of the following versions of our multiscale test and SiZer: 
+%\begin{itemize}[leftmargin=1.5cm,itemsep=0cm]
+
+%\item[$\mathcal{T}_{\text{MS}}$:] our multiscale test as defined in Section ?? of the paper. 
+
+%\item[$\mathcal{T}_{\text{UC}}$:] an uncorrected version of our multiscale test without the additive correction terms $\lambda(h)$ 
+
+%\item[$\mathcal{T}_{\text{RW}}$:] a row-wise version of our multiscale test 
+
+%\item[$\mathcal{T}_{\text{SiZer}}$:] the row-wise version of dependent SiZer as developed in \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. 
+
+%\end{itemize}
+%The row-wise version $\mathcal{T}_{\text{RW}}$ of our test is the direct counterpart to the sizer test $\mathcal{T}_{\text{SiZer}}$. The two main differences of the two procedures are as follows: (i) $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ are based on different statistics to test the hypotheses $H_0(u,h)$ that $m$ is constant on the interval $[u-h,u+h]$. (ii) The quantiles of $\mathcal{T}_{\text{RW}}$ under the null are approximated by our simulation-based procedure, whereas the quantiles of $\mathcal{T}_{\text{SiZer}}$ are approximated by the method of \cite{HannigMarron2006} and \cite{ParkHannigKang2009} which is based on extreme value theory. In our simulation study, we in particular compare the size and power properties of $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$. This shows how our simulation-based procedure compares to the approximation in \cite{HannigMarron2006} and \cite{ParkHannigKang2009}.
+
 
 %-- Compare multiscale test with and without additive correction terms $\lambda(h)$ by ``parallel coordinate plots'' as in Figure 5 of Hannig \& Marron (2006). 
 
@@ -220,6 +251,18 @@ We have removed Section 4.1 from the paper. Moreover, we have thoroughly revised
 
 
 \item \textit{Section 5.2: I understand that you are doing comparisons to SiZer out of the box. However, some of the comparison might not be quite fair. SiZer is adjusting multiplicity ”row-wise” while the proposed method is attempting a global multiple control. What would happen if your $G_T$ only focused on one scale?}
+
+We have thoroughly revised the comparison study with SiZer, attempting to give a better and fairer picture of the methods. The revised study compares the following versions of our multiscale test and SiZer: 
+\begin{itemize}[leftmargin=0.5cm,itemsep=0cm]
+
+\item our multiscale test $\mathcal{T}_{\text{MS}}$ as defined in Section ?? of the paper 
+\item an uncorrected version $\mathcal{T}_{\text{UC}}$ of our multiscale test without the additive correction terms $\lambda(h)$ 
+\item a row-wise version of $\mathcal{T}_{\text{RW}}$ of our multiscale test 
+\item the row-wise dependent SiZer $\mathcal{T}_{\text{SiZer}}$ of \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. 
+
+\end{itemize}
+We have analyzed the size and power properties of the four methods (not only the global but also the row-wise size and power properties to be fairer with regard to SiZer). As already mentioned in our answer to your comment (1), the row-wise version $\mathcal{T}_{\text{RW}}$ of our multiscale test focuses on one scale at a time and is thus the direct counterpart to $\mathcal{T}_{\text{SiZer}}$. Please see Section ?? for the full simulation study, which in particular shows how $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ compare to each other. We hope you find the revised study more accurate.
+
 
 %What's done (here $\alpha$ is always taken to be $0.05$):
 %\begin{itemize}

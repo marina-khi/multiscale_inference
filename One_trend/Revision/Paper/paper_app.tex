@@ -1,26 +1,23 @@
 
-
 \section{Simulations}\label{sec-sim}
 
 
 %To assess the finite sample performance of our methods, we conduct a number of simulations. In Sections \ref{subsec-sim-multiscale}, we investigate the performance of our multiscale test and compare it to the SiZer methods for time series developed in \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. In Section \ref{subsec-sim-lrv}, we analyse the finite sample properties of our long-run variance estimator from Section \ref{sec-error-var} and compare it to the estimator of \cite{Hall2003}. 
 
 
-\subsection{Small sample properties of the multiscale test}\label{subsec-sim-multiscale}
+\subsection{\textcolor{red}{Small sample properties of the multiscale test}}\label{subsec-sim-multiscale}
 
 
-In what follows, we investigate the finite sample performance of our multiscale test and compare it to the dependent SiZer methods from \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. We consider the following versions of our multiscale test and SiZer:
-
-
+In what follows, we investigate the performance of our multiscale test and compare it to the dependent SiZer methods from \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. We consider the following versions of our multiscale test and SiZer:
 \begin{itemize}[leftmargin=1.25cm]
 
 \item[$\mathcal{T}_{\text{MS}}$:] our multiscale test with the statistic $\widehat{\Psi}_T = \max_{h \in H_T} \{ \widehat{\Psi}_T(h) - \lambda(h) \}$, where $\widehat{\Psi}_T(h) = \max_{u \in U_T} |\widehat{\psi}_T(u,h) / \widehat{\sigma}|$. Here and in what follows, we write $\mathcal{G}_T = U_T \times H_T$, where $U_T$ is the set of locations and $H_T$ the set of bandwidths.  
 
 \item[$\mathcal{T}_{\text{UC}}$:] the uncorrected version of our multiscale test with the test statistic $\widehat{\Psi}_{T,\text{uncorrected}} = \max_{h \in H_T} \widehat{\Psi}_T(h)$, which was already introduced in \eqref{multiscale-stat-uncorrected}. The uncorrected test is carried out in exactly the same way as $\mathcal{T}_{\text{MS}}$. The only difference is that the correction terms $\lambda(h)$ are removed. 
 
-\item[$\mathcal{T}_{\text{RW}}$:] a row-wise (or scale-wise) version of our multiscale test as briefly mentioned in Section \ref{subsec-method-comparison}. This version carries out a test scale-wise, that is, separately for each scale $h \in H_T$ based on the statistic $\widehat{\Psi}_T(h)$. Note: (i) For each $h \in H_T$, the test based on $\widehat{\Psi}_T(h)$ can be performed in the same way as the multiscale test $\mathcal{T}_{\text{MS}}$, since it is a degenerate version of the latter with the set of scales $H_T$ replaced by the singleton $\{h\}$. (ii) It does not matter whether we correct the statistic $\widehat{\Psi}_T(h)$ by subtracting $\lambda(h)$ or not, since $\widehat{\Psi}_T(h)$ acts as a fixed constant if only one bandwidth $h$ is taken into account. 
+\item[$\mathcal{T}_{\text{RW}}$:] a row-wise (or scale-wise) version of our multiscale test as briefly mentioned in Section \ref{subsec-method-comparison}. This version carries out a test scale-wise, that is, separately for each scale $h \in H_T$ based on the statistic $\widehat{\Psi}_T(h)$. Note: (i) For each $h \in H_T$, the test based on $\widehat{\Psi}_T(h)$ can be performed in the same way as the multiscale test $\mathcal{T}_{\text{MS}}$, since it is a degenerate version of the latter with the set of scales $H_T$ replaced by the singleton $\{h\}$. (ii) It does not matter whether we correct the statistic $\widehat{\Psi}_T(h)$ by subtracting $\lambda(h)$ or not, since $\lambda(h)$ acts as a fixed constant when only one bandwidth $h$ is taken into account. 
 
-\item[$\mathcal{T}_{\text{SiZer}}$:] the row-wise version of dependent SiZer as developed in \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. We do not consider a global SiZer version since such a version was not introduced for the time series case in the aforementioned papers. 
+\item[$\mathcal{T}_{\text{SiZer}}$:] the row-wise version of dependent SiZer as developed in \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. We do not consider a global version of dependent SiZer since such a version was not introduced in the aforementioned papers. 
 
 \end{itemize}
 %There is an important difference between $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{UC}}$ on the one hand and $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ on the other hand. $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{UC}}$ are \textit{global} test procedures: They test $H_0(u,h)$ simultaneously for all locations $u \in U_T$ and scales $h \in H_T$. Hence, they are designed to control the size over both locations $u$ and scales $h$. The methods $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$, in contrast, are row-wise (or scale-wise) in nature: They test the hypothesis $H_0(u,h)$ simulteneously for all $u \in u$ but separately for each scale $h \in H$. Hence, they control the size for each scale $h \in H$ separately. 
@@ -29,19 +26,21 @@ In what follows, we investigate the finite sample performance of our multiscale 
 The simulation setup is as follows: We generate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$ for different trends $m$, error processes $\{\varepsilon_t\}$ and sample sizes $T$. The error terms are supposed to have the AR($1$) structure $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$, where $a_1 \in \{-0.9,-0.5,-0.25, \linebreak 0.25,0.5,0.9\}$, $\eta_t$ are i.i.d.\ standard normal and the AR order $p^*=1$ is treated as known. To simulate data under the null, we let $m$ be a constant function. In particular, we set $m = 0$ without loss of generality. To generate data under the alternative, we consider different non-constant trend functions which are specified below. For each model specification, we simulate $S=1000$ data samples and carry out the tests $\mathcal{T}_{\text{MS}}$, $\mathcal{T}_{\text{UC}}$, $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ for each simulated sample. 
 
 
-To implement our multiscale test $\mathcal{T}_{\text{MS}}$, we choose $K$ to be an Epanechnikov kernel and set $\mathcal{G}_T = U_T \times H_T$, where $U_T  = \{ u: u = 5k/T \text{ for some } 1 \le k \le T/5 \}$ and $H_T  = \{ h: h = 5\ell/T \text{ for some } 0 \le \ell \le T/20 \}$. We thus take into account all rescaled time points $u$ on an equidistant grid $U_T$ with step length $5/T$. For the bandwidth $h = 5\ell/T$ and any $u \in [h,1-h]$, the kernel window $[u-h,u+h]$ contains $10\ell$ observations. Hence, the bandwidths $h \in H_T$ correspond to effective sample sizes of $10,20,30,\ldots$ up to approximately $T/4$ data points. As a robustness check, we have re-run the simulations for a number of other grids. As the results are very similar, we do however not report them here. 
-To estimate the long-run error variance $\sigma^2$, we apply the procedure from Section \ref{sec-error-var} with $q=25$ and $\overline{r}=10$. As already discussed in Section \ref{sec-error-var}, $q=25$ should be an appropriate value for AR(1) errors that are not too strongly correlated, in particular, for $a_1 \in \{-0.5,-0.25,0.25,0.5\}$. When the errors are very strongly correlated, larger values of $q$ are required to produce precise estimates of $\sigma^2$. In the case of AR errors with $a_1 \in \{-0.9,0.9\}$, we thus set $q = 50$. The dependence of our long-run variance estimator on the tuning parameters $q$ and $\overline{r}$ is explored more systematically in Section \ref{subsec-sim-lrv}. 
-To compute the critical values of the multiscale test $\mathcal{T}_{\text{MS}}$, we simulate $1000$ values of the statistic $\Phi_T$ defined in Section \ref{subsec-method-test} and compute their empirical $(1-\alpha)$ quantile $q_T(\alpha)$. The uncorrected and row-wise versions $\mathcal{T}_{\text{UC}}$ and $\mathcal{T}_{\text{RW}}$ of our multiscale test are implemented analogously. The SiZer test is implemented as described in \cite{ParkHannigKang2009}. The details are summarized in Section S.3 of the Supplementary Material. 
+To implement our multiscale test $\mathcal{T}_{\text{MS}}$, we choose $K$ to be an Epanechnikov kernel and set $\mathcal{G}_T = U_T \times H_T$, where 
+\begin{align*}
+U_T & = \big\{ u \in [0,1]: u = \textstyle{\frac{5t}{T}} \text{ for some } t \in \naturals \big\} \\
+H_T & = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5\ell}{T}} \text{ for some } t \in \naturals \big\}. 
+\end{align*}
+We thus take into account all locations $u$ on an equidistant grid $U_T$ with step length $5/T$ and all bandwidths $h=5/T, 10/T, 15/T,\ldots$ with $\log T /T \le h \le 1/4$. Note that the lower bound $\log T / T$ is motivated by \ref{C-h} which requires that $\log T /T \ll h$ for all scales $h \in H_T$ (given that all moments of $\varepsilon_t$ exist). As a robustness check, we have re-run the simulations for a number of other grids. As the results are very similar, we do however not report them here. 
+%To implement our multiscale test $\mathcal{T}_{\text{MS}}$, we choose $K$ to be an Epanechnikov kernel and set $\mathcal{G}_T = U_T \times H_T$, where $U_T  = \{ u: u = 5k/T \text{ for some } 1 \le k \le T/5 \}$ and $H_T  = \{ h: h = 5\ell/T \text{ for some } 0 \le \ell \le T/20 \}$. We thus take into account all rescaled time points $u$ on an equidistant grid $U_T$ with step length $5/T$. For the bandwidth $h = 5\ell/T$ and any $u \in [h,1-h]$, the kernel window $[u-h,u+h]$ contains $10\ell$ observations. Hence, the bandwidths $h \in H_T$ correspond to effective sample sizes of $10,20,30,\ldots$ up to approximately $T/4$ data points. 
+To estimate the long-run error variance $\sigma^2$, we apply the procedure from Section \ref{sec-error-var} with $\overline{r}=10$ and the following choices of $q$: For $a_1 \in \{-0.5,-0.25,0.25,0.5\}$, we set $q = 25$. As already discussed in Section \ref{sec-error-var}, this should be an appropriate choice for AR(1) errors that are not too strongly correlated, in particular, for $a_1 \in \{-0.5,-0.25,0.25,0.5\}$. When the errors are very strongly correlated, larger values of $q$ are required to produce precise estimates of $\sigma^2$. In the case of AR($1$) errors with $a_1 \in \{-0.9,0.9\}$, we thus set $q = 50$. The dependence of our long-run variance estimator on the tuning parameters $q$ and $\overline{r}$ is explored more systematically in Section \ref{subsec-sim-lrv}. 
+To compute the critical values of the multiscale test $\mathcal{T}_{\text{MS}}$, we simulate $5000$ values of the statistic $\Phi_T$ defined in Section \ref{subsec-method-test} and compute their empirical $(1-\alpha)$ quantile $q_T(\alpha)$. The uncorrected and row-wise versions $\mathcal{T}_{\text{UC}}$ and $\mathcal{T}_{\text{RW}}$ of our multiscale test are implemented analogously. The SiZer test is implemented as described in \cite{ParkHannigKang2009}. The details are summarized in Section S.3 of the Supplementary Material. 
 
-%The size and power numbers in the following tables and figures are calculated as follows: The actual size of the test $\mathcal{T}_j$, $j \in \{ \}$, is computed as the number of simulations in which the test rejects the null $H_0$ divided by the total number of simulations. 
+
+\subsubsection{Size simulations} 
 
 
-
-\subsubsection{Size simulations} % of the multiscale test $\boldsymbol{\mathcal{T}_{\text{MS}}}$}
-
-
-The first part of our simulation study investigates the properties of the four tests $\mathcal{T}_{\text{MS}}$, $\mathcal{T}_{\text{UC}}$, $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ under the null that the trend $m$ is constant. To start with, we focus on the multiscale test $\mathcal{T}_{\text{MS}}$ and explore its size properties under the null. Table \ref{tab:sim:size:MS1} presents the actual size for the AR parameters $a_1 \in \{-0.5,-0.25,0.25,0.5\}$, which is computed as the number of simulations in which $\mathcal{T}_{\text{MS}}$ rejects the null divided by the total number of simulations. %The long-run variance $\sigma^2$ needed to compute the test statistic of $\mathcal{T}_{\text{MS}}$ is estimated by the procedure from Section \ref{sec-error-var}, where we set $q = 25$ and $\overline{r} = 10$. As a robustness check, we have re-run the simulations for other choices of $q$ and $\overline{r}$, which yields very similar results. The dependence of the estimators of our long-run variance estimator on $q$ and $\overline{r}$ is further explored in Section \ref{subsec-sim-lrv}. 
-As can be seen, the actual size of the multiscale test $\mathcal{T}_{\text{MS}}$ is fairly close to the nominal target $\alpha$ for all the considered AR parameters and sample sizes. Hence, the test has approximately the correct size.
+The first part of our simulation study investigates the size properties of the four tests $\mathcal{T}_{\text{MS}}$, $\mathcal{T}_{\text{UC}}$, $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ under the null that the trend $m$ is constant. To start with, we focus on the multiscale test $\mathcal{T}_{\text{MS}}$. Table \ref{tab:sim:size:MS1} reports the actual size of $\mathcal{T}_{\text{MS}}$ for the AR parameters $a_1 \in \{-0.5,-0.25,0.25,0.5\}$, which is computed as the number of simulations in which $\mathcal{T}_{\text{MS}}$ rejects the null divided by the total number of simulations. As can be seen, the actual size of the multiscale test $\mathcal{T}_{\text{MS}}$ is fairly close to the nominal target $\alpha$ for all the considered AR parameters and sample sizes. Hence, the test has approximately the correct size.
 
 
 \begin{table}[t!]
@@ -56,9 +55,9 @@ As can be seen, the actual size of the multiscale test $\mathcal{T}_{\text{MS}}$
  & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
  & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
 \cmidrule[0.4pt]{1-13}
-$T = 250$  &  0.015 & 0.049 & 0.117  & 0.009 & 0.052 & 0.111  & 0.013 & 0.047 & 0.110  & 0.017 & 0.048 & 0.109 \\ 
-$T = 500$  &  0.008 & 0.056 & 0.128  & 0.017 & 0.047 & 0.112  & 0.014 & 0.050 & 0.100  & 0.014 & 0.048 & 0.107 \\ 
-$T = 1000$ &  0.007 & 0.053 & 0.090  & 0.014 & 0.059 & 0.106  & 0.014 & 0.056 & 0.099  & 0.017 & 0.057 & 0.099 \\ 
+$T=250$  &  0.015 & 0.053 & 0.099  & 0.013 & 0.051 & 0.097  & 0.013 & 0.049 & 0.095  & 0.013 & 0.047 & 0.082 \\ 
+$T=500$  &  0.010 & 0.044 & 0.084  & 0.010 & 0.039 & 0.083  & 0.009 & 0.045 & 0.089  & 0.008 & 0.050 & 0.096 \\ 
+$T=1000$ &  0.008 & 0.051 & 0.113  & 0.010 & 0.055 & 0.108  & 0.009 & 0.059 & 0.102  & 0.010 & 0.064 & 0.098 \\ 
 \bottomrule
 \end{tabularx}}
 \end{table}
@@ -76,31 +75,24 @@ $T = 1000$ &  0.007 & 0.053 & 0.090  & 0.014 & 0.059 & 0.106  & 0.014 & 0.056 & 
  & \multicolumn{7}{c}{sample size $T$} & \multicolumn{7}{c}{sample size $T$} \\
  & 250 & 500 & 1000 & 2000 & 3000 & 4000 & 5000  &  250 & 500 & 1000 & 2000 & 3000 & 4000 & 5000 \\
 \cmidrule[0.4pt]{1-15}
-$\alpha = 0.01$  &  0.057 & 0.033 & 0.032 & 0.014 & 0.011 & 0.018 & 0.011  & 0.004 & 0.012 & 0.023 & 0.015 & 0.019 & 0.019 & 0.020 \\ 
-$\alpha =  0.05$ &  0.134 & 0.098 & 0.091 & 0.055 & 0.046 & 0.057 & 0.049  & 0.016 & 0.040 & 0.076 & 0.062 & 0.050 & 0.057 & 0.060 \\ 
-$\alpha =   0.1$ &  0.233 & 0.193 & 0.156 & 0.109 & 0.103 & 0.108 & 0.095  & 0.039 & 0.079 & 0.103 & 0.120 & 0.116 & 0.111 & 0.113 \\ 
-
+$\alpha=0.01$ &  0.063 & 0.028 & 0.023 & 0.016 & 0.005 & 0.007 & 0.008  & 0.002 & 0.017 & 0.018 & 0.020 & 0.013 & 0.016 & 0.012 \\ 
+$\alpha=0.05$ &  0.144 & 0.108 & 0.084 & 0.054 & 0.038 & 0.045 & 0.039  & 0.020 & 0.055 & 0.058 & 0.057 & 0.046 & 0.067 & 0.055 \\ 
+$\alpha=0.1$  &  0.230 & 0.179 & 0.154 & 0.102 & 0.094 & 0.104 & 0.093  & 0.039 & 0.090 & 0.098 & 0.103 & 0.105 & 0.138 & 0.106 \\ 
 \bottomrule
 \end{tabularx}}
 \end{table}
 
 
-In Table \ref{tab:sim:size:MS1}, we have explored the size of $\mathcal{T}_{\text{MS}}$ when the error terms are moderately autocorrelated. The case of very strong autocorrelated errors is investigated in Table \ref{tab:sim:size:MS2}, where we consider AR errors with $a_1 \in \{-0.9,0.9\}$. Inspecting the table, the size numbers can be seen to stabilize around their target $\alpha$ for sample sizes $T \ge 2000$. For smaller sample sizes, there are considerable size distortions which are worst for $T=250$ and slowly disappear as $T$ increases. Hence, in the case of strongly autocorrelated errors, our multiscale test has good size properties only for sufficiently large sample sizes. This is not very surprising: Statistical inference in the presence of strongly autocorrelated data is a very difficult problem in general and satisfying results can only be expected for fairly large sample sizes. %Before moving on, we mention two points concerning the implemntation of $\mathcal{T}_{\text{MS}}$ to produce tTable ??: (i) In order to speed up the calculations, we have used a bit the same grid $\mathcal{G}_T$ as for $T=1000$, that is, $\mathcal{G}_T = \mathcal{G}_{1000}$ for all considered sample sizes $T \ge 1000$ for the larger sample sizes $T=2000,3000,4000,5000$. (ii) We have set $q=50$ (and $\overline{r}=10$) for computing the estimator of $\sigma^2$. As already discussed in Section \ref{sec-error-var}, $q$ needs to be chosen large enough such that the coefficient $c_{q-1}$ of the MA($\infty$) representation of $\{\varepsilon_t\}$ is small. If $a_1$ is very large in absoulte value such as $|a_1| = 0.9$, the coefficient $c_k$ decay quite slowly. If $q=25$ 
+In Table \ref{tab:sim:size:MS1}, we have explored the size of $\mathcal{T}_{\text{MS}}$ when the error terms are moderately autocorrelated. The case of very strong autocorrelated errors is investigated in Table \ref{tab:sim:size:MS2}, where we consider AR errors with $a_1 \in \{-0.9,0.9\}$. Inspecting the table, the size numbers can be seen to stabilize around their target $\alpha$ for sample sizes $T \ge 1000$. For smaller sample sizes, there are considerable size distortions which are worst for $T=250$ and slowly disappear as $T$ increases. Hence, in the case of strongly autocorrelated errors, our multiscale test has good size properties only for sufficiently large sample sizes. This is not very surprising: Statistical inference in the presence of strongly autocorrelated data is a very difficult problem in general and satisfying results can only be expected for fairly large sample sizes.  
 
 
-%\subsubsection{Size comparisons}
-
-
-We next compare our multiscale test $\mathcal{T}_{\text{MS}}$ with $\mathcal{T}_{\text{UC}}$, $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ in terms of size. There is an important difference between $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{UC}}$ on the one hand and $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ on the other. $\mathcal{T}_{\text{MS}}$ and its uncorrected version $\mathcal{T}_{\text{UC}}$ are global test procedures: They test $H_0(u,h)$ simultaneously for all locations $u \in U_T$ and scales $h \in H_T$. Hence, they are designed to control the size over both locations $u$ and scales $h$. The methods $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$, in contrast, are row-wise (or scale-wise) in nature: They test the hypothesis $H_0(u,h)$ simultaneously for all $u \in U_T$ but separately for each scale $h \in H_T$. Hence, they control the size for each scale $h \in H_T$ separately. 
-
-
-%The following simulations illustrate this important distinction. 
+We next compare our multiscale test $\mathcal{T}_{\text{MS}}$ with $\mathcal{T}_{\text{UC}}$, $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ in terms of size. There is an important difference between $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{UC}}$ on the one hand and $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ on the other. $\mathcal{T}_{\text{MS}}$ and its uncorrected version $\mathcal{T}_{\text{UC}}$ are global test procedures: They test $H_0(u,h)$ simultaneously for all locations $u \in U_T$ and scales $h \in H_T$. Hence, they control the size simultaneously over both locations $u$ and scales $h$. The methods $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$, in contrast, are row-wise (or scale-wise) in nature: They test the hypothesis $H_0(u,h)$ simultaneously for all $u \in U_T$ but separately for each scale $h \in H_T$. Hence, they control the size for each scale $h \in H_T$ separately. 
 
 
 %We conduct some simulations to illustrate this distinction. The results are as expected: Our multiscale test $\mathcal{T}_{\text{MS}}$ and its uncorrected version $\mathcal{T}_{\text{UC}}$ hold the size $\alpha$ reasonably well, whereas the row-wise procedures $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ are much too liberal, their size lying substantially above the target $\alpha$. On the other hand, the row-wise procedures have good size properties when each scale $h \in H$ is considered separately.  As the result are not much insightful, we have not included them in the paper but we have added them to the Supplementary NMAteria in Section S.3. 
 
 
-We conduct some simulation exercises to illustrate this distinction. To keep the simulation study to a reasonable length, we restrict attention to a subset of the parameters $\alpha$ and $a_1$. In particular, we focus on $\alpha=0.05$ and $a_1 \in \{-0.5,0.5\}$. To simplify the implementation of $\mathcal{T}_{\text{SiZer}}$, we assume that the autocovariance function of the error process and thus the long-run error variance $\sigma^2$ is known. To keep the comparison fair, we treat $\sigma^2$ as known also when implementing $\mathcal{T}_{\text{MS}}$, $\mathcal{T}_{\text{UC}}$ and $\mathcal{T}_{\text{RW}}$. Moreover, we use exactly the same grid $\mathcal{G}_T$ for all four methods. To achieve this, we start off with the grid $\mathcal{G}_T = U_T \times H_T$ with $U_T$ and $H_T$ defined above. We then follow \cite{Rondonotti2007} and \cite{ParkHannigKang2009} and restrict attention to those points $(u,h) \in \mathcal{G}_T$ for which the effective sample size $\text{ESS}^*(u,h)$ for correlated data is not smaller than $5$. This yields the grid $\mathcal{G}_T^* = \{ (u, h) \in \mathcal{G}_T : \text{ESS}^*(u, h) \geq 5 \}$. A definition of $\text{ESS}^*(u,h)$ is given in Section S.3 of the Supplement. % a detailed discussion of $\text{ESS}^*(u,h)$ can be found in \cite{Rondonotti2007}.   
+We conduct some simulation exercises to illustrate this important distinction. To keep the simulation study to a reasonable length, we restrict attention to the significance level $\alpha=0.05$ and the AR parameters $a_1 \in \{-0.5,0.5\}$. To simplify the implementation of $\mathcal{T}_{\text{SiZer}}$, we assume that the autocovariance function of the error process and thus the long-run error variance $\sigma^2$ is known. To keep the comparison fair, we treat $\sigma^2$ as known also when implementing $\mathcal{T}_{\text{MS}}$, $\mathcal{T}_{\text{UC}}$ and $\mathcal{T}_{\text{RW}}$. Moreover, we use exactly the location-scale grid for all four methods. To achieve this, we start off with the grid $\mathcal{G}_T = U_T \times H_T$ with $U_T$ and $H_T$ defined above. We then follow \cite{Rondonotti2007} and \cite{ParkHannigKang2009} and restrict attention to those points $(u,h) \in \mathcal{G}_T$ for which the effective sample size $\text{ESS}^*(u,h)$ for correlated data is not smaller than $5$. This yields the grid $\mathcal{G}_T^* = \{ (u, h) \in \mathcal{G}_T : \text{ESS}^*(u, h) \geq 5 \}$. A definition of $\text{ESS}^*(u,h)$ is given in Section S.3 of the Supplement. % a detailed discussion of $\text{ESS}^*(u,h)$ can be found in \cite{Rondonotti2007}.   
 
 
 \begin{table}[t!]
@@ -113,9 +105,12 @@ We conduct some simulation exercises to illustrate this distinction. To keep the
 \cmidrule[0.4pt]{2-9} 
  & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{UC}}$ & $\mathcal{T}_{\text{RW}}$ & $\mathcal{T}_{\text{SiZer}}$ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{UC}}$ & $\mathcal{T}_{\text{RW}}$ & $\mathcal{T}_{\text{SiZer}}$ \\
 \cmidrule[0.4pt]{1-9} 
-$T=250$  & 0.064 & 0.080 & 0.305 & 0.379  & 0.050 & 0.037 & 0.121 & 0.310 \\ 
-$T=500$  & 0.055 & 0.072 & 0.351 & 0.445  & 0.047 & 0.042 & 0.180 & 0.394 \\ 
-$T=1000$ & 0.059 & 0.076 & 0.413 & 0.552  & 0.046 & 0.042 & 0.232 & 0.491 \\ 
+$T=250$  &  0.043 & 0.057 & 0.277 & 0.364  & 0.034 & 0.023 & 0.111 & 0.281 \\ 
+$T=500$  &  0.049 & 0.072 & 0.373 & 0.466  & 0.045 & 0.035 & 0.218 & 0.400 \\ 
+$T=1000$ &  0.044 & 0.059 & 0.371 & 0.542  & 0.042 & 0.034 & 0.235 & 0.484 \\ 
+%$T=250$  & 0.064 & 0.080 & 0.305 & 0.379  & 0.050 & 0.037 & 0.121 & 0.310 \\ 
+%$T=500$  & 0.055 & 0.072 & 0.351 & 0.445  & 0.047 & 0.042 & 0.180 & 0.394 \\ 
+%$T=1000$ & 0.059 & 0.076 & 0.413 & 0.552  & 0.046 & 0.042 & 0.232 & 0.491 \\ 
 \bottomrule
 \end{tabularx}}
 \end{table}
@@ -124,25 +119,26 @@ $T=1000$ & 0.059 & 0.076 & 0.413 & 0.552  & 0.046 & 0.042 & 0.232 & 0.491 \\
 \begin{figure}[t!]
 \begin{subfigure}{.5\textwidth}
 \centering
-\includegraphics[width=.9\linewidth]{Plots/pcp_rowwise_T_500_a1_-50.pdf}
+\includegraphics[width=\linewidth]{Plots/pcp_rowwise_T_500_a1_-50.pdf}
 \caption{$a_1 = -0.5$}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
 \centering
-\includegraphics[width=.9\linewidth]{Plots/pcp_rowwise_T_500_a1_50.pdf}
+\includegraphics[width=\linewidth]{Plots/pcp_rowwise_T_500_a1_50.pdf}
 \caption{$a_1 = 0.5$}
 \end{subfigure}
 \caption{Parallel coordinate plots for row-wise size comparisons.}\label{fig:sim:size:compare}
 \end{figure}
 
 
-In what follows, we distinguish between global and row-wise (or scale-wise) size: Global size is defined as the number of simulations in which the test rejects $H_0(u,h)$ for some $(u,h) \in \mathcal{G}_T^*$ divided by the total number of simulations. Hence, it is identical to the size as computed in Tables \ref{tab:sim:size:MS1} and \ref{tab:sim:size:MS2}. Row-wise size for scale $h^* \in H_T$, in contrast, is the number of simulations in which the test rejects $H_0(u,h^*)$ for some $(u,h^*) \in \mathcal{G}_T^*$. Hence, the size is calculated for each scale $h^*$ separately. Table \ref{tab:sim:size:compare} reports the global size of the four tests $\mathcal{T}_{\text{MS}}$, $\mathcal{T}_{\text{UC}}$, $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$. As can be seen, the size of our multiscale test $\mathcal{T}_{\text{MS}}$ is fairly close to the target $\alpha=0.05$. The size numbers of the uncorrected version $\mathcal{T}_{\text{UC}}$ are reasonably close to $\alpha=0.05$ as well, even though they are a bit upward biased for $a_1=-0.5$ and downward biased for $a_1=0.5$. The global size of the row-wise methods $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$, in contrast, is much larger than the target $\alpha=0.05$. Hence, as expected, the global tests $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{UC}}$ hold the size reasonably well, whereas the row-wise methods $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ are much too liberal. 
+In what follows, we distinguish between global and row-wise (or scale-wise) size: Global size is defined as the percentage of simulations in which the test rejects $H_0(u,h)$ for some $(u,h) \in \mathcal{G}_T^*$. Hence, it is identical to the size as computed in Tables \ref{tab:sim:size:MS1} and \ref{tab:sim:size:MS2}. Row-wise size for scale $h^* \in H_T$, in contrast, is the percentage of simulations in which the test rejects $H_0(u,h^*)$ for some $(u,h^*) \in \mathcal{G}_T^*$. %Hence, the size is calculated for each scale $h^*$ separately. 
+Table \ref{tab:sim:size:compare} reports the global size of the four tests. As can be seen, the size of our multiscale test $\mathcal{T}_{\text{MS}}$ is fairly close to the target $\alpha=0.05$. The size numbers of the uncorrected version $\mathcal{T}_{\text{UC}}$ are reasonably close to $\alpha=0.05$ as well, even though they are a bit upward biased for $a_1=-0.5$ and downward biased for $a_1=0.5$. The global size of the row-wise methods $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$, in contrast, is much larger than the target $\alpha=0.05$. Hence, as expected, the global tests $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{UC}}$ hold the size reasonably well, whereas the row-wise methods $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ are much too liberal. 
 
 
-Figure \ref{fig:sim:size:compare} presents the row-wise size of the four tests by so-called parallel coordinate plots (cp.\ ?? and ??). Each curve in the figure specifies the row-wise size of one of the four tests as a function of $h$. 
+Figure \ref{fig:sim:size:compare} presents the row-wise size of the four tests by so-called parallel coordinate plots [\cite{Inselberg1985}] for the sample size $T=500$. Each curve in the figure specifies the row-wise size of one of the four tests as a function of $h$. 
 %. The so-called parallel coordinate plots (cp.\ ?? and ??) in panels (a) and (b) are produced as follows: For each of the four tests, we compute the size separately for each scale $h \in H_T$. In particular, for each $h \in H_T$, we calculate the percentage of simulation runs in which the test rejects $H_0(u,h)$ for some $u \in U_T$. We thus obtain a curve for each test which specifies its row-wise size as a function of $h$. 
 %The resulting curves are plotted in Figure \ref{fig:sim:size:compare} for $a_1=-0.5$ in panel (a) and for $a_1=0.5$ in panel (b). 
-As expected, the row-wise version $\mathcal{T}_{\text{RW}}$ of our multiscale test holds the size quite accurately across scales $h$. Only for the very small scales, the size is not kept very precisely, which is presumably due to the fact that the effective sample size (i.e.\ the number of data points in the kernel window) is very small, leading to imprecise results. The size of $\mathcal{T}_{\text{SiZer}}$ is also reasonably close to the target across scales, even though the size numbers are a bit upward biased. 
+As expected, the row-wise version $\mathcal{T}_{\text{RW}}$ of our multiscale test holds the size quite accurately across scales $h$. Only for very small scales, the size is not kept very precisely, which is presumably due to the fact that the effective sample size (i.e.\ the number of data points in the kernel window) is very small, leading to imprecise results. The size of $\mathcal{T}_{\text{SiZer}}$ is also reasonably close to the target across scales, even though the size numbers have an upward bias.  
 %. However, it appears that $\mathcal{T}_{SiZer}$ is a bit more liberal than $\mathcal{T}_{\text{RW}}$, its size lying somewhat above the target of $\alpha=0.05$. 
 The global tests $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{UC}}$, in contrast, have a row-wise size much smaller than the target $\alpha=0.05$, which reflects the fact that they control global rather than row-wise size. 
 
@@ -150,10 +146,7 @@ The global tests $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{UC}}$, in con
 \subsubsection{Power comparisons}
 
 
-In the second part of our study, we compare the multiscale test $\mathcal{T}_{\text{MS}}$ with $\mathcal{T}_{\text{UC}}$, $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ in terms of power. We in particular investigate the ability of the tests to detect local increases in the trend $m$.\footnote{The same exercise could of course be carried out for decreases as well.} 
-%As for the size comparisons, we restrict attention to the significance level $\alpha=0.05$ and the AR parameters $a_1 \in \{-0.5,0.5\}$. We investigate We have the following decision rules: 
-%The tests are said to find an increase on the interval $[u-h,u+h]$ (correctly or mistakenly), if the test statistic for $H_0(u,h)$ is above the critical value. More precisely, 
-The tests induce the following decision rules: For each $(u,h) \in \mathcal{G}_T^*$, 
+In the second part of our study, we compare the multiscale test $\mathcal{T}_{\text{MS}}$ with $\mathcal{T}_{\text{UC}}$, $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ in terms of power. We in particular investigate the ability of the tests to detect local increases in the trend $m$.\footnote{The same exercise could of course be carried out for decreases as well.} The tests induce the following decision rules: For each $(u,h) \in \mathcal{G}_T^*$, 
 \begin{center}
 \begin{tabular}{rcl}
 $\mathcal{T}_{\text{MS}}$ indicates an increase on $[u-h,u+h]$   & $\Longleftrightarrow$ & $\widehat{\psi}_T(u,h) / \widehat{\sigma} > q_T(\alpha) + \lambda(h)$ \\ 
@@ -162,491 +155,70 @@ $\mathcal{T}_{\text{RW}}$ indicates an increase on $[u-h,u+h]$   & $\Longleftrig
 $\mathcal{T}_{\text{SiZer}}$ indicates an increase on $[u-h,u+h]$ & $\Longleftrightarrow$ & $s_T(u,h) > q_T^{\text{SiZer}}(\alpha,h)$, 
 \end{tabular}
 \end{center}
-where $q_T^{\text{UC}}(\alpha)$, $q_T^{\text{RW}}(\alpha,h)$ and $q_T^{\text{SiZer}}(\alpha,h)$ are the critical values of $\mathcal{T}_{\text{UC}}$, $\mathcal{T}_{\text{RW}}$, $\mathcal{T}_{\text{SiZer}}$, respectively. Note that the critical values of $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ depend on the scale $h$ as these are row-wise procedures. 
+where $q_T^{\text{UC}}(\alpha)$, $q_T^{\text{RW}}(\alpha,h)$, $q_T^{\text{SiZer}}(\alpha,h)$ are the critical values of $\mathcal{T}_{\text{UC}}$, $\mathcal{T}_{\text{RW}}$, $\mathcal{T}_{\text{SiZer}}$, respectively. Note that the critical values of $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ depend on the scale $h$ as these are row-wise procedures. 
 
 
 \begin{table}[t!]
-\centering
 \footnotesize{
-\caption{Global power comparison for the bump signal}\label{tab:sim:power:bump}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\caption{Global power and global spurious power for the bump signal. The sample size is $T=500$.}\label{tab:sim:power:bump}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{C{3} C{0.0001} ZZZZ C{0.0001} ZZZZ} 
+\begin{tabularx}{\textwidth}{l@{\hskip 20pt} Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 20pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z}
 \toprule
-%        & & \multicolumn{6}{c}{$a_1 = -0.25$} & & \multicolumn{6}{c}{$a_1 = 0.25$} \\ 
-%\cmidrule[0.4pt]{3-8} \cmidrule[0.4pt]{10-15}
-        & & \multicolumn{4}{c}{$a_1=-0.5$} & & \multicolumn{4}{c}{$a_1=0.5$} \\[0.1cm]
-        & & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{UC}}$ & $\mathcal{T}_{\text{RW}}$ & $\mathcal{T}_{\text{SiZer}}$ & & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{UC}}$ & $\mathcal{T}_{\text{RW}}$ & $\mathcal{T}_{\text{SiZer}}$ \\
-\cmidrule[0.4pt]{1-11}
-Power  & & 0.000 & 0.000 & 0.000 & 0.000 & & 0.000 & 0.000 & 0.000 & 0.000 \\ 
-Spurious power & & 0.000 & 0.000 & 0.000 & 0.000 & & 0.000 & 0.000 & 0.000 & 0.000 \\ 
+ & \multicolumn{4}{c}{$a_1 = -0.5$} & \multicolumn{4}{c}{$a_1 = 0.5$} \\
+\cmidrule[0.4pt]{2-9} 
+ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{UC}}$ & $\mathcal{T}_{\text{RW}}$ & $\mathcal{T}_{\text{SiZer}}$ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{UC}}$ & $\mathcal{T}_{\text{RW}}$ & $\mathcal{T}_{\text{SiZer}}$ \\
+\cmidrule[0.4pt]{1-9}
+Global power          &  0.452 & 0.369 & 0.748 & 0.848  & 0.516 & 0.510 & 0.797 & 0.885 \\ 
+Global spurious power &  0.020 & 0.024 & 0.174 & 0.215  & 0.016 & 0.018 & 0.093 & 0.174 \\ 
 \bottomrule
 \end{tabularx}}
 \end{table}
 
 
 \begin{figure}[t!]
+\begin{subfigure}{\textwidth}
 \centering
-\includegraphics[width=0.7\textwidth]{Plots/power_comparison.pdf}
-\caption{Rowwise power comparison for bump signal.}\label{fig:sim:power:bump}
+\includegraphics[width=\linewidth]{Plots/pcp_power_T_500_a1_-50.pdf}
+\caption{$a_1 = -0.5$}
+\end{subfigure}
+
+\begin{subfigure}{\textwidth}
+\centering
+\includegraphics[width=\linewidth]{Plots/pcp_power_T_500_a1_50.pdf}
+\caption{$a_1 = 0.5$}
+\end{subfigure}
+\caption{Parallel coordinate plots for row-wise power comparisons.}\label{fig:sim:power:bump}
 \end{figure}
 
 
-We first consider a very simple trend function $m$ which allows us to make systematic power comparisons. The function is defined by $m(u) = 0.5 \cdot \ind(u \in [0.45,0.55]) \cdot (1 - \{\frac{(u-0.5}{0.05}\}^2)^2$ and is graphically illustrated in ??. As one can see, $m$ has a small bump around $u=0.5$ and is constant otherwise. More precisely, $m$ is increasing on $I^{+} = (0.45,0.5)$, decreasing on $I^{-} = (0.5,0.55)$ and constant elsewhere. We distinguish between the following types of power: 
+We consider a very simple trend function $m$ which allows us to make systematic power comparisons. In addition, we analyze more complicated trend signals $m$. However, to save space, the results for these additional signals are reported in Section ?? of the Supplementary Material. The trend function we are considering now is defined as $m(u) = c \cdot \ind(u \in [0.45,0.55]) \cdot (1 - \{\frac{(u-0.5}{0.05}\}^2)^2$, where the constant $c$ is specified such that the tests have non-trivial power. In particular, we set $c = ??$ in the AR($1$) case with $a_1 = -0.5$ and $c=??$ in the case with $a_1=0.5$. Figure ?? provides a graphical illustration of $m$. As can be seen, $m$ has a small bump around $u=0.5$ and is constant otherwise. More precisely, $m$ is increasing on $I^{+} = (0.45,0.5)$, decreasing on $I^{-} = (0.5,0.55)$ and constant elsewhere. We distinguish between the following types of power for the tests $\mathcal{T}_j$ with $j \in \{ \text{MS}, \text{UC}, \text{RW}, \text{SiZer} \}$: 
 \begin{enumerate}[label=(\roman*),leftmargin=0.85cm]
-\item global power: the precentage of simulation runs in which the test indicates an increase on some interval $I_{u,h}=[u-h,u+h]$ where $m$ is indeed increasing, that is, on some $I_{u,h}$ with $I_{u,h} \cap I^+ \neq \emptyset$.
-\item spurious global power: the percentage of simulation runs in which the test indicates an increase on some interval $I_{u,h}=[u-h,u+h]$ where $m$ is not increasing, that is, on some $I_{u,h}$ with $I_{u,h} \cap I^+ = \emptyset$.
-\item row-wise power on scale $h^*$: the percentage of simulation runs in which the test indicates an increase on some interval $I_{u,h^*}=[u-h^*,u+h^*]$ where $m$ is indeed increasing, that is, on some $I_{u,h^*}$ with $I_{u,h^*} \cap I^+ \neq \emptyset$.
-\item spurious row-wise power on scale $h^*$: the percentage of simulation runs in which the test indicates an increase on some interval $I_{u,h^*}=[u-h^*,u+h^*]$ where $m$ is not increasing, that is, on some $I_{u,h^*}$ with $I_{u,h^*} \cap I^+ = \emptyset$.
+\item global power: the precentage of simulation runs in which the test $\mathcal{T}_j$ indicates an increase on some interval $I_{u,h}=[u-h,u+h]$ where $m$ is indeed increasing, that is, on some $I_{u,h}$ with $I_{u,h} \cap I^+ \neq \emptyset$.
+\item spurious global power: the percentage of simulation runs in which the test $\mathcal{T}_j$ indicates an increase on some interval $I_{u,h}=[u-h,u+h]$ where $m$ is not increasing, that is, on some $I_{u,h}$ with $I_{u,h} \cap I^+ = \emptyset$.
+\item row-wise power on scale $h^*$: the percentage of simulation runs in which the test $\mathcal{T}_j$ indicates an increase on some interval $I_{u,h^*}=[u-h^*,u+h^*]$ where $m$ is indeed increasing, that is, on some $I_{u,h^*}$ with $I_{u,h^*} \cap I^+ \neq \emptyset$.
+\item spurious row-wise power on scale $h^*$: the percentage of simulation runs in which the test $\mathcal{T}_j$ indicates an increase on some interval $I_{u,h^*}=[u-h^*,u+h^*]$ where $m$ is not increasing, that is, on some $I_{u,h^*}$ with $I_{u,h^*} \cap I^+ = \emptyset$.
 \end{enumerate}
-In what follows, we investigate these types of power for the four test methods under consideration. As for the size comparisons, we restrict attention to the significance level $\alpha=0.05$ and the AR parameters $a_1 \in \{-0.5,0.5\}$. 
+In what follows, we investigate these types of power for the four tests under consideration. To save space, we restrict attention to the significance level $\alpha=0.05$ and the AR parameters $a_1 \in \{-0.5,0.5\}$. 
 
 
-Table \ref{tab:sim:power:bump} reports global power and global spurious power for the four tests. As one can see, our multiscale test $\mathcal{T}_{\text{MS}}$ has higher power than the uncorrected version $\mathcal{T}_{\text{UC}}$. This confirms the theoretical optimality theory in \cite{DuembgenSpokoiny2001} (see also \cite{DuembgenWalther2008} and \cite{RufibachWalther2010}) according to which the aggregation scheme of the multiscale test $\mathcal{T}_{\text{MS}}$ should result in better power properties than the simpler scheme of $\mathcal{T}_{\text{UC}}$. As expected, the row-wise methods $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ have more power than the global tests. Indeed, $\mathcal{T}_{\text{SiZer}}$ is even a bit more powerful than $\mathcal{T}_{\text{RW}}$, which is presumably due to the fact that it is a bit too liberal under the null as observed in Figure \ref{fig:sim:size:compare}. The higher power of the row-wise procedures comes at some cost: Their spurious global power is much higher than that of the global tests. $\mathcal{T}_{\text{SiZer}}$ spuriously finds an increase in the tend $m$ in more than ??\% of the simulations, $\mathcal{T}_{\text{RW}}$ in more than ??\%. The multiscale test $\mathcal{T}_{\text{MS}}$ (and similarly its uncorrected version $\mathcal{T}_{\text{UC}}$) controls the probability of finding a spurious increase as indicated by Proposition \ref{prop-test-3}: its spurious global power is bounded by $100\cdot\alpha\% = 5\%$.  
+Table \ref{tab:sim:power:bump} reports the global power and global spurious power of the four tests for the sample size $T=500$. As one can see, our multiscale test $\mathcal{T}_{\text{MS}}$ has higher power than the uncorrected version $\mathcal{T}_{\text{UC}}$. This confirms the theoretical optimality theory in \cite{DuembgenSpokoiny2001} [see also \cite{DuembgenWalther2008} and \cite{RufibachWalther2010}] according to which the aggregation scheme of $\mathcal{T}_{\text{MS}}$ should yield better power properties than the simpler scheme of $\mathcal{T}_{\text{UC}}$. As expected, the row-wise methods $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ have substantially more power than the global tests. Indeed, $\mathcal{T}_{\text{SiZer}}$ is even a bit more powerful than $\mathcal{T}_{\text{RW}}$, which is presumably due to the fact that it is a bit too liberal under the null as observed in Figure \ref{fig:sim:size:compare}. The higher power of the row-wise procedures comes at some cost: Their spurious global power is much higher than that of the global tests. $\mathcal{T}_{\text{SiZer}}$ spuriously finds an increase in the trend $m$ in more than ??\% of the simulations, $\mathcal{T}_{\text{RW}}$ in more than ??\%. The multiscale test $\mathcal{T}_{\text{MS}}$ (and similarly its uncorrected version $\mathcal{T}_{\text{UC}}$), in contrast, controls the probability of finding a spurious increase. In particular, as implied by Proposition \ref{prop-test-3}, its spurious global power is bounded by $100\cdot\alpha\% = 5\%$.  
 
 
-Figure \ref{fig:sim:power:bump} gives a more detailed picture of the power properties of the four tests. The parallel coordinate plots specify the row-wise and spurious row-wise power of the tests, that is, they show how power is distributed across scales. Let us first have a look at the row-wise methods. As can be seen, $\mathcal{T}_{\text{SiZer}}$ is more powerful than $\mathcal{T}_{\text{RW}}$ on all scales under consideration. As already mentioned when discussing the global power results, this is presumably due to the fact that $\mathcal{T}_{\text{SiZer}}$ is somewhat too liberal under the null. Comparing the power curves of the two global methods gives an interesting insight: Our multiscale test $\mathcal{T}_{\text{MS}}$ has substantially more power than the uncorrected version $\mathcal{T}_{\text{UC}}$ on medium and large scales. On fine scales, in contrast, $\mathcal{T}_{\text{UC}}$ is slightly more powerful than $\mathcal{T}_{\text{MS}}$. This again illustrates the theoretical optimality theory in \cite{DuembgenSpokoiny2001}. According to this theory, the multiscale test $\mathcal{T}_{\text{MS}}$ should be as powerful as $\mathcal{T}_{\text{UC}}$ on small scales but more powerful on large scales. This is exactly what can be seen in the two panels of Figure \ref{fig:sim:power:bump}. 
+Figure \ref{fig:sim:power:bump} gives a more detailed picture of the power properties of the four tests. The parallel coordinate plots show how power and spurious power are distributed across scales $h$. Let us first have a look at the row-wise methods. As can be seen, $\mathcal{T}_{\text{SiZer}}$ is more powerful than $\mathcal{T}_{\text{RW}}$ on all scales under consideration. As already mentioned when discussing the global power results, this is presumably due to the fact that $\mathcal{T}_{\text{SiZer}}$ is somewhat too liberal under the null. Comparing the power curves of the two global methods gives an interesting insight: 
+%According to the optimality theory in \cite{DuembgenSpokoiny2001}, the multiscale test $\mathcal{T}_{\text{MS}}$ should asymptotically be as powerful as $\mathcal{T}_{\text{UC}}$ on small scales but more powerful on large scales. Figure ?? illustrates this theoretcial prediction: Our multiscale test $\mathcal{T}_{\text{MS}}$ has substantially more power than the uncorrected version $\mathcal{T}_{\text{UC}}$ on medium and large scales. On small scales, in contrast, $\mathcal{T}_{\text{MS}}$ is a bit les powerful than $\mathcal{T}_{\text{UC}}$. However, this loss of power on small scales is comarbly small to the gain of power on larger scales (and should wash out as the sample sitze increases). 
+Our multiscale test $\mathcal{T}_{\text{MS}}$ has substantially more power than the uncorrected version $\mathcal{T}_{\text{UC}}$ on medium and large scales. On small scales, in contrast, it is a bit less powerful than $\mathcal{T}_{\text{UC}}$. This again illustrates the theoretical optimality theory in \cite{DuembgenSpokoiny2001} which suggests that, asymptotically, the multiscale test $\mathcal{T}_{\text{MS}}$ should be as powerful as $\mathcal{T}_{\text{UC}}$ on small scales but more powerful on large scales. This is essentially what we see in the two panels of Figure \ref{fig:sim:power:bump}. Of course, $\mathcal{T}_{\text{MS}}$ does not have exactly as much power as $\mathcal{T}_{\text{UC}}$ on fine scales. However, the loss of power on fine scales is fairly small compared to the gain of power on larger scales (which is reflected in the fact that $\mathcal{T}_{\text{MS}}$ has more global power than $\mathcal{T}_{\text{UC}}$). 
 
 
-The main take-aways from our simulation study are as follows: If one wants to have an exploratory data tool for finding local increases/decreases of a trend, the row-wise methods $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ both do a good job. However, if the main interest lies in rigorous statistical inference rather than mere data exploration, one needs to go with a global test method. Our simulation exercises have shown that our multiscale test $\mathcal{T}_{\text{MS}}$ is a global method which enjoys good size and power properties. In particular, as predicted by the theory, it is a more effective test than the uncorrected version $\mathcal{T}_{\text{UC}}$. 
-
-
-%The main take-away lessons from our simulation exercises are as follows: If one wants to have an exploratory data tool for finding local increases/decreases of a trend, the row-wise methods do a good job. However, if one is interested not only in data exploration but ion rigorous statistical inference, one has to go with a global test method. Our simulation exercises have shown that our multiscale test $\mathcal{T}_{\text{MS}}$ is a global method which enjoys good size and power properties. In particular, as predicted by the optimal theory undelrying the aggregtion scheme of ??, it is a more effective test than the uncorrected version ??. Hence, it 
-
-
-%the simulations have shown that the aggreatgtion scheme of ?? is superior to ??. In particular, it gives better power properties. Hence, our multiscale test offers a possiblity to make rigorous statistical inference about local increases / decreases of a trend, while enjoying the good power propetties as predicted by the optimality theory which underlies the aggregation scheme of ??. On the other hand, if one wants to have a data exploration tool and rigorosu statistical infenrece is not the goal, the row-wise methods are a more powerful alternative (which howwevr do not allow to make rigorous confidnece statemetns any more),. 
-
-%TO summarize, the main findings of our simulation study are as follows. Wteher one wants to go for a global or a row-wise method depends on one's intention: If one wants to have a data exploration tool for finding localö increaers of a trend with as much power and one is not concerned about spurious findings, then the two row-wise methods ?ß and ?? are approrpiate. However, if one wants to make rigorous statistical inference. In particular, if one wants to make rigorous confidence statements about the increases found by the test, one has to go for the global methods. Moreover, as illustrated by the simulations, our multiscale method is a global test which gives as muc power as possiblöe due to the aggregatopn. 
-
-
-%\begin{table}[t!]
-%\centering
-%\footnotesize{
-%\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-%\newcolumntype{Z}{>{\centering\arraybackslash}X}
-%\begin{tabular}{lll}%{\textwidth}{C{3} C{0.0001} ZZZZ C{0.0001} ZZZZ} 
-%\toprule
-%        & & \multicolumn{4}{c}{$a_1=-0.5$} & & \multicolumn{4}{c}{$a_1=0.5$} \\[0.1cm]
-%        & & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{UC}}$ & $\mathcal{T}_{\text{RW}}$ & $\mathcal{T}_{\text{SiZer}}$ & & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{UC}}$ & $\mathcal{T}_{\text{RW}}$ & $\mathcal{T}_{\text{SiZer}}$ \\
-%\cmidrule[0.4pt]{1-11}
-%                          & test statistic & Rejects $H_0(u,h)$ if \\
-%$\mathcal{T}_{\text{MS}}$   &  $\widehat{\Psi}_T = \max_{h \in H_T} \{ \widehat{\Psi}_T(h) - \lambda(h) \}$ & $|\widehat{\psi}_T(u,h) / \widehat{\sigma}| - \lambda(h) > q_T(\alpha)$. \\
-%$\mathcal{T}_{\text{UC}}$   & $\widehat{\Psi}_{T,\text{uncorrected}} = \max_{h \in H_T} \widehat{\Psi}_T(h)$ & $|\widehat{\psi}_T(u,h) / \widehat{\sigma}| > q_T^{\text{UC}}(\alpha)$.  \\
-%$\mathcal{T}_{\text{RW}}$   & $\widehat{\Psi}_T(h)$ for each $h \in H$ &  $|\widehat{\psi}_T(u,h) / \widehat{\sigma}| > q_T^{\text{RW}}(\alpha,h)$.  \\
-%$\mathcal{T}_{\text{SiZer}}$ & $S_T(h)$ for each $h \in H$ & $|s_T(u,h)| > q_T^{\text{SiZer}}(\alpha,h)$.  \\
-%\end{tabular}}
-%\end{table}
-
-
-
-
-
-
-\newpage
- 
-
-\begin{enumerate}[label=(\arabic*),leftmargin=0.7cm]
-
-\item Size properties of our multiscale test $\mathcal{T}_{\text{MS}}$.
-
-\begin{table}[h!]
-\footnotesize{
-\caption{Size of $\mathcal{T}_{\text{MS}}$ for different AR parameters $a_1$, sample sizes $T$ and nominal sizes $\alpha$ for the estimated long-run variance.}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{C{3} C{0.01} ZZZ C{0.01} ZZZ C{0.01} ZZZ C{0.01} ZZZ} 
-\toprule
- & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$}  & &  \multicolumn{3}{c}{$a_1 = 0.5$} \\
-\cmidrule[0.4pt]{3-5} \cmidrule[0.4pt]{7-9} \cmidrule[0.4pt]{11-13} \cmidrule[0.4pt]{15-17} 
- & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
- & &  0.01 & 0.05 & 0.1   & &  0.01 & 0.05 & 0.1   & &  0.01 & 0.05 & 0.1  & &  0.01 & 0.05 & 0.1   \\
-\cmidrule[0.4pt]{1-17}
-$T = 250$ &  & 0.015 & 0.049 & 0.117 &  & 0.009 & 0.052 & 0.111 &  & 0.013 & 0.047 & 0.110 &  & 0.017 & 0.048 & 0.109 \\ 
-$T =   500$ &  & 0.008 & 0.056 & 0.128 &  & 0.017 & 0.047 & 0.112 &  & 0.014 & 0.050 & 0.100 &  & 0.014 & 0.048 & 0.107 \\ 
-$T =   1000$ &  & 0.007 & 0.053 & 0.090 &  & 0.014 & 0.059 & 0.106 &  & 0.014 & 0.056 & 0.099 &  & 0.017 & 0.057 & 0.099 \\ 
-\bottomrule
-\end{tabularx}}
-\end{table}
-
-\begin{table}[h!]
-\footnotesize{
-\caption{Size of $\mathcal{T}_{\text{MS}}$ for different AR parameters $a_1$, sample sizes $T$ and nominal sizes $\alpha$ for the true long-run variance.}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{C{3} C{0.01} ZZZ C{0.01} ZZZ C{0.01} ZZZ C{0.01} ZZZ} 
-\toprule
- & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$}  & &  \multicolumn{3}{c}{$a_1 = 0.5$} \\
- \cmidrule[0.4pt]{3-5} \cmidrule[0.4pt]{7-9} \cmidrule[0.4pt]{11-13}  \cmidrule[0.4pt]{15-17} 
- & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
- & &  0.01 & 0.05 & 0.1   & &  0.01 & 0.05 & 0.1   & &  0.01 & 0.05 & 0.1  & &  0.01 & 0.05 & 0.1   \\
-\cmidrule[0.4pt]{1-17}
-$T = 250$ &  & 0.014 & 0.053 & 0.107 &  & 0.013 & 0.049 & 0.104 &  & 0.014 & 0.046 & 0.093 &  & 0.011 & 0.043 & 0.082 \\ 
-$T =   500$ &  & 0.014 & 0.049 & 0.103 &  & 0.014 & 0.049 & 0.099 &  & 0.014 & 0.047 & 0.096 &  & 0.013 & 0.044 & 0.091 \\ 
-$T =   1000$ &  & 0.010 & 0.050 & 0.105 &  & 0.010 & 0.050 & 0.107 &  & 0.010 & 0.044 & 0.105 &  & 0.009 & 0.043 & 0.097 \\ 
-\bottomrule
-\end{tabularx}}
-\end{table}
-
-\begin{table}[h!]
-\footnotesize{
-\caption{Size of $\mathcal{T}_{\text{MS}}$ for different AR parameters $a_1$, sample sizes $T$ and nominal sizes $\alpha$ for the estimated long-run variance.}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{C{3} C{0.01} ZZZZZZZ C{0.01} ZZZZZZZ} 
-\toprule
- & &  \multicolumn{7}{c}{$a_1 = -0.9$} & &  \multicolumn{7}{c}{$a_1 = 0.9$} \\
-\cmidrule[0.4pt]{3-9} \cmidrule[0.4pt]{11-17}  
- & &  \multicolumn{7}{c}{sample size $T$} & &  \multicolumn{7}{c}{sample size $T$} \\
- & &  250 & 500 & 1000 &2000 &3000 &4000 &5000  & &  250 & 500 & 1000 &2000 &3000 &4000 &5000 \\
-\cmidrule[0.4pt]{1-17}
- $\alpha = 0.01$ &  & 0.057 & 0.033 & 0.032 & 0.014 & 0.011 & 0.018 & 0.011 &  & 0.004 & 0.012 & 0.023 & 0.015 & 0.019 & 0.019 & 0.020 \\ 
- $\alpha =  0.05$ &  & 0.134 & 0.098 & 0.091 & 0.055 & 0.046 & 0.057 & 0.049 &  & 0.016 & 0.040 & 0.076 & 0.062 & 0.050 & 0.057 & 0.060 \\ 
-$\alpha =   0.1$ &  & 0.233 & 0.193 & 0.156 & 0.109 & 0.103 & 0.108 & 0.095 &  & 0.039 & 0.079 & 0.103 & 0.120 & 0.116 & 0.111 & 0.113 \\ 
-
-\bottomrule
-\end{tabularx}}
-\end{table}
-
-\begin{table}[h!]
-\footnotesize{
-\caption{Size of $\mathcal{T}_{\text{MS}}$ for different AR parameters $a_1$, sample sizes $T$ and nominal sizes $\alpha$ for the true long-run variance.}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{C{3} C{0.01} ZZZZZZZ C{0.01} ZZZZZZZ} 
-\toprule
- & &  \multicolumn{7}{c}{$a_1 = -0.9$} & &  \multicolumn{7}{c}{$a_1 = 0.9$} \\
-\cmidrule[0.4pt]{3-9} \cmidrule[0.4pt]{11-17}  
- & &  \multicolumn{7}{c}{sample size $T$} & &  \multicolumn{7}{c}{sample size $T$} \\
- & &  250 & 500 & 1000 &2000 &3000 &4000 &5000  & &  250 & 500 & 1000 &2000 &3000 &4000 &5000 \\
-\cmidrule[0.4pt]{1-17}
-$\alpha =  0.01$ &  & 0.058 & 0.036 & 0.027 & 0.014 & 0.010 & 0.016 & 0.011 &  & 0.003 & 0.005 & 0.005 & 0.008 & 0.009 & 0.008 & 0.009 \\ 
-$\alpha =   0.05 $&  & 0.136 & 0.092 & 0.090 & 0.056 & 0.048 & 0.056 & 0.048 &  & 0.010 & 0.019 & 0.028 & 0.036 & 0.042 & 0.046 & 0.040 \\ 
-$\alpha =   0.1$ &  & 0.231 & 0.196 & 0.154 & 0.109 & 0.107 & 0.107 & 0.103 &  & 0.024 & 0.044 & 0.053 & 0.068 & 0.087 & 0.093 & 0.090 \\ 
-\bottomrule
-\end{tabularx}}
-\end{table}
-
-\begin{table}[h!]
-\footnotesize{
-\caption{Size of $\mathcal{T}_{\text{MS}}$ for different AR parameters $a_1$, sample sizes $T$ and nominal sizes $\alpha$ for the true long-run variance.}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{C{3} C{0.01} ZZZZ C{0.01} ZZZZ} 
-\toprule
- & &  \multicolumn{4}{c}{$a_1 = -0.5$} & &  \multicolumn{4}{c}{$a_1 = 0.5$} \\
-\cmidrule[0.4pt]{3-6} \cmidrule[0.4pt]{8-11}  
-& &  $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{uncor}}$ &  $\mathcal{T}_{\text{rows}}$ & $ \mathcal{T}_{\text{SiZer}}$ & &  $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{uncor}}$ & $ \mathcal{T}_{\text{rows}}$ & $ \mathcal{T}_{\text{SiZer}}$\\
-\cmidrule[0.4pt]{1-11}
-$T=250$ &  & 0.064 & 0.080 & 0.305 & 0.379 &  & 0.050 & 0.037 & 0.121 & 0.310 \\ 
- $T =  500$ &  & 0.055 & 0.072 & 0.351 & 0.445 &  & 0.047 & 0.042 & 0.180 & 0.394 \\ 
- $T = 1000$ &  & 0.059 & 0.076 & 0.413 & 0.552 &  & 0.046 & 0.042 & 0.232 & 0.491 \\ 
-\bottomrule
-\end{tabularx}}
-\end{table}
-
-\item Comparison of the multiscale test $\mathcal{T}_{\text{MS}}$ with its uncorrected version $\mathcal{T}_{\text{UC}}$, its row-wise version $\mathcal{T}_{\text{RW}}$ and (row-wise) SiZer $\mathcal{T}_{\text{SiZer}}$. 
-
-For the comparison, we focus on the significance level $\alpha=0.05$ and on the AR parameters $a_1 \in \{-0.5,0.5\}$. (Maybe report results for other AR parameters and significance levels in supplement?)
-
-
-\begin{figure}[t]
-\begin{subfigure}{.5\textwidth}
-\centering
-\includegraphics[width=.9\linewidth]{Plots/pcp_rowwise_T_500_a1_-50.pdf}
-\caption{$a_1 = -0.50$}
-\end{subfigure}
-\begin{subfigure}{.5\textwidth}
-\centering
-\includegraphics[width=.9\linewidth]{Plots/pcp_rowwise_T_500_a1_50.pdf}
-\caption{$a_1 = 0.50$}
-\end{subfigure}
-\caption{Rowwise power comparison}  
-\label{fig:comparison_rowwise_size}
-\end{figure}
-
-\begin{enumerate}[label=(\alph*),leftmargin=0.7cm]
-
-\item Size comparisons:
-\begin{itemize}[label=--,leftmargin=0.5cm]
-\item Comparison of global size (as in Figure 6 of Hannig \& Marron (2006)).
-\item Comparison of row-wise size (as in Figure 7 of Hannig \& Marron (2006)). (Three plots, each corresponding to one sample size $T=250, 500, 1000$. Or one plot for all three sample sizes? Too packed?)  
-\end{itemize}
-
-\item Power comparisons: 
-\begin{itemize}[label=--,leftmargin=0.5cm]
-%\item We first consider two simple signals. I think we may stick with the two types of signals that we had in the old Section 7.2 (Comparison with SiZer): 
-%(i) a global signal: a linear trend $m(u) = \beta (u - 0.5)$ with ONE slope $\beta$ which may be different for $a_1 = -0.5$ and $a_1 = 0.5$. 
-%(ii) a local signal: the bump function $m(u) = 0.5 \cdot \ind(u \in [0.45,0.55]) \cdot (1 - \{\frac{(u-0.5}{0.05}\}^2)^2$. (This is the same bump function as in Section 7.2, but more localized and smaller, so that it is harder to detect.)
-\item We first consider a version of the bump signal that we already had in the old Section 7.2 (Comparison with SiZer): $m(u) = 0.5 \cdot \ind(u \in [0.45,0.55]) \cdot (1 - \{\frac{(u-0.5}{0.05}\}^2)^2$. (This is the same bump function as in Section 7.2, but more localized and smaller, so that it is harder to detect.) \\[0.1cm]
-Set $T=500$. We make the following power comparisons for the bump signal: \\[0.1cm]
-(i) comparison of global power and global spurious power reported in a table of the same form as Table \ref{tab:bump_power_spuriouspower}. 
-
-\begin{table}[h!]
-\centering
-\footnotesize{
-\caption{Global power comparison for the bump signal}\label{tab:bump_power_spuriouspower}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{C{3} C{0.0001} ZZZZ C{0.0001} ZZZZ} 
-\toprule
-%        & & \multicolumn{6}{c}{$a_1 = -0.25$} & & \multicolumn{6}{c}{$a_1 = 0.25$} \\ 
-%\cmidrule[0.4pt]{3-8} \cmidrule[0.4pt]{10-15}
-        & & \multicolumn{4}{c}{$a_1=-0.5$} & & \multicolumn{4}{c}{$a_1=0.5$} \\[0.1cm]
-        & & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{UC}}$ & $\mathcal{T}_{\text{RW}}$ & $\mathcal{T}_{\text{SiZer}}$ & & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{UC}}$ & $\mathcal{T}_{\text{RW}}$ & $\mathcal{T}_{\text{SiZer}}$ \\
-\cmidrule[0.4pt]{1-11}
-Power  & & 0.000 & 0.000 & 0.000 & 0.000 & & 0.000 & 0.000 & 0.000 & 0.000 \\ 
-Spurious power & & 0.000 & 0.000 & 0.000 & 0.000 & & 0.000 & 0.000 & 0.000 & 0.000 \\ 
-\bottomrule
-\end{tabularx}}
-\end{table}
-
-(ii) comparison of rowwise power reported in a plot of the same format as Figure 7 of Hannig \& Marron (2006) / Figure \ref{fig:bump-power} below. 
-
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.7\textwidth]{Plots/power_comparison.pdf}
-\caption{Rowwise power comparison for bump signal.}\label{fig:bump-power}
-\end{figure}
-\end{itemize}
-
-\item Power comparisons by means of ``more interesting'' signals (e.g.\ the blocks signal of Donoho): plot of SiZer maps and minimal intervals. 
-
-
-\end{enumerate}
-\end{enumerate}
-
-\FloatBarrier
-
-
-
-\subsection{Size and power properties of the multiscale test}\label{subsec-sim-1} 
-
-
-Our simulation design mimics the situation in the application example of Section \ref{sec-data}. We generate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$ for different trend functions $m$, error processes $\{\varepsilon_t\}$ and time series lengths $T$. The error terms are supposed to have the AR($1$) structure $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$, where $a_1 \in \{-0.5,-0.25,0.25,0.5\}$ and $\eta_t$ are i.i.d.\ standard normal. In addition, we consider the AR($2$) specification $\varepsilon_t = a_1 \varepsilon_{t-1} + a_2 \varepsilon_{t-2} + \eta_t$, where $\eta_t$ are normally distributed with $\ex[\eta_t] = 0$ and $\ex[\eta_t^2] = \nu^2$. We set $a_1 = 0.167$, $a_2 = 0.178$ and $\nu^2 = 0.322$, thus matching the estimated values obtained in the application of Section \ref{sec-data}. To simulate data under the null hypothesis, we let $m$ be a constant function. In particular, we set $m = 0$ without loss of generality. To generate data under the alternative, we consider the trend functions $m(u) = \beta (u - 0.5) \cdot \ind(0.5 \le u \le 1)$ with $\beta = 1.5,2.0,2.5$. These functions are broken lines with a kink at $u = 0.5$ and different slopes $\beta$. Their shape roughly resembles the trend estimates in the application of Section \ref{sec-data}. The slope parameter $\beta$ corresponds to a trend with the value $m(1) = 0.5 \beta$ at the right endpoint $u = 1$. We thus consider broken lines with the values $m(1) = 0.75, 1.0, 1.25$. Inspecting the middle panel of Figure \ref{plot-results-app1}, the broken lines with the endpoints $m(1) = 1.0$ and $m(1) = 1.25$ (that is, with $\beta = 2.0$ and $\beta = 2.5$) can be seen to resemble the local linear trend estimates in the real-data example the most (where we neglect the nonlinearities of the local linear fits at the beginning of the observation period). The broken line with $\beta = 1.5$ is closer to the null, making it harder for our test to detect this alternative.\footnote{The broken lines $m$ are obviously non-differentiable at the kink point. We could replace them by slightly smoothed versions to satisfy the differentiability assumption that is imposed in the theoretical part of the paper. However, as this leaves the simulation results essentially unchanged but only creates additional notation, we stick to the broken lines.}
-
-
-%To simulate data under the null, we let $m$ be a constant function. In parti\-cular, we set $m = 0$ without loss of generality. To generate data under the alternative, we consider trend functions of the form $m(u) = \beta \cdot (u - 0.5) \cdot \ind(0.5 \le u \le 1)$ with the slope parameter $\beta$. These functions are broken lines with a kink at $u = 0.5$. Their shape roughly resembles the trend estimates in the application of Section \ref{sec-data}. For each AR specification of the errors, we consider three different slopes $\beta = s_\beta \cdot \sigma$ with $s_\beta \in \{1.7,2.3,2.9\}$ and $\sigma^2$ being the long-run error variance. The parameter $s_\beta$ is closely related to the signal-to-noise ratio in the model $Y_{t,T} = m(t/T) + \varepsilon_t$: The larger $s_\beta$, the stronger is the trend $m$ compared to the long-run error variance $\sigma^2$. The values $s_\beta \in \{ 1.7, 2.3, 2.9\}$ are motivated by the application example in Section \ref{sec-data}: For the AR($2$) specification which mimics the data example, it holds that $\beta \approx 1.5, 2.0, 2.5$ for $s_\beta = 1.7,2.3,2.9$. As the slope parameter $\beta$ corresponds to a trend with the value $m(1) = 0.5 \cdot \beta$ at the right endpoint $u = 1$, we thus consider broken lines with the values $m(1) \approx 0.75, 1.0, 1.25$ in this case. Inspecting the middle panel of Figure \ref{plot-results-app1}, the broken lines with the endpoints $m(1) \approx 1.0$ and $m(1) \approx 1.25$ (that is, with $s_\beta = 2.3$ and $s_\beta = 2.9$) can be seen to resemble the local linear trend estimates in the real-data example the most (where we neglect the nonlinearities of the local linear fits at the beginning of the observation period). The broken line with $s_\beta = 1.7$ has a smaller slope $\beta$ and is thus closer to the null, making it harder for our test to detect this alternative.\footnote{The broken lines $m$ are obviously non-differentiable at the kink point. We could replace them by slightly smoothed versions to satisfy the differentiability assumption that is imposed in the theoretical part of the paper. However, as this leaves the simulation results essentially unchanged but only creates additional notation, we stick to the broken lines.}
-
-
-\begin{sidewaystable}
-\centering
-\footnotesize{
-\caption{Size of our multiscale test for different AR parameters $a_1$ and $a_2$, sample sizes $T$ and nominal sizes $\alpha$.}\label{tab:size_test}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{C{2} C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ} 
-\toprule
- & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) = (0.167,0.178)$} \\
-\cmidrule[0.4pt]{3-5} \cmidrule[0.4pt]{7-9} \cmidrule[0.4pt]{11-13} \cmidrule[0.4pt]{15-17} \cmidrule[0.4pt]{19-21}
- & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
- & &  0.01 & 0.05  & 0.1 & &  0.01 & 0.05  & 0.1  & &  0.01 & 0.05  & 0.1  & &  0.01 & 0.05  & 0.1  & &  0.01 & 0.05  & 0.1   \\
-\cmidrule[0.4pt]{1-21}
-$T = 250$ &  & 0.015 & 0.050 & 0.127 &  & 0.014 & 0.057 & 0.120 &  & 0.011 & 0.046 & 0.116 &  & 0.013 & 0.042 & 0.108 &  & 0.011 & 0.052 & 0.117 \\ 
- $T= 350$ &  & 0.009 & 0.067 & 0.120 &  & 0.010 & 0.055 & 0.095 &  & 0.009 & 0.055 & 0.096 &  & 0.010 & 0.049 & 0.090 &  & 0.010 & 0.059 & 0.114 \\ 
- $T= 500$ &  & 0.015 & 0.053 & 0.128 &  & 0.015 & 0.047 & 0.100 &  & 0.018 & 0.048 & 0.101 &  & 0.015 & 0.042 & 0.106 &  & 0.015 & 0.056 & 0.107 \\ 
-\bottomrule
-\end{tabularx}
-\vspace{0.5cm}
-
-\caption{Power of our multiscale test for different AR parameters $a_1$ and $a_2$, sample sizes $T$ and nominal sizes $\alpha$. The three panels (a)--(c) corresponds to different slope parameters $\beta$ of the broken line $m$.}\label{tab:power_test}
-
-\begin{tabularx}{\textwidth}{C{2} C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ} 
-\multicolumn{21}{c}{(a) $\beta = 1.5$} \\[0.2cm]
-\toprule
- & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) = (0.167,0.178)$} \\
-\cmidrule[0.4pt]{3-5} \cmidrule[0.4pt]{7-9} \cmidrule[0.4pt]{11-13} \cmidrule[0.4pt]{15-17} \cmidrule[0.4pt]{19-21}
- & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
- & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1   \\
-\cmidrule[0.4pt]{1-21}
-$T=250$ &  & 0.484 & 0.726 & 0.853 &  & 0.319 & 0.548 & 0.702 &  & 0.077 & 0.177 & 0.324 &  & 0.036 & 0.097 & 0.181 &  & 0.269 & 0.460 & 0.612 \\ 
- $T= 350$ &  & 0.735 & 0.913 & 0.955 &  & 0.463 & 0.753 & 0.834 &  & 0.116 & 0.273 & 0.385 &  & 0.050 & 0.141 & 0.221 &  & 0.390 & 0.654 & 0.770 \\ 
-  $T=500$ &  & 0.945 & 0.988 & 0.997 &  & 0.775 & 0.925 & 0.972 &  & 0.195 & 0.389 & 0.551 &  & 0.060 & 0.162 & 0.285 &  & 0.623 & 0.815 & 0.907 \\ 
-\bottomrule
-\end{tabularx}
-\vspace{0.25cm}
-
-\begin{tabularx}{\textwidth}{C{2} C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ} 
-\multicolumn{21}{c}{(b) $\beta = 2.0$} \\[0.2cm]
-\toprule
- & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) = (0.167,0.178)$} \\
-\cmidrule[0.4pt]{3-5} \cmidrule[0.4pt]{7-9} \cmidrule[0.4pt]{11-13} \cmidrule[0.4pt]{15-17} \cmidrule[0.4pt]{19-21}
- & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
- & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1   \\
-\cmidrule[0.4pt]{1-21}
-$T = 250$ &  & 0.869 & 0.961 & 0.985 &  & 0.663 & 0.846 & 0.916 &  & 0.164 & 0.340 & 0.520 &  & 0.062 & 0.143 & 0.259 &  & 0.549 & 0.724 & 0.851 \\ 
-$T=  350$ &  & 0.979 & 0.997 & 1.000 &  & 0.863 & 0.969 & 0.986 &  & 0.262 & 0.483 & 0.615 &  & 0.092 & 0.231 & 0.334 &  & 0.759 & 0.922 & 0.958 \\ 
- $T= 500$ &  & 1.000 & 1.000 & 1.000 &  & 0.983 & 0.997 & 0.999 &  & 0.469 & 0.716 & 0.821 &  & 0.137 & 0.309 & 0.451 &  & 0.933 & 0.983 & 0.994 \\ 
-\bottomrule
-\end{tabularx}
-\vspace{0.25cm}
-
-\begin{tabularx}{\textwidth}{C{2} C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ C{0.1} ZZZ} 
-\multicolumn{21}{c}{(c) $\beta = 2.5$} \\[0.2cm]
-\toprule
- & &  \multicolumn{3}{c}{$a_1 = -0.5$} & &  \multicolumn{3}{c}{$a_1 = -0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.25$} & &  \multicolumn{3}{c}{$a_1 = 0.5$} & &  \multicolumn{3}{c}{$(a_1,a_2) = (0.167,0.178)$} \\
-\cmidrule[0.4pt]{3-5} \cmidrule[0.4pt]{7-9} \cmidrule[0.4pt]{11-13} \cmidrule[0.4pt]{15-17} \cmidrule[0.4pt]{19-21}
- & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} & &  \multicolumn{3}{c}{nominal size $\alpha$} \\
- & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1   & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1    & &  0.01 & 0.05  & 0.1   \\
-\cmidrule[0.4pt]{1-21}
-$T=250$ &  & 0.989 & 1.000 & 1.000 &  & 0.901 & 0.971 & 0.993 &  & 0.322 & 0.543 & 0.703 &  & 0.100 & 0.224 & 0.367 &  & 0.804 & 0.918 & 0.958 \\ 
- $T= 350$ &  & 1.000 & 1.000 & 1.000 &  & 0.990 & 1.000 & 1.000 &  & 0.470 & 0.737 & 0.833 &  & 0.162 & 0.361 & 0.481 &  & 0.950 & 0.988 & 0.997 \\ 
- $T= 500$ &  & 1.000 & 1.000 & 1.000 &  & 0.999 & 1.000 & 1.000 &  & 0.773 & 0.919 & 0.968 &  & 0.285 & 0.473 & 0.649 &  & 0.994 & 0.999 & 1.000 \\ 
-\bottomrule
-\end{tabularx}
-}
-\end{sidewaystable}
-
-
-To implement our test, we choose $K$ to be an Epanechnikov kernel and define the set $\mathcal{G}_T$ of location-scale points $(u,h)$ as
-\begin{align}
-\mathcal{G}_T = \big\{ (u, h): & \, \, u = 5k/T \text{ for some } 1 \le k \le T/5 \text{ and } \nonumber \\ & \, \, h = (3+5\ell)/T \text{ for some } 0 \le \ell \le T/20 \big\}. \label{grid-sim-app}
-\end{align}
-We thus take into account all rescaled time points $u \in [0,1]$ on an equidistant grid with step length $5/T$. For the bandwidth $h = (3 + 5\ell)/T$ and any $u \in [h,1-h]$, the kernel weights $\kernel(h^{-1} \{t/T-u\})$ are non-zero for exactly $5 + 10 \ell$ observations. Hence, the bandwidths $h$ in $\mathcal{G}_T$ correspond to effective sample sizes of $5, 15, 25, \ldots$ up to approximately $T/4$ data points. As a robustness check, we have re-run the simulations for a number of other grids. As the results are very similar, we do however not report them here. The long-run error variance $\sigma^2$ is estimated by the procedures from Section \ref{subsec-error-var-AR}: We first compute the estimator $\widehat{\boldsymbol{a}}$ of the AR parameter(s), where we use $\overline{r} = 10$ and the pilot estimator $\widetilde{\boldsymbol{a}}_q$ with $q = 25$. Based on $\widehat{\boldsymbol{a}}$, we then compute the estimator $\widehat{\sigma}^2$ of the long-run error variance $\sigma^2$. As a further robustness check, we have re-run the simulations for other choices of the parameters $q$ and $\overline{r}$, which yields very similar results. The dependence of the estimators $\widehat{\boldsymbol{a}}$ and $\widehat{\sigma}^2$ on $q$ and $\overline{r}$ is further explored in Section \ref{subsec-sim-3}. To compute the critical values of the multiscale test, we simulate $1000$ values of the statistic $\Phi_T$ defined in Section \ref{subsec-method-test} and compute their empirical $(1-\alpha)$ quantile $q_T(\alpha)$. 
-
-
-Tables \ref{tab:size_test} and \ref{tab:power_test} report the simulation results for the sample sizes $T=250,350,500$ and the significance levels $\alpha = 0.01, 0.05, 0.10$. The sample size $T = 350$ is approximately equal to the time series length $359$ in the real-data example of Section \ref{sec-data}. To produce our simulation results, we generate $S=1000$ samples for each model specification and carry out the multiscale test for each sample. The entries of Tables \ref{tab:size_test} and \ref{tab:power_test} are computed as the number of simulations in which the test rejects divided by the total number of simulations. As can be seen from Table \ref{tab:size_test}, the actual size of the test is fairly close to the nominal target $\alpha$ for all the considered AR specifications and sample sizes. Hence, the test has approximately the correct size. Inspecting Table \ref{tab:power_test}, one can further see that the test has reasonable power properties. For all the considered AR specifications, the power increases quickly (i) as the sample size gets larger and (ii) as we move away from the null by increasing the slope parameter $\beta$. The power is of course quite different across the various AR specifications. In particular, it is much lower for positive than for negative values of $a_1$ in the AR($1$) case, the lowest power numbers being obtained for the largest positive value $a_1 = 0.5$ under consideration. This reflects the fact that it is more difficult to detect a trend when there is strong positive autocorrelation in the data. For the AR($2$) specification of the errors, the sample size $T=350$ and the slopes $\beta = 2.0$ and $\beta = 2.5$, which yield the two model specifications that resemble the real-life data in Section \ref{sec-data} the most, the power of the test is above $92\%$ for the significance levels $\alpha = 0.05$ and $\alpha = 0.1$ and above $75\%$ for $\alpha = 0.01$. Hence, our method has substantial power in the two simulation scenarios which are closest to the situation in the application. 
-
-
-\subsection{Comparison with SiZer}\label{subsec-sim-2}
-
-
-We now compare our multiscale test to SiZer for times series which was developed in \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. Roughly speaking, the SiZer method proceeds as follows: For each location $u$ and bandwidth $h$ in a pre-specified set, SiZer computes an estimator $\widehat{m}_h^\prime(u)$ of the derivative $m^\prime(u)$ and a corresponding confidence interval. For each $(u,h)$, it then checks whether the confidence interval includes the value $0$. The set $\Pi_T^{\text{SiZer}}$ of points $(u,h)$ for which the confidence interval does not include $0$ corresponds to the set of intervals $\Pi_T^\pm$ for which our multiscale test finds an increase/decrease in the trend $m$. %rejects the null hypothesis $H_0$ that $m$ is constant on all intervals $[u-h,u+h]$ under consideration. 
-In order to explore how our test performs in comparison to SiZer, we compare the two sets $\Pi_T^\pm$ and $\Pi_T^{\text{SiZer}}$ in different ways to each other in what follows. 
-
-
-In order to implement SiZer for time series, we follow the exposition in \cite{ParkHannigKang2009}.\footnote{We have also examined the somewhat different implementation from \cite{Rondonotti2007}. As this yields worse simulation results than the procedure from \cite{ParkHannigKang2009}, we however do not report them here.} The details are given in Section S.3 in the Supplementary Material. To simplify the implementation of SiZer, we assume that the autocovariance function $\gamma_\varepsilon(\cdot)$ of the error process and thus the long-run error variance $\sigma^2$ is known. Our multiscale test is implemented in the same way as in Section \ref{subsec-sim-1}. To keep the comparison fair, we treat $\sigma^2$ as known also when implementing our method. Moreover, we use the same grid $\mathcal{G}_T$ of points $(u,h)$ for both methods. To achieve this, we start off with the grid $\mathcal{G}_T$ from \eqref{grid-sim-app}. We then follow \cite{Rondonotti2007} and \cite{ParkHannigKang2009} and restrict attention to those points $(u,h) \in \mathcal{G}_T$ for which the effective sample size $\text{ESS}^*(u,h)$ for correlated data is not smaller than $5$. This yields the grid $\mathcal{G}_T^* = \{ (u, h) \in \mathcal{G}_T : \text{ESS}^*(u, h) \geq 5 \}$. A detailed discussion of the effective sample size $\text{ESS}^*(u,h)$ for correlated data can be found in \cite{Rondonotti2007}.   
-
-
-\begin{table}[t!]
-\centering
-\footnotesize{
-\caption{Size of our multiscale test (MT) and SiZer for different model specifications.}\label{tab:size_comparison}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{C{2} C{0.0001} ZZZZZZ C{0.0001} ZZZZZZ} 
-\toprule
-        & & \multicolumn{6}{c}{$a_1 = -0.25$} & & \multicolumn{6}{c}{$a_1 = 0.25$} \\ 
-\cmidrule[0.4pt]{3-8} \cmidrule[0.4pt]{10-15}
-        & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} 
-        & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
-        & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
-\cmidrule[0.4pt]{1-15}
-$T = 250$ &  & 0.018 & 0.112 & 0.040 & 0.374 & 0.104 & 0.575 &  & 0.017 & 0.106 & 0.034 & 0.347 & 0.092 & 0.522 \\ 
-  $T= 350$ &  & 0.012 & 0.140 & 0.058 & 0.426 & 0.080 & 0.621 &  & 0.012 & 0.130 & 0.046 & 0.399 & 0.074 & 0.578 \\ 
-  $T=500$ &  & 0.005 & 0.140 & 0.041 & 0.489 & 0.097 & 0.680 &  & 0.006 & 0.136 & 0.039 & 0.452 & 0.097 & 0.639 \\ 
-\bottomrule
-\end{tabularx}
-\vspace{0.5cm}
-
-\caption{Power of our multiscale test (MT) and SiZer for different model specifications. The three panels (a)--(c) corresponds to different slope parameters $\beta$ of the linear tend $m$.}\label{tab:power_comparison}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{C{2} C{0.0001} ZZZZZZ C{0.0001} ZZZZZZ} 
-\multicolumn{15}{c}{(a) $\beta = 1.0$ for negative $a_1$ and $\beta = 2.0$ for positive $a_1$} \\[0.2cm]
-\toprule
-        & & \multicolumn{6}{c}{$a_1 = -0.25$} & & \multicolumn{6}{c}{$a_1 = 0.25$} \\ 
-\cmidrule[0.4pt]{3-8} \cmidrule[0.4pt]{10-15}
-        & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} 
-        & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
-        & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
-\cmidrule[0.4pt]{1-15}
-$T = 250$ &  & 0.218 & 0.544 & 0.454 & 0.869 & 0.664 & 0.949 &  & 0.359 & 0.717 & 0.653 & 0.947 & 0.829 & 0.989 \\ 
- $T= 350$ &  & 0.385 & 0.707 & 0.665 & 0.958 & 0.753 & 0.986 &  & 0.599 & 0.888 & 0.864 & 0.995 & 0.913 & 0.998 \\ 
-  $T=500$ &  & 0.581 & 0.899 & 0.862 & 0.993 & 0.949 & 0.999 &  & 0.851 & 0.981 & 0.983 & 1.000 & 0.999 & 1.000 \\ 
- \bottomrule
-\end{tabularx}
-\vspace{0.25cm}
-
-\begin{tabularx}{\textwidth}{C{2} C{0.0001} ZZZZZZ C{0.0001} ZZZZZZ} 
-\multicolumn{15}{c}{(b) $\beta = 1.25$ for negative $a_1$ and $\beta = 2.25$ for positive $a_1$} \\[0.2cm]
-\toprule
-      & & \multicolumn{6}{c}{$a_1 = -0.25$} & & \multicolumn{6}{c}{$a_1 = 0.25$} \\ 
-\cmidrule[0.4pt]{3-8} \cmidrule[0.4pt]{10-15}
-      & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} 
-      & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
-      & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
-\cmidrule[0.4pt]{1-15}
-$T=250$ &  & 0.426 & 0.771 & 0.705 & 0.969 & 0.878 & 0.996 &  & 0.537 & 0.861 & 0.791 & 0.987 & 0.932 & 0.999 \\ 
-  $T=350$ &  & 0.645 & 0.912 & 0.882 & 0.993 & 0.954 & 1.000 &  & 0.773 & 0.955 & 0.948 & 0.999 & 0.985 & 1.000 \\ 
- $T= 500$ &  & 0.915 & 0.994 & 0.993 & 1.000 & 0.998 & 1.000 &  & 0.962 & 0.999 & 1.000 & 1.000 & 0.999 & 1.000 \\ 
-\bottomrule
-\end{tabularx}
-\vspace{0.25cm}
-
-\begin{tabularx}{\textwidth}{C{2} C{0.0001} ZZZZZZ C{0.0001} ZZZZZZ} 
-\multicolumn{15}{c}{(c) $\beta = 1.5$ for negative $a_1$ and $\beta = 2.5$ for positive $a_1$} \\[0.2cm]
-\toprule
-       & & \multicolumn{6}{c}{$a_1 = -0.25$} & & \multicolumn{6}{c}{$a_1 = 0.25$} \\ 
-\cmidrule[0.4pt]{3-8} \cmidrule[0.4pt]{10-15}
-       & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} 
-       & & \multicolumn{2}{c}{$\alpha=0.01$} & \multicolumn{2}{c}{$\alpha=0.05$}  & \multicolumn{2}{c}{$\alpha=0.1$} \\[0.1cm]
-       & & MT & SiZer & MT & SiZer & MT & SiZer & & MT & SiZer & MT & SiZer & MT & SiZer \\
-\cmidrule[0.4pt]{1-15}
-$T=250$ &  & 0.701 & 0.942 & 0.911 & 0.992 & 0.972 & 1.000 &  & 0.698 & 0.941 & 0.908 & 0.993 & 0.970 & 1.000 \\ 
- $T= 350$ &  & 0.895 & 0.994 & 0.981 & 1.000 & 0.996 & 1.000 &  & 0.893 & 0.993 & 0.980 & 1.000 & 0.996 & 1.000 \\ 
-  $T=500$ &  & 0.995 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 &  & 0.995 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
-\bottomrule
-\end{tabularx}
-}
-\end{table}
-
-
-In the first part of the comparison study, we analyse the size and power of the two methods. To do so, we treat SiZer as a rigorous statistical test of the null hypothesis $H_0$ that $m$ is constant on all intervals $[u-h,u+h]$ with $(u,h) \in \mathcal{G}_T^*$. In particular, we let SiZer reject the null if the set $\Pi_T^{\text{SiZer}}$ is non-empty, that is, if the value $0$ is not included in the confidence interval for at least one point $(u,h) \in \mathcal{G}_T^*$. We simulate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$ with different AR($1$) error processes and different trends $m$. In particular, we let $\{\varepsilon_t\}$ be an AR($1$) process of the form $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$ with $a_1 \in \{ -0.25,0.25\}$ and i.i.d.\ standard normal innovations $\eta_t$. To simulate data under the null, we set $m = 0$ as in the previous section. To generate data under the alternative, we consider the linear trends $m(u) = \beta (u - 0.5)$ with different slopes $\beta$. As it is more difficult to detect a trend $m$ in the data when the error terms are positively autocorrelated, we choose the slopes $\beta$ larger in the AR($1$) case with $a_1 = 0.25$ than in the case with $a_1 = -0.25$. In particular, we let $\beta \in \{ 1.0,1.25,1.5 \}$ when $a_1 = -0.25$ and $\beta \in \{ 2.0,2.25,2.5 \}$ when $a_1 = 0.25$. Further model specifications with nonlinear trends are considered in the second part of the comparison study. To produce our simulation results, we generate $S=1000$ samples for each model specification and carry out the two methods for each sample.
-
-
-The simulation results are reported in Tables \ref{tab:size_comparison} and \ref{tab:power_comparison}. Both for our multiscale test and SiZer, the entries in the tables are computed as the number of simulations in which the respective method rejects the null hypothesis $H_0$ divided by the total number of simulations. As can be seen from Table \ref{tab:size_comparison}, our test has approximately correct size in all of the considered settings, whereas SiZer is very liberal and rejects the null way too often. Examining Table \ref{tab:power_comparison}, one can further see that our procedure has reasonable power against the considered alternatives. The power numbers are of course higher for SiZer, which is a trivial consequence of the fact that SiZer is extremely liberal. These numbers should thus be treated with caution. All in all, the simulations suggest that SiZer can hardly be regarded as a rigorous statistical test of the null hypothesis $H_0$ that $m$ is constant on all intervals $[u-h,u+h]$ with $(u,h) \in \mathcal{G}_T^*$. This is not very surprising as SiZer is not designed to be such a test but to produce informative SiZer maps. In particular, the confidence intervals of SiZer are not constructed to control the level $\alpha$ under $H_0$. In what follows, we thus attempt to compare the two methods in a different way which goes beyond mere size and power comparisons. 
-
-
-Both our method and SiZer can be regarded as statistical tools to identify time regions where the curve $m$ is increasing/decreasing.\footnote{More precisely speaking, SiZer is usually interpreted as investigating the curve $m$, viewed at different levels of resolution, rather than the curve $m$ itself. Put differently, the underlying object of interest is a family of smoothed versions of $m$ rather than $m$ itself.} Suppose that $m$ is increasing/decreasing in the time region $\mathcal{R} \subset [0,1]$ but constant otherwise, that is, $m^\prime(u) \ne 0$ for all $u \in \mathcal{R}$ and $m^\prime(u) = 0$ for all $u \notin \mathcal{R}$. A natural question is the following: How well can the two methods identify the time region $\mathcal{R}$? In our framework, information on the region $\mathcal{R}$ is contained in the minimal intervals of the set $\Pi_T^\pm$. In particular, the union $\mathcal{R}_T^\pm$ of the minimal intervals in $\Pi_T^\pm$ can be regarded as an estimate of $\mathcal{R}$. This follows from the results in Propositions \ref{prop-test-2} and \ref{prop-test-3}. Let $\mathcal{R}_T^{\text{SiZer}}$ be the union of the minimal intervals in $\Pi_T^{\text{SiZer}}$. In what follows, we compare $\mathcal{R}_T^\pm$ and $\mathcal{R}_T^{\text{SiZer}}$ to the region $\mathcal{R}$. This gives us information on how well the two methods approximate the true region where $m$ is increasing/decreasing.\footnote{The same exercise could of course also be carried out separately for the time region where the trend $m$ increases and the region where it decreases.} 
-
-
-%\begin{figure}[t]
-%\begin{subfigure}{.5\textwidth}
-%\centering
-%\includegraphics[width=.9\linewidth]{Plots/min_int_with_T_500_a1_-50.pdf}
-%\caption{$a_1 = -0.5$}
-%\end{subfigure}
-%\begin{subfigure}{.5\textwidth}
-%\centering
-%\includegraphics[width=.9\linewidth]{Plots/min_int_with_T_500_a1_50.pdf}
-%\caption{$a_1 = 0.5$}
-%\end{subfigure}
-%\caption{Comparison of the regions $\mathcal{R}_T^\pm$ and $\mathcal{R}_T^{\text{SiZer}}$. Subfigure (a) corresponds to the model setting with the AR parameter $a_1 = -0.5$, subfigure (b) to the setting with $a_1 = 0.5$. The upper panel of each subfigure shows a simulated time series path together with the underlying trend function $m$. The middle panel depicts the regions $\mathcal{R}_T^\pm$ produced by our multiscale test for $100$ simulation runs. The lower panel presents the regions $\mathcal{R}_T^{\text{SiZer}}$ produced by SiZer.}  
-%\label{fig:comparison_SiZer}
-%\end{figure}
-
-\begin{figure}[t]
-\begin{subfigure}{.5\textwidth}
-\centering
-\includegraphics[width=.9\linewidth]{Plots/min_int_with_T_500_a1_-25.pdf}
-\caption{$a_1 = -0.25$}
-\end{subfigure}
-\begin{subfigure}{.5\textwidth}
-\centering
-\includegraphics[width=.9\linewidth]{Plots/min_int_with_T_500_a1_25.pdf}
-\caption{$a_1 = 0.25$}
-\end{subfigure}
-\caption{Comparison of the regions $\mathcal{R}_T^\pm$ and $\mathcal{R}_T^{\text{SiZer}}$. Subfigure (a) corresponds to the model setting with the AR parameter $a_1 = -0.25$, subfigure (b) to the setting with $a_1 = 0.25$. The upper panel of each subfigure shows a simulated time series path together with the underlying trend function $m$. The middle panel depicts the regions $\mathcal{R}_T^\pm$ produced by our multiscale test for $100$ simulation runs. The lower panel presents the regions $\mathcal{R}_T^{\text{SiZer}}$ produced by SiZer.}  
-\label{fig:comparison_SiZer}
-\end{figure}
-
-
-We consider the same simulation setup as in the first part of the comparison study, only the trend function $m$ is different. We let $m$ be defined as $m(u) = 2 \cdot \ind(u \in [0.4,0.6]) \cdot (1 - 100 \{u-0.5\}^2)^2$, which implies that $\mathcal{R} = (0.4,0.5) \cup (0.5,0.6)$. The function $m$ is plotted in the two upper panels of Figure \ref{fig:comparison_SiZer}. We set the significance level to $\alpha= 0.05$ and the sample size to $T=500$. For each AR parameter $a_1 \in \{ -0.25,0.25 \}$, we simulate $S=100$ samples and compute $\mathcal{R}_T^\pm$ and $\mathcal{R}_T^{\text{SiZer}}$ for each sample. The simulation results are depicted in Figure \ref{fig:comparison_SiZer}, the two subfigures (a) and (b) corresponding to different AR parameters. The upper panel of each subfigure displays the time series path of a representative simulation together with the trend function $m$. The middle panel shows the regions $\mathcal{R}_T^\pm$ produced by our multiscale approach for the $100$ simulation runs: On the $y$-axis, the simulation runs $i$ are enumerated for $1 \le i \le 100$, and the black line at $y$-level $i$ represents $\mathcal{R}_T^\pm$ for the $i$-th simulation. Finally, the lower panel of each subfigure depicts the regions $\mathcal{R}_T^{\text{SiZer}}$ in an analogous way. 
-
-
-Inspecting Figure \ref{fig:comparison_SiZer}, our multiscale method can be seen to approximate the region $\mathcal{R}$ fairly well in both simulation scenarios under consideration. In particular, $\mathcal{R}_T^\pm$ gives a good approximation to the region $\mathcal{R}$ for most simulations. Only in some simulation runs, $\mathcal{R}_T^\pm$ is too large compared to $\mathcal{R}$, which means that our method is not able to locate the region $\mathcal{R}$ sufficiently precisely. Overall, the SiZer method also produces quite satisfactory results. However, the SiZer estimates of $\mathcal{R}$ are not as precise as ours. In particular, SiZer spuriously finds regions of decrease/increase outside the interval $\mathcal{R}$ much more often than our method. It thus frequently mistakes fluctuations in the time series which are due to the dependence in the error terms for increases/decreases in the trend $m$. 
-
-%For the negative AR parameter $a_1 = -0.25$, it performs substantially better than SiZer: For most simulations, $\mathcal{R}_T^\pm$ gives a good approximation to the region $\mathcal{R}$, whereas SiZer spuriously finds regions of decrease/increase outside the interval $\mathcal{R}$ quite often. SiZer thus frequently mistakes fluctuations in the time series which are due to the dependence in the error terms for increases/decreases in $m$. For the positive AR parameter $a_1 = 0.25$, the difference in performance is a bit less pronounced. Nevertheless, also here, SiZer spuriously detects increases/decreases in $m$ outside $\mathcal{R}$ much more often than our method. 
-
-
-To sum up, our multiscale test exhibits good size and power properties in the simulations, and the minimal intervals produced by it identify the time regions where $m$ increases/decreases in a quite reliable way. SiZer performs clearly worse in these respects. Nevertheless, it may still produce informative SiZer plots. % (which is what it is designed for anyway). 
-All in all, we would like to regard the two methods as complementary rather than direct competitors. SiZer is an explorative tool which aims to give an overview of the increases/decreases in $m$ by means of a SiZer plot. Our method, in contrast, is tailored to be a rigorous statistical test of the hypothesis $H_0$. In particular, it allows to make rigorous confidence statements about the time regions where the trend $m$ increases/decreases. %Such statements are not possible with SiZer. 
+To summarize, the main take-aways from our simulation study are as follows: If one is interested in an exploratory data tool for finding local increases/decreases of a trend, the row-wise methods $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ both do a good job. However, if the main interest lies in rigorous statistical inference rather than mere data exploration, one needs to go for a global test method. Our simulation exercises have shown that our multiscale test $\mathcal{T}_{\text{MS}}$ is a global method which enjoys good size and power properties. In particular, 
+%as predicted by the theory, 
+as suggested by theoretical considerations, 
+it is a more effective test than the uncorrected version $\mathcal{T}_{\text{UC}}$. 
 
 
 \subsection{Small sample properties of the long-run variance estimator}\label{subsec-sim-lrv}
 
 
-In the final part of the simulation study, we examine the estimators of the AR para\-meters and the long-run error variance from Section \ref{subsec-error-var-AR}. We simulate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$, where $\{ \varepsilon_t\}$ is an AR($1$) process of the form $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$. We consider the AR parameters $a_1 \in \{-0.95,-0.75,-0.5,-0.25,0.25,0.5,0.75,0.95\}$ and let $\eta_t$ be i.i.d.\ standard normal innovation terms. We report our findings for a specific sample size $T$, in particular for $T=500$, as the results for other sample sizes are very similar. For simplicity, $m$ is chosen to be a linear function of the form $m(u) = \beta u$ with the slope parameter $\beta$. For each value of $a_1$, we consider two different slopes $\beta$, one corresponding to a moderate and one to a pronounced trend $m$. 
+\textcolor{red}{In the following part of the simulation study, we analyze the estimators of the AR parameters and the long-run error variance from Section \ref{sec-error-var} and compare them to the estimators of \cite{Hall2003}. We simulate data from the model $Y_{t,T} = m(t/T) + \varepsilon_t$, where $\{ \varepsilon_t\}$ is an AR($1$) process of the form $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$. We consider the AR parameters $a_1 \in \{-0.95,-0.75,-0.5,-0.25,0.25,0.5,0.75,0.95\}$ and let $\eta_t$ be i.i.d.\ standard normal innovation terms. Throughout the simulation study, the AR order $p^*=1$ is treated as known.} We report our findings for a specific sample size $T$, in particular for $T=500$, as the results for other sample sizes are very similar. For simplicity, $m$ is chosen to be a linear function of the form $m(u) = \beta u$ with the slope parameter $\beta$. For each value of $a_1$, we consider two different slopes $\beta$, one corresponding to a moderate and one to a pronounced trend $m$. 
 %In particular, we let $\beta = s_\beta \cdot \sigma$ with $s_\beta = 1$ (moderate trend) and $s_\beta= 10$ (pronounced trend), where $\sigma^2$ is the long-run error variance.
 In particular, we let $\beta = s_\beta \sqrt{\var(\varepsilon_t)}$ with $s_\beta \in \{1,10\}$. When $s_\beta = 1$, the slope $\beta$ is equal to the standard deviation $\sqrt{\var(\varepsilon_t)}$ of the error process, which yields a moderate trend $m$. When $s_\beta = 10$, in contrast, the slope $\beta$ is $10$ times as large as $\sqrt{\var(\varepsilon_t)}$, which results in a quite pronounced trend $m$. 
 
@@ -659,7 +231,7 @@ For each model specification, we generate $S=1000$ data samples and compute the 
 \item oracle estimators $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2_{\text{oracle}}$ of $a_1$ and $\sigma^2$, which are constructed under the assumption that the error process $\{\varepsilon_t\}$ is observed. For each simulation run, we compute $\widehat{a}_{\text{oracle}}$ as the maximum likelihood estimator of $a_1$ from the time series of simulated error terms $\varepsilon_1,\ldots,\varepsilon_T$. We then calculate the residuals $r_t = \varepsilon_t - \widehat{a}_{\text{oracle}} \, \varepsilon_{t-1}$ and estimate the innovation variance $\nu^2 = \ex[\eta_t^2]$ by $\widehat{\nu}_{\text{oracle}}^2 = (T-1)^{-1} \sum_{t=2}^T r_t^2$. Finally, we set $\widehat{\sigma}^2_{\text{oracle}} = \widehat{\nu}_{\text{oracle}}^2 / (1 - \widehat{a}_{\text{oracle}})^2$. 
 \end{enumerate}
 Throughout the section, we set $q = 25$, $\overline{r} = 10$ and $(m_1,m_2) = (20,30)$. We in particular choose $q$ to be in the middle of $m_1$ and $m_2$ to make the tuning parameters of the estimators $\widetilde{a}_q$ and $\widehat{a}_{\text{HvK}}$ more or less comparable. In order to assess how sensitive our estimators are to the choice of $q$ and $\overline{r}$, we carry out a number of robustness checks, considering a range of different values for $q$ and $\overline{r}$. In addition, we vary the tuning parameters $m_1$ and $m_2$ of the estimators from \cite{Hall2003} in order to make sure that the results of our comparison study are not driven by the particular choice of any of the involved tuning parameters. The results of our robustness checks are reported in Section S.3 of the Supplementary Material. They show that the results of our comparison study are robust to %persist across 
-different choices of the parameters $q$, $\overline{r}$ and $(m_1,m_2)$. Moreover, they indicate that our estimators are rather insensitive to the choice of tuning parameters. 
+different choices of the parameters $q$, $\overline{r}$ and $(m_1,m_2)$. %Moreover, they indicate that our estimators are rather insensitive to the choice of tuning parameters. 
 
 
 \begin{figure}[t!]
@@ -670,10 +242,11 @@ different choices of the parameters $q$, $\overline{r}$ and $(m_1,m_2)$. Moreove
 \includegraphics[width=\textwidth]{Plots/MSE_lrv_T=500_slope=1_(q,r,M1,M2)=(25,10,20,30).pdf}
 \end{subfigure}
 \caption{MSE values for the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$, $\widehat{\sigma}^2_{\text{oracle}}$ in the simulation scenarios with a moderate trend ($s_\beta=1$).}\label{fig:MSE_slope1}
-\end{figure}
+%\end{figure}
+\vspace{0.25cm}
 
 
-\begin{figure}[t!]
+%\begin{figure}[t!]
 \begin{subfigure}[b]{0.475\textwidth}
 \includegraphics[width=\textwidth]{Plots/MSE_a1_T=500_slope=10_(q,r,M1,M2)=(25,10,20,30).pdf}
 \end{subfigure}\hspace{0.25cm}
