@@ -19,7 +19,7 @@ dyn.load("functions/SiZer_functions.dll")
 
 
 # Parameters
-Nsim          <- 5000        # number of simulation runs for size/power calculations
+Nsim          <- 1000        # number of simulation runs for size/power calculations
 sigma_eta     <- 1           # standard deviation of the innovation term in the AR model
 SimRuns       <- 5000        # number of simulation runs to produce critical values
 type_of_sigma <- 'estimated' # Estimating the long-run variance \sigma^2 or plugging the true theoretical value

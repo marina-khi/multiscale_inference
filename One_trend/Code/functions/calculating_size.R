@@ -1,6 +1,5 @@
 calculating_size <- function(a1, different_T, different_alpha, sigma_eta, Nsim = 1000, kappa =0.1,
                              SimRuns =1000, type_of_sigma = 'estimated', q_ = 25, remove.small.ess = 'false'){
-
   size_ms    <- numeric(length(different_alpha))
   size_uncor <- numeric(length(different_alpha))
   size_rows  <- numeric(length(different_alpha))
@@ -36,7 +35,7 @@ calculating_size <- function(a1, different_T, different_alpha, sigma_eta, Nsim =
     size_matrix_temp_uncor <- matrix(NA, nrow = Nsim, ncol = length(different_alpha))
     size_matrix_temp_rows  <- matrix(NA, nrow = Nsim, ncol = length(different_alpha))
     
-    set.seed(1)     
+    set.seed(321)     
     for (i in 1:Nsim){
       #Simulating the time series
       data.simulated <- simulating_data(T, a1, sigma_eta, sim.design = 'constant')
@@ -83,7 +82,8 @@ calculating_size <- function(a1, different_T, different_alpha, sigma_eta, Nsim =
 
 
 calculating_size_for_SiZer <- function(a1, different_T, alpha, sigma_eta, Nsim = 1000, SimRuns =1000){
-    size    <- c()
+  size    <- c()
+  
   for (T in different_T){
     # Construct grid
     grid      <- grid_construction(T)
@@ -102,7 +102,7 @@ calculating_size_for_SiZer <- function(a1, different_T, alpha, sigma_eta, Nsim =
     
     size_temp <- numeric(Nsim)
     
-    set.seed(1)
+    set.seed(321)
     for (i in 1:Nsim){
       #Simulating the time series
       data.simulated <- simulating_data(T, a1, sigma_eta, sim.design = 'constant')
@@ -127,6 +127,7 @@ calculating_size_for_SiZer <- function(a1, different_T, alpha, sigma_eta, Nsim =
 
 calculating_size_rowwise <- function(a1, T, alpha, sigma_eta, Nsim = 1000, SimRuns =1000){
   # Construct grid
+
   grid      <- grid_construction(T)
   gset      <- grid$gset
   u.grid    <- sort(unique(gset[,1]))
@@ -152,7 +153,7 @@ calculating_size_rowwise <- function(a1, T, alpha, sigma_eta, Nsim = 1000, SimRu
   sizer.std    <- SiZer_std(weights=sizer.wghts, autocov=autocov, T)
   sizer.quants <- SiZer_quantiles(alpha=alpha, T=T, grid=grid, autocov=autocov)
   
-  set.seed(1)
+  set.seed(321)
   for (i in 1:Nsim){
     #Simulating the time series
     data.simulated <- simulating_data(T, a1, sigma_eta, sim.design = 'constant')
