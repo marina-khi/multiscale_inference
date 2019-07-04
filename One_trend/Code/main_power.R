@@ -124,11 +124,15 @@ for (a1 in different_a1){
 ##########################
 
 sim.design <- c('blocks', 'sine') # type of trend function m()
-sigma_eta <- 0.1
 
 for (a1 in different_a1){
   for (sim.design_ in sim.design){
-    set.seed(1)
+
+    if (sim.design_ == 'sine') {
+      sigma_eta = 1
+    } else {
+      sigma_eta = 0.1
+    }
   
     #Simulating the time series
     data.simulated <- simulating_data(T, a1, sigma_eta, sim.design = sim.design_)
@@ -162,20 +166,23 @@ for (a1 in different_a1){
     test.res      <- multiscale_testing(alpha=alpha, quantiles=quants, values=vals, grid=grid)
     SiZer_results <- SiZer_test(values=sizer.vals, std.devs=sizer.std, quants=sizer.quants, grid=grid)
     
-    pdffilename <- paste0("plots/SiZer_map_T_", T, "_", sim.design_, "_a1_", a1*100, ".pdf")
-    pdf(pdffilename, width = 6, height = 10, paper = 'special')
+    pdffilename <- paste0("plots/SiZer_map_T_", T, "_", sim.design_, "_a1_", a1*100, "_v2.pdf")
+    pdf(pdffilename, width = 6, height = 16, paper = 'special')
     
-    par(mfrow = c(3, 1), cex = 1,  tck = -0.025) #Setting the layout of the graphs
+    par(mfrow = c(5, 1), cex = 1,  tck = -0.025) #Setting the layout of the graphs
     
-    par(mar = c(4.5, 4.5, 0, 0)) #Margins for each plot
+    par(mar = c(2, 4, 0, 0)) #Margins for each plot
     par(oma = c(0, 0.2, 0.2, 0.2)) #Outer margins 
     
-    plot(seq(1/T, 1, by = 1/T), data, ylab = "", xlab = "", col= 'grey', type = 'l', lty = 1,mgp=c(1.8,0.5,0))
+    plot(seq(1/T, 1, by = 1/T), data, xlim = c(0, 1), ylab = "", xlab = "", col= 'grey', type = 'l', lty = 1,mgp=c(1.8,0.5,0), xaxt = "n")
     lines(seq(1/T, 1, by = 1/T), trend, lwd = 2)
     
     SiZermap(u.grid, h.grid, test.res$test_ms, plot.title = expression(italic(T)[MS]))
+    SiZermap(u.grid, h.grid, test.res$test_uncor, plot.title = expression(italic(T)[UC]))
+    SiZermap(u.grid, h.grid, test.res$test_rows, plot.title = expression(italic(T)[RW]))
     SiZermap(u.grid, h.grid, SiZer_results$test, plot.title = expression(italic(T)[SiZer]))
     
+    axis(1, at=c(0.2, 0.4, 0.6, 0.8), mgp=c(1,0.5,0))
     dev.off()
   }
 }

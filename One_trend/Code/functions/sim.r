@@ -25,7 +25,7 @@ simulating_data <- function(T, a1, sigma_eta, sim.design, slope.fac = 0){
   } else if (sim.design == "blocks"){
     #trend function of blocks example
     h_for_blocks <- c(4, -5, 3, -4, 5, -4.2, 2.1, 4.3, -3.1, 2.1, -4.2)
-    t_for_blocks <- c(0.1, 0.13, 0.15, 0.23, 0.25, 0.4, 0.4, 0.65, 0.76, 0.78, 0.81)
+    t_for_blocks <- c(0.1, 0.13, 0.15, 0.23, 0.25, 0.4, 0.44, 0.65, 0.76, 0.78, 0.81)
     trend <- numeric(T)
     for(i in 1:T) {trend[i] <- (0.6 / 9.2) * (sum(h_for_blocks*(1 + sign(i/T - t_for_blocks))/2) + 2) + 0.2}
   } else if (sim.design == "brokenline") {
