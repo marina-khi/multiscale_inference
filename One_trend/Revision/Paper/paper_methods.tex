@@ -246,6 +246,9 @@ Even though related, our methods and theory are markedly different from those of
 
 
 
+\vspace{-0.4cm}
+
+\enlargethispage{0.25cm}
 \section{\textcolor{red}{Estimation of the long-run error variance}}\label{sec-error-var}
 
 
@@ -262,7 +265,7 @@ We consider the class of AR($\infty$) processes as an error model, which is a qu
 \begin{equation}\label{AR-inf-errors} 
 \varepsilon_t = \sum_{j=1}^\infty a_j \varepsilon_{t-j} + \eta_t, 
 \end{equation} 
-where $a_1,a_2,a_3,\ldots$ are unknown coefficients and $\eta_t$ are i.i.d.\ innovations with $\ex[\eta_t] = 0$ and $\ex[\eta_t^2] = \nu^2$. We assume that $A(z) := 1 - \sum_{j=1}^{\infty} a_j z^j \ne 0$ for all complex numbers $|z| \le 1 + \delta$ with some small $\delta > 0$, which has the following implications: (i) $\{ \varepsilon_t \}$ is stationary and causal. (ii) The coefficients $a_j$ decay to zero exponentially fast, that is, $|a_j| \le C \xi^j$ with some $C > 0$ and $\xi \in (0,1)$. (iii) $\{ \varepsilon_t\}$ has an MA($\infty$) representation of the form $\varepsilon_t =  \sum_{k=0}^\infty c_k \eta_{t-k}$. The coefficients $c_k$ can be computed iteratively from the equations 
+where $a_1,a_2,a_3,\ldots$ are unknown coefficients and $\eta_t$ are i.i.d.\ with $\ex[\eta_t] = 0$ and $\ex[\eta_t^2] = \nu^2$. We assume that $A(z) := 1 - \sum_{j=1}^{\infty} a_j z^j \ne 0$ for all complex numbers $|z| \le 1 + \delta$ with some small $\delta > 0$, which has the following implications: (i) $\{ \varepsilon_t \}$ is stationary and causal. (ii) The coefficients $a_j$ decay to zero exponentially fast, that is, $|a_j| \le C \xi^j$ with some $C > 0$ and $\xi \in (0,1)$. (iii) $\{ \varepsilon_t\}$ has an MA($\infty$) representation of the form $\varepsilon_t =  \sum_{k=0}^\infty c_k \eta_{t-k}$. The coefficients $c_k$ can be computed iteratively from the equations 
 \begin{equation}\label{c-recursion}
 c_k - \sum_{j=1}^k a_j c_{k-j} = b_k 
 \end{equation}
@@ -300,7 +303,7 @@ where $\boldsymbol{a} = (a_1,\ldots,a_p)^\top$, $\boldsymbol{\gamma}_q = (\gamma
 \begin{equation}\label{est-AR-FS}
 \widetilde{\boldsymbol{a}}_q = \widehat{\boldsymbol{\Gamma}}_q^{-1} \widehat{\boldsymbol{\gamma}}_q, 
 \end{equation}
-where $\widehat{\boldsymbol{\Gamma}}_q$ and $\widehat{\boldsymbol{\gamma}}_q$ are defined analogously as $\boldsymbol{\Gamma}_q$ and $\boldsymbol{\gamma}_q$ with $\gamma_q(\ell)$ replaced by the sample autocovariances $\widehat{\gamma}_q(\ell) = (T-q)^{-1} \sum_{t=q+\ell+1}^T \Delta_q Y_{t,T} \Delta_q Y_{t-\ell,T}$ and $q = q_T$ goes to infinity as $T \rightarrow \infty$. We impose the following formal conditions on the growth of $q = q_T$ and $p = p_T$: 
+where $\widehat{\boldsymbol{\Gamma}}_q$ and $\widehat{\boldsymbol{\gamma}}_q$ are defined analogously as $\boldsymbol{\Gamma}_q$ and $\boldsymbol{\gamma}_q$ with $\gamma_q(\ell)$ replaced by the sample autocovariances $\widehat{\gamma}_q(\ell) = (T-q)^{-1} \sum_{t=q+\ell+1}^T \Delta_q Y_{t,T} \Delta_q Y_{t-\ell,T}$ and $q = q_T$ goes to infinity as $T \rightarrow \infty$. We impose the following conditions on the growth of $q = q_T$ and $p = p_T$: 
 \begin{equation}\label{conditions-p-q}
 C \log T \le p \ll \min\{q,T^{1/4}\} \quad \text{and} \quad \log T \ll q \ll \sqrt{T} 
 \end{equation}

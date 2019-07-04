@@ -101,7 +101,7 @@ We hope the above points make clear that the methodological and theoretical cont
 \vspace{10pt}
 
 
-\textbf{Simulations and applications.} We have thoroughly revised the simulation study in Section ??. In particular, we have re-designed large parts of the comparison study with SiZer according to the suggestions of Referee 2. Moreover, we have analyzed our multiscale test for the case of strongly autocorrelated errors (in particular for AR($1$) errors with parameter $\pm 0.9$) as suggested by Referee 1. Note that we have skipped the simulation scenario which mimics the situation in the application section in order to keep the simulation study to a reasonable length. Finally, we have added a second application example to global temeprature data as requested by Referee 1. 
+\textbf{Simulations and application examples.} We have thoroughly revised the simulation study in Section 5. In order to take into account the many suggestions of Referees 1 and 2, we have completely re-designed the size and power simulations for our multiscale test (formerly Section 5.1) and the comparison with SiZer (formerly Section 5.2), which are combined in the new Section 5.1. Among other things, we consider different trend signals for our power simulations as suggested by Referee 2 and AR error terms with strong autocorrelation (AR($1$) errors with parameter $\pm 0.9$) as suggested by Referee 1. Note that we have removed the simulation setup with AR($2$) errors which mimics the situation in the application example in order to keep the simulation study to a reasonable length. Finally, we have added a second application example to global temperature data as requested by Referee 1. 
 
 
 %Old version: 
@@ -278,6 +278,7 @@ We have analyzed the size and power properties of the four methods (not only the
 
 \item \textit{Page 25, line 1-26: I do not quite understand this figure. Would it be possible to rather reproduce the colorful SiZer figures that show the results of the test at various scales and locations? Also you should use several different signals. I believe that a single relatively large bump is not sufficient test bed. A good collection of signals can be found in \cite{DonohoJohnstone1995}. Also, would \cite{HannigLeePark2013} be helpful in comparing the results?}
 
+
 %What's done (here $\alpha$ is always taken to be $0.05$):
 %\begin{itemize}
 %\item Plots comparing SiZer maps under the null:
@@ -299,105 +300,6 @@ We have analyzed the size and power properties of the four methods (not only the
 \item \textit{Page 31, line 1-39: Can you plot the SiZer results on this data?}
 
 \end{enumerate}
-
-
-
-%\begin{figure}[t!]
-%\begin{subfigure}[b]{0.475\textwidth}
-%\includegraphics[width=\textwidth]{Plots/rowwise_sig_comparison_T_250_a1_-50_slope_0.pdf}
-%\caption{$a_1 = -0.5$, slope = $0$}
-%\end{subfigure}\hspace{0.25cm}
-%\begin{subfigure}[b]{0.475\textwidth}
-%\includegraphics[width=\textwidth]{Plots/rowwise_sig_comparison_T_250_a1_-50_slope_125.pdf}
-%\caption{$a_1 = -0.5$, slope = $1,25$}
-%\end{subfigure}\\
-%\begin{subfigure}[b]{0.475\textwidth}
-%\includegraphics[width=\textwidth]{Plots/rowwise_sig_comparison_T_250_a1_-25_slope_0.pdf}
-%\caption{$a_1 = -0.25$, slope = $0$}
-%\end{subfigure}\hspace{0.25cm}
-%\begin{subfigure}[b]{0.475\textwidth}
-%\includegraphics[width=\textwidth]{Plots/rowwise_sig_comparison_T_250_a1_-25_slope_125.pdf}
-%\caption{$a_1 = -0.25$, slope = $1.25$}
-%\end{subfigure}\\
-%\begin{subfigure}[b]{0.475\textwidth}
-%\includegraphics[width=\textwidth]{Plots/rowwise_sig_comparison_T_250_a1_0_slope_0.pdf}
-%\caption{$a_1 = 0$, slope = $0$}
-%\end{subfigure}\hspace{0.25cm}
-%\begin{subfigure}[b]{0.475\textwidth}
-%\includegraphics[width=\textwidth]{Plots/rowwise_sig_comparison_T_250_a1_0_slope_125.pdf}
-%\caption{$a_1 = 0$, slope = $1.25$}
-%\end{subfigure}
-%\caption{Parallel coordinate plots for $T = 250$ and different AR(1) parameters $a_1 = -0.5, -0.25, 0, 0.25$ in the simulation scenarios with a pronounced trend and without the trend respectively.}\label{fig:PCP}
-%\end{figure}
-
-%\begin{figure}[t]
-%    \ContinuedFloat
-%\begin{subfigure}[b]{0.475\textwidth}
-%\includegraphics[width=\textwidth]{Plots/rowwise_sig_comparison_T_250_a1_25_slope_0.pdf}
-%\caption{$a_1 = 0.25$, slope = $0$}
-%\end{subfigure}\hspace{0.25cm}
-%\begin{subfigure}[b]{0.475\textwidth}
-%\includegraphics[width=\textwidth]{Plots/rowwise_sig_comparison_T_250_a1_25_slope_225.pdf}
-%\caption{$a_1 = 0.25$, slope = $2.25$}
-%\end{subfigure}
-%\caption{Parallel coordinate plots for $T = 250$ and different AR(1) parameters $a_1 = -0.5, -0.25, 0, 0.25$ in the simulation scenarios with a pronounced trend and without the trend respectively.}\label{fig:PCP}
-%\end{figure}
-
-%\begin{figure}[t!]
-%\begin{subfigure}[b]{0.475\textwidth}
-%\includegraphics[width=\textwidth]{Plots/representatives_T_250_a1_-50_slope_0.pdf}
-%\caption{$a_1 = -0.5$}
-%\end{subfigure}\hspace{0.25cm}
-%\begin{subfigure}[b]{0.475\textwidth}
-%\includegraphics[width=\textwidth]{Plots/representatives_T_250_a1_-25_slope_0.pdf}
-%\caption{$a_1 = -0.25$}
-%\end{subfigure}\\
-%\begin{subfigure}[b]{0.475\textwidth}
-%\includegraphics[width=\textwidth]{Plots/representatives_T_250_a1_0_slope_0.pdf}
-%\caption{$a_1 = 0$}
-%\end{subfigure}\hspace{0.25cm}
-%\begin{subfigure}[b]{0.475\textwidth}
-%\includegraphics[width=\textwidth]{Plots/representatives_T_250_a1_25_slope_0.pdf}
-%\caption{$a_1 = 0.25$}
-%\end{subfigure}
-%\caption{Representative SiZer maps $T = 250$ and different AR(1) parameters $a_1 = -0.5, -0.25, 0, 0.25$ in the simulation scenario under the null.}\label{fig:Representative_SiZer_maps}
-%\end{figure}
-
-%\begin{figure}[t!]
-%\begin{subfigure}[b]{0.475\textwidth}
-%\includegraphics[width=\textwidth]{Plots/SiZer_comparison_under_null_global_T_250.pdf}
-%\caption{Global method}
-%\end{subfigure}\hspace{0.25cm}
-%\begin{subfigure}[b]{0.475\textwidth}
-%\includegraphics[width=\textwidth]{Plots/SiZer_comparison_under_null_rowwise_T_250.pdf}
-%\caption{Rowwise method}
-%\end{subfigure}
-%\caption{Comparative SiZer maps for $T = 250$ and different AR(1) parameters $a_1 = -0.25, 0, 0.25$ in the simulation scenario under the null}\label{fig:SiZer_maps_comparison_null}
-%\end{figure}
-
-%\begin{figure}[t!]
-%\begin{subfigure}[b]{0.475\textwidth}
-%\includegraphics[width=\textwidth]{Plots/SiZer_comparison_sin_global_T_250.pdf}
-%\caption{Global method}
-%\end{subfigure}\hspace{0.25cm}
-%\begin{subfigure}[b]{0.475\textwidth}
-%\includegraphics[width=\textwidth]{Plots/SiZer_comparison_sin_rowwise_T_250.pdf}
-%\caption{Rowwise method}
-%\end{subfigure}
-%\caption{Comparative SiZer maps for $T = 250$ and different AR(1) parameters $a_1 = -0.25, 0, 0.25$ in the simulation scenario with sine curve as the trend function}\label{fig:SiZer_maps_comparison_null}
-%\end{figure}
-
-%\begin{figure}[t!]
-%\begin{subfigure}[b]{0.475\textwidth}
-%\includegraphics[width=\textwidth]{Plots/SiZer_comparison_blocks_global_T_1000.pdf}
-%\caption{Global method}
-%\end{subfigure}\hspace{0.25cm}
-%\begin{subfigure}[b]{0.475\textwidth}
-%\includegraphics[width=\textwidth]{Plots/SiZer_comparison_blocks_rowwise_T_1000.pdf}
-%\caption{Rowwise method}
-%\end{subfigure}
-%\caption{Comparative SiZer maps for $T = 1000$ and different AR(1) parameters $a_1 = -0.25, 0, 0.25$ in the simulation scenario with blocks as the trends function}\label{fig:SiZer_maps_comparison_blocks}
-%\end{figure}
 
 
 
