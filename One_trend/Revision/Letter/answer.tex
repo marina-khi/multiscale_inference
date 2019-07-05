@@ -209,30 +209,11 @@ Thank you very much for the constructive and useful suggestions. In our revision
 
 In the revised simulation study of Section ??, we consider a row-wise version $\mathcal{T}_{\text{RW}}$ of our multiscale test, which is the direct counterpart to the row-wise dependent SiZer method $\mathcal{T}_{\text{SiZer}}$ developed in \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. The quantiles of $\mathcal{T}_{\text{RW}}$ under the null are approximated by our simulation-based procedure, whereas the quantiles of $\mathcal{T}_{\text{SiZer}}$ are approximated by the method of \cite{HannigMarron2006} and \cite{ParkHannigKang2009} which is based on extreme value theory. In our simulation study, we compare the size and power properties of $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$. This shows how our simulation-based procedure compares to the approximation in \cite{HannigMarron2006} and \cite{ParkHannigKang2009}.
 
-
 At this point, we would like to add two remarks on our simulation-based procedure to compute the quantiles of the multiscale test under the null: 
 \begin{itemize}[leftmargin=0.5cm]
 \item As already mentioned when summarizing the main differences between our multiscale approach and SiZer at the beginning of this letter, the Gaussian approximation procedure that we use for simulating the quantiles of the multiscale statistic under the null is not the same as the bootstrap procedures proposed in \cite{ChaudhuriMarron1999, ChaudhuriMarron2000}. Both procedures are of course resampling methods. However,the resampling is done in a quite different way. 
 \item It far from clear that our simulation-based procedure is theoretically valid and provides an adequate critical value such that our test has asymptotically the correct size under the null. One of the main theoretical contributions of the paper is that this is indeed the case. 
 \end{itemize}
-
-
-%compare the size and power properties of the following versions of our multiscale test and SiZer: 
-%\begin{itemize}[leftmargin=1.5cm,itemsep=0cm]
-
-%\item[$\mathcal{T}_{\text{MS}}$:] our multiscale test as defined in Section ?? of the paper. 
-
-%\item[$\mathcal{T}_{\text{UC}}$:] an uncorrected version of our multiscale test without the additive correction terms $\lambda(h)$ 
-
-%\item[$\mathcal{T}_{\text{RW}}$:] a row-wise version of our multiscale test 
-
-%\item[$\mathcal{T}_{\text{SiZer}}$:] the row-wise version of dependent SiZer as developed in \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. 
-
-%\end{itemize}
-%The row-wise version $\mathcal{T}_{\text{RW}}$ of our test is the direct counterpart to the sizer test $\mathcal{T}_{\text{SiZer}}$. The two main differences of the two procedures are as follows: (i) $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ are based on different statistics to test the hypotheses $H_0(u,h)$ that $m$ is constant on the interval $[u-h,u+h]$. (ii) The quantiles of $\mathcal{T}_{\text{RW}}$ under the null are approximated by our simulation-based procedure, whereas the quantiles of $\mathcal{T}_{\text{SiZer}}$ are approximated by the method of \cite{HannigMarron2006} and \cite{ParkHannigKang2009} which is based on extreme value theory. In our simulation study, we in particular compare the size and power properties of $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$. This shows how our simulation-based procedure compares to the approximation in \cite{HannigMarron2006} and \cite{ParkHannigKang2009}.
-
-
-%-- Compare multiscale test with and without additive correction terms $\lambda(h)$ by ``parallel coordinate plots'' as in Figure 5 of Hannig \& Marron (2006). 
 
 
 \item \textit{Page 12, line 15: What is random here? After a spending some time I believe that it is the $\Pi_T$ but on first reading I thought $E_T$s are non-random. Please explain these various objects better.}
@@ -264,37 +245,32 @@ We have thoroughly revised the comparison study with SiZer, attempting to give a
 We have analyzed the size and power properties of the four methods (not only the global but also the row-wise size and power properties to be fairer with regard to SiZer). As already mentioned in our answer to your comment (1), the row-wise version $\mathcal{T}_{\text{RW}}$ of our multiscale test focuses on one scale at a time and is thus the direct counterpart to $\mathcal{T}_{\text{SiZer}}$. Please see Section ?? for the full simulation study, which in particular shows how $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ compare to each other. We hope you find the revised study more accurate.
 
 
-%What's done (here $\alpha$ is always taken to be $0.05$):
-%\begin{itemize}
-%\item For each setting, each sample size, and each bandwidth row we report the percentage of realizations of the data in which there were some red or blue pixels in that row. The reports are given in ``parallel coordinate plots'' as in Figure 5 of \cite*{HannigMarron2006}. Each plot has the results of SiZer, the results of our global method and the results of our rowwise method respectively. The settings are as follows:
-%\begin{enumerate}
-%\item Under the null for $a_1 = -0.25, 0, 0.25$ and sample size $T = 250$.
-%\item Under the alternative for $a_1 = -0.25, 0$ and sample size $T = 250$. The trend function is linear increasing on the whole interval with the slope $\beta = 1.25$. 
-%\item Under the alternative for $a_1 = 0.25$ and sample size $T = 250$. The trend function is linear increasing on the whole interval with the slope $\beta = 2.25$. 
-%\end{enumerate}
-%\item Representative SiZer maps (for SiZer, our global method and our rowwise method) for simulated data from the null distribution for $a_1 = -0.25, 0, 0.25$. Sample size is $T = 250$. $1,000$ such SiZer maps were simulated for each setting and the population of them was ordered in terms of number of pixels that flag significant structure by being red or blue. For each setting and for each method we show 500th of these maps (essentially the median of the population), the 750th (the third quartile), the 850th and the 950th member of the ordered population.
-%\end{itemize}
-
-
 \item \textit{Page 25, line 1-26: I do not quite understand this figure. Would it be possible to rather reproduce the colorful SiZer figures that show the results of the test at various scales and locations? Also you should use several different signals. I believe that a single relatively large bump is not sufficient test bed. A good collection of signals can be found in \cite{DonohoJohnstone1995}. Also, would \cite{HannigLeePark2013} be helpful in comparing the results?}
 
+We have removed the figure from the paper. In order to compare the power properties of our multiscale approach and SiZer, we perform the following simulation exercises in the revision:
+\begin{enumerate}[label=(\alph*), leftmargin=0.7cm]
 
-%What's done (here $\alpha$ is always taken to be $0.05$):
-%\begin{itemize}
-%\item Plots comparing SiZer maps under the null:
-%\begin{enumerate}
-%\item Plots comparing SiZer and global method and rowwise methods respectively for sample size is $T=250$. AR(1) parameters are $a_1 = -0.25, 0, 0.25$ and $\sigma_\eta^2 = 1$.
-%\end{enumerate}
-%\item Plots comparing SiZer maps under the alternative:
-%\begin{enumerate}
-%\item Plots comparing SiZer and global method and rowwise methods respectively for sine curve plus AR(1) noise (as in \cite*{ParkHannigKang2009}) for sample size $T=250$. AR(1) parameters are $a_1 = -0.25, 0, 0.25$ and $\sigma_\eta^2 = 1$.
-%\item Plots comparing SiZer and global method and rowwise methods respectively for blocks plus AR(1) noise (signal from \cite*{Donoho1995}, recentered and normalized as in \cite*{HannigMarron2006}) for sample size $T=250$. AR(1) parameters are $a_1 = -0.25, 0, 0.25$ and $\sigma_\eta^2 = 0.01$.
-%\item Plots comparing SiZer and global method and rowwise methods respectively for blocks plus AR(1) noise (signal from \cite*{Donoho1995}, recentered and normalized as in \cite*{HannigMarron2006}) for sample size $T=1000$. AR(1) parameters are $a_1 = -0.25, 0, 0.25$ and $\sigma_\eta^2 = 0.01$.
-%\end{enumerate}
-%\end{itemize}
+\item As suggested by you, we consider different trend signals and produce the SiZer plots for both our approach and SiZer. We use the following signals: (i) the sine signal $m(u) = \sin(6\pi u)$ that was considered in \cite{ParkHannigKang2009} and (ii) the blocks signal from \cite{DonohoJohnstone1995} which was investigated in detail in \cite{HannigMarron2006}. In both cases, the error terms are modelled as an AR($1$) process with the parameter $a_1 \in\{-0.5,0.5\}$. 
 
-%Different signals: \\
-%-- Power results could be reported in terms of ability to find the jump points in the blocks example. 
+\item In addition to (a), we perform more or less conventional power comparisons for our approach and SiZer. To do so, we consider a simple trend signal, in particular, a bump signal as in the previous version of the paper. The considered bump signal is increasing (i.e.\ has a positive derivative) on the interval $I^+ = (0.45,0.5)$, is decreasing on $I^- = (0.5,0.55)$ and is constant elsewhere. Suppose we are interested in finding local increases in $m$. When performing our multiscale test and SiZer, we can distinguish between 
+\begin{itemize}[leftmargin=0.5cm,itemsep=0cm]
+\item a correct finding: the test finds an increase on some interval $I_{u,h} = [u-h,u+h]$ which intersects with $I^+$ (that is, the test finds an increase on some interval $I_{u,h}$ where $m$ is indeed increasing).
+\item a spurious/false finding: the test finds an increase on some interval $I_{u,h} = [u-h,u+h]$ which does not intersect with $I^+$ (that is, the test finds an increase on some interval $I_{u,h}$ where $m$ is not increasing).
+\end{itemize}
+We now proceed as follows: We simulate $S=1000$ data samples. For both our approach and SiZer, we compute 
+\begin{itemize}[leftmargin=0.5cm,itemsep=0cm]
+\item global power: the number of simulations where there is at least one correct finding divided by the total number of simulations
+\item spurious global power: the number of simulations where there is at at least one spurious/false finding divided by the total number of simulations.
+\end{itemize}
+In addition, we compute power and spurious power row-wise, that is, for each scale $h$ separately. 
+
+\end{enumerate}
+The simulation exercises from (b) can be found in Section ??. Those from (a) are in Section ?? of the Supplementary Material. We have decided not to include them in the paper because of space considerations. (The figures with the SiZer plots are already two full pages by themselves.) However, if you think it is important to add these simulation exercises to the paper, we'll be happy to re-structure our simulation study accordingly. 
+
+Concerning the simulation exercises in (b), please also note the following: Our definitions of a correct and a spurious/false finding imply that the underlying target of interest is the unknown trend function $m$. This is different from the SiZer philosophy where the target is not the curve $m$ itself but rather ``the curve viewed at different resolution levels''. Formally, the target is the family of  convolutions $m_h(u) = \int K(w) m(u+hw) dw$, that is, the family of smoothed versions $m_h$ of the curve $m$. It would of course be possible to define correct and spurious/false findings in terms of the smoothed versions $m_h$. However, our main aim is to make rigorous confidence statements about the time regions where the trend $m$ (rather than the smoothed versions $m_h$) is increasing/decreasing. Hence, for us, it is more natural to think of the trend $m$ itself as the underlying target. 
+
+Finally, many thanks for pointing us to \cite{HannigLeePark2013}. However, we have decided not to use the metrics in this paper in our simulation study for the following reason: The metrics defined in \cite{HannigLeePark2013} are designed to measure how far the SiZer maps produced by different procedures (e.g.\ by dependent SiZer and our multiscale test) are from some oracle SiZer map. The oracle SiZer map is thus the target which should be approximated as well as possible by the procedures. This oracle SiZer map is based on a noiseless version of SiZer. (Specifically, it results from applying SiZer to the noiseless data $\{ m(t/T): t=1,\ldots,T\}$ rather than the noisy data $\{ Y_{t,T}: t=1,\ldots,T\}$ and from plugging the true error variance into the SiZer confidence intervals.) Hence, it is very natural to regard the oracle SiZer map as a benchmark for the map which SiZer produces from the actual (empirical or simulated) data. 
+However, it is not clear to us why the oracle SiZer map should be a meaningful benchmark for the map produced by our multiscale test. Indeed, the oracle SiZer map cannot be regarded as a map which is generated by our multiscale test in an idealized noiseless situation (simply because our test approach is based on different test statistics and confidence intervals/critical values than SiZer). Hence, as far as we can see, it is not so meaningful to use the oracle SiZer map as a target when comparing our multiscale test with SiZer. 
 
 
 \item \textit{Page 31, line 1-39: Can you plot the SiZer results on this data?}
