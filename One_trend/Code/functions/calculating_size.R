@@ -1,5 +1,5 @@
-calculating_size <- function(a1, different_T, different_alpha, sigma_eta, Nsim = 1000, kappa =0.1,
-                             SimRuns =1000, type_of_sigma = 'estimated', q_ = 25, remove.small.ess = 'false'){
+calculating_size <- function(a1, different_T, different_alpha, sigma_eta, Nsim = 1000, 
+                             SimRuns =1000, type_of_sigma = 'estimated', q_ = 25){
   size_ms    <- numeric(length(different_alpha))
   size_uncor <- numeric(length(different_alpha))
   size_rows  <- numeric(length(different_alpha))
@@ -11,22 +11,13 @@ calculating_size <- function(a1, different_T, different_alpha, sigma_eta, Nsim =
     u.grid    <- sort(unique(gset[,1]))
     h.grid    <- sort(unique(gset[,2]))
     
-    if (remove.small.ess == 'true'){
-      autocov   <- (sigma_eta^2/(1-a1^2)) * (a1^seq(0,T-1,by=1))
-      ess       <- ESS.star(u.grid=u.grid, h.grid=h.grid, T=T, autocov=autocov)
-      deletions <- ess$del
-      grid      <- grid_construction(T=T, u.grid=u.grid, h.grid=h.grid, deletions=deletions)
-    }
-    
     # Compute kernel weights and critical value for multiscale test
     wghts  <- kernel_weights(T=T, grid=grid)
     
     filename = paste0("quantiles/distr_T_", T,".RData")
-    if((!file.exists(filename)) || (remove.small.ess == 'true')) {
-      quants <- multiscale_quantiles(T=T, grid=grid, weights=wghts, kappa=kappa, SimRuns=SimRuns)
-      if (remove.small.ess == 'false'){
-        save(quants, file = filename)
-      }
+    if(!file.exists(filename)) {
+      quants <- multiscale_quantiles(T=T, grid=grid, weights=wghts, kappa=0.1, SimRuns=SimRuns)
+      save(quants, file = filename)
     } else {
       load(filename)
     }
@@ -35,7 +26,7 @@ calculating_size <- function(a1, different_T, different_alpha, sigma_eta, Nsim =
     size_matrix_temp_uncor <- matrix(NA, nrow = Nsim, ncol = length(different_alpha))
     size_matrix_temp_rows  <- matrix(NA, nrow = Nsim, ncol = length(different_alpha))
     
-    set.seed(321)     
+    #set.seed(12321)     
     for (i in 1:Nsim){
       #Simulating the time series
       data.simulated <- simulating_data(T, a1, sigma_eta, sim.design = 'constant')
@@ -81,8 +72,11 @@ calculating_size <- function(a1, different_T, different_alpha, sigma_eta, Nsim =
 }
 
 
-calculating_size_for_SiZer <- function(a1, different_T, alpha, sigma_eta, Nsim = 1000, SimRuns =1000){
-  size    <- c()
+calculating_size_for_all <- function(a1, different_T, alpha, sigma_eta, Nsim = 1000, SimRuns =1000){
+  size_SiZer <- c()
+  size_ms    <- c()
+  size_uncor <- c()
+  size_rows  <- c()
   
   for (T in different_T){
     # Construct grid
@@ -99,10 +93,16 @@ calculating_size_for_SiZer <- function(a1, different_T, alpha, sigma_eta, Nsim =
     sizer.wghts  <- SiZer_weights(T=T, grid=grid)
     sizer.std    <- SiZer_std(weights=sizer.wghts, autocov=autocov, T)
     sizer.quants <- SiZer_quantiles(alpha=alpha, T=T, grid=grid, autocov=autocov)
+
+    # Compute kernel weights and critical value for multiscale test
+    wghts  <- kernel_weights(T=T, grid=grid)
+    quants <- multiscale_quantiles(T=T, grid=grid, weights=wghts, kappa=0.1, SimRuns=SimRuns)
+
+    size_SiZer_temp <- numeric(Nsim)
+    size_ms_temp    <- numeric(Nsim)
+    size_uncor_temp <- numeric(Nsim)
+    size_rows_temp  <- numeric(Nsim)
     
-    size_temp <- numeric(Nsim)
-    
-    set.seed(321)
     for (i in 1:Nsim){
       #Simulating the time series
       data.simulated <- simulating_data(T, a1, sigma_eta, sim.design = 'constant')
@@ -110,19 +110,34 @@ calculating_size_for_SiZer <- function(a1, different_T, alpha, sigma_eta, Nsim =
       trend          <- data.simulated$trend
       sigma_true     <- data.simulated$sigma
     
+      stats    <- multiscale_statistics(data=data, weights=wghts, sigmahat=sigma_true, grid=grid)
+      vals     <- stats$values
+      
+      
       values     <- sizer.wghts %*% data
       sizer.vals <- as.vector(values)
       
       SiZer_results    <- SiZer_test(values=sizer.vals, std.devs=sizer.std, quants=sizer.quants, grid=grid)
+      test.res <- multiscale_testing(alpha=alpha, quantiles=quants, values=vals, grid=grid)
       
-      SiZer_results$test[SiZer_results$test == 2] <- NA
-      if (sum(abs(SiZer_results$test), na.rm = TRUE) >0) {size_temp[i] <- 1} else {size_temp[i] <- 0}
+      test.res$test_ms[test.res$test_ms == 2] <- NA
+      test.res$test_uncor[test.res$test_uncor == 2] <- NA
+      test.res$test_rows[test.res$test_rows == 2] <- NA        
+      SiZer_results$test[SiZer_results$test == 2] <- NA 
+      
+      if (sum(abs(test.res$test_ms), na.rm = TRUE) >0) {size_ms_temp[i] <- 1} else {size_ms_temp[i] <- 0}
+      if (sum(abs(test.res$test_uncor), na.rm = TRUE) >0) {size_uncor_temp[i] <- 1} else {size_uncor_temp[i] <- 0}
+      if (sum(abs(test.res$test_rows), na.rm = TRUE) >0) {size_rows_temp[i] <- 1} else {size_rows_temp[i] <- 0}
+      if (sum(abs(SiZer_results$test), na.rm = TRUE) >0) {size_SiZer_temp[i] <- 1} else {size_SiZer_temp[i] <- 0}
     }
-    size <- c(size, sum(size_temp)/Nsim)
-    cat("Size of SiZer is", sum(size_temp)/Nsim, " for T = ", T, "\n")
-    rm(size_temp)
+    size_SiZer <- c(size_SiZer, sum(size_SiZer_temp)/Nsim)
+    size_ms <- c(size_ms, sum(size_ms_temp)/Nsim)
+    size_uncor <- c(size_uncor, sum(size_uncor_temp)/Nsim)
+    size_rows <- c(size_rows, sum(size_rows_temp)/Nsim)
+    
+    rm(size_SiZer_temp, size_rows_temp, size_ms_temp, size_uncor_temp)
   }
-  return(size.results.sizer = size)
+  return(list(SiZer = size_SiZer, ms = size_ms, uncor = size_uncor, rows = size_rows))
 }
 
 calculating_size_rowwise <- function(a1, T, alpha, sigma_eta, Nsim = 1000, SimRuns =1000){
@@ -153,7 +168,6 @@ calculating_size_rowwise <- function(a1, T, alpha, sigma_eta, Nsim = 1000, SimRu
   sizer.std    <- SiZer_std(weights=sizer.wghts, autocov=autocov, T)
   sizer.quants <- SiZer_quantiles(alpha=alpha, T=T, grid=grid, autocov=autocov)
   
-  set.seed(321)
   for (i in 1:Nsim){
     #Simulating the time series
     data.simulated <- simulating_data(T, a1, sigma_eta, sim.design = 'constant')

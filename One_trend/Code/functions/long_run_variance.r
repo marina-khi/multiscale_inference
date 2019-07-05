@@ -142,3 +142,16 @@ AR_coef_HvK <- function(data,L1,L2,p)
     a.hat.HvK <- as.vector(a.hat.HvK)
     return(a.hat.HvK)
 }
+
+
+autocovariance_function_AR2 <- function(k, a_1, a_2, sigma_eta, gamma_previous){
+  len <- length(gamma_previous)
+  if (k == 0) {
+    result = ((1 - a_2) / (1 + a_2))* (sigma_eta * sigma_eta / ((1 - a_2)^2 - a_1^2))
+  } else if (k == 1){
+    result = (a_1 / (1 - a_2))*((1 - a_2) / (1 + a_2))* (sigma_eta * sigma_eta / ((1 - a_2)^2 - a_1^2))
+  } else {
+    result = a_1 * gamma_previous[len] + a_2 * gamma_previous[len - 1]
+  }
+  return(result)
+}
