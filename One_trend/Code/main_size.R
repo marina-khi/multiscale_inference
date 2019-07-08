@@ -36,9 +36,10 @@ number_of_cols            <- length(different_a1) * (length(different_alpha) + 1
 size_matrix_ms            <- matrix(NA, nrow = length(different_T), ncol = number_of_cols)
 rownames(size_matrix_ms)  <- different_T
 
+set.seed(111)
 k <- 1
 for (a1 in different_a1){
-  size <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, kappa =0.1, SimRuns =SimRuns, type_of_sigma = type_of_sigma, q_ = 25, remove.small.ess = 'false')[[1]]
+  size <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, SimRuns =SimRuns, type_of_sigma = type_of_sigma, q_ = 25)[[1]]
   size_matrix_ms[, (k * (length(different_alpha) + 1) - (length(different_alpha) - 1)):(k * (length(different_alpha) + 1))] <- size
   k <- k + 1
 }
@@ -58,9 +59,10 @@ number_of_cols    <- length(different_a1) * (length(different_T) + 1)
 size_ms           <- matrix(NA, nrow = length(different_alpha), ncol = number_of_cols)
 rownames(size_ms) <- different_alpha
 
+set.seed(112)
 k <- 1
 for (a1 in different_a1){
-  result <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, kappa =0.1, SimRuns =SimRuns, type_of_sigma = type_of_sigma, q_ = 50, remove.small.ess = 'false')[[1]]
+  result <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, SimRuns =SimRuns, type_of_sigma = type_of_sigma, q_ = 50)[[1]]
   size_ms[, (k * (length(different_T) + 1) - (length(different_T) - 1)):(k * (length(different_T) + 1))] <- t(result)
   k <- k + 1
 }
@@ -75,22 +77,22 @@ print.xtable(xtable(size_ms, digits = c(3), align = paste(replicate(number_of_co
 
 different_T     <- c(250, 500, 1000)
 different_a1    <- c(-0.5, 0.5)
-different_alpha <- c(0.05)
+alpha <- 0.05
 
 number_of_cols         <- length(different_a1) * 5
 size_matrix            <- matrix(NA, nrow = length(different_T), ncol = number_of_cols)
 rownames(size_matrix)  <- different_T
 
+set.seed(113)
 k <- 1
 for (a1 in different_a1){
   #Here we are plugging the true long-run variance to make the comparison between the method fair.
   #Therefore, all the differences in size come from the methods themselves
-  size <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, SimRuns =SimRuns, type_of_sigma = 'true', remove.small.ess = 'true')
-  size_matrix[, (k-1)*5 + 2] <- size[[1]]
-  size_matrix[, (k-1)*5 + 3] <- size[[2]]
-  size_matrix[, (k-1)*5 + 4] <- size[[3]]
-  size.SiZer <- calculating_size_for_SiZer(a1, different_T, different_alpha, sigma_eta, Nsim = 1000, SimRuns =1000)
-  size_matrix[, (k-1)*5 + 5] <- size.SiZer
+  size <- calculating_size_for_all(a1, different_T, alpha, sigma_eta, Nsim = Nsim, SimRuns =SimRuns)
+  size_matrix[, (k-1)*5 + 2] <- size$ms
+  size_matrix[, (k-1)*5 + 3] <- size$uncor
+  size_matrix[, (k-1)*5 + 4] <- size$rows
+  size_matrix[, (k-1)*5 + 5] <- size$SiZer
   k <- k + 1
 }
 
