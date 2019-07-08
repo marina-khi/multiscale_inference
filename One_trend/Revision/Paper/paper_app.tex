@@ -32,7 +32,7 @@ To estimate the long-run error variance $\sigma^2$, we apply the procedure from 
 To compute the critical values of the multiscale test $\mathcal{T}_{\text{MS}}$, we simulate $5000$ values of the statistic $\Phi_T$ defined in Section \ref{subsec-method-test} and compute their empirical $(1-\alpha)$ quantile $q_T(\alpha)$. The uncorrected and row-wise versions $\mathcal{T}_{\text{UC}}$ and $\mathcal{T}_{\text{RW}}$ of our multiscale test are implemented analogously. The SiZer test is implemented as described in \cite{ParkHannigKang2009}. The details are summarized in Section S.3 of the Supplementary Material. 
 
 
-\subsubsection{Size simulations} 
+\subsubsection{Size simulations}\label{subsec-sim-multiscale-size} 
 
 
 The first part of our simulation study investigates the size properties of the four tests $\mathcal{T}_{\text{MS}}$, $\mathcal{T}_{\text{UC}}$, $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ under the null that the trend $m$ is constant. To start with, we focus on the multiscale test $\mathcal{T}_{\text{MS}}$. Table \ref{tab:sim:size:MS1} reports the actual size of $\mathcal{T}_{\text{MS}}$ for the AR parameters $a_1 \in \{-0.5,-0.25,0.25,0.5\}$, which is computed as the number of simulations in which $\mathcal{T}_{\text{MS}}$ rejects the null divided by the total number of simulations. As can be seen, the actual size of the multiscale test $\mathcal{T}_{\text{MS}}$ is fairly close to the nominal target $\alpha$ for all the considered AR parameters and sample sizes. Hence, the test has approximately the correct size.
@@ -133,7 +133,7 @@ Figure \ref{fig:sim:size:compare} reports the row-wise size of the four tests by
 The row-wise size of $\mathcal{T}_{\text{SiZer}}$ also gives an acceptable approximation to the target $\alpha=5\%$, even though the size numbers are upward biased quite a bit. The global tests $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{UC}}$, in contrast, have a row-wise size much smaller than the target $\alpha=5\%$, which reflects the fact that they control global rather than row-wise size. 
 
 
-\subsubsection{Power comparisons}
+\subsubsection{Power comparisons}\label{subsec-sim-multiscale-power}
 
 
 In the second part of our simulation study, we compare the tests $\mathcal{T}_{\text{MS}}$, $\mathcal{T}_{\text{UC}}$, $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ in terms of power. As above, we use the location-scale grid $\mathcal{G}_T^*$ and treat the autocovariance function of the error terms as known when implementing the tests. Moreover, we restrict attention to the significance level $\alpha=0.05$, the AR parameters $a_1 \in \{-0.5,0.5\}$ and the sample size $T=1000$. Our simulation exercises investigate the ability of the four tests to detect local increases in the trend $m$. (The same could of course be done for decreases as well.) The tests indicate a local increase in $m$ according to the following decision rules: For each $(u,h) \in \mathcal{G}_T^*$, 
