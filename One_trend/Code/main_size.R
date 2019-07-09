@@ -59,7 +59,7 @@ number_of_cols    <- length(different_a1) * (length(different_T) + 1)
 size_ms           <- matrix(NA, nrow = length(different_alpha), ncol = number_of_cols)
 rownames(size_ms) <- different_alpha
 
-set.seed(112)
+#set.seed(112)
 k <- 1
 for (a1 in different_a1){
   result <- calculating_size(a1, different_T, different_alpha, sigma_eta, Nsim = Nsim, SimRuns =SimRuns, type_of_sigma = type_of_sigma, q_ = 50)[[1]]

@@ -38,7 +38,7 @@ T_tempr      <- length(yearly_tempr)
 #############################
 #Order selection for England#
 #############################
-q <- 20:35
+q <- 10:35
 r <- 10:15
 criterion_matrix <- expand.grid(q = q, r = r)
 
@@ -78,7 +78,7 @@ for (i in 1:nrow(criterion_matrix)){
 #Setting tuning parameters for testing#
 #######################################
 p <- 2
-q <- 25
+q <- 15
 r <- 10
 
 
@@ -218,8 +218,8 @@ yearly_tempr_global <- temperature_global[temperature_global$ANNUAL > -99, 'ANNU
 T_tempr_global      <- length(yearly_tempr_global)
 
 #Order selection for global
-q <- 20:35
-r <- 10:15
+q <- 10:35
+r <- 5:15
 criterion_matrix_global <- expand.grid(q = q, r = r)
 
 criterion_matrix_global$FPE <- numeric(length = nrow(criterion_matrix_global))
@@ -253,7 +253,7 @@ for (i in 1:nrow(criterion_matrix_global)){
 
 #Setting tuning parameters for testing global temperature
 p_global <- 4
-q_global <- 25
+q_global <- 15
 r_global <- 10
 
 #Data analysis
@@ -306,7 +306,7 @@ gset_result$test <- (gset_result$vals2 > quant.ms) * sign(gset_result$vals)
 
 a_t_set <- subset(gset_result, test == 1, select = c(u, h, vals2))
 p_t_set <- data.frame('startpoint' = (a_t_set$u - a_t_set$h)*T_tempr_global + 1850, 'endpoint' = (a_t_set$u + a_t_set$h)*T_tempr_global + 1850, 'values' = a_t_set$vals2)
-p_t_set <- subset(p_t_set, endpoint <= 2015, select = c(startpoint, endpoint, values)) 
+#p_t_set <- subset(p_t_set, endpoint <= 2015, select = c(startpoint, endpoint, values)) 
 p_t_set <- choosing_minimal_intervals(p_t_set)
 
 print.xtable(xtable(subset(p_t_set, select = c(startpoint, endpoint)), digits = c(0)), type="latex", file="plots/minimal_intervals_global.tex")
@@ -326,10 +326,10 @@ test.res      <- multiscale_testing(alpha=alpha, quantiles=quants, values=vals, 
 
 
 #Parameters for plotting
-grid_points <- seq(from = 1/T_tempr, to = 1, length.out = T_tempr) #grid points for estimating
-grid_time <- seq(from = 1659, to = 2017, length.out = T_tempr) #grid points for plotting 
+grid_points <- seq(from = 1/T_tempr_global, to = 1, length.out = T_tempr_global) #grid points for estimating
+grid_time <- seq(from = 1850, to = 2014, length.out = T_tempr_global) #grid points for plotting 
 
-pdffilename <- paste0("plots/application.pdf")
+pdffilename <- paste0("plots/application_global.pdf")
 pdf(pdffilename, width=8, height=10, paper="special")
 
 par(mfrow = c(4,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
@@ -337,49 +337,20 @@ par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
 
 # Plotting the real data
-plot(grid_time, xlim = c(1659, 2019), yearly_tempr, type = "l", mgp=c(1,0.5,0), xaxp = c(1675, 2025, 7)) 
+plot(grid_time, xlim = c(1850, 2014), yearly_tempr_global, type = "l", mgp=c(1,0.5,0), xaxp = c(1900, 2000, 4)) 
 
 
 #Plotting the minimal intervals. Do not have any negative minimal intervals, so plotting all (positive) ones
 ymaxlim = max(p_t_set$values)
 yminlim = min(p_t_set$values)
-plot(NA, xlim=c(1659,2019), xaxt = "n",  ylim = c(yminlim - 0.2, ymaxlim + 0.2), yaxp  = c(1.75, 2.5, 3), mgp=c(2,0.5,0))
+plot(NA, xlim = c(1850, 2014), xaxt = "n",  ylim = c(yminlim - 0.2, ymaxlim + 0.2), mgp=c(2,0.5,0))
 segments(p_t_set[['startpoint']], p_t_set[['values']], p_t_set$endpoint, p_t_set[['values']])
 abline(h = quant.ms, lty = 2)
 
 SiZermap(u.grid, h.grid, test.res$test_ms, plot.title = expression(italic(T)[MS]))
-axis(1, at=seq(17/T_tempr, 367/T_tempr, by = 50/T_tempr), labels = FALSE, mgp=c(1,0.5,0))
+#axis(1, at=seq(17/T_tempr, 367/T_tempr, by = 50/T_tempr), labels = FALSE, mgp=c(1,0.5,0))
 
 SiZermap(u.grid, h.grid, SiZer_results$test, plot.title = expression(italic(T)[SiZer]))
 
-axis(1, at=seq(17/T_tempr, 367/T_tempr, by = 50/T_tempr), labels = seq(1675, 2025, by = 50), mgp=c(1,0.5,0))
-dev.off()
-
-
-
-
-
-
-
-sigma_hat_global <- estimating_variance_new(yearly_tempr_global, q_global, order = p_global, r_global)[[1]]
-data_analysis_global(alpha, yearly_tempr_global, test_problem, sigma_hat_global, pdffilename_global)
-
-#plotting fitted data
-pdf("Paper/Plots/fitting_different_AR.pdf")
-par(mfrow = c(9,2), cex = 0.8, tck = -0.025) #Setting the layout of the graphs
-par(mar = c(0, 0.5, 1.0, 0)) #Margins for each plot
-par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
-
-for (order_AR in 1:9){
-  coefficient <- estimating_variance_new(yearly_tempr_global, q_global, order = order_AR, r_global)
-  ts.sim <- arima.sim(list(c(order_AR, 0, 0), ar = coefficient[[2]]), n=T_tempr_global, rand.gen=function(n){rnorm(n, sd=coefficient[[3]])} )
-
-  plot(ts.sim, ylab="", xlab = "", ylim = c(-1, 1), type = 'l',axes=FALSE, frame.plot=TRUE, cex = 1.2, tck = -0.025)
-  Axis(side=2, at  = c(-0.75,-0.25, 0.25, 0.75))
-  Axis(side=1, labels=FALSE)
-  plot(yearly_tempr_global - ts.sim, ylab="", xlab = "", ylim = c(-1, 1),yaxp  = c(-0.75, 0.75, 3), type = 'l', axes=FALSE, frame.plot=TRUE, cex = 1.2, tck = -0.025)
-  Axis(side=1, labels=FALSE)
-  Axis(side=2, labels = FALSE)
-}
-
+#axis(1, at=seq(17/T_tempr, 367/T_tempr, by = 50/T_tempr), labels = seq(1675, 2025, by = 50), mgp=c(1,0.5,0))
 dev.off()
