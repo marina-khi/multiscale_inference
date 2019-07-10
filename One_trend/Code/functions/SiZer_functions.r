@@ -238,5 +238,5 @@ SiZermap <- function(u.grid, h.grid, test.results, plot.title)
   temp    <- seq(min(temp),max(temp),by=1)
   col.vec <- col.vec[temp]
   
-  image(x=u.grid, y=log(h.grid,10), z=t(test.results), col=col.vec, xlab = '', ylab=expression(log[10](h)), main = plot.title, xaxt = 'n')
+  image(x=u.grid, y=log(h.grid,10), z=t(test.results), col=col.vec, xlab = '', ylab=expression(log[10](h)), main = plot.title, xaxt = 'n', mgp=c(1,0.5,0))
 }
