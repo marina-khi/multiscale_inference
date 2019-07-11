@@ -143,7 +143,7 @@ write.csv(criterion_matrix_global,"plots/criterion_matrix_global.csv", row.names
 
 
 #Setting tuning parameters for testing global temperature
-p_global <- 4
+p_global <- 5
 q_global <- 15
 r_global <- 10
 
