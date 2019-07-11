@@ -4,8 +4,6 @@ calculating_power <- function(a1, T, alpha, sigma_eta, Nsim = 1000, SimRuns =100
                               region = 'increase',
                               type_of_power = 'global'){
   
-  set.seed(1)
-  
   #Construct grid
   grid      <- grid_construction(T)
   gset      <- grid$gset
@@ -114,8 +112,6 @@ calculating_power_rowwise <- function(a1, T, alpha, sigma_eta, Nsim = 1000, SimR
                               remove.small.ess = 'true', sim.design = 'bump', bump.height = 1,
                               region = 'increase',
                               type_of_power = 'global'){
-  
-  set.seed(1)
   
   #Construct grid
   grid      <- grid_construction(T)
