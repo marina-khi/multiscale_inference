@@ -1,7 +1,33 @@
-data_analysis <- function(data, ts_start, ts_end, filename_table, filename_plot, axis_at, axis_labels, xaxp, yaxp, 
+data_analysis <- function(data, ts_start, filename_table, filename_plot, axis_at, axis_labels, xaxp, yaxp, 
                           alpha = 0.05, SimRuns = 1000, order = 1, q = 25, r.bar = 10, plot_SiZer = 'yes',
                           sigma_supplied = 'no', sigma = NA){
-  Tlen <- length(data)
+  # Function that carries out the multiscale test for the given time series including all the necessary calculations of   
+  # multiscale statistics and critical values. 
+  #
+  # Arguments:
+  # data        time series needed to be analysed
+  # ts_start    first point in time of the data. Needed for the plots
+  # alpha       significance level     
+  #  
+  # Outputs: physical files  
+  # test_ms     matrix of test results for our multiscale test defined in Section 3
+  #             test_ms[i,j] = -1: test rejects the null for the j-th location u and the 
+  #                                i-th bandwidth h and indicates a decrease in the trend
+  #             test_ms[i,j] = 0:  test does not reject the null for the j-th location u  
+  #                                and the i-th bandwidth h 
+  #             test_ms[i,j] = 1:  test rejects the null for the j-th location u and the 
+  #                                i-th bandwidth h and indicates an increase in the trend
+  #             test_ms[i,j] = 2:  no test is carried out at j-th location u and i-th 
+  #                                bandwidth h (because the point (u,h) is excluded from  
+  #                                the grid as specified by the 'deletions'-option in the
+  #                                function 'grid_construction')  
+  # test_uncor  matrix of test results for the uncorrected version of the multiscale test 
+  # test_order  matrix of test results for the version of the multiscale test from Section ??
+  # test_rows   matrix of test results for the rowwise version of the multiscale test 
+  
+  
+  Tlen <- length(data)         #length of the data
+  ts_end <- ts_start + Tlen -1 #the last point of time series
   
   #estimate the long-run variance
   AR.struc  <- AR_lrv(data=data, q=q, r.bar=r.bar, p=order)
@@ -32,24 +58,14 @@ data_analysis <- function(data, ts_start, ts_end, filename_table, filename_plot,
     load(filename)
   }
   
-  # Select (1-alpha) quantile of the multiscale statistic under the null
-  probs.ms <- as.vector(quants$quant_ms[1,])
-  quant.ms <- as.vector(quants$quant_ms[2,])
-  
-  if(sum(probs.ms == (1-alpha)) == 0){
-    pos.ms <- which.min(abs(probs.ms-(1-alpha)))
-  } else {
-    pos.ms <- which.max(probs.ms == (1-alpha)) 
-  }
-  quant.ms    <- quant.ms[pos.ms]
-  
   #Compute test results
-  vals2            <- abs(vals) - correct
-  gset_result      <- cbind(gset, vals, vals2)
-  gset_result$test <- (gset_result$vals2 > quant.ms) * sign(gset_result$vals)
+  test.res   <- multiscale_testing(alpha=alpha, quantiles=quants, values=vals, grid=grid)
+  gset$test  <- as.vector(t(test.res$test_ms))
+  gset$vals2 <- as.vector(abs(vals) - correct) 
+  quant.ms   <- test.res$quant.ms
   
   #Produce minimal intervals
-  a_t_set <- subset(gset_result, test == 1, select = c(u, h, vals2))
+  a_t_set <- subset(gset, test == 1, select = c(u, h, vals2))
   p_t_set <- data.frame('startpoint' = (a_t_set$u - a_t_set$h)*Tlen + ts_start, 'endpoint' = (a_t_set$u + a_t_set$h)*Tlen + ts_start, 'values' = a_t_set$vals2)
   p_t_set <- subset(p_t_set, endpoint <= ts_end, select = c(startpoint, endpoint, values)) 
   p_t_set <- choosing_minimal_intervals(p_t_set)
@@ -57,7 +73,6 @@ data_analysis <- function(data, ts_start, ts_end, filename_table, filename_plot,
   print.xtable(xtable(subset(p_t_set, select = c(startpoint, endpoint)), digits = c(0)), type="latex", file=filename_table)
   
   #Parameters for plotting
-  grid_points <- seq(from = 1/Tlen, to = 1, length.out = Tlen) #grid points for estimating
   grid_time <- seq(from = ts_start, to = ts_end, length.out = Tlen) #grid points for plotting 
   
   
@@ -75,14 +90,12 @@ data_analysis <- function(data, ts_start, ts_end, filename_table, filename_plot,
     SiZer.values  <- sizer.wghts %*% data
     sizer.vals    <- as.vector(SiZer.values)
     SiZer_results <- SiZer_test(values=sizer.vals, std.devs=sizer.std, quants=sizer.quants, grid=grid)
-  
+    
     test.res      <- multiscale_testing(alpha=alpha, quantiles=quants, values=vals, grid=grid)
-
+  
     pdf(filename_plot, width=7, height=10, paper="special")
     par(mfrow = c(4,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
   } else {
-    test.res      <- multiscale_testing(alpha=alpha, quantiles=quants, values=vals, grid=grid)
-    
     pdf(filename_plot, width=7, height=10, paper="special")
     par(mfrow = c(3,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
   }
@@ -91,23 +104,28 @@ data_analysis <- function(data, ts_start, ts_end, filename_table, filename_plot,
   par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
   
   # Plotting the real data
-  plot(grid_time, xlim = c(ts_start, ts_end), data, type = "l", mgp=c(1,0.5,0), xaxp = xaxp, xaxs='i') 
+  plot(grid_time, xlim = c(ts_start, ts_end), data, type = "l", mgp=c(1,0.5,0), xaxp = xaxp, xaxs='i')
+  title(main = expression((a) ~ observed ~ temperature ~ time ~ series), line = 1)
   
-  
+  par(mar = c(0.5, 0.5, 3.5, 0)) #Margins for each plot
   #Plotting the minimal intervals. Do not have any negative minimal intervals, so plotting all (positive) ones
   ymaxlim = max(p_t_set$values)
-  yminlim = min(p_t_set$values)
-  plot(NA, xlim=c(ts_start,ts_end), xaxt = "n",  ylim = c(yminlim - 0.3, ymaxlim + 0.3), yaxp  = yaxp, mgp=c(2,0.5,0))
+  yminlim = min(min(p_t_set$values), quant.ms)
+  plot(NA, xlim=c(ts_start,ts_end), xaxt = "n",  ylim = c(yminlim - 0.1, ymaxlim + 0.1), yaxp  = yaxp, mgp=c(2,0.5,0))
+  title(main = expression((b) ~ minimal ~ intervals ~ produced ~ by ~ italic(T)[MS]), line = 1)
   segments(p_t_set[['startpoint']], p_t_set[['values']], p_t_set$endpoint, p_t_set[['values']])
   abline(h = quant.ms, lty = 2)
-  
-  SiZermap(u.grid, h.grid, test.res$test_ms, plot.title = expression(italic(T)[MS]))
 
+  par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
+  SiZermap(u.grid, h.grid, test.res$test_ms, plot.title = expression((c) ~ SiZer ~ map ~ 'for' ~ italic(T)[MS]))
+  #title(main =, line = 1)
+    
   if (plot_SiZer == 'yes'){
     axis(1, at=axis_at, labels = FALSE, mgp=c(1,0.5,0))
-    SiZermap(u.grid, h.grid, SiZer_results$test, plot.title = expression(italic(T)[SiZer]))
+    SiZermap(u.grid, h.grid, SiZer_results$test, plot.title = expression((d) ~ SiZer ~ map ~ 'for' ~ italic(T)[SiZer]))
   }
   axis(1, at=axis_at, labels = axis_labels, mgp=c(1,0.5,0))
   
   dev.off()
+  #return(list(gset, quant.ms))
 }
