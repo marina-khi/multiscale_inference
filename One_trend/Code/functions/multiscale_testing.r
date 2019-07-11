@@ -107,5 +107,5 @@ multiscale_testing <- function(alpha, quantiles, values, grid){
   test.rows  <- matrix(test.res[,4], ncol=length(u.grid.full), byrow=TRUE)  
 
 
-  return(list(ugrid=u.grid.full, hgrid=h.grid.full, test_ms=test.ms, test_uncor=test.uncor, test_order=test.order, test_rows=test.rows))
+  return(list(ugrid=u.grid.full, hgrid=h.grid.full, test_ms=test.ms, test_uncor=test.uncor, test_order=test.order, test_rows=test.rows, quant.ms = quant.ms))
 }

@@ -229,7 +229,7 @@ SiZer_test <- function(values, std.devs, quants, grid){
   return(list(ugrid=u.grid.full, hgrid=h.grid.full, test=test.sizer))
 }
 
-SiZermap <- function(u.grid, h.grid, test.results, plot.title)
+SiZermap <- function(u.grid, h.grid, test.results, plot.title = NA)
   
 {  # computes SiZer map from the test results 
   
