@@ -96,7 +96,7 @@ data_analysis <- function(data, ts_start, filename_table, filename_plot, axis_at
     pdf(filename_plot, width=7, height=10, paper="special")
     par(mfrow = c(4,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
   } else {
-    pdf(filename_plot, width=7, height=10, paper="special")
+    pdf(filename_plot, width=7, height=7.5, paper="special")
     par(mfrow = c(3,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
   }
   
