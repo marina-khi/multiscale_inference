@@ -12,7 +12,7 @@
 
 To start with, we compute the variance of $\bar{Y} = T^{-1} \sum_{t=1}^T Y_{t,T}$, which is given by
 \[ \var(\bar{Y}) = \frac{\gamma_\varepsilon(0)}{T} + \frac{2}{T} \sum_{k = 1}^{T-1} \Big(1 - \frac{k}{T}\Big)\gamma_\varepsilon(k). \]
-Since the autocovariance function $\gamma_{\varepsilon}(\cdot)$ is known by assumption, we can calculate the value of $\var(\bar{Y})$ by using the formula $\gamma_\varepsilon(k) = \nu^2 a_1^{|k|} / (1 - a_1^2)$ together with the true para\-meters $a_1$ and $\nu^2 = \ex[\eta_t^2]$. We next compute 
+Since the autocovariance function $\gamma_{\varepsilon}(\cdot)$ is \textcolor{red}{assumed to be known}, we can calculate the value of $\var(\bar{Y})$ by using the formula $\gamma_\varepsilon(k) = \nu^2 a_1^{|k|} / (1 - a_1^2)$ together with the true para\-meters $a_1$ and $\nu^2 = \ex[\eta_t^2]$. We next compute 
 \[ T^* = \frac{\gamma_\varepsilon(0)}{\var(\bar{Y})}, \]
 which can be interpreted as a measure of information in the data. \textcolor{red}{For each point $(u,h) \in \mathcal{G}_T$}, we finally calculate the effective sample size for dependent data 
 \[ \text{ESS}^*(u, h) = \frac{T^*}{T} \frac{\sum_{t=1}^T K_h(t/T - u)}{K_h(0)} \]
@@ -67,9 +67,9 @@ The results for the blocks example are reported in Figure \ref{fig:sizer:blocks}
 \begin{enumerate}[leftmargin=0.8cm,label=(\roman*)]
 %\item The blue and red regions are tenedetially larger for the SiZer plots of the row-wise methods. 
 
-\item In the SiZer maps of the two row-wise methods $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$, there is a small strip of blue pixels around the jump location $u=0.44$. Hence, the row-wise methods detect the small upward jump in the blocks signal at $u=0.44$, whereas the global methods do not pick up this jump. 
+\item In the SiZer maps of the two row-wise methods $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$, there is a small stripe of blue pixels around the jump location $u=0.44$. Hence, the row-wise methods detect the small upward jump in the blocks signal at $u=0.44$, whereas the global methods do not pick up this jump. 
 
-\item In the SiZer map of $\mathcal{T}_{\text{SiZer}}$, there are two small strips of red pixels near the location $u=0.95$ corresponding to scales $h$ with $\log_{10}(h)$ between $-1.2$ and $-1.6$. Hence, the row-wise SiZer test $\mathcal{T}_{\text{SiZer}}$ spuriously finds a decrease in the trend $m$ on a short time interval around $u=0.95$. As a specific example, the pixel $(u,h) = (0.93,0.03)$ is coloured red, implying that $\mathcal{T}_{\text{SiZer}}$ spuriously finds a decrease on the interval $[0.90,0.96]$. Inspecting the grey time series plot in the top panel of subfigure (b), it indeed looks as if there is a short downward trend in the time series towards the end of the sample. However, this downward movement of the time series is not due to an actual decrease in the trend function $m$. It is rather produced by the autocorrelation structure in the error terms. 
+\item In the SiZer map of $\mathcal{T}_{\text{SiZer}}$, there are two small stripes of red pixels near the location $u=0.95$ corresponding to scales $h$ with $\log_{10}(h)$ between $-1.2$ and $-1.6$. Hence, the row-wise SiZer test $\mathcal{T}_{\text{SiZer}}$ spuriously finds a decrease in the trend $m$ on a short time interval around $u=0.95$. As a specific example, the pixel $(u,h) = (0.93,0.03)$ is coloured red, implying that $\mathcal{T}_{\text{SiZer}}$ spuriously finds a decrease on the interval $[0.90,0.96]$. Inspecting the grey time series plot in the top panel of subfigure (b), it indeed looks as if there is a short downward trend in the time series towards the end of the sample. However, this downward movement of the time series is not due to an actual decrease in the trend function $m$. It is rather produced by the autocorrelation structure in the error terms. 
 
 \end{enumerate}
 (i) indicates that the row-wise methods  $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ tend to be more powerful than the global tests $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{UC}}$. (ii) shows that this gain of power comes at a cost: The row-wise methods tend to find spurious increases/decreases more often than the global ones. Hence, the SiZer maps of subfigure (b) nicely illustrate the main findings of our power simulations in Section \ref{subsec-sim-multiscale-power}.
@@ -88,7 +88,7 @@ The SiZer maps for the sine example are depicted in Figure \ref{fig:sizer:sine}.
 \includegraphics[width=\textwidth]{Plots/SiZermaps/SiZer_map_T_1000_blocks_a1_50_seed_6.pdf}
 \caption{$a=0.5$}
 \end{subfigure}
-\caption{SiZer maps for the blocks example. The left-hand panels of subfigure (a) show the results for $a_1=-0.5$, the right-hand panels of subfigure (b) those for $a_1=0.5$. The two upper panels depicts the sine curve with the simulated data sample in the background. The other panels show the SiZer maps produced by the four tests $\mathcal{T}_{\text{MS}}$, $\mathcal{T}_{\text{UC}}$, $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$.}\label{fig:sizer:blocks}
+\caption{SiZer maps for the blocks example. The left-hand panels of subfigure (a) show the results for $a_1=-0.5$, the right-hand panels of subfigure (b) those for $a_1=0.5$. The two upper panels depict the trend curve $m$ with the simulated data sample in the background. The other panels show the SiZer maps produced by the four tests $\mathcal{T}_{\text{MS}}$, $\mathcal{T}_{\text{UC}}$, $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$.}\label{fig:sizer:blocks}
 \end{figure}
 
 
@@ -102,7 +102,7 @@ The SiZer maps for the sine example are depicted in Figure \ref{fig:sizer:sine}.
 \includegraphics[width=\textwidth]{Plots/SiZermaps/SiZer_map_T_1000_sine_a1_50_seed_1.pdf}
 \caption{$a=0.5$}
 \end{subfigure}
-\caption{SiZer maps for the sine example. The left-hand panels of subfigure (a) show the results for $a_1=-0.5$, the right-hand panels of subfigure (b) those for $a_1=0.5$. The two upper panels depicts the sine curve with the simulated data sample in the background. The other panels show the SiZer maps produced by the four tests $\mathcal{T}_{\text{MS}}$, $\mathcal{T}_{\text{UC}}$, $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$.}\label{fig:sizer:sine}
+\caption{SiZer maps for the sine example. The left-hand panels of subfigure (a) show the results for $a_1=-0.5$, the right-hand panels of subfigure (b) those for $a_1=0.5$. The two upper panels depict the sine curve with the simulated data sample in the background. The other panels show the SiZer maps produced by the four tests $\mathcal{T}_{\text{MS}}$, $\mathcal{T}_{\text{UC}}$, $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$.}\label{fig:sizer:sine}
 \end{figure}  
 
 
