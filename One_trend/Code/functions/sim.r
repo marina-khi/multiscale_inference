@@ -67,5 +67,5 @@ simulating_data <- function(T, a1, sigma_eta, sim.design, slope.fac = 0){
   
   #simulated time series
   data <- trend + eps
-  return(list(trend = trend, data = data, sigma = sigma, int.plus = int.plus, int.minus = int.minus))
+  return(list(trend = trend, data = data, sigma = sigma, int.plus = int.plus, int.minus = int.minus, eps = eps))
 }

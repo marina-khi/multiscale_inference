@@ -1,7 +1,7 @@
 rm(list=ls())
 
 source("functions/long_run_variance.r")
-
+source("functions/sim.r")
 
 # Parameters
 
@@ -28,16 +28,17 @@ for(nb in 1:Nsim)
 
 {  set.seed(nb)
 
-   # simulate data
-   source("simulations/sim.r")  
+  # simulate data
+  data.simulated <- simulating_data(T, a1, sigma_eta, sim.design = sim.design, slope.fac = slope.fac)
+  
 
    # compute estimator
-   AR.struc    <- AR_lrv(data=data, q=25, r.bar=10, p=1)    
+   AR.struc    <- AR_lrv(data=data.simulated$data, q=25, r.bar=10, p=1)    
    a.hat[nb]   <- AR.struc$ahat 
    lrv.hat[nb] <- AR.struc$lrv
 
    # compute oracle estimators
-   res.oracle    <- lm(eps[2:T] ~ eps[1:(T-1)] - 1)
+   res.oracle    <- lm(data.simulated$eps[2:T] ~ data.simulated$eps[1:(T-1)] - 1)
    a.oracle[nb]  <- as.vector(res.oracle$coef)
    sig.oracle     <- mean(res.oracle$residuals^2)
    lrv.oracle[nb] <- sig.oracle/(1-sum(a.oracle[nb]))^2 
@@ -53,6 +54,6 @@ abline(v=a1,col="red",lwd=2)
 hist(a.oracle)
 abline(v=a1,col="red",lwd=2)
 hist(lrv.hat)
-abline(v=sigma^2,col="red",lwd=2)
+abline(v=data.simulated$sigma^2,col="red",lwd=2)
 hist(lrv.oracle)
-abline(v=sigma^2,col="red",lwd=2)
+abline(v=data.simulated$sigma^2,col="red",lwd=2)
