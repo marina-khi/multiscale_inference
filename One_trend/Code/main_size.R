@@ -1,4 +1,4 @@
-#This is the main file for producing the simulation results for size, that are reported in Section 5.1.1.
+#This is the main file for producing the simulation results for size, which are reported in Section 5.1.1.
 rm(list=ls())
 
 library(Rcpp)
@@ -6,19 +6,15 @@ library(xtable)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
 
-source("functions/grid_construction.r")
-source("functions/multiscale_statistics.r")
-source("functions/multiscale_quantiles.r")
-source("functions/multiscale_testing.r")
-source("functions/long_run_variance.r")
-source("functions/sim.r")
+#The following file contains one main function that computes statistical size of different tests based on different specifications.
+#All the necessary arguments to use this function are described in the file.
 source("functions/CalculateSiZe.r")
-source("functions/SiZer_functions.r")
-sourceCpp("functions/kernel_weights.cpp")
-sourceCpp("functions/SiZer_functions.cpp")
 
 
-# Parameters
+###############################
+#Defining necessary parameters#
+###############################
+
 Nsim       <- 1000        # number of simulation runs for size/power calculations
 sigma_eta  <- 1           # standard deviation of the innovation term in the AR model
 SimRuns    <- 5000        # number of simulation runs to produce critical values

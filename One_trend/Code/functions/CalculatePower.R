@@ -39,8 +39,18 @@ CalculatePower <- function(T, a1, sigma_eta, alpha = 0.05, Nsim = 1000, SimRuns 
   #   power_SiZer: A vector of length equal to the number of bandwidths analysed, each entry corresponding to the rowwise power 
   #     of the SiZer testing procedure (T_SiZer) for this bandwidth.
   #   h.grid.new:  A vector of the bandwidths analysed.
-  
 
+  #Load necessary functions  
+  source("functions/grid_construction.r")
+  source("functions/multiscale_statistics.r")
+  source("functions/multiscale_quantiles.r")
+  source("functions/multiscale_testing.r")
+  source("functions/long_run_variance.r")
+  source("functions/sim.r")
+  source("functions/SiZer_functions.r")
+  sourceCpp("functions/kernel_weights.cpp")
+  sourceCpp("functions/SiZer_functions.cpp")
+  
   #Construct grid
   grid      <- grid_construction(T)
   gset      <- grid$gset

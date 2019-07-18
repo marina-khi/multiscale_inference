@@ -6,20 +6,15 @@ library(xtable)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
 
-source("functions/grid_construction.r")
-source("functions/multiscale_statistics.r")
-source("functions/multiscale_quantiles.r")
-source("functions/multiscale_testing.r")
-source("functions/long_run_variance.r")
-source("functions/sim.r")
+#The following file contains one main function that computes power of different tests based on different specifications.
+#All the necessary arguments for this function are described in detail in the file.
 source("functions/CalculatePower.r")
-source("functions/SiZer_functions.r")
-sourceCpp("functions/kernel_weights.cpp")
-sourceCpp("functions/SiZer_functions.cpp")
 
 
+###############################
+#Defining necessary parameters#
+###############################
 
-# Parameters
 Nsim       <- 1000    # number of simulation runs for size/power calculations
 sigma_eta  <- 1       # standard deviation of the innovation term in the AR model
 SimRuns    <- 5000    # number of simulation runs to produce critical values
@@ -32,6 +27,7 @@ different_T  <- c(250, 500, 1000) #different sample sizes for global power
 ##########################
 #Calculating global power#
 ##########################
+
 sim.design <- 'bump'  # type of trend function m()
 height.neg <- 0.85    # height of the bump in case of sim.design = 'bump'. This height is used to calculate power for negative a1     
 height.pos <- 2.65    # height of the bump in case of sim.design = 'bump'. This height is used to calculate power for positive a1 
@@ -70,9 +66,11 @@ for (a1 in different_a1){
 print.xtable(xtable(power_matrix, digits = c(3), align = paste(replicate(5*length(different_a1) + 2, "c"), collapse = "")),
              type="latex", file=paste0("plots/power_table.tex"), include.colnames = FALSE)
 
+
 ############################
 #Calculating rowwise power#
 ############################
+
 sim.design <- 'bump'  # type of trend function m()
 height.neg <- 0.85    # height of the bump in case of sim.design = 'bump'. This height is used to calculate power for negative a1     
 height.pos <- 2.65    # height of the bump in case of sim.design = 'bump'. This height is used to calculate power for positive a1 
@@ -138,9 +136,18 @@ for (a1 in different_a1){
   dev.off()
 }
 
+
 #############################################
 #Blocks and sine examples for the Supplement#
 #############################################
+source("functions/grid_construction.r")
+source("functions/multiscale_statistics.r")
+source("functions/multiscale_quantiles.r")
+source("functions/multiscale_testing.r")
+source("functions/sim.r")
+source("functions/SiZer_functions.r")
+sourceCpp("functions/kernel_weights.cpp")
+sourceCpp("functions/SiZer_functions.cpp")
 
 sim.design <- c('blocks', 'sine') # type of trend function m()
 
@@ -193,7 +200,7 @@ for (a1 in different_a1){
     test.res      <- multiscale_testing(alpha=alpha, quantiles=quants, values=vals, grid=grid)
     SiZer_results <- SiZer_test(values=sizer.vals, std.devs=sizer.std, quants=sizer.quants, grid=grid)
 
-    pdffilename <- paste0("plots/new/SiZer_map_T_", T, "_", sim.design_, "_a1_", a1*100, ".pdf")
+    pdffilename <- paste0("plots/SiZer_map_T_", T, "_", sim.design_, "_a1_", a1*100, ".pdf")
     pdf(pdffilename, width = 6, height = 16, paper = 'special')
 
     par(mfrow = c(5, 1), cex = 1,  tck = -0.025) #Setting the layout of the graphs
