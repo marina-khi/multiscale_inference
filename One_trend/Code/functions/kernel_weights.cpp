@@ -1,10 +1,11 @@
-
+#include <Rcpp.h>
 #include <math.h> 
 #include <R.h>
 #include <Rmath.h> 
 #include <stdlib.h> 
 #include <stdio.h>
 
+using namespace Rcpp;
 
 double awert(double x){
 
@@ -71,8 +72,8 @@ double s_t_1(double u, double h, int T){
    return(result / (T * h));
 }
 
-
-void kernel_weights(int *T, double *gset, int *N, double *weight){
+// [[Rcpp::export]]
+Rcpp::NumericVector kernel_weights(int T, Rcpp::NumericVector gset, int N){
 
    /* Inputs: 
       T        	  length of time series
@@ -86,60 +87,54 @@ void kernel_weights(int *T, double *gset, int *N, double *weight){
 
    int i, t, pos, pos1, pos2, t_min, t_max;
    double u, h, x, temp;
-   double *weight1, *weight2; 
 
-   weight1 = (double*) malloc(sizeof(double) * N[0] * T[0]);
-   weight2 = (double*) malloc(sizeof(double) * N[0]);
- 
-   for(i = 0; i < N[0]*T[0]; i++){
-      weight1[i] = 0.0;
-   }
-   for(i = 0; i < N[0]; i++){
-      weight2[i] = 0.0;
-   }
-
+   Rcpp::NumericVector weight1(N * T);
+   Rcpp::NumericVector weight2(N);
+   
+   Rcpp::NumericVector weight(N * T);
+   
    pos1 = 0;
    pos2 = 0; 	
 
-   for(i = 0; i < N[0]; i++){
+   for(i = 0; i < N; i++){
       u = gset[i];
-      h = gset[i+N[0]];
-      t_min = (int)(floor((u - h) * (float)T[0]));      
+      h = gset[i+N];
+      t_min = (int)(floor((u - h) * (float)T));      
       if(t_min < 1) t_min = 1;
-      t_max = (int)(ceil((u + h) * (float)T[0]));      
-      if(t_max > T[0]) t_max = T[0];
-      pos1 = i*T[0];
+      t_max = (int)(ceil((u + h) * (float)T));      
+      if(t_max > T) t_max = T;
+      pos1 = i*T;
   
       if(u > h && u < 1.0-h){
         for(t = t_min; t < (t_max+1); t++){
-           x = ((t / (float)T[0] - u) / h);           
+           x = ((t / (float)T - u) / h);           
            temp = epanc(x) * x;
            weight1[pos1 + (t_min-1)] = temp;
-           weight2[pos2] += temp * temp;
-	   pos1++;
-	}
+           weight2[pos2] = weight2[pos2] + temp * temp;
+  	      pos1++;
+	      }
       } else {
         for(t = t_min; t < (t_max+1); t++){
-           x = ((t / (float)T[0] - u) / h);
-           temp = epanc(x) * (s_t_0(u, h, T[0]) * x - s_t_1(u, h, T[0]));
+           x = ((t / (float)T - u) / h);
+           temp = epanc(x) * (s_t_0(u, h, T) * x - s_t_1(u, h, T));
            weight1[pos1 + (t_min-1)] = temp;
-           weight2[pos2] += temp * temp;
-	   pos1++;
-	}
+           weight2[pos2] = weight2[pos2] + temp * temp;
+      	   pos1++;
+	      }
       }
       pos2++;
    }
 
    pos = 0;
     
-   for(i = 0; i < N[0]; i++){
-      for(t = 0; t < T[0]; t++){
- 	 weight[pos] = weight1[pos] / sqrt(weight2[i]);     
-         pos++;
+   for(i = 0; i < N; i++){
+      for(t = 0; t < T; t++){
+        weight[pos] = weight1[pos] / sqrt(weight2[i]);     
+        pos++;
       }
     }     
-
-   free(weight1);
-   free(weight2); 
+    
+    return weight;
+    free(weight1);
+    free(weight2); 
 }
-

@@ -122,8 +122,7 @@ plotting_MSE_graphs <- function(data1, data2, data3, pdfname, margin_, legend_po
   dev.off()
 }
 
-plotting_variance_histograms <- function(data1, data2, data3, star_value, pdfname, 
-                                         text1, text2, text3, cutting_at_end = 'no'){
+PlotHistograms <- function(data1, data2, data3, star_value, pdfname, text1, text2, text3, cut.at.end = FALSE){
   smallest_value <- min(c(data1, data2, data3))
   biggest_value  <- max(c(data1, data2, data3))
   step_len       <- (biggest_value-smallest_value)/50
@@ -131,7 +130,7 @@ plotting_variance_histograms <- function(data1, data2, data3, star_value, pdfnam
   breaks_grid <- seq(smallest_value, biggest_value, by = step_len)
   breaks_grid[length(breaks_grid)] <- biggest_value
   
-  if (cutting_at_end == 'yes'){
+  if (cut.at.end){
     if (smallest_value < -1.4){
       steps <- ceiling(50*(biggest_value-smallest_value)/(biggest_value+1.4))
       step_len <- (biggest_value-smallest_value)/steps

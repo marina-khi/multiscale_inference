@@ -5,13 +5,17 @@
 #include <stdlib.h> 
 #include <stdio.h>
 
-Rcpp::List estimating_sigma(Rcpp::NumericVector y, int T, int L1, int L2, double sigmahat, double sigma_eta){
-             /* y			list of y_t values y= (y_1,...,y_T)
-                T        	length of time series
-                L1, L2     	Tuning parameters, integers
-				sigmahat	return: estimator for square root of long-run error variance, sigma
-				a_hat_1		return: estimator for a_1 coefficient of AR(1)
-				sigma_eta	return: estimator for square root of the variance of the innovation in AR(1) model
+// [[Rcpp::export]]
+Rcpp::List EstimateLrvHvK(Rcpp::NumericVector y, int T, int L1, int L2){
+             /* Function that estimates AR(1) parameters of time series y based on the method from Hall and van Keilegom.
+              Args:
+                y			    list of y_t values y= (y_1,...,y_T)
+                T         length of time series
+                L1, L2    Tuning parameters, integers
+              Returns:
+				        sigma_hat: estimator for square root of long-run error variance, sigma
+				        a_hat_1:   estimator for a_1 coefficient of AR(1)
+				        sigma_eta: estimator for square root of the variance of the innovation in AR(1) model
 			*/
 	int r, t, j;
 	double gamma_hat_zero, gamma_hat_one;
@@ -36,7 +40,7 @@ Rcpp::List estimating_sigma(Rcpp::NumericVector y, int T, int L1, int L2, double
 	double sigma_eta = sqrt(gamma_hat_zero * (1 - a_hat_1 * a_hat_1));
 	double sigma2 =  (sigma_eta * sigma_eta)  / ((1 - a_hat_1) * (1 - a_hat_1));
 	double sigma_hat = sqrt(sigma2);
-	return Rcpp::List::create(Rcpp::Named("a_hat_1") = a_hat_1,
+	return Rcpp::List::create(Rcpp::Named("a_hat") = a_hat_1,
                            Rcpp::Named("sigma_eta") = sigma_eta,
                            Rcpp::Named("sigma_hat") = sigma_hat);
 }

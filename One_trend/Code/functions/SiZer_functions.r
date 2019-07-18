@@ -85,9 +85,9 @@ SiZer_weights <- function(T, grid)
 
   wghts <- vector(mode = "double", length = N*T)
 
-  result <- .C("sizer_weights", T, gset, N, wghts)
+  result <- sizer_weights(T, gset, N)
 
-  return(matrix(result[[4]],ncol=T,byrow=TRUE))
+  return(matrix(result,ncol=T,byrow=TRUE))
 }
 
 
