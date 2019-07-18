@@ -333,55 +333,78 @@ with some constant $C > 0$ that does only depend on $\underline{\sigma}$ and $\o
 \section{\textcolor{red}{Proofs of the results from Section \ref{sec-error-var}}}\label{sec-supp-proofs2}
 
 
-In what follows, we prove Proposition \ref{prop-lrv} from Section \ref{sec-error-var}. The notation is the same as in the previous section. In particular, the symbol $C$ denotes a generic real constant which may take a different value on each occurrence. Throughout the section, we assume that $m$ is Lipschitz and that $\{\varepsilon_t\}$ is an AR($p^*$) process of the form \eqref{AR-errors} with the following properties: $A(z) \ne 0$ for all $|z| \le 1 + \delta$ with some small $\delta > 0$ and the innovations $\eta_t$ have a finite fourth moment. 
+In what follows, we prove Proposition \ref{prop-lrv} from Section \ref{sec-error-var}. Throughout the section, we assume that $m$ is Lipschitz and that $\{\varepsilon_t\}$ is an AR($p^*$) process of the form \eqref{AR-errors} with the following properties: $A(z) \ne 0$ for all $|z| \le 1 + \delta$ with some small $\delta > 0$ and the innovations $\eta_t$ have a finite fourth moment. As in the previous section, the symbol $C$ denotes a generic real constant which may take a different value on each occurrence. Moreover, the notation $v_T \ll w_T$ means that $v_T/w_T \rightarrow 0$ as $T \rightarrow \infty$.  
 
 
 
 \subsection*{Auxiliary results}
 
 
-To start with, we derive some auxiliary results needed for the proof of Proposition \ref{prop-lrv}. To do so, we impose the following conditions on $p=p_T$ and $q=q_T$:
-\begin{equation}\label{aux-conditions-p-q}
-1 \le p \ll \sqrt{T} \quad \text{and} \quad 1 \le q \ll \sqrt{T},
-\end{equation}
-where $v_T \ll w_T$ means that $v_T/w_T \rightarrow 0$ for $T \rightarrow \infty$. As one can see, the conditions in \eqref{aux-conditions-p-q} are less restrictive than those in \eqref{conditions-p-q} which are required for the proof of Proposition \ref{prop-lrv}. In particular, $q=q_T$ is allowed to be smaller than $p=p_T$. Our first auxiliary result bounds the $L_2$-distance between the $\ell$-th sample autocovariance
-\[ \widehat{\gamma}_q^*(\ell) =  \frac{1}{T-q} \sum\limits_{t=q+\ell+1}^T \Delta_q \varepsilon_t \, \Delta_q \varepsilon_{t-\ell} \]
-of the process $\{\Delta_q \varepsilon_t \}$ and its true counterpart $\gamma_q(\ell) = \cov(\Delta_q \varepsilon_t,\Delta_q \varepsilon_{t-\ell})$. 
+To start with, we derive some auxiliary results on the sample autocovariances 
+\[ \widehat{\gamma}_q(\ell) = \frac{1}{T-q} \sum_{t=q+\ell+1}^T \Delta_q Y_{t,T} \, \Delta_q Y_{t-\ell,T}. \]
+The first result bounds the $L_2$-distance between the $\ell$-th sample autocovariance $\widehat{\gamma}_q(\ell)$ and its true counterpart $\gamma_q(\ell) = \cov(\Delta_q\varepsilon_t,\Delta_q\varepsilon_{t-\ell})$ uniformly over $\ell$. 
+%
+%
 \begin{lemmaA}\label{lemma-lrv-1}
-Let $1 \le p \ll \sqrt{T}$ and $1 \le q \ll \sqrt{T}$. Then for any $1 \le \ell \le p$,   
-\[ \ex \Big[ \big( \widehat{\gamma}_q^*(\ell) - \gamma_q(\ell) \big)^2 \Big] \le C \Big\{ \frac{1}{T-q} + \Big(\frac{p}{T-q}\Big)^2 \Big\}, \]
-where the constant $C$ does not depend on $\ell$, $p$, $q$ and $T$. 
+Let $1 \le p \ll \sqrt{T}$ and $1 \le q \ll \sqrt{T}$. For any $1 \le \ell \le p$,   
+\[ \ex \Big[ \big( \widehat{\gamma}_q(\ell) - \gamma_q(\ell) \big)^2 \Big] \le  C \Big\{ \frac{1}{T-q} + \Big(\frac{p}{T-q}\Big)^2 + \Big(\frac{q}{T}\Big)^2 \Big\}, \]
+where the constant $C$ is independent of $\ell$, $p$, $q$ and $T$. 
 \end{lemmaA}
-
-
+%
+%
 \begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{lemma-lrv-1}}}] 
-It holds that
-\[ \widehat{\gamma}_q^*(\ell) - \gamma_q(\ell) = \Sigma_{q,1}(\ell) - \Sigma_{q,2}(\ell) - \Sigma_{q,3}(\ell) + \Sigma_{q,4}(\ell) - \Big(1 - \frac{T-q-\ell}{T-q}\Big) \gamma_q(\ell), \]
+The expression $\widehat{\gamma}_q(\ell) - \gamma_q(\ell)$ can be decomposed as
+\[ \widehat{\gamma}_q(\ell) - \gamma_q(\ell) = \big(\widehat{\gamma}_q^*(\ell) - \gamma_q(\ell)\big) + R_{q,A}(\ell) + R_{q,B}(\ell) + R_{q,C}(\ell), \] 
 where
+\[ \widehat{\gamma}_q^*(\ell) = \frac{1}{T-q} \sum\limits_{t=q+\ell+1}^T \Delta_q \varepsilon_t \, \Delta_q \varepsilon_{t-\ell} \] 
+and
+\begin{align*} 
+R_{q,A}(\ell) & = \frac{1}{T-q} \sum_{t=q+\ell+1}^T \Delta_q m_t \Delta_q \varepsilon_{t-\ell} \\
+R_{q,B}(\ell) & = \frac{1}{T-q} \sum_{t=q+\ell+1}^T \Delta_q \varepsilon_t \Delta_q m_{t-\ell} \\
+R_{q,C}(\ell) & = \frac{1}{T-q} \sum_{t=q+\ell+1}^T \Delta_q m_t \Delta_q m_{t-\ell} 
+\end{align*}
+with $\Delta_q m_t = m(\frac{t}{T}) - m(\frac{t-q}{T})$. In what follows, we prove that for any $1 \le \ell \le p$,   
+\begin{equation}\label{claim-star-lemma-lrv-1}
+\ex \Big[ \big( \widehat{\gamma}_q^*(\ell) - \gamma_q(\ell) \big)^2 \Big] \le C \Big\{ \frac{1}{T-q} + \Big(\frac{p}{T-q}\Big)^2 \Big\}, 
+\end{equation}
+where the constant $C$ does not depend on $\ell$, $p$, $q$ and $T$. Applying the Cauchy-Schwarz inequality and exploiting the Lipschitz continuity of $m$, we further obtain that 
+\[ \ex R_{q,A}^2(\ell) \le  \Big( \frac{1}{T-q} \sum_{t=q+\ell+1}^T \{ \Delta_q m_t \}^2 \Big) \Big( \frac{1}{T-q} \sum_{t=q+\ell+1}^T \{ \Delta_q \varepsilon_{t-\ell} \}^2 \Big) \le C \Big( \frac{q}{T} \Big)^2, \]
+where $C$ is independent of $\ell$, $p$, $q$ and $T$. Analogously, we get that $\ex R_{q,k}^2(\ell) \le C (q/T)^2$ for $k = B,C$. From this and \eqref{claim-star-lemma-lrv-1}, it immediately follows that
+\begin{align*}
+\ex \Big[ \big( \widehat{\gamma}_q(\ell) - \gamma_q(\ell) \big)^2 \Big] 
+ & \le 16 \Big\{ \ex \Big[ \big( \widehat{\gamma}_q^*(\ell) - \gamma_q(\ell) \big)^2 \Big] + \ex R_{q,A}^2(\ell) + \ex R_{q,B}^2(\ell) + \ex R_{q,C}^2(\ell) \Big\} \\
+ & \le C \Big\{ \frac{1}{T-q} + \Big(\frac{p}{T-q}\Big)^2 + \Big(\frac{q}{T}\Big)^2 \Big\},
+\end{align*}
+which completes the proof. 
+
+
+It remains to verify \eqref{claim-star-lemma-lrv-1}. To do so, we decompose $\widehat{\gamma}_q^*(\ell) - \gamma_q(\ell)$ as 
+\[ \widehat{\gamma}_q^*(\ell) - \gamma_q(\ell) = \Sigma_{q,1}(\ell) - \Sigma_{q,2}(\ell) - \Sigma_{q,3}(\ell) + \Sigma_{q,4}(\ell) - \Big(1 - \frac{T-q-\ell}{T-q}\Big) \gamma_q(\ell) \]
+with
 \begin{align*}
 \Sigma_{q,1}(\ell) & = \frac{1}{T-q} \sum_{t=q+\ell+1}^T \big\{ \varepsilon_t \varepsilon_{t-\ell} - \ex \varepsilon_t \varepsilon_{t-\ell} \big\} \\
 \Sigma_{q,2}(\ell) & = \frac{1}{T-q} \sum_{t=q+\ell+1}^T \big\{ \varepsilon_t \varepsilon_{t-\ell-q} - \ex \varepsilon_t \varepsilon_{t-\ell-q} \big\} \\
 \Sigma_{q,3}(\ell) & = \frac{1}{T-q} \sum_{t=q+\ell+1}^T \big\{ \varepsilon_{t-q} \varepsilon_{t-\ell} - \ex \varepsilon_{t-q} \varepsilon_{t-\ell} \big\} \\
-\Sigma_{q,4}(\ell) & = \frac{1}{T-q} \sum_{t=q+\ell+1}^T \big\{ \varepsilon_{t-q} \varepsilon_{t-\ell-q} - \ex \varepsilon_{t-q} \varepsilon_{t-\ell-q} \big\}. 
+\Sigma_{q,4}(\ell) & = \frac{1}{T-q} \sum_{t=q+\ell+1}^T \big\{ \varepsilon_{t-q} \varepsilon_{t-\ell-q} - \ex \varepsilon_{t-q} \varepsilon_{t-\ell-q} \big\} 
 \end{align*}
-In what follows, we prove that 
-\begin{equation}\label{eq1-lemma-lrv-1}
+and prove that 
+\begin{equation}\label{eq1-star-lemma-lrv-1}
 \ex \Sigma_{q,k}^2(\ell) \le \frac{C}{T-q} 
 \end{equation}
-for $1 \le k \le 4$, where the constant $C$ only depends on the coefficients $c_0,c_1,c_2,\ldots$ of the MA($\infty$) representation of $\{\varepsilon_t\}$ and the innovation variance $\nu^2$. From this, it immediately follows that 
+for $1 \le k \le 4$, where the constant $C$ only depends on the coefficients $c_0,c_1,c_2,\ldots$ of the MA($\infty$) representation of $\{\varepsilon_t\}$ and the innovation variance $\nu^2$. From this, we get that 
 \begin{align*}
 \ex \Big[ \big( \widehat{\gamma}_q^*(\ell) - \gamma_q(\ell) \big)^2 \Big] 
- & \le 5 \Big\{ \sum_{k=1}^4 \ex \Sigma_{q,k}^2(\ell) + \Big(1 - \frac{T-q-\ell}{T-q}\Big)^2 \gamma_q^2(\ell) \Big\} \\
+ & \le 25 \Big\{ \sum_{k=1}^4 \ex \Sigma_{q,k}^2(\ell) + \Big(1 - \frac{T-q-\ell}{T-q}\Big)^2 \gamma_q^2(\ell) \Big\} \\
  & \le C \Big\{ \frac{1}{T-q} + \Big(\frac{p}{T-q}\Big)^2 \Big\} 
 \end{align*}
-with $C$ independent of $\ell$, $p$, $q$ and $T$, which completes the proof. 
+with $C$ independent of $\ell$, $p$, $q$ and $T$, which shows \eqref{claim-star-lemma-lrv-1}. 
 
 
-It remains to show \eqref{eq1-lemma-lrv-1} for $1 \le k \le 4$. We restrict attention to $k=1$, the proof for the other cases being completely analogous. Since the variables $\varepsilon_t$ have the MA($\infty$) expansion $\varepsilon_t = \sum_{k=0}^{\infty} c_k \eta_{t-k}$ and $\gamma_\varepsilon(\ell) = (\sum_{k=0}^\infty c_k c_{k+\ell}) \nu^2$, it holds that 
+We now turn to the proof of \eqref{eq1-star-lemma-lrv-1}. As the proof is completely analogous for $k \in \{1,\ldots,4\}$, we restrict attention to $k=1$. Since the variables $\varepsilon_t$ have the MA($\infty$) expansion $\varepsilon_t = \sum_{k=0}^{\infty} c_k \eta_{t-k}$ and the autocovariances $\gamma_\varepsilon(\ell) = \cov(\varepsilon_t,\varepsilon_{t-\ell})$ can be written as $\gamma_\varepsilon(\ell) = (\sum_{k=0}^\infty c_k c_{k+\ell}) \nu^2$, it holds that 
 \begin{align*} 
  & \ex \big[ \varepsilon_{t} \varepsilon_{t-\ell} \varepsilon_{t^\prime} \varepsilon_{t^\prime-\ell} \big] \\*
  & = \Big( \sum_{k=0}^{\infty} c_k \, c_{k+t^\prime-t} \, c_{k+\ell} \, c_{k+\ell+t^\prime-t} \Big) \kappa +  \Big( \sum_{k=0}^{\infty} c_k \, c_{k+\ell} \Big)^2 \nu^4 \\*
- & \quad + \Big( \sum_{k=0}^{\infty} c_k \, c_{k+t^\prime-t} \Big)^2 \nu^4 + \Big( \sum_{k=0}^{\infty} c_k \, c_{k+\ell+t^\prime-t} \Big) \Big( \sum_{k=0}^{\infty} c_k \, c_{k+\ell+t-t^\prime} \Big) \nu^4 \\
+ & \quad + \Big( \sum_{k=0}^{\infty} c_k \, c_{k+t^\prime-t} \Big)^2 \nu^4 + \Big( \sum_{k=0}^{\infty} c_k \, c_{k+\ell+t^\prime-t} \Big) \Big( \sum_{k=0}^{\infty} c_k \, c_{k+\ell+t-t^\prime} \Big) \nu^4 \\*
  & = \Big( \sum_{k=0}^{\infty} c_k \, c_{k+t^\prime-t} \, c_{k+\ell} \, c_{k+\ell+t^\prime-t} \Big) \kappa + \gamma_\varepsilon^2(\ell) + \gamma_\varepsilon^2(t^\prime-t) + \gamma_\varepsilon(t^\prime-t+\ell) \gamma_\varepsilon(t^\prime-t-\ell)
 \end{align*}
 with $\kappa=\ex[\eta_0^4] - 3 \nu^4$ and $c_k=0$ for $k < 0$. From this, we obtain that $\ex \Sigma_{q,1}^2(\ell) = \sum_{k=1}^3 \ex \Sigma_{q,1,k}^2(\ell)$ with  
@@ -392,68 +415,77 @@ with $\kappa=\ex[\eta_0^4] - 3 \nu^4$ and $c_k=0$ for $k < 0$. From this, we obt
 \end{align*}
 Let $\# \{ t^\prime - t = r \}$ be the number of pairs $(t,t^\prime)$ with $q+1 \le t,t^\prime \le T$ such that $t^\prime - t = r$ and note that $\# \{ t^\prime - t = r \} \le T-q$ for any $r$. It holds that 
 \begin{align}
-\ex \Sigma_{q,1,1}^2(\ell) & \le \frac{1}{(T-q)^2} \sum_{r=-T}^T \# \big\{ t^\prime - t = r \big\} \sum_{k=0}^{\infty} | c_k \, c_{k+r} \, c_{k+\ell} \, c_{k+\ell+r} | \nonumber \\
- & \le \frac{1}{T-q} \sum_{k=0}^{\infty} | c_k \, c_{k+\ell} | \sum_{r=-\infty}^\infty | c_{k+r} \, c_{k+\ell+r} | \nonumber \\
- & \le \frac{\{ \max_j|c_j| \}^2 \{ \sum_{k=0}^{\infty} |c_k| \}^2}{T-q}  \le \frac{C}{T-q}, \label{eq2-lemma-lrv-1} 
+|\ex \Sigma_{q,1,1}^2(\ell)| & \le \frac{\kappa}{(T-q)^2} \sum_{r=-T}^T \# \big\{ t^\prime - t = r \big\} \sum_{k=0}^{\infty} | c_k \, c_{k+r} \, c_{k+\ell} \, c_{k+\ell+r} | \nonumber \\
+ & \le \frac{\kappa}{T-q} \sum_{k=0}^{\infty} | c_k \, c_{k+\ell} | \sum_{r=-\infty}^\infty | c_{k+r} \, c_{k+\ell+r} | \nonumber \\
+ & \le \frac{\kappa \{ \max_j|c_j| \}^2 \{ \sum_{k=0}^{\infty} |c_k| \}^2}{T-q}  \le \frac{C}{T-q}, \label{eq2-star-lemma-lrv-1} 
 \end{align}
 where $C$ only depends on the parameters $c_0,c_1,c_2,\ldots$ of the MA($\infty$) representation of $\{ \varepsilon_t\}$. Moreover, 
 \begin{align}
 \ex \Sigma_{q,1,2}^2(\ell) 
- & = \frac{1}{(T-q)^2} \sum_{r=-T}^T \# \big\{ t^\prime - t = r \big\} \gamma_{\varepsilon}^2(r) \nonumber \\
- & \le \frac{\{ \sum_{r=-\infty}^\infty |\gamma_{\varepsilon}^2(r)| \}}{T-q} \le \frac{C}{T-q} \label{eq3-lemma-lrv-1}
+ & = \frac{1}{(T-q)^2} \sum_{r=-T}^T \# \big\{ t^\prime - t = r \big\} \gamma_{\varepsilon}^2(r) \le \frac{\{ \sum_{r=-\infty}^\infty \gamma_{\varepsilon}^2(r) \}}{T-q} \le \frac{C}{T-q} \label{eq3-star-lemma-lrv-1}
 \end{align}
-and analogously
-\begin{equation}\label{eq4-lemma-lrv-1}
-\ex \Sigma_{q,1,3}^2(\ell) \le \frac{\gamma_{\varepsilon}(0) \{ \sum_{r=-\infty}^{\infty} |\gamma_{\varepsilon}(r)| \}}{T-q} \le \frac{C}{T-q}, 
-\end{equation}
-where $C$ only depends on the MA parameters $c_0,c_1,c_2,\ldots$ and the innovation variance $\nu^2$ (noting that $\gamma_\varepsilon(k) = \sum_{j=0}^\infty c_j c_{j+k} \nu^2$). Combining \eqref{eq2-lemma-lrv-1}--\eqref{eq4-lemma-lrv-1}, we arrive at \eqref{eq1-lemma-lrv-1} for $k = 1$. 
+and analogously $|\ex \Sigma_{q,1,3}^2(\ell)| \le C/(T-q)$, where $C$ only depends on the MA parameters $c_0,c_1,c_2,\ldots$ and the innovation variance $\nu^2$ (noting that $\gamma_\varepsilon(k) = \sum_{j=0}^\infty c_j c_{j+k} \nu^2$). With \eqref{eq2-star-lemma-lrv-1} and \eqref{eq3-star-lemma-lrv-1}, we immediately arrive at \eqref{eq1-star-lemma-lrv-1}. 
 \end{proof}
 
 
-The next result bounds the $L_2$-distance between the $\ell$-th sample autocovariance 
-\[ \widehat{\gamma}_q(\ell) = \frac{1}{T-q} \sum_{t=q+\ell+1}^T \Delta_q Y_{t,T} \, \Delta_q Y_{t-\ell,T} \]
-of the observed process $\{ \Delta_q Y_{t,T} \}$ and $\gamma_{\varepsilon}(\ell)$. 
+With the help of Lemma \ref{lemma-lrv-1}, we can derive the following bounds on $\ex \| \widehat{\boldsymbol{\gamma}}_q - \boldsymbol{\gamma}_q \|_2$ and $\ex \| \widehat{\boldsymbol{\Gamma}}_q - \boldsymbol{\Gamma}_q \|_2$, where $\widehat{\boldsymbol{\gamma}}_q = (\widehat{\gamma}_q(1),\dots,\widehat{\gamma}_q(p))^\top$ and $\boldsymbol{\gamma}_q = (\gamma_q(1),\dots,\gamma_q(p))^\top$ as well as $\widehat{\boldsymbol{\Gamma}}_q = (\widehat{\gamma}_q(i-j): 1 \le i,j \le p)$ and $\boldsymbol{\Gamma}_q = (\gamma_q(i-j): 1 \le i,j \le p)$. 
+%
+%
 \begin{lemmaA}\label{lemma-lrv-2}
-Let $1 \le p \ll \sqrt{T}$ and $1 \le q \ll \sqrt{T}$. Then for any $1 \le \ell \le p$,   
-\[ \ex \Big[ \big( \widehat{\gamma}_q(\ell) - \gamma_q(\ell) \big)^2 \Big] \le  C \Big\{ \frac{1}{T-q} + \Big(\frac{p}{T-q}\Big)^2 + \Big(\frac{q}{T}\Big)^2 \Big\}, \]
-where the constant $C$ is independent of $\ell$, $p$, $q$ and $T$. 
-\end{lemmaA}
-
-
-\begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{lemma-lrv-2}}}] 
-We decompose $\widehat{\gamma}_q(\ell)$ as $\widehat{\gamma}_q(\ell) = \widehat{\gamma}_q^*(\ell) + R_{q,A}(\ell) + R_{q,B}(\ell) + R_{q,C}(\ell)$, where 
-\begin{align*} 
-R_{q,A}(\ell) & = \frac{1}{T-q} \sum_{t=q+\ell+1}^T \Delta_q m_t \Delta_q \varepsilon_{t-\ell} \\
-R_{q,B}(\ell) & = \frac{1}{T-q} \sum_{t=q+\ell+1}^T \Delta_q \varepsilon_t \Delta_q m_{t-\ell} \\
-R_{q,C}(\ell) & = \frac{1}{T-q} \sum_{t=q+\ell+1}^T \Delta_q m_t \Delta_q m_{t-\ell} 
-\end{align*}
-with $\Delta_q m_t = m(\frac{t}{T}) - m(\frac{t-q}{T})$. 
-As $m$ is Lipschitz continuous, we can apply the Cauchy-Schwarz inequality to obtain that 
-\[ \ex R_{q,A}^2(\ell) \le  \Big( \frac{1}{T-q} \sum_{t=q+\ell+1}^T \{ \Delta_q m_t \}^2 \Big) \Big( \frac{1}{T-q} \sum_{t=q+\ell+1}^T \{ \Delta_q \varepsilon_{t-\ell} \}^2 \Big) \le C \Big( \frac{q}{T} \Big)^2, \]
-where $C$ is independent of $\ell$, $p$, $q$ and $T$. Analogously, we get that $\ex R_{q,k}^2(\ell) \le C (q/T)^2$ for $K = B,C$. Using this together with Lemma \ref{lemma-lrv-1}, we arrive at 
+Let $1 \le p \ll \sqrt{T}$ and $1 \le q \ll \sqrt{T}$. It holds that 
 \begin{align*}
-\ex \Big[ \big( \widehat{\gamma}_q(\ell) - \gamma_q(\ell) \big)^2 \Big] 
- & \le 4 \Big\{ \ex \Big[ \big( \widehat{\gamma}_q^*(\ell) - \gamma_q(\ell) \big)^2 \Big] + \ex R_{q,A}^2(\ell) + \ex R_{q,B}^2(\ell) + \ex R_{q,C}^2(\ell) \Big\} \\
- & \le C \Big\{ \frac{1}{T-q} + \Big(\frac{p}{T-q}\Big)^2 + \Big(\frac{q}{T}\Big)^2 \Big\}. \qedhere
-\end{align*}
-\end{proof}
-
-
-With the help of Lemma \ref{lemma-lrv-2}, we can finally derive bounds on the terms $\ex \| \widehat{\boldsymbol{\gamma}}_q - \boldsymbol{\gamma}_q \|_2$ and $\ex \| \widehat{\boldsymbol{\Gamma}}_q - \boldsymbol{\Gamma}_q \|_2$, where $\boldsymbol{\gamma}_q = (\gamma_q(1),\dots,\gamma_q(p))^\top$ and $\boldsymbol{\Gamma}_q = (\gamma_q(i-j): 1 \le i,j \le p)$. 
-\begin{lemmaA}\label{lemma-lrv-3}
-Let $1 \le p \ll \sqrt{T}$ and $1 \le q \ll \sqrt{T}$. Then 
-\begin{align*}
-\ex \| \widehat{\boldsymbol{\gamma}}_q - \boldsymbol{\gamma}_q \|_2 & \le C \sqrt{p} \Big\{ \frac{1}{T-q} + \Big(\frac{p}{T-q}\Big)^2 + \Big(\frac{q}{T}\Big)^2 \Big\} \\
-\ex \| \widehat{\boldsymbol{\Gamma}}_q - \boldsymbol{\Gamma}_q \|_2 & \le C p \Big\{ \frac{1}{T-q} + \Big(\frac{p}{T-q}\Big)^2 + \Big(\frac{q}{T}\Big)^2 \Big\}
+\ex \| \widehat{\boldsymbol{\gamma}}_q - \boldsymbol{\gamma}_q \|_2 & \le C \sqrt{p} \Big\{ \frac{1}{T-q} + \Big(\frac{p}{T-q}\Big)^2 + \Big(\frac{q}{T}\Big)^2 \Big\}^{1/2} \\
+\ex \| \widehat{\boldsymbol{\Gamma}}_q - \boldsymbol{\Gamma}_q \|_2 & \le C p \Big\{ \frac{1}{T-q} + \Big(\frac{p}{T-q}\Big)^2 + \Big(\frac{q}{T}\Big)^2 \Big\}^{1/2}
 \end{align*}
 with some constant $C$ independent of $p$, $q$ and $T$. 
 \end{lemmaA}
-
-
-\begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{lemma-lrv-3}}}] 
-The first statement immediately follows from Lemma \ref{lemma-lrv-2}. The second statement is obtained by using Lemma \ref{lemma-lrv-2} and the bound
+%
+%
+\begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{lemma-lrv-2}}}] 
+The first statement immediately follows from Lemma \ref{lemma-lrv-1}. The second statement is obtained by using Lemma \ref{lemma-lrv-1} and the bound
 \[ \| \widehat{\boldsymbol{\Gamma}}_q - \boldsymbol{\Gamma}_q \|_2 \le \max_{1 \le i \le p} \Big( \sum\limits_{j=1}^p \big| \widehat{\gamma}_q(i-j) - \gamma_q(i-j) \big| \Big) \le \sum\limits_{\ell=-p}^p \big| \widehat{\gamma}_q(\ell) - \gamma_q(\ell) \big|, \]
 which follows from Gershgorin's theorem. 
+\end{proof}
+
+
+The final auxiliary result summarizes some properties of the inverse autocovariance matrices $\widehat{\boldsymbol{\Gamma}}_q^{-1}$ and $\boldsymbol{\Gamma}_q^{-1}$.
+%
+%
+\begin{lemmaA}\label{lemma-lrv-3}
+Let $p \rightarrow \infty$ and $(1+\delta)p \le q \ll \sqrt{T}$ for some small $\delta > 0$. Then 
+\begin{enumerate}[label=(\roman*),leftmargin=0.85cm]
+\item $\| \boldsymbol{\Gamma}_q^{-1} \|_2 \le C$ for sufficiently large $T$ with $C$ independent of $p$, $q$ and $T$
+\item $\| \widehat{\boldsymbol{\Gamma}}_q^{-1} - \boldsymbol{\Gamma}_q^{-1} \|_2 = O_p(p/\sqrt{T})$ 
+\item $\| \widehat{\boldsymbol{\Gamma}}_q^{-1} \|_2 = O_p(1)$. 
+\end{enumerate}
+\end{lemmaA}
+%
+%
+\begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{lemma-lrv-3}}}] 
+We first prove (i). As $\gamma_q(\ell) = 2 \gamma_{\varepsilon}(\ell) - \gamma_{\varepsilon}(q-\ell) - \gamma_{\varepsilon}(q+\ell)$ with $\gamma_{\varepsilon}(\ell) = \cov(\varepsilon_t,\varepsilon_{t-\ell})$, it holds that 
+\[ \boldsymbol{\Gamma}_q = 2\boldsymbol{\Gamma} - \boldsymbol{R}, \]
+where $\boldsymbol{\Gamma} = (\gamma_{\varepsilon}(i-j): 1 \le i,j \le p)$ and $\boldsymbol{R} = (\gamma_{\varepsilon}(q+i-j) + \gamma_{\varepsilon}(q-i+j): 1 \le i,j \le p)$. Since the spectral density $f_{\varepsilon}$ of the AR($p^*$) process $\{\varepsilon_t\}$ is bounded away from zero and infinity, we can use Proposition 4.5.3 in \cite{BrockwellDavis1991} to obtain that the eigenvalues of the autocovariance matrix $\boldsymbol{\Gamma}$ lie in some interval $[c_{\Gamma},C_{\Gamma}]$ with constants $0 < c_{\Gamma} \le C_{\Gamma} < \infty$ that are independent of $p$. From this, we can infer that 
+\begin{equation}\label{res1-lemma-lrv-3}
+\| \boldsymbol{\Gamma}^{-1} \|_2 \le C \text{  with some constant } C \text{ independent of } p. 
+\end{equation}
+Moreover, it holds that 
+\begin{equation}\label{res2-lemma-lrv-3}
+\| \boldsymbol{\Gamma}_q/2 - \boldsymbol{\Gamma} \|_2 = \| \boldsymbol{R}/2 \|_2 \le \sum\limits_{\ell=-p}^p | \gamma_{\varepsilon}(q-\ell) + \gamma_{\varepsilon}(q+\ell) |/2 \le C p \xi^{q-p} = o(1), 
+\end{equation}
+where we have used Gershgorin's theorem and the fact that $|\gamma_{\varepsilon}(\ell)| \le C \xi^\ell$ with some $\xi \in (0,1)$. We now make use of the inequality
+\begin{equation}\label{inverse-matrix-formula}
+\| \boldsymbol{A}^{-1} - \boldsymbol{B}^{-1} \|_2 \le \frac{ \| \boldsymbol{B}^{-1} \|_2^2 \, \| \boldsymbol{B} - \boldsymbol{A} \|_2 }{1  -  \| \boldsymbol{B} - \boldsymbol{A} \|_2 \, \| \boldsymbol{B}^{-1} \|_2},
+\end{equation}
+which holds for general invertible matrices $\boldsymbol{A}$ and $\boldsymbol{B}$ and which is a simple consequence of the fact that $\boldsymbol{A}^{-1} - \boldsymbol{B}^{-1} = (\boldsymbol{A}^{-1} - \boldsymbol{B}^{-1} + \boldsymbol{B}^{-1}) (\boldsymbol{B} - \boldsymbol{A}) \boldsymbol{B}^{-1}$. Setting $\boldsymbol{A} = \boldsymbol{\Gamma}_q/2$ and $\boldsymbol{B} = \boldsymbol{\Gamma}$ in \eqref{inverse-matrix-formula} and applying \eqref{res1-lemma-lrv-3} together with \eqref{res2-lemma-lrv-3}, we get that  
+\begin{equation}\label{res3-lemma-lrv-3}
+\| \boldsymbol{\Gamma}_q^{-1}/2 - \boldsymbol{\Gamma}^{-1} \|_2 \le \frac{ \| \boldsymbol{\Gamma}^{-1} \|_2^2 \, \| \boldsymbol{\Gamma}_q/2 - \boldsymbol{\Gamma} \|_2 }{1  -  \| \boldsymbol{\Gamma}_q/2 - \boldsymbol{\Gamma} \|_2 \, \| \boldsymbol{\Gamma}^{-1} \|_2} \le C 
+\end{equation}
+for sufficiently large $T$ with $C$ independent of $p$, $q$ and $T$. Statement (i) easily follows upon combining \eqref{res1-lemma-lrv-3} and \eqref{res3-lemma-lrv-3}.
+
+
+We next turn to the proof of (ii). With \eqref{inverse-matrix-formula}, we obtain that 
+\[ \| \widehat{\boldsymbol{\Gamma}}_q^{-1} - \boldsymbol{\Gamma}_q^{-1} \|_2 \le \frac{ \| \boldsymbol{\Gamma}_q^{-1} \|_2^2 \, \| \widehat{\boldsymbol{\Gamma}}_q - \boldsymbol{\Gamma}_q \|_2 }{1  -  \| \widehat{\boldsymbol{\Gamma}}_q - \boldsymbol{\Gamma}_q \|_2 \, \| \boldsymbol{\Gamma}_q^{-1} \|_2} = O_p\Big( \frac{p}{\sqrt{T}} \Big), \]
+since  $\| \boldsymbol{\Gamma}_q^{-1} \|_2 \le C$ by (i) and $\| \widehat{\boldsymbol{\Gamma}}_q - \boldsymbol{\Gamma}_q \|_2 = O_p(p/\sqrt{T})$ by Lemma \ref{lemma-lrv-2}. Finally, (iii) is an immediately consequence of (i) and (ii). 
 \end{proof}
 
 
@@ -463,40 +495,67 @@ which follows from Gershgorin's theorem.
 
 We have to prove the following three statements: 
 \begin{align}
-\| \widetilde{\boldsymbol{a}}_q - \boldsymbol{a} \|_2 & = O_p\Big( \sqrt{\frac{p^2}{T}} \Big) \label{prop-lrv-statement1} \\ 
+\| \widetilde{\boldsymbol{a}}_q - \boldsymbol{a} \|_2 & = O_p\Big( \sqrt{\frac{p}{T}} \Big) \label{prop-lrv-statement1} \\ 
 \| \widehat{\boldsymbol{a}} - \boldsymbol{a} \|_2 & = O_p\Big( \sqrt{\frac{p^3}{T}} \Big) \label{prop-lrv-statement2} \\
-\widehat{\sigma}^2 - \sigma^2 & = O_p\Big(  \sqrt{\frac{p^4}{T}} \Big). \label{prop-lrv-statement3}
+\widehat{\sigma}^2 - \sigma^2 & = O_p\Big( \sqrt{\frac{p^4}{T}} \Big). \label{prop-lrv-statement3}
 \end{align} 
+We carry out the proof for case (B), that is, we impose the following conditions on the parameters $p$, $q$, $\underline{r}$ and $\overline{r}$: $q \ll \sqrt{T}$, $C \log T \le p \ll \min\{ T^{1/5},q\}$ for some sufficiently large $C$, $\underline{r} = (1+\delta)p$ for some small $\delta > 0$ and $\overline{r} - \underline{r}$ remains bounded as $T \rightarrow \infty$. The proof for case (A) is a simplified version of that for case (B). 
 
 
 \begin{proof}[\textnormal{\textbf{Proof of (\ref{prop-lrv-statement1})}}] It holds that   
 \begin{align*}
 \widetilde{\boldsymbol{a}}_q - \boldsymbol{a} = \widehat{\boldsymbol{\Gamma}}_q^{-1} \widehat{\boldsymbol{\gamma}}_q - \boldsymbol{a}   
- & = \widehat{\boldsymbol{\Gamma}}_q^{-1} \big[ \widehat{\boldsymbol{\gamma}}_q - \boldsymbol{\Gamma}_q \boldsymbol{a} + ( \boldsymbol{\Gamma}_q - \widehat{\boldsymbol{\Gamma}}_q )\boldsymbol{a} \big] \\
  & = \widehat{\boldsymbol{\Gamma}}_q^{-1} \big[ (\widehat{\boldsymbol{\gamma}}_q - \boldsymbol{\gamma}_q) + (\boldsymbol{\gamma}_q - \boldsymbol{\Gamma}_q \boldsymbol{a}) + (\boldsymbol{\Gamma}_q - \widehat{\boldsymbol{\Gamma}}_q)\boldsymbol{a} \big] \\
  & = \widehat{\boldsymbol{\Gamma}}_q^{-1} \big[ (\widehat{\boldsymbol{\gamma}}_q - \boldsymbol{\gamma}_q) - \nu^2 \boldsymbol{c}_q + \boldsymbol{\rho}_q  + (\boldsymbol{\Gamma}_q - \widehat{\boldsymbol{\Gamma}}_q)\boldsymbol{a} \big] 
 \end{align*}
 and thus 
 \begin{equation}\label{eq1-prop-lrv-statement1}
-\| \widetilde{\boldsymbol{a}}_q - \boldsymbol{a} \|_2 \le \| \widehat{\boldsymbol{\Gamma}}_q^{-1} \|_2 \Big[ \| \widehat{\boldsymbol{\gamma}}_q - \boldsymbol{\gamma}_q \|_2 + \nu^2 \| \boldsymbol{c}_q \|_2 + \| \boldsymbol{\rho}_q \|_2 + \| \boldsymbol{\Gamma}_q - \widehat{\boldsymbol{\Gamma}}_q \|_2 \| \boldsymbol{a} \|_2 \Big], 
+\| \widetilde{\boldsymbol{a}}_q - \boldsymbol{a} \|_2 \le \| \widehat{\boldsymbol{\Gamma}}_q^{-1} \|_2 \Big[ \| \widehat{\boldsymbol{\gamma}}_q - \boldsymbol{\gamma}_q \|_2 + \nu^2 \| \boldsymbol{c}_q \|_2 + \| \boldsymbol{\rho}_q \|_2 + \| (\boldsymbol{\Gamma}_q - \widehat{\boldsymbol{\Gamma}}_q) \boldsymbol{a} \|_2 \Big], 
 \end{equation}
-where we have used that $\boldsymbol{\gamma}_q - \boldsymbol{\Gamma}_q \boldsymbol{a} = -\nu^2 \boldsymbol{c}_q + \boldsymbol{\rho}_q$. We now make use of the following facts: (i) By Lemma \ref{lemma-lrv-3} and standard arguments, one can show that the inverse $\widehat{\boldsymbol{\Gamma}}_q^{-1}$ exists with probability tending to $1$ and $\| \widehat{\boldsymbol{\Gamma}}_q^{-1}  - \boldsymbol{\Gamma}_q^{-1} \|_2 = o_p(1)$, which implies that $\| \widehat{\boldsymbol{\Gamma}}_q^{-1} \|_2 = O_p(1)$. (ii) By Lemma \ref{lemma-lrv-3}, we immediately get that $\| \widehat{\boldsymbol{\gamma}}_q - \boldsymbol{\gamma}_q \|_2 = O_p(\sqrt{p/T})$. (iii) Since $\boldsymbol{c}_q = (c_{q-1},\ldots,c_{q-p})^\top$ and $|c_j| \le C \xi^j$ for some $\xi \in (0,1)$, it holds that $\| \boldsymbol{c}_q \|_2 \le C \sqrt{p} \xi^{q-p}$. (iv) Similarly, as $\boldsymbol{\rho}_q = (\rho_q(1),\ldots,\rho_q(p))^\top$ with $\rho_q(\ell) = \sum_{j=p+1}^{p^*} a_j \gamma_q(\ell-j)$, we have $|\rho_q(\ell)| \le C \sum_{j=p+1}^{p^*} \xi^j \le C \xi^p$ and thus $\| \boldsymbol{\rho}_q \|_2 \le C \sqrt{p} \xi^p$. (v) Lemma \ref{lemma-lrv-3} immediately yields that $\| \boldsymbol{\Gamma}_q - \widehat{\boldsymbol{\Gamma}}_q \|_2 = O_p(\sqrt{p^2/T})$ and $\| \boldsymbol{a} \|_2 \le ( \sum_{j=1}^{p^*} a_j^2 )^{1/2} \le C$. Plugging (i)--(v) into \eqref{eq1-prop-lrv-statement1}, we arrive at 
-\[ \| \widetilde{\boldsymbol{a}}_q - \boldsymbol{a} \|_2 = O_p \Big( \sqrt{\frac{p^2}{T}} + \sqrt{p} \xi^{q-p} + \sqrt{p} \xi^p \Big) = O_p\Big(\sqrt{\frac{p^2}{T}}\Big), \]
+where we have used that $\boldsymbol{\gamma}_q - \boldsymbol{\Gamma}_q \boldsymbol{a} = -\nu^2 \boldsymbol{c}_q + \boldsymbol{\rho}_q$. We now make use of the following facts: (i) By Lemmas \ref{lemma-lrv-2} and \ref{lemma-lrv-3}, it holds that $\| \widehat{\boldsymbol{\Gamma}}_q^{-1} \|_2 = O_p(1)$ and $\| \widehat{\boldsymbol{\gamma}}_q - \boldsymbol{\gamma}_q \|_2 = O_p(\sqrt{p/T})$. (ii) Since $\boldsymbol{c}_q = (c_{q-1},\ldots,c_{q-p})^\top$ and $|c_j| \le C \xi^j$ for some $\xi \in (0,1)$, it holds that $\| \boldsymbol{c}_q \|_2 \le C \sqrt{p} \xi^{q-p}$. Similarly, as $\boldsymbol{\rho}_q = (\rho_q(1),\ldots,\rho_q(p))^\top$ with $\rho_q(\ell) = \sum_{j=p+1}^{p^*} a_j \gamma_q(\ell-j)$, we have $|\rho_q(\ell)| \le C \sum_{j=p+1}^{p^*} \xi^j \le C \xi^p$ and thus $\| \boldsymbol{\rho}_q \|_2 \le C \sqrt{p} \xi^p$. (iii) It holds that $\| (\boldsymbol{\Gamma}_q - \widehat{\boldsymbol{\Gamma}}_q) \boldsymbol{a} \|_2 = O_p(\sqrt{p/T})$, which can be seen as follows: 
+\begin{align*}
+ & \| (\boldsymbol{\Gamma}_q - \widehat{\boldsymbol{\Gamma}}_q) \boldsymbol{a} \|_2^2 \\
+ & = \sum_{i,j,j^\prime=1}^p \big\{ \gamma_q(i-j) - \widehat{\gamma}_q(i-j) \big \} \big\{ \gamma_q(i-j^\prime) - \widehat{\gamma}_q(i-j^\prime) \big \} a_j a_{j^\prime} \\ 
+ & \le \sum_{j,j^\prime=1}^p |a_j a_{j^\prime}| \Big( \sum_{i=1}^p \big\{ \gamma_q(i-j) - \widehat{\gamma}_q(i-j) \big \}^2 \Big)^{1/2}  \Big( \sum_{i=1}^p \big\{ \gamma_q(i-j^\prime) - \widehat{\gamma}_q(i-j^\prime) \big \}^2 \Big)^{1/2} \\
+ & \le \Big( \max_{1 \le j \le p} \sum_{i=1}^p \big\{ \gamma_q(i-j) - \widehat{\gamma}_q(i-j) \big \}^2 \Big) \Big( \sum_{j,j^\prime=1}^p |a_j a_{j^\prime}| \Big) \\
+ & \le C \sum_{\ell=-p}^p \big\{ \gamma_q(\ell) - \widehat{\gamma}_q(\ell) \big \}^2 = O_p\Big(\frac{p}{T}\Big),
+\end{align*}
+where the last equality follows by Lemma \ref{lemma-lrv-1}. Plugging (i)--(iii) into \eqref{eq1-prop-lrv-statement1}, we arrive at 
+\[ \| \widetilde{\boldsymbol{a}}_q - \boldsymbol{a} \|_2 = O_p \Big( \sqrt{\frac{p}{T}} + \sqrt{p} \xi^{q-p} + \sqrt{p} \xi^p \Big) = O_p\Big(\sqrt{\frac{p}{T}}\Big), \]
 which completes the proof.
 \end{proof}
 
 
 \begin{proof}[\textnormal{\textbf{Proof of (\ref{prop-lrv-statement2})}}] 
-It suffices to show that $\| \widehat{\boldsymbol{a}}_r - \boldsymbol{a} \|_2 = O_p(\sqrt{p^3/T})$ for any fixed integer $r \ge 1$ that does not grow with the sample size $T$. By the same arguments as in the proof of \eqref{prop-lrv-statement1}, we get the bound
-\begin{equation}\label{eq1-prop-lrv-statement2}
-\| \widehat{\boldsymbol{a}}_r - \boldsymbol{a} \|_2 \le \| \widehat{\boldsymbol{\Gamma}}_r^{-1} \|_2 \Big[ \| \widehat{\boldsymbol{\gamma}}_r - \boldsymbol{\gamma}_r \|_2 + \| \widetilde{\nu}^2 \widetilde{\boldsymbol{c}}_r - \nu^2 \boldsymbol{c}_r \|_2 + \| \boldsymbol{\rho}_r \|_2 + \| \boldsymbol{\Gamma}_r - \widehat{\boldsymbol{\Gamma}}_r \|_2 \| \boldsymbol{a} \|_2 \Big]. 
+It suffices to show that $\| \widehat{\boldsymbol{a}}_r - \boldsymbol{a} \|_2 = O_p(\sqrt{p^3/T})$ for $r = (1-\delta) p$ with some small $\delta > 0$. By the same arguments as for \eqref{prop-lrv-statement1}, we obtain the bound
+\begin{align}
+\| \widehat{\boldsymbol{a}}_r - \boldsymbol{a} \|_2 
+ & \le \| \widehat{\boldsymbol{\Gamma}}_r^{-1} \|_2 \Big[ \| \widehat{\boldsymbol{\gamma}}_r - \boldsymbol{\gamma}_r \|_2 + \| \widetilde{\nu}^2 \widetilde{\boldsymbol{c}}_r - \nu^2 \boldsymbol{c}_r \|_2 + \| \boldsymbol{\rho}_r \|_2 + \| (\boldsymbol{\Gamma}_r - \widehat{\boldsymbol{\Gamma}}_r) \boldsymbol{a} \|_2 \Big] \nonumber \\
+ & = \| \widehat{\boldsymbol{\Gamma}}_r^{-1} \|_2 \, \| \widetilde{\nu}^2 \widetilde{\boldsymbol{c}}_r - \nu^2 \boldsymbol{c}_r \|_2 + O_p\Big(\sqrt{\frac{p}{T}}\Big). \label{eq1-prop-lrv-statement2}
+\end{align}
+Straightforward but lengthy calculations yield that $\widetilde{\nu}^2 - \nu^2 = O_p(\sqrt{p/T})$. Moreover, as proven below, 
+\begin{equation}\label{eq2-prop-lrv-statement2}
+\max_{1 \le j \le p} | \widetilde{c}_j - c_j | = O_p\Big( \frac{p}{\sqrt{T}} \Big), 
 \end{equation}
-With the help of the fact that $\widetilde{\boldsymbol{a}}_q - \boldsymbol{a} = O_p(\sqrt{p^2/T})$, it is straightforward to verify that $\widetilde{\nu}^2 - \nu^2 = O_p(\sqrt{p^3/T})$ and $\| \widetilde{\boldsymbol{c}}_r - \boldsymbol{c}_r \|_2 = O_p(\sqrt{p^2/T})$, which implies that $\| \widetilde{\nu}^2 \widetilde{\boldsymbol{c}}_r - \nu^2 \boldsymbol{c}_r \|_2 = O_p(\sqrt{p^3/T})$. Using this observation along with (i)--(v) from the proof of \eqref{prop-lrv-statement1}, we can bound the right-hand side of equation \eqref{eq1-prop-lrv-statement2} to get that $\| \widehat{\boldsymbol{a}}_r - \boldsymbol{a} \|_2 = O_p(\sqrt{p^3/T})$. 
+which implies that $\| \widetilde{\nu}^2 \widetilde{\boldsymbol{c}}_r - \nu^2 \boldsymbol{c}_r \|_2 = O_p(\sqrt{p^3/T})$. Plugging this into \eqref{eq1-prop-lrv-statement2} completes the proof of \eqref{prop-lrv-statement2}. 
+
+
+It remains to verify \eqref{eq2-prop-lrv-statement2}. By assumption, $A(z) \ne 0$ for all complex $|z| \le 1 + \delta$ with some small $\delta > 0$. Hence, $A^{-1}(z)$ has a (unique) series expansion of the form $A^{-1}(z) = \sum_{j=0}^{\infty} c_j z^j$ for all $|z| < 1 + \delta$, where the coefficients $c_j$ satisfy the integral representation 
+\begin{equation}\label{integral-rep-c}
+c_j = \frac{1}{2 \pi i} \oint_{|w|=1} \frac{A^{-1}(w)}{w^{j+1}} dw \qquad \text{for all } j \ge 0. 
+\end{equation}
+Here and in what follows, the symbol $\oint_{|w|=1}$ denotes the line integral along the unit circle. An analogous integral representation can be derived for the estimates $\widetilde{c}_j$: By classical time series results, $\widetilde{A}(z) = 1 - \sum_{j=1}^p \widetilde{a}_j z^j \ne 0$ for all complex $|z| \le 1$ whenever $\widehat{\gamma}_q(0) > 0$. Since $\widetilde{A}(z)$ has exactly $p$ (and thus finitely many) roots, it even holds that $\widetilde{A}(z) \ne 0$ for all $|z| \le 1 + \widetilde{\delta}$ with some small $\widetilde{\delta} > 0$ whenever $\widehat{\gamma}_q(0) > 0$. Note that $\widetilde{\delta} = \widetilde{\delta}(\widetilde{a}_1,\ldots,\widetilde{a}_p)$ is a function of the parameter estimates $\widetilde{a}_1,\ldots,\widetilde{a}_p$ and thus random. As $\widehat{\gamma}_q(0) > 0$ with probability approaching $1$, we can infer that $\widetilde{A}(z) \ne 0$ for all $|z| \le 1 + \widetilde{\delta}$ with probability tending to $1$. This in turn implies that, with probability tending to $1$, $\widetilde{A}^{-1}(z)$ has a (unique) series expansion of the form $\widetilde{A}^{-1}(z) = \sum_{j=0}^{\infty} \widetilde{\phi}_j z^j$ for all $|z| < 1 + \widetilde{\delta}$, where the coefficients $\widetilde{\phi}_j$ satisfy the integral representation $\widetilde{\phi}_j = (2 \pi i)^{-1} \oint_{|w|=1} \widetilde{A}^{-1}(w) / w^{j+1} dw$ for all $j \ge 0$. By definition, the estimates $\widetilde{c}_j$ are the solution to the recursive equations \eqref{c-recursion}. Importantly, this is equivalent to them being the coefficients in the series expansion of $A^{-1}(z)$. Hence, $\widetilde{c}_j = \widetilde{\phi}_j$ for all $j \ge 0$ and thus 
+\begin{equation}\label{integral-rep-ctilde}
+\widetilde{c}_j = \frac{1}{2 \pi i} \oint_{|w|=1} \frac{\widetilde{A}^{-1}(w)}{w^{j+1}} dw \qquad \text{for all } j \ge 0 
+\end{equation} 
+with probability tending to $1$. Combining \eqref{integral-rep-c} and \eqref{integral-rep-ctilde}, we finally obtain that  
+\[ \max_{1 \le j \le p} |\widetilde{c}_j - c_j| = \max_{1 \le j \le p} \Big| \frac{1}{2 \pi i} \oint_{|w|=1} \frac{\widetilde{A}^{-1}(w) - A^{-1}(w)}{w^{j+1}} dw \Big| \]
+with probability tending to $1$. The right-hand side of this formula can be bounded with the help of \eqref{prop-lrv-statement1} and straightforward arguments to arrive at \eqref{eq2-prop-lrv-statement2}. 
 \end{proof}
 
 
 \begin{proof}[\textnormal{\textbf{Proof of (\ref{prop-lrv-statement3})}}] 
-With the help of the result that $\widehat{\boldsymbol{a}} - \boldsymbol{a} = O_p(\sqrt{p^3/T})$ and standard calculations, it can be shown that $\widehat{\nu}^2 = \nu^2 + O_p(\sqrt{p^4/T})$ and $(1 - \sum_{j=1}^p \widehat{a}_j)^2 - (1 - \sum_{j=1}^p a_j)^2 = O_p(\sqrt{p^4/T})$. The statement \eqref{prop-lrv-statement3} is a simple consequence of these two facts.  
+With the help of \eqref{prop-lrv-statement2} and straightforward but lengthy calculations, it can be shown that $\widehat{\nu}^2 = \nu^2 + O_p(\sqrt{p^3/T})$ and $(1 - \sum_{j=1}^p \widehat{a}_j)^2 - (1 - \sum_{j=1}^{p^*} a_j)^2 = O_p(\sqrt{p^4/T})$. The statement \eqref{prop-lrv-statement3} is a simple consequence of these two facts.  
 \end{proof}
 
 

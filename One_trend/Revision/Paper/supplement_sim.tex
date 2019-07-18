@@ -5,7 +5,7 @@
 \subsection*{Implementation of SiZer in Section \ref{subsec-sim-multiscale}}
 
 
-\textcolor{red}{The SiZer methods in Section \ref{subsec-sim-multiscale} are implemented as follows:}
+%\textcolor{red}{The SiZer methods in Section \ref{subsec-sim-multiscale} are implemented as follows:}
 \begin{enumerate}[leftmargin=0.7cm,label=(\alph*)]
 
 \item Computation of the grid $\mathcal{G}_T^*$:
@@ -13,7 +13,7 @@
 To start with, we compute the variance of $\bar{Y} = T^{-1} \sum_{t=1}^T Y_{t,T}$, which is given by
 \[ \var(\bar{Y}) = \frac{\gamma_\varepsilon(0)}{T} + \frac{2}{T} \sum_{k = 1}^{T-1} \Big(1 - \frac{k}{T}\Big)\gamma_\varepsilon(k). \]
 Since the autocovariance function $\gamma_{\varepsilon}(\cdot)$ is \textcolor{red}{assumed to be known}, we can calculate the value of $\var(\bar{Y})$ by using the formula $\gamma_\varepsilon(k) = \nu^2 a_1^{|k|} / (1 - a_1^2)$ together with the true para\-meters $a_1$ and $\nu^2 = \ex[\eta_t^2]$. We next compute 
-\[ T^* = \frac{\gamma_\varepsilon(0)}{\var(\bar{Y})}, \]
+\[ T^* = \frac{\gamma_\varepsilon(0)}{\var(\bar{Y})}, \] 
 which can be interpreted as a measure of information in the data. \textcolor{red}{For each point $(u,h) \in \mathcal{G}_T$}, we finally calculate the effective sample size for dependent data 
 \[ \text{ESS}^*(u, h) = \frac{T^*}{T} \frac{\sum_{t=1}^T K_h(t/T - u)}{K_h(0)} \]
 with $K_h(v) = h^{-1} K(v/h)$ and set $\mathcal{G}_T^* = \{ (u,h) \in \mathcal{G}_T: \text{ESS}^*(u, h) \ge 5 \}$. 
@@ -110,7 +110,8 @@ The SiZer maps for the sine example are depicted in Figure \ref{fig:sizer:sine}.
 \subsection*{Robustness checks for Section \ref{subsec-sim-lrv}}
 
 
-In what follows, we carry out some robustness checks to assess how sensitive the estimators $\widehat{a}$ and $\widehat{\sigma}^2$ are to the choice of the tuning parameters $q$ and $\overline{r}$. To do so, we repeat the simulation exercises of Section \ref{subsec-sim-lrv} for different values of $q$ and $\overline{r}$. In addition, we consider different choices of the tuning parameters $(m_1,m_2)$ on which the estimators of \cite{Hall2003} depend. As in Section \ref{subsec-sim-lrv}, we choose $m_1$ and $m_2$ such that $q$ lies between these values. We thus keep the parameters $q$ and $(m_1,m_2)$ roughly comparable. 
+\textcolor{red}{In what follows, we carry out some robustness checks to assess how sensitive the estimators $\widehat{a}$ and $\widehat{\sigma}^2$ are to the choice of the tuning parameters $q$ and $(\underline{r},\overline{r})$. To do so, we repeat the simulation exercises of Section \ref{subsec-sim-lrv} for different values of $q$ and $\overline{r}$. The parameter $\underline{r}$, in contrast, is not varied but set to $\underline{r}=1$ throughout. The reason is as follows: Our estimators can be expected to perform well as long as the differencing orders $r$ with $\underline{r} \le r \le \overline{r}$ are sufficiently small. Choosing $\underline{r}$ as small as possible is thus completely unproblematic (and indeed most natural). The interesting issue is rather how our estimators depend on the choice of $\overline{r}$.}
+In addition, we consider different choices of the tuning parameters $(m_1,m_2)$ on which the estimators of \cite{Hall2003} depend. As in Section \ref{subsec-sim-lrv}, we choose $m_1$ and $m_2$ such that $q$ lies between these values. We thus keep the parameters $q$ and $(m_1,m_2)$ roughly comparable. 
 
 
 To start with, we consider the simulation scenarios with a moderate trend ($s_\beta = 1$). The MSE values of the estimators $\widehat{a}$, $\widehat{a}_{\text{HvK}}$, $\widehat{a}_{\text{oracle}}$ and $\widehat{\sigma}^2$, $\widehat{\sigma}^2_{\text{HvK}}$, $\widehat{\sigma}^2_{\text{oracle}}$ for these scenarios are presented in Figure \ref{fig:MSE_slope1} of Section \ref{subsec-sim-lrv}. These MSEs are re-calculated in Figures \ref{fig:MSE_slope1_AR_robust} and \ref{fig:MSE_slope1_lrv_robust} for a range of different choices of $q$, $\overline{r}$ and $(m_1,m_2)$. As one can see, the MSEs in the different plots of Figures \ref{fig:MSE_slope1_AR_robust} and \ref{fig:MSE_slope1_lrv_robust} are very similar. Hence, the MSE results reported in Section \ref{subsec-sim-lrv} for the scenarios with a moderate trend appear to be fairly robust to different choices of the tuning parameters. In particular, our estimators $\widehat{a}$ and $\widehat{\sigma}^2$ seem to be quite insensitive to the choice of tuning parameters, at least as far as their MSEs are concerned.
