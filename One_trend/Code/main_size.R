@@ -11,19 +11,13 @@ options(xtable.timestamp = "")
 source("functions/CalculateSiZe.r")
 
 
-###############################
-#Defining necessary parameters#
-###############################
-
+##########################################
+#Calculating size for small parameters a1#
+##########################################
 Nsim       <- 1000        # number of simulation runs for size/power calculations
 sigma_eta  <- 1           # standard deviation of the innovation term in the AR model
 SimRuns    <- 5000        # number of simulation runs to produce critical values
 sigma.type <- 'estimated' # Estimating the long-run variance \sigma^2 or plugging the true theoretical value
-
-
-##########################################
-#Calculating size for small parameters a1#
-##########################################
 
 different_T     <- c(250, 500, 1000)         #Sample sizes for calculating size 
 different_a1    <- c(-0.5, -0.25, 0.25, 0.5) #Values of AR(1) parameters considered 
@@ -52,6 +46,10 @@ print.xtable(xtable(size_matrix_ms, digits = c(3), align = paste(replicate(numbe
 ######################################
 #Calculating size for for a_1 = +-0.9#
 ######################################
+Nsim       <- 1000        # number of simulation runs for size/power calculations
+sigma_eta  <- 1           # standard deviation of the innovation term in the AR model
+SimRuns    <- 5000        # number of simulation runs to produce critical values
+sigma.type <- 'estimated' # Estimating the long-run variance \sigma^2 or plugging the true theoretical value
 
 different_T     <- c(250, 500, 1000, 2000, 3000)
 different_a1    <- c(-0.9, 0.9)
@@ -80,6 +78,10 @@ print.xtable(xtable(size_ms, digits = c(3), align = paste(replicate(number_of_co
 ########################################
 #Calculating global size for comparison#
 ########################################
+Nsim       <- 1000        # number of simulation runs for size/power calculations
+sigma_eta  <- 1           # standard deviation of the innovation term in the AR model
+SimRuns    <- 5000        # number of simulation runs to produce critical values
+sigma.type <- 'true'      # Estimating the long-run variance \sigma^2 or plugging the true theoretical value
 
 different_T     <- c(250, 500, 1000)
 different_a1    <- c(-0.5, 0.5)
@@ -96,7 +98,7 @@ for (a1 in different_a1){
   #Therefore, all the differences in size come from the methods themselves
   i <- 1
   for (T in different_T){
-    size <- CalculateSize(T, a1, sigma_eta, different_alpha, Nsim = Nsim, SimRuns = SimRuns, sigma.type = 'true', remove.small.ess = TRUE)
+    size <- CalculateSize(T, a1, sigma_eta, different_alpha, Nsim = Nsim, SimRuns = SimRuns, sigma.type = sigma.type, remove.small.ess = TRUE)
     size_matrix[i, (k-1)*5 + 2] <- size$size.ms
     size_matrix[i, (k-1)*5 + 3] <- size$size.uncor
     size_matrix[i, (k-1)*5 + 4] <- size$size.rows
@@ -113,6 +115,10 @@ print.xtable(xtable(size_matrix, digits = c(3), align = paste(replicate(number_o
 #################################################################
 #Calculating rowwise size and creating parallel coordinate plots#
 #################################################################
+Nsim       <- 1000        # number of simulation runs for size/power calculations
+sigma_eta  <- 1           # standard deviation of the innovation term in the AR model
+SimRuns    <- 5000        # number of simulation runs to produce critical values
+sigma.type <- 'true'      # Estimating the long-run variance \sigma^2 or plugging the true theoretical value
 
 T               <- 1000
 different_a1    <- c(-0.5)
@@ -120,7 +126,7 @@ different_alpha <- c(0.05)
 
 set.seed(0)
 for (a1 in different_a1){
-  result <- CalculateSize(T, a1, sigma_eta, different_alpha,  Nsim = Nsim, SimRuns = SimRuns, sigma.type = 'true', remove.small.ess = TRUE)
+  result <- CalculateSize(T, a1, sigma_eta, different_alpha,  Nsim = Nsim, SimRuns = SimRuns, sigma.type = sigma.type, remove.small.ess = TRUE)
   h.grid <- result$h.grid
   
   for (j in 1:length(different_alpha)){

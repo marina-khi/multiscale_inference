@@ -11,10 +11,9 @@ options(xtable.timestamp = "")
 source("functions/SimulateVariance.R")
 
 
-###############################
-#Defining necessary parameters#
-###############################
-
+#######################################################################
+#Comparing three methods for different slope factors and different a_1#
+#######################################################################
 Nsim       <- 1000      # Number of replications for comparison of the estimators
 sigma_eta  <- 1         # Sqrt root of the variance of the innovation \eta_t
 T_size     <- 500       # Sample size considered
@@ -24,11 +23,6 @@ different_a          <- c(-0.95,-0.75,-0.5,-0.25,0.25,0.5,0.75,0.95) # AR parame
 different_slope_facs <- c(1, 10) # slope of linear trend = slope_fac * sqrt(sigma_eta^2/(1-a_star^2))
 different_q          <- c(25)    # tuning parameters for first-step estimator
 different_r          <- c(10)    # tuning parameters for second-step estimator
-
-
-#######################################################################
-#Comparing three methods for different slope factors and different a_1#
-#######################################################################
 
 source("functions/functions.R")  # Loading functions for plotting
 

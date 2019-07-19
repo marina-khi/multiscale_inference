@@ -11,7 +11,7 @@ SimulateVariance <- function(a_1_star, sigma_eta_star, T_size, Nsim,
   #   a_1_star: True AR(1) coefficient for the error distribution.
   #   sigma_eta_star: True standard deviation of the innovation term in the AR(1) process.
   #   T_size:  Sample size of the time series simulated.
-  #   Nsim: number of simulations for power calculations. Default is 1000.
+  #   Nsim: Number of simulations for power calculations. Default is 1000.
   #   pdfname_a_hat: Name (and path) of the pdf file which will contain the histograms for estimators of a_1.
   #   pdfname_lrv: Name (and path) of the pdf file which will contain the histograms for estimators of the long-run variance.
   #   sim.design: Type of the trend function. Can be "constant", "linear", "brokenline", "bump", "blocks" or "sine".
@@ -24,7 +24,8 @@ SimulateVariance <- function(a_1_star, sigma_eta_star, T_size, Nsim,
   #     the following specifications: (a_1 = -0.95 or a_1 = 0.25) and q = 25 and r.bar = 10. If 'no', no histograms are produced.
   #     Default is "no".
   #   
-  # Returns:
+  # Outputs:
+  #   physical files;
   #   a_mse: Value of the mean squared error for the estimator \widehat{a} of a_1 for our method.
   #   a_mse_HvK: Value of the mean squared error for the estimator \widehat{a}_{HvK} of a_1
   #     for the method from Hall and Van Keilegom (2003).
@@ -69,7 +70,7 @@ SimulateVariance <- function(a_1_star, sigma_eta_star, T_size, Nsim,
     
     result_HvK         <- EstimateLrvHvK(y_data_with_trend, T_size, M1, M2)
     a_hat_hall_vect    <- c(a_hat_hall_vect, result_HvK$a_hat)
-    sigma_eta_hat_hall <- calculating_sigma_eta(y_data_with_trend, result_HvK$a_hat, p = 1)
+    sigma_eta_hat_hall <- sqrt(variance_eta(y_data_with_trend, result_HvK$a_hat, p = 1))
     lrv_hat_hall       <- sigma_eta_hat_hall^2/((1 - sum(result_HvK$a_hat))^2)
     lrv_hat_hall_vect  <- c(lrv_hat_hall_vect, lrv_hat_hall)
 
