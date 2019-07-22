@@ -40,7 +40,7 @@ CalculateSize <- function(T, a1, sigma_eta, different_alpha, Nsim = 1000,
   #   h.grid.new:  A vector of the bandwidths analysed.
 
   #Load necessary functions  
-  source("functions/grid_construction.r")
+  source("functions/ConstructGrid.r")
   source("functions/multiscale_statistics.r")
   source("functions/multiscale_quantiles.r")
   source("functions/multiscale_testing.r")

@@ -11,10 +11,9 @@ options(xtable.timestamp = "")
 source("functions/CalculatePower.r")
 
 
-###############################
-#Defining necessary parameters#
-###############################
-
+##########################
+#Calculating global power#
+##########################
 Nsim       <- 1000    # number of simulation runs for size/power calculations
 sigma_eta  <- 1       # standard deviation of the innovation term in the AR model
 SimRuns    <- 5000    # number of simulation runs to produce critical values
@@ -22,11 +21,6 @@ SimRuns    <- 5000    # number of simulation runs to produce critical values
 different_a1 <- c(-0.5, 0.5)      #different a_1 parameters
 alpha        <- 0.05              #Significance level
 different_T  <- c(250, 500, 1000) #different sample sizes for global power
-
-
-##########################
-#Calculating global power#
-##########################
 
 sim.design <- 'bump'  # type of trend function m()
 height.neg <- 0.85    # height of the bump in case of sim.design = 'bump'. This height is used to calculate power for negative a1     
@@ -70,6 +64,13 @@ print.xtable(xtable(power_matrix, digits = c(3), align = paste(replicate(5*lengt
 ############################
 #Calculating rowwise power#
 ############################
+
+Nsim       <- 1000    # number of simulation runs for size/power calculations
+sigma_eta  <- 1       # standard deviation of the innovation term in the AR model
+SimRuns    <- 5000    # number of simulation runs to produce critical values
+
+different_a1 <- c(-0.5, 0.5)      #different a_1 parameters
+alpha        <- 0.05              #Significance level
 
 sim.design <- 'bump'  # type of trend function m()
 height.neg <- 0.85    # height of the bump in case of sim.design = 'bump'. This height is used to calculate power for negative a1     
@@ -140,7 +141,8 @@ for (a1 in different_a1){
 #############################################
 #Blocks and sine examples for the Supplement#
 #############################################
-source("functions/grid_construction.r")
+
+source("functions/ConstructGrid.r")
 source("functions/multiscale_statistics.r")
 source("functions/multiscale_quantiles.r")
 source("functions/multiscale_testing.r")
@@ -148,6 +150,14 @@ source("functions/sim.r")
 source("functions/SiZer_functions.r")
 sourceCpp("functions/kernel_weights.cpp")
 sourceCpp("functions/SiZer_functions.cpp")
+
+Nsim       <- 1000    # number of simulation runs for size/power calculations
+sigma_eta  <- 1       # standard deviation of the innovation term in the AR model
+SimRuns    <- 5000    # number of simulation runs to produce critical values
+
+different_a1 <- c(-0.5, 0.5)      #different a_1 parameters
+alpha        <- 0.05              #Significance level
+T            <- 1000    # Sample size
 
 sim.design <- c('blocks', 'sine') # type of trend function m()
 
@@ -191,7 +201,7 @@ for (a1 in different_a1){
     gset_cpp               <- as.vector(gset_cpp) 
     storage.mode(gset_cpp) <- "double"
     
-    wghts <- matrix(kernel_weights_cpp(T, gset_cpp, N), ncol = T, byrow = TRUE)
+    wghts <- matrix(kernel_weights(T, gset_cpp, N), ncol = T, byrow = TRUE)
     
     quants <- multiscale_quantiles(T=T, grid=grid, weights=wghts, kappa=0.1, SimRuns=SimRuns)
     stats  <- multiscale_statistics(data=data, weights=wghts, sigmahat=sigma_true, grid=grid)

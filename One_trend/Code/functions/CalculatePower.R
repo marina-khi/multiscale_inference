@@ -13,7 +13,7 @@ CalculatePower <- function(T, a1, sigma_eta, alpha = 0.05, Nsim = 1000, SimRuns 
   #   sigma_eta: standard deviation of the innovation term in the AR(1) process.
   #   alpha : Confidence level. Default is 5%.
   #   Nsim: number of simulations for power calculations. Default is 1000.
-  #   SimRuns: number of simulations for calculating gaussian quantile for T_ms. Default is 5000.
+  #   SimRuns: number of simulations for calculating gaussian quantile for T_ms. Default is 1000.
   #   sigma.type: If 'estimated', then the long-run variance used in the test statistic is first estimated by
   #     AR_lrv() function. Otherwise, if 'true' the true theoretical value of the long-run variance is used.
   #   q_: tuning parameter for estimating the long-run variance from Section 4. Default is 25. 
@@ -41,7 +41,7 @@ CalculatePower <- function(T, a1, sigma_eta, alpha = 0.05, Nsim = 1000, SimRuns 
   #   h.grid.new:  A vector of the bandwidths analysed.
 
   #Load necessary functions  
-  source("functions/grid_construction.r")
+  source("functions/ConstructGrid.r")
   source("functions/multiscale_statistics.r")
   source("functions/multiscale_quantiles.r")
   source("functions/multiscale_testing.r")
