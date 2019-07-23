@@ -108,17 +108,18 @@ AnalyzeData <- function(data, ts_start, filename_table, filename_plot, axis_at, 
     
     test.res      <- multiscale_testing(alpha=alpha, quantiles=quants, values=vals, grid=grid)
   
-    pdf(filename_plot, width=7, height=10, paper="special")
-    par(mfrow = c(4,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
+    pdf(filename_plot, width=7, height=9, paper="special")
+    layout(matrix(c(1, 2, 3, 4),ncol=1), widths=c(3,3,3, 3), heights=c(1,0.8,1, 1), TRUE) # Setting the layout of the graphs
   } else {
-    pdf(filename_plot, width=7, height=7.5, paper="special")
-    par(mfrow = c(3,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
+    pdf(filename_plot, width=7, height=6.6, paper="special")
+    layout(matrix(c(1,2,3),ncol=1), widths=c(3,3,3), heights=c(1,0.8,1), TRUE) # Setting the layout of the graphs
   }
   
   #Parameters for plotting
   grid_time <- seq(from = ts_start, to = ts_end, length.out = Tlen) #grid points for plotting 
   p_t_set$plottingindex <- (1:nrow(p_t_set))/nrow(p_t_set)
   
+  par(cex = 1.1, tck = -0.025)
   par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
   par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
   
@@ -133,7 +134,7 @@ AnalyzeData <- function(data, ts_start, filename_table, filename_plot, axis_at, 
   #yminlim = min(min(p_t_set$values), quant.ms)
   plot(NA, xlim=c(ts_start,ts_end), xaxt = "n",  ylim = c(0, 1 + 1/nrow(p_t_set)), yaxp  = yaxp, mgp=c(2,0.5,0))
   title(main = expression((b) ~ minimal ~ intervals ~ produced ~ by ~ italic(T)[MS]), line = 1)
-  segments(p_t_set[['startpoint']], p_t_set$plottingindex, p_t_set$endpoint, p_t_set$plottingindex)
+  segments(p_t_set[['startpoint']], p_t_set$plottingindex, p_t_set$endpoint, p_t_set$plottingindex, lwd = 2)
   #abline(h = quant.ms, lty = 2)
 
   #SiZer 

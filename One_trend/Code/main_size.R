@@ -10,6 +10,8 @@ options(xtable.timestamp = "")
 #All the necessary arguments to use this function are described in the file.
 source("functions/CalculateSiZe.r")
 
+#Random generation of the seed. The seed is necessary for computing all the different specifications on comparable datasets
+seed <- sample(1:100000, 1)
 
 ##########################################
 #Calculating size for small parameters a1#
@@ -28,10 +30,11 @@ size_matrix_ms            <- matrix(NA, nrow = length(different_T), ncol = numbe
 rownames(size_matrix_ms)  <- different_T
 
 k <- 1
-set.seed(111)
+set.seed(111) 
 for (a1 in different_a1){
   i <- 1
   for (T in different_T){
+    #set.seed(seed) # This is for calculating size in different specifications on the same data
     size <- CalculateSize(T, a1, sigma_eta, different_alpha, Nsim = Nsim, SimRuns =SimRuns, sigma.type = sigma.type, q_ = 25, remove.small.ess = FALSE)$size.ms
     size_matrix_ms[i, (k * (length(different_alpha) + 1) - (length(different_alpha) - 1)):(k * (length(different_alpha) + 1))] <- size
     i <- i + 1
@@ -64,6 +67,7 @@ for (a1 in different_a1){
   set.seed(0)
   i <- 1
   for (T in different_T){
+    #set.seed(seed) # This is for calculating size in different specifications on the same data
     result <- CalculateSize(T, a1, sigma_eta, different_alpha, Nsim = Nsim, SimRuns = SimRuns, sigma.type = sigma.type, q_ = 50, remove.small.ess = FALSE)$size.ms
     size_ms[, (k - 1) * (length(different_T) + 1) + i + 1] <- t(result)
     i <- i + 1
@@ -98,6 +102,7 @@ for (a1 in different_a1){
   #Therefore, all the differences in size come from the methods themselves
   i <- 1
   for (T in different_T){
+    #set.seed(seed) # This is for calculating size in different specifications on the same data
     size <- CalculateSize(T, a1, sigma_eta, different_alpha, Nsim = Nsim, SimRuns = SimRuns, sigma.type = sigma.type, remove.small.ess = TRUE)
     size_matrix[i, (k-1)*5 + 2] <- size$size.ms
     size_matrix[i, (k-1)*5 + 3] <- size$size.uncor
@@ -124,8 +129,8 @@ T               <- 1000
 different_a1    <- c(-0.5)
 different_alpha <- c(0.05)
 
-set.seed(0)
 for (a1 in different_a1){
+  #set.seed(seed) # This is for calculating size in different specifications on the same data
   result <- CalculateSize(T, a1, sigma_eta, different_alpha,  Nsim = Nsim, SimRuns = SimRuns, sigma.type = sigma.type, remove.small.ess = TRUE)
   h.grid <- result$h.grid
   
