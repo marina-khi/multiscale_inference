@@ -113,6 +113,10 @@ CalculateSize <- function(T, a1, sigma_eta, different_alpha, Nsim = 1000,
     size_rowwise_temp_SiZer[[j]] <- matrix(NA, nrow = Nsim, ncol = length(h.grid.new))
   }    
   
+  cat("","\n")
+  cat("Carrying out the size simulations for the following specification: a_1 = ", a1, ", T = ", T,"\n")
+  progbar <- txtProgressBar(min = 1, max = Nsim, style = 3, char = ".")
+  
   for (i in 1:Nsim){
     #Simulating the time series
     data.simulated <- simulating_data(T, a1, sigma_eta, sim.design = 'constant')
@@ -164,7 +168,9 @@ CalculateSize <- function(T, a1, sigma_eta, different_alpha, Nsim = 1000,
         }
       }
     }
+    setTxtProgressBar(progbar, i)
   }
+  close(progbar)
   
   size_rowwise_ms    <- lapply(size_rowwise_temp_ms, colMeans)
   size_rowwise_uncor <- lapply(size_rowwise_temp_uncor, colMeans)

@@ -69,7 +69,7 @@ write.csv(criterion_matrix,"plots/criterion_matrix_UK.csv", row.names = FALSE)
 
 #Setting tuning parameters for testing
 p <- 2
-q <- 15
+q <- 25
 r <- 10
 
 #And finally testing itself!

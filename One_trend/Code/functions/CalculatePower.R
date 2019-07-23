@@ -132,7 +132,10 @@ CalculatePower <- function(T, a1, sigma_eta, alpha = 0.05, Nsim = 1000, SimRuns 
   power_rows_temp   <- matrix(NA, nrow = Nsim, ncol = length(h.grid.new))
   power_SiZer_temp  <- matrix(NA, nrow = Nsim, ncol = length(h.grid.new))
   
-
+  cat("","\n")
+  cat("Carrying out the", power.type, "power simulations for the following specification: a_1 = ", a1, ", T = ", T,"\n")
+  progbar <- txtProgressBar(min = 1, max = Nsim, style = 3, char = ".")
+  
   for (i in 1:Nsim){
     #Simulating the time series
     data.simulated <- simulating_data(T, a1, sigma_eta, sim.design = sim.design, slope.fac = bump.height)
@@ -175,7 +178,10 @@ CalculatePower <- function(T, a1, sigma_eta, alpha = 0.05, Nsim = 1000, SimRuns 
       if (sum(test_rows[h_index, ] == coded.value, na.rm = TRUE) >0) {power_rows_temp[i, j] <- 1} else {power_rows_temp[i, j] <- 0}
       if (sum(test_SiZer[h_index, ] == coded.value, na.rm = TRUE) >0) {power_SiZer_temp[i, j] <- 1} else {power_SiZer_temp[i, j] <- 0}
     }
+    setTxtProgressBar(progbar, i)
   }
+  close(progbar)
+  
   power <- colSums(power_matrix_temp)/Nsim
   
   power_ms    <- colSums(power_ms_temp)/Nsim

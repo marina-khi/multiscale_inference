@@ -117,6 +117,8 @@ AnalyzeData <- function(data, ts_start, filename_table, filename_plot, axis_at, 
   
   #Parameters for plotting
   grid_time <- seq(from = ts_start, to = ts_end, length.out = Tlen) #grid points for plotting 
+  p_t_set$plottingindex <- (1:nrow(p_t_set))/nrow(p_t_set)
+  
   par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
   par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
   
@@ -127,12 +129,12 @@ AnalyzeData <- function(data, ts_start, filename_table, filename_plot, axis_at, 
   par(mar = c(0.5, 0.5, 3.5, 0)) #Margins for each plot
 
   #Plotting the minimal intervals. Do not have any negative minimal intervals, so plotting all (positive) ones
-  ymaxlim = max(p_t_set$values)
-  yminlim = min(min(p_t_set$values), quant.ms)
-  plot(NA, xlim=c(ts_start,ts_end), xaxt = "n",  ylim = c(yminlim - 0.1, ymaxlim + 0.1), yaxp  = yaxp, mgp=c(2,0.5,0))
+  #ymaxlim = max(p_t_set$values)
+  #yminlim = min(min(p_t_set$values), quant.ms)
+  plot(NA, xlim=c(ts_start,ts_end), xaxt = "n",  ylim = c(0, 1 + 1/nrow(p_t_set)), yaxp  = yaxp, mgp=c(2,0.5,0))
   title(main = expression((b) ~ minimal ~ intervals ~ produced ~ by ~ italic(T)[MS]), line = 1)
-  segments(p_t_set[['startpoint']], p_t_set[['values']], p_t_set$endpoint, p_t_set[['values']])
-  abline(h = quant.ms, lty = 2)
+  segments(p_t_set[['startpoint']], p_t_set$plottingindex, p_t_set$endpoint, p_t_set$plottingindex)
+  #abline(h = quant.ms, lty = 2)
 
   #SiZer 
   par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot

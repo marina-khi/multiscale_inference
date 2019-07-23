@@ -30,6 +30,7 @@ power_matrix           <- matrix(NA, nrow = 2 * length(different_T), ncol = 5*le
 rownames(power_matrix) <- rep(different_T, each = 2)
 power_matrix[, 1]      <- rep(c("Power", "Spurious power"), length(different_T)) 
 
+
 k <- 1
 for (a1 in different_a1){
   if (a1 < 0) {
@@ -39,12 +40,12 @@ for (a1 in different_a1){
   }
   i <- 1
   for (T in different_T){
-    set.seed(1)
+    set.seed(1) # This is for calculating global and spurious power on the same data
     power_overall  <- CalculatePower(T, a1, sigma_eta, alpha, Nsim = Nsim, SimRuns =SimRuns,
                              sigma.type = 'true', remove.small.ess = TRUE,
                              sim.design = 'bump', bump.height = height, region = 'increase',
                              power.type = '')
-    set.seed(1)
+    set.seed(1) # This is for calculating global and spurious power on the same data
     power_spurious <- CalculatePower(T, a1, sigma_eta, alpha, Nsim = Nsim, SimRuns =SimRuns,
                              sigma.type = 'true', remove.small.ess = TRUE,
                              sim.design = 'bump', bump.height = height, region = 'increase',
@@ -52,7 +53,7 @@ for (a1 in different_a1){
 
     power_matrix[2 * i - 1, ((k - 1) * 5 + 3):(k * 5 + 1)] <- power_overall$power
     power_matrix[2 * i, ((k - 1) * 5 + 3):(k * 5 + 1)] <- power_spurious$power
-    i <- i + 1 
+    i <- i + 1
   }
   k <- k + 1
 }
@@ -109,7 +110,7 @@ for (a1 in different_a1){
   plot(seq(1/T, 1, by = 1/T), data, ylab = "", xlab = "", col= 'grey', type = 'l', lty = 1,mgp=c(1.8,0.5,0))
   lines(seq(1/T, 1, by = 1/T), trend, lwd = 2)
   
-  plot(x = h.grid, y = result$power_ms*100, ylim=c(0, 72), yaxp = c(0, 60, 4),mgp=c(1.8,0.5,0), type="l", lty=1, xaxt='n', ylab = "Percentage (%)", xlab='bandwidth h')
+  plot(x = h.grid, y = result$power_ms*100, ylim=c(0, 72), yaxp = c(0, 60, 4),mgp=c(1.8,0.5,0), type="l", lty=1, xaxt='n', ylab = "Power (in %)", xlab='bandwidth h')
   points(x = h.grid, y = result$power_ms*100, pch=19, cex = 0.8)
   
   lines(x = h.grid, y = result$power_uncor*100, lwd=1.5, lty = 'dashed') 
@@ -122,7 +123,7 @@ for (a1 in different_a1){
   legend('topleft', cex = 0.9, bty = "n", legend = c(expression(italic(T)[MS]), expression(italic(T)[UC]), expression(italic(T)[RW]), expression(italic(T)[SiZer])),
          pch = c(19, NA, NA, NA), lty = c('solid', 'dashed', 'dotted', 'solid'), y.intersp=1.25)
   
-  plot(x = h.grid, y = result_spurious$power_ms*100, ylim=c(0, 11), yaxp = c(0, 8, 4), type="l",mgp=c(1.8,0.5,0), lty=1, xaxt='n', ylab = "Percentage (%)", xlab='bandwidth h', lwd = 2)
+  plot(x = h.grid, y = result_spurious$power_ms*100, ylim=c(0, 11), yaxp = c(0, 8, 4), type="l",mgp=c(1.8,0.5,0), lty=1, xaxt='n', ylab = "Spurious power (in %)", xlab='bandwidth h', lwd = 2)
   points(x = h.grid, y = result_spurious$power_ms*100, pch=19, cex = 0.8)
   
   lines(x = h.grid, y = result_spurious$power_uncor*100, lwd=2, lty = 'dashed') 
@@ -155,15 +156,15 @@ Nsim       <- 1000    # number of simulation runs for size/power calculations
 sigma_eta  <- 1       # standard deviation of the innovation term in the AR model
 SimRuns    <- 5000    # number of simulation runs to produce critical values
 
-different_a1 <- c(-0.5, 0.5)      #different a_1 parameters
-alpha        <- 0.05              #Significance level
-T            <- 1000    # Sample size
+different_a1 <- c(-0.5, 0.5)      # different a_1 parameters
+alpha        <- 0.05              # Significance level
+T            <- 1000              # Sample size
 
 sim.design <- c('blocks', 'sine') # type of trend function m()
 
 for (a1 in different_a1){
   for (sim.design_ in sim.design){
-    set.seed(1)
+    set.seed(1) #This is for calculating both examples for all specifications on the same errors
     if (sim.design_ == 'sine') {
       sigma_eta = sqrt((1 -a1^2) )
     } else {
