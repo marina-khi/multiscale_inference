@@ -43,15 +43,18 @@
 
 
 First of all, we would like to thank the editor, the associate editor and the reviewers for their many comments and suggestions which were very helpful in improving the paper. In the revision, we have addressed all comments and have rewritten the paper accordingly. Please find our point-by-point responses below. 
-Since the revised paper includes additional material as requested by the referees (additional simulations, a second application example, \dots), it is a bit longer than the original submission. In particular, it has grown from 34 to 37 pages in our layout. However, we are of course happy and willing to reduce the length of the paper by shifting parts of it into the online supplement if this is needed. 
+Since the revised paper includes additional material as requested by the referees (additional simulations, a second application example, \dots), it is a bit longer than the original submission. In particular, it has grown from 34 to 37 pages in our layout. However, we are of course happy and willing to reduce the length of the paper 
+%by shifting parts of it into the online supplement 
+if this is needed. 
 Before we reply to the specific comments of the referees, we summarize the major changes in the revision.
+
 \vspace{10pt}
 
 
 \textbf{Generalization of the theoretical results.} We have extended the theoretical results as suggested by Referee 1:
 \begin{enumerate}[label=(\roman*), leftmargin=0.8cm]
 
-\item We have derived the following consistency result in addition to Proposition 3.3: Let the significance level $\alpha = \alpha_T \in (0,1)$ depend on the sample size $T$. If $\alpha_T \rightarrow 0$, then $\mathbb{P}({E}_T^{\ell}) \rightarrow 1$. This result is stated as Corollary 3.1 on p.13 of the revised paper. 
+\item We have derived the following consistency result in addition to Proposition 3.3: Let the significance level $\alpha = \alpha_T \in (0,1)$ depend on the sample size $T$. If $\alpha_T \rightarrow 0$, then $\mathbb{P}({E}_T^{\ell}) \rightarrow 1$ for $\ell \in \{ \pm,+,- \}$. This result is stated as Corollary 3.1 on p.13 of the revised paper. 
 %We provide a generalization of Proposition 3.3 which shows that $\mathbb{P}({E}_T^{\ell}) = (1 - \alpha_T) + o(1)$ for any sequence $\{\alpha_T\}$ of significance levels $\alpha_T \in (0,1)$. In particular, for $\alpha_T \rightarrow 0$, we get the consistency result that $\mathbb{P}({E}_T^{\ell}) \rightarrow 1$. 
 
 \item We have generalized our estimator of the long-run error variance. The estimation procedure is shown to be valid not only for AR($p$) processes of known finite order $p$ but for any stationary error process $\{\varepsilon_t\}$ with an AR($\infty$) representation. This greatly extends the applicability of the estimator. 
@@ -59,18 +62,21 @@ Before we reply to the specific comments of the referees, we summarize the major
 \vspace{3pt}
 
 
-\textbf{Comparison to SiZer.} As requested by the Associate Editor, we give a clear account of the main contributions and innovations of our paper relative to the SiZer approach in the revision. Please see the new Section 3.4 for the details. In what follows, we give a slightly rephrased and condensed version of the new Section 3.4. 
+\textbf{Comparison to SiZer.} In the new Section 3.4, we give a clear account of the main contributions and innovations of our paper relative to the SiZer approach.
+Moreover, we have thoroughly revised the simulations in Section 5 which compare our multiscale test with SiZer, taking into account the suggestions of Referee 2. 
+In what follows, we summarize the main points of the new Section 3.4. 
+%As requested by the Associate Editor, we give a clear account of the main contributions and innovations of our paper relative to the SiZer approach in the revision. Please see the new Section 3.4 for the details. In what follows, we give a slightly rephrased and condensed version of the new Section 3.4. 
 
 
 Informally speaking, both our approach and SiZer for dependent data (dependent SiZer for short) are methods to test for local increases/decreases of a nonparametric trend function $m$. The formal problem is to test the hypothesis
 \[ H_0(u,h): \text{The trend } m \text{ is constant on the time interval } [u-h,u+h] \]
-simultaneously for a large number of different time intervals $[u-h,u+h]$, in particular, for all intervals with $u \in I_T$ and $h \in H_T$, where $I_T$ is the set of locations and $H_T$ the set of bandwidths or scales $h$ under consideration. 
+simultaneously for a large number of different time intervals $[u-h,u+h]$, in particular, for all intervals with $u \in I_T$ and $h \in H_T$, where $I_T$ is the set of locations and $H_T$ the set of bandwidths/scales $h$ under consideration. 
 
 
 Let $\widehat{s}_T(u,h)$ be the SiZer statistic to test $H_0(u,h)$, which corresponds to the statistic $\widehat{\psi}_T(u,h)$ in our approach and which is properly defined in Section 3.4. There are two versions of dependent SiZer: 
 \begin{enumerate}[label=(\alph*), leftmargin=0.8cm]
 
-\item The global version aggegrates the individual statistics $\widehat{s}_T(u,h)$ into the overall statistic $\widehat{S}_T = \max_{h \in H_T} \widehat{S}_T(h)$, where $\widehat{S}_T(h) = \max_{u \in I_T} |\widehat{s}_T(u,h)|$. The statistic $\widehat{S}_T$ is the counterpart to the multiscale statistic $\widehat{\Psi}_T$ in our approach. 
+\item The global version aggegrates the individual statistics $\widehat{s}_T(u,h)$ into the overall statistic $\widehat{S}_T = \max_{h \in H_T} \widehat{S}_T(h)$, where $\widehat{S}_T(h) = \max_{u \in I_T} |\widehat{s}_T(u,h)|$. The statistic $\widehat{S}_T$ is the counterpart to the multiscale statistic $\widehat{\Psi}_T$ of our approach. 
 
 \item The row-wise SiZer version considers each scale $h \in H_T$ separately. In particular, for each bandwidth $h \in H_T$, a test is carried out based on the statistic $\widehat{S}_T(h)$. 
 %A row-wise analogue of our approach would be obtained by carrying out a test for each scale $h \in H$ separately based on the statistic $\widehat{\Psi}_T(h) = \max_{u \in I} |\widehat{\psi}_T(u,h)/\widehat{\sigma}|$. (Note that we can drop the correction term $\lambda(h)$ in this case as it is a fixed constant if only a single bandwidth $h$ is taken into account.)
@@ -82,7 +88,7 @@ In practice, SiZer is commonly implemented in its row-wise form. The main reason
 Even though related, our methods and theory are markedly different from those of the SiZer approach:
 \begin{enumerate}[label=(\roman*), leftmargin=0.8cm]
 
-\item Theory for SiZer is derived under the following assumption on the set of bandwidths $H_T$: It holds that $H_T \subseteq H$ for all $T$, where $H$ is a compact subset of $(0,\infty)$. As already pointed out in \cite{ChaudhuriMarron2000}, this is a quite substantial/severe restriction: Only bandwidths $h$ are taken into account that remain bounded away from zero as the sample size $T$ grows. Bandwidths $h$ that converge to zero as $T$ increases are excluded.  As \cite{ChaudhuriMarron2000} put it (on p.420):
+\item Theory for SiZer is derived under the following assumption on the set of bandwidths $H_T$: It holds that $H_T \subseteq H$ for all $T$, where $H$ is a compact subset of $(0,\infty)$. As already pointed out in \cite{ChaudhuriMarron2000}, this is a quite severe restriction: Only bandwidths $h$ are taken into account that remain bounded away from zero as the sample size $T$ grows. Bandwidths $h$ that converge to zero as $T$ increases are excluded.  As \cite{ChaudhuriMarron2000} put it (on p.420):
 \vspace{0.15cm}
 
 \begin{spacing}{1.1}
@@ -102,10 +108,17 @@ We hope the above points make clear that the methodological and theoretical cont
 
 
 \newpage
-\textbf{Simulations and application examples.} We have thoroughly revised the simulation study in Section 5. In order to take into account the many suggestions of Referees 1 and 2, we have completely re-designed the size and power simulations for our multiscale test (formerly Section 5.1) and the comparison with SiZer (formerly Section 5.2), which are combined in the new Section 5.1. Among other things, we consider different trend signals for our power simulations as suggested by Referee 2 and AR error terms with strong autocorrelation (AR($1$) errors with parameter $\pm 0.9$) as suggested by Referee 1. Note that we have removed the simulation setup with AR($2$) errors which mimics the situation in the application example in order to keep the simulation study to a reasonable length. Finally, we have added a second application example to global temperature data as requested by Referee 1. 
+\textbf{Simulations and application examples.} We have thoroughly revised the simulation study of Section 5. In order to take into account the many suggestions of Referees 1 and 2, we have completely re-designed the simulation exercises which analyse the finite sample properties of our multiscale test and dependent SiZer. These were formerly presented in Sections 5.1 and 5.2 and are combined in the new Section 5.1 of the revised paper. 
+%Among other things, we have replaced (part of) the simulation designs by new ones with different trend functions and AR error terms as suggested by the referees. 
+Among other things, we consider additional simulation designs (with different trend functions and AR error terms) which are chosen according to the suggestions of the referees. To keep the simulation study to a reasonable length, we have removed some of the simulation setups from the previous version of the paper, in particular, the setup with AR($2$) errors that mimics the situation in the application example. Finally, we have added a second application example to global temperature data as requested by Referee 1. 
 
 
-The revised R-code to run the simulation exercises and the application examples has been submitted as part of the revision. When revising the code, we found a minor mistake in the computation of the long-run variance estimator $\widehat{\sigma}^2$. This mistake, however, only concerned the case of AR($p$) errors with $p > 1$, that is, it only concerned the application example to the Central England temperature record where AR($p$) errors with $p=2$ are used. The revised application example can be found in the new Section 6.1. As can be seen, the estimation results are qualitatively the same as before. Indeed, the corrected estimate $\widehat{\sigma}^2 = 0.737$ is quite close to the old one $\widehat{\sigma}^2 = 0.749$. The R-code is accompanied by a README file which explains the main structure of the code and how to run it.  
+%We have thoroughly revised the simulation study in Section 5. In order to take into account the many suggestions of Referees 1 and 2, we have completely re-designed the size and power simulations for our multiscale test (formerly Section 5.1) and the comparison with SiZer (formerly Section 5.2), which are combined in the new Section 5.1. 
+%Among other things, we consider different trend signals for our power simulations as suggested by Referee 2 and AR error terms with strong autocorrelation (AR($1$) errors with parameter $\pm 0.9$) as suggested by Referee 1. Note that we have removed the simulation setup with AR($2$) errors which mimics the situation in the application example in order to keep the simulation study to a reasonable length. Finally, we have added a second application example to global temperature data as requested by Referee 1. 
+%In particular, we consider additional simulation designs (with different trend functions and AR error terms) which are chosen according to the suggestions of the referees. To keep the simulationstudy to a reasonable length, we have removed some of the simulations setups fropm the previous version of the paper, in particular, the setup with AR($2$) errors which mimics the situation in the application example. Finally, we have added a second application example to global temperature data as requested by Referee 1. 
+
+
+The revised R-code to run the simulation exercises and the application examples has been submitted as part of the revision. When revising the code, we found a minor mistake in the computation of the long-run error variance estimator $\widehat{\sigma}^2$. This mistake, however, only concerned the case of AR($p$) errors with $p > 1$. Hence, it did not affect the simulations on the long-run error variance estimator in Section 5.2, where $p=1$ throughout. Only the long-run variance estimate $\widehat{\sigma}^2$ in the application to the Central England temperature record (where $p=2$) changed at bit. The revised application example can be found in the new Section 6.1. As can be seen, the corrected estimate $\widehat{\sigma}^2 = 0.737$ is quite close to the old one $\widehat{\sigma}^2 = 0.749$ and the test results are qualitatively the same as before. The R-code is accompanied by a README file which explains the main structure of the code and how to run it.  
 
 
 %Old version: 
@@ -160,7 +173,7 @@ Thank you very much for the constructive and helpful comments. In our revision, 
 
 \textit{I believe that the following type of result can be obtained: $\mathbb{P} (E^{\ell}_T) \to 1$. Theorem 3.1 is for testing purpose. In certain application one might be interested in such consistency result. Basically one needs to study the behavior of $q_T(\alpha)$ when $\alpha \to 0$.}
 
-Under our regularity conditions, it can indeed be proven that $\mathbb{P} (E^{\ell}_T) \to 1$ as $\alpha=\alpha_T \rightarrow 1$. We have added this consistency result as Corollary 3.1 to the paper. The proof is provided in the Supplementary Material.
+Under our regularity conditions, it can indeed be proven that $\mathbb{P} (E^{\ell}_T) \to 1$ as $\alpha=\alpha_T \rightarrow 0$. We have added this consistency result as Corollary 3.1 to the paper. The proof is provided in the Supplementary Material.
 
 
 \item \textit{Estimation of long run variance using autoregressive processes.}
@@ -174,7 +187,7 @@ Under our regularity conditions, it can indeed be proven that $\mathbb{P} (E^{\e
 %\end{itemize}
 A similar version of the authors' estimate (4.14) can be used. Rate of convergence (cf.\ Proposition 4.1) can be derived with rate $T^{-1/2}$ therein possibly replaced by a larger term of the form $T^{-c}$ with $c < 1/2$.}
 
-Many thanks for this interesting suggestion. We have generalized our procedure for estimating the long-run variance $\sigma^2$ along the lines suggested by you: Rather than considering AR($p$) processes of known finite order $p$, we consider the much more general class of AR($\infty$) processes, which nests AR processes of any finite order as a special case. More specifically, we assume the error process $\{\varepsilon_t\}$ to have the form
+Many thanks for this interesting suggestion. We have generalized our procedure to estimate the long-run variance $\sigma^2$ along the lines suggested by you: Rather than considering AR($p$) processes of known finite order $p$, we consider the much more general class of AR($\infty$) processes, which nests AR processes of any finite order as a special case. More specifically, we assume the error process $\{\varepsilon_t\}$ to have the form
 \begin{equation}\label{AR-inf}
 \varepsilon_t = \sum\limits_{j=1}^\infty a_j \varepsilon_{t-j} + \eta_t, \tag{$*$} 
 \end{equation}
@@ -193,16 +206,16 @@ Whereas $p$ is fixed in case (A), we fit AR($p$) type processes of growing order
 %
 The convergence rates of our estimators are derived in Proposition 4.1 for both cases (A) and (B). Whereas the estimators are $\sqrt{T}$-consistent in case (A), the convergence rates are a bit slower in case (B) as you have already conjectured in your comment. Another technical detail which is different in cases (A) and (B) is the following: The second-step estimator $\widehat{\boldsymbol{a}}_r$ of the AR parameters $\boldsymbol{a} = (a_1,\ldots,a_p)^\top$ depends on the tuning parameter $r$, which can be chosen as any fixed natural number in case (A). In case (B), in contrast, $r$ is required to be slightly larger than $p$, in particular, $r \ge (1+\delta)p$ for some arbitrarily small but fixed $\delta > 0$. The technical reason for this is as follows: Let $\boldsymbol{\Gamma}_r = (\gamma_r(i-j): 1 \le i,j \le p)$ with $\gamma_r(\ell) = \text{Cov}(\Delta_r \varepsilon_t,\Delta_r \varepsilon_{t-\ell})$ be the autocovariance matrix of the $r$-th differences $\Delta_r \varepsilon_t = \varepsilon_t - \varepsilon_{t-r}$. Notably, $\boldsymbol{\Gamma}_r$ is of growing dimension $p=p_T$ in case (B). To derive our theoretical results, we need to show the following:  
 \begin{itemize}[leftmargin=0.8cm]
-\item[($+$)] The eigenvalues of $\boldsymbol{\Gamma}_r$ are bounded away from zero uniformly across $p=p_T$, that is, they lie in some interval $[c,C]$ with $0 < c \le C < \infty$ independent of $p=p_T$. 
+\item[($+$)] The eigenvalues of $\boldsymbol{\Gamma}_r$ are bounded away from zero uniformly in $p=p_T$, that is, they lie in some interval $[c,C]$ with $0 < c \le C < \infty$ independent of $p=p_T$. 
 \end{itemize}
 The standard strategy to prove ($+$) is to invoke results on Toeplitz matrices (see e.g.\ Section 5.2 in \cite{GrenanderSzego1958} or Proposition 4.5.3 in \cite{BrockwellDavis1991}). However, these results yield ($+$) only if the spectral density of $\{\Delta_r \varepsilon_t\}$ is bounded away from zero and infinity. Unfortunately, this is \textit{not} the case: $\{\Delta_r \varepsilon_t\}$ is an ARMA($p^*$,$r$) process with a unit root in the MA polynomial, implying that its spectral density takes the value $0$. We thus had to prove ($+$) by a different strategy, which is given in Lemma S.7 of the Supplement. For this strategy to work, we require that $r \ge (1+\delta) p$. \newline
 %
-The revised and extended methods to estimate the AR parameters and the long-run variance of the error process $\{\varepsilon_t\}$ can be found in Section 4 of the revision. The proof of Proposition 4.1 is provided in Section S.2 of the Supplement. Please also note that we have removed Section 4.1 (which discusses long-run variance estimation for general weakly dependent processes) from the paper as requested by Referee 2. 
+The revised and extended methods to estimate the AR parameters and the long-run variance of the error process $\{\varepsilon_t\}$  can be found in Section 4 of the paper. The proof of Proposition 4.1 is provided in Section S.2 of the Supplement. Please also note that we have removed Section 4.1 (which discusses long-run variance estimation for general weakly dependent processes) from the paper as requested by Referee 2. 
 
 
 \item \textit{Real data application.}
 
-\textit{The authors analyzed the yearly mean Central England temperature data. It will be interesting to apply their approach to the global temperature data. In the paper \cite{WuWoodroofeMentz2001}, an increasing trend function is fitted. It will be important to know which period the sequence in increasing/decreasing.}
+\textit{The authors analyzed the yearly mean Central England temperature data. It will be interesting to apply their approach to the global temperature data. In the paper \cite{WuWoodroofeMentz2001}, an increasing trend function is fitted. It will be important to know in which period the sequence is increasing/decreasing.}
 
 We have added the application to global temperature data as a second empirical example. In particular, we have used exactly the same data as in \cite{WuWoodroofeMentz2001} in order to be able to compare our test results with theirs. Please see the new Section 6.2 for the details.
 
@@ -230,18 +243,20 @@ Thank you very much for the constructive and useful suggestions. In our revision
 
 \item \textit{Section 3.2: The authors recommend computing the quantiles for the independent Gaussian case by simulation. This suggestion is already in the original SiZer paper \citep{ChaudhuriMarron1999}. However in the late 1990s computing power was not sufficient to make this suggestion feasible. This led to the use of approximation such as in \cite{HannigMarron2006}. I would like to ask how does the simulation based quantile compare to the approximation in \cite{HannigMarron2006}.} 
 
-In the revised simulation study of Section 5.1, we consider a row-wise version $\mathcal{T}_{\text{RW}}$ of our multiscale test, which is the counterpart to row-wise dependent SiZer developed in \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. A definition of the row-wise test $\mathcal{T}_{\text{RW}}$ is given on the top of p.21. The quantiles of $\mathcal{T}_{\text{RW}}$ under the null are approximated by our simulation-based procedure. \newline
+Actually, we are not entirely sure how to read your question ``how does the simulation based quantile compare to the approximation in \cite{HannigMarron2006}''. We understand the question as follows: How does our simulation-based test procedure compare empirically to the approximation-based SiZer version of \cite{HannigMarron2006} and \cite{ParkHannigKang2009}? We hope this is indeed what you mean by your question. \newline
 %
-In the literature, two different procedures have been proposed to compute the quantiles of row-wise dependent SiZer under the null. \cite{Rondonotti2004} and \cite{Rondonotti2007} modified the ``independent blocks'' heuristics of \cite{ChaudhuriMarron1999} to compute the quantiles, whereas \cite{ParkHannigKang2009} developed a procedure based on extreme value theory. As the procedure of \cite{ParkHannigKang2009} gave substantially better results in our simulation exercises, we focus on this procedure throughout our simulation study, that is, we implement row-wise dependent SiZer as described in \cite{ParkHannigKang2009}. The implementation details are summarized in Section S.3 of the Supplement. \newline
+We have done the following to answer this question: In the revised simulation study of Section 5.1, we consider a row-wise version $\mathcal{T}_{\text{RW}}$ of our multiscale test, which is the counterpart to row-wise dependent SiZer developed in \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. A definition of the row-wise test $\mathcal{T}_{\text{RW}}$ is given on the top of p.21. The quantiles of $\mathcal{T}_{\text{RW}}$ under the null are approximated by our simulation-based procedure, whereas the quantiles of row-wise dependent SiZer are approximated by the method of \cite{HannigMarron2006} and \cite{ParkHannigKang2009} which is based on extreme value theory. In our simulation study, we compare the size and power properties of the row-wise version $\mathcal{T}_{\text{RW}}$ of our test and row-wise dependent SiZer. This shows how our simulation-based procedure compares to the approximation-based SiZer procedure of \cite{HannigMarron2006} and \cite{ParkHannigKang2009}. 
+
+%In the revised simulation study of Section 5.1, we consider a row-wise version $\mathcal{T}_{\text{RW}}$ of our multiscale test, which is the counterpart to row-wise dependent SiZer developed in \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. A definition of the row-wise test $\mathcal{T}_{\text{RW}}$ is given on the top of p.21. The quantiles of $\mathcal{T}_{\text{RW}}$ under the null are approximated by our simulation-based procedure. \newline
 %
-In Section 5.1, we carry out some simulation exercises to compare the row-wise version $\mathcal{T}_{\text{RW}}$ of our multiscale test with row-wise dependent SiZer. This shows how our simulation-based procedure compares to the approximation of \cite{ParkHannigKang2009} which is based on extreme value theory.
+%In the literature, two different procedures have been proposed to compute the quantiles of row-wise dependent SiZer under the null. \cite{Rondonotti2004} and \cite{Rondonotti2007} modified the ``independent blocks'' heuristics of \cite{ChaudhuriMarron1999} to compute the quantiles, whereas \cite{ParkHannigKang2009} developed a procedure based on extreme value theory. As the procedure of \cite{ParkHannigKang2009} gave substantially better results in our simulation exercises, we focus on this procedure throughout our simulation study, that is, we implement row-wise dependent SiZer as described in \cite{ParkHannigKang2009}. The implementation details are summarized in Section S.3 of the Supplement. \newline
+%
+%In Section 5.1, we carry out some simulation exercises to compare the row-wise version $\mathcal{T}_{\text{RW}}$ of our multiscale test with row-wise dependent SiZer. This shows how our simulation-based procedure compares to the approximation of \cite{ParkHannigKang2009} which is based on extreme value theory.
 
-%In the revised simulation study of Section 5.1, we consider a row-wise version $\mathcal{T}_{\text{RW}}$ of our multiscale test, which is the counterpart to row-wise dependent SiZer $\mathcal{T}_{\text{SiZer}}$ developed in \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. A definition of the row-wise test $\mathcal{T}_{\text{RW}}$ is given on the top of p.21. The quantiles of $\mathcal{T}_{\text{RW}}$ under the null are approximated by our simulation-based procedure, whereas the quantiles of $\mathcal{T}_{\text{SiZer}}$ are approximated by the method of \cite{HannigMarron2006} and \cite{ParkHannigKang2009} which is based on extreme value theory. In our simulation study, we compare the size and power properties of $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$. This gives some insights into how our simulation-based procedure compares to the approximation in \cite{HannigMarron2006} and \cite{ParkHannigKang2009}.
-
-Before moving on to your next comment, we would like to emphasize the following two points concerning our simulation-based procedure and its relation to the suggestions in the original SiZer paper \citep{ChaudhuriMarron1999}: 
+Before moving on to your next comment, we would like to emphasize the following two points on our simulation-based test procedure and its relation to the simulation/bootstrap procedures proposed in the original SiZer paper \citep{ChaudhuriMarron1999}: 
 \begin{itemize}[leftmargin=0.5cm]
 \item As already mentioned when summarizing the main differences between our multiscale approach and SiZer at the beginning of this letter, the Gaussian approximation procedure that we use for simulating the quantiles of the multiscale statistic under the null is not the same as the (empirical) bootstrap procedures proposed in \cite{ChaudhuriMarron1999, ChaudhuriMarron2000}. Both procedures can be regarded as resampling methods. However, the resampling is done in a quite different way. 
-\item It far from clear that our simulation-based procedure is theoretically valid and provides an adequate critical value such that our test has asymptotically the correct size under the null. One of the main theoretical contributions of the paper is to formally show that this is indeed the case. 
+\item It is far from obvious that our simulation-based procedure is theoretically valid and provides an adequate critical value such that our test has asymptotically the correct size under the null. One of the main theoretical contributions of our paper is to formally show that this is indeed the case. 
 \end{itemize}
 
 
@@ -260,14 +275,14 @@ We have removed the speculative statements following Proposition 4.1.
 We have removed Section 4.1 from the paper. Moreover, we have thoroughly revised Section 4 on the estimation of the long-run error variance according to the suggestions of Referee 1. Please see our reply to comment (2) of Referee 1 for the details. 
 
 
-\item \textit{Section 5.2: I understand that you are doing comparisons to SiZer out of the box. However, some of the comparison might not be quite fair. SiZer is adjusting multiplicity ”row-wise” while the proposed method is attempting a global multiple control. What would happen if your $G_T$ only focused on one scale?}
+\item \textit{Section 5.2: I understand that you are doing comparisons to SiZer out of the box. However, some of the comparison might not be quite fair. SiZer is adjusting multiplicity ”row-wise” while the proposed method is attempting a global multiple control. What would happen if your $\mathcal{G}_T$ only focused on one scale?}
 
 We have thoroughly revised the comparison study with SiZer, attempting to give a better and fairer comparison of the methods. The revised study compares the following versions of our multiscale test and SiZer: 
 \begin{itemize}[leftmargin=0.5cm,itemsep=0cm]
 
-\item our multiscale test $\mathcal{T}_{\text{MS}}$ as defined in Section 3.1 of the paper 
+\item our multiscale test $\mathcal{T}_{\text{MS}}$ as defined in Section 3 of the paper 
 \item an uncorrected version $\mathcal{T}_{\text{UC}}$ of our multiscale test without the additive correction terms $\lambda(h)$ 
-\item a row-wise version of $\mathcal{T}_{\text{RW}}$ of our multiscale test 
+\item a row-wise version $\mathcal{T}_{\text{RW}}$ of our multiscale test 
 \item the row-wise dependent SiZer $\mathcal{T}_{\text{SiZer}}$ of \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. 
 
 \end{itemize}
@@ -298,7 +313,7 @@ The simulation exercises from (b) can be found in Section 5.1.2. Those from (a) 
 %
 Concerning the simulation exercises in (b), please also note the following: Our definitions of a correct and a spurious/false finding imply that the underlying target of interest is the unknown trend function $m$. This is different from the SiZer philosophy where the target is not the curve $m$ itself but rather ``the curve viewed at different resolution levels''. Formally, the target is the family of  convolutions $m_h(u) = \int K(w) m(u+hw) dw$, that is, the family of smoothed versions $m_h$ of the curve $m$. It would of course be possible to define correct and spurious/false findings in terms of the smoothed versions $m_h$. However, our main aim is to make rigorous confidence statements about the time regions where the trend $m$ (rather than the smoothed versions $m_h$) is increasing/decreasing. Hence, for us, it is more natural to think of the trend $m$ itself as the underlying target. 
 
-Finally, many thanks for pointing us to \cite{HannigLeePark2013}. However, we have decided not to use the metrics in this paper in our simulation study for the following reason: The metrics defined in \cite{HannigLeePark2013} are designed to measure how far the SiZer maps produced by different procedures (e.g.\ by dependent SiZer and our multiscale test) are from some oracle SiZer map. The oracle SiZer map is thus regarded as the target which should be approximated as well as possible by the procedures. This oracle SiZer map is based on a noiseless version of SiZer. (Specifically, it results from applying SiZer to the noiseless data $\{ m(t/T): t=1,\ldots,T\}$ rather than the noisy data $\{ Y_{t,T}: t=1,\ldots,T\}$ and from plugging the true error variance into the SiZer confidence intervals.) Hence, it is very natural to regard the oracle SiZer map as a benchmark for the map which SiZer produces from the actual (empirical or simulated) data. 
+Finally, many thanks for pointing us to \cite{HannigLeePark2013}. However, we have decided not to use the metrics of this paper in our simulation study for the following reason: The metrics defined in \cite{HannigLeePark2013} can be used to measure how far the SiZer maps produced by different procedures (e.g.\ by dependent SiZer and our multiscale test) are from some oracle SiZer map. The oracle SiZer map is thus regarded as the target which should be approximated as well as possible by the procedures. This oracle SiZer map is based on a noiseless version of SiZer. (Specifically, it results from applying SiZer to the noiseless data $\{ m(t/T): t=1,\ldots,T\}$ rather than the noisy data $\{ Y_{t,T}: t=1,\ldots,T\}$ and from plugging the true error variance into the SiZer confidence intervals.) Hence, it is very natural to regard the oracle SiZer map as a benchmark for the map which SiZer produces from the actual (empirical or simulated) data. 
 However, it is not clear to us why the oracle SiZer map should be a meaningful benchmark for the map produced by our multiscale test. Indeed, the oracle SiZer map cannot be regarded as a map which is generated by our multiscale test in an idealized noiseless situation (simply because our test approach is based on different test statistics and confidence intervals/critical values than SiZer). Hence, as far as we can see, it is not so meaningful to use the oracle SiZer map as a target when comparing our multiscale test with SiZer. Moreover, it would be a bit unfair to use it as a target since, by construction, it is closely related in structure to the SiZer test but not to our multiscale test. 
 
 
