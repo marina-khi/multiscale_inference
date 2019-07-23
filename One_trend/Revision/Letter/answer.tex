@@ -19,7 +19,7 @@
 \usepackage{setspace}
 \usepackage{mathrsfs}
 \usepackage[official]{eurosym}
-\usepackage[left=2.8cm,right=2.8cm,bottom=2.8cm,top=2.5cm]{geometry}
+\usepackage[left=2.8cm,right=2.8cm,bottom=2.8cm,top=2.8cm]{geometry}
 
 \setcounter{secnumdepth}{4}
 \renewcommand{\baselinestretch}{1.2}
@@ -43,7 +43,7 @@
 
 
 First of all, we would like to thank the editor, the associate editor and the reviewers for their many comments and suggestions which were very helpful in improving the paper. In the revision, we have addressed all comments and have rewritten the paper accordingly. Please find our point-by-point responses below. 
-%Since the revised paper includes additional material as requested by the referees (e.g. ??), it is a bit longer than the original submission. However, we are of course happy and willing to reduce the length of the paper by shifting parts of it into the online supplement if this is needed. 
+Since the revised paper includes additional material as requested by the referees (additional simulations, a second application example, \dots), it is a bit longer than the original submission. In particular, it has grown from 34 to 37 pages in our layout. However, we are of course happy and willing to reduce the length of the paper by shifting parts of it into the online supplement if this is needed. 
 Before we reply to the specific comments of the referees, we summarize the major changes in the revision.
 \vspace{10pt}
 
@@ -51,7 +51,7 @@ Before we reply to the specific comments of the referees, we summarize the major
 \textbf{Generalization of the theoretical results.} We have extended the theoretical results as suggested by Referee 1:
 \begin{enumerate}[label=(\roman*), leftmargin=0.8cm]
 
-\item We have derived the following consistency result in addition to Proposition 3.3: Let the significance level $\alpha = \alpha_T \in (0,1)$ depend on the sample size $T$. If $\alpha_T \rightarrow 0$, then $\mathbb{P}({E}_T^{\ell}) \rightarrow 1$. 
+\item We have derived the following consistency result in addition to Proposition 3.3: Let the significance level $\alpha = \alpha_T \in (0,1)$ depend on the sample size $T$. If $\alpha_T \rightarrow 0$, then $\mathbb{P}({E}_T^{\ell}) \rightarrow 1$. This result is stated as Corollary 3.1 on p.13 of the revised paper. 
 %We provide a generalization of Proposition 3.3 which shows that $\mathbb{P}({E}_T^{\ell}) = (1 - \alpha_T) + o(1)$ for any sequence $\{\alpha_T\}$ of significance levels $\alpha_T \in (0,1)$. In particular, for $\alpha_T \rightarrow 0$, we get the consistency result that $\mathbb{P}({E}_T^{\ell}) \rightarrow 1$. 
 
 \item We have generalized our estimator of the long-run error variance. The estimation procedure is shown to be valid not only for AR($p$) processes of known finite order $p$ but for any stationary error process $\{\varepsilon_t\}$ with an AR($\infty$) representation. This greatly extends the applicability of the estimator. 
@@ -59,49 +59,54 @@ Before we reply to the specific comments of the referees, we summarize the major
 \vspace{3pt}
 
 
-\textbf{Comparison to SiZer.} As requested by the Associate Editor, we give a clear account of the main contributions and innovations of our paper relative to the SiZer approach in the revision. Please see the new Section ?? for the details. In what follows, we give a slightly rephrased and condensed version of the new Section ??. 
+\textbf{Comparison to SiZer.} As requested by the Associate Editor, we give a clear account of the main contributions and innovations of our paper relative to the SiZer approach in the revision. Please see the new Section 3.4 for the details. In what follows, we give a slightly rephrased and condensed version of the new Section 3.4. 
 
 
 Informally speaking, both our approach and SiZer for dependent data (dependent SiZer for short) are methods to test for local increases/decreases of a nonparametric trend function $m$. The formal problem is to test the hypothesis
 \[ H_0(u,h): \text{The trend } m \text{ is constant on the time interval } [u-h,u+h] \]
-simultaneously for a large number of different time intervals $[u-h,u+h]$, in particular, for all intervals with $u \in I$ and $h \in H$, where $I$ is the set of locations and $H$ the set of bandwidths or scales $H$ under consideration. 
+simultaneously for a large number of different time intervals $[u-h,u+h]$, in particular, for all intervals with $u \in I_T$ and $h \in H_T$, where $I_T$ is the set of locations and $H_T$ the set of bandwidths or scales $h$ under consideration. 
 
 
-Let $s_T(u,h)$ be the SiZer statistic to test $H_0(u,h)$, which corresponds to the statistic $\widehat{\psi}_T(u,h)$ in our approach and which is properly defined in Section ??. There are two versions of dependent SiZer: 
+Let $\widehat{s}_T(u,h)$ be the SiZer statistic to test $H_0(u,h)$, which corresponds to the statistic $\widehat{\psi}_T(u,h)$ in our approach and which is properly defined in Section 3.4. There are two versions of dependent SiZer: 
 \begin{enumerate}[label=(\alph*), leftmargin=0.8cm]
 
-\item The global version aggegrates the individual statistics $s_T(u,h)$ into the overall statistic $S_T = \max_{h \in H} S_T(h)$, where $S_T(h) = \max_{u \in I} |s_T(u,h)|$. The statistic $S_T$ is the counterpart to the multiscale statistic $\widehat{\Psi}_T$ in our approach. 
+\item The global version aggegrates the individual statistics $\widehat{s}_T(u,h)$ into the overall statistic $\widehat{S}_T = \max_{h \in H_T} \widehat{S}_T(h)$, where $\widehat{S}_T(h) = \max_{u \in I_T} |\widehat{s}_T(u,h)|$. The statistic $\widehat{S}_T$ is the counterpart to the multiscale statistic $\widehat{\Psi}_T$ in our approach. 
 
-\item The row-wise SiZer version considers each scale $h \in H$ separately. In particular, for each bandwidth $h \in H$, a test is carried out based on the statistic $S_T(h)$. 
+\item The row-wise SiZer version considers each scale $h \in H_T$ separately. In particular, for each bandwidth $h \in H_T$, a test is carried out based on the statistic $\widehat{S}_T(h)$. 
 %A row-wise analogue of our approach would be obtained by carrying out a test for each scale $h \in H$ separately based on the statistic $\widehat{\Psi}_T(h) = \max_{u \in I} |\widehat{\psi}_T(u,h)/\widehat{\sigma}|$. (Note that we can drop the correction term $\lambda(h)$ in this case as it is a fixed constant if only a single bandwidth $h$ is taken into account.)
 
 \end{enumerate}
-In practice, SiZer is commonly implemented in its row-wise form. The main reason is that it has more power than the global version by construction. However, this gain of power comes at a cost: Row-wise SiZer carries out a test \textit{separately} for each scale $h \in H$, thus ignoring the simultaneous test problem across scales $h$. Hence, it is not a rigorous level-$\alpha$-test of the overall null hypothesis $H_0$. For this reason, we focus on global SiZer in what follows. 
+In practice, SiZer is commonly implemented in its row-wise form. The main reason is that it has more power than the global version by construction. However, this gain of power comes at a cost: Row-wise SiZer carries out a test \textit{separately} for each scale $h \in H_T$, thus ignoring the simultaneous test problem across scales $h$. Hence, it is not a rigorous level-$\alpha$-test of the overall null hypothesis $H_0$. For this reason, we focus on global SiZer in what follows. 
 
 
 Even though related, our methods and theory are markedly different from those of the SiZer approach:
 \begin{enumerate}[label=(\roman*), leftmargin=0.8cm]
 
-\item Theory for SiZer is derived under the assumption that the set of bandwidths $H$ is a compact subset of $(0,\infty)$. As already pointed out in \cite{ChaudhuriMarron2000}, this is a quite substantial/severe restriction: Only bandwidths $h$ are taken into account that remain bounded away from zero as the sample size $T$ grows. Bandwidths $h$ that converge to zero as $T$ increases are excluded.  As \cite{ChaudhuriMarron2000} put it (on p.420):
+\item Theory for SiZer is derived under the following assumption on the set of bandwidths $H_T$: It holds that $H_T \subseteq H$ for all $T$, where $H$ is a compact subset of $(0,\infty)$. As already pointed out in \cite{ChaudhuriMarron2000}, this is a quite substantial/severe restriction: Only bandwidths $h$ are taken into account that remain bounded away from zero as the sample size $T$ grows. Bandwidths $h$ that converge to zero as $T$ increases are excluded.  As \cite{ChaudhuriMarron2000} put it (on p.420):
 \vspace{0.15cm}
 
-\begin{spacing}{1.0}
+\begin{spacing}{1.1}
 {\small \textit{Note that all the weak convergence results in this section have been established under the assumption that both $H$ and $I$ are fixed compact subintervals of $(0,\infty)$ and $(-\infty,\infty)$ respectively. Compactness of the set $H \times I$ enables us to exploit standard results on weak convergence of a sequence of probability measures on a space of continuous functions defined on a common compact metric space. However, conventional asymptotics for nonparametric curve estimates allows the smoothing parameter $h$ to shrink with growing sample size. There frequently one assumes that $h_n$ is of the order $n^{-\gamma}$ for some appropriate choice of $0 < \gamma < 1$ so that the estimate $\hat{f}_{h_n}(x)$ converges to the ``true function'' $f(x)$ at an ``optimal rate''. This makes one wonder about the asymptotic behaviour of the empirical scale space surface when $h$ varies in $H_n = [a n^{-\gamma},b]$, where $a,b > 0$ are fixed constants. Extension of our weak convergence results along that direction will be quite interesting, and we leave it as a challenging open problem here.} }
 \end{spacing} 
 \vspace{0.2cm}
 
-The theory of our paper allows to deal with this problem. In particular, it allows to simultaneously consider scales $h$ that remain bounded away from zero and scales $h = h_T$ that converge to zero at various different rates $T^{-\gamma}$. To achieve this, we come up with a proof strategy which is very different from that in the SiZer literature:  As proven in \cite{ChaudhuriMarron2000} for the i.i.d.\ case and in \cite{ParkHannigKang2009} for the dependent data case, $S_T$ weakly converges to some limit process $S$ under the overall null hypothesis $H_0$. This is the central technical result on which the theoretical properties of SiZer are based. In contrast to this, our proof strategy does not even require the statistic $\widehat{\Psi}_T$ to have a weak limit and is thus not restricted by the limitations of classic weak convergence theory. 
+The theory of our paper allows to deal with this problem. In particular, it allows to simultaneously consider scales $h$ that remain bounded away from zero and scales $h = h_T$ that converge to zero at various different rates $T^{-\gamma}$. To achieve this, we come up with a proof strategy which is very different from that in the SiZer literature:  As proven in \cite{ChaudhuriMarron2000} for the i.i.d.\ case and in \cite{ParkHannigKang2009} for the dependent data case, $\widehat{S}_T$ weakly converges to some limit process $S$ under the overall null hypothesis $H_0$. This is the central technical result on which the theoretical properties of SiZer are based. In contrast to this, our proof strategy does not even require the statistic $\widehat{\Psi}_T$ to have a weak limit and is thus not restricted by the limitations of classic weak convergence theory. 
 
-\item There are different ways to combine the test statistics $S_T(h) = \max_{u \in I} |s_T(u,h)|$ for different scales $h \in H$. One way is to take their maximum, which leads to the SiZer statistic $S_T = \max_{h \in H} S_T(h)$. We could proceed analogously and consider the multiscale statistic $\widehat{\Psi}_{T,\text{uncorrected}} = \max_{h \in H} \widehat{\Psi}_T(h) = \max_{(u,h) \in I \times H} |\widehat{\psi}_T(u,h)/\widehat{\sigma}|$. However, as argued in \cite{DuembgenSpokoiny2001} and as discussed in Section ?? of our paper, this aggregation scheme is not optimal when the set $H = H_T$ contains scales $h$ of many different rates. Following the lead of \cite{DuembgenSpokoiny2001}, we consider the test statistic $\widehat{\Psi}_T = \max_{(u,h) \in I \times H} \{ |\widehat{\psi}_T(u,h)/\widehat{\sigma}| - \lambda(h) \}$ with the additive correction terms $\lambda(h)$. Hence, even though related, our multiscale test statistic $\widehat{\Psi}_T$ differs from the SiZer statistic $S_T$ in important ways. 
+\item There are different ways to combine the test statistics $\widehat{S}_T(h) = \max_{u \in I} |\widehat{s}_T(u,h)|$ for different scales $h \in H_T$. One way is to take their maximum, which leads to the SiZer statistic $\widehat{S}_T = \max_{h \in H_T} \widehat{S}_T(h)$. We could proceed analogously and consider the multiscale statistic $\widehat{\Psi}_{T,\text{uncorrected}} = \max_{h \in H_T} \widehat{\Psi}_T(h) = \max_{(u,h) \in I \times H} |\widehat{\psi}_T(u,h)/\widehat{\sigma}|$. However, as argued in \cite{DuembgenSpokoiny2001} and as discussed in Section 3.1 of our paper, this aggregation scheme is not optimal when the set $H_T$ contains scales $h$ of many different rates. Following the lead of \cite{DuembgenSpokoiny2001}, we consider the test statistic $\widehat{\Psi}_T = \max_{(u,h) \in I_T \times H_T} \{ |\widehat{\psi}_T(u,h)/\widehat{\sigma}| - \lambda(h) \}$ with the additive correction terms $\lambda(h)$. Hence, even though related, our multiscale test statistic $\widehat{\Psi}_T$ differs from the SiZer statistic $\widehat{S}_T$ in important ways. 
 
-\item The main complication in carrying out both our multiscale test and SiZer is to determine the critical values, that is, the quantiles of the test statistics $\widehat{\Psi}_T$ and $S_T$ under $H_0$. In order to approximate the quantiles, we proceed quite differently than in the SiZer literature. The quantiles of the SiZer statistic $S_T$ can be approximated by those of the weak limit process $S$. Usually, however, the quantiles of $S$ cannot be determined analytically but have to be approximated themselves (e.g.\ by the bootstrap procedures of \cite{ChaudhuriMarron1999, ChaudhuriMarron2000}). Alternatively, the quantiles of $S_T$ can be approximated by procedures based on extreme value theory (as proposed in \cite{HannigMarron2006} and \cite{ParkHannigKang2009}). In our approach, the quantiles of $\widehat{\Psi}_T$ under $H_0$ are approximated by those of a suitably constructed Gaussian analogue of $\widehat{\Psi}_T$. It is far from obvious that this Gaussian approximation is valid when the data are dependent. To see this, deep strong approximation theory for dependent data (as derived in \cite{BerkesLiuWu2014}) is needed. It is important to note that our Gaussian approximation procedure is not the same as the bootstrap procedures proposed in \cite{ChaudhuriMarron1999, ChaudhuriMarron2000}. Both procedures can of course be regarded as resampling methods. However, the resampling is done in a quite different way in our case.
+\item The main complication in carrying out both our multiscale test and SiZer is to determine the critical values, that is, the quantiles of the test statistics $\widehat{\Psi}_T$ and $\widehat{S}_T$ under $H_0$. In order to approximate the quantiles, we proceed quite differently than in the SiZer literature. The quantiles of the SiZer statistic $\widehat{S}_T$ can be approximated by those of the weak limit process $S$. Usually, however, the quantiles of $S$ cannot be determined analytically but have to be approximated themselves (e.g.\ by the bootstrap procedures of \cite{ChaudhuriMarron1999, ChaudhuriMarron2000}). Alternatively, the quantiles of $\widehat{S}_T$ can be approximated by procedures based on extreme value theory (as proposed in \cite{HannigMarron2006} and \cite{ParkHannigKang2009}). In our approach, the quantiles of $\widehat{\Psi}_T$ under $H_0$ are approximated by those of a suitably constructed Gaussian analogue of $\widehat{\Psi}_T$. It is far from obvious that this Gaussian approximation is valid when the data are dependent. To see this, deep strong approximation theory for dependent data (as derived in \cite{BerkesLiuWu2014}) is needed. It is important to note that our Gaussian approximation procedure is not the same as the bootstrap procedures proposed in \cite{ChaudhuriMarron1999, ChaudhuriMarron2000}. Both procedures can of course be regarded as resampling methods. However, the resampling is done in a quite different way in our case.
 
 \end{enumerate}
 We hope the above points make clear that the methodological and theoretical contributions of our paper are quite substantial relative to the SiZer methodology. 
 \vspace{10pt}
 
 
+\newpage
 \textbf{Simulations and application examples.} We have thoroughly revised the simulation study in Section 5. In order to take into account the many suggestions of Referees 1 and 2, we have completely re-designed the size and power simulations for our multiscale test (formerly Section 5.1) and the comparison with SiZer (formerly Section 5.2), which are combined in the new Section 5.1. Among other things, we consider different trend signals for our power simulations as suggested by Referee 2 and AR error terms with strong autocorrelation (AR($1$) errors with parameter $\pm 0.9$) as suggested by Referee 1. Note that we have removed the simulation setup with AR($2$) errors which mimics the situation in the application example in order to keep the simulation study to a reasonable length. Finally, we have added a second application example to global temperature data as requested by Referee 1. 
+
+
+The revised R-code to run the simulation exercises and the application examples has been submitted as part of the revision. When revising the code, we found a minor mistake in the computation of the long-run variance estimator $\widehat{\sigma}^2$. This mistake, however, only concerned the case of AR($p$) errors with $p > 1$, that is, it only concerned the application example to the Central England temperature record where AR($p$) errors with $p=2$ are used. The revised application example can be found in the new Section 6.1. As can be seen, the estimation results are qualitatively the same as before. Indeed, the corrected estimate $\widehat{\sigma}^2$ is quite similar to the old one. In particular, we have $\widehat{\sigma}^2 = 0.737$ compared to the old estimate $\widehat{\sigma}^2 = 0.749$. The R-code is accompanied by a README file which explains the main structure of the code and how to run it.  
+
 
 
 %Old version: 
@@ -150,18 +155,18 @@ We hope the above points make clear that the methodological and theoretical cont
 Thank you very much for the constructive and helpful comments. In our revision, we have addressed all of them. Please see our replies to your comments below.
 
 
-\begin{enumerate}[label=(\arabic*),leftmargin=0.8cm]
+\begin{enumerate}[label=(\arabic*),leftmargin=0.7cm]
 
 \item \textit{A consistency result of Proposition 3.3.}
 
 \textit{I believe that the following type of result can be obtained: $\mathbb{P} (E^{\ell}_T) \to 1$. Theorem 3.1 is for testing purpose. In certain application one might be interested in such consistency result. Basically one needs to study the behavior of $q_T(\alpha)$ when $\alpha \to 0$.}
 
-Under our regularity conditions, it can indeed be proven that $\mathbb{P} (E^{\ell}_T) \to 1$ as $\alpha=\alpha_T \rightarrow 1$. We have added this consistency result as Corollary ?? to the paper. The proof is provided in the Supplementary Material.
+Under our regularity conditions, it can indeed be proven that $\mathbb{P} (E^{\ell}_T) \to 1$ as $\alpha=\alpha_T \rightarrow 1$. We have added this consistency result as Corollary 3.1 to the paper. The proof is provided in the Supplementary Material.
 
 
 \item \textit{Estimation of long run variance using autoregressive processes.}
 
-\textit{The authors considered estimating $\sigma^2$ using AR processes. A limitation is that the order $p$ is fixed and finite. It appears that the latter limitation can be relaxed. For a stationary process $\varepsilon_t$ (not necessarily linear), one can fit an AR process with large $p$}
+\textit{The authors considered estimating $\sigma^2$ using AR processes. A limitation is that the order $p$ is fixed and finite. It appears that the latter limitation can be relaxed. For a stationary process $\varepsilon_t$ (not necessarily linear), one can fit an AR process with large $p$,}
 \[ \varepsilon_t = \sum_{j=1}^p a_j \varepsilon_{t-j} + \eta_t, \]
 \textit{properties of fitted $\widehat{a}_1, \ldots, \widehat{a}_p$ can be obtained from the results in the following papers: \cite{WuPourahmadi2009} and \cite{XiaoWu2012}.
 %\begin{itemize}
@@ -170,25 +175,49 @@ Under our regularity conditions, it can indeed be proven that $\mathbb{P} (E^{\e
 %\end{itemize}
 A similar version of the authors' estimate (4.14) can be used. Rate of convergence (cf.\ Proposition 4.1) can be derived with rate $T^{-1/2}$ therein possibly replaced by a larger term of the form $T^{-c}$ with $c < 1/2$.}
 
-Many thanks for this interesting suggestion. We have generalized our procedure for estimating the long-run variance $\sigma^2$ along the lines suggested by you: Rather than considering AR($p$) processes of known finite order $p$, we consider the much more general case of AR($\infty$) processes. We thus assume the error process $\{\varepsilon_t\}$ to have the form
+Many thanks for this interesting suggestion. We have generalized our procedure for estimating the long-run variance $\sigma^2$ along the lines suggested by you: Rather than considering AR($p$) processes of known finite order $p$, we consider the much more general class of AR($\infty$) processes, which nests AR processes of any finite order as a special case. More specifically, we assume the error process $\{\varepsilon_t\}$ to have the form
 \begin{equation}\label{AR-inf}
 \varepsilon_t = \sum\limits_{j=1}^\infty a_j \varepsilon_{t-j} + \eta_t, \tag{$*$} 
 \end{equation}
-where $a_1,a_2,a_3,\ldots$ are unknown parameters and $\eta_t$ are i.i.d.\ innovations (which fulfill certain regularity conditions as detailed in the revised Section 4). Notably, the model \eqref{AR-inf} for the error terms nests AR($p^*$) processes of any finite (unknown) order $p^*$ as a special case: If $a_{p^*} = 0$ and $a_j = 0$ for all $j > p^*$, then $\{ \varepsilon_t \}$ is an AR process of order $p^*$. 
+where $a_1,a_2,a_3,\ldots$ are unknown parameters and $\eta_t$ are i.i.d.\ innovations (which fulfill certain regularity conditions as detailed in the revised Section 4). 
+%Notably, the error model ($*$) nests AR processes of any finite (unknown) order as a special case. 
+As far as we can see, this is the most general class of error processes to which we can extend our methods: For our theory to work, we require the process $\{\varepsilon_t\}$ to have at least an AR($\infty$) representation because otherwise we do not get suitable Yule-Walker equations that we can exploit. 
 
-In order to generalize our theory to the case that $\{\varepsilon_t\}$ has an AR($\infty$) representation of the form \eqref{AR-inf}, we proceed as follows: We fit AR($p$) processes to the data whose order $p=p_T$ grows with the sample size $T$. We thus approximate the AR($\infty$) process $\{\varepsilon_t\}$ by a sequence of AR($p$) processes whose order $p=p_T$ goes to infinity. This is somewhat different but related to the banding techniques developed in \cite{WuPourahmadi2009} and \cite{XiaoWu2012}. As you mention yourself in your comment, the resulting estimators are not $\sqrt{T}$-consistent any more. Their convergence rate is somewhat slower than $1/\sqrt{T}$, in particular, it is of the form $p^c/\sqrt{T}$ with some $c > 0$. Please see the revised Proposition 4.1 and its proof in the Supplementary Material for the details. 
+
+In the paper, we reformulate \eqref{AR-inf} as follows: We assume that $\{\varepsilon_t\}$ has the form
+\begin{equation}\label{AR-pstar}
+\varepsilon_t = \sum\limits_{j=1}^{p^*} a_j \varepsilon_{t-j} + \eta_t, \tag{$**$} 
+\end{equation}
+where $p^* \in \mathbb{N} \cup \{\infty\}$ is the true (unknown) AR order of $\{\varepsilon_t\}$ which may be finite or infinite. In order to generalize our theory to the case that $\{\varepsilon_t\}$ has an AR($p^*$) representation of the form \eqref{AR-pstar}, we fit AR($p$) type models to the data, where we distinguish between the following two cases: 
+\begin{enumerate}[label=(\Alph*),leftmargin=0.8cm]
+\item We do not know the precise AR order $p^*$ but we know an upper bound $p \in \mathbb{N}$ with $p \ge p^*$. 
+\item We neither know $p^*$ nor an upper bound on it. In this case, we let $p=p_T \rightarrow \infty$ as $T \rightarrow \infty$. 
+\end{enumerate}
+Whereas $p$ is fixed in case (A), we fit AR($p$) type processes of growing order $p = p_T$ to the data in case (B). We thus approximate the AR($p^*$) process $\{ \varepsilon_t \}$ by a sequence of AR($p$) processes whose order $p = p_T$ goes to infinity. This approach is somewhat simpler but related to the banding techniques developed in \cite{WuPourahmadi2009} and \cite{XiaoWu2012}. \newline
+%
+%
+The convergence rates of our estimators are derived in Proposition 4.1 for both cases (A) and (B). Whereas the estimators are $\sqrt{T}$-consistent in case (A), the convergence rates are a bit slower in case (B) as you have already conjectured in your comment. Another technical detail which is different in cases (A) and (B) is the following: The second-step estimator $\widehat{\boldsymbol{a}}_r$ of the AR parameters $\boldsymbol{a} = (a_1,\ldots,a_p)^\top$ depends on the tuning parameter $r$, which can be chosen as any fixed natural number in case (A). In case (B), in contrast, $r$ is required to be slightly larger than $p$, in particular, $r \ge (1+\delta)p$ for some arbitrarily small but fixed $\delta > 0$. The technical reason for this is as follows: Let $\boldsymbol{\Gamma}_r = (\gamma_r(i-j): 1 \le i,j \le p)$ with $\gamma_r(\ell) = \text{Cov}(\Delta_r \varepsilon_t,\Delta_r \varepsilon_{t-\ell})$ be the autocovariance matrix of the $r$-th differences $\Delta_r \varepsilon_t = \varepsilon_t - \varepsilon_{t-r}$. Notably, $\boldsymbol{\Gamma}_r$ is of growing dimension $p=p_T$ in case (B). To derive our theoretical results, we need to show the following:  
+\begin{itemize}[leftmargin=0.8cm]
+\item[($+$)] The eigenvalues of $\boldsymbol{\Gamma}_r$ are bounded away from zero uniformly across $p=p_T$, that is, they lie in some interval $[c,C]$ with $0 < c \le C < \infty$ independent of $p=p_T$. 
+\end{itemize}
+The standard strategy to prove ($+$) is to invoke results on Toeplitz matrices (see e.g.\ Section 5.2 in \cite{GrenanderSzego1958} or Proposition 4.5.3 in \cite{BrockwellDavis1991}). However, these results yield ($+$) only if the spectral density of $\{\Delta_r \varepsilon_t\}$ is bounded away from zero and infinity. Unfortunately, this is \textit{not} the case: $\{\Delta_r \varepsilon_t\}$ is an ARMA($p^*$,$r$) process with a unit root in the MA polynomial, implying that its spectral density takes the value $0$. We thus had to prove ($+$) by a different strategy, which is given in Lemma S.7 of the Supplement. For this strategy to work, we require that $r \ge (1+\delta) p$. \newline
+%
+%
+The revised and extended methods to estimate the AR parameters and the long-run variance of the error process $\{\varepsilon_t\}$ can be found in Section 4 of the revision. The proof of Proposition 4.1 is provided in Section S.2 of the Supplement. Please also note that we have removed Section 4.1 (which discusses long-run variance estimation for general weakly dependent processes) from the paper as requested by Referee 2. 
 
 
 \item \textit{Real data application.}
 
 \textit{The authors analyzed the yearly mean Central England temperature data. It will be interesting to apply their approach to the global temperature data. In the paper \cite{WuWoodroofeMentz2001}, an increasing trend function is fitted. It will be important to know which period the sequence in increasing/decreasing.}
 
+We have added the application to global temperature data as a second empirical example. In particular, we have used exactly the same data as in \cite{WuWoodroofeMentz2001} in order to be able to compare our test results with theirs. Please see the new Section 6.2 for the details.
 
-\item \textit{Simulation Study.}
+
+\item \textit{Simulation study.}
 
 \textit{In the simulation study, the authors considered AR(1) processes with relatively weaker dependence: $a_1 \in \{-0.5, -0.25, 0.25, 0.5\}$. One should consider the \linebreak stronger positive/negative dependence case with $a = \pm 0.9$ (say). How does the strength of dependence affect the performance of the procedure?}
 
-We have added the AR($1$) case with $a = \pm 0.9$ to our revised simulation study in Section ??. In particular, we have carried out additional size simulations for the case that $a = \pm 0.9$. The results are reported in Table 2 on p.?? and can be summarized as follows: For the negative parameter $a = -0.9$, the size of the multiscale test is close to the nominal target $\alpha$ for sample sizes $T \ge 1000$. However, for the smaller sample sizes $T=250$ and $T=500$ there are substantial size distortions. In the case of $a = 0.9$, a similar picture arises, however, with somewhat smaller size distortions. Hence, when the error terms are strongly (positively or negatively) autocorrelated, our test method has good size properties only for sufficiently large sample sizes. In our opinion, this is not so surprising: Statistical inference in the presence of strongly autocorrelated data is a very difficult problem in general and satisfying results can only be expected for sufficiently large sample sizes.
+We have added the AR($1$) case with $a = \pm 0.9$ to our revised simulation study in Section 5.1. In particular, we have carried out additional size simulations for the case that $a = \pm 0.9$. The results are reported in Table 2 on p.22 and can be summarized as follows: The size of our multiscale test gives a decent approximation to the nominal target $\alpha$ for sample sizes $T \ge 1000$. However, for the smaller sample sizes $T=250$ and $T=500$, there are substantial size distortions. Hence, when the error terms are strongly autocorrelated, our test has good size properties only for sufficiently large sample sizes. This is indeed what we have expected: Statistical inference in the presence of strongly autocorrelated data is a hard problem in general and satisfactory results can only be expected for reasonably large sample sizes.
 
 \end{enumerate}
 
@@ -203,22 +232,30 @@ We have added the AR($1$) case with $a = \pm 0.9$ to our revised simulation stud
 Thank you very much for the constructive and useful suggestions. In our revision, we have addressed all of them. In particular, we have thoroughly revised the simulation study which compares our multiscale test with SiZer according to your suggestions. Here are our point-by-point responses to your comments. 
 
 
-\begin{enumerate}[label=(\arabic*),leftmargin=0.8cm]
+\begin{enumerate}[label=(\arabic*),leftmargin=0.7cm]
 
 \item \textit{Section 3.2: The authors recommend computing the quantiles for the independent Gaussian case by simulation. This suggestion is already in the original SiZer paper \citep{ChaudhuriMarron1999}. However in the late 1990s computing power was not sufficient to make this suggestion feasible. This led to the use of approximation such as in \cite{HannigMarron2006}. I would like to ask how does the simulation based quantile compare to the approximation in \cite{HannigMarron2006}.} 
 
-In the revised simulation study of Section ??, we consider a row-wise version $\mathcal{T}_{\text{RW}}$ of our multiscale test, which is the direct counterpart to the row-wise dependent SiZer method $\mathcal{T}_{\text{SiZer}}$ developed in \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. The quantiles of $\mathcal{T}_{\text{RW}}$ under the null are approximated by our simulation-based procedure, whereas the quantiles of $\mathcal{T}_{\text{SiZer}}$ are approximated by the method of \cite{HannigMarron2006} and \cite{ParkHannigKang2009} which is based on extreme value theory. In our simulation study, we compare the size and power properties of $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$. This shows how our simulation-based procedure compares to the approximation in \cite{HannigMarron2006} and \cite{ParkHannigKang2009}.
+In the revised simulation study of Section 5.1, we consider a row-wise version $\mathcal{T}_{\text{RW}}$ of our multiscale test, which is the counterpart to row-wise dependent SiZer developed in \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. A definition of the row-wise test $\mathcal{T}_{\text{RW}}$ is given on the top of p.21. The quantiles of $\mathcal{T}_{\text{RW}}$ under the null are approximated by our simulation-based procedure. \newline
+%
+%
+In the literature, two different procedures have been proposed to compute the quantiles of row-wise dependent SiZer under the null. \cite{Rondonotti2004} and \cite{Rondonotti2007} modified the ``independent blocks'' heuristics of \cite{ChaudhuriMarron1999} to compute the quantiles, whereas \cite{ParkHannigKang2009} developed a procedure based on extreme value theory. As the procedure of \cite{ParkHannigKang2009} gave substantially better results in our simulation exercises, we focus on this procedure throughout our simulation study, that is, we implement row-wise dependent SiZer as described in \cite{ParkHannigKang2009}. The implementation details are summarized in Section S.3 of the Supplement. \newline
+%
+%
+In Section 5.1, we carry out some simulation exercises to compare the row-wise version $\mathcal{T}_{\text{RW}}$ of our multiscale test with row-wise dependent SiZer. This shows how our simulation-based procedure compares to the approximation of \cite{ParkHannigKang2009} which is based on extreme value theory.
 
-At this point, we would like to add two remarks on our simulation-based procedure to compute the quantiles of the multiscale test under the null: 
+%In the revised simulation study of Section 5.1, we consider a row-wise version $\mathcal{T}_{\text{RW}}$ of our multiscale test, which is the counterpart to row-wise dependent SiZer $\mathcal{T}_{\text{SiZer}}$ developed in \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. A definition of the row-wise test $\mathcal{T}_{\text{RW}}$ is given on the top of p.21. The quantiles of $\mathcal{T}_{\text{RW}}$ under the null are approximated by our simulation-based procedure, whereas the quantiles of $\mathcal{T}_{\text{SiZer}}$ are approximated by the method of \cite{HannigMarron2006} and \cite{ParkHannigKang2009} which is based on extreme value theory. In our simulation study, we compare the size and power properties of $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$. This gives some insights into how our simulation-based procedure compares to the approximation in \cite{HannigMarron2006} and \cite{ParkHannigKang2009}.
+
+Before moving on to your next comment, we would like to emphasize the following two points concerning our simulation-based procedure and its relation to the suggestions in the original SiZer paper \citep{ChaudhuriMarron1999}: 
 \begin{itemize}[leftmargin=0.5cm]
-\item As already mentioned when summarizing the main differences between our multiscale approach and SiZer at the beginning of this letter, the Gaussian approximation procedure that we use for simulating the quantiles of the multiscale statistic under the null is not the same as the bootstrap procedures proposed in \cite{ChaudhuriMarron1999, ChaudhuriMarron2000}. Both procedures are of course resampling methods. However,the resampling is done in a quite different way. 
-\item It far from clear that our simulation-based procedure is theoretically valid and provides an adequate critical value such that our test has asymptotically the correct size under the null. One of the main theoretical contributions of the paper is that this is indeed the case. 
+\item As already mentioned when summarizing the main differences between our multiscale approach and SiZer at the beginning of this letter, the Gaussian approximation procedure that we use for simulating the quantiles of the multiscale statistic under the null is not the same as the (empirical) bootstrap procedures proposed in \cite{ChaudhuriMarron1999, ChaudhuriMarron2000}. Both procedures can be regarded as resampling methods. However, the resampling is done in a quite different way. 
+\item It far from clear that our simulation-based procedure is theoretically valid and provides an adequate critical value such that our test has asymptotically the correct size under the null. One of the main theoretical contributions of the paper is to formally show that this is indeed the case. 
 \end{itemize}
 
 
 \item \textit{Page 12, line 15: What is random here? After a spending some time I believe that it is the $\Pi_T$ but on first reading I thought $E_T$s are non-random. Please explain these various objects better.}
 
-We have rewritten the text concerning the objects $\Pi_T^\ell$ and $E_T^\ell$ for $\ell \in \{\pm,+,-\}$ as suggested. We have in particular attempted to explain these objects in a clearer way and to clarify the question what is random here. (The collection of intervals $\Pi_T^\ell$ is indeed random.) Please see p.?? for the details. We hope the new exposition of the material makes things clearer.  
+We have rewritten the text concerning the objects $\Pi_T^\ell$ and $E_T^\ell$ for $\ell \in \{\pm,+,-\}$ as suggested. We have in particular attempted to explain these objects in a clearer way and to clarify the question what is random here. (The collection of intervals $\Pi_T^\ell$ is indeed random.) Please see p.11/12 for the details. We hope the new exposition of the material makes things clearer.  
 
 
 \item \textit{Page 18, line 52: Please remove the speculative statements about what can be shown unless you actually show it in this paper.}
@@ -233,16 +270,16 @@ We have removed Section 4.1 from the paper. Moreover, we have thoroughly revised
 
 \item \textit{Section 5.2: I understand that you are doing comparisons to SiZer out of the box. However, some of the comparison might not be quite fair. SiZer is adjusting multiplicity ”row-wise” while the proposed method is attempting a global multiple control. What would happen if your $G_T$ only focused on one scale?}
 
-We have thoroughly revised the comparison study with SiZer, attempting to give a better and fairer picture of the methods. The revised study compares the following versions of our multiscale test and SiZer: 
+We have thoroughly revised the comparison study with SiZer, attempting to give a better and fairer comparison of the methods. The revised study compares the following versions of our multiscale test and SiZer: 
 \begin{itemize}[leftmargin=0.5cm,itemsep=0cm]
 
-\item our multiscale test $\mathcal{T}_{\text{MS}}$ as defined in Section ?? of the paper 
+\item our multiscale test $\mathcal{T}_{\text{MS}}$ as defined in Section 3.1 of the paper 
 \item an uncorrected version $\mathcal{T}_{\text{UC}}$ of our multiscale test without the additive correction terms $\lambda(h)$ 
 \item a row-wise version of $\mathcal{T}_{\text{RW}}$ of our multiscale test 
 \item the row-wise dependent SiZer $\mathcal{T}_{\text{SiZer}}$ of \cite{Rondonotti2004}, \cite{Rondonotti2007} and \cite{ParkHannigKang2009}. 
 
 \end{itemize}
-We have analyzed the size and power properties of the four methods (not only the global but also the row-wise size and power properties to be fairer with regard to SiZer). As already mentioned in our answer to your comment (1), the row-wise version $\mathcal{T}_{\text{RW}}$ of our multiscale test focuses on one scale at a time and is thus the direct counterpart to $\mathcal{T}_{\text{SiZer}}$. Please see Section ?? for the full simulation study, which in particular shows how $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ compare to each other. We hope you find the revised study more accurate.
+A brief description of the four test methods $\mathcal{T}_{\text{MS}}$, $\mathcal{T}_{\text{UC}}$, $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ is given at the beginning of the simulation section on p.20/21. We have analyzed the size and power properties of the four methods, in particular, not only the global but also the row-wise size and power properties to be fairer with regard to SiZer. As already mentioned in our answer to your comment (1), the row-wise version $\mathcal{T}_{\text{RW}}$ of our multiscale test focuses on one scale at a time and is thus the direct counterpart to $\mathcal{T}_{\text{SiZer}}$. Please see Section 5.1 for the full simulation study, which in particular shows how $\mathcal{T}_{\text{RW}}$ and $\mathcal{T}_{\text{SiZer}}$ compare to each other. We hope you find the revised study more accurate.
 
 
 \item \textit{Page 25, line 1-26: I do not quite understand this figure. Would it be possible to rather reproduce the colorful SiZer figures that show the results of the test at various scales and locations? Also you should use several different signals. I believe that a single relatively large bump is not sufficient test bed. A good collection of signals can be found in \cite{DonohoJohnstone1995}. Also, would \cite{HannigLeePark2013} be helpful in comparing the results?}
@@ -257,16 +294,17 @@ We have removed the figure from the paper. In order to compare the power propert
 \item a correct finding: the test finds an increase on some interval $I_{u,h} = [u-h,u+h]$ which intersects with $I^+$ (that is, the test finds an increase on some interval $I_{u,h}$ where $m$ is indeed increasing).
 \item a spurious/false finding: the test finds an increase on some interval $I_{u,h} = [u-h,u+h]$ which does not intersect with $I^+$ (that is, the test finds an increase on some interval $I_{u,h}$ where $m$ is not increasing).
 \end{itemize}
-We now proceed as follows: We simulate $S=1000$ data samples. For both our approach and SiZer, we compute 
+For both our approach and SiZer, we define the following concepts: 
 \begin{itemize}[leftmargin=0.5cm,itemsep=0cm]
 \item global power: the number of simulations where there is at least one correct finding divided by the total number of simulations
 \item spurious global power: the number of simulations where there is at at least one spurious/false finding divided by the total number of simulations.
 \end{itemize}
-In addition, we compute power and spurious power row-wise, that is, for each scale $h$ separately. 
+In addition, we define row-wise power and spurious row-wise power in an ana\-logous way. We now proceed as follows: We simulate $S=1000$ data samples and compute (global/row-wise) power as well as spurious (global/row-wise) power for the tests under consideration.  
 
 \end{enumerate}
-The simulation exercises from (b) can be found in Section ??. Those from (a) are in Section ?? of the Supplementary Material. We have decided not to include them in the paper because of space considerations. (The figures with the SiZer plots are already two full pages by themselves.) However, if you think it is important to add these simulation exercises to the paper, we'll be happy to re-structure our simulation study accordingly. 
-
+The simulation exercises from (b) can be found in Section 5.1.2. Those from (a) are in Section S.3 of the Supplementary Material. We have decided not to include them in the paper because of space considerations. (The figures with the SiZer plots are already two full pages by themselves.) However, if you think it is important to add these simulation exercises to the paper, we'll be happy to re-structure our simulation study accordingly. \newline
+%
+%
 Concerning the simulation exercises in (b), please also note the following: Our definitions of a correct and a spurious/false finding imply that the underlying target of interest is the unknown trend function $m$. This is different from the SiZer philosophy where the target is not the curve $m$ itself but rather ``the curve viewed at different resolution levels''. Formally, the target is the family of  convolutions $m_h(u) = \int K(w) m(u+hw) dw$, that is, the family of smoothed versions $m_h$ of the curve $m$. It would of course be possible to define correct and spurious/false findings in terms of the smoothed versions $m_h$. However, our main aim is to make rigorous confidence statements about the time regions where the trend $m$ (rather than the smoothed versions $m_h$) is increasing/decreasing. Hence, for us, it is more natural to think of the trend $m$ itself as the underlying target. 
 
 Finally, many thanks for pointing us to \cite{HannigLeePark2013}. However, we have decided not to use the metrics in this paper in our simulation study for the following reason: The metrics defined in \cite{HannigLeePark2013} are designed to measure how far the SiZer maps produced by different procedures (e.g.\ by dependent SiZer and our multiscale test) are from some oracle SiZer map. The oracle SiZer map is thus the target which should be approximated as well as possible by the procedures. This oracle SiZer map is based on a noiseless version of SiZer. (Specifically, it results from applying SiZer to the noiseless data $\{ m(t/T): t=1,\ldots,T\}$ rather than the noisy data $\{ Y_{t,T}: t=1,\ldots,T\}$ and from plugging the true error variance into the SiZer confidence intervals.) Hence, it is very natural to regard the oracle SiZer map as a benchmark for the map which SiZer produces from the actual (empirical or simulated) data. 
@@ -274,6 +312,8 @@ However, it is not clear to us why the oracle SiZer map should be a meaningful b
 
 
 \item \textit{Page 31, line 1-39: Can you plot the SiZer results on this data?}
+
+We have applied both our multiscale test and row-wise dependent SiZer to the Central England temperature data. The SiZer plots produced by our test and dependent SiZer are plotted on p.33 of the revised paper.  
 
 \end{enumerate}
 
