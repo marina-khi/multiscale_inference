@@ -43,14 +43,12 @@ for (a1 in different_a1){
   }
   i <- 1
   for (T in different_T){
-    #set.seed(seed) # This is for calculating global and spurious power on the same data
-    set.seed(1)
+    set.seed(seed) # This is for calculating global and spurious power on the same data
     power_overall  <- CalculatePower(T, a1, sigma_eta, alpha, Nsim = Nsim, SimRuns =SimRuns,
                              sigma.type = 'true', remove.small.ess = TRUE,
                              sim.design = 'bump', bump.height = height, region = 'increase',
                              power.type = '')
-    #set.seed(seed) # This is for calculating global and spurious power on the same data
-    set.seed(1) 
+    set.seed(seed) # This is for calculating global and spurious power on the same data
     power_spurious <- CalculatePower(T, a1, sigma_eta, alpha, Nsim = Nsim, SimRuns =SimRuns,
                              sigma.type = 'true', remove.small.ess = TRUE,
                              sim.design = 'bump', bump.height = height, region = 'increase',
@@ -86,14 +84,12 @@ T          <- 1000    # Sample size
 for (a1 in different_a1){
   if (a1 < 0) {height = height.neg}
   else {height = height.pos}
-  #set.seed(seed) # This is for calculating global and spurious power on the same data
-  set.seed(1)
+  set.seed(seed) # This is for calculating global and spurious power on the same data
   result <- CalculatePower(T, a1, sigma_eta, alpha, Nsim = Nsim, SimRuns =SimRuns,
                                       sigma.type = 'true', remove.small.ess = TRUE,
                                       sim.design = 'bump', bump.height = height,
                                       region = 'increase', power.type = '')
-  #set.seed(seed) # This is for calculating global and spurious power on the same data
-  set.seed(1)
+  set.seed(seed) # This is for calculating global and spurious power on the same data
   result_spurious <- CalculatePower(T, a1, sigma_eta, alpha, Nsim = Nsim, SimRuns =SimRuns,
                                       sigma.type = 'true', remove.small.ess = TRUE,
                                       sim.design = 'bump', bump.height = height,
@@ -109,7 +105,6 @@ for (a1 in different_a1){
   par(mar = c(3.5, 3.5, 0, 0)) #Margins for each plot
   par(oma = c(0, 0.2, 0.2, 0.2)) #Outer margins 
   
-  set.seed(T)
   data.simulated <- simulating_data(T, a1, sigma_eta, sim.design = sim.design, slope.fac = height)
   data           <- data.simulated$data
   trend          <- data.simulated$trend
@@ -171,8 +166,7 @@ sim.design <- c('blocks', 'sine') # type of trend function m()
 
 for (a1 in different_a1){
   for (sim.design_ in sim.design){
-    #set.seed(seed) # This is for the examples being comparable since the errors are the same
-    set.seed(1) 
+    set.seed(seed) # This is for the examples being comparable since the errors are the same
     if (sim.design_ == 'sine') {
       sigma_eta = sqrt((1 -a1^2) )
     } else {

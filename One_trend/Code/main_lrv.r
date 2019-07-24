@@ -34,8 +34,7 @@ for (q in different_q){
     for (slope_fac in different_slope_facs){
       name_spec <- paste0("T=",T_size,"_slope=",slope_fac,"_(q,r,M1,M2)=(",q,",",r,",",q - 5,",",q + 5,")")
       
-      set.seed(1) #This is for comparing different scenarios on the same data
-      #set.seed(seed) #This is for comparing different scenarios on the same data
+      set.seed(seed) #This is for comparing different scenarios on the same data
       
       a_mat2   <- a_mat_HvK   <- a_mat_oracle   <- numeric()
       lrv_mat2 <- lrv_mat_HvK <- lrv_mat_oracle <- numeric()
