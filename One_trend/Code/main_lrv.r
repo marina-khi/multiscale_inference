@@ -8,7 +8,7 @@ options(xtable.timestamp = "")
 
 # The following file contains one main function that computes different estimators of AR(1) parameters such as the coefficient a_1
 # and the long-run variance. All the necessary arguments for this function are described in detail in the file.
-source("functions/SimulateVariance.R")
+source("functions/SimulateVariance.r")
 
 #Random generation of the seed. The seed is necessary for computing all the different specifications on comparable datasets
 seed <- sample(1:100000, 1)
@@ -27,7 +27,7 @@ different_slope_facs <- c(1, 10) # slope of linear trend = slope_fac * sqrt(sigm
 different_q          <- c(25)    # tuning parameters for first-step estimator
 different_r          <- c(10)    # tuning parameters for second-step estimator
 
-source("functions/functions.R")  # Loading functions for plotting
+source("functions/functions.r")  # Loading functions for plotting
 
 for (q in different_q){
   for (r in different_r){
@@ -45,7 +45,7 @@ for (q in different_q){
         pdfname_lrv   = paste0("plots/lrv_histograms_a1=", a_1*100,"_", name_spec, ".pdf")
 
         mse_results <- SimulateVariance(a_1, sigma_eta, T_size, Nsim = Nsim, pdfname_a_hat, pdfname_lrv, sim.design = sim.design, slope_fac, 
-                                           q = q, r.bar = r, M1 = q - 5, M2 = q + 5, produce_plots = "selected")
+                                           q = q, r.bar = r, M1 = q - 5, M2 = q + 5, produce.plots = "selected")
         
         a_mat2       <- c(a_mat2, mse_results[[1]])
         a_mat_HvK    <- c(a_mat_HvK, mse_results[[2]])

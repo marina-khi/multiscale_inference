@@ -50,6 +50,10 @@ SimulateVariance <- function(a_1_star, sigma_eta_star, T_size, Nsim,
   lrv_hat_vect <- c()
   lrv_hat_oracle_vect  <- c()
   
+  cat("","\n")
+  cat("Estimating the long-run variance for the following specification: a_1 = ", a_1_star, ", T = ", T_size,"\n")
+  progbar <- txtProgressBar(min = 1, max = Nsim, style = 3, char = ".")
+  
   for (i in 1:Nsim){
     #Simulate the data
     data.simulated <- simulating_data(T_size, a_1_star, sigma_eta_star, sim.design = sim.design, slope.fac = slope)
@@ -79,8 +83,10 @@ SimulateVariance <- function(a_1_star, sigma_eta_star, T_size, Nsim,
     res_oracle          <- lm(eps[2:T_size] ~ eps[1:(T_size-1)] - 1)
     a_hat_oracle_vect   <- c(a_hat_oracle_vect, as.vector(res_oracle$coef))
     lrv_hat_oracle_vect <- c(lrv_hat_oracle_vect, mean(res_oracle$residuals^2)/(1-sum(as.vector(res_oracle$coef)))^2)
+    setTxtProgressBar(progbar, i)
   }
-
+  close(progbar)
+  
   if (produce.plots == "yes"){
     PlotHistograms(a_hat_vect, a_hat_hall_vect, a_hat_oracle_vect, a_1_star, pdfname_a_hat,
                                  text1 = expression(widehat(a)), text2 = expression(widehat(a)[HvK]),
