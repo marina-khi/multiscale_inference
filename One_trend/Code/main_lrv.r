@@ -10,6 +10,9 @@ options(xtable.timestamp = "")
 # and the long-run variance. All the necessary arguments for this function are described in detail in the file.
 source("functions/SimulateVariance.R")
 
+#Random generation of the seed. The seed is necessary for computing all the different specifications on comparable datasets
+seed <- sample(1:100000, 1)
+
 
 #######################################################################
 #Comparing three methods for different slope factors and different a_1#
@@ -32,11 +35,13 @@ for (q in different_q){
       name_spec <- paste0("T=",T_size,"_slope=",slope_fac,"_(q,r,M1,M2)=(",q,",",r,",",q - 5,",",q + 5,")")
       
       set.seed(1) #This is for comparing different scenarios on the same data
+      #set.seed(seed) #This is for comparing different scenarios on the same data
       
       a_mat2   <- a_mat_HvK   <- a_mat_oracle   <- numeric()
       lrv_mat2 <- lrv_mat_HvK <- lrv_mat_oracle <- numeric()
       
       for (a_1 in different_a){
+        
         pdfname_a_hat = paste0("plots/a_hat_histograms_a1=", a_1*100,"_", name_spec, ".pdf")
         pdfname_lrv   = paste0("plots/lrv_histograms_a1=", a_1*100,"_", name_spec, ".pdf")
 

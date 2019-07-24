@@ -34,7 +34,7 @@ set.seed(111)
 for (a1 in different_a1){
   i <- 1
   for (T in different_T){
-    #set.seed(seed) # This is for calculating size in different specifications on the same data
+    #set.seed(seed) # This is for calculating size for different specifications on comparable datasets
     size <- CalculateSize(T, a1, sigma_eta, different_alpha, Nsim = Nsim, SimRuns =SimRuns, sigma.type = sigma.type, q_ = 25, remove.small.ess = FALSE)$size.ms
     size_matrix_ms[i, (k * (length(different_alpha) + 1) - (length(different_alpha) - 1)):(k * (length(different_alpha) + 1))] <- size
     i <- i + 1
@@ -67,7 +67,7 @@ for (a1 in different_a1){
   set.seed(0)
   i <- 1
   for (T in different_T){
-    #set.seed(seed) # This is for calculating size in different specifications on the same data
+    #set.seed(seed) # This is for calculating size for different specifications on comparable datasets
     result <- CalculateSize(T, a1, sigma_eta, different_alpha, Nsim = Nsim, SimRuns = SimRuns, sigma.type = sigma.type, q_ = 50, remove.small.ess = FALSE)$size.ms
     size_ms[, (k - 1) * (length(different_T) + 1) + i + 1] <- t(result)
     i <- i + 1
@@ -87,6 +87,9 @@ sigma_eta  <- 1           # standard deviation of the innovation term in the AR 
 SimRuns    <- 5000        # number of simulation runs to produce critical values
 sigma.type <- 'true'      # Estimating the long-run variance \sigma^2 or plugging the true theoretical value
 
+#Here we are plugging the true long-run variance to make the comparison between the method fair.
+#Therefore, all the differences in size come from the methods themselves
+
 different_T     <- c(250, 500, 1000)
 different_a1    <- c(-0.5, 0.5)
 different_alpha <- c(0.05)
@@ -98,11 +101,9 @@ rownames(size_matrix)  <- different_T
 k <- 1
 set.seed(0)
 for (a1 in different_a1){
-  #Here we are plugging the true long-run variance to make the comparison between the method fair.
-  #Therefore, all the differences in size come from the methods themselves
   i <- 1
   for (T in different_T){
-    #set.seed(seed) # This is for calculating size in different specifications on the same data
+    #set.seed(seed) # This is for calculating size for different specifications on comparable datasets
     size <- CalculateSize(T, a1, sigma_eta, different_alpha, Nsim = Nsim, SimRuns = SimRuns, sigma.type = sigma.type, remove.small.ess = TRUE)
     size_matrix[i, (k-1)*5 + 2] <- size$size.ms
     size_matrix[i, (k-1)*5 + 3] <- size$size.uncor
@@ -126,17 +127,19 @@ SimRuns    <- 5000        # number of simulation runs to produce critical values
 sigma.type <- 'true'      # Estimating the long-run variance \sigma^2 or plugging the true theoretical value
 
 T               <- 1000
-different_a1    <- c(-0.5)
+different_a1    <- c(-0.5, 0.5)
 different_alpha <- c(0.05)
 
+set.seed(0)
+
 for (a1 in different_a1){
-  #set.seed(seed) # This is for calculating size in different specifications on the same data
+  #set.seed(seed) # This is for calculating size for different specifications on comparable datasets
   result <- CalculateSize(T, a1, sigma_eta, different_alpha,  Nsim = Nsim, SimRuns = SimRuns, sigma.type = sigma.type, remove.small.ess = TRUE)
   h.grid <- result$h.grid
   
   for (j in 1:length(different_alpha)){
     alpha <- different_alpha[j]  
-    pdffilename <- paste0("plots/new/pcp_size_T_", T, "_a1_", a1*100, ".pdf")
+    pdffilename <- paste0("plots/pcp_size_T_", T, "_a1_", a1*100, ".pdf")
     pdf(pdffilename, width=5.5, height=4.16, paper="special")
   
     par(mfrow = c(1, 1), cex = 1,  tck = -0.025) #Setting the layout of the graphs
@@ -145,7 +148,7 @@ for (a1 in different_a1){
     par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins 
   
     plot(x = h.grid, y = result$size.rw.ms[[j]]*100, ylim=c(0, 18), yaxp = c(0, 15, 3), type="l", lty=1, xaxt='n',
-        ylab = "Percentage (%)", xlab='bandwidth h',mgp=c(2,0.5,0))
+        ylab = "Size (in %)", xlab='bandwidth h',mgp=c(2,0.5,0))
     points(x = h.grid, y = result$size.rw.ms[[j]]*100, pch=19, cex = 0.8)
   
     lines(x = h.grid, y = result$size.rw.uncor[[j]]*100, lwd=1.5, lty = 'dashed')

@@ -10,6 +10,9 @@ options(xtable.timestamp = "")
 #All the necessary arguments for this function are described in detail in the file.
 source("functions/CalculatePower.r")
 
+#Random generation of the seed. The seed is necessary for computing all the different specifications on comparable datasets
+seed <- sample(1:100000, 1)
+
 
 ##########################
 #Calculating global power#
@@ -23,8 +26,8 @@ alpha        <- 0.05              #Significance level
 different_T  <- c(250, 500, 1000) #different sample sizes for global power
 
 sim.design <- 'bump'  # type of trend function m()
-height.neg <- 0.85    # height of the bump in case of sim.design = 'bump'. This height is used to calculate power for negative a1     
-height.pos <- 2.65    # height of the bump in case of sim.design = 'bump'. This height is used to calculate power for positive a1 
+height.neg <- 0.45    # height of the bump in case of sim.design = 'bump'. This height is used to calculate power for negative a1     
+height.pos <- 1.3    # height of the bump in case of sim.design = 'bump'. This height is used to calculate power for positive a1 
 
 power_matrix           <- matrix(NA, nrow = 2 * length(different_T), ncol = 5*length(different_a1) + 1)
 rownames(power_matrix) <- rep(different_T, each = 2)
@@ -40,12 +43,14 @@ for (a1 in different_a1){
   }
   i <- 1
   for (T in different_T){
-    set.seed(1) # This is for calculating global and spurious power on the same data
+    #set.seed(seed) # This is for calculating global and spurious power on the same data
+    set.seed(1)
     power_overall  <- CalculatePower(T, a1, sigma_eta, alpha, Nsim = Nsim, SimRuns =SimRuns,
                              sigma.type = 'true', remove.small.ess = TRUE,
                              sim.design = 'bump', bump.height = height, region = 'increase',
                              power.type = '')
-    set.seed(1) # This is for calculating global and spurious power on the same data
+    #set.seed(seed) # This is for calculating global and spurious power on the same data
+    set.seed(1) 
     power_spurious <- CalculatePower(T, a1, sigma_eta, alpha, Nsim = Nsim, SimRuns =SimRuns,
                              sigma.type = 'true', remove.small.ess = TRUE,
                              sim.design = 'bump', bump.height = height, region = 'increase',
@@ -70,22 +75,24 @@ Nsim       <- 1000    # number of simulation runs for size/power calculations
 sigma_eta  <- 1       # standard deviation of the innovation term in the AR model
 SimRuns    <- 5000    # number of simulation runs to produce critical values
 
-different_a1 <- c(-0.5, 0.5)      #different a_1 parameters
+different_a1 <- c(-0.5)      #different a_1 parameters
 alpha        <- 0.05              #Significance level
 
 sim.design <- 'bump'  # type of trend function m()
-height.neg <- 0.85    # height of the bump in case of sim.design = 'bump'. This height is used to calculate power for negative a1     
-height.pos <- 2.65    # height of the bump in case of sim.design = 'bump'. This height is used to calculate power for positive a1 
+height.neg <- 0.45    # height of the bump in case of sim.design = 'bump'. This height is used to calculate power for negative a1     
+height.pos <- 1.3    # height of the bump in case of sim.design = 'bump'. This height is used to calculate power for positive a1 
 T          <- 1000    # Sample size
 
 for (a1 in different_a1){
   if (a1 < 0) {height = height.neg}
   else {height = height.pos}
+  #set.seed(seed) # This is for calculating global and spurious power on the same data
   set.seed(1)
   result <- CalculatePower(T, a1, sigma_eta, alpha, Nsim = Nsim, SimRuns =SimRuns,
                                       sigma.type = 'true', remove.small.ess = TRUE,
                                       sim.design = 'bump', bump.height = height,
                                       region = 'increase', power.type = '')
+  #set.seed(seed) # This is for calculating global and spurious power on the same data
   set.seed(1)
   result_spurious <- CalculatePower(T, a1, sigma_eta, alpha, Nsim = Nsim, SimRuns =SimRuns,
                                       sigma.type = 'true', remove.small.ess = TRUE,
@@ -164,7 +171,8 @@ sim.design <- c('blocks', 'sine') # type of trend function m()
 
 for (a1 in different_a1){
   for (sim.design_ in sim.design){
-    set.seed(1) #This is for calculating both examples for all specifications on the same errors
+    #set.seed(seed) # This is for the examples being comparable since the errors are the same
+    set.seed(1) 
     if (sim.design_ == 'sine') {
       sigma_eta = sqrt((1 -a1^2) )
     } else {
