@@ -75,46 +75,55 @@ Following \cite{Wu2005}, we define the \textit{physical dependence measure} for 
 \]
 where $\mathcal{F}_t  = (\ldots, \epsilon_{-1}, \epsilon_0, \epsilon_1, \ldots, \epsilon_{t-1}, \epsilon_t)$ and $\mathcal{F}_t^\prime  = (\ldots, \epsilon_{-1}, \epsilon^\prime_0, \epsilon_1, \ldots, \epsilon_{t-1}, \epsilon_t)$ is a coupled process of $\mathcal{F}_t$ with $\epsilon_0^\prime$ being an i.i.d. copy of $\epsilon_0$.
 
-The model setting is as follows. We observe time series $\mathcal{Y}_i = \{Y_{it}: 1 \le t \le T \}$ of length $T$ for $1 \le i \le n$. Each time series $\mathcal{Y}_i$ satisfies the model equation \begin{equation}\label{model_full}
+The model setting is as follows. We observe a panel of $n$ time series $\mathcal{Z}_i = \{(Y_{it}, \mathbf{X}_{it}): 1 \le t \le T \}$ of length $T$ for $1 \le i \le n$. Each time series $\mathcal{Z}_i$ satisfies the model equation \begin{equation}\label{model_full}
 Y_{it} = \bm{\beta}^\top_i \mathbf{X}_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
 \end{equation}
-for $1 \le t \le T$, where $\bm{\beta}_i$ is a $d \times 1$ vector of unknown parameters, $\mathbf{X}_{it}$ is a $d\times 1$ vector of individual covariates, $m_i$ is an unknown nonparametric trend function defined on $[0,1]$, $\alpha_i$ is a (deterministic or random) intercept term and $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ is a zero-mean stationary error process. As usual in nonparametric regression, the trend functions $m_i$ in model \eqref{model} depend on rescaled time $t/T$ rather than on real time $t$; cp.\ \cite{Robinson1989}, \cite{Dahlhaus1997} and \cite{VogtLinton2014} for the use and some discussion of the rescaled time argument. The functions $m_i$ are only identified up to an additive constant in model \eqref{model}: One can reformulate the model as $Y_{it} = [m_i(t/T) + c_i] + \bm{\beta}_i^\top \mathbf{X}_{it} + [\alpha_i - c_i] + \varepsilon_{it}$, that is, one can freely shift additive constants $c_i$ between the trend $m_i(t/T)$ and the error component $\alpha_i$. In order to obtain identification, one may impose different normalization constraints on the trends $m_i$. One possibility is to normalize them such that $\int_0^1 m_i(u) du = 0$ for all $i$. In what follows, we take for granted that the trends $m_i$ satisfy this constraint. The term $\alpha_i$ can also be regarded as an additional error component. In the econometrics literature, it is commonly called a fixed effect error term. It can be interpreted as capturing unobserved characteristics of the time series $\mathcal{Y}_i$ which remain constant over time. We allow the error terms $\alpha_i$ to be dependent across $i$ in an arbitrary way. Hence, by including them in model equation \eqref{model_full}, we allow the $n$ time series $\mathcal{Y}_i$ in our sample to be correlated with each other. Whereas the terms $\alpha_i$ may be correlated, the error processes $\mathcal{E}_i$ are assumed to be independent across $i$. In addition, each process $\mathcal{E}_i$ is supposed to satisfy the following conditions: 
+for $1 \le t \le T$, where $\bm{\beta}_i$ is a $d \times 1$ vector of unknown parameters, $\mathbf{X}_{it}$ is a $d\times 1$ vector of individual covariates, $m_i$ is an unknown nonparametric trend function defined on $[0,1]$, $\alpha_i$ is a (deterministic or random) intercept term and $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ is a zero-mean stationary error process. As usual in nonparametric regression, the trend functions $m_i$ in model \eqref{model_full} depend on rescaled time $t/T$ rather than on real time $t$; cp.\ \cite{Robinson1989}, \cite{Dahlhaus1997} and \cite{VogtLinton2014} for the use and some discussion of the rescaled time argument. The functions $m_i$ are only identified up to an additive constant in model \eqref{model_full}: One can reformulate the model as $Y_{it} = [m_i(t/T) + c_i] + \bm{\beta}_i^\top \mathbf{X}_{it} + [\alpha_i - c_i] + \varepsilon_{it}$, that is, one can freely shift additive constants $c_i$ between the trend $m_i(t/T)$ and the error component $\alpha_i$. In order to obtain identification, one may impose different normalization constraints on the trends $m_i$. One possibility is to normalize them such that $\int_0^1 m_i(u) du = 0$ for all $i$. In what follows, we take for granted that the trends $m_i$ satisfy this constraint. The term $\alpha_i$ can also be regarded as an additional error component. In the econometrics literature, it is commonly called a fixed effect error term. It can be interpreted as capturing unobserved characteristics of the time series $\mathcal{Z}_i$ which remain constant over time. We allow the error terms $\alpha_i$ to be dependent across $i$ in an arbitrary way. Hence, by including them in model equation \eqref{model_full}, we allow the $n$ time series $\mathcal{Z}_i$ in our panel to be correlated with each other. Whereas the terms $\alpha_i$ may be correlated, the error processes $\mathcal{E}_i$ are assumed to be independent across $i$. In addition, each process $\mathcal{E}_i$ is supposed to satisfy the following conditions: 
 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
 
 \item \label{C-err1} For each $i$ the variables $\varepsilon_{it}$ allow for the representation $\varepsilon_{it} = G_i(\ldots,\eta_{it-1},\eta_{it})$, where $\eta_{it}$ are i.i.d.\ random variables across $t$ and $G_i: \reals^\integers \rightarrow \reals$ is a measurable function. Denote $\mathcal{J}_{it} = (\ldots,\eta_{it-2},\eta_{it-1},\eta_{it})$.
 
-\item \label{C-err2} It holds that $\ex[\varepsilon_{it}] =0$ and $\| \varepsilon_{it} \|_q < \infty$ for some $q > 4$. 
+\item \label{C-err2} For all $i$ it holds that $\ex[\varepsilon_{it}] =0$ and $\| \varepsilon_{it} \|_q < \infty$ for some $q > 4$. 
 
 \end{enumerate}
 
-Following \cite{Wu2005}, we impose conditions on the dependence structure of the error process $\{\varepsilon_{it}\}_{t\in\integers}$ in terms of the physical dependence measure $\delta_q(G_i, t)$. In particular, we assume the following: 
+Following \cite{Wu2005}, we impose conditions on the dependence structure of the error processes $\mathcal{E}_i$ in terms of the physical dependence measure $\delta_q(G_i, t)$. In particular, we assume the following: 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
 \setcounter{enumi}{2}
 
-\item \label{C-err3} Define $\Theta_{i, t,q} = \sum\nolimits_{s \ge t} \delta_q(G_i, s)$ for $t \ge 0$. It holds that 
+\item \label{C-err3} Define $\Theta_{i, t,q} = \sum\nolimits_{s \ge t} \delta_q(G_i, s)$ for $t \ge 0$. For each $i$ it holds that 
 $\Theta_{i, t,q} = O ( t^{-\tau_q} (\log t)^{-A} )$,  
 where $A > \frac{2}{3} (1/q + 1 + \tau_q)$ and $\tau_q = \{q^2 - 4 + (q-2) \sqrt{q^2 + 20q + 4}\} / 8q$. 
 
 \end{enumerate}
 
-The conditions \ref{C-err1}--\ref{C-err3} are fulfilled by a wide range of stationary processes $\{\varepsilon_{it}\}_{t\in\integers}$. For a detailed discussion of these properties, see \cite{KhismatullinaVogt2018}.
-%As a first example, consider linear processes of the form $\varepsilon_t = \sum\nolimits_{i=0}^{\infty} c_i \eta_{t-i}$ with $\| \varepsilon_t \|_q < \infty$, where $c_i$ are absolutely summable coefficients and $\eta_t$ are i.i.d.\ innovations with $\ex[\eta_t] = 0$ and $\| \eta_t\|_q < \infty$. Trivially, \ref{C-err1} and \ref{C-err2} are fulfilled in this case. Moreover, if $|c_i| = O(\rho^i)$ for some $\rho \in (0,1)$, then \ref{C-err3} is easily seen to be satisfied as well. As a special case, consider an ARMA process $\{\varepsilon_t\}$ of the form $\varepsilon_t - \sum\nolimits_{i=1}^p a_i \varepsilon_{t-i} = \eta_t + \sum\nolimits_{j=1}^r b_j \eta_{t-j}$  with $\| \varepsilon_t \|_q < \infty$, where $a_1,\ldots,a_p$ and $b_1,\ldots,b_r$ are real-valued parameters. As before, we let $\eta_t$ be i.i.d.\ innovations with $\ex[\eta_t] = 0$ and $\| \eta_t\|_q < \infty$. Moreover, as usual, we suppose that the complex polynomials $A(z) = 1 - \sum\nolimits_{j=1}^p a_jz^j$ and $B(z) = 1 + \sum\nolimits_{j=1}^r b_jz^j$ do not have any roots in common. If $A(z)$ does not have any roots inside the unit disc, then the ARMA process $\{ \varepsilon_t \}$ is stationary and causal. Specifically, it has the representation $\varepsilon_t = \sum\nolimits_{i=0}^{\infty} c_i \eta_{t-i}$ with $|c_i| = O(\rho^i)$ for some $\rho \in (0,1)$, implying that \ref{C-err1}--\ref{C-err3} are fulfilled. The results in \cite{WuShao2004} show that condition \ref{C-err3} (as well as the other two conditions) is not only fulfilled for linear time series processes but also for a variety of non-linear processes. 
+The conditions \ref{C-err1}--\ref{C-err3} are fulfilled by a wide range of stationary processes $\mathcal{E}_i$. For a detailed discussion of these properties, see \cite{KhismatullinaVogt2018}.
 
-Finally note that throughout the paper, we restrict attention to the case where the number of time series $n$ in model \eqref{model} is fixed. Extending our theoretical results to the case where $n$ slowly grows with the sample size $T$ is a possible topic for further research.
+Finally note that throughout the paper, we restrict attention to the case where the number of time series $n$ in model \eqref{model_full} is fixed. Extending our theoretical results to the case where $n$ slowly grows with the sample size $T$ is a possible topic for further research.
 
 
-\section{Testing for equality of time trends in the absence of exogenous regressors}\label{sec-test-without-regs}
+\section{Testing for equality of time trends}\label{sec-test}
 
-In this section, we adapt the multiscale method developed in \cite{KhismatullinaVogt2018} to test the hypothesis that the trend functions in the absence of exogenous covariates $\mathbf{X}_{it}$ are all the same. As we will see, the proposed multiscale method does not only allow to test whether the null hypothesis is violated. It also provides information on where violations occur. More specifically, it allows to identify, with a pre-specified confidence, (i) trend functions which are different from each other and (ii) time intervals where these trend functions differ.
+In this section, we adapt the multiscale method developed in \cite{KhismatullinaVogt2018} to the problem of comparison of the trend curves $m_i$ in model \eqref{model_full}.  As we will see, the proposed multiscale method does not only allow to test whether the null hypothesis is violated. It also provides information on where violations occur. More specifically, it allows to identify, with a pre-specified confidence, (i) trend functions which are different from each other and (ii) time intervals where these trend functions differ.
 
-\subsection{Construction of the test statistic}\label{subsec-test-without-regs-stat}
+\subsection{Construction of the test statistic}\label{subsec-test-stat}
 
-More formally, we test the null hypothesis $H_0: m_1 = m_2 = \ldots = m_n$ in model
-\begin{equation}\label{model-without-regs}
-Y_{it} = m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it},
-\end{equation} 
-where $\varepsilon_{it}$ are zero-mean error terms and $\alpha_i$ are (random or deterministic) intercepts. Defining $Y_{it}^\circ = Y_{it} - \alpha_i$, this equation can be rewritten as $Y_{it}^\circ = m_i(\frac{t}{T}) + \varepsilon_{it}$, which is a standard nonparametric regression equation. The variables $Y_{it}^\circ$ are not observed, but they can be approximated by $\widehat{Y}_{it} = Y_{it} - \widehat{\alpha}_i$, where $\widehat{\alpha}_i = T^{-1} \sum_{t=1}^T Y_{it}$ is an estimator of the intercept $\alpha_i$. By construction, $\widehat{\alpha}_i - \alpha_i = T^{-1} \sum_{t=1}^T \varepsilon_{it} + T^{-1} \sum_{t=1}^T m_i(\frac{t}{T}) = O_p(T^{-1/2}) + T^{-1} \sum_{t=1}^T m_i(\frac{t}{T})$. Hence, $\widehat{\alpha}_i$ is a reasonable estimator of $\alpha_i$ if $T^{-1} \sum_{t=1}^T m_i(\frac{t}{T})$ converges to zero as $T \rightarrow \infty$. To ensure this, we suppose throughout the section that the functions $m_i$ are Lipschitz continuous, that is, $|m_i(v) - m_i(w)| \le L|v - w|$ for all $v,w \in [0,1]$ and some constant $L < \infty$. Since $\int_0^1 m_i(u) du = 0$ by normalization, this implies that $T^{-1} \sum_{t=1}^T m_i(\frac{t}{T}) = O(T^{-1})$. We further let $\widehat{\sigma}_i^2$ be an estimator of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_{i0}, \varepsilon_{i\ell})$ which is computed from the constructed sample $\{ \widehat{Y}_{it}: 1 \le t \le T \}$. We thus regard $\widehat{\sigma}_i^2 = \widehat{\sigma}_i^2(\widehat{Y}_{i1},\ldots,\widehat{Y}_{iT})$ as a function of the variables $\widehat{Y}_{it}$ for $1 \le t \le T$. Throughout the section, we assume that $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$. Details on how to construct estimators of $\sigma_i^2$ are deferred to Section \ref{sec-error-var}. 
+In what follows, we describe the construction of the test statistic that adresses the question of comparing different trend curves. More specifically, we test the null hypothesis $H_0: m_1 = m_2 = \ldots = m_n$ in model \eqref{model_full}. We assume that all the trend functions $m_i(\cdot)$ are continuosly differentiable on $[0, 1]$.
+
+It is obvious that if $\alpha_i$ and $\bm{\beta}_i$ are known, the problem of testing for the common time trend would be greatly simplified. That is, we would test $H_0: m_1 = m_2 = \ldots = m_n$ in the model
+\begin{align*}
+Y_{it} - \alpha_i - \bm{\beta}_i^\top \mathbf{X}_{it} & =: Y_{it}^\circ\\
+					& = m_i \Big( \frac{t}{T} \Big) + \varepsilon_{it}, 
+\end{align*}
+which is a standard nonparametric regression equation. The variables $Y_{it}^\circ$ are not observed since the intercept $\alpha_i$ and the coefficients $\bm{\beta}_i$ are not known. Given appropriate estimators $\widehat{\bm{\beta}}_i$ and $\widehat{\alpha}_i$, we can then consider
+\begin{align*}
+	\widehat{Y}_{it} := Y_{it} -\widehat{\alpha}_i - \widehat{\bm{\beta}}_i^\top \mathbf{X}_{it} =(\widehat{\bm{\beta}}_i - \bm{\beta}_i)^\top \mathbf{X}_{it} + m_i \Big( \frac{t}{T} \Big) + \big( \alpha_i - \widehat{\alpha}_i \big) + \varepsilon_{it}. 
+\end{align*}
+
+Then our unobserved variables $Y_{it}^\circ$ can be approximated by $\widehat{Y}_{it}$ and we compute our test statistic based on $\widehat{Y}_{it}$. In what follows, we assume that the such estimators with the property that $\widehat{\alpha}_i - \alpha_i = O_P(T^{-1/2})$ and $\widehat{\bm{\beta}}_i - \bm{\beta}_i = O_P(T^{-1/2})$ are given. Since $\frac{1}{T}\sum_{t=1}^T  \mathbf{X}_{it} = O_P(1)$ by Chebyshev's inequality, the unobserved variable $Y_{it}^\circ := Y_{it} - \bm{\beta}_i^\top \mathbf{X}_{it} - \alpha_i = m_i(t/T) + \varepsilon_{it}$ can be well approximated by $\widehat{Y}_{it} = Y_{it} -\widehat{\alpha}_i - \widehat{\bm{\beta}}_i^\top \mathbf{X}_{it} = Y_{it}^\circ + O_P(T^{-1/2})$. Details on one of the possible ways to construct $\widehat{\alpha}_i$ and $\widehat{\bm{\beta}}^\top_i$ are deferred to Section \ref{subsec-test-est}.
+
+We further let $\widehat{\sigma}_i^2$ be an estimator of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_{i0}, \varepsilon_{i\ell})$ which is computed from the constructed sample $\{ \widehat{Y}_{it}: 1 \le t \le T \}$. We thus regard $\widehat{\sigma}_i^2 = \widehat{\sigma}_i^2(\widehat{Y}_{i1},\ldots,\widehat{Y}_{iT})$ as a function of the variables $\widehat{Y}_{it}$ for $1 \le t \le T$. Throughout the section, we assume that $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$. Details on how to construct estimators of $\sigma_i^2$ are deferred to Section \ref{sec-error-var}. 
 
 
 We are now ready to introduce the multiscale statistic for testing the hypothesis $H_0: m_1 = m_2 = \ldots = m_n$. For any pair of time series $i$ and $j$, we define the kernel averages
@@ -124,7 +133,7 @@ where $w_{t,T}(u,h)$ are the local linear kernel weights calculated by the follo
 w_{t,T}(u,h) = \frac{\Lambda_{t,T}(u,h)}{ \{\sum\nolimits_{t=1}^T \Lambda_{t,T}(u,h)^2 \}^{1/2} }, 
 \end{equation}
 where
-\[ \Lambda_{t,T}(u,h) = K\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,0}(u,h) \Big(\frac{\frac{t}{T}-u}{h}\Big) - S_{T,1}(u,h) \Big], \]
+\[ \Lambda_{t,T}(u,h) = K\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big], \]
 $S_{T,\ell}(u,h) = (Th)^{-1} \sum\nolimits_{t=1}^T K(\frac{\frac{t}{T}-u}{h}) (\frac{\frac{t}{T}-u}{h})^\ell$ for $\ell = 0,1,2$ and $K$ is a kernel function with the following properties: 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
 \setcounter{enumi}{3}
@@ -137,24 +146,24 @@ where $\lambda(h) = \sqrt{2 \log \{ 1/(2h) \}}$ and the set $\mathcal{G}_T$ has 
 that is, we define it as the maximal distance $\widehat{\Psi}_{ij,T}$ between any pair of curves $m_i$ and $m_j$ with $i \ne j$. 
 
 
-\subsection{The test procedure}\label{subsec-test-without-regs-test}
+\subsection{The test procedure}\label{subsec-test-test}
 
 
-Let $Z_{it}$ for $1 \le t \le T$ and $1 \le i \le n$ be independent standard normal random variables which are independent of the error terms $\varepsilon_{it}$. Denote the empirical average of the variables $Z_{i1},\ldots,Z_{iT}$ by $\bar{Z}_{i,T} = T^{-1} \sum_{t=1}^T Z_{it}$. To simplify notation, we write $\bar{Z}_i = \bar{Z}_{i,T}$ in what follows. For each $i$ and $j$, we introduce the Gaussian statistic 
-\[ \Phi_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\}, \] 
-where $\phi_{ij,T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \}$. Moreover, we define the statistic
+Let $Z_{it}$ and $\mathbf{V}_{it}$ for $1 \le t \le T$ and $1 \le i \le n$ be independent standard normal random variables and independent standard normal random vectors respectively which are independent of the error terms $\varepsilon_{it}$ and the covariates $\mathbf{X}_{it}$. Denote the empirical average of the variables $Z_{i1},\ldots,Z_{iT}$ by $\bar{Z}_{i,T} = T^{-1} \sum_{t=1}^T Z_{it}$ and the vector of empirical averages of the random vectors $\mathbf{V}_{it}$ by $\bar{\mathbf{V}}_{i, T} = T^{-1} \sum_{t=1}^T \mathbf{V}_{it}$. To simplify notation, we write $\bar{Z}_i = \bar{Z}_{i,T}$ and $\bar{\mathbf{V}}_{i} = \bar{\mathbf{V}}_{i, T}$ in what follows. For each $i$ and $j$, we introduce the Gaussian statistic 
+\[ \Phi_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \big\{ \Big|\frac{\phi_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\}, \] 
+where $\phi_{ij,T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \Big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\bm{\beta}}_i^\top (\mathbf{V}_{it} - \bar{\mathbf{V}}_{i}) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) + \widehat{\bm{\beta}}_j^\top (\mathbf{V}_{jt} - \bar{\mathbf{V}}_{j}) \big\}$. Moreover, we define the statistic
 \[ \Phi_{n,T} = \max_{1 \le i < j \le n} \Phi_{ij,T} \]
 and denote its $(1-\alpha)$-quantile by $q_{n,T}(\alpha)$. Our multiscale test of the hypothesis $H_0: m_1 = m_2 = \ldots = m_n$ is defined as follows: For a given significance level $\alpha \in (0,1)$, we reject $H_0$ if $\widehat{\Psi}_{n,T} > q_{n,T}(\alpha)$. 
 
 
-\subsection{Theoretical properties of the test}\label{subsec-test-without-regs-theo}
+\subsection{Theoretical properties of the test}\label{subsec-test-theo}
 
 
 To start with, we introduce the auxiliary statistic 
 \[ \widehat{\Phi}_{n,T} = \max_{1 \le i < j \le n} \widehat{\Phi}_{ij,T}, \]
 where
 \[ \widehat{\Phi}_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \} \]
-and $\widehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \{ (\varepsilon_{it} - \bar{\varepsilon}_i) - (\varepsilon_{jt} - \bar{\varepsilon}_j) \}$ with $\bar{\varepsilon}_i = \bar{\varepsilon}_{i,T} = T^{-1} \sum_{t=1}^T \varepsilon_{it}$. Our first theoretical result characterizes the asymptotic behaviour of the statistic $\widehat{\Phi}_{n,T}$. 
+and $\widehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) + \bm{\beta}_i^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - (\varepsilon_{jt} - \bar{\varepsilon}_j) -\bm{\beta}_j^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\}$ with $\bar{\varepsilon}_i = \bar{\varepsilon}_{i,T} = T^{-1} \sum_{t=1}^T \varepsilon_{it}$ and $ \bar{\mathbf{X}}_{i} =  \bar{\mathbf{X}}_{i, T} = T^{-1}\sum_{t=1}^T  \mathbf{X}_{it}$ respectively. Our first theoretical result characterizes the asymptotic behaviour of the statistic $\widehat{\Phi}_{n,T}$. 
 \begin{theorem}\label{theo-stat-equality}
 Suppose that the error processes $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ are independent across $i$ and satisfy \ref{C-err1}--\ref{C-err3} for each $i$. Moreover, let \ref{C-ker}--\ref{C-h} be fulfilled and assume that $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$ for each $i$. Then 
 \[ \pr \big( \widehat{\Phi}_{n,T} \le q_{n,T}(\alpha) \big) = (1 - \alpha) + o(1). \]
@@ -170,34 +179,7 @@ Let the conditions  of Theorem \ref{theo-stat-equality} be satisfied.
 \end{enumerate}
 \end{prop}
 
-\section{Testing for equality of time trends in the presence of exogenous regressors}\label{sec-test-with-regs}
-
-
-\subsection{Construction of the test statistic}\label{subsec-test-with-regs-stat}
-
-We now extend the model \eqref{model-without-regs} to include the exogenous regressors:
-\begin{equation}\label{model-with-regs}
-Y_{it} = \bm{\beta}_i^\top \mathbf{X}_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
-\end{equation}
-It is obvious that if $\bm{\beta}_i$ is known, the problem of testing for the common time trend would be reduced to the one discussed before. That is, we would test $H_0: m_1 = m_2 = \ldots = m_n$ in the model
-\begin{align*}
-Y_{it} - \bm{\beta}_i^\top \mathbf{X}_{it} & =: V_{it}\\
-					& = m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
-\end{align*}
-replacing $Y_{it}$ by $V_{it}$ in the construction of the test statistic. However, $\bm{\beta}_i$ is not known so we need to estimate it first. Moreover, as before, $\alpha_i$ is also not known. Given estimators $\widehat{\bm{\beta}}_i$ and $\widehat{\alpha}_i$, we then consider
-\begin{align*}
-	\widehat{V}_{it} := Y_{it} -\widehat{\alpha}_i - \widehat{\bm{\beta}}_i^\top \mathbf{X}_{it} =(\widehat{\bm{\beta}}_i - \bm{\beta}_i)^\top \mathbf{X}_{it} + m_i \Big( \frac{t}{T} \Big) + \big( \alpha_i - \widehat{\alpha}_i \big) + \varepsilon_{it} 
-\end{align*}
-and construct the kernel averages $\widehat{\psi}_{ij, T}(u, h)$ based on $\widehat{V}_{it}$ instead of $\widehat{Y}_{it}$. Specifically, for any pair of time series $i$ and $j$ we define the kernel averages
-\begin{align*}
-	\widehat{\psi}^{\prime}_{ij, T}(u, h) = \sum_{t=1}^T w_{t, T}(u, h)(\widehat{V}_{it} - \widehat{V}_{jt})
-\end{align*}
-with the kernel weights defined in \eqref{weights}. Similar as in Section \ref{subsec-test-without-regs-stat}, we aggregate the kernel averages $\widehat{\psi}^{\prime}_{ij, T}(u, h)$ for all $(u, h)\in \mathcal{G}_T$ by the multiscale test statistic
-\[ \widehat{\Psi}^\prime_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widehat{\psi}^\prime_{ij,T}(u,h)}{(\widehat{\sigma}_{i,V}^2 + \widehat{\sigma}_{j, V}^2)^{1/2}}\Big| - \lambda(h) \Big\}. \]
-
-Here we let $\widehat{\sigma}_{i, V}^2$ be an aprropriate estimator of the long-run error error variance $\sigma_i^2$ constructed from the sample $\{\widehat{V}_{i1}, \ldots, \widehat{V}_{iT}\}$. Hence, we regard $\widehat{\sigma}_{i, V}^2 = \widehat{\sigma}_{i, V}^2(\widehat{V}_{i1}, \ldots, \widehat{V}_{iT})$ as a function of variables $\widehat{V}_{it}$ for $1\leq t \leq T$. As in the previous section, we assume that $\widehat{\sigma}_{i, V}^2 = \sigma_i^2 + o_P(\rho_T)$ with $\rho_T = o(1/\log T)$. We shall omit the subscript $V$ in $\widehat{\sigma}_{i, V}^2$ hereafter if it does not lead to any confusion. 
-
-\subsection{Estimation of the parameters $\bm{\beta}_i$ and $\alpha_i$}\label{subsec-test-with-regs-est}
+\subsection{Estimation of the parameters $\bm{\beta}_i$ and $\alpha_i$}\label{subsec-test-est}
 
 We now focus on finding an appropriate estimator $\widehat{\bm{\beta}}_i$ of $\bm{\beta}_i$. For that purpose, we consider the time series $\{\Delta Y_{it}\}$ of the differences $\Delta Y_{it} = Y_{it} - Y_{i t-1}$ for each $i$. We then have
 \begin{align*}
@@ -251,44 +233,9 @@ Now consider an appropriate estimator $\widehat{\alpha}_{i}$ for the intercept $
 
 Note that $\frac{1}{T}\sum_{i=1}^T \varepsilon_{it} = O_P(T^{-1/2})$ and $\frac{1}{T}\sum_{i=1}^T m_i(t/T) = O(T^{-1})$ due to Lipschitz continuity of $m_i$ and normalization $\int_{0}^1 m_i(u)du = 0$. Furthermore, $\frac{1}{T}\sum_{t=1}^T  \mathbf{X}_{it} = O_P(1)$ by Chebyshev's inequality and $\widehat{\bm{\beta}}_i - \bm{\beta}_i = O_P (T^{-1/2})$ by Theorem \ref{theo-regs}. Plugging all these results together in \eqref{alpha-est}, we get that $\widehat{\alpha}_i - \alpha_i = O_P(T^{-1/2})$.
 
-Therefore, if we consider the unobserved variable $V_{it}^\circ := Y_{it} - \bm{\beta}_i^\top \mathbf{X}_{it} - \alpha_i = m_i(t/T) + \varepsilon_{it}$, they can be well approximated by $\widehat{V}_{it} = Y_{it} -\widehat{\alpha}_i - \widehat{\bm{\beta}}_i^\top \mathbf{X}_{it} = V_{it}^\circ + O_P(T^{-1/2})$. Hence, we our test statistic $\widehat{\Psi}_{n, T}^\prime$ constructed from the sample $\{\widehat{V}_{i1}, \ldots, \widehat{V}_{iT}\}$ can be used to test the hypotheses for $V^\circ_{it}$.
 
-
-\subsection{The test procedure}\label{subsec-test-with-regs-test}
-
-
-As in Section \ref{subsec-test-without-regs-test}, let $Z_{it}$ for $1 \le t \le T$ and $1 \le i \le n$ be independent standard normal random variables which are independent of the error terms $\varepsilon_{it}$ and of the covariates $\mathbf{X}_{it}$ and $\bar{Z}_{i} :=  \bar{Z}_{i,T} = T^{-1} \sum_{t=1}^T Z_{it}$ be the empirical average of the variables $Z_{i1},\ldots,Z_{iT}$. For each $i$ and $j$, we introduce the Gaussian statistic 
-\[ \Phi_{ij,T}^\prime = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij,T}^\prime(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\}, \] 
-where \textcolor{red}{$\phi_{ij,T}^\prime(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \}$}. Moreover, we define the statistic
-\[ \Phi_{n,T}^\prime = \max_{1 \le i < j \le n} \Phi_{ij,T}^\prime \]
-and denote its $(1-\alpha)$-quantile by $q_{n,T}^\prime(\alpha)$. Our multiscale test of the hypothesis $H_0: m_1 = m_2 = \ldots = m_n$ is defined as follows: For a given significance level $\alpha \in (0,1)$, we reject $H_0$ if $\widehat{\Psi}_{n,T}^\prime > q_{n,T}^\prime(\alpha)$. 
-
-
-\subsection{Theoretical properties of the test}\label{subsec-test-with-regs-theo}
-
-
-Similarly to Section \ref{subsec-test-without-regs-theo}, we introduce the auxiliary statistic 
-\[ \widehat{\Phi}_{n,T}^\prime = \max_{1 \le i < j \le n} \widehat{\Phi}_{ij,T}^\prime, \]
-where
-\[ \widehat{\Phi}^\prime_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}^\prime_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \} \]
-and \textcolor{red}{$\widehat{\phi}^\prime_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \{ (\varepsilon_{it} - \bar{\varepsilon}_i) - (\varepsilon_{jt} - \bar{\varepsilon}_j) \}$} with $\bar{\varepsilon}_i := \bar{\varepsilon}_{i,T} = T^{-1} \sum_{t=1}^T \varepsilon_{it}$. 
-First, we characterize the asymptotic behaviour of this auxiliary statistic $\widehat{\Phi}_{n,T}^\prime$. 
-\begin{theorem}\label{theo-stat-equality-with-regs}
-Suppose that the error processes $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ are independent across $i$ and satisfy \ref{C-err1}--\ref{C-err3} for each $i$. Moreover, let \ref{C-ker}--\ref{C-h} be fulfilled and assume that $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$ for each $i$. Then 
-\[ \pr \big( \widehat{\Phi}_{n,T}^\prime \le q_{n,T}^\prime(\alpha) \big) = (1 - \alpha) + o(1). \]
-\end{theorem}
-The proof is provided in the Appendix.
-
-The following proposition characterizes the behaviour of our multiscale test under the null hypothesis and under local alternatives. 
-\begin{prop}\label{prop-test-equality}
-Let the conditions  of Theorem \ref{theo-stat-equality-with-regs} be satisfied. 
-\begin{enumerate}[label=(\alph*),leftmargin=0.75cm]
-\item Under the null hypothesis $H_0: m_1 = m_2 = \ldots = m_n$, it holds that 
-\[ \pr \big( \widehat{\Psi}_{n,T}^\prime \le q_{n,T}^\prime(\alpha) \big) = (1 - \alpha) + o(1). \]
 %\item Let $m_i = m_{i,T}$ be a Lipschitz continuous function with $\int_0^1 m_{i,T}(w) dw = 0$ for any $i$. In particular, suppose that $|m_{i,T}(v) - m_{i,T}(w)| \le L |v - w|$ for all $v,w \in [0,1]$ and some fixed constant $L < \infty$ which does not depend on $T$. Moreover, assume that for some pair of indices $i$ and $j$, the functions $m_{i,T}$ and $m_{j,T}$ have the following property: There exists $(u,h) \in \mathcal{G}_T$ with $[u-h,u+h] \subseteq [0,1]$ such that $m_{i,T}(w) - m_{j,T}(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$ or $m_{j,T}(w) - m_{i,T}(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$, where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$. Then 
 %\[ \pr \big( \widehat{\Psi}_{n,T}^\prime \le q_{n,T}^\prime(\alpha) \big) = o(1). \]
-\end{enumerate}
-\end{prop}
 
 
 
