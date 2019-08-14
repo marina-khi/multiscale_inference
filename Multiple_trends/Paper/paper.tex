@@ -149,10 +149,12 @@ that is, we define it as the maximal distance $\widehat{\Psi}_{ij,T}$ between an
 \subsection{The test procedure}\label{subsec-test-test}
 
 
-Let $Z_{it}$ and $\mathbf{V}_{it}$ for $1 \le t \le T$ and $1 \le i \le n$ be independent standard normal random variables and independent standard normal random vectors respectively which are independent of the error terms $\varepsilon_{it}$ and the covariates $\mathbf{X}_{it}$. Denote the empirical average of the variables $Z_{i1},\ldots,Z_{iT}$ by $\bar{Z}_{i,T} = T^{-1} \sum_{t=1}^T Z_{it}$ and the vector of empirical averages of the random vectors $\mathbf{V}_{it}$ by $\bar{\mathbf{V}}_{i, T} = T^{-1} \sum_{t=1}^T \mathbf{V}_{it}$. To simplify notation, we write $\bar{Z}_i = \bar{Z}_{i,T}$ and $\bar{\mathbf{V}}_{i} = \bar{\mathbf{V}}_{i, T}$ in what follows. For each $i$ and $j$, we introduce the Gaussian statistic 
-\[ \Phi_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \big\{ \Big|\frac{\phi_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\}, \] 
-where $\phi_{ij,T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \Big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\bm{\beta}}_i^\top (\mathbf{V}_{it} - \bar{\mathbf{V}}_{i}) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) + \widehat{\bm{\beta}}_j^\top (\mathbf{V}_{jt} - \bar{\mathbf{V}}_{j}) \big\}$. Moreover, we define the statistic
-\[ \Phi_{n,T} = \max_{1 \le i < j \le n} \Phi_{ij,T} \]
+Let $Z_{it}$ for $1 \le t \le T$ and $1 \le i \le n$ be independent standard normal random variables and independent standard normal random vectors respectively which are independent of the error terms $\varepsilon_{it}$ and the covariates $\mathbf{X}_{it}$. Denote the empirical average of the variables $Z_{i1},\ldots,Z_{iT}$ by $\bar{Z}_{i,T} = T^{-1} \sum_{t=1}^T Z_{it}$. To simplify notation, we write $\bar{Z}_i = \bar{Z}_{i,T}$ in what follows. For each $i$ and $j$, we introduce the Gaussian statistic 
+\[\Phi_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \big\{ \Big|\frac{\phi_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\}, \] 
+where $\phi_{ij,T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}$. Moreover, we define the statistic
+\begin{align}\label{Phi-statistic}
+\Phi_{n,T} = \max_{1 \le i < j \le n} \Phi_{ij,T}
+\end{align}
 and denote its $(1-\alpha)$-quantile by $q_{n,T}(\alpha)$. Our multiscale test of the hypothesis $H_0: m_1 = m_2 = \ldots = m_n$ is defined as follows: For a given significance level $\alpha \in (0,1)$, we reject $H_0$ if $\widehat{\Psi}_{n,T} > q_{n,T}(\alpha)$. 
 
 
@@ -160,24 +162,26 @@ and denote its $(1-\alpha)$-quantile by $q_{n,T}(\alpha)$. Our multiscale test o
 
 
 To start with, we introduce the auxiliary statistic 
-\[ \widehat{\Phi}_{n,T} = \max_{1 \le i < j \le n} \widehat{\Phi}_{ij,T}, \]
+\begin{align}\label{Phi-hat-statistic}
+\widehat{\Phi}_{n,T} = \max_{1 \le i < j \le n} \widehat{\Phi}_{ij,T},
+\end{align}
 where
 \[ \widehat{\Phi}_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \} \]
 and $\widehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) + \bm{\beta}_i^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - (\varepsilon_{jt} - \bar{\varepsilon}_j) -\bm{\beta}_j^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\}$ with $\bar{\varepsilon}_i = \bar{\varepsilon}_{i,T} = T^{-1} \sum_{t=1}^T \varepsilon_{it}$ and $ \bar{\mathbf{X}}_{i} =  \bar{\mathbf{X}}_{i, T} = T^{-1}\sum_{t=1}^T  \mathbf{X}_{it}$ respectively. Our first theoretical result characterizes the asymptotic behaviour of the statistic $\widehat{\Phi}_{n,T}$. 
 \begin{theorem}\label{theo-stat-equality}
 Suppose that the error processes $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ are independent across $i$ and satisfy \ref{C-err1}--\ref{C-err3} for each $i$. Moreover, let \ref{C-ker}--\ref{C-h} be fulfilled and assume that $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$ for each $i$. Then 
-\[ \pr \big( \widehat{\Phi}_{n,T} \le q_{n,T}(\alpha) \big) = (1 - \alpha) + o(1). \]
+\[ \pr \big( \widehat{\Phi}_{n,T} \le q_{n,T}(\alpha)| \{ \mathbf{X}_{it}: 1 \le t \le T, 1 \leq i \leq n \} \big) = (1 - \alpha) + o(1) \text{ a.s.} \]
 \end{theorem}
 Theorem \ref{theo-stat-equality} is the main stepping stone to derive the theoretical properties of our multiscale test. The details are provided in the Appendix. The following proposition characterizes the behaviour of our multiscale test under the null hypothesis and under local alternatives. 
-\begin{prop}\label{prop-test-equality}
-Let the conditions  of Theorem \ref{theo-stat-equality} be satisfied. 
-\begin{enumerate}[label=(\alph*),leftmargin=0.75cm]
-\item Under the null hypothesis $H_0: m_1 = m_2 = \ldots = m_n$, it holds that 
-\[ \pr \big( \widehat{\Psi}_{n,T} \le q_{n,T}(\alpha) \big) = (1 - \alpha) + o(1). \]
-\item Let $m_i = m_{i,T}$ be a Lipschitz continuous function with $\int_0^1 m_{i,T}(w) dw = 0$ for any $i$. In particular, suppose that $|m_{i,T}(v) - m_{i,T}(w)| \le L |v - w|$ for all $v,w \in [0,1]$ and some fixed constant $L < \infty$ which does not depend on $T$. Moreover, assume that for some pair of indices $i$ and $j$, the functions $m_{i,T}$ and $m_{j,T}$ have the following property: There exists $(u,h) \in \mathcal{G}_T$ with $[u-h,u+h] \subseteq [0,1]$ such that $m_{i,T}(w) - m_{j,T}(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$ or $m_{j,T}(w) - m_{i,T}(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$, where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$. Then 
-\[ \pr \big( \widehat{\Psi}_{n,T} \le q_{n,T}(\alpha) \big) = o(1). \]
-\end{enumerate}
-\end{prop}
+%\begin{prop}\label{prop-test-equality}
+%Let the conditions  of Theorem \ref{theo-stat-equality} be satisfied. 
+%\begin{enumerate}[label=(\alph*),leftmargin=0.75cm]
+%\item Under the null hypothesis $H_0: m_1 = m_2 = \ldots = m_n$, it holds that 
+%\[ \pr \big( \widehat{\Psi}_{n,T} \le q_{n,T}(\alpha) \big) = (1 - \alpha) + o(1). \]
+%\item Let $m_i = m_{i,T}$ be a Lipschitz continuous function with $\int_0^1 m_{i,T}(w) dw = 0$ for any $i$. In particular, suppose that $|m_{i,T}(v) - m_{i,T}(w)| \le L |v - w|$ for all $v,w \in [0,1]$ and some fixed constant $L < \infty$ which does not depend on $T$. Moreover, assume that for some pair of indices $i$ and $j$, the functions $m_{i,T}$ and $m_{j,T}$ have the following property: There exists $(u,h) \in \mathcal{G}_T$ with $[u-h,u+h] \subseteq [0,1]$ such that $m_{i,T}(w) - m_{j,T}(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$ or $m_{j,T}(w) - m_{i,T}(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$, where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$. Then 
+%\[ \pr \big( \widehat{\Psi}_{n,T} \le q_{n,T}(\alpha) \big) = o(1). \]
+%\end{enumerate}
+%\end{prop}
 
 \subsection{Estimation of the parameters $\bm{\beta}_i$ and $\alpha_i$}\label{subsec-test-est}
 
@@ -198,7 +202,7 @@ In particular, for each $i$ we employ the least squares estimation method to est
 We need the following assumptions on the independent variables $ \mathbf{X}_{it}$ for each $i$:
 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
-\setcounter{enumi}{3}
+\setcounter{enumi}{4}
 
 \item \label{C-reg1} The covariates $ \mathbf{X}_{it}$ allow for the representation $ \mathbf{X}_{it} = \mathbf{H}_i(\mathcal{U}_{it})$, where $\mathcal{U}_{it} =(\ldots,u_{it-1},u_{it})$ with $u_{it}$ being i.i.d.\ random variables and $\mathbf{H}_i := (H_{i1}, H_{i2}, \ldots, H_{id})^\top: \reals^\integers \rightarrow \reals^d$ is a measurable function such that $\mathbf{H}_i(\mathcal{U}_{it})$ is well defined. 
 
@@ -210,7 +214,7 @@ We need the following assumptions on the independent variables $ \mathbf{X}_{it}
 To be able to prove the main theorems in this section, we need additional assumptions on the relationship between the covariates and the error process.
 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
-\setcounter{enumi}{6}
+\setcounter{enumi}{7}
 \item \label{C-reg4} $\mathbf{X}_{it}$ (elementwise) and $\varepsilon_{is}$ are uncorrelated for each $t, s\in \{1, \ldots, T\}$.
 \item \label{C-reg5} Let $\zeta_{i, t} = (u_{it}, \eta_{it})^\top$. Define $\mathcal{I}_{i, t} = (\ldots, \zeta_{i, t-1}, \zeta_{i, t})$ and $\mathbf{U}_i(\mathcal{I}_{i, t}) =  \mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{J}_{it})$. Then, $\sum_{s=0}^\infty \delta_2(\mathbf{U}_i, s)<\infty$.
 \item \label{C-reg6} $\sum_{s=0}^\infty \delta_4(\mathbf{H}_i, s)<\infty$.
@@ -239,7 +243,9 @@ Note that $\frac{1}{T}\sum_{i=1}^T \varepsilon_{it} = O_P(T^{-1/2})$ and $\frac{
 
 
 
-\subsection{Proof of Theorem \ref{theo-stat-equality-with-regs}}\label{subsec-appendix-stat-equaility}
+\subsection{Proof of Theorem \ref{theo-stat-equality}}\label{subsec-appendix-stat-equaility}
+
+
 
 
 
