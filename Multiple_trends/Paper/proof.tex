@@ -55,7 +55,10 @@ In this section, we prove the theoretical results from Section \ref{sec-method}.
 The main purpose of this section is to prove that there is a version of the multiscale statistic $\widehat{\Phi}_{n,T}$ defined in \eqref{Phi-hat-statistic} which is close to a Gaussian statistic whose distribution is known. More specifically, we prove the following result. 
 \begin{propA}\label{propA-strong-approx-equality}
 Under the conditions of Theorem \ref{theo-stat-equality}, there exist statistics $\widetilde{\Phi}_{n,T}$ for $T = 1,2,\ldots$ with the following two properties: (i) $\widetilde{\Phi}_{n, T}$ has the same distribution as $\widehat{\Phi}_{n, T}$ for any $T$, and (ii)
-\[ \big| \widetilde{\Phi}_{n, T} - \Phi_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} + \rho_T \sqrt{\log T} \Big), \]
+\begin{align*}
+\big| \widetilde{\Phi}_{n, T} - \Phi_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} &+ \rho_T \sqrt{\log T} + \rho_T\max_{1\le i\le n} \Big|\sum\limits_{s=1}^T \widehat{\bm{\beta}}_i^\top(\mathbf{X}_{is} - \bar{\mathbf{X}}_{i} )\Big| +\\
+&+ \frac{T^{-1/2}}{\sqrt{Th_{min}}} \max_{1 \le i \le n}\max_{1\le t \le T}\Big|\sum\limits_{s=1}^t (\mathbf{X}_{is} - \bar{\mathbf{X}}_{i} )\Big|  \Big),
+\end{align*}
 where $\Phi_{n,T}$ is a Gaussian statistic as defined in \eqref{Phi-statistic}. 
 \end{propA}
 \begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-strong-approx-equality}}}] 
@@ -126,25 +129,22 @@ Now consider $\max_{1 \le t \le T} |A_{ij, t}|$:
 & + \max_{1 \le t \le T} \Big|(\bm{\beta}_i - \widehat{\bm{\beta}_i})^\top\sum\limits_{s=1}^t (\mathbf{X}_{is} - \bar{\mathbf{X}}_{i}) \Big| 
 + \max_{1 \le t \le T} \Big|(\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top\sum\limits_{s=1}^t (\mathbf{X}_{js} - \bar{\mathbf{X}}_{j}) \Big|
 \end{align*}
-Now suppose that \textcolor{red}{for all $1 \le i \le n$ we have $\bm{\beta}_i - \widehat{\bm{\beta}}_i = o(T^{-1/2})$ almost surely}. Then applying the strong approximation result \eqref{eq-strongapprox-dep}, we can infer that
+Now suppose that \textcolor{red}{for all $1 \le i \le n$ we have $\bm{\beta}_i - \widehat{\bm{\beta}}_i = o_P(T^{-1/2})$ almost surely}. Then applying the strong approximation result \eqref{eq-strongapprox-dep}, we can infer that
 \begin{align}\label{max_At}
-\max_{1 \le t \le T} |A_{ij, t}|  = o(T^{1/q}) + o(T^{-1/2})\max_{1 \le t \le T}\Big|\sum\limits_{s=1}^t (\mathbf{X}_{is} - \bar{\mathbf{X}}_{i})\Big| +  o(T^{-1/2})\max_{1 \le t \le T}\Big|\sum\limits_{s=1}^t (\mathbf{X}_{js} - \bar{\mathbf{X}}_{j} )\Big|
+\max_{1 \le t \le T} |A_{ij, t}|  = o(T^{1/q}) + o_P(T^{-1/2})\max_{1 \le t \le T}\Big|\sum\limits_{s=1}^t (\mathbf{X}_{is} - \bar{\mathbf{X}}_{i})\Big| +  o_P(T^{-1/2})\max_{1 \le t \le T}\Big|\sum\limits_{s=1}^t (\mathbf{X}_{js} - \bar{\mathbf{X}}_{j} )\Big|
 \end{align}
 Standard arguments show that $\max_{(u,h) \in \mathcal{G}_T} W_T(u,h) = O( 1/\sqrt{Th_{\min}} )$. Plugging \eqref{max_At} in \eqref{eq-strongapprox-bound3} and then in \eqref{eq-strongapprox-bound2}, we can thus infer that 
 \begin{align}\label{eq-strongapprox-bound4}
 \big| \widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond} \big| &\le \{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{-1/2}  \max_{(u,h) \in \mathcal{G}_T} W_T(u, h) \max_{1\le i < j \le n}\max_{1\le t \le T} |A_{ij, t}|\le\nonumber \\
-&\le o \Big( \frac{T^{1/q}}{\sqrt{Th_{\min}}} \Big) + o \Big( \frac{T^{-1/2}}{\sqrt{Th_{\min}}} \Big)\max_{1 \le i \le n}\max_{1\le t \le T}\Big|\sum\limits_{s=1}^t (\mathbf{X}_{js} - \bar{\mathbf{X}}_{j} )\Big|.
+&\le o\Big( \frac{T^{1/q}}{\sqrt{Th_{\min}}} \Big) + o_P \Big( \frac{T^{-1/2}}{\sqrt{Th_{\min}}} \Big)\max_{1 \le i \le n}\max_{1\le t \le T}\Big|\sum\limits_{s=1}^t (\mathbf{X}_{is} - \bar{\mathbf{X}}_{i} )\Big|.
 \end{align}
 
-\color{red}{Now consider $|\Phi_{n, T}^{\diamond} - \Phi_{n, T}|$. Since $\phi_{ij, T}(u,h)$ conditionally on $\{\mathbf{X}_{it}\}$ is distributed as $ \normal(\widehat{\bm{\beta}}_i^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) -  \widehat{\bm{\beta}}_j^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}),\sigma^2_i + \sigma^2_j)$ for all $(u,h) \in \mathcal{G}_T$ and all $1\le i < j \le n$, $|\mathcal{G}_T| = O(T^\theta)$ for some large but fixed constant $\theta$ by Assumption (??), $n$ is fixed and $\widehat{\sigma}^2_i = \sigma^2_i + o_p(\rho_T)$ as well as $\widetilde{\sigma}^2_i = \sigma^2_i + o_p(\rho_T)$, we can establish that
+Now consider $|\Phi_{n, T}^{\diamond} - \Phi_{n, T}|$. Since $\phi_{ij, T}(u,h)$ conditionally on $\{\mathbf{X}_{it}\}$ is distributed as $ \normal(\widehat{\bm{\beta}}_i^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) -  \widehat{\bm{\beta}}_j^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}),\sigma^2_i + \sigma^2_j)$ for all $(u,h) \in \mathcal{G}_T$ and all $1\le i < j \le n$, $|\mathcal{G}_T| = O(T^\theta)$ for some large but fixed constant $\theta$ by Assumption (??), $n$ is fixed and $\widehat{\sigma}^2_i = \sigma^2_i + o_p(\rho_T)$ as well as $\widetilde{\sigma}^2_i = \sigma^2_i + o_p(\rho_T)$, we can establish that
 \begin{align}\label{eq-strongapprox-bound5}
-\big| \Phi_{n, T}^{\diamond} - \Phi_{n, T} \big| \le \max_{1\leq i< j \leq n}\max_{(u,h) \in \mathcal{G}_T} \Big|\frac{\phi_{ij, T}(u,h)}{\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{1/2}} - \frac{\phi_{ij, T}(u,h)}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}}\Big| = o_P(\rho_T \sqrt{\log T}).
+\big| \Phi_{n, T}^{\diamond} - \Phi_{n, T} \big| &\le \max_{1\leq i< j \leq n}\max_{(u,h) \in \mathcal{G}_T} \Big|\frac{\phi_{ij, T}(u,h)}{\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{1/2}} - \frac{\phi_{ij, T}(u,h)}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}}\Big| = \nonumber\\
+&=o_P(\rho_T \sqrt{\log T}) + o_P(\rho_T)\max_{1\le i\le n} \Big|\sum\limits_{s=1}^T \widehat{\bm{\beta}}_i^\top(\mathbf{X}_{is} - \bar{\mathbf{X}}_{i} )\Big|.
 \end{align}
-Plugging \eqref{eq-strongapprox-bound5} in \eqref{eq-strongapprox-bound1}, we get 
-\begin{equation}\label{eq-strongapprox-bound6}
-\big| \widetilde{\Phi}_{n, T} - \Phi_{n, T} \big| \le \big| \widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond} \big| + o_P(\rho_T \sqrt{\log T}). 
-\end{equation}
-Plugging \eqref{eq-strongapprox-bound6} into \eqref{eq-strongapprox-bound1} completes the proof.}
+Plugging \eqref{eq-strongapprox-bound4} and \eqref{eq-strongapprox-bound5} in \eqref{eq-strongapprox-bound1} completes the proof.
 \end{proof}
 
 
@@ -162,8 +162,8 @@ where $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$.
 \end{propA}
 %
 %
-\color{red}{\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-anticon-equality}}}] 
-The main technical tool for proving Proposition \ref{propA-anticon-equality} are anti-concentration bounds for Gaussian random vectors. The following proposition slightly generalizes anti-concentration results derived in \cite{Chernozhukov2015}, in particular Theorem 3 therein. 
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-anticon-equality}}}] 
+\color{red}{The main technical tool for proving Proposition \ref{propA-anticon-equality} are anti-concentration bounds for Gaussian random vectors. The following proposition slightly generalizes anti-concentration results derived in \cite{Chernozhukov2015}, in particular Theorem 3 therein. 
 \begin{propA}\label{theo-anticon}
 Let $(X_1,\ldots,X_p)^\top$ be a Gaussian random vector in $\reals^p$ with $\ex[X_j] = \mu_j$ and $\var(X_j) = \sigma_j^2 > 0$ for $1 \le j \le p$. Define $\overline{\mu} = \max_{1 \le j \le p} |\mu_j|$ together with $\underline{\sigma} = \min_{1 \le j \le p} \sigma_j$ and $\overline{\sigma} = \max_{1 \le j \le p} \sigma_j$. Moreover, set $a_p = \ex[ \max_{1 \le j \le p} (X_j-\mu_j)/\sigma_j ]$ and $b_p = \ex[ \max_{1 \le j \le p} (X_j-\mu_j) ]$. For every $\delta > 0$, it holds that
 \[ \sup_{x \in \reals} \pr \Big( \big| \max_{1 \le j \le p} X_j - x \big| \le \delta \Big) \le C \delta \big\{ \overline{\mu} + a_p + b_p + \sqrt{1 \vee \log(\underline{\sigma}/\delta)} \big\}, \]
@@ -178,8 +178,8 @@ with $x_j = (x_{j1},x_{j2})$. This notation allows us to write
 \[ \Phi_T = \max_{1 \le j \le 2p} X_j, \]
 where $(X_1,\ldots,X_{2p})^\top$ is a Gaussian random vector with the following properties: (i) $\mu_j := \ex[X_j] = - \lambda(x_{j2})$ and thus $\overline{\mu} = \max_{1 \le j \le 2p} |\mu_j| \le C \sqrt{\log T}$, and (ii) $\sigma_j^2 := \var(X_j) = 1$ for all $j$. Since $\sigma_j = 1$ for all $j$, it holds that $a_{2p} = b_{2p}$. Moreover, as the variables $(X_j - \mu_j)/\sigma_j$ are standard normal, we have that $a_{2p} = b_{2p} \le \sqrt{2 \log (2p)} \le C \sqrt{\log T}$. With this notation at hand, we can apply Proposition \ref{theo-anticon} to obtain that 
 \[ \sup_{x \in \reals} \pr \Big( \big| \Phi_T - x \big| \le \delta_T \Big) \le C \delta_T \Big[ \sqrt{\log T} + \sqrt{ \log(1/\delta_T) } \Big] = o(1) \]
-with $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$, which is the statement of Proposition \ref{propA-anticon}.
-\end{proof}}
+with $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$, which is the statement of Proposition \ref{propA-anticon}.}
+\end{proof}
 
 
 
@@ -187,14 +187,15 @@ with $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$, which is t
 
 
 To prove Theorem \ref{theo-stat-equality}, we make use of the two auxiliary results derived above. By Proposition \ref{propA-strong-approx-equality}, there exist statistics $\widetilde{\Phi}_{n, T}$ for $T = 1,2,\ldots$ which are distributed as $\widehat{\Phi}_T$ for any $T \ge 1$ and which have the property that 
-\begin{equation}\label{statement-propA-strong-approx-equality}
-\big| \widetilde{\Phi}_{n, T} - \Phi_{n, T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} + \rho_T \sqrt{\log T} \Big), 
-\end{equation}
-where $\Phi_{n, T}$ is a Gaussian statistic as defined in \eqref{Phi-statistic}. The approximation result \eqref{statement-propA-strong-approx} allows us to replace the multiscale statistic $\widehat{\Phi}_{n, T}$ by an identically distributed version $\widetilde{\Phi}_{n, T}$ which is close to the Gaussian statistic $\Phi_{n, T}$. \color{red}{In the next step, we show that  
+\begin{align}\label{statement-propA-strong-approx-equality}
+\big| \widetilde{\Phi}_{n, T} - \Phi_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} &+ \rho_T \sqrt{\log T} + \rho_T\max_{1\le i\le n} \Big|\sum\limits_{s=1}^T \widehat{\bm{\beta}}_i^\top(\mathbf{X}_{is} - \bar{\mathbf{X}}_{i} )\Big| +\nonumber\\
+&+ \frac{T^{-1/2}}{\sqrt{Th_{min}}} \max_{1 \le i \le n}\max_{1\le t \le T}\Big|\sum\limits_{s=1}^t (\mathbf{X}_{is} - \bar{\mathbf{X}}_{i} )\Big|  \Big),
+\end{align}
+where $\Phi_{n, T}$ is a Gaussian statistic as defined in \eqref{Phi-statistic}. The approximation result \eqref{statement-propA-strong-approx-equality} allows us to replace the multiscale statistic $\widehat{\Phi}_{n, T}$ by an identically distributed version $\widetilde{\Phi}_{n, T}$ which is close to the Gaussian statistic $\Phi_{n, T}$. \color{red}{In the next step, we show that  
 \begin{equation}\label{eq-theo-stat-equality-step2}
 \sup_{x \in \reals} \big| \pr(\widetilde{\Phi}_T \le x) - \pr(\Phi_T \le x) \big| = o(1), 
-\end{equation}
-which immediately implies the statement of Theorem \ref{theo-stat}. For the proof of \eqref{eq-theo-stat-step2}, we use the following simple lemma: 
+\end{equation}}
+which immediately implies the statement of Theorem \ref{theo-stat-equality}. \color{red}{For the proof of \eqref{eq-theo-stat-equality-step2}, we use the following simple lemma: 
 \begin{lemmaA}\label{lemma1-theo-stat}
 Let $V_T$ and $W_T$ be real-valued random variables for $T = 1,2,\ldots$ such that $V_T - W_T = o_p(\delta_T)$ with some $\delta_T = o(1)$. If 
 \begin{equation}\label{eq-lemma1-cond}
