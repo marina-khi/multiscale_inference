@@ -122,7 +122,8 @@ Now consider $\max_{1 \le t \le T} |A_{ij, t}|$:
 \le & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \sigma_i \sum\limits_{s=1}^t Z_{is} \Big| + 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \sigma_j \sum\limits_{s=1}^t Z_{js} \Big| +\\
 & + \max_{1 \le t \le T} \Big|\sum\limits_{s=1}^t(\bm{\beta}_i - \widehat{\bm{\beta}_i})^\top (\mathbf{X}_{is} - \bar{\mathbf{X}}_{i}) \Big| 
 + \max_{1 \le t \le T} \Big|\sum\limits_{s=1}^t(\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{js} - \bar{\mathbf{X}}_{j}) \Big| = \\
-= & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \sigma_i \sum\limits_{s=1}^t \big(\mathbb{B}_{i}(s) - \mathbb{B}_{i}(s-1) \big) \Big| + 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \sigma_j \sum\limits_{s=1}^t \big(\mathbb{B}_{j}(s) - \mathbb{B}_{j}(s-1) \big) \Big| +\\
+= & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \sigma_i \sum\limits_{s=1}^t \big(\mathbb{B}_{i}(s) - \mathbb{B}_{i}(s-1) \big) \Big| +\\
+& +  2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \sigma_j \sum\limits_{s=1}^t \big(\mathbb{B}_{j}(s) - \mathbb{B}_{j}(s-1) \big) \Big| +\\
 & + \max_{1 \le t \le T} \Big|\sum\limits_{s=1}^t(\bm{\beta}_i - \widehat{\bm{\beta}_i})^\top (\mathbf{X}_{is} - \bar{\mathbf{X}}_{i}) \Big| 
 + \max_{1 \le t \le T} \Big|\sum\limits_{s=1}^t(\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{js} - \bar{\mathbf{X}}_{j}) \Big| =\\
 = & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \sigma_i \mathbb{B}_{i}(t) \Big| + 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \sigma_j \mathbb{B}_{j}(t) \Big| +\\
@@ -163,22 +164,29 @@ where $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$.
 %
 %
 \begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-anticon-equality}}}] 
-\color{red}{The main technical tool for proving Proposition \ref{propA-anticon-equality} are anti-concentration bounds for Gaussian random vectors. The following proposition slightly generalizes anti-concentration results derived in \cite{Chernozhukov2015}, in particular Theorem 3 therein. 
+
+We write $x = (u,h)$ along with $\mathcal{G}_T = \{ x : x \in \mathcal{G}_T \} = \{x_1,\ldots,x_p\}$, where $p := |\mathcal{G}_T| \le O(T^\theta)$ for some large but fixed $\theta > 0$ by our assumptions. Moreover, for $k = 1,\ldots,p$, we set 
+\begin{align*}
+U_{ij, 2k-1} & = \frac{\phi_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} - \lambda(x_{k2}) \\
+U_{ij, 2k} & = -\frac{\phi_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} - \lambda(x_{k2}) 
+\end{align*}
+with $x_k = (x_{k1},x_{k2})$. This notation allows us to write
+\[ \Phi_{n, T} = \max_{1\le i < j \le n} \max_{1 \le k \le 2p} U_{ij, k}, \]
+where $(U_{12, 1},\ldots,U_{(n-1)n, 2p})^\top \in \reals^{n(n-1)p}$ is a Gaussian random vector.
+
+\color{red}{Here we need proposition with conditional mean and variances!
+
+The main technical tool for proving Proposition \ref{propA-anticon-equality} are anti-concentration bounds for Gaussian random vectors. The following proposition slightly generalizes anti-concentration results derived in \cite{Chernozhukov2015}, in particular Theorem 3 therein.
+
 \begin{propA}\label{theo-anticon}
 Let $(X_1,\ldots,X_p)^\top$ be a Gaussian random vector in $\reals^p$ with $\ex[X_j] = \mu_j$ and $\var(X_j) = \sigma_j^2 > 0$ for $1 \le j \le p$. Define $\overline{\mu} = \max_{1 \le j \le p} |\mu_j|$ together with $\underline{\sigma} = \min_{1 \le j \le p} \sigma_j$ and $\overline{\sigma} = \max_{1 \le j \le p} \sigma_j$. Moreover, set $a_p = \ex[ \max_{1 \le j \le p} (X_j-\mu_j)/\sigma_j ]$ and $b_p = \ex[ \max_{1 \le j \le p} (X_j-\mu_j) ]$. For every $\delta > 0$, it holds that
 \[ \sup_{x \in \reals} \pr \Big( \big| \max_{1 \le j \le p} X_j - x \big| \le \delta \Big) \le C \delta \big\{ \overline{\mu} + a_p + b_p + \sqrt{1 \vee \log(\underline{\sigma}/\delta)} \big\}, \]
 where $C > 0$ depends only on $\underline{\sigma}$ and $\overline{\sigma}$. 
 \end{propA} 
-The proof of Proposition \ref{theo-anticon} is provided in \cite{KhismatullinaVogt2018}. To apply Proposition \ref{theo-anticon} to our setting at hand, we introduce the following notation: We write $x = (u,h)$ along with $\mathcal{G}_T = \{ x : x \in \mathcal{G}_T \} = \{x_1,\ldots,x_p\}$, where $p := |\mathcal{G}_T| \le O(T^\theta)$ for some large but fixed $\theta > 0$ by our assumptions. Moreover, for $j = 1,\ldots,p$, we set 
-\begin{align*}
-X_{2j-1} & = \frac{\phi_T(x_{j1},x_{j2})}{\sigma} - \lambda(x_{j2}) \\
-X_{2j} & = -\frac{\phi_T(x_{j1},x_{j2})}{\sigma} - \lambda(x_{j2}) 
-\end{align*}
-with $x_j = (x_{j1},x_{j2})$. This notation allows us to write
-\[ \Phi_T = \max_{1 \le j \le 2p} X_j, \]
-where $(X_1,\ldots,X_{2p})^\top$ is a Gaussian random vector with the following properties: (i) $\mu_j := \ex[X_j] = - \lambda(x_{j2})$ and thus $\overline{\mu} = \max_{1 \le j \le 2p} |\mu_j| \le C \sqrt{\log T}$, and (ii) $\sigma_j^2 := \var(X_j) = 1$ for all $j$. Since $\sigma_j = 1$ for all $j$, it holds that $a_{2p} = b_{2p}$. Moreover, as the variables $(X_j - \mu_j)/\sigma_j$ are standard normal, we have that $a_{2p} = b_{2p} \le \sqrt{2 \log (2p)} \le C \sqrt{\log T}$. With this notation at hand, we can apply Proposition \ref{theo-anticon} to obtain that 
-\[ \sup_{x \in \reals} \pr \Big( \big| \Phi_T - x \big| \le \delta_T \Big) \le C \delta_T \Big[ \sqrt{\log T} + \sqrt{ \log(1/\delta_T) } \Big] = o(1) \]
-with $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$, which is the statement of Proposition \ref{propA-anticon}.}
+The proof of Proposition \ref{theo-anticon} is provided in \cite{KhismatullinaVogt2018}.}
+%(i) $\mu_{ij, k} := \ex[U_{ij, k} | \{X_{it}\}] = - \lambda(x_{j2})$ and thus $\overline{\mu} = \max_{1 \le j \le 2p} |\mu_j| \le C \sqrt{\log T}$, and (ii) $\sigma_j^2 := \var(X_j) = 1$ for all $j$. Since $\sigma_j = 1$ for all $j$, it holds that $a_{2p} = b_{2p}$. Moreover, as the variables $(X_j - \mu_j)/\sigma_j$ are standard normal, we have that $a_{2p} = b_{2p} \le \sqrt{2 \log (2p)} \le C \sqrt{\log T}$. With this notation at hand, we can apply Proposition \ref{theo-anticon} to obtain that 
+%\[ \sup_{x \in \reals} \pr \Big( \big| \Phi_T - x \big| \le \delta_T \Big) \le C \delta_T \Big[ \sqrt{\log T} + \sqrt{ \log(1/\delta_T) } \Big] = o(1) \]
+%with $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$, which is the statement of Proposition \ref{propA-anticon-equaility}.
 \end{proof}
 
 
@@ -191,33 +199,18 @@ To prove Theorem \ref{theo-stat-equality}, we make use of the two auxiliary resu
 \big| \widetilde{\Phi}_{n, T} - \Phi_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} &+ \rho_T \sqrt{\log T} + \rho_T\max_{1\le i\le n} \Big|\sum\limits_{s=1}^T \widehat{\bm{\beta}}_i^\top(\mathbf{X}_{is} - \bar{\mathbf{X}}_{i} )\Big| +\nonumber\\
 &+ \frac{T^{-1/2}}{\sqrt{Th_{min}}} \max_{1 \le i \le n}\max_{1\le t \le T}\Big|\sum\limits_{s=1}^t (\mathbf{X}_{is} - \bar{\mathbf{X}}_{i} )\Big|  \Big),
 \end{align}
-where $\Phi_{n, T}$ is a Gaussian statistic as defined in \eqref{Phi-statistic}. The approximation result \eqref{statement-propA-strong-approx-equality} allows us to replace the multiscale statistic $\widehat{\Phi}_{n, T}$ by an identically distributed version $\widetilde{\Phi}_{n, T}$ which is close to the Gaussian statistic $\Phi_{n, T}$. \color{red}{In the next step, we show that  
+where $\Phi_{n, T}$ is a Gaussian statistic as defined in \eqref{Phi-statistic}. The approximation result \eqref{statement-propA-strong-approx-equality} allows us to replace the multiscale statistic $\widehat{\Phi}_{n, T}$ by an identically distributed version $\widetilde{\Phi}_{n, T}$ which is close to the Gaussian statistic $\Phi_{n, T}$.
+
+\color{red}{In the next step, we show that  
 \begin{equation}\label{eq-theo-stat-equality-step2}
-\sup_{x \in \reals} \big| \pr(\widetilde{\Phi}_T \le x) - \pr(\Phi_T \le x) \big| = o(1), 
-\end{equation}}
-which immediately implies the statement of Theorem \ref{theo-stat-equality}. \color{red}{For the proof of \eqref{eq-theo-stat-equality-step2}, we use the following simple lemma: 
-\begin{lemmaA}\label{lemma1-theo-stat}
-Let $V_T$ and $W_T$ be real-valued random variables for $T = 1,2,\ldots$ such that $V_T - W_T = o_p(\delta_T)$ with some $\delta_T = o(1)$. If 
-\begin{equation}\label{eq-lemma1-cond}
-\sup_{x \in \reals} \pr(|V_T - x| \le \delta_T) = o(1), 
+\sup_{x \in \reals} \big| \pr(\widetilde{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = o(1) \text{ a.s.}, 
 \end{equation}
-then 
-\begin{equation}\label{eq-lemma1-statement}
-\sup_{x \in \reals} \big| \pr(V_T \le x) - \pr(W_T \le x) \big| = o(1). 
-\end{equation}
-\end{lemmaA}
-The statement of Lemma \ref{lemma1-theo-stat} can be summarized as follows: If $W_T$ can be approximated by $V_T$ in the sense that $V_T - W_T = o_p(\delta_T)$ and if $V_T$ does not concentrate too strongly in small regions of the form $[x - \delta_T,x+\delta_T]$ as assumed in \eqref{eq-lemma1-cond}, then the distribution of $W_T$ can be approximated by that of $V_T$ in the sense of \eqref{eq-lemma1-statement}.
-We now apply this lemma with $V_T = \Phi_T$, $W_T = \widetilde{\Phi}_T$ and $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$: From \eqref{statement-propA-strong-approx}, we already know that $\widetilde{\Phi}_T - \Phi_T = o_p(\delta_T)$. Moreover, by Proposition \ref{propA-anticon}, it holds that 
-\begin{equation}\label{statement-propA-anticon}
-\sup_{x \in \reals} \pr \Big( | \Phi_T - x | \le \delta_T \Big) = o(1). 
-\end{equation}
-Hence, the conditions of Lemma \ref{lemma1-theo-stat} are satisfied. Applying the lemma, we obtain \eqref{eq-theo-stat-step2}, which completes the proof of Theorem \ref{theo-stat-equality}.}
+which immediately implies the statement of Theorem \ref{theo-stat-equality}.}
 
-
-\newpage
+\color{black}{\newpage
 \bibliographystyle{ims}
 {\small
 \setlength{\bibsep}{0.55em}
-\bibliography{bibliography}}
+\bibliography{bibliography}}}
 
 \end{document}
