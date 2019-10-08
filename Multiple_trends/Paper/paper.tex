@@ -15,8 +15,12 @@
 \usepackage{natbib}
 \usepackage{setspace}
 \usepackage{mathrsfs}
+\usepackage{bibentry}
 \usepackage[left=2.7cm,right=2.7cm,bottom=2.7cm,top=2.7cm]{geometry}
 \parindent0pt 
+
+\newcommand{\doublehat}[1]{\skew{5.5}\widehat{\widehat{#1}}}
+\newcommand{\doublehattwo}[1]{\widehat{\widehat{#1}}}
 
 \input{macros}
 
@@ -78,7 +82,13 @@ where $\mathcal{F}_t  = (\ldots, \epsilon_{-1}, \epsilon_0, \epsilon_1, \ldots, 
 The model setting is as follows. We observe a panel of $n$ time series $\mathcal{Z}_i = \{(Y_{it}, \mathbf{X}_{it}): 1 \le t \le T \}$ of length $T$ for $1 \le i \le n$. Each time series $\mathcal{Z}_i$ satisfies the model equation \begin{equation}\label{model_full}
 Y_{it} = \bm{\beta}^\top_i \mathbf{X}_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
 \end{equation}
-for $1 \le t \le T$, where $\bm{\beta}_i$ is a $d \times 1$ vector of unknown parameters, $\mathbf{X}_{it}$ is a $d\times 1$ vector of individual covariates, $m_i$ is an unknown nonparametric trend function defined on $[0,1]$, $\alpha_i$ is a (deterministic or random) intercept term and $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ is a zero-mean stationary error process. As usual in nonparametric regression, the trend functions $m_i$ in model \eqref{model_full} depend on rescaled time $t/T$ rather than on real time $t$; cp.\ \cite{Robinson1989}, \cite{Dahlhaus1997} and \cite{VogtLinton2014} for the use and some discussion of the rescaled time argument. The functions $m_i$ are only identified up to an additive constant in model \eqref{model_full}: One can reformulate the model as $Y_{it} = [m_i(t/T) + c_i] + \bm{\beta}_i^\top \mathbf{X}_{it} + [\alpha_i - c_i] + \varepsilon_{it}$, that is, one can freely shift additive constants $c_i$ between the trend $m_i(t/T)$ and the error component $\alpha_i$. In order to obtain identification, one may impose different normalization constraints on the trends $m_i$. One possibility is to normalize them such that $\int_0^1 m_i(u) du = 0$ for all $i$. In what follows, we take for granted that the trends $m_i$ satisfy this constraint. The term $\alpha_i$ can also be regarded as an additional error component. In the econometrics literature, it is commonly called a fixed effect error term. It can be interpreted as capturing unobserved characteristics of the time series $\mathcal{Z}_i$ which remain constant over time. We allow the error terms $\alpha_i$ to be dependent across $i$ in an arbitrary way. Hence, by including them in model equation \eqref{model_full}, we allow the $n$ time series $\mathcal{Z}_i$ in our panel to be correlated with each other. Whereas the terms $\alpha_i$ may be correlated, the error processes $\mathcal{E}_i$ are assumed to be independent across $i$. In addition, each process $\mathcal{E}_i$ is supposed to satisfy the following conditions: 
+for $1 \le t \le T$, where $\bm{\beta}_i$ is a $d \times 1$ vector of unknown parameters, $\mathbf{X}_{it}$ is a $d\times 1$ vector of individual covariates, $m_i$ is an unknown nonparametric trend function defined on $[0,1]$, $\alpha_i$ is a (deterministic or random) intercept term and $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ is a zero-mean stationary error process. As usual in nonparametric regression, the trend functions $m_i$ in model \eqref{model_full} depend on rescaled time $t/T$ rather than on real time $t$; cp.\ \cite{Robinson1989}, \cite{Dahlhaus1997} and \cite{VogtLinton2014} for the use and some discussion of the rescaled time argument. The functions $m_i$ are only identified up to an additive constant in model \eqref{model_full}: One can reformulate the model as $Y_{it} = [m_i(t/T) + c_i] + \bm{\beta}_i^\top \mathbf{X}_{it} + [\alpha_i - c_i] + \varepsilon_{it}$, that is, one can freely shift additive constants $c_i$ between the trend $m_i(t/T)$ and the error component $\alpha_i$. In order to obtain identification, one may impose different normalization constraints on the trends $m_i$. One possibility is to normalize them such that $\int_0^1 m_i(u) du = 0$ for all $i$. In what follows, we take for granted that the trends $m_i$ satisfy this constraint. The term $\alpha_i$ can also be regarded as an additional error component. In the econometrics literature, it is commonly called a fixed effect error term. It can be interpreted as capturing unobserved characteristics of the time series $\mathcal{Z}_i$ which remain constant over time. We allow the error terms $\alpha_i$ to be dependent across $i$ in an arbitrary way. Hence, by including them in model equation \eqref{model_full}, we allow the $n$ time series $\mathcal{Z}_i$ in our panel to be correlated with each other. Whereas the terms $\alpha_i$ may be correlated, the error processes $\mathcal{E}_i$ are assumed to be independent across $i$. Technical conditions regarding the model are discussed further in this section.
+
+Finally, note that throughout the paper, we restrict attention to the case where the number of time series $n$ in model \eqref{model_full} is fixed. Extending our theoretical results to the case where $n$ slowly grows with the sample size $T$ is a possible topic for further research.
+
+\subsection{Assumptions}\label{subsec-model-assumptions}
+
+Each process $\mathcal{E}_i$ is supposed to satisfy the following conditions: 
 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
 
@@ -100,7 +110,28 @@ where $A > \frac{2}{3} (1/q + 1 + \tau_q)$ and $\tau_q = \{q^2 - 4 + (q-2) \sqrt
 
 The conditions \ref{C-err1}--\ref{C-err3} are fulfilled by a wide range of stationary processes $\mathcal{E}_i$. For a detailed discussion of these properties, see \cite{KhismatullinaVogt2018}.
 
-Finally note that throughout the paper, we restrict attention to the case where the number of time series $n$ in model \eqref{model_full} is fixed. Extending our theoretical results to the case where $n$ slowly grows with the sample size $T$ is a possible topic for further research.
+Regarding the independent variables $ \mathbf{X}_{it}$, we need the following additional assumptions for each $i$:
+
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+\setcounter{enumi}{3}
+
+\item \label{C-reg1} The covariates $ \mathbf{X}_{it}$ allow for the representation $ \mathbf{X}_{it} = \mathbf{H}_i(\ldots,u_{it-1},u_{it})$ with $u_{it}$ being i.i.d.\ random variables and $\mathbf{H}_i := (H_{i1}, H_{i2}, \ldots, H_{id})^\top: \reals^\integers \rightarrow \reals^d$ is a measurable function such that $\mathbf{H}_i(\mathcal{U}_{it})$ is well defined. Denote $\mathcal{U}_{it} = (\ldots, u_{it-1}, u_{it})$.
+
+\item \label{C-reg2} Let $N_i$ be the $d\times d$ matrix with $kl$-th entry $n_{i, kl}= \ex[H_{ik}(\mathcal{U}_{i0})H_{il}(\mathcal{U}_{i0})]$. We assume that the smallest eigenvalue of $N_i$ is strictly bigger than $0$.
+
+\item \label{C-reg3} Let $\ex [\mathbf{H}_{i}(\mathcal{U}_{i0})]=\mathbf{0}$ and $||\mathbf{H}_{i}(\mathcal{U}_{it})||_4 <\infty$.
+\item \label{C-reg4} $\sum_{s=0}^\infty \delta_4(\mathbf{H}_i, s)<\infty$.
+\end{enumerate}
+
+To be able to prove the main theorems in Section \ref{sec-test}, we need additional assumptions on the relationship between the covariates and the error process.
+
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+\setcounter{enumi}{7}
+\item \label{C-reg5} $\mathbf{X}_{it}$ (elementwise) and $\varepsilon_{is}$ are uncorrelated for each $t, s\in \{1, \ldots, T\}$.
+\item \label{C-reg6} Let $\zeta_{i, t} = (u_{it}, \eta_{it})^\top$. Define $\mathcal{I}_{i, t} = (\ldots, \zeta_{i, t-1}, \zeta_{i, t})$ and $\mathbf{U}_i(\mathcal{I}_{i, t}) =  \mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{J}_{it})$. Then, $\sum_{s=0}^\infty \delta_2(\mathbf{U}_i, s)<\infty$.
+
+\end{enumerate}
+
 
 
 \section{Testing for equality of time trends}\label{sec-test}
@@ -118,10 +149,18 @@ Y_{it} - \alpha_i - \bm{\beta}_i^\top \mathbf{X}_{it} & =: Y_{it}^\circ\\
 \end{align*}
 which is a standard nonparametric regression equation. The variables $Y_{it}^\circ$ are not observed since the intercept $\alpha_i$ and the coefficients $\bm{\beta}_i$ are not known. Given appropriate estimators $\widehat{\bm{\beta}}_i$ and $\widehat{\alpha}_i$, we can then consider
 \begin{align*}
-	\widehat{Y}_{it} := Y_{it} -\widehat{\alpha}_i - \widehat{\bm{\beta}}_i^\top \mathbf{X}_{it} =(\widehat{\bm{\beta}}_i - \bm{\beta}_i)^\top \mathbf{X}_{it} + m_i \Big( \frac{t}{T} \Big) + \big( \alpha_i - \widehat{\alpha}_i \big) + \varepsilon_{it}. 
+	\widehat{Y}_{it} := Y_{it} -\widehat{\alpha}_i - \widehat{\bm{\beta}}_i^\top \mathbf{X}_{it} =(\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top \mathbf{X}_{it} + m_i \Big( \frac{t}{T} \Big) + \big( \alpha_i - \widehat{\alpha}_i \big) + \varepsilon_{it}. 
 \end{align*}
 
-Then our unobserved variables $Y_{it}^\circ$ can be approximated by $\widehat{Y}_{it}$ and we compute our test statistic based on $\widehat{Y}_{it}$. In what follows, we assume that the such estimators with the property that $\widehat{\alpha}_i - \alpha_i = O_P(T^{-1/2})$ and $\widehat{\bm{\beta}}_i - \bm{\beta}_i = O_P(T^{-1/2})$ are given. Since $\frac{1}{T}\sum_{t=1}^T  \mathbf{X}_{it} = O_P(1)$ by Chebyshev's inequality, the unobserved variable $Y_{it}^\circ := Y_{it} - \bm{\beta}_i^\top \mathbf{X}_{it} - \alpha_i = m_i(t/T) + \varepsilon_{it}$ can be well approximated by $\widehat{Y}_{it} = Y_{it} -\widehat{\alpha}_i - \widehat{\bm{\beta}}_i^\top \mathbf{X}_{it} = Y_{it}^\circ + O_P(T^{-1/2})$. Details on one of the possible ways to construct $\widehat{\alpha}_i$ and $\widehat{\bm{\beta}}^\top_i$ are deferred to Section \ref{subsec-test-est}.
+Then our unobserved variables $Y_{it}^\circ$ can be approximated by $\widehat{Y}_{it}$ and we compute our test statistic based on $\widehat{Y}_{it}$. In what follows, we assume that an estimator with the property that $\bm{\beta}_i - \widehat{\bm{\beta}}_i = O_P(T^{-1/2})$ is given.  Details on one of the possible ways to construct $\widehat{\bm{\beta}}_i$ are deferred to Section \ref{subsec-test-est}.
+
+Given $\widehat{\bm{\beta}}_i$, consider an appropriate estimator $\widehat{\alpha}_{i}$ for the intercept $\alpha_i$ calculated by
+\begin{align}\label{alpha-est}
+\widehat{\alpha}_i &= \frac{1}{T}\sum_{t=1}^T \big(Y_{it} - \widehat{\bm{\beta}}_i^\top \mathbf{X}_{it}\big) = \frac{1}{T}\sum_{t=1}^T \big(\bm{\beta}_i^\top \mathbf{X}_{it} - \widehat{\bm{\beta}}_i^\top \mathbf{X}_{it} + \alpha_i + m_i(t/T) + \varepsilon_{it}\big) =\\
+&= \big(\bm{\beta}_i - \widehat{\bm{\beta}}_i \big)^\top\frac{1}{T}\sum_{t=1}^T  \mathbf{X}_{it} + \alpha_i + \frac{1}{T}\sum_{i=1}^T m_i(t/T) + \frac{1}{T}\sum_{i=1}^T \varepsilon_{it}.\nonumber
+\end{align}
+
+Note that $\frac{1}{T}\sum_{i=1}^T \varepsilon_{it} = O_P(T^{-1/2})$ and $\frac{1}{T}\sum_{i=1}^T m_i(t/T) = O(T^{-1})$ due to Lipschitz continuity of $m_i$ and normalization $\int_{0}^1 m_i(u)du = 0$. Furthermore, $\frac{1}{T}\sum_{t=1}^T  \mathbf{X}_{it} = O_P(1)$ by Chebyshev's inequality and $\widehat{\bm{\beta}}_i - \bm{\beta}_i = O_P (T^{-1/2})$. Plugging all these results together in \eqref{alpha-est}, we get that $\widehat{\alpha}_i - \alpha_i = O_P(T^{-1/2})$.Thus, the unobserved variable $Y_{it}^\circ := Y_{it} - \bm{\beta}_i^\top \mathbf{X}_{it} - \alpha_i = m_i(t/T) + \varepsilon_{it}$ can be well approximated by $\widehat{Y}_{it} = Y_{it} -\widehat{\alpha}_i - \widehat{\bm{\beta}}_i^\top \mathbf{X}_{it} = Y_{it}^\circ + O_P(T^{-1/2})$.
 
 We further let $\widehat{\sigma}_i^2$ be an estimator of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_{i0}, \varepsilon_{i\ell})$ which is computed from the constructed sample $\{ \widehat{Y}_{it}: 1 \le t \le T \}$. We thus regard $\widehat{\sigma}_i^2 = \widehat{\sigma}_i^2(\widehat{Y}_{i1},\ldots,\widehat{Y}_{iT})$ as a function of the variables $\widehat{Y}_{it}$ for $1 \le t \le T$. Throughout the section, we assume that $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$. Details on how to construct estimators of $\sigma_i^2$ are deferred to Section \ref{sec-error-var}. 
 
@@ -136,20 +175,32 @@ where
 \[ \Lambda_{t,T}(u,h) = K\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big], \]
 $S_{T,\ell}(u,h) = (Th)^{-1} \sum\nolimits_{t=1}^T K(\frac{\frac{t}{T}-u}{h}) (\frac{\frac{t}{T}-u}{h})^\ell$ for $\ell = 0,1,2$ and $K$ is a kernel function with the following properties: 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
-\setcounter{enumi}{3}
+\setcounter{enumi}{9}
 \item \label{C-ker} The kernel $K$ is non-negative, symmetric about zero and integrates to one. Moreover, it has compact support $[-1,1]$ and is Lipschitz continuous, that is, $|K(v) - K(w)| \le C |v-w|$ for any $v,w \in \reals$ and some constant $C > 0$. 
 \end{enumerate} 
-The kernel average $\widehat{\psi}_{ij,T}(u,h)$ can be regarded as measuring the distance between the two trend curves $m_i$ and $m_j$ on the interval $[u-h,u+h]$. We aggregate the kernel averages $\widehat{\psi}_{ij,T}(u,h)$ for all $(u,h) \in \mathcal{G}_T$ by the multiscale statistic 
+The kernel average $\widehat{\psi}_{ij,T}(u,h)$ can be regarded as measuring the distance between the two trend curves $m_i$ and $m_j$ on the interval $[u-h,u+h]$.
+
+We now combine the test statistics $\widehat{\psi}_{ij, T}(u,h)$ for a wide range of different locations $u$ and bandwidths or scales $h$ in a following way:
 \[ \widehat{\Psi}_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widehat{\psi}_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\}, \] 
-where $\lambda(h) = \sqrt{2 \log \{ 1/(2h) \}}$ and the set $\mathcal{G}_T$ has been introduced in Section \ref{subsec-method-stat}. The statistic $\widehat{\Psi}_{ij,T}$ can be interpreted as a distance measure between the two curves $m_i$ and $m_j$. We finally define the multiscale statistic for testing the null hypothesis $H_0: m_1 =m_2 = \ldots = m_n$ as
+where $\lambda(h) = \sqrt{2 \log \{ 1/(2h) \}}$ and the set $\mathcal{G}_T$ is the set of points $(u, h)$ that are taken into
+consideration. The statistic $\widehat{\Psi}_{ij,T}$ can be interpreted as a global distance measure between the two curves $m_i$ and $m_j$. Thus, the multiscale statistic $\widehat{\Psi}_{ij, T}$ simultaneously takes into account all locations $u$ and bandwidths $h$ with $(u,h) \in \mathcal{G}_T$. Throughout the paper, we suppose that $\mathcal{G}_T$ is some subset of $\mathcal{G}_T^{\text{full}} = \{ (u,h): u = t/T \text{ for some } 1 \le t \le T \text{ and } h \in [h_{\min},h_{\max}] \}$, where $h_{\min}$ and $h_{\max}$ denote some minimal and maximal bandwidth value, respectively. For our theory to work, we require the following conditions to hold:
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+\setcounter{enumi}{10}
+
+\item \label{C-grid} $|\mathcal{G}_T| = O(T^\theta)$ for some arbitrarily large but fixed constant $\theta > 0$, where $|\mathcal{G}_T|$ denotes the cardinality of $\mathcal{G}_T$. 
+
+\item \label{C-h} $h_{\min} \gg T^{-(1-\frac{2}{q})} \log T$, that is, $h_{\min} / \{ T^{-(1-\frac{2}{q})} \log T \} \rightarrow \infty$ with $q > 4$ defined in \ref{C-err2} and $h_{\max} < 1/2$.
+
+\end{enumerate}
+
+We finally define the multiscale statistic for testing the null hypothesis $H_0: m_1 =m_2 = \ldots = m_n$ as
 \[ \widehat{\Psi}_{n,T} = \max_{1 \le i < j \le n} \widehat{\Psi}_{ij,T}, \]
 that is, we define it as the maximal distance $\widehat{\Psi}_{ij,T}$ between any pair of curves $m_i$ and $m_j$ with $i \ne j$. 
-
 
 \subsection{The test procedure}\label{subsec-test-test}
 
 
-Let $Z_{it}$ for $1 \le t \le T$ and $1 \le i \le n$ be independent standard normal random variables and independent standard normal random vectors respectively which are independent of the error terms $\varepsilon_{it}$ and the covariates $\mathbf{X}_{it}$. Denote the empirical average of the variables $Z_{i1},\ldots,Z_{iT}$ by $\bar{Z}_{i,T} = T^{-1} \sum_{t=1}^T Z_{it}$. To simplify notation, we write $\bar{Z}_i = \bar{Z}_{i,T}$ in what follows. For each $i$ and $j$, we introduce the Gaussian statistic 
+Let $Z_{it}$ for $1 \le t \le T$ and $1 \le i \le n$ be independent standard normal random variables which are independent of the error terms $\varepsilon_{it}$ and the covariates $\mathbf{X}_{it}$. Denote the empirical average of the variables $Z_{i1},\ldots,Z_{iT}$ by $\bar{Z}_{i,T} = T^{-1} \sum_{t=1}^T Z_{it}$. To simplify notation, we write $\bar{Z}_i = \bar{Z}_{i,T}$ in what follows. For each $i$ and $j$, we introduce the Gaussian statistic 
 \[\Phi_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \big\{ \Big|\frac{\phi_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\}, \] 
 where $\phi_{ij,T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}$. Moreover, we define the statistic
 \begin{align}\label{Phi-statistic}
@@ -167,12 +218,14 @@ To start with, we introduce the auxiliary statistic
 \end{align}
 where
 \[ \widehat{\Phi}_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \} \]
-and $\widehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) + \bm{\beta}_i^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - (\varepsilon_{jt} - \bar{\varepsilon}_j) -\bm{\beta}_j^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\}$ with $\bar{\varepsilon}_i = \bar{\varepsilon}_{i,T} = T^{-1} \sum_{t=1}^T \varepsilon_{it}$ and $ \bar{\mathbf{X}}_{i} =  \bar{\mathbf{X}}_{i, T} = T^{-1}\sum_{t=1}^T  \mathbf{X}_{it}$ respectively. Our first theoretical result characterizes the asymptotic behaviour of the statistic $\widehat{\Phi}_{n,T}$. 
+and $\widehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) + (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - (\varepsilon_{jt} - \bar{\varepsilon}_j) - \linebreak - (\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\}$ with $\bar{\varepsilon}_i = \bar{\varepsilon}_{i,T} = T^{-1} \sum_{t=1}^T \varepsilon_{it}$ and $ \bar{\mathbf{X}}_{i} =  \bar{\mathbf{X}}_{i, T} = T^{-1}\sum_{t=1}^T  \mathbf{X}_{it}$ respectively. Our first theoretical result characterizes the asymptotic behaviour of the statistic $\widehat{\Phi}_{n,T}$. 
 \begin{theorem}\label{theo-stat-equality}
-Suppose that the error processes $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ are independent across $i$ and satisfy \ref{C-err1}--\ref{C-err3} for each $i$. Moreover, let \ref{C-ker}--\ref{C-h} be fulfilled and assume that $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$ for each $i$. Then 
-\[ \pr \big( \widehat{\Phi}_{n,T} \le q_{n,T}(\alpha)| \{ \mathbf{X}_{it}: 1 \le t \le T, 1 \leq i \leq n \} \big) = (1 - \alpha) + o(1) \text{ a.s.} \]
+Suppose that the error processes $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ are independent across $i$ and satisfy \ref{C-err1}--\ref{C-err3} for each $i$. Moreover, let \ref{C-reg1}--\ref{C-h} be fulfilled and assume that $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$ for each $i$. Then 
+\[ \pr \big( \widehat{\Phi}_{n,T} \le q_{n,T}(\alpha) \big) = (1 - \alpha) + o(1) \]
 \end{theorem}
-Theorem \ref{theo-stat-equality} is the main stepping stone to derive the theoretical properties of our multiscale test. The details are provided in the Appendix. The following proposition characterizes the behaviour of our multiscale test under the null hypothesis and under local alternatives. 
+Theorem \ref{theo-stat-equality} is the main stepping stone to derive the theoretical properties of our multiscale test. The proof of the theorem is provided in the Section \ref{subsec-appendix-stat-equality}.
+
+%The following proposition characterizes the behaviour of our multiscale test under the null hypothesis and under local alternatives. 
 %\begin{prop}\label{prop-test-equality}
 %Let the conditions  of Theorem \ref{theo-stat-equality} be satisfied. 
 %\begin{enumerate}[label=(\alph*),leftmargin=0.75cm]
@@ -183,9 +236,9 @@ Theorem \ref{theo-stat-equality} is the main stepping stone to derive the theore
 %\end{enumerate}
 %\end{prop}
 
-\subsection{Estimation of the parameters $\bm{\beta}_i$ and $\alpha_i$}\label{subsec-test-est}
+\subsection{Estimation of the parameters $\bm{\beta}_i$}\label{subsec-test-est}
 
-We now focus on finding an appropriate estimator $\widehat{\bm{\beta}}_i$ of $\bm{\beta}_i$. For that purpose, we consider the time series $\{\Delta Y_{it}\}$ of the differences $\Delta Y_{it} = Y_{it} - Y_{i t-1}$ for each $i$. We then have
+We now focus on finding an appropriate estimator $\widehat{\bm{\beta}}_i$ of $\bm{\beta}_i$. For that purpose, for each $i$ we consider the time series $\{\Delta Y_{it}: 2 \leq t \leq T\}$ of the differences $\Delta Y_{it} = Y_{it} - Y_{i t-1}$. We then have
 \begin{align*}
 	\Delta Y_{it} = Y_{it} - Y_{i t-1} =\bm{\beta}_i^\top \Delta \mathbf{X}_{it} + \bigg(m_i \Big( \frac{t}{T} \Big) - m_i \Big(\frac{t-1}{T}\Big)\bigg) + \Delta \varepsilon_{it},
 \end{align*}
@@ -196,46 +249,17 @@ where $\Delta  \mathbf{X}_{it} =  \mathbf{X}_{it} -  \mathbf{X}_{it-1}$ and $ \D
 
 In particular, for each $i$ we employ the least squares estimation method to estimate $\bm{\beta}_i$ in \eqref{model_with_regs}, treating $\Delta \mathbf{X}_{it}$ as the regressors and $\Delta Y_{it}$ as the response variable. That is, we propose the following differencing estimator:
 \begin{align}\label{dif-est}
-\widehat{\bm{\beta}}_i = \Big( \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta Y_{it}
+\widehat{\bm{\beta}}_i = \Big( \sum_{t=2}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \sum_{t=2}^T \Delta \mathbf{X}_{it} \Delta Y_{it}
 \end{align}
-
-We need the following assumptions on the independent variables $ \mathbf{X}_{it}$ for each $i$:
-
-\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
-\setcounter{enumi}{4}
-
-\item \label{C-reg1} The covariates $ \mathbf{X}_{it}$ allow for the representation $ \mathbf{X}_{it} = \mathbf{H}_i(\mathcal{U}_{it})$, where $\mathcal{U}_{it} =(\ldots,u_{it-1},u_{it})$ with $u_{it}$ being i.i.d.\ random variables and $\mathbf{H}_i := (H_{i1}, H_{i2}, \ldots, H_{id})^\top: \reals^\integers \rightarrow \reals^d$ is a measurable function such that $\mathbf{H}_i(\mathcal{U}_{it})$ is well defined. 
-
-\item \label{C-reg2} Let $N_i$ be the $d\times d$ matrix with $kl$-th entry $n_{i, kl}= \ex[H_{ik}(\mathcal{U}_{i0})H_{il}(\mathcal{U}_{i0})]$. We assume that the smallest eigenvalue of $N_i$ is strictly bigger than $0$.
-
-\item \label{C-reg3} Let $\ex [\mathbf{H}_{i}(\mathcal{U}_{i0})]=\mathbf{0}$ and $||\mathbf{H}_{i}(\mathcal{U}_{it})||_4 <\infty$.
-\end{enumerate}
-
-To be able to prove the main theorems in this section, we need additional assumptions on the relationship between the covariates and the error process.
-
-\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
-\setcounter{enumi}{7}
-\item \label{C-reg4} $\mathbf{X}_{it}$ (elementwise) and $\varepsilon_{is}$ are uncorrelated for each $t, s\in \{1, \ldots, T\}$.
-\item \label{C-reg5} Let $\zeta_{i, t} = (u_{it}, \eta_{it})^\top$. Define $\mathcal{I}_{i, t} = (\ldots, \zeta_{i, t-1}, \zeta_{i, t})$ and $\mathbf{U}_i(\mathcal{I}_{i, t}) =  \mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{J}_{it})$. Then, $\sum_{s=0}^\infty \delta_2(\mathbf{U}_i, s)<\infty$.
-\item \label{C-reg6} $\sum_{s=0}^\infty \delta_4(\mathbf{H}_i, s)<\infty$.
-\end{enumerate}
 
 Then the asymptotic consistency for this differencing estimator is given by the following theorem:
 
 \begin{theorem}\label{theo-regs}
 Under Assumptions \ref{C-err1} - \ref{C-reg6}, we have
-\[\widehat{\bm{\beta}}_i - \bm{\beta}_i = O_P \Big(\frac{1}{\sqrt{T}}\Big),
+\[\bm{\beta}_i - \widehat{\bm{\beta}}_i  = O_P \Big(\frac{1}{\sqrt{T}}\Big),
 \]
 where $\widehat{\bm{\beta}}_i$ is the differencing estimator given by \eqref{dif-est}.
 \end{theorem}
-
-Now consider an appropriate estimator $\widehat{\alpha}_{i}$ for the intercept $\alpha_i$ calculated by
-\begin{align}\label{alpha-est}
-\widehat{\alpha}_i &= \frac{1}{T}\sum_{t=1}^T \big(Y_{it} - \widehat{\bm{\beta}}_i^\top \mathbf{X}_{it}\big) = \frac{1}{T}\sum_{t=1}^T \big(\bm{\beta}_i^\top \mathbf{X}_{it} - \widehat{\bm{\beta}}_i^\top \mathbf{X}_{it} + \alpha_i + m_i(t/T) + \varepsilon_{it}\big) =\\
-&= \big(\bm{\beta}_i - \widehat{\bm{\beta}}_i \big)^\top\frac{1}{T}\sum_{t=1}^T  \mathbf{X}_{it} + \alpha_i + \frac{1}{T}\sum_{i=1}^T m_i(t/T) + \frac{1}{T}\sum_{i=1}^T \varepsilon_{it}.\nonumber
-\end{align}
-
-Note that $\frac{1}{T}\sum_{i=1}^T \varepsilon_{it} = O_P(T^{-1/2})$ and $\frac{1}{T}\sum_{i=1}^T m_i(t/T) = O(T^{-1})$ due to Lipschitz continuity of $m_i$ and normalization $\int_{0}^1 m_i(u)du = 0$. Furthermore, $\frac{1}{T}\sum_{t=1}^T  \mathbf{X}_{it} = O_P(1)$ by Chebyshev's inequality and $\widehat{\bm{\beta}}_i - \bm{\beta}_i = O_P (T^{-1/2})$ by Theorem \ref{theo-regs}. Plugging all these results together in \eqref{alpha-est}, we get that $\widehat{\alpha}_i - \alpha_i = O_P(T^{-1/2})$.
 
 
 %\item Let $m_i = m_{i,T}$ be a Lipschitz continuous function with $\int_0^1 m_{i,T}(w) dw = 0$ for any $i$. In particular, suppose that $|m_{i,T}(v) - m_{i,T}(w)| \le L |v - w|$ for all $v,w \in [0,1]$ and some fixed constant $L < \infty$ which does not depend on $T$. Moreover, assume that for some pair of indices $i$ and $j$, the functions $m_{i,T}$ and $m_{j,T}$ have the following property: There exists $(u,h) \in \mathcal{G}_T$ with $[u-h,u+h] \subseteq [0,1]$ such that $m_{i,T}(w) - m_{j,T}(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$ or $m_{j,T}(w) - m_{i,T}(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$, where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$. Then 
@@ -306,12 +330,398 @@ Note that $\frac{1}{T}\sum_{i=1}^T \varepsilon_{it} = O_P(T^{-1/2})$ and $\frac{
 %The statement of Proposition \ref{prop-clustering-2} remains to hold true when the sets of intervals $\Pi_{n,T}(\ell,\ell^\prime)$ are replaced by the corresponding sets of minimal intervals. According to Proposition \ref{prop-clustering-2}, the sets $\Pi_{n,T}(\ell,\ell^\prime)$ allow us to locate, with a pre-specified confidence, time regions where the group-specific trend functions $g_\ell$ and $g_{\ell^\prime}$ differ from each other. In particular, we can claim with asymptotic confidence $\ge 1 - \alpha$ that the trend functions $g_\ell$ and $g_{\ell^\prime}$ differ on all intervals $I_{u,h} \in \Pi_{n,T}(\ell,\ell^\prime)$.
 
 
-\newpage
+%\newpage
 \bibliographystyle{ims}
 {\small
 \setlength{\bibsep}{0.55em}
-\bibliography{bibliography}}
+\nobibliography{bibliography}}
 
-\input{paper_appendix}
+\section{Appendix}\label{sec-appendix}
+
+\subsection{Proof of Theorem \ref{theo-stat-equality}}\label{subsec-appendix-stat-equaility}
+
+
+In this section, we prove the theoretical results from Section \ref{sec-test}. We use the following notation: The symbol $C$ denotes a universal real constant which may take a different value on each occurrence. For $a,b \in \reals$, we write $a_+ = \max \{0,a\}$ and $a \vee b = \max\{a,b\}$. For any set $A$, the symbol $|A|$ denotes the cardinality of $A$. The notation $X \stackrel{\mathcal{D}}{=} Y$ means that the two random variables $X$ and $Y$ have the same distribution. Finally, $f_0(\cdot)$ and $F_0(\cdot)$ denote the density and the distribution function of the standard normal distribution, respectively.
+
+\subsection*{Introducing additional intermediate statistic}
+
+The auxiliary statistic $\widehat{\Phi}_{n,T}$ defined in Section \ref{subsec-test-theo} (which is basically the version of the main statistic $\widehat{\Psi}_{n,T}$ under the null hypothesis) heavily depends on the known covariates $\mathbf{X}_{it}$, whereas the Gaussian version $\Phi_{n,T}$ does not. This is the reason why we need to introduce additional intermediate test statistic that connects  $\widehat{\Phi}_{n,T}$ and $\Phi_{n,T}$. Thus, for each $i$ and $j$, consider the following kernel averages:
+\[\doublehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) - (\varepsilon_{jt} - \bar{\varepsilon}_j)  \big\}. \]
+The intermediate statistic is then defined as 
+\begin{align}\label{Phi-doublehat-statistic}
+\doublehattwo{\Phi}_{n,T} &= \max_{1 \le i < j \le n} \doublehattwo{\Phi}_{ij,T}\quad  \text{with} \\
+\doublehattwo{\Phi}_{ij,T} &= \max_{(u,h) \in \mathcal{G}_T} \big\{ \Big|\frac{\doublehat{\phi}_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\}.\nonumber
+\end{align}
+This statistic can thus be regarded as an approximation of the statistic $\widehat{\Phi}_{n,T}$. Heuristically, the kernel averages $\doublehat{\phi}_{ij,T}(u,h)$
+are close to the kernel averages $\widehat{\phi}_{ij,T}(u,h)$ because of the properties of our estimators $\widehat{\bf{\beta}}_i$ and assumptions on $\mathbf{X}_{it}$ but we will prove it later in this Section.
+
+
+\subsection*{Auxiliary results using strong approximation theory}
+
+The main purpose of this section is to prove that there is a version of the multiscale statistic $\doublehattwo{\Phi}_{n,T}$ defined in \eqref{Phi-doublehat-statistic} which is close to a Gaussian statistic whose distribution is known. More specifically, we prove the following result. 
+
+\begin{propA}\label{propA-strong-approx-equality}
+Under the conditions of Theorem \ref{theo-stat-equality}, there exist statistics $\widetilde{\Phi}_{n,T}$ for $T = 1,2,\ldots$ with the following two properties: (i) $\widetilde{\Phi}_{n, T}$ has the same distribution as $\doublehattwo{\Phi}_{n, T}$ for any $T$, and (ii)
+\begin{align*}
+\big| \widetilde{\Phi}_{n, T} - \Phi_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} &+ \frac{\rho_T}{\sqrt{h_{\min}}}\sqrt{\log T} \Big),
+\end{align*}
+where $\Phi_{n,T}$ is a Gaussian statistic as defined in \eqref{Phi-statistic}. 
+\end{propA}
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-strong-approx-equality}}}] 
+For the proof, we draw on strong approximation theory for each stationary process $\mathcal{E}_i = \{\varepsilon_{it}: 1 \leq t \leq T\}$ that fulfill the conditions \ref{C-err1}--\ref{C-err3}. By Theorem 2.1 and Corollary 2.1 in \cite{BerkesLiuWu2014}, the following strong approximation result holds true: On a richer probability space, there exist a standard Brownian motion $\mathbb{B}$ and a sequence $\{ \widetilde{\varepsilon}_{t}: t \in \naturals \}$ such that $[\widetilde{\varepsilon}_{1},\ldots,\widetilde{\varepsilon}_{T}] \stackrel{\mathcal{D}}{=} [\varepsilon_{1},\ldots,\varepsilon_{T}]$ for each $T$ and 
+\begin{equation}\label{eq-strongapprox-dep}
+\max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{s} - \sigma \mathbb{B}(t) \Big| = o\big( T^{1/q} \big) \quad \text{a.s.},  
+\end{equation}
+where $\sigma^2 = \sum_{k \in \integers} \cov(\varepsilon_{0}, \varepsilon_{k})$ denotes the long-run error variance.
+
+We apply this result for each stationary process $\mathcal{E}_i = \{\varepsilon_{it}: 1 \leq t \leq T\}$ separately. In order to do this, we define 
+\begin{align}\label{Phi-tilde-statistic}
+\widetilde{\Phi}_{n,T} = \max_{1 \le i < j \le n} \widetilde{\Phi}_{ij,T},
+\end{align}
+where
+\[ \widetilde{\Phi}_{ij, T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widetilde{\phi}_{ij, T}(u,h)}{\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big\}, \]
+where $\widetilde{\phi}_{ij, T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \big\{ (\widetilde{\varepsilon}_{it} - \bar{\widetilde{\varepsilon}}_i)  - (\widetilde{\varepsilon}_{jt} - \bar{\widetilde{\varepsilon}}_j)\big\}$ and $\widetilde{\sigma}^2_i$ are the same estimators as $\widehat{\sigma}^2_i$ with $\widehat{Y}_{it} = (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top \mathbf{X}_{it} + m_i ( t/T) + \big( \alpha_i - \widehat{\alpha}_i \big) + \varepsilon_{it}$
+replaced by $\widetilde{Y}_{it} = \linebreak = (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top \mathbf{X}_{it} + m_i(t/T) + \big( \alpha_i - \widehat{\alpha}_i \big) + \widetilde{\varepsilon}_{it}$  for $1 \le t \le T$. In addition, we let
+\begin{align*}
+\Phi_{n, T} & = \max_{1\leq i < j \leq n} \Phi_{ij, T}= \max_{1\leq i < j \leq n} \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij, T}(u,h)}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}}\Big| - \lambda(h) \Big\} \\
+\Phi_{n, T}^{\diamond} & =\max_{1\leq i < j \leq n} \Phi_{ij, T}^{\diamond} = \max_{1\leq i< j \leq n}\max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij, T}(u,h)}{\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{1/2}}\Big| - \lambda(h) \Big\} 
+\end{align*}
+with $$\phi_{ij, T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}$$ and $Z_{it} = \mathbb{B}_i(t) - \mathbb{B}_i(t-1)$. With this notation, we can write 
+\begin{equation}\label{eq-strongapprox-bound1}
+\big| \widetilde{\Phi}_{n, T} - \Phi_{n, T} \big| \le \big| \widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond} \big| + \big| \Phi_{n, T}^{\diamond} - \Phi_{n, T} \big|. 
+\end{equation}
+First consider $|\widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond}|$. Straightforward calculations yield that 
+\begin{align}\label{eq-strongapprox-bound2}
+\big| \widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond} \big| \le \{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{-1/2} \max_{1\le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \big| \widetilde{\phi}_{ij, T}(u,h) - \phi_{ij, T}(u,h) \big|.
+\end{align}
+Using summation by parts,
+($\sum_{i=1}^n a_i b_i = \sum_{i=1}^{n-1} A_i (b_i - b_{i+1}) + A_n b_n$ with $A_j = \sum_{j=1}^i a_j$) 
+we further obtain that 
+\begin{align*}
+\big| \widetilde{\phi}_{ij, T}(u,h) &- \phi_{ij, T}(u,h) \big| = \\
+=&\bigg|\sum_{t=1}^T w_{t,T}(u,h) \big\{ (\widetilde{\varepsilon}_{it} - \bar{\widetilde{\varepsilon}}_i) - (\widetilde{\varepsilon}_{jt} - \bar{\widetilde{\varepsilon}}_j) -\widehat{\sigma}_i (Z_{it} - \bar{Z}_i) + \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}\bigg| = \\
+=&\Big|\sum_{t=1}^{T-1} A_{ij, t} \big(w_{t,T}(u,h) -w_{t+1,T}(u,h)\big) + A_{ij, T} w_{T,T}(u,h)\Big|,
+\end{align*}
+where 
+\begin{align*}
+A_{ij, t} = \sum_{s=1}^t \big\{ (\widetilde{\varepsilon}_{is} - \bar{\widetilde{\varepsilon}}_i)  - (\widetilde{\varepsilon}_{js} - \bar{\widetilde{\varepsilon}}_j) - \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) + \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}.
+\end{align*}
+Note that by construction $A_{ij, T} = 0$ for all pairs $(i, j)$. Denoting 
+\[ W_T(u,h) = \sum\limits_{t=1}^{T-1} |w_{t+1,T}(u,h) - w_{t,T}(u,h)|,\]
+we have 
+\begin{align}\label{eq-strongapprox-bound3}
+\big| \widetilde{\phi}_{ij, T}(u,h) - \phi_{ij, T}(u,h) \big| =& \Big|\sum_{t=1}^{T-1} A_{ij, t} \big(w_{t,T}(u,h) -w_{t+1,T}(u,h)\big)\Big|\le W_T(u, h)\max_{1 \le t \le T} |A_{ij, t}|.
+\end{align}
+Now consider $\max_{1 \le t \le T} |A_{ij, t}|$:
+\begin{align*}
+\max_{1 \le t \le T} |A_{ij, t}|  \le & \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t (\widetilde{\varepsilon}_{is} - \bar{\widetilde{\varepsilon}}_{i}) - \widehat{\sigma}_i \sum\limits_{s=1}^t \big\{ Z_{is} - \bar{Z_i} \big\} \Big| + \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t (\widetilde{\varepsilon}_{js} - \bar{\widetilde{\varepsilon}}_{j}) - \widehat{\sigma}_j \sum\limits_{s=1}^t \big\{ Z_{js} - \bar{Z_j} \big\} \Big| \le \\
+\le & \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \widehat{\sigma}_i \sum\limits_{s=1}^t Z_{is} \Big| + \max_{1 \le t \le T} \Big| t (\bar{\widetilde{\varepsilon}}_{i} - \widehat{\sigma}_i \bar{Z_i}) \Big|+\\
+& + \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \widehat{\sigma}_j \sum\limits_{s=1}^t Z_{js} \Big| + \max_{1 \le t \le T} \Big| t (\bar{\widetilde{\varepsilon}}_{j} -\widehat{\sigma}_j \bar{Z_j}) \Big|= \\
+= & \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \widehat{\sigma}_i \sum\limits_{s=1}^t Z_{is} \Big| + T \Big| \frac{1}{T}\Big(\sum\limits_{s=1}^T \widetilde{\varepsilon}_{is} - \widehat{\sigma}_i \sum\limits_{s=1}^T Z_{is}\Big)\Big|+\\
+& + \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \widehat{\sigma}_j \sum\limits_{s=1}^t Z_{js} \Big| +  T \Big| \frac{1}{T}\Big(\sum\limits_{s=1}^T \widetilde{\varepsilon}_{js} -\widehat{\sigma}_j \sum\limits_{s=1}^T  Z_{js}\Big)\Big| \le \\
+\le & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} -\widehat{\sigma}_i \sum\limits_{s=1}^t Z_{is} \Big| + 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} -\widehat{\sigma}_j \sum\limits_{s=1}^t Z_{js} \Big| =\\
+= & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \widehat{\sigma}_i \sum\limits_{s=1}^t \big(\mathbb{B}_{i}(s) - \mathbb{B}_{i}(s-1) \big) \Big| +\\
+& +  2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} -\widehat{\sigma}_j \sum\limits_{s=1}^t \big(\mathbb{B}_{j}(s) - \mathbb{B}_{j}(s-1) \big) \Big| =\\
+= & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \widehat{\sigma}_i \mathbb{B}_{i}(t) \Big| + 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \widehat{\sigma}_j \mathbb{B}_{j}(t) \Big| \le\\
+\le & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \sigma_i \mathbb{B}_{i}(t) \Big| + 2 \max_{1 \le t \le T}\Big|\sigma_i \mathbb{B}_{i}(t) - \widehat{\sigma}_i \mathbb{B}_{i}(t)  \Big| +\\
+&+ 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \sigma_j \mathbb{B}_{j}(t) \Big| + 2 \max_{1 \le t \le T} \Big| \sigma_j \mathbb{B}_{j}(t) - \widehat{\sigma}_j \mathbb{B}_{j}(t) \Big|
+\end{align*}
+Note that for all $1 \le i \le n$ we have $\widehat{\sigma}_i^2 - \sigma_i^2 = o_P(\rho_T)$ which leads to $\widehat{\sigma}_i - \sigma_i = o_P(\rho_T)$. Furthermore, regarding the standard Brownian motion $\mathbb{B}_{i}(t)$ as a sum of standard normal random variables, we get the following result:
+\begin{align*}
+ \max_{1 \le t \le T} |\mathbb{B}_{i}(t) | &=  \max_{1 \le t \le T}\big|\sum_{s=1}^t Z_{is} \big| = \max_{1 \le t \le T}\Big|\sqrt{t} \frac{1}{\sqrt{t}}\sum_{s=1}^t Z_{is} \Big| \le \\
+ &\le \max_{1 \le t \le T}\sqrt{t}  \max_{1 \le t \le T}\Big| \frac{1}{\sqrt{t}}\sum_{s=1}^t Z_{is} \Big| = \sqrt{T}  \max_{1 \le t \le T}\Big| \frac{1}{\sqrt{t}}\sum_{s=1}^t Z_{is} \Big| = O_P(\sqrt{T \log T}),
+\end{align*}
+where we used the bound for the maximum of $T$ standard normal random variables and the fact that for each $t$, $1\le t \le T$, $ \frac{1}{\sqrt{t}}\sum_{s=1}^t Z_{is}$ is a standard normal random variable.
+
+Therefore, applying the strong approximation result \eqref{eq-strongapprox-dep}, we can infer that
+\begin{align}\label{max_At}
+\max_{1 \le t \le T} |A_{ij, t}|  \le & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \sigma_i \mathbb{B}_{i}(t) \Big| + 2\big|\sigma_i - \widehat{\sigma}_i\big|  \max_{1 \le t \le T}\big|\mathbb{B}_{i}(t) \big| +\nonumber\\
+&+ 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \sigma_j \mathbb{B}_{j}(t) \Big| + 2\big|\sigma_j - \widehat{\sigma}_j\big| \max_{1 \le t \le T} \big| \mathbb{B}_{j}(t) \big| = \nonumber\\
+=& o_P\big(T^{1/q} + \rho_T \sqrt{T \log T}\big). 
+\end{align}
+Standard arguments show that $\max_{(u,h) \in \mathcal{G}_T} W_T(u,h) = O( 1/\sqrt{Th_{\min}} )$. Plugging \eqref{max_At} in \eqref{eq-strongapprox-bound3} and then in \eqref{eq-strongapprox-bound2}, we can thus infer that 
+\begin{align}\label{eq-strongapprox-bound4}
+\big| \widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond} \big| &\le \{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{-1/2}  \max_{(u,h) \in \mathcal{G}_T} W_T(u, h) \max_{1\le i < j \le n}\max_{1\le t \le T} |A_{ij, t}|=\nonumber \\
+&= o_P\Big( \frac{T^{1/q}}{\sqrt{Th_{\min}}} + \frac{\rho_T}{\sqrt{h_{\min}}}\sqrt{\log T} \Big).
+\end{align}
+Now consider $|\Phi_{n, T}^{\diamond} - \Phi_{n, T}|$. Since $\phi_{ij, T}(u,h)$ is distributed as $ \normal(0,\widehat{\sigma}^2_i + \widehat{\sigma}^2_j)$ for all $(u,h) \in \mathcal{G}_T$ and all $1\le i < j \le n$, $|\mathcal{G}_T| = O(T^\theta)$ for some large but fixed constant $\theta$ by Assumption \ref{C-grid}, $n$ is fixed and $\widehat{\sigma}^2_i = \sigma^2_i + o_p(\rho_T)$ as well as $\widetilde{\sigma}^2_i = \sigma^2_i + o_p(\rho_T)$, we can establish that
+\begin{align}\label{eq-strongapprox-bound5}
+\big| \Phi_{n, T}^{\diamond} - \Phi_{n, T} \big| &\le \max_{1\leq i< j \leq n}\max_{(u,h) \in \mathcal{G}_T} \Big|\frac{\phi_{ij, T}(u,h)}{\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{1/2}} - \frac{\phi_{ij, T}(u,h)}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}}\Big| = o_P(\rho_T \sqrt{\log T}).
+\end{align}
+Plugging \eqref{eq-strongapprox-bound4} and \eqref{eq-strongapprox-bound5} in \eqref{eq-strongapprox-bound1} completes the proof.
+\end{proof}
+
+
+
+\subsection*{Auxiliary results using anti-concentration bounds}
+
+
+In this section, we establish some properties of the Gaussian statistic $\Phi_{n,T}$ defined in \eqref{Phi-statistic}. We in particular show that $\Phi_{n,T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$ with $\delta_T$ converging to zero.  
+%
+%
+\begin{propA}\label{propA-anticon-equality}
+Under the conditions of Theorem \ref{theo-stat-equality}, it holds that 
+\[ \sup_{x \in \reals} \pr \big( | \Phi_{n,T} - x | \le \delta_T \big) = o(1), \]
+where $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}/ h_{\min}$.
+\end{propA}
+%
+%
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-anticon-equality}}}] 
+
+We write $x = (u,h)$ along with $\mathcal{G}_T = \{ x : x \in \mathcal{G}_T \} = \{x_1,\ldots,x_p\}$, where $p := |\mathcal{G}_T| \le O(T^\theta)$ for some large but fixed $\theta > 0$ by our assumptions. Moreover, for $k = 1,\ldots,p$, we set 
+\begin{align*}
+U_{ij, 2k-1} & = \frac{\phi_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} - \lambda(x_{k2}) \\
+U_{ij, 2k} & = -\frac{\phi_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} - \lambda(x_{k2}) 
+\end{align*}
+with $x_k = (x_{k1},x_{k2})$. This notation allows us to write
+\[ \Phi_{n, T} = \max_{1\le i < j \le n} \max_{1 \le k \le 2p} U_{ij, k}, \]
+where $(U_{12, 1},\ldots,U_{(n-1)n, 2p})^\top \in \reals^{n(n-1)p}$ is a Gaussian random vector.
+
+The main technical tool for proving Proposition \ref{propA-anticon-equality} are anti-concentration bounds for Gaussian random vectors. The following proposition slightly generalizes anti-concentration results derived in \cite{Chernozhukov2015}, in particular Theorem 3 therein.
+
+\begin{propA}\label{theo-anticon}
+Let $(X_1,\ldots,X_p)^\top$ be a Gaussian random vector in $\reals^p$ with $\ex[X_j] = \mu_j$ and $\var(X_j) = \sigma_j^2 > 0$ for $1 \le j \le p$. Define $\overline{\mu} = \max_{1 \le j \le p} |\mu_j|$ together with $\underline{\sigma} = \min_{1 \le j \le p} \sigma_j$ and $\overline{\sigma} = \max_{1 \le j \le p} \sigma_j$. Moreover, set $a_p = \ex[ \max_{1 \le j \le p} (X_j-\mu_j)/\sigma_j ]$ and $b_p = \ex[ \max_{1 \le j \le p} (X_j-\mu_j) ]$. For every $\delta > 0$, it holds that
+\[ \sup_{x \in \reals} \pr \Big( \big| \max_{1 \le j \le p} X_j - x \big| \le \delta \Big) \le C \delta \big\{ \overline{\mu} + a_p + b_p + \sqrt{1 \vee \log(\underline{\sigma}/\delta)} \big\}, \]
+where $C > 0$ depends only on $\underline{\sigma}$ and $\overline{\sigma}$. 
+\end{propA} 
+The proof of Proposition \ref{theo-anticon} is provided in \cite{KhismatullinaVogt2018}.
+\end{proof}
+
+\subsection*{Auxiliary results concerning the intermediate statistic}
+
+
+In this section, we establish some properties of the intermediate test statistic $\doublehattwo{\Phi}_{n,T}$ defined in \eqref{Phi-doublehat-statistic} and its relationship with $\widehat{\Phi}_{n, T}$. First of all, we prove the proposition that relates the distribution of these two statistics.
+
+
+\begin{propA}\label{propA-intermediate-relation}
+For any $x \in \reals$ and $\gamma_{n, T} > 0$, we have
+\begin{align*} \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) - \pr \Big(\big|\doublehattwo{\Phi}_{n,T} &- \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)\le \pr(\widehat{\Phi}_{n, T} \le x) \le \\
+&\le\pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big).
+\end{align*}
+\end{propA}
+
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-intermediate-relation}}}] 
+From the law of total probability and the monotonic property of the probability function, we have
+\begin{align*} \pr(\widehat{\Phi}_{n, T} \le x) &= \pr \Big(\widehat{\Phi}_{n, T} \le x, \big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| \le \gamma_{n, T} \Big) + \pr \Big(\widehat{\Phi}_{n, T} \le x, \big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big) \le \\
+& \le  \pr \Big(\widehat{\Phi}_{n, T} \le x, \widehat{\Phi}_{n,T} - \gamma_{n, T} \le \doublehattwo{\Phi}_{n,T} \le \widehat{\Phi}_{n,T} + \gamma_{n, T} \Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big) \le \\
+& \le  \pr \Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T} \Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big).
+\end{align*}
+Analogously, 
+\begin{align*} \pr(\doublehattwo{\Phi}_{n, T} \le x - \gamma_{n, T}) =& \pr \Big(\doublehattwo{\Phi}_{n, T} \le x - \gamma_{n, T}, \big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| \le \gamma_{n, T} \Big) +\\
+&+ \pr \Big(\doublehattwo{\Phi}_{n, T} \le x - \gamma_{n, T}, \big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big) \le \\
+ \le&  \pr \Big(\doublehattwo{\Phi}_{n, T} \le x - \gamma_{n, T}, \doublehattwo{\Phi}_{n, T} - \gamma_{n, T} \le \widehat{\Phi}_{n,T} \le \doublehattwo{\Phi}_{n, T} + \gamma_{n, T} \Big) +\\
+ &+  \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big) \le \\
+ \le &  \pr \Big(\widehat{\Phi}_{n,T} \le x \Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big).
+\end{align*}
+Now consider $\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big|$. Analogously as in the proof of Proposition \ref{propA-strong-approx-equality}, we can establish that
+\begin{align*}
+\big| \doublehattwo{\Phi}_{n, T} - \widehat{\Phi}_{n, T} \big| \le \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2} \max_{1\le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \Big| \doublehat{\phi}_{ij, T}(u,h) - \widehat{\phi}_{ij, T}(u,h) \Big|,
+\end{align*}
+where 
+\[\doublehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) - (\varepsilon_{jt} - \bar{\varepsilon}_j)  \big\} \]
+and 
+\[\widehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) + (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - (\varepsilon_{jt} - \bar{\varepsilon}_j) - (\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\}.\]
+Thus, 
+\begin{align*}
+\Big| \doublehat{\phi}_{ij, T}(u,h) - \widehat{\phi}_{ij, T}(u,h) \Big| & =\Big| \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - (\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\} \Big| \le \\
+&\le  \sum_{t=1}^T \big|w_{t,T}(u,h)\big| \big| (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i})  -(\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\} \big| \le\\
+&\le  \sum_{t=1}^T \big| (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) \big| + \sum_{t=1}^T \big| (\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big|
+\end{align*}
+Then
+\begin{align*}
+\big| \doublehattwo{\Phi}_{n, T} - \widehat{\Phi}_{n, T} \big| &\le 2 \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2} \max_{1\le i \le n} \max_{(u,h) \in \mathcal{G}_T}\sum_{t=1}^T \big| (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) \big| = \\
+&= 2 \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2} \max_{1\le i \le n} \sum_{t=1}^T \big| (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) \big|
+\end{align*}
+Furthermore, we know that for all $i \in \{1, \ldots, n\}$ we have $\bm{\beta}_i - \widehat{\bm{\beta}}_i = O_P(T^{-1/2})$ and $\widehat{\sigma}_i^2 = \sigma_i^2 + o_P(\rho_T)$.
+
+ 
+Statement of the proposition directly follows from it.
+\end{proof}
+
+
+\subsection*{Proof of Theorem \ref{theo-stat-equality}}
+
+
+To prove Theorem \ref{theo-stat-equality}, we make use of the two auxiliary results derived above. By Proposition \ref{propA-strong-approx-equality}, there exist statistics $\widetilde{\Phi}_{n, T}$ for $T = 1,2,\ldots$ which are distributed as $\doublehattwo{\Phi}_T$ for any $T \ge 1$ and which have the property that 
+\begin{align}\label{statement-propA-strong-approx-equality}
+\big| \widetilde{\Phi}_{n, T} - \Phi_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} &+ \frac{\rho_T}{\sqrt{h_{\min}}}\sqrt{\log T} \Big),
+\end{align}
+where $\Phi_{n, T}$ is a Gaussian statistic as defined in \eqref{Phi-statistic}. The approximation result \eqref{statement-propA-strong-approx-equality} allows us to replace the multiscale statistic $\doublehattwo{\Phi}_{n, T}$ by an identically distributed version $\widetilde{\Phi}_{n, T}$ which is close to the Gaussian statistic $\Phi_{n, T}$.
+
+In the next step, we show that  
+\begin{equation}\label{eq-theo-stat-equality-step2}
+\sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = o(1). 
+\end{equation}
+
+The proof of \eqref{eq-theo-stat-equality-step2} proceeds as follows. Suppose that $\pr(\widehat{\Phi}_{n,T}) \geq \pr(\Phi_{n, T})$. Then by Proposition \ref{propA-intermediate-relation} we have
+\begin{align}\label{eq-theo-stat-equality-step3}
+0 &\le \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x)  \le \nonumber\\
+&\le \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)   - \pr\Big(\Phi_{n,T} \le x\Big) = \nonumber\\
+&= \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big)  - \pr\Big(\Phi_{n,T} \le x\Big) + o(1)= \nonumber\\
+&= \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) - \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big) +  \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big)   - \pr\Big(\Phi_{n,T} \le x\Big) + o(1)\le
+\end{align}
+
+which immediately implies the statement of Theorem \ref{theo-stat-equality}.
+
+\subsection{Proof of Theorem \ref{theo-regs}}\label{subsec-appendix-estimators}
+
+We define the first-differenced regressors as follows.
+\[ \Delta \mathbf{X}_{it} =\mathbf{H}_i(\mathcal{U}_{it}) - \mathbf{H}_i(\mathcal{U}_{it-1}) := \Delta \mathbf{H}_i(\mathcal{U}_{it}). \]
+Similarly, 
+\[\Delta \varepsilon_{it} = \varepsilon_{it} - \varepsilon_{it-1} = G_i(\mathcal{J}_{it}) - G_i(\mathcal{J}_{it-1}) = \Delta G_i(\mathcal{J}_{it}).
+\]
+ 
+With these assumptions we can prove the following propositions.
+\begin{prop}\label{prop-reg-1}
+Under Assumptions \ref{C-reg1} and \ref{C-reg3}, $|| \Delta \mathbf{H}_i(\mathcal{U}_{it})||_4 < \infty$.
+\end{prop}
+
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{prop-reg-1}}}]
+By Assumption \ref{C-reg3},
+\[
+ || \Delta \mathbf{H}_i(\mathcal{U}_{it})||_4 \leq  ||\mathbf{H}_i(\mathcal{U}_{it})||_4 +  || \mathbf{H}_i(\mathcal{U}_{it-1})||_4 < \infty.
+\]
+\end{proof} 
+
+\begin{prop}\label{prop-reg-2}
+Under Assumption \ref{C-reg4}, $\Delta \mathbf{X}_{it}$ (elementwise) and $\Delta \varepsilon_{it}$ are uncorrelated for each $t\in \{1, \ldots, T\}$.
+\end{prop}
+
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{prop-reg-2}}}]
+By Assumption \ref{C-reg4},
+\begin{align*}
+\ex [\Delta \mathbf{X}_{it}\Delta \varepsilon_{it}] &= \ex \big[(\mathbf{X}_{it} - \mathbf{X}_{it-1}) (\varepsilon_{it} - \varepsilon_{it-1})\big] =\\
+=&\ex[\mathbf{X}_{it}  \varepsilon_{it}] - \ex[\mathbf{X}_{it-1}  \varepsilon_{it}]- \ex[\mathbf{X}_{it}  \varepsilon_{it-1}] + \ex[\mathbf{X}_{it-1}  \varepsilon_{it-1}] =\\
+=& \ex[\mathbf{X}_{it}]\ex[  \varepsilon_{it}] - \ex[\mathbf{X}_{it-1}]\ex[  \varepsilon_{it}]- \ex[\mathbf{X}_{it}]\ex[  \varepsilon_{it-1}] + \ex[\mathbf{X}_{it-1}]\ex[  \varepsilon_{it-1}] =\\
+=& \big( \ex[\mathbf{X}_{it}] - \ex[\mathbf{X}_{it-1}]\big)\big(\ex[  \varepsilon_{it}]  - \ex[\varepsilon_{it-1}]\big) = \ex [\Delta \mathbf{X}_{it}]\ex[\Delta \varepsilon_{it}]
+\end{align*}
+\end{proof} 
+
+
+\begin{prop}\label{prop-reg-3}
+Define 
+\[ \Delta \mathbf{U}_i(\mathcal{I}_{i, t}) := \Delta \mathbf{H}_i(\mathcal{U}_{it}) \Delta G_i(\mathcal{J}_{it}).
+\]
+Under Assumptions \ref{C-err2} - \ref{C-err3}, \ref{C-reg5} - \ref{C-reg6}, we have that $\sum_{s=0}^\infty \delta_2(\Delta \mathbf{U}_i, s) < \infty$.
+\end{prop}
+
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{prop-reg-3}}}]
+Note the following
+\begin{align*}
+ &\delta_2(\Delta \mathbf{U}_i, t) = || \Delta\mathbf{U}_i(\mathcal{I}_{i, t}) - \Delta \mathbf{U}_i(\mathcal{I}_{i,t}^\prime) ||_2 =\\
+ &= || \Delta \mathbf{H}_i(\mathcal{U}_{it}) \Delta G_i(\mathcal{J}_{it}) -  \Delta \mathbf{H}_i(\mathcal{U}_{it}^\prime) \Delta G_i(\mathcal{J}_{it}^\prime) ||_2 =\\
+ & = ||\big(\mathbf{H}_i(\mathcal{U}_{it}) - \mathbf{H}_i(\mathcal{U}_{it-1})\big)\big(G_i(\mathcal{J}_{it}) - G_i(\mathcal{J}_{it-1})\big) - \big(\mathbf{H}_i(\mathcal{U}_{it}^\prime) - \mathbf{H}_i(\mathcal{U}_{it-1}^\prime)\big)\big(G_i(\mathcal{J}_{it}^\prime) - G_i(\mathcal{J}_{it-1}^\prime)\big)||_2 =\\
+ &= ||\mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{J}_{it}) - \mathbf{H}_i(\mathcal{U}_{it-1})G_i(\mathcal{J}_{it}) - \mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{J}_{it-1})  + \mathbf{H}_i(\mathcal{U}_{it-1})G_i(\mathcal{J}_{it-1}) - \\
+ &\quad - \mathbf{H}_i(\mathcal{U}_{it}^\prime)G_i(\mathcal{J}_{it}^\prime) + \mathbf{H}_i(\mathcal{U}_{it-1}^\prime)G_i(\mathcal{J}_{it}^\prime) + \mathbf{H}_i(\mathcal{U}_{it}^\prime)G_i(\mathcal{J}_{it-1}^\prime)  - \mathbf{H}_i(\mathcal{U}_{it-1}^\prime)G_i(\mathcal{J}_{it-1}^\prime) ||_2\leq \\
+ &\leq ||\mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{J}_{it}) - \mathbf{H}_i(\mathcal{U}_{it}^\prime)G_i(\mathcal{J}_{it}^\prime) ||_2 + ||\mathbf{H}_i(\mathcal{U}_{it-1})G_i(\mathcal{J}_{it-1}) -  \mathbf{H}_i(\mathcal{U}_{it-1}^\prime)G_i(\mathcal{J}_{it-1}^\prime)||_2 + \\
+ &\quad + ||\mathbf{H}_i(\mathcal{U}_{it-1})G_i(\mathcal{J}_{it}) -\mathbf{H}_i(\mathcal{U}_{it-1}^\prime)G_i(\mathcal{J}_{it}^\prime)    ||_2
+ + ||\mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{J}_{it-1}) -  \mathbf{H}_i(\mathcal{U}_{it}^\prime)G_i(\mathcal{J}_{it-1}^\prime) ||_2 = \\
+ & = \delta_2(\mathbf{U}_i, t) + \delta_2(\mathbf{U}_i, t-1)  +\\
+ &\quad + ||\mathbf{H}_i(\mathcal{U}_{it-1})G_i(\mathcal{J}_{it}) - \mathbf{H}_i(\mathcal{U}_{it-1}^\prime)G_i(\mathcal{J}_{it}) + \mathbf{H}_i(\mathcal{U}_{it-1}^\prime)G_i(\mathcal{J}_{it}) - \mathbf{H}_i(\mathcal{U}_{it-1}^\prime)G_i(\mathcal{J}_{it}^\prime)    ||_2+\\
+ &\quad + ||\mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{J}_{it-1}) -\mathbf{H}_i(\mathcal{U}_{it}^\prime)G_i(\mathcal{J}_{it-1})+ \mathbf{H}_i(\mathcal{U}_{it}^\prime)G_i(\mathcal{J}_{it-1})-  \mathbf{H}_i(\mathcal{U}_{it}^\prime)G_i(\mathcal{J}_{it-1}^\prime) ||_2 \leq\\
+  &\leq \delta_2(\mathbf{U}_i, t) + \delta_2(\mathbf{U}_i, t-1)  + \\
+  &\quad +||\big(\mathbf{H}_i(\mathcal{U}_{it-1}) - \mathbf{H}_i(\mathcal{U}_{it-1}^\prime)\big) G_i(\mathcal{J}_{it})||_2 +  ||\mathbf{H}_i(\mathcal{U}_{it-1}^\prime)\big(G_i(\mathcal{J}_{it}) - G_i(\mathcal{J}_{it}^\prime)\big)    ||_2+\\
+ &\quad + ||\big(\mathbf{H}_i(\mathcal{U}_{it}) -\mathbf{H}_i(\mathcal{U}_{it}^\prime)\big)G_i(\mathcal{J}_{it-1})||_2 + ||\mathbf{H}_i(\mathcal{U}_{it}^\prime)\big(G_i(\mathcal{J}_{it-1}) -G_i(\mathcal{J}_{it-1}^\prime)\big) ||_2 \leq \\
+ &\leq \delta_2(\mathbf{U}_i, t) + \delta_2(\mathbf{U}_i, t-1)  + \big(\delta_2(\mathbf{H}_i, t-1) +  \delta_2(\mathbf{H}_i, t)\big) ||G_i ||_2+ \big( \delta_2(G_i, t-1) +  \delta_2(G_i, t)\big)||\mathbf{H}_i ||_2  
+\end{align*}
+
+Here $\mathcal{U}_{it}^\prime  = (\ldots, u_{i(-1)}, u^\prime_{i0}, u_{i1}, \ldots, u_{it-1}, u_{it})$, $\mathcal{U}_{it-1}^\prime  = (\ldots, u_{i(-1)}, u^\prime_{i0}, u_{i1}, \ldots, u_{it-1})$, $\mathcal{J}_{it}^\prime  = (\ldots, \eta_{i(-1)}, \eta^\prime_{i0}, \eta_{i1}, \ldots, \eta_{it-1}, \eta_{it})$, $\mathcal{J}_{it-1}^\prime  = (\ldots, \eta_{i(-1)}, \eta^\prime_{i0}, \eta_{i1}, \ldots, \eta_{it-1})$ are coupled processes with $u_{i0}^\prime$ being an i.i.d. copy of $u_{i0}$ and $\eta_{i0}^\prime$ being an i.i.d. copy of $\eta_{i0}$.
+
+This leads us to 
+\begin{align*}
+ &\sum_{s=0}^\infty \delta_2(\Delta \mathbf{U}_i, s) \leq \sum_{s=0}^\infty \delta_2(\mathbf{U}_i, s) + \sum_{s=1}^\infty\delta_2(\mathbf{U}_i, s-1)  +\\
+ &\quad + \sum_{s=1}^\infty\big(\delta_2(\mathbf{H}_i, s-1) +  \delta_2(\mathbf{H}_i, s)\big) ||G_i ||_2 + \sum_{s=1}^\infty\big( \delta_2(G_i, s-1) +  \delta_2(G_i, s)\big)||\mathbf{H}_i ||_2 <\infty 
+\end{align*}
+
+
+\end{proof}
+
+
+\begin{prop}\label{prop-reg-4}
+Under Assumptions \ref{C-err1} - \ref{C-reg6},
+\[ \Big| \frac{1}{\sqrt{T}}\sum_{t=1}^T \Delta \mathbf{X}_{it}\Delta \varepsilon_{it} \Big| = O_P(1).
+\]
+\end{prop}
+
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{prop-reg-4}}}]
+We need the following notation:
+\begin{alignat*}{2}
+&\mathcal{P}_{i,t}(\cdot) &&:= \ex[\cdot|\mathcal{I}_{i, t}] -\ex[\cdot|\mathcal{I}_{i, t-1}], \\
+&\kappa_{i} && := \frac{1}{T}\sum_{t=1}^T  \Delta \mathbf{X}_{it}\Delta \varepsilon_{it}, \\
+&\kappa_{i, s}^{\mathcal{P}} && := \frac{1}{T}\sum_{t=1}^T \mathcal{P}_{i, t-s}\big( \Delta \mathbf{X}_{it}\Delta \varepsilon_{it}\big).
+\end{alignat*}
+Then,
+\begin{align*}
+||\kappa_{i, s}^{\mathcal{P}}||^2 &= \Big|\Big| \frac{1}{T}\sum_{t=1}^T \mathcal{P}_{i, t-s}\big( \Delta \mathbf{X}_{it}\Delta \varepsilon_{it}\big) \Big|\Big|^2 \leq\\
+&\leq \frac{1}{T^2} \sum_{t=1}^T \Big|\Big| \ex (\Delta \mathbf{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i, t-s}) -\ex (\Delta \mathbf{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i, t-s-1}) \Big|\Big|^2 =\\
+&= \frac{1}{T^2} \sum_{t=1}^T \Big|\Big| \ex (\Delta \mathbf{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i, t-s}) -\ex (\Delta \mathbf{X}_{it, s}^\prime\Delta \varepsilon_{it, s}^\prime|\mathcal{I}_{i, t-s}) \Big|\Big|^2,
+\end{align*}
+where $\Delta \mathbf{X}_{it, s}^\prime\Delta \varepsilon_{it, s}^\prime$ denotes $\Delta \mathbf{X}_{it}\Delta \varepsilon_{it}$ with $\{\zeta_{i, t-s}\}$ replaced by its i.i.d. copy $\{\zeta_{i, t-s}^\prime\}$. In this case $\ex (\Delta \mathbf{X}_{it, s}^\prime\Delta \varepsilon_{it, s}^\prime|\mathcal{I}_{i, t-s -1}) = \ex (\Delta \mathbf{X}_{it, s}^\prime\Delta \varepsilon_{it, s}^\prime|\mathcal{I}_{i, t-s})$. Furthermore, by linearity of the expectation and Jensen's inequality, we have 
+\begin{align*}
+||\kappa_{i, s}^{\mathcal{P}}||^2 &\leq \frac{1}{T^2} \sum_{t=1}^T \Big|\Big| \ex (\Delta \mathbf{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i, t-s}) -\ex (\Delta \mathbf{X}_{it, s}^\prime\Delta \varepsilon_{it, s}^\prime|\mathcal{I}_{i, t-s}) \Big|\Big|^2 \leq \\
+&\leq \frac{1}{T^2} \sum_{t=1}^T \Big|\Big| \Delta \mathbf{X}_{it}\Delta \varepsilon_{it} -\Delta \mathbf{X}_{it, s}^\prime\Delta \varepsilon_{it, s}^\prime\Big|\Big|^2 =\\
+& = \frac{1}{T^2} \sum_{t=1}^T \Big|\Big| \Delta \mathbf{H}_i(\mathcal{U}_{it})  \Delta G_i(\mathcal{J}_{it}) - \Delta \mathbf{H}_i(\mathcal{U}_{it, s}^\prime)  \Delta G_i(\mathcal{J}_{it, s}^\prime)\Big|\Big|^2 =\\
+& = \frac{1}{T^2} \sum_{t=1}^T \Big|\Big| \Delta \mathbf{U}_i(\mathcal{I}_{i,t})  - \Delta \mathbf{U}_i(\mathcal{I}_{i,t, s}^\prime) \Big|\Big|^2 \leq \frac{1}{T^2} \sum_{t=1}^T \delta_2^2(\Delta \mathbf{U}_i, s) = \frac{1}{T}\delta_2^2(\Delta \mathbf{U}_i, s)
+\end{align*}
+with $\mathcal{U}_{it, s}^\prime = (\ldots, u_{it-s-1}, u^\prime_{it-s}, u_{it-s+1}, \ldots, u_{it})$, $\mathcal{J}_{it, s}^\prime = (\ldots, \eta_{it-s-1}, \eta^\prime_{it-s}, \eta_{it-s+1}, \ldots, \eta_{it})$, $\zeta^\prime_{it} = (u_{it}^\prime, \eta_{it}^\prime)^\top$ and $\mathcal{I}_{i,t,s}^\prime =(\ldots, \zeta_{it-s-1}, \zeta^\prime_{it-s}, \zeta_{it-s+1}, \ldots, \zeta_{it})$.
+
+Moreover,
+\begin{align*}
+\kappa_i - \ex \kappa_i &= \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it}\Delta \varepsilon_{it} - \ex \kappa_i = \frac{1}{T}\sum_{t=1}^T \ex ( \Delta \mathbf{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i,t}) - \ex \kappa_i =\\
+&= \frac{1}{T}\sum_{t=1}^T \big( \ex ( \Delta \mathbf{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i,t} ) - \ex ( \mathbf{X}_{it}\Delta \varepsilon_{it}) \big) = \\
+&= \frac{1}{T}\sum_{t=1}^T \sum_{s=0}^\infty \big( \ex ( \Delta \mathbf{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i,t-s} ) - \ex ( \Delta \mathbf{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i,t-s-1} )  \big) =\\
+&= \frac{1}{T}\sum_{t=1}^T \sum_{s=0}^\infty \mathcal{P}_{i, t-s} (\Delta \mathbf{X}_{it}\Delta \varepsilon_{it}) = \sum_{s=0}^\infty \kappa_{i, s}^{\mathcal{P}}.
+\end{align*}
+Thus, by Proposition \ref{prop-reg-3},
+\[ || \kappa_i - \ex \kappa_i || \leq \sum_{s=0}^\infty ||\kappa_{i, s}^{\mathcal{P}} || \leq \frac{1}{\sqrt{T}}\sum_{s=0}^\infty \delta_2(\Delta \mathbf{U}_i, s) = O\Big(\frac{1}{\sqrt{T}}\Big)
+\]
+Since $\ex \kappa_i = 0$ by Proposition \ref{prop-reg-2}, we conclude that
+\[  \Big|\Big| \frac{1}{T}\sum_{t=1}^T  \Delta \mathbf{X}_{it}\Delta \varepsilon_{it} \Big|\Big| = O\Big(\frac{1}{\sqrt{T}}\Big).
+\]
+Therefore, the proposition follows.
+\end{proof}
+
+
+
+\begin{proof}[\textnormal{\textbf{Proof of Theorem \ref{theo-regs}}}]
+Recall the differencing estimator $\widehat{\bm{\beta}}_i$:
+\begin{align*}
+\widehat{\bm{\beta}}_i &= \Big( \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta Y_{it} =\\
+& =  \Big( \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \sum_{t=1}^T \Delta \mathbf{X}_{it} \bigg(\Delta \mathbf{X}_{it}^\top \bm{\beta}_i + \Delta \varepsilon_{it} + O\Big(\frac{1}{T}\Big) \bigg) =\\
+&= \bm{\beta}_i +  \Big( \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \varepsilon_{it}
++  O\Big(\frac{1}{T}\Big) \Big( \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \sum_{t=1}^T \Delta \mathbf{X}_{it}. 
+\end{align*}
+This leads to
+\begin{align*}
+\sqrt{T}( \widehat{\bm{\beta}}_i - \bm{\beta}_i) &=  \Big(\frac{1}{T} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1}\frac{1}{\sqrt{T}} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \varepsilon_{it} +\\
+&+  O\Big(\frac{1}{\sqrt{T}}\Big) \Big( \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it}.
+\end{align*}
+
+Since 
+\[\ex \Big[ \frac{1}{T}\sum_{t=1}^T \Delta H_{ij}(\mathcal{U}_{it})\Big] = 0\]
+and 
+\[\var \Big[ \frac{1}{T}\sum_{t=1}^T \Delta H_{ij}(\mathcal{U}_{it})\Big] \leq \frac{4}{T^2} \ex\big[H_{ij}^2(\mathcal{U}_{it})\big],\]
+by Chebyshev's inequality we have that $\Big|\frac{1}{T}\sum_{t=1}^T \Delta H_{ij}(\mathcal{U}_{it})\Big| = O_P(1)$ for each $j\in\{1, \ldots, d\} $. And this in turn implies that
+\begin{align}\label{proof-1}
+\Big|\frac{1}{T}\sum_{t=1}^T \Delta \mathbf{H}_i (\mathcal{U}_{it}) \Big| = \Big| \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it}\Big| = O_P(1).
+\end{align}
+
+
+Similarly, by Proposition \ref{prop-reg-1} and Chebyshev's inequality, we have that for each $j, k\in\{1, \ldots, d\}$
+\[  \Big|\frac{1}{T}\sum_{t=1}^T \Delta H_{ij}(\mathcal{U}_{it}) \Delta H_{ik}(\mathcal{U}_{it})\Big| = O_P(1),
+\]
+which leads to 
+\begin{align}\label{proof-2}
+\Big|\Big| \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{H}_i (\mathcal{U}_{it})\Delta \mathbf{H}_i (\mathcal{U}_{it})^\top \Big|\Big| =\Big|\Big|\frac{1}{T}\sum_{t=1}^T\Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top\Big|\Big| = O_P(1),
+\end{align}
+where $||A||$ with $A$ being a matrix is any matrix norm.
+
+By Assumption \ref{C-reg2}, we know that $\ex [\Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top] = \ex [\Delta \mathbf{X}_{i0} \Delta \mathbf{X}_{i0}^\top]$ is invertible, thus, 
+\[\Bigg| \Bigg| \Big(\frac{1}{T}\sum_{t=1}^T\Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top\Big)^{-1}\Bigg|\Bigg| = O_P(1).\]
+By applying Proposition \ref{prop-reg-4}, \eqref{proof-1} and \eqref{proof-2}, the statement of the theorem follows.
+\end{proof}
+
+
+
 
 \end{document}
