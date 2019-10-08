@@ -3,20 +3,20 @@
 \usepackage{amssymb,amsthm,graphicx}
 \usepackage{enumitem}
 \usepackage{color}
-\usepackage{epsfig}
-\usepackage{graphics}
-\usepackage{pdfpages}
-\usepackage{subcaption}
-\usepackage[font=small]{caption}
-\usepackage[hang,flushmargin]{footmisc} 
+%\usepackage{epsfig}
+%\usepackage{graphics}
+%\usepackage{pdfpages}
+%\usepackage{subcaption}
+%\usepackage[font=small]{caption}
+%\usepackage[hang,flushmargin]{footmisc} 
 \usepackage{float}
-\usepackage{booktabs}
+%\usepackage{booktabs}
 \usepackage[mathscr]{euscript}
 \usepackage{natbib}
-\usepackage{setspace}
-\usepackage{mathrsfs}
+%\usepackage{setspace}
+%\usepackage{mathrsfs}
 \usepackage{bibentry}
-\usepackage[left=2.7cm,right=2.7cm,bottom=2.7cm,top=2.7cm]{geometry}
+%\usepackage[left=2.7cm,right=2.7cm,bottom=2.7cm,top=2.7cm]{geometry}
 \parindent0pt 
 
 \newcommand{\doublehat}[1]{\skew{5.5}\widehat{\widehat{#1}}}
@@ -68,7 +68,7 @@
 \numberwithin{equation}{section}
 \allowdisplaybreaks[1]
 
-\input{paper_intro}
+%\input{paper_intro}
 
 \section{The model}\label{sec-model}
 
@@ -541,27 +541,71 @@ Statement of the proposition directly follows from it.
 
 \subsection*{Proof of Theorem \ref{theo-stat-equality}}
 
+For the proof of Theorem \ref{theo-stat-equality}, we will use the following simple lemma: 
+\begin{lemmaA}\label{lemma1-theo-stat}
+Let $V_T$ and $W_T$ be real-valued random variables for $T = 1,2,\ldots$ such that $V_T - W_T = o_p(\delta_T)$ with some $\delta_T = o(1)$. If 
+\begin{equation}\label{eq-lemma1-cond}
+\sup_{x \in \reals} \pr(|V_T - x| \le \delta_T) = o(1), 
+\end{equation}
+then 
+\begin{equation}\label{eq-lemma1-statement}
+\sup_{x \in \reals} \big| \pr(V_T \le x) - \pr(W_T \le x) \big| = o(1). 
+\end{equation}
+\end{lemmaA}
+Proof of this lemma is provided in \cite*{KhismatullinaVogt2018}.
 
-To prove Theorem \ref{theo-stat-equality}, we make use of the two auxiliary results derived above. By Proposition \ref{propA-strong-approx-equality}, there exist statistics $\widetilde{\Phi}_{n, T}$ for $T = 1,2,\ldots$ which are distributed as $\doublehattwo{\Phi}_T$ for any $T \ge 1$ and which have the property that 
-\begin{align}\label{statement-propA-strong-approx-equality}
+Now we can proceed to the proof itself. We will build the proof of Theorem \ref{theo-stat-equality} on the auxiliary results derived above. Then the steps of the proof are as follows.
+\begin{itemize}
+\item First, by Proposition \ref{propA-strong-approx-equality}, there exist statistics $\widetilde{\Phi}_{n, T}$ for $T = 1,2,\ldots$ which are distributed as $\doublehattwo{\Phi}_T$ for any $n \ge 2$, $T \ge 1$ and which have the property that 
+\begin{align}\label{eq-theo-stat-equality-step1}
 \big| \widetilde{\Phi}_{n, T} - \Phi_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} &+ \frac{\rho_T}{\sqrt{h_{\min}}}\sqrt{\log T} \Big),
 \end{align}
-where $\Phi_{n, T}$ is a Gaussian statistic as defined in \eqref{Phi-statistic}. The approximation result \eqref{statement-propA-strong-approx-equality} allows us to replace the multiscale statistic $\doublehattwo{\Phi}_{n, T}$ by an identically distributed version $\widetilde{\Phi}_{n, T}$ which is close to the Gaussian statistic $\Phi_{n, T}$.
-
-In the next step, we show that  
-\begin{equation}\label{eq-theo-stat-equality-step2}
-\sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = o(1). 
+where $\Phi_{n, T}$ is a Gaussian statistic as defined in \eqref{Phi-statistic}. The approximation result \eqref{eq-theo-stat-equality-step1} allows us to replace the multiscale statistic $\doublehattwo{\Phi}_{n, T}$ by an identically distributed version $\widetilde{\Phi}_{n, T}$ which is close to the Gaussian statistic $\Phi_{n, T}$.
+\item Second, by Proposition \ref{propA-anticon-equality} we show that $\Phi_{n,T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$ with $\delta_T$ converging to zero. Or, in other words, it holds that 
+\begin{align}\label{eq-theo-stat-equality-step2}
+\sup_{x \in \reals} \pr \big( | \Phi_{n,T} - x | \le \delta_T \big) = o(1),
+\end{align}
+where $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}/ h_{\min}$.
+\item In the third step we make use of Lemma \ref{lemma1-theo-stat} to show that
+\begin{equation}\label{eq-theo-stat-equality-step3}
+\sup_{x \in \reals} \big| \pr(\doublehattwo{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = o(1). 
 \end{equation}
+This statement directly follows from the previous two steps and the fact that $\widetilde{\Phi}_{n, T}$ is distributed as $\doublehattwo{\Phi}_{n, T}$ for any $n \ge 2$, $T \ge 1$.
+\item And finally, we prove that  
+\begin{equation}\label{eq-theo-stat-equality-step4}
+\sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = o(1),
+\end{equation}
+which immediately implies the statement of Theorem \ref{theo-stat-equality}.
+\end{itemize}
 
-The proof of \eqref{eq-theo-stat-equality-step2} proceeds as follows. Suppose that $\pr(\widehat{\Phi}_{n,T}) \geq \pr(\Phi_{n, T})$. Then by Proposition \ref{propA-intermediate-relation} we have
+The proof of \eqref{eq-theo-stat-equality-step4} proceeds as follows. First we consider those $x\in \reals$ such that $\pr(\widehat{\Phi}_{n,T} \le x) \geq \pr(\Phi_{n, T} \le x)$. Then by Proposition \ref{propA-intermediate-relation} we have
 \begin{align}\label{eq-theo-stat-equality-step3}
 0 &\le \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x)  \le \nonumber\\
 &\le \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)   - \pr\Big(\Phi_{n,T} \le x\Big) = \nonumber\\
 &= \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big)  - \pr\Big(\Phi_{n,T} \le x\Big) + o(1)= \nonumber\\
-&= \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) - \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big) +  \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big)   - \pr\Big(\Phi_{n,T} \le x\Big) + o(1)\le
+&= \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) - \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big) +  \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big)   - \pr\Big(\Phi_{n,T} \le x\Big) + o(1)= \nonumber \\
+&= \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) - \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big) +  \pr\Big(x \le {\Phi}_{n,T} \le x + \gamma_{n, T}\Big) + o(1)\le \nonumber \\
+&\le \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) - \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big) +  \pr\Big(\big|{\Phi}_{n,T} - x \big| \le \gamma_{n, T}\Big) + o(1).
 \end{align}
 
-which immediately implies the statement of Theorem \ref{theo-stat-equality}.
+Now consider such $x\in \reals$ that $\pr(\widehat{\Phi}_{n,T}\le x) < \pr(\Phi_{n, T}\le x)$. Then again by Proposition \ref{propA-intermediate-relation} we have
+\begin{align*}\label{eq-theo-stat-equality-step3_2}
+0 &\le \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| =  \pr(\Phi_{n,T} \le x)-  \pr(\widehat{\Phi}_{n, T} \le x) \le \\
+&\le\pr\Big(\Phi_{n,T} \le x\Big)  + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)   - \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) = \\
+&= \pr\Big(\Phi_{n,T} \le x\Big)- \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big)   + o(1)= \\
+&= \pr\Big(\Phi_{n,T} \le x\Big) - \pr\Big(\Phi_{n,T} \le x - \gamma_{n, T}\Big) + \pr\Big(\Phi_{n,T} \le x- \gamma_{n, T}\Big) - \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big)  + o(1)= \\
+&= \pr\Big(x - \gamma_{n,T} \le {\Phi}_{n,T} \le x \Big) +\pr\Big(\Phi_{n,T} \le x- \gamma_{n, T}\Big) - \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) + o(1)\le \\
+&\le \pr\Big(\big|{\Phi}_{n,T} - x \big| \le \gamma_{n, T}\Big) +\pr\Big({\Phi}_{n,T} \le x - \gamma_{n, T}\Big) -\pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) + o(1).  
+\end{align*}
+Now note that since {\color{red}$\gamma_{n,T} \to 0$}, we can use the anticoncentration results for the Gaussian statistic ${\Phi}_{n,T}$ so that we get $\pr\Big(\big|{\Phi}_{n,T} - x \big| \le \gamma_{n, T}\Big) = o(1)$. Thus, 
+\begin{align*}
+\sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) &- \pr(\Phi_{n,T} \le x) \big| \le \\
+\le \max \Bigg\{ &\sup_{x \in \reals} \bigg| \pr\Big({\Phi}_{n,T} \le x - \gamma_{n, T}\Big) -\pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big)\bigg|, \\
+&\sup_{x \in \reals} \bigg| \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big) -\pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big)\bigg| \Bigg\} + o(1) = \\
+=&\sup_{y \in \reals} \bigg| \pr\Big({\Phi}_{n,T} \le y\Big) -\pr\Big(\doublehattwo{\Phi}_{n,T} \le y\Big)\bigg| + o(1) = o(1).
+\end{align*}
+
+
 
 \subsection{Proof of Theorem \ref{theo-regs}}\label{subsec-appendix-estimators}
 
