@@ -511,9 +511,20 @@ Analogously,
 &+ \pr \Big(\doublehattwo{\Phi}_{n, T} \le x - \gamma_{n, T}, \big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big) \le \\
  \le&  \pr \Big(\doublehattwo{\Phi}_{n, T} \le x - \gamma_{n, T}, \doublehattwo{\Phi}_{n, T} - \gamma_{n, T} \le \widehat{\Phi}_{n,T} \le \doublehattwo{\Phi}_{n, T} + \gamma_{n, T} \Big) +\\
  &+  \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big) \le \\
- \le &  \pr \Big(\widehat{\Phi}_{n,T} \le x \Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big).
+ \le &  \pr \Big(\widehat{\Phi}_{n,T} \le x \Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big),
 \end{align*}
-Now consider $\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big|$. Analogously as in the proof of Proposition \ref{propA-strong-approx-equality}, we can establish that
+which completes the proof.
+\end{proof}
+
+The aim of the next proposition is to determine the value of $\gamma_{n, T}$ such that the different between the distributions of $\widehat{\Phi}_{n, T}$ and $\doublehattwo{\Phi}_{n, T}$ is not too big. In other words,
+
+\begin{propA}\label{propA-intermediate-relation-2}
+For $\gamma_{n, T} = $, we have
+\begin{align*} \pr \Big(\big|\doublehattwo{\Phi}_{n,T} &- \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big) = o(1).
+\end{align*}
+\end{propA}
+\begin{proof}
+Consider $\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big|$. Analogously as in the proof of Proposition \ref{propA-strong-approx-equality}, we can establish that
 \begin{align*}
 \big| \doublehattwo{\Phi}_{n, T} - \widehat{\Phi}_{n, T} \big| \le \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2} \max_{1\le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \Big| \doublehat{\phi}_{ij, T}(u,h) - \widehat{\phi}_{ij, T}(u,h) \Big|,
 \end{align*}

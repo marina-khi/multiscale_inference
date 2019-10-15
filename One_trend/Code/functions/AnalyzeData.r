@@ -108,9 +108,11 @@ AnalyzeData <- function(data, ts_start, filename_table, filename_plot, axis_at, 
     
     test.res      <- multiscale_testing(alpha=alpha, quantiles=quants, values=vals, grid=grid)
   
+    #postscript(filename_plot, paper="special", width=7, height=9, horizontal=FALSE)
     pdf(filename_plot, width=7, height=9, paper="special")
     layout(matrix(c(1, 2, 3, 4),ncol=1), widths=c(3,3,3, 3), heights=c(1,0.8,1, 1), TRUE) # Setting the layout of the graphs
   } else {
+    #postscript(filename_plot, paper="special", width=7, height=6.6, horizontal=FALSE)
     pdf(filename_plot, width=7, height=6.6, paper="special")
     layout(matrix(c(1,2,3),ncol=1), widths=c(3,3,3), heights=c(1,0.8,1), TRUE) # Setting the layout of the graphs
   }

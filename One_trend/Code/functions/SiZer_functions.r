@@ -233,7 +233,8 @@ SiZermap <- function(u.grid, h.grid, test.results, plot.title = NA)
   
 {  # computes SiZer map from the test results 
   
-  col.vec <- c("red", "purple", "blue", "gray") 
+#  col.vec <- c("red", "purple", "blue", "gray") 
+  col.vec <- c("#F7F7F7", "#969696", "#525252", "#636363") 
   temp    <- sort(unique(as.vector(test.results))) + 2
   temp    <- seq(min(temp),max(temp),by=1)
   col.vec <- col.vec[temp]
