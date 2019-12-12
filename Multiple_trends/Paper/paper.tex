@@ -16,7 +16,7 @@
 %\usepackage{setspace}
 %\usepackage{mathrsfs}
 \usepackage{bibentry}
-%\usepackage[left=2.7cm,right=2.7cm,bottom=2.7cm,top=2.7cm]{geometry}
+\usepackage[left=2.7cm,right=2.7cm,bottom=2.7cm,top=2.7cm]{geometry}
 \parindent0pt 
 
 \newcommand{\doublehat}[1]{\skew{5.5}\widehat{\widehat{#1}}}
@@ -189,7 +189,7 @@ consideration. The statistic $\widehat{\Psi}_{ij,T}$ can be interpreted as a glo
 
 \item \label{C-grid} $|\mathcal{G}_T| = O(T^\theta)$ for some arbitrarily large but fixed constant $\theta > 0$, where $|\mathcal{G}_T|$ denotes the cardinality of $\mathcal{G}_T$. 
 
-\item \label{C-h} $h_{\min} \gg T^{-(1-\frac{2}{q})} \log T$, that is, $h_{\min} / \{ T^{-(1-\frac{2}{q})} \log T \} \rightarrow \infty$ with $q > 4$ defined in \ref{C-err2} and $h_{\max} < 1/2$.
+\item \label{C-h} $h_{\min} \gg T^{-(1-\frac{2}{q})} \log T$, that is, $h_{\min} / \{ T^{-(1-\frac{2}{q})} \log T \} \rightarrow \infty$ with $q > 4$ defined in \ref{C-err2} and {\color{red}$h_{\max} =o(1)$}.
 
 \end{enumerate}
 
@@ -343,6 +343,33 @@ where $\widehat{\bm{\beta}}_i$ is the differencing estimator given by \eqref{dif
 
 In this section, we prove the theoretical results from Section \ref{sec-test}. We use the following notation: The symbol $C$ denotes a universal real constant which may take a different value on each occurrence. For $a,b \in \reals$, we write $a_+ = \max \{0,a\}$ and $a \vee b = \max\{a,b\}$. For any set $A$, the symbol $|A|$ denotes the cardinality of $A$. The notation $X \stackrel{\mathcal{D}}{=} Y$ means that the two random variables $X$ and $Y$ have the same distribution. Finally, $f_0(\cdot)$ and $F_0(\cdot)$ denote the density and the distribution function of the standard normal distribution, respectively.
 
+%\subsection*{Auxiliary results concerning the local linear estimators}
+%Consider the local linear kernel weights $w_{t,T}(u,h)$ defined in \eqref{weights}. We can rewrite them as follows.
+%\begin{align*}
+%w_{t,T}(u,h) = \frac{\frac{1}{\sqrt{Th}} K\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]}{ \bigg\{\frac{1}{Th}\sum\nolimits_{t=1}^T  K^2\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]^2 \bigg\}^{1/2} }, 
+%\end{align*}
+%where
+%$S_{T,\ell}(u,h) = (Th)^{-1} \sum\nolimits_{t=1}^T K(\frac{\frac{t}{T}-u}{h}) (\frac{\frac{t}{T}-u}{h})^\ell$ for $\ell = 1,2$. For the sake of simplicity, denote the part of the denominator inside the curly brackets by $\nu_T(u, h)$. Then we can prove the following result:
+%\begin{lemmaA}\label{lemma-weights}
+%Let 
+%\begin{align*}
+%\nu(u, h) = \int_{-u/h}^{(1- u)/h} K^2(v)\big[S_{2}(u,h) -v S_{1}(u,h)\big]^2 dv,
+%\end{align*}
+%with $S_j(u, h) = \int_{-u/h}^{(1-u)/h} K(\rho)\rho^j d\rho$. It holds that 
+%\begin{align*}
+%|\nu_T(u, h) - \nu(u, h)| \leq \frac{C}{Th}
+%\end{align*}
+%for all $u\in [0, 1]$ and $h\in (0, 0.5)$, where $C$ does not depend on $u, h$ and $T$. Moreover, 
+%\begin{align*}
+%\inf_{u\in [0, 1], h\in (0, 0.5)} \nu(u, h) > 0.
+%\end{align*}
+%\end{lemmaA}
+%\begin{proof}
+%Proof is ommitted (for now).
+%\end{proof}
+
+
+
 \subsection*{Introducing additional intermediate statistic}
 
 The auxiliary statistic $\widehat{\Phi}_{n,T}$ defined in Section \ref{subsec-test-theo} (which is basically the version of the main statistic $\widehat{\Psi}_{n,T}$ under the null hypothesis) heavily depends on the known covariates $\mathbf{X}_{it}$, whereas the Gaussian version $\Phi_{n,T}$ does not. This is the reason why we need to introduce additional intermediate test statistic that connects  $\widehat{\Phi}_{n,T}$ and $\Phi_{n,T}$. Thus, for each $i$ and $j$, consider the following kernel averages:
@@ -414,7 +441,8 @@ we have
 \end{align}
 Now consider $\max_{1 \le t \le T} |A_{ij, t}|$:
 \begin{align*}
-\max_{1 \le t \le T} |A_{ij, t}|  \le & \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t (\widetilde{\varepsilon}_{is} - \bar{\widetilde{\varepsilon}}_{i}) - \widehat{\sigma}_i \sum\limits_{s=1}^t \big\{ Z_{is} - \bar{Z_i} \big\} \Big| + \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t (\widetilde{\varepsilon}_{js} - \bar{\widetilde{\varepsilon}}_{j}) - \widehat{\sigma}_j \sum\limits_{s=1}^t \big\{ Z_{js} - \bar{Z_j} \big\} \Big| \le \\
+\max_{1 \le t \le T} |A_{ij, t}|  \le & \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t (\widetilde{\varepsilon}_{is} - \bar{\widetilde{\varepsilon}}_{i}) - \widehat{\sigma}_i \sum\limits_{s=1}^t \big\{ Z_{is} - \bar{Z_i} \big\} \Big| + \\
+&+ \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t (\widetilde{\varepsilon}_{js} - \bar{\widetilde{\varepsilon}}_{j}) - \widehat{\sigma}_j \sum\limits_{s=1}^t \big\{ Z_{js} - \bar{Z_j} \big\} \Big| \le \\
 \le & \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \widehat{\sigma}_i \sum\limits_{s=1}^t Z_{is} \Big| + \max_{1 \le t \le T} \Big| t (\bar{\widetilde{\varepsilon}}_{i} - \widehat{\sigma}_i \bar{Z_i}) \Big|+\\
 & + \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \widehat{\sigma}_j \sum\limits_{s=1}^t Z_{js} \Big| + \max_{1 \le t \le T} \Big| t (\bar{\widetilde{\varepsilon}}_{j} -\widehat{\sigma}_j \bar{Z_j}) \Big|= \\
 = & \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \widehat{\sigma}_i \sum\limits_{s=1}^t Z_{is} \Big| + T \Big| \frac{1}{T}\Big(\sum\limits_{s=1}^T \widetilde{\varepsilon}_{is} - \widehat{\sigma}_i \sum\limits_{s=1}^T Z_{is}\Big)\Big|+\\
@@ -519,7 +547,7 @@ which completes the proof.
 The aim of the next proposition is to determine the value of $\gamma_{n, T}$ such that the different between the distributions of $\widehat{\Phi}_{n, T}$ and $\doublehattwo{\Phi}_{n, T}$ is not too big. In other words,
 
 \begin{propA}\label{propA-intermediate-relation-2}
-For $\gamma_{n, T} = $, we have
+For $\gamma_{n, T} = C h_{max}$, where $C$ is a universal constant that does not depend on $n$ and $T$, we have
 \begin{align*} \pr \Big(\big|\doublehattwo{\Phi}_{n,T} &- \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big) = o(1).
 \end{align*}
 \end{propA}
@@ -534,18 +562,68 @@ and
 \[\widehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) + (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - (\varepsilon_{jt} - \bar{\varepsilon}_j) - (\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\}.\]
 Thus, 
 \begin{align*}
-\Big| \doublehat{\phi}_{ij, T}(u,h) - \widehat{\phi}_{ij, T}(u,h) \Big| & =\Big| \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - (\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\} \Big| \le \\
-&\le  \sum_{t=1}^T \big|w_{t,T}(u,h)\big| \big| (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i})  -(\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\} \big| \le\\
-&\le  \sum_{t=1}^T \big| (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) \big| + \sum_{t=1}^T \big| (\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big|
+\Big| \doublehat{\phi}_{ij, T}(u,h) &- \widehat{\phi}_{ij, T}(u,h) \Big|  =\Big| \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - (\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\} \Big| \le \\
+&\le \Big| \sum_{t=1}^T w_{t,T}(u,h) (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) \Big| +  \Big| \sum_{t=1}^T w_{t,T}(u,h)(\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j})  \Big| =\\
+&= |\bm{\beta}_i - \widehat{\bm{\beta}}_i|^\top \Big| \sum_{t=1}^T w_{t,T}(u,h)  (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) \Big| + |\bm{\beta}_j - \widehat{\bm{\beta}}_j|^\top \Big| \sum_{t=1}^T w_{t,T}(u,h) (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j})  \Big| 
 \end{align*}
-Then
-\begin{align*}
-\big| \doublehattwo{\Phi}_{n, T} - \widehat{\Phi}_{n, T} \big| &\le 2 \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2} \max_{1\le i \le n} \max_{(u,h) \in \mathcal{G}_T}\sum_{t=1}^T \big| (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) \big| = \\
-&= 2 \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2} \max_{1\le i \le n} \sum_{t=1}^T \big| (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) \big|
-\end{align*}
-Furthermore, we know that for all $i \in \{1, \ldots, n\}$ we have $\bm{\beta}_i - \widehat{\bm{\beta}}_i = O_P(T^{-1/2})$ and $\widehat{\sigma}_i^2 = \sigma_i^2 + o_P(\rho_T)$.
 
- 
+Now consider the term $\big| \sum_{t=1}^T w_{t,T}(u,h) (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i})  \big|$. Without loss of generality, we can regard the covariates $\mathbf{X}_{it}$ to be scalars $X_{it}$, not vectors. The rest of the proof in case of a vector proceeds analogously.
+Note that by construction the weights $w_{t, T}(u, h)$ are not equal to $0$ if and only if $T(u-h) \le t \le T(u+h)$. We can use this fact together with the Cauchy-Schwarz inequality to obtain
+\begin{align*}
+\Big| \sum_{t=1}^T w_{t,T}(u,h) (X_{it} - \bar{X}_{j})  \Big| &= \Big| \sum_{t=1}^T w_{t,T}(u,h) \mathbf{1}_{\{T(u-h) \le t \le T(u+h)\}} (X_{it} - \bar{X}_{i})  \Big| \le \\
+&\le  \Big( \sum_{t=1}^T w^2_{t,T}(u,h) \Big)^{1/2} \Big( \sum_{t=1}^T \mathbf{1}_{\{T(u-h) \le t \le T(u+h)\}} (X_{it} - \bar{X}_{i})^2  \Big)^{1/2} = \\
+& =  \Big( \sum_{t=1}^T w^2_{t,T}(u,h) \Big)^{1/2} \Big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} (X_{it} - \bar{X}_{i})^2  \Big)^{1/2}.
+\end{align*}
+Further note that
+\begin{align*}
+\sum_{t=1}^T w^2_{t,T}(u,h) = \sum_{t=1}^T\frac{\frac{1}{Th} K^2\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]^2}{ \bigg\{\frac{1}{Th}\sum\nolimits_{s=1}^T  K^2\Big(\frac{\frac{s}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{s}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]^2 \bigg\} } = 1. 
+\end{align*}
+Hence, 
+\begin{align}\label{eq-intermediate-relation-1}
+\Big| \sum_{t=1}^T w_{t,T}(u,h) (X_{it} - \bar{X}_{i})  \Big| \le \Big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} (X_{it} - \bar{X}_{j})^2  \Big)^{1/2}.
+\end{align}
+Now consider random variables $(X_{it} - \bar{X}_{i})^2$. In order to apply the Markov inequality, we need to estimate $E\big[(X_{it} - \bar{X}_{i})^2\big]$:
+\begin{align*}
+E\big[(X_{it} - \bar{X}_{i})^2\big] = E X_{it}^2 - 2 E (X_{it}\bar{X}_i) + E \bar{X}_i^2.
+\end{align*}
+Now according to \ref{C-reg1}, we have $ E X_{it}^2 = E X_{i0}^2$. Moreover, by the Cauchy-Scwarz inequality 
+\begin{align*}
+\big|E (X_{it}\bar{X}_i)\big| &= \Big|\frac{1}{T} \sum_{s=1}^T E (X_{it} X_{is}) \Big| \leq \frac{1}{T} \sum_{s=1}^T \big| E (X_{it} X_{is}) \big| \leq \\
+&\leq \frac{1}{T} \sum_{s=1}^T \sqrt{E X_{it}^2 E X_{is}^2} = \frac{1}{T} \sum_{s=1}^T E X_{i0}^2  = E X_{i0}^2
+\end{align*}
+and
+\begin{align*}
+E \bar{X}_i^2 &= \frac{1}{T^2} \sum_{t=1}^T \sum_{s=1}^T E (X_{it} X_{is})  \leq \\
+&\leq \frac{1}{T^2} \sum_{t=1}^T \sum_{s=1}^T \sqrt{E X_{it}^2 E X_{is}^2} = \frac{1}{T^2} \sum_{t=1}^T \sum_{s=1}^T E X_{i0}^2  = E X_{i0}^2.
+\end{align*}
+Hence, according to \ref{C-reg3}, 
+\begin{align*}
+E\big[(X_{it} - \bar{X}_{i})^2\big] \leq 4 E X_{i0}^2 < \infty.
+\end{align*}
+Applying the Markov inequality, we get that 
+\begin{align*}
+\pr \Big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} (X_{it} - \bar{X}_{j})^2 \geq a \Big) \leq \frac{ \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} E\big[(X_{it} - \bar{X}_{i})^2\big]}{a} \leq \frac{(2Th + 2) \cdot 4E X_{i0}^2 }{a}.
+\end{align*}
+Therefore, 
+\begin{align*}
+ \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} (X_{it} - \bar{X}_{j})^2 = O_P(Th),
+\end{align*}
+or, equivalently,
+\begin{align}\label{eq-intermediate-relation-2}
+ \Big(\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} (X_{it} - \bar{X}_{j})^2 \Big)^{1/2} = O_P(\sqrt{Th}).
+\end{align}
+Plugging \eqref{eq-intermediate-relation-2} in \eqref{eq-intermediate-relation-1}, we get that
+\begin{align*}
+\Big| \sum_{t=1}^T w_{t,T}(u,h) (X_{it} - \bar{X}_{i})  \Big| =O_P(\sqrt{Th}).
+\end{align*}
+
+Then, since we know that for all $i \in \{1, \ldots, n\}$ we have $\beta_i - \widehat{\beta}_i = O_P(T^{-1/2})$ and $\widehat{\sigma}_i^2 = \sigma_i^2 + o_P(\rho_T)$.
+\begin{align*}
+\big| \doublehattwo{\Phi}_{n, T} - \widehat{\Phi}_{n, T} \big| &\le 2 \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2} \max_{1\le i \le n} \max_{(u,h) \in \mathcal{G}_T}|\beta_i - \widehat{\beta}_i| \Big| \sum_{t=1}^T w_{t,T}(u,h)  (X_{it} - \bar{X}_{i}) \Big| = \\
+& = 2 \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2} \max_{1\le i \le n} \max_{(u,h) \in \mathcal{G}_T} O_P\big(1/\sqrt{T}\big)O_P(\sqrt{Th}) = \\
+& = O_P(1)  O_P\big(1/\sqrt{T}\big)O_P(\sqrt{Th_{max}}) = O_P(h_{max})
+\end{align*}
+
 Statement of the proposition directly follows from it.
 \end{proof}
 
@@ -590,16 +668,16 @@ which immediately implies the statement of Theorem \ref{theo-stat-equality}.
 \end{itemize}
 
 The proof of \eqref{eq-theo-stat-equality-step4} proceeds as follows. First we consider those $x\in \reals$ such that $\pr(\widehat{\Phi}_{n,T} \le x) \geq \pr(\Phi_{n, T} \le x)$. Then by Proposition \ref{propA-intermediate-relation} we have
-\begin{align}\label{eq-theo-stat-equality-step3}
+\begin{align*}
 0 &\le \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x)  \le \nonumber\\
 &\le \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)   - \pr\Big(\Phi_{n,T} \le x\Big) = \nonumber\\
 &= \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big)  - \pr\Big(\Phi_{n,T} \le x\Big) + o(1)= \nonumber\\
 &= \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) - \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big) +  \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big)   - \pr\Big(\Phi_{n,T} \le x\Big) + o(1)= \nonumber \\
 &= \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) - \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big) +  \pr\Big(x \le {\Phi}_{n,T} \le x + \gamma_{n, T}\Big) + o(1)\le \nonumber \\
 &\le \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) - \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big) +  \pr\Big(\big|{\Phi}_{n,T} - x \big| \le \gamma_{n, T}\Big) + o(1).
-\end{align}
+\end{align*}
 
-Now consider such $x\in \reals$ that $\pr(\widehat{\Phi}_{n,T}\le x) < \pr(\Phi_{n, T}\le x)$. Then again by Proposition \ref{propA-intermediate-relation} we have
+Now consider such $x\in \reals$ that $\pr(\widehat{\Phi}_{n,T}\le x) < \pr(\Phi_{n, T}\le x)$. Then again by Proposition \ref{propA-intermediate-relation} for $\gamma_{n, T} = C h_{max}$ we have
 \begin{align*}\label{eq-theo-stat-equality-step3_2}
 0 &\le \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| =  \pr(\Phi_{n,T} \le x)-  \pr(\widehat{\Phi}_{n, T} \le x) \le \\
 &\le\pr\Big(\Phi_{n,T} \le x\Big)  + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)   - \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) = \\
@@ -608,7 +686,7 @@ Now consider such $x\in \reals$ that $\pr(\widehat{\Phi}_{n,T}\le x) < \pr(\Phi_
 &= \pr\Big(x - \gamma_{n,T} \le {\Phi}_{n,T} \le x \Big) +\pr\Big(\Phi_{n,T} \le x- \gamma_{n, T}\Big) - \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) + o(1)\le \\
 &\le \pr\Big(\big|{\Phi}_{n,T} - x \big| \le \gamma_{n, T}\Big) +\pr\Big({\Phi}_{n,T} \le x - \gamma_{n, T}\Big) -\pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) + o(1).  
 \end{align*}
-Now note that since {\color{red}$\gamma_{n,T} \to 0$}, we can use the anticoncentration results for the Gaussian statistic ${\Phi}_{n,T}$ so that we get $\pr\Big(\big|{\Phi}_{n,T} - x \big| \le \gamma_{n, T}\Big) = o(1)$. Thus, 
+Now note that since $\gamma_{n,T} \to 0$ by \ref{C-h}, we can use the anticoncentration results for the Gaussian statistic ${\Phi}_{n,T}$ to get $\pr\Big(\big|{\Phi}_{n,T} - x \big| \le \gamma_{n, T}\Big) = o(1)$. Thus, 
 \begin{align*}
 \sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) &- \pr(\Phi_{n,T} \le x) \big| \le \\
 \le \max \Bigg\{ &\sup_{x \in \reals} \bigg| \pr\Big({\Phi}_{n,T} \le x - \gamma_{n, T}\Big) -\pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big)\bigg|, \\
