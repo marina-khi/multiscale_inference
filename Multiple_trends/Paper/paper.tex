@@ -189,7 +189,7 @@ consideration. The statistic $\widehat{\Psi}_{ij,T}$ can be interpreted as a glo
 
 \item \label{C-grid} $|\mathcal{G}_T| = O(T^\theta)$ for some arbitrarily large but fixed constant $\theta > 0$, where $|\mathcal{G}_T|$ denotes the cardinality of $\mathcal{G}_T$. 
 
-\item \label{C-h} $h_{\min} \gg T^{-(1-\frac{2}{q})} \log T$, that is, $h_{\min} / \{ T^{-(1-\frac{2}{q})} \log T \} \rightarrow \infty$ with $q > 4$ defined in \ref{C-err2} and {\color{red}$h_{\max} =o(1)$}.
+\item \label{C-h} $h_{\min} \gg T^{-(1-\frac{2}{q})} \log T$, that is, $h_{\min} / \{ T^{-(1-\frac{2}{q})} \log T \} \rightarrow \infty$ with $q > 4$ defined in \ref{C-err2} and $h_{\max} \leq 1/2$.
 
 \end{enumerate}
 
@@ -337,11 +337,34 @@ where $\widehat{\bm{\beta}}_i$ is the differencing estimator given by \eqref{dif
 \nobibliography{bibliography}}
 
 \section{Appendix}\label{sec-appendix}
+In this section, we prove the theoretical results from Section \ref{sec-test}. We use the following notation: The symbol $C$ denotes a universal real constant which may take a different value on each occurrence. For $a,b \in \reals$, we write $a_+ = \max \{0,a\}$ and $a \vee b = \max\{a,b\}$. For any set $A$, the symbol $|A|$ denotes the cardinality of $A$. The notation $X \stackrel{\mathcal{D}}{=} Y$ means that the two random variables $X$ and $Y$ have the same distribution. Finally, $f_0(\cdot)$ and $F_0(\cdot)$ denote the density and the distribution function of the standard normal distribution, respectively.
 
 \subsection{Proof of Theorem \ref{theo-stat-equality}}\label{subsec-appendix-stat-equaility}
 
+We will build the proof of Theorem \ref{theo-stat-equality} on the auxiliary results derived below. The steps of the proof are as follows.
+\begin{itemize}
+\item First, by Proposition \ref{propA-strong-approx-equality}, there exist statistics $\widetilde{\Phi}_{n, T}$ for $T = 1,2,\ldots$ which are distributed as $\doublehattwo{\Phi}_{n, T}$ for any $T \ge 1$ and which have the property that 
+\begin{align}\label{eq-theo-stat-equality-step1}
+\big| \widetilde{\Phi}_{n, T} - \Phi_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} &+ \frac{\rho_T}{\sqrt{h_{\min}}}\sqrt{\log T} \Big),
+\end{align}
+where $\Phi_{n, T}$ is a Gaussian statistic as defined in \eqref{Phi-statistic}. The approximation result \eqref{eq-theo-stat-equality-step1} allows us to replace the multiscale statistic $\doublehattwo{\Phi}_{n, T}$ by an identically distributed version $\widetilde{\Phi}_{n, T}$ which is close to the Gaussian statistic $\Phi_{n, T}$.
+\item Second, by Proposition \ref{propA-anticon-equality} we show that $\Phi_{n,T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$ with $\delta_T$ converging to zero. Or, in other words, it holds that 
+\begin{align}\label{eq-theo-stat-equality-step2}
+\sup_{x \in \reals} \pr \big( | \Phi_{n,T} - x | \le \delta_T \big) = o(1),
+\end{align}
+where $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}/ \sqrt{h_{\min}}$.
+\item In the third step we make use of Lemma \ref{lemma1-theo-stat} to show that
+\begin{equation}\label{eq-theo-stat-equality-step3}
+\sup_{x \in \reals} \big| \pr(\doublehattwo{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = o(1). 
+\end{equation}
+This statement directly follows from the previous two steps and the fact that $\widetilde{\Phi}_{n, T}$ is distributed as $\doublehattwo{\Phi}_{n, T}$ for any $n \ge 2$, $T \ge 1$.
+\item And finally, in Proposition \ref{propA-final} we prove that  
+\begin{equation}\label{eq-theo-stat-equality-step4}
+\sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = o(1),
+\end{equation}
+which immediately implies the statement of Theorem \ref{theo-stat-equality}.
+\end{itemize}
 
-In this section, we prove the theoretical results from Section \ref{sec-test}. We use the following notation: The symbol $C$ denotes a universal real constant which may take a different value on each occurrence. For $a,b \in \reals$, we write $a_+ = \max \{0,a\}$ and $a \vee b = \max\{a,b\}$. For any set $A$, the symbol $|A|$ denotes the cardinality of $A$. The notation $X \stackrel{\mathcal{D}}{=} Y$ means that the two random variables $X$ and $Y$ have the same distribution. Finally, $f_0(\cdot)$ and $F_0(\cdot)$ denote the density and the distribution function of the standard normal distribution, respectively.
 
 %\subsection*{Auxiliary results concerning the local linear estimators}
 %Consider the local linear kernel weights $w_{t,T}(u,h)$ defined in \eqref{weights}. We can rewrite them as follows.
@@ -380,9 +403,7 @@ The intermediate statistic is then defined as
 \doublehattwo{\Phi}_{ij,T} &= \max_{(u,h) \in \mathcal{G}_T} \big\{ \Big|\frac{\doublehat{\phi}_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\}.\nonumber
 \end{align}
 This statistic can thus be regarded as an approximation of the statistic $\widehat{\Phi}_{n,T}$. Heuristically, the kernel averages $\doublehat{\phi}_{ij,T}(u,h)$
-are close to the kernel averages $\widehat{\phi}_{ij,T}(u,h)$ because of the properties of our estimators $\widehat{\bf{\beta}}_i$ and assumptions on $\mathbf{X}_{it}$ but we will prove it later in this Section.
-
-
+are close to the kernel averages $\widehat{\phi}_{ij,T}(u,h)$ because of the properties of our estimators $\widehat{\bbeta}_i$ and assumptions on $\mathbf{X}_{it}$ but we will prove it later in this Section.
 \subsection*{Auxiliary results using strong approximation theory}
 
 The main purpose of this section is to prove that there is a version of the multiscale statistic $\doublehattwo{\Phi}_{n,T}$ defined in \eqref{Phi-doublehat-statistic} which is close to a Gaussian statistic whose distribution is known. More specifically, we prove the following result. 
@@ -395,7 +416,7 @@ Under the conditions of Theorem \ref{theo-stat-equality}, there exist statistics
 where $\Phi_{n,T}$ is a Gaussian statistic as defined in \eqref{Phi-statistic}. 
 \end{propA}
 \begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-strong-approx-equality}}}] 
-For the proof, we draw on strong approximation theory for each stationary process $\mathcal{E}_i = \{\varepsilon_{it}: 1 \leq t \leq T\}$ that fulfill the conditions \ref{C-err1}--\ref{C-err3}. By Theorem 2.1 and Corollary 2.1 in \cite{BerkesLiuWu2014}, the following strong approximation result holds true: On a richer probability space, there exist a standard Brownian motion $\mathbb{B}$ and a sequence $\{ \widetilde{\varepsilon}_{t}: t \in \naturals \}$ such that $[\widetilde{\varepsilon}_{1},\ldots,\widetilde{\varepsilon}_{T}] \stackrel{\mathcal{D}}{=} [\varepsilon_{1},\ldots,\varepsilon_{T}]$ for each $T$ and 
+For the proof, we draw on strong approximation theory for each stationary process $\mathcal{E}_i = \{\varepsilon_{it}: 1 \leq t \leq T\}$ that fulfill the conditions \ref{C-err1}--\ref{C-err3}. By Theorem 2.1 and Corollary 2.1 in \cite{BerkesLiuWu2014}, the following strong approximation result holds true: On a richer probability space, there exists a standard Brownian motion $\mathbb{B}$ and a sequence $\{ \widetilde{\varepsilon}_{t}: t \in \naturals \}$ such that $[\widetilde{\varepsilon}_{1},\ldots,\widetilde{\varepsilon}_{T}] \stackrel{\mathcal{D}}{=} [\varepsilon_{1},\ldots,\varepsilon_{T}]$ for each $T$ and 
 \begin{equation}\label{eq-strongapprox-dep}
 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{s} - \sigma \mathbb{B}(t) \Big| = o\big( T^{1/q} \big) \quad \text{a.s.},  
 \end{equation}
@@ -410,8 +431,8 @@ where
 where $\widetilde{\phi}_{ij, T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \big\{ (\widetilde{\varepsilon}_{it} - \bar{\widetilde{\varepsilon}}_i)  - (\widetilde{\varepsilon}_{jt} - \bar{\widetilde{\varepsilon}}_j)\big\}$ and $\widetilde{\sigma}^2_i$ are the same estimators as $\widehat{\sigma}^2_i$ with $\widehat{Y}_{it} = (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top \mathbf{X}_{it} + m_i ( t/T) + \big( \alpha_i - \widehat{\alpha}_i \big) + \varepsilon_{it}$
 replaced by $\widetilde{Y}_{it} = \linebreak = (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top \mathbf{X}_{it} + m_i(t/T) + \big( \alpha_i - \widehat{\alpha}_i \big) + \widetilde{\varepsilon}_{it}$  for $1 \le t \le T$. In addition, we let
 \begin{align*}
-\Phi_{n, T} & = \max_{1\leq i < j \leq n} \Phi_{ij, T}= \max_{1\leq i < j \leq n} \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij, T}(u,h)}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}}\Big| - \lambda(h) \Big\} \\
-\Phi_{n, T}^{\diamond} & =\max_{1\leq i < j \leq n} \Phi_{ij, T}^{\diamond} = \max_{1\leq i< j \leq n}\max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij, T}(u,h)}{\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{1/2}}\Big| - \lambda(h) \Big\} 
+\Phi_{n, T} & = \max_{1\leq i < j \leq n} \Phi_{ij, T}= \max_{1\leq i < j \leq n} \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij, T}(u,h)}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}}\Big| - \lambda(h) \Big\} \text{ as in \eqref{Phi-statistic}}, \\
+\text{ and }\Phi_{n, T}^{\diamond} & =\max_{1\leq i < j \leq n} \Phi_{ij, T}^{\diamond} = \max_{1\leq i< j \leq n}\max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij, T}(u,h)}{\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{1/2}}\Big| - \lambda(h) \Big\} 
 \end{align*}
 with $$\phi_{ij, T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}$$ and $Z_{it} = \mathbb{B}_i(t) - \mathbb{B}_i(t-1)$. With this notation, we can write 
 \begin{equation}\label{eq-strongapprox-bound1}
@@ -419,7 +440,7 @@ with $$\phi_{ij, T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \big\{ \widehat{\s
 \end{equation}
 First consider $|\widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond}|$. Straightforward calculations yield that 
 \begin{align}\label{eq-strongapprox-bound2}
-\big| \widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond} \big| \le \{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{-1/2} \max_{1\le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \big| \widetilde{\phi}_{ij, T}(u,h) - \phi_{ij, T}(u,h) \big|.
+\big| \widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond} \big| \le  \max_{1\le i < j \le n} \Big(\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{-1/2} \max_{(u,h) \in \mathcal{G}_T} \big| \widetilde{\phi}_{ij, T}(u,h) - \phi_{ij, T}(u,h) \big|\Big).
 \end{align}
 Using summation by parts,
 ($\sum_{i=1}^n a_i b_i = \sum_{i=1}^{n-1} A_i (b_i - b_{i+1}) + A_n b_n$ with $A_j = \sum_{j=1}^i a_j$) 
@@ -481,16 +502,28 @@ Plugging \eqref{eq-strongapprox-bound4} and \eqref{eq-strongapprox-bound5} in \e
 
 
 
+
+
 \subsection*{Auxiliary results using anti-concentration bounds}
 
 
 In this section, we establish some properties of the Gaussian statistic $\Phi_{n,T}$ defined in \eqref{Phi-statistic}. We in particular show that $\Phi_{n,T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$ with $\delta_T$ converging to zero.  
-%
+
+The main technical tool for proving Proposition \ref{propA-anticon-equality} are anti-concentration bounds for Gaussian random vectors. The following proposition slightly generalizes anti-concentration results derived in \cite{Chernozhukov2015}, in particular Theorem 3 therein.
+
+\begin{propA}\label{theo-anticon}
+Let $(X_1,\ldots,X_p)^\top$ be a Gaussian random vector in $\reals^p$ with $\ex[X_j] = \mu_j$ and $\var(X_j) = \sigma_j^2 > 0$ for $1 \le j \le p$. Define $\overline{\mu} = \max_{1 \le j \le p} |\mu_j|$ together with $\underline{\sigma} = \min_{1 \le j \le p} \sigma_j$ and $\overline{\sigma} = \max_{1 \le j \le p} \sigma_j$. Moreover, set $a_p = \ex[ \max_{1 \le j \le p} (X_j-\mu_j)/\sigma_j ]$ and $b_p = \ex[ \max_{1 \le j \le p} (X_j-\mu_j) ]$. For every $\delta > 0$, it holds that
+\[ \sup_{x \in \reals} \pr \Big( \big| \max_{1 \le j \le p} X_j - x \big| \le \delta \Big) \le C \delta \big\{ \overline{\mu} + a_p + b_p + \sqrt{1 \vee \log(\underline{\sigma}/\delta)} \big\}, \]
+where $C > 0$ depends only on $\underline{\sigma}$ and $\overline{\sigma}$. 
+\end{propA} 
+The proof of Proposition \ref{theo-anticon} is provided in \cite{KhismatullinaVogt2018}.
+
+
 %
 \begin{propA}\label{propA-anticon-equality}
 Under the conditions of Theorem \ref{theo-stat-equality}, it holds that 
 \[ \sup_{x \in \reals} \pr \big( | \Phi_{n,T} - x | \le \delta_T \big) = o(1), \]
-where $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}/ h_{\min}$.
+where $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}/ \sqrt{h_{\min}}$.
 \end{propA}
 %
 %
@@ -502,18 +535,28 @@ U_{ij, 2k-1} & = \frac{\phi_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \wi
 U_{ij, 2k} & = -\frac{\phi_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} - \lambda(x_{k2}) 
 \end{align*}
 with $x_k = (x_{k1},x_{k2})$. This notation allows us to write
-\[ \Phi_{n, T} = \max_{1\le i < j \le n} \max_{1 \le k \le 2p} U_{ij, k}, \]
-where $(U_{12, 1},\ldots,U_{(n-1)n, 2p})^\top \in \reals^{n(n-1)p}$ is a Gaussian random vector.
+\[ \Phi_{n, T} = \max_{1\le i < j \le n} \max_{1 \le k \le 2p} U_{ij, k}, = \max_{1 \leq l \leq (n-1)np} U^\prime_l\]
+where $(U^\prime_{1},\ldots,U^\prime_{(n-1)np})^\top \in \reals^{n(n-1)p}$ is a Gaussian random vector with the following properties: (i) $\mu_{l} := \ex[U^\prime_l] = \{\ex[U_{ij, 2k}] \text{ or }\ex[U_{ij, 2k-1}]\}= - \lambda(x_{k2}) $ and thus
+$$\overline{\mu} = \max_{1\leq l \leq (n-1)np} |\mu_{l}| \leq C \sqrt{\log T},$$
+and (ii) $\sigma_{l}^2 := \var(U^\prime_{l}) = 1$ for all $1 \leq 1 \leq (n-1)np$. Hence, $a_{(n-1)np} = b_{(n-1)np}$. Moreover, as the variables $(U^\prime_l - \mu_l)/\sigma_l$ are standard normal, we have that $a_{(n-1)np} = b_{(n-1)np} \le C\sqrt{\log ((n-1)np)} \leq C \sqrt{\log T}$. With this notation at hand, we can apply Proposition \ref{theo-anticon} to obtain that 
+\[ \sup_{x \in \reals} \pr \Big( \big| \Phi_T - x \big| \le \delta_T \Big) \le C \delta_T \Big[ \sqrt{\log T} + \sqrt{ \log(1/\delta_T) } \Big] = o(1) \]
+with $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}/\sqrt{h_{\min}}$, which is the statement of Proposition \ref{propA-anticon-equality}.
 
-The main technical tool for proving Proposition \ref{propA-anticon-equality} are anti-concentration bounds for Gaussian random vectors. The following proposition slightly generalizes anti-concentration results derived in \cite{Chernozhukov2015}, in particular Theorem 3 therein.
-
-\begin{propA}\label{theo-anticon}
-Let $(X_1,\ldots,X_p)^\top$ be a Gaussian random vector in $\reals^p$ with $\ex[X_j] = \mu_j$ and $\var(X_j) = \sigma_j^2 > 0$ for $1 \le j \le p$. Define $\overline{\mu} = \max_{1 \le j \le p} |\mu_j|$ together with $\underline{\sigma} = \min_{1 \le j \le p} \sigma_j$ and $\overline{\sigma} = \max_{1 \le j \le p} \sigma_j$. Moreover, set $a_p = \ex[ \max_{1 \le j \le p} (X_j-\mu_j)/\sigma_j ]$ and $b_p = \ex[ \max_{1 \le j \le p} (X_j-\mu_j) ]$. For every $\delta > 0$, it holds that
-\[ \sup_{x \in \reals} \pr \Big( \big| \max_{1 \le j \le p} X_j - x \big| \le \delta \Big) \le C \delta \big\{ \overline{\mu} + a_p + b_p + \sqrt{1 \vee \log(\underline{\sigma}/\delta)} \big\}, \]
-where $C > 0$ depends only on $\underline{\sigma}$ and $\overline{\sigma}$. 
-\end{propA} 
-The proof of Proposition \ref{theo-anticon} is provided in \cite{KhismatullinaVogt2018}.
 \end{proof}
+
+\subsection*{Other auxiliary results}
+
+\begin{lemmaA}\label{lemma1-theo-stat}
+Let $V_T$ and $W_T$ be real-valued random variables for $T = 1,2,\ldots$ such that $V_T - W_T = o_p(\delta_T)$ with some $\delta_T = o(1)$. If 
+\begin{equation}\label{eq-lemma1-cond}
+\sup_{x \in \reals} \pr(|V_T - x| \le \delta_T) = o(1), 
+\end{equation}
+then 
+\begin{equation}\label{eq-lemma1-statement}
+\sup_{x \in \reals} \big| \pr(V_T \le x) - \pr(W_T \le x) \big| = o(1). 
+\end{equation}
+\end{lemmaA}
+Proof of this lemma is provided in \cite*{KhismatullinaVogt2018}.
 
 \subsection*{Auxiliary results concerning the intermediate statistic}
 
@@ -544,17 +587,17 @@ Analogously,
 which completes the proof.
 \end{proof}
 
-The aim of the next proposition is to determine the value of $\gamma_{n, T}$ such that the different between the distributions of $\widehat{\Phi}_{n, T}$ and $\doublehattwo{\Phi}_{n, T}$ is not too big. In other words,
+The aim of the next proposition is to determine the value of $\gamma_{n, T}$ such that the difference between the distributions of $\widehat{\Phi}_{n, T}$ and $\doublehattwo{\Phi}_{n, T}$ is not too big. In other words,
 
 \begin{propA}\label{propA-intermediate-relation-2}
-For $\gamma_{n, T} = C h_{max}$, where $C$ is a universal constant that does not depend on $n$ and $T$, we have
+For $\gamma_{n, T} =?? $, where $C$ is a universal constant that does not depend on $n$ and $T$, we have
 \begin{align*} \pr \Big(\big|\doublehattwo{\Phi}_{n,T} &- \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big) = o(1).
 \end{align*}
 \end{propA}
 \begin{proof}
 Consider $\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big|$. Analogously as in the proof of Proposition \ref{propA-strong-approx-equality}, we can establish that
 \begin{align*}
-\big| \doublehattwo{\Phi}_{n, T} - \widehat{\Phi}_{n, T} \big| \le \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2} \max_{1\le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \Big| \doublehat{\phi}_{ij, T}(u,h) - \widehat{\phi}_{ij, T}(u,h) \Big|,
+\big| \doublehattwo{\Phi}_{n, T} - \widehat{\Phi}_{n, T} \big| \le  \max_{1\le i < j \le n} \bigg( \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2}\max_{(u,h) \in \mathcal{G}_T} \Big| \doublehat{\phi}_{ij, T}(u,h) - \widehat{\phi}_{ij, T}(u,h) \Big|\bigg),
 \end{align*}
 where 
 \[\doublehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) - (\varepsilon_{jt} - \bar{\varepsilon}_j)  \big\} \]
@@ -564,108 +607,98 @@ Thus,
 \begin{align*}
 \Big| \doublehat{\phi}_{ij, T}(u,h) &- \widehat{\phi}_{ij, T}(u,h) \Big|  =\Big| \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - (\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\} \Big| \le \\
 &\le \Big| \sum_{t=1}^T w_{t,T}(u,h) (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) \Big| +  \Big| \sum_{t=1}^T w_{t,T}(u,h)(\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j})  \Big| =\\
-&= |\bm{\beta}_i - \widehat{\bm{\beta}}_i|^\top \Big| \sum_{t=1}^T w_{t,T}(u,h)  (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) \Big| + |\bm{\beta}_j - \widehat{\bm{\beta}}_j|^\top \Big| \sum_{t=1}^T w_{t,T}(u,h) (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j})  \Big| 
+&= |\bm{\beta}_i - \widehat{\bm{\beta}}_i|^\top \Big| \sum_{t=1}^T w_{t,T}(u,h)  (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) \Big| + |\bm{\beta}_j - \widehat{\bm{\beta}}_j|^\top \Big| \sum_{t=1}^T w_{t,T}(u,h) (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j})  \Big| =\\
+&= |\bm{\beta}_i - \widehat{\bm{\beta}}_i|^\top \Big| \sum_{t=1}^T w_{t,T}(u,h)  (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) \Big| + |\bm{\beta}_j - \widehat{\bm{\beta}}_j|^\top \Big| \sum_{t=1}^T w_{t,T}(u,h) (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j})  \Big| \leq\\
+&\leq |\bm{\beta}_i - \widehat{\bm{\beta}}_i|^\top \Big| \sum_{t=1}^T w_{t,T}(u,h) \mathbf{X}_{it} \Big| +  \big|(\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top\bar{\mathbf{X}}_{i}\big| \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big| +\\
+&\quad +|\bm{\beta}_j - \widehat{\bm{\beta}}_j|^\top \Big| \sum_{t=1}^T w_{t,T}(u,h) \mathbf{X}_{jt}  \Big| + \big|(\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top\bar{\mathbf{X}}_{j}\big| \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big| 
+ \end{align*}
+Hence,
+\begin{align*}
+\big| \doublehattwo{\Phi}_{n, T} - \widehat{\Phi}_{n, T} \big| \le  &2\max_{1\le i < j \le n}\bigg( \{\widehat{\sigma}_i^2+ \widehat{\sigma}_j^2 \}^{-1/2} |\bm{\beta}_i - \widehat{\bm{\beta}}_i|^\top \max_{(u,h) \in \mathcal{G}_T} \Big| \sum_{t=1}^T w_{t,T}(u,h) \mathbf{X}_{it} \Big|\bigg) + \\
+&+ 2\max_{1\le i < j \le n} \bigg(\{\widehat{\sigma}_i^2+ \widehat{\sigma}_j^2 \}^{-1/2}\big|(\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top\bar{\mathbf{X}}_{i}\big| \max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big|\bigg)
+\end{align*}
+Without loss of generality, we can regard the covariates $\mathbf{X}_{it}$ to be scalars $X_{it}$, not vectors. The rest of the proof in case of vectors proceeds analogously.
+
+First, by our assumptions $\widehat{\sigma}_i^2 = \sigma_i^2 + o_P(\rho_T)$. Hence, $\max_{1\le i < j \le n}\{\widehat{\sigma}_i^2+ \widehat{\sigma}_j^2 \}^{-1/2}  = O_P(1)$.
+
+Now consider the term $\big| \sum_{t=1}^T w_{t,T}(u,h) \mathbf{X}_{it}  \big|$. 
+%Note that by construction the weights $w_{t, T}(u, h)$ are not equal to $0$ if and only if $T(u-h) \le t \le T(u+h)$. We can use this fact to rewrite
+%\begin{align*}
+%\Big| \sum_{t=1}^T w_{t,T}(u,h) X_{it}   \Big|  = \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}   \Big|.
+%\end{align*}
+%Note that 
+%\begin{align*}
+%E\big[w_{t,T}(u,h)X_{it} \big] = w_{t,T}(u,h)  E [X_{it}]  = 0
+%\end{align*}
+%and, according to \ref{C-reg3},
+%\begin{align*}
+%E\big[w^2_{t,T}(u,h)X_{it}^2\big] =w^2_{t,T}(u,h) E\big[X_{it}^2\big] = w^2_{t,T}(u,h) E\big[X_{i0}^2\big] < \infty.
+%\end{align*}
+%Analogously, according to \ref{C-reg3},
+%\begin{align*}
+%E\big[w^{q^\prime}_{t,T}(u,h)X_{it}^{q^\prime}\big] =w^{q^\prime}_{t,T}(u,h) E\big[X_{it}^{q^\prime}\big] = w^{q^\prime}_{t,T}(u,h) E\big[X_{i0}^{q^\prime}\big] < \infty.
+%\end{align*}
+We want to show that 
+\begin{align*}
+\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it} \Big| = o_P({\sqrt{T}}).
 \end{align*}
 
-Now consider the term $\big| \sum_{t=1}^T w_{t,T}(u,h) (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i})  \big|$. Without loss of generality, we can regard the covariates $\mathbf{X}_{it}$ to be scalars $X_{it}$, not vectors. The rest of the proof in case of a vector proceeds analogously.
-Note that by construction the weights $w_{t, T}(u, h)$ are not equal to $0$ if and only if $T(u-h) \le t \le T(u+h)$. We can use this fact together with the Cauchy-Schwarz inequality to obtain
+Note that
 \begin{align*}
-\Big| \sum_{t=1}^T w_{t,T}(u,h) (X_{it} - \bar{X}_{j})  \Big| &= \Big| \sum_{t=1}^T w_{t,T}(u,h) \mathbf{1}_{\{T(u-h) \le t \le T(u+h)\}} (X_{it} - \bar{X}_{i})  \Big| \le \\
-&\le  \Big( \sum_{t=1}^T w^2_{t,T}(u,h) \Big)^{1/2} \Big( \sum_{t=1}^T \mathbf{1}_{\{T(u-h) \le t \le T(u+h)\}} (X_{it} - \bar{X}_{i})^2  \Big)^{1/2} = \\
-& =  \Big( \sum_{t=1}^T w^2_{t,T}(u,h) \Big)^{1/2} \Big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} (X_{it} - \bar{X}_{i})^2  \Big)^{1/2}.
-\end{align*}
-Further note that
-\begin{align*}
-\sum_{t=1}^T w^2_{t,T}(u,h) = \sum_{t=1}^T\frac{\frac{1}{Th} K^2\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]^2}{ \bigg\{\frac{1}{Th}\sum\nolimits_{s=1}^T  K^2\Big(\frac{\frac{s}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{s}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]^2 \bigg\} } = 1. 
-\end{align*}
-Hence, 
-\begin{align}\label{eq-intermediate-relation-1}
-\Big| \sum_{t=1}^T w_{t,T}(u,h) (X_{it} - \bar{X}_{i})  \Big| \le \Big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} (X_{it} - \bar{X}_{j})^2  \Big)^{1/2}.
-\end{align}
-Now consider random variables $(X_{it} - \bar{X}_{i})^2$. In order to apply the Markov inequality, we need to estimate $E\big[(X_{it} - \bar{X}_{i})^2\big]$:
-\begin{align*}
-E\big[(X_{it} - \bar{X}_{i})^2\big] = E X_{it}^2 - 2 E (X_{it}\bar{X}_i) + E \bar{X}_i^2.
-\end{align*}
-Now according to \ref{C-reg1}, we have $ E X_{it}^2 = E X_{i0}^2$. Moreover, by the Cauchy-Scwarz inequality 
-\begin{align*}
-\big|E (X_{it}\bar{X}_i)\big| &= \Big|\frac{1}{T} \sum_{s=1}^T E (X_{it} X_{is}) \Big| \leq \frac{1}{T} \sum_{s=1}^T \big| E (X_{it} X_{is}) \big| \leq \\
-&\leq \frac{1}{T} \sum_{s=1}^T \sqrt{E X_{it}^2 E X_{is}^2} = \frac{1}{T} \sum_{s=1}^T E X_{i0}^2  = E X_{i0}^2
+\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w^2_{t,T}(u,h) &= \sum_{t=1}^T w^2_{t,T}(u,h) =\\
+&= \sum_{t=1}^T\frac{\frac{1}{Th} K^2\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]^2}{ \bigg\{\frac{1}{Th}\sum\nolimits_{s=1}^T  K^2\Big(\frac{\frac{s}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{s}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]^2 \bigg\} } =\\
+&= 1
 \end{align*}
 and
 \begin{align*}
-E \bar{X}_i^2 &= \frac{1}{T^2} \sum_{t=1}^T \sum_{s=1}^T E (X_{it} X_{is})  \leq \\
-&\leq \frac{1}{T^2} \sum_{t=1}^T \sum_{s=1}^T \sqrt{E X_{it}^2 E X_{is}^2} = \frac{1}{T^2} \sum_{t=1}^T \sum_{s=1}^T E X_{i0}^2  = E X_{i0}^2.
+\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} \big(\sqrt{2Th + 2}\cdot w_{t,T}(u,h)\big)^2 = 2Th+2.
 \end{align*}
-Hence, according to \ref{C-reg3}, 
+\textcolor{red}{
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+\setcounter{enumi}{12}
+	\item \label{C-reg4}  Additional assumption on the dependence adjusted norm here!
+\end{enumerate}}
+\begin{theorem}{\cite{Wu2016}}
+Assume that $||X_{\cdot}||^{q^\prime}_{q^\prime, \alpha} < \infty$, where $q^\prime > 2$ and $\alpha >0$, and $\sum_{t=1}^T a_t^2 = T.$ Moreover, assume that $\alpha > 1/2 - 1/q^\prime$. Denote $S_T = a_1 X_1 + \ldots + a_T X_T$. Then for all $x>0$,
 \begin{align*}
-E\big[(X_{it} - \bar{X}_{i})^2\big] \leq 4 E X_{i0}^2 < \infty.
+	\pr(|S_T| \geq x) \leq C_1 \frac{|a|_{q^\prime}^{q^\prime}||X_{\cdot}||^{q^\prime}_{q^\prime, \alpha}  }{x^{q^\prime}} + C_2 \exp \left( - \frac{C_3 x^2} {T ||X_\cdot||^2_{2, \alpha}}\right),
 \end{align*}
-Applying the Markov inequality, we get that 
+wjere $C_1, C_2, C_3$ are constants that only depend on $q^\prime$ and $\alpha$.
+\end{theorem}
+Now according to Theorem 2 in \cite{Wu2016}, we can bound the single probability as follows
 \begin{align*}
-\pr \Big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} (X_{it} - \bar{X}_{j})^2 \geq a \Big) \leq \frac{ \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} E\big[(X_{it} - \bar{X}_{i})^2\big]}{a} \leq \frac{(2Th + 2) \cdot 4E X_{i0}^2 }{a}.
+\pr&\left(\Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} \sqrt{2Th + 2}\cdot w_{t,T}(u,h)X_{it}  \Big| \geq \sqrt{(2Th + 2)T}\cdot x\right) \leq\\
+&\leq C_1 \frac{\big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |\sqrt{2Th + 2}\cdot w_{t,T}(u,h)|^{q^\prime}\big) ||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha}}{(\sqrt{(2Th + 2)T}\cdot x)^{q^\prime}} + C_2 \exp \left(-\frac{C_3 (2Th + 2)T x^2}{(2Th + 2)||X_{i\cdot}||^{2}_{2, \alpha}}\right) = \\
+&= C_1 \frac{\big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime}\big) ||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha}}{T^{q^\prime/2}\cdot x^{q^\prime}} + C_2 \exp \left(-\frac{C_3 T x^2}{||X_{i\cdot}||^{2}_{2, \alpha}}\right) 
 \end{align*}
-Therefore, 
+
+Now take any $\epsilon>0$, $\delta>0$:
 \begin{align*}
- \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} (X_{it} - \bar{X}_{j})^2 = O_P(Th),
+\pr &\left(\frac{\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}  \Big|}{\sqrt{T}} \geq \delta \right) =\\
+&=\pr\left(\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}  \Big| \geq \delta \sqrt{T} \right) \leq \\
+&\overset{\text{Boole's inequality}}{\leq} \sum_{(u, h) \in \mathcal{G}_T} \pr \left( \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}  \Big| \geq \delta \sqrt{T} \right) = \\
+&\overset{\text{``normalisation''}}{=} \sum_{(u, h) \in \mathcal{G}_T} \pr \left( \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} \sqrt{2Th + 2}\cdot w_{t,T}(u,h)X_{it}  \Big| \geq \sqrt{(2Th + 2)T}\cdot \delta \right) \leq \\
+&\overset{\text{Wu's Theorem}}{\leq} \sum_{(u, h) \in \mathcal{G}_T} \left[C_1 \frac{\big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime}\big) ||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha}}{T^{q^\prime/2}\cdot \delta^{q^\prime}} + C_2 \exp \left(-\frac{C_3 T \delta^2}{||X_{i\cdot}||^{2}_{2, \alpha}}\right) \right] \leq\\
+&\leq C_1 \frac{ T^\theta ||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha}}{T^{q^\prime/2}\cdot \delta^{q^\prime}} \max_{(u, h) \in \mathcal{G}_T} \left( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime}\right)+ C_2 T^\theta \exp \left(-\frac{C_3 T \delta^2}{||X_{i\cdot}||^{2}_{2, \alpha}}\right) = \\
+&\leq C \frac{ T^{\theta - q^\prime/2}}{\delta^{q^\prime}} + C T^\theta \exp \left(-C T \delta^2\right).
 \end{align*}
-or, equivalently,
-\begin{align}\label{eq-intermediate-relation-2}
- \Big(\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} (X_{it} - \bar{X}_{j})^2 \Big)^{1/2} = O_P(\sqrt{Th}).
-\end{align}
-Plugging \eqref{eq-intermediate-relation-2} in \eqref{eq-intermediate-relation-1}, we get that
+where in the last equality we used the following facts:
+\begin{enumerate}
+	\item $||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha} < \infty$;
+	\textcolor{red}{\item $\max_{(u, h) \in \mathcal{G}_T} \left( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime}\right) < \infty$;}
+	\item $||X_{i\cdot}||^{2}_{2, \alpha} < \infty$ (follows from $(1)$).
+\end{enumerate}
+If we take $\theta - q^\prime/2 <0$, then the term on the RHS can be arbitrarily small for any fixed $\delta >0$ and for large enough $T$. Hence, 
 \begin{align*}
-\Big| \sum_{t=1}^T w_{t,T}(u,h) (X_{it} - \bar{X}_{i})  \Big| =O_P(\sqrt{Th}).
+\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}  \Big| = o_P(\sqrt{T}).
 \end{align*}
 
-Then, since we know that for all $i \in \{1, \ldots, n\}$ we have $\beta_i - \widehat{\beta}_i = O_P(T^{-1/2})$ and $\widehat{\sigma}_i^2 = \sigma_i^2 + o_P(\rho_T)$.
-\begin{align*}
-\big| \doublehattwo{\Phi}_{n, T} - \widehat{\Phi}_{n, T} \big| &\le 2 \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2} \max_{1\le i \le n} \max_{(u,h) \in \mathcal{G}_T}|\beta_i - \widehat{\beta}_i| \Big| \sum_{t=1}^T w_{t,T}(u,h)  (X_{it} - \bar{X}_{i}) \Big| = \\
-& = 2 \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2} \max_{1\le i \le n} \max_{(u,h) \in \mathcal{G}_T} O_P\big(1/\sqrt{T}\big)O_P(\sqrt{Th}) = \\
-& = O_P(1)  O_P\big(1/\sqrt{T}\big)O_P(\sqrt{Th_{max}}) = O_P(h_{max})
-\end{align*}
-
-Statement of the proposition directly follows from it.
-\end{proof}
 
 
-\subsection*{Proof of Theorem \ref{theo-stat-equality}}
-
-For the proof of Theorem \ref{theo-stat-equality}, we will use the following simple lemma: 
-\begin{lemmaA}\label{lemma1-theo-stat}
-Let $V_T$ and $W_T$ be real-valued random variables for $T = 1,2,\ldots$ such that $V_T - W_T = o_p(\delta_T)$ with some $\delta_T = o(1)$. If 
-\begin{equation}\label{eq-lemma1-cond}
-\sup_{x \in \reals} \pr(|V_T - x| \le \delta_T) = o(1), 
-\end{equation}
-then 
-\begin{equation}\label{eq-lemma1-statement}
-\sup_{x \in \reals} \big| \pr(V_T \le x) - \pr(W_T \le x) \big| = o(1). 
-\end{equation}
-\end{lemmaA}
-Proof of this lemma is provided in \cite*{KhismatullinaVogt2018}.
-
-Now we can proceed to the proof itself. We will build the proof of Theorem \ref{theo-stat-equality} on the auxiliary results derived above. Then the steps of the proof are as follows.
-\begin{itemize}
-\item First, by Proposition \ref{propA-strong-approx-equality}, there exist statistics $\widetilde{\Phi}_{n, T}$ for $T = 1,2,\ldots$ which are distributed as $\doublehattwo{\Phi}_T$ for any $n \ge 2$, $T \ge 1$ and which have the property that 
-\begin{align}\label{eq-theo-stat-equality-step1}
-\big| \widetilde{\Phi}_{n, T} - \Phi_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} &+ \frac{\rho_T}{\sqrt{h_{\min}}}\sqrt{\log T} \Big),
-\end{align}
-where $\Phi_{n, T}$ is a Gaussian statistic as defined in \eqref{Phi-statistic}. The approximation result \eqref{eq-theo-stat-equality-step1} allows us to replace the multiscale statistic $\doublehattwo{\Phi}_{n, T}$ by an identically distributed version $\widetilde{\Phi}_{n, T}$ which is close to the Gaussian statistic $\Phi_{n, T}$.
-\item Second, by Proposition \ref{propA-anticon-equality} we show that $\Phi_{n,T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$ with $\delta_T$ converging to zero. Or, in other words, it holds that 
-\begin{align}\label{eq-theo-stat-equality-step2}
-\sup_{x \in \reals} \pr \big( | \Phi_{n,T} - x | \le \delta_T \big) = o(1),
-\end{align}
-where $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}/ h_{\min}$.
-\item In the third step we make use of Lemma \ref{lemma1-theo-stat} to show that
-\begin{equation}\label{eq-theo-stat-equality-step3}
-\sup_{x \in \reals} \big| \pr(\doublehattwo{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = o(1). 
-\end{equation}
-This statement directly follows from the previous two steps and the fact that $\widetilde{\Phi}_{n, T}$ is distributed as $\doublehattwo{\Phi}_{n, T}$ for any $n \ge 2$, $T \ge 1$.
-\item And finally, we prove that  
-\begin{equation}\label{eq-theo-stat-equality-step4}
-\sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = o(1),
-\end{equation}
-which immediately implies the statement of Theorem \ref{theo-stat-equality}.
-\end{itemize}
+\begin{propA}\label{propA-final}
+Under the conditions of Theorem \ref{theo-stat-equality}, it holds that 
+\[ \sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = o(1). \]
+\end{propA}
 
 The proof of \eqref{eq-theo-stat-equality-step4} proceeds as follows. First we consider those $x\in \reals$ such that $\pr(\widehat{\Phi}_{n,T} \le x) \geq \pr(\Phi_{n, T} \le x)$. Then by Proposition \ref{propA-intermediate-relation} we have
 \begin{align*}
@@ -693,6 +726,67 @@ Now note that since $\gamma_{n,T} \to 0$ by \ref{C-h}, we can use the anticoncen
 &\sup_{x \in \reals} \bigg| \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big) -\pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big)\bigg| \Bigg\} + o(1) = \\
 =&\sup_{y \in \reals} \bigg| \pr\Big({\Phi}_{n,T} \le y\Big) -\pr\Big(\doublehattwo{\Phi}_{n,T} \le y\Big)\bigg| + o(1) = o(1).
 \end{align*}
+
+
+%The latter is true because
+%\begin{align*}
+%E\big[(X_{it} - \bar{X}_{i})^2\big] = E X_{it}^2 - 2 E (X_{it}\bar{X}_i) + E \bar{X}_i^2.
+%\end{align*}
+%Now according to \ref{C-reg1}, we have $ E X_{it}^2 = E X_{i0}^2$. Moreover, by the Cauchy-Scwarz inequality 
+%\begin{align*}
+%\big|E (X_{it}\bar{X}_i)\big| &= \Big|\frac{1}{T} \sum_{s=1}^T E (X_{it} X_{is}) \Big| \leq \frac{1}{T} \sum_{s=1}^T \big| E (X_{it} X_{is}) \big| \leq \\
+%&\leq \frac{1}{T} \sum_{s=1}^T \sqrt{E X_{it}^2 E X_{is}^2} = \frac{1}{T} \sum_{s=1}^T E X_{i0}^2  = E X_{i0}^2
+%\end{align*}
+%and
+%\begin{align*}
+%E \bar{X}_i^2 &= \frac{1}{T^2} \sum_{t=1}^T \sum_{s=1}^T E (X_{it} X_{is})  \leq \\
+%&\leq \frac{1}{T^2} \sum_{t=1}^T \sum_{s=1}^T \sqrt{E X_{it}^2 E X_{is}^2} = \frac{1}{T^2} \sum_{t=1}^T \sum_{s=1}^T E X_{i0}^2  = E X_{i0}^2.
+%\end{align*}
+%Hence,, 
+%\begin{align*}
+%E\big[(X_{it} - \bar{X}_{i})^2\big] \leq 4 E X_{i0}^2 < \infty,
+%\end{align*}
+%which proves \eqref{sec-moment}.
+%together with the Cauchy-Schwarz inequality to obtain
+%\begin{align*}
+%\Big| \sum_{t=1}^T w_{t,T}(u,h) (X_{it} - \bar{X}_{j})  \Big| &= \Big| \sum_{t=1}^T w_{t,T}(u,h) \mathbf{1}_{\{T(u-h) \le t \le T(u+h)\}} (X_{it} - \bar{X}_{i})  \Big| \le \\
+%&\le  \Big( \sum_{t=1}^T w^2_{t,T}(u,h) \Big)^{1/2} \Big( \sum_{t=1}^T \mathbf{1}_{\{T(u-h) \le t \le T(u+h)\}} (X_{it} - \bar{X}_{i})^2  \Big)^{1/2} = \\
+%& =  \Big( \sum_{t=1}^T w^2_{t,T}(u,h) \Big)^{1/2} \Big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} (X_{it} - \bar{X}_{i})^2  \Big)^{1/2}.
+%\end{align*}
+
+%Hence, 
+%\begin{align}\label{eq-intermediate-relation-1}
+%\Big| \sum_{t=1}^T w_{t,T}(u,h) (X_{it} - \bar{X}_{i})  \Big| \le \Big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} (X_{it} - \bar{X}_{j})^2  \Big)^{1/2}.
+%\end{align}
+%Applying the Markov inequality, we get that 
+%\begin{align*}
+%\pr \Big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} (X_{it} - \bar{X}_{j})^2 \geq a \Big) \leq \frac{ \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} E\big[(X_{it} - \bar{X}_{i})^2\big]}{a} \leq \frac{(2Th + 2) \cdot 4E X_{i0}^2 }{a}.
+%\end{align*}
+%Therefore, 
+%\begin{align*}
+% \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} (X_{it} - \bar{X}_{j})^2 = O_P(Th),
+%\end{align*}
+%or, equivalently,
+%\begin{align}\label{eq-intermediate-relation-2}
+% \Big(\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} (X_{it} - \bar{X}_{j})^2 \Big)^{1/2} = O_P(\sqrt{Th}).
+%\end{align}
+%Plugging \eqref{eq-intermediate-relation-2} in \eqref{eq-intermediate-relation-1}, we get that
+%\begin{align*}
+%\Big| \sum_{t=1}^T w_{t,T}(u,h) (X_{it} - \bar{X}_{i})  \Big| =O_P(\sqrt{Th}).
+%\end{align*}
+%
+%Then, since we know that for all $i \in \{1, \ldots, n\}$ we have $\beta_i - \widehat{\beta}_i = O_P(T^{-1/2})$ and $\widehat{\sigma}_i^2 = \sigma_i^2 + o_P(\rho_T)$.
+%\begin{align*}
+%\big| \doublehattwo{\Phi}_{n, T} - \widehat{\Phi}_{n, T} \big| &\le 2 \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2} \max_{1\le i \le n} \max_{(u,h) \in \mathcal{G}_T}|\beta_i - \widehat{\beta}_i| \Big| \sum_{t=1}^T w_{t,T}(u,h)  (X_{it} - \bar{X}_{i}) \Big| = \\
+%& = 2 \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2} \max_{1\le i \le n} \max_{(u,h) \in \mathcal{G}_T} O_P\big(1/\sqrt{T}\big)O_P(\sqrt{Th}) = \\
+%& = O_P(1)  O_P\big(1/\sqrt{T}\big)O_P(\sqrt{Th_{max}}) = O_P(h_{max})
+%\end{align*}
+%
+%Statement of the proposition directly follows from it.
+\end{proof}
+
+
+
 
 
 
