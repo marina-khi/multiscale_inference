@@ -119,15 +119,16 @@ Regarding the independent variables $ \mathbf{X}_{it}$, we need the following ad
 
 \item \label{C-reg2} Let $N_i$ be the $d\times d$ matrix with $kl$-th entry $n_{i, kl}= \ex[H_{ik}(\mathcal{U}_{i0})H_{il}(\mathcal{U}_{i0})]$. We assume that the smallest eigenvalue of $N_i$ is strictly bigger than $0$.
 
-\item \label{C-reg3} Let $\ex [\mathbf{H}_{i}(\mathcal{U}_{i0})]=\mathbf{0}$ and $||\mathbf{H}_{i}(\mathcal{U}_{it})||_4 <\infty$.
+\item \label{C-reg3} Let $\ex [\mathbf{H}_{i}(\mathcal{U}_{i0})]=\mathbf{0}$ and $||\mathbf{H}_{i}(\mathcal{U}_{it})||_{q^\prime} <\infty$ for $q^\prime > \theta/2$.
 \item \label{C-reg4} $\sum_{s=0}^\infty \delta_4(\mathbf{H}_i, s)<\infty$.
-\item \label{C-reg5} \textcolor{red}{Dependence adjusted norm!}
+\item \label{C-reg5} $\sup_{m\geq 0} (m+1)^{\alpha} \sum_{t=m}^{\infty} \delta_{q^\prime}(\mathbf{H}_{i}, t) < \infty$ for $\alpha > 1/2 - 1/{q^\prime}$.
+\textcolor{red}{Dependence adjusted norm!}
 \end{enumerate}
 
 To be able to prove the main theorems in Section \ref{sec-test}, we need additional assumptions on the relationship between the covariates and the error process.
 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
-\setcounter{enumi}{7}
+\setcounter{enumi}{8}
 \item \label{C-reg-err1} $\mathbf{X}_{it}$ (elementwise) and $\varepsilon_{is}$ are uncorrelated for each $t, s\in \{1, \ldots, T\}$.
 \item \label{C-reg-err2} Let $\zeta_{i, t} = (u_{it}, \eta_{it})^\top$. Define $\mathcal{I}_{i, t} = (\ldots, \zeta_{i, t-1}, \zeta_{i, t})$ and $\mathbf{U}_i(\mathcal{I}_{i, t}) =  \mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{J}_{it})$. Then, $\sum_{s=0}^\infty \delta_2(\mathbf{U}_i, s)<\infty$.
 
@@ -176,7 +177,7 @@ where
 \[ \Lambda_{t,T}(u,h) = K\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big], \]
 $S_{T,\ell}(u,h) = (Th)^{-1} \sum\nolimits_{t=1}^T K(\frac{\frac{t}{T}-u}{h}) (\frac{\frac{t}{T}-u}{h})^\ell$ for $\ell = 0,1,2$ and $K$ is a kernel function with the following properties: 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
-\setcounter{enumi}{9}
+\setcounter{enumi}{10}
 \item \label{C-ker} The kernel $K$ is non-negative, symmetric about zero and integrates to one. Moreover, it has compact support $[-1,1]$ and is Lipschitz continuous, that is, $|K(v) - K(w)| \le C |v-w|$ for any $v,w \in \reals$ and some constant $C > 0$. 
 \end{enumerate} 
 The kernel average $\widehat{\psi}_{ij,T}(u,h)$ can be regarded as measuring the distance between the two trend curves $m_i$ and $m_j$ on the interval $[u-h,u+h]$.
@@ -186,11 +187,11 @@ We now combine the test statistics $\widehat{\psi}_{ij, T}(u,h)$ for a wide rang
 where $\lambda(h) = \sqrt{2 \log \{ 1/(2h) \}}$ and the set $\mathcal{G}_T$ is the set of points $(u, h)$ that are taken into
 consideration. The statistic $\widehat{\Psi}_{ij,T}$ can be interpreted as a global distance measure between the two curves $m_i$ and $m_j$. Thus, the multiscale statistic $\widehat{\Psi}_{ij, T}$ simultaneously takes into account all locations $u$ and bandwidths $h$ with $(u,h) \in \mathcal{G}_T$. Throughout the paper, we suppose that $\mathcal{G}_T$ is some subset of $\mathcal{G}_T^{\text{full}} = \{ (u,h): u = t/T \text{ for some } 1 \le t \le T \text{ and } h \in [h_{\min},h_{\max}] \}$, where $h_{\min}$ and $h_{\max}$ denote some minimal and maximal bandwidth value, respectively. For our theory to work, we require the following conditions to hold:
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
-\setcounter{enumi}{10}
+\setcounter{enumi}{11}
 
 \item \label{C-grid} $|\mathcal{G}_T| = O(T^\theta)$ for some arbitrarily large but fixed constant $\theta > 0$, where $|\mathcal{G}_T|$ denotes the cardinality of $\mathcal{G}_T$. 
 
-\item \label{C-h} $h_{\min} \gg T^{-(1-\frac{2}{q})} \log T$, that is, $h_{\min} / \{ T^{-(1-\frac{2}{q})} \log T \} \rightarrow \infty$ with $q > 4$ defined in \ref{C-err2} and $h_{\max} \leq 1/2$.
+\item \label{C-h} $h_{\min} \gg T^{-(1-\frac{2}{q})} \log T$, that is, $h_{\min} / \{ T^{-(1-\frac{2}{q})} \log T \} \rightarrow \infty$ with $q > 4$ defined in \ref{C-err2} and $h_{\max} < 1/2$.
 
 \end{enumerate}
 
@@ -367,32 +368,6 @@ which immediately implies the statement of Theorem \ref{theo-stat-equality}.
 \end{itemize}
 
 
-%\subsection*{Auxiliary results concerning the local linear estimators}
-%Consider the local linear kernel weights $w_{t,T}(u,h)$ defined in \eqref{weights}. We can rewrite them as follows.
-%\begin{align*}
-%w_{t,T}(u,h) = \frac{\frac{1}{\sqrt{Th}} K\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]}{ \bigg\{\frac{1}{Th}\sum\nolimits_{t=1}^T  K^2\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]^2 \bigg\}^{1/2} }, 
-%\end{align*}
-%where
-%$S_{T,\ell}(u,h) = (Th)^{-1} \sum\nolimits_{t=1}^T K(\frac{\frac{t}{T}-u}{h}) (\frac{\frac{t}{T}-u}{h})^\ell$ for $\ell = 1,2$. For the sake of simplicity, denote the part of the denominator inside the curly brackets by $\nu_T(u, h)$. Then we can prove the following result:
-%\begin{lemmaA}\label{lemma-weights}
-%Let 
-%\begin{align*}
-%\nu(u, h) = \int_{-u/h}^{(1- u)/h} K^2(v)\big[S_{2}(u,h) -v S_{1}(u,h)\big]^2 dv,
-%\end{align*}
-%with $S_j(u, h) = \int_{-u/h}^{(1-u)/h} K(\rho)\rho^j d\rho$. It holds that 
-%\begin{align*}
-%|\nu_T(u, h) - \nu(u, h)| \leq \frac{C}{Th}
-%\end{align*}
-%for all $u\in [0, 1]$ and $h\in (0, 0.5)$, where $C$ does not depend on $u, h$ and $T$. Moreover, 
-%\begin{align*}
-%\inf_{u\in [0, 1], h\in (0, 0.5)} \nu(u, h) > 0.
-%\end{align*}
-%\end{lemmaA}
-%\begin{proof}
-%Proof is ommitted (for now).
-%\end{proof}
-
-
 
 \subsection*{Introducing additional intermediate statistic}
 
@@ -558,6 +533,9 @@ then
 \end{equation}
 \end{lemmaA}
 Proof of this lemma is provided in \cite*{KhismatullinaVogt2018}.
+\begin{definitionA} Dependence adjusted norm:
+$||X_{\cdot}||^{q^\prime}_{q^\prime, \alpha} = \sup_{m\geq 0} (m+1)^{\alpha} \sum_{t=m}^{\infty} \delta_{q^\prime}(X, t)$.
+\end{definitionA}
 
 \begin{theoremA}{\cite{Wu2016}}\label{theo-wu}
 Assume that $||X_{\cdot}||^{q^\prime}_{q^\prime, \alpha} < \infty$, where $q^\prime > 2$ and $\alpha >0$, and $\sum_{t=1}^T a_t^2 = T.$ Moreover, assume that $\alpha > 1/2 - 1/q^\prime$. Denote $S_T = a_1 X_1 + \ldots + a_T X_T$. Then for all $x>0$,
@@ -652,13 +630,41 @@ by Chebyshev's inequality we have that $|\bar{X}_{i,j}| = \Big|\frac{1}{T}\sum_{
 \begin{align*}
 \big| \bar{\X}_i\big| = \Big|\frac{1}{T}\sum_{t=1}^T \mathbf{H}_i (\mathcal{U}_{it}) \Big| = O_P(1).
 \end{align*}
+\textcolor{red}{Prove here that the value above is $o_P(1)$!!!}
 
-Finally, by Cauchy-Schwarz inequliaty 
+Finally, consider the local linear kernel weights $w_{t,T}(u,h)$ defined in \eqref{weights}. By construction the weights $w_{t, T}(u, h)$ are not equal to $0$ if and only if \linebreak $T(u-h) \le t \le T(u+h)$. We can use this fact to bound  $\max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big|$ using the Cacuhy Schwarz inequality:
 \begin{align*}
- \sum_{t=1}^T w_{t,T}(u,h)  = \sum_{t=1}^T\frac{ K\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]}{ \bigg\{\sum\nolimits_{s=1}^T  K^2\Big(\frac{\frac{s}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{s}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]^2 \bigg\}^{1/2} }
+\Big| \sum_{t=1}^T w_{t,T}(u,h)   \Big| & = \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)   \Big| \leq \sqrt{\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w^2_{t,T}(u,h)}\sqrt{\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} 1^2} =\\
+&=1 \cdot \sqrt{\lceil T(u+h) \rceil -  \lfloor T(u-h) \rfloor +1 } \leq \sqrt{2Th + 2} \leq \sqrt{2Th_{\max} +2}.
 \end{align*}
+Hence, $\max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big| = O(\sqrt{T})$.
+%We can rewrite them as follows.
+%\begin{align*}
+%w_{t,T}(u,h) = \frac{\frac{1}{\sqrt{Th}} K\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]}{ \bigg\{\frac{1}{Th}\sum\nolimits_{t=1}^T  K^2\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]^2 \bigg\}^{1/2} }, 
+%\end{align*}
+%where
+%$S_{T,\ell}(u,h) = (Th)^{-1} \sum\nolimits_{t=1}^T K(\frac{\frac{t}{T}-u}{h}) (\frac{\frac{t}{T}-u}{h})^\ell$ for $\ell = 1,2$. For the sake of simplicity, denote the part of the denominator inside the curly brackets by $\nu_T(u, h)$. Then we can prove the following result:
+%\begin{lemmaA}\label{lemma-weights}
+%Let 
+%\begin{align*}
+%\nu(u, h) = \int_{-u/h}^{(1- u)/h} K^2(v)\big[S_{2}(u,h) -v S_{1}(u,h)\big]^2 dv,
+%\end{align*}
+%with $S_j(u, h) = \int_{-u/h}^{(1-u)/h} K(\rho)\rho^j d\rho$. It holds that 
+%\begin{align*}
+%|\nu_T(u, h) - \nu(u, h)| \leq \frac{C}{Th}
+%\end{align*}
+%for all $u\in [0, 1]$ and $h\in (0, 0.5)$, where $C$ does not depend on $u, h$ and $T$. Moreover, 
+%\begin{align*}
+%\inf_{u\in [0, 1], h\in (0, 0.5)} \nu(u, h) > 0.
+%\end{align*}
+%\end{lemmaA}
+%\begin{proof}
+%Proof is ommitted (for now).
+%\end{proof}
 
-\textcolor{red}{Prove here that the value above is $o(\sqrt{T})$!!!}
+
+
+
 
 
 Now, back to the first summand in \eqref{ineq-diff-1}. 
@@ -723,8 +729,8 @@ We want to prove that $\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u
 \end{align*}
 where in the last equality we used the following facts:
 \begin{enumerate}
-	\item $||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha} < \infty$;
-	\textcolor{red}{\item $\max_{(u, h) \in \mathcal{G}_T} \left( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime}\right) < \infty$;}
+	\item $||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha} < \infty$ by the assumption \ref{C-reg5};
+	\textcolor{red}{\item $\max_{(u, h) \in \mathcal{G}_T} \left( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime}\right) < \infty$; (still need to fomally write down)}
 	\item $||X_{i\cdot}||^{2}_{2, \alpha} < \infty$ (follows from $(1)$).
 \end{enumerate}
 If we take $\theta - q^\prime/2 <0$, then the term on the RHS is converging to can $0$ as $T \to \infty$ for any fixed $\delta >0$. Hence, 
@@ -740,7 +746,7 @@ Under the conditions of Theorem \ref{theo-stat-equality}, it holds that
 \[ \sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = o(1). \]
 \end{propA}
 \begin{proof}
-First, we consider those $x\in \reals$ such that $\pr(\widehat{\Phi}_{n,T} \le x) \geq \pr(\Phi_{n, T} \le x)$. Then by Proposition \ref{propA-intermediate-relation} we have
+First, we consider those $x\in \reals$ such that $\pr(\widehat{\Phi}_{n,T} \le x) \geq \pr(\Phi_{n, T} \le x)$. Then by Proposition \ref{propA-intermediate-relation} and taking $\gamma_{n, T}$ from the Proposition \ref{propA-intermediate-relation-2} we have
 \begin{align*}
 0 &\le \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x)  \le \nonumber\\
 &\le \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)   - \pr\Big(\Phi_{n,T} \le x\Big) = \nonumber\\
@@ -750,7 +756,7 @@ First, we consider those $x\in \reals$ such that $\pr(\widehat{\Phi}_{n,T} \le x
 &\le \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) - \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big) +  \pr\Big(\big|{\Phi}_{n,T} - x \big| \le \gamma_{n, T}\Big) + o(1).
 \end{align*}
 
-Now consider such $x\in \reals$ that $\pr(\widehat{\Phi}_{n,T}\le x) < \pr(\Phi_{n, T}\le x)$. Then again by Proposition \ref{propA-intermediate-relation} for $\gamma_{n, T} = C h_{max}$ we have
+Now consider such $x\in \reals$ that $\pr(\widehat{\Phi}_{n,T}\le x) < \pr(\Phi_{n, T}\le x)$. Then again by Proposition \ref{propA-intermediate-relation} for $\gamma_{n, T}$ from Proposition \ref{propA-intermediate-relation-2} we have
 \begin{align*}\label{eq-theo-stat-equality-step3_2}
 0 &\le \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| =  \pr(\Phi_{n,T} \le x)-  \pr(\widehat{\Phi}_{n, T} \le x) \le \\
 &\le\pr\Big(\Phi_{n,T} \le x\Big)  + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)   - \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) = \\
@@ -759,7 +765,7 @@ Now consider such $x\in \reals$ that $\pr(\widehat{\Phi}_{n,T}\le x) < \pr(\Phi_
 &= \pr\Big(x - \gamma_{n,T} \le {\Phi}_{n,T} \le x \Big) +\pr\Big(\Phi_{n,T} \le x- \gamma_{n, T}\Big) - \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) + o(1)\le \\
 &\le \pr\Big(\big|{\Phi}_{n,T} - x \big| \le \gamma_{n, T}\Big) +\pr\Big({\Phi}_{n,T} \le x - \gamma_{n, T}\Big) -\pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) + o(1).  
 \end{align*}
-Now note that since $\gamma_{n,T} \to 0$ by \ref{C-h}, we can use the anticoncentration results for the Gaussian statistic ${\Phi}_{n,T}$ to get $\pr\Big(\big|{\Phi}_{n,T} - x \big| \le \gamma_{n, T}\Big) = o(1)$. Thus, 
+Now note that since $\gamma_{n,T} \to 0$, we can use the anticoncentration results for the Gaussian statistic ${\Phi}_{n,T}$ to get $\pr\Big(\big|{\Phi}_{n,T} - x \big| \le \gamma_{n, T}\Big) = o(1)$. Thus, 
 \begin{align*}
 \sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) &- \pr(\Phi_{n,T} \le x) \big| \le \\
 \le \max \Bigg\{ &\sup_{x \in \reals} \bigg| \pr\Big({\Phi}_{n,T} \le x - \gamma_{n, T}\Big) -\pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big)\bigg|, \\
