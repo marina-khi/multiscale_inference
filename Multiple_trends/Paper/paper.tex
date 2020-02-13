@@ -72,7 +72,7 @@
 
 \section{The model}\label{sec-model}
 
-Before we proceed any further, we need to introduce some notation used throughout the paper. For a vector $\mathbf{v} = (v_1, \ldots, v_m)\in\reals^m$, we write $|\mathbf{v}| = \big(\sum_{i=1}^m v_i^2\big)^{1/2}$. For a random vector $\mathbf{V}$, we define it's $\mathcal{L}^q, q>1$ norm as $||\mathbf{V}||_q = \big(\ex |\mathbf{V}|^q\big)^{1/q}$. For a patricular case $q = 2$, we write $||\mathbf{V}|| := ||\mathbf{V}||_2$.
+Before we proceed any further, we need to introduce some notation used throughout the paper. For a vector $\mathbf{v} = (v_1, \ldots, v_m)\in\reals^m$, we write $|\mathbf{v}| = \big(\sum_{i=1}^m v_i^2\big)^{1/2}$ and $|\mathbf{v}|_q = \big(\sum_{i=1}^m v_i^q\big)^{1/q}$ respectively. For a random vector $\mathbf{V}$, we define it's $\mathcal{L}^q, q>1$ norm as $||\mathbf{V}||_q = \big(\ex |\mathbf{V}|^q\big)^{1/q}$. For a patricular case $q = 2$, we write $||\mathbf{V}|| := ||\mathbf{V}||_2$.
 
 Following \cite{Wu2005}, we define the \textit{physical dependence measure} for the process $\mathbf{L}(\mathcal{F}_t)$ as the following:
 \[ \delta_q(\mathbf{L}, t) = || \mathbf{L}(\mathcal{F}_t) - \mathbf{L}(\mathcal{F}_t^\prime) ||_q,
@@ -119,10 +119,9 @@ Regarding the independent variables $ \mathbf{X}_{it}$, we need the following ad
 
 \item \label{C-reg2} Let $N_i$ be the $d\times d$ matrix with $kl$-th entry $n_{i, kl}= \ex[H_{ik}(\mathcal{U}_{i0})H_{il}(\mathcal{U}_{i0})]$. We assume that the smallest eigenvalue of $N_i$ is strictly bigger than $0$.
 
-\item \label{C-reg3} Let $\ex [\mathbf{H}_{i}(\mathcal{U}_{i0})]=\mathbf{0}$ and $||\mathbf{H}_{i}(\mathcal{U}_{it})||_{q^\prime} <\infty$ for $q^\prime > \theta/2$.
-\item \label{C-reg4} $\sum_{s=0}^\infty \delta_4(\mathbf{H}_i, s)<\infty$.
-\item \label{C-reg5} $\sup_{m\geq 0} (m+1)^{\alpha} \sum_{t=m}^{\infty} \delta_{q^\prime}(\mathbf{H}_{i}, t) < \infty$ for $\alpha > 1/2 - 1/{q^\prime}$.
-\textcolor{red}{Dependence adjusted norm!}
+\item \label{C-reg3} Let $\ex [\mathbf{H}_{i}(\mathcal{U}_{i0})]=\mathbf{0}$ and $||\mathbf{H}_{i}(\mathcal{U}_{it})||_{q^\prime} <\infty$ for some $q^\prime > \max\{ 2\theta, 4\}$, where $\theta$ will be introduced further in Assumption \ref{C-grid}.
+\item \label{C-reg4} $\sum_{s=0}^\infty \delta_{q^\prime}(\mathbf{H}_i, s)<\infty$ for $q^\prime$ from Assumption \ref{C-reg3}.
+\item \label{C-reg5} For each $i$ it holds that $\sum_{s=t}^{\infty} \delta_{q^\prime}(\mathbf{H}_{i}, s)= O(t^{-\alpha}) $ for $q^\prime$ from Assumption \ref{C-reg3} and for some $\alpha > 1/2 - 1/{q^\prime}$.
 \end{enumerate}
 
 To be able to prove the main theorems in Section \ref{sec-test}, we need additional assumptions on the relationship between the covariates and the error process.
@@ -495,14 +494,12 @@ where $C > 0$ depends only on $\underline{\sigma}$ and $\overline{\sigma}$.
 The proof of Proposition \ref{theo-anticon} is provided in \cite{KhismatullinaVogt2018}.
 
 
-%
 \begin{propA}\label{propA-anticon-equality}
 Under the conditions of Theorem \ref{theo-stat-equality}, it holds that 
 \[ \sup_{x \in \reals} \pr \big( | \Phi_{n,T} - x | \le \delta_T \big) = o(1), \]
 where $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}/ \sqrt{h_{\min}}$.
 \end{propA}
-%
-%
+
 \begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-anticon-equality}}}] 
 
 We write $x = (u,h)$ along with $\mathcal{G}_T = \{ x : x \in \mathcal{G}_T \} = \{x_1,\ldots,x_p\}$, where $p := |\mathcal{G}_T| \le O(T^\theta)$ for some large but fixed $\theta > 0$ by our assumptions. Moreover, for $k = 1,\ldots,p$, we set 
@@ -514,10 +511,12 @@ with $x_k = (x_{k1},x_{k2})$. This notation allows us to write
 \[ \Phi_{n, T} = \max_{1\le i < j \le n} \max_{1 \le k \le 2p} U_{ij, k}, = \max_{1 \leq l \leq (n-1)np} U^\prime_l\]
 where $(U^\prime_{1},\ldots,U^\prime_{(n-1)np})^\top \in \reals^{n(n-1)p}$ is a Gaussian random vector with the following properties: (i) $\mu_{l} := \ex[U^\prime_l] = \{\ex[U_{ij, 2k}] \text{ or }\ex[U_{ij, 2k-1}]\}= - \lambda(x_{k2}) $ and thus
 $$\overline{\mu} = \max_{1\leq l \leq (n-1)np} |\mu_{l}| \leq C \sqrt{\log T},$$
-and (ii) $\sigma_{l}^2 := \var(U^\prime_{l}) = 1$ for all $1 \leq 1 \leq (n-1)np$. Hence, $a_{(n-1)np} = b_{(n-1)np}$. Moreover, as the variables $(U^\prime_l - \mu_l)/\sigma_l$ are standard normal, we have that $a_{(n-1)np} = b_{(n-1)np} \le C\sqrt{\log ((n-1)np)} \leq C \sqrt{\log T}$. With this notation at hand, we can apply Proposition \ref{theo-anticon} to obtain that 
-\[ \sup_{x \in \reals} \pr \Big( \big| \Phi_T - x \big| \le \delta_T \Big) \le C \delta_T \Big[ \sqrt{\log T} + \sqrt{ \log(1/\delta_T) } \Big] = o(1) \]
+and (ii) $\sigma_{l}^2 := \var(U^\prime_{l}) = 1$ for all $1 \leq l \leq (n-1)np$. Hence, $a_{(n-1)np} = b_{(n-1)np}$. Moreover, as the variables $(U^\prime_l - \mu_l)/\sigma_l$ are standard normal, we have that $a_{(n-1)np} = b_{(n-1)np} \le C\sqrt{\log ((n-1)np)} \leq C \sqrt{\log T}$. With this notation at hand, we can apply Proposition \ref{theo-anticon} to obtain that 
+\[ \sup_{x \in \reals} \pr \Big( \big| \Phi_{n, T} - x \big| \le \delta_T \Big) \le C \delta_T \Big[ \sqrt{\log T} + \sqrt{ \log(1/\delta_T) } \Big] = o(1) \]
 with $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}/\sqrt{h_{\min}}$, which is the statement of Proposition \ref{propA-anticon-equality}.
+{\color{red} This part does not go through! We need additional assumptions on $h_{\min}$!
 
+For this part to go through we need stricter assumption on $\rho_T$: $$\rho_T = O\left(\frac{1}{T^{1/2 - 1/q} \sqrt{\log T}}\right)!$$}
 \end{proof}
 
 \subsection*{Other auxiliary results}
@@ -534,17 +533,67 @@ then
 \end{lemmaA}
 Proof of this lemma is provided in \cite*{KhismatullinaVogt2018}.
 \begin{definitionA} Dependence adjusted norm:
-$||X_{\cdot}||^{q^\prime}_{q^\prime, \alpha} = \sup_{m\geq 0} (m+1)^{\alpha} \sum_{t=m}^{\infty} \delta_{q^\prime}(X, t)$.
+$||X_{\cdot}||^{q}_{q, \alpha} = \sup_{m\geq 0} (m+1)^{\alpha} \sum_{t=m}^{\infty} \delta_{q}(X, t)$.
 \end{definitionA}
 
 \begin{theoremA}{\cite{Wu2016}}\label{theo-wu}
-Assume that $||X_{\cdot}||^{q^\prime}_{q^\prime, \alpha} < \infty$, where $q^\prime > 2$ and $\alpha >0$, and $\sum_{t=1}^T a_t^2 = T.$ Moreover, assume that $\alpha > 1/2 - 1/q^\prime$. Denote $S_T = a_1 X_1 + \ldots + a_T X_T$. Then for all $x>0$,
+Assume that $||X_{\cdot}||^{q}_{q, \alpha} < \infty$, where $q > 2$ and $\alpha >0$, and $\sum_{t=1}^T a_t^2 = T.$ Moreover, assume that $\alpha > 1/2 - 1/q$. Denote $S_T = a_1 X_1 + \ldots + a_T X_T$. Then for all $x>0$,
 \begin{align*}
-	\pr(|S_T| \geq x) \leq C_1 \frac{|a|_{q^\prime}^{q^\prime}||X_{\cdot}||^{q^\prime}_{q^\prime, \alpha}  }{x^{q^\prime}} + C_2 \exp \left( - \frac{C_3 x^2} {T ||X_\cdot||^2_{2, \alpha}}\right),
+	\pr(|S_T| \geq x) \leq C_1 \frac{|a|_{q}^{q}||X_{\cdot}||^{q}_{q, \alpha}  }{x^{q}} + C_2 \exp \left( - \frac{C_3 x^2} {T ||X_\cdot||^2_{2, \alpha}}\right),
 \end{align*}
-wjere $C_1, C_2, C_3$ are constants that only depend on $q^\prime$ and $\alpha$.
+where $C_1, C_2, C_3$ are constants that only depend on $q$ and $\alpha$.
 \end{theoremA}
 
+\begin{theoremA}{\cite{Wu2007}}\label{theo-wu-2}
+Let $(\xi_i)_{i \in \integers}$ be a stationary and ergodic Markov chain and $g(\cdot)$ be a measurable function. Let $g(\xi_1) \in \mathcal{L}^q, q > 2, \ex[g(\xi_0)] = 0$ and $\mathit{l}$ be a positive, nondecreasing slowly varying function. Assume that $$ \sum_{i = n}^\infty \big|\big| \ex [g(\xi_i)| \xi_0] - \ex [g(\xi_i)| \xi_{-1}]\big|\big|_q =O\big([\log n]^{-\beta}\big),$$ where $0 \leq \beta<1/q$ and 
+\begin{align*}
+\sum_{k=1}^\infty \frac{k^{-\beta q}}{[l(2^k)]^q} < \infty.	
+\end{align*}
+Then $S_n = g(\xi_1) + \ldots + g(\xi_n) = o_{a.s.}[\sqrt{n}l(n)]$.
+\end{theoremA}
+
+\begin{propA}{\cite{Wu2007}}\label{prop-wu}
+Let $(\epsilon_n)_{n\in\integers}$ be i.i.d. random variables, $\xi_n = (\ldots, \epsilon_{n-1}, \epsilon_n)$ and $g(\cdot)$ be a measurable function such that $g(\xi_n)$ is a proper random variable for each $n \geq 0$. For $k \geq 0$ let $\tilde{\xi}_k = (\ldots, \epsilon_{-1}, \epsilon_0^\prime, \epsilon_1, \ldots, \epsilon_{k-1}, \epsilon_k)$, where $\epsilon_0^\prime$ is an i.i.d. copy of $\epsilon_0$. Let $g(\xi_0) \in \mathcal{L}^q, q > 1$ and $\ex[g(\xi_0)] = 0$. For $n \geq 1$ we have
+
+$$\big|\big| \ex [g(\xi_n)| \xi_0] - \ex [g(\xi_n)| \xi_{-1}]\big|\big|_q \leq 2 \big|\big| g(\xi_n) - g(\tilde{\xi}_n)\big|\big|_q.$$
+\end{propA}
+
+\begin{propA}\label{propA-reg-5}
+Under the conditions of Theorem \ref{theo-stat-equality}, it holds that 
+\begin{align*}
+\bar{\X}_i = \frac{1}{T}\sum_{t=1}^T \mathbf{H}_i (\mathcal{U}_{it}) = o_P(1).
+\end{align*}
+\end{propA}
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-reg-5}}}] 
+
+
+To prove this fact, we will use two results from \cite*{Wu2007} stated above. First, fix $j \in \{1, \ldots, d\}$. Denote $\xi_t = \mathcal{U}_{it}, \tilde{\xi}_t = \mathcal{U}^\prime_{it}$ and $g(\cdot) = H_{i,j}(\cdot)$. Then by Assumption \ref{C-reg3}, $g(\xi_0) = H_{i, j}(\mathcal{U}_{i0}) \in \mathcal{L}^{q^\prime}$ for $q^\prime > 4$ and $\ex[g(\xi_0)] = \ex[H_{i, j}(\mathcal{U}_{i0})] = 0$ and we can apply Proposition \ref{prop-wu} that says that for all $s \geq 1$ we have:
+\begin{align*}
+\big|\big| \ex [g(\xi_s)| \xi_0] - \ex [g(\xi_s)| \xi_{-1}]\big|\big|_{q^\prime} \leq 2 \big|\big| g(\xi_s) - g(\tilde{\xi}_s)\big|\big|_{q^\prime},
+\end{align*}
+or, equivalently,
+\begin{align*}
+\big|\big| \ex [H_{i, j}(\mathcal{U}_{is})| \mathcal{U}_{i0}] - \ex [H_{i, j}(\mathcal{U}_{is})| \mathcal{U}_{i(-1)}]\big|\big|_{q^\prime} \leq 2 \big|\big| H_{i, j}(\mathcal{U}_{is}) - H_{i, j}(\mathcal{U}_{is}^\prime)\big|\big|_{q^\prime}.
+\end{align*}
+Since this holds simultaneously for all $j \in \{1, \ldots, d\}$, we can use the obvious bound $\big|\big| H_{i, j}(\mathcal{U}_{is}) - H_{i, j}(\mathcal{U}_{is}^\prime)\big|\big|_{q^\prime} \leq \big|\big| \mathbf{H}_{i}(\mathcal{U}_{is}) - \mathbf{H}_{i}(\mathcal{U}_{is}^\prime)\big|\big|_{q^\prime} = \delta_{q^\prime}(\mathbf{H}_i, s)$ and Assumption \ref{C-reg5} to write 
+\begin{align*}
+0 \leq \sum_{s = t}^\infty \big|\big| \ex [g(\xi_s)| \xi_0] - \ex [g(\xi_s)| \xi_{-1}]\big|\big|_{q^\prime} \leq \sum_{s = t}^\infty \delta_{q^\prime}(\mathbf{H}_i, s) =O(t^{-\alpha}),
+\end{align*}
+where $\alpha > 1/2 - 1/{q^\prime}$.
+
+Now we want to apply Theorem \ref{theo-wu-2}. As a parameter $\beta$ in the theorem we can take any value satisfying assumption $0 \leq \beta 1/{q^\prime}$ because for every $\beta \geq 0$ we have 
+\begin{align*}
+\sum_{s = t}^\infty \big|\big| \ex [g(\xi_s)| \xi_0] - \ex [g(\xi_s)| \xi_{-1}]\big|\big|_{q^\prime} \leq \sum_{s = t}^\infty \delta_{q^\prime}(\mathbf{H}_i, s) =O(t^{-\alpha}) = O\big([\log t]^{-\beta}\big).
+\end{align*}
+Furthermore, as a positive, nondecreasing slowly varying function $\mathit{l}$ we can take \linebreak $\mathit{l}(x) = \log^{2/{q^\prime} - \beta}(x)$. Then,
+\begin{align*}
+\sum_{k=1}^\infty \frac{k^{-\beta q^\prime}}{[l(2^k)]^{q^\prime}} &= \sum_{k=1}^\infty \frac{k^{-\beta  q^\prime}}{\big[\log^{2/{q^\prime} - \beta}(2^k)\big]^{q^\prime}} =\\
+&= \sum_{k=1}^\infty \frac{k^{-\beta  q^\prime}}{\big[k \log 2\big]^{(2/{q^\prime} - \beta)q^\prime}} =\\
+&= \sum_{k=1}^\infty \frac{k^{-\beta  q^\prime}}{k^{2 -\beta q^\prime }(\log 2)^{(2/{q^\prime} - \beta)q^\prime}} =\\
+&= \frac{1}{(\log 2)^{2 - \beta q^\prime}}\sum_{k=1}^\infty \frac{1}{k^2} < \infty.
+\end{align*}
+Hence, $S_T = g(\xi_1) + \ldots + g(\xi_T) = o_{a.s.}[\sqrt{T}\log^{2/{q^\prime} - \beta}(T)]$, or, equivalently, $\bar{X}_{i, j} = S_T/T = o_{a.s.}[\log^{2/{q^\prime} - \beta}(T)/\sqrt{T}] = o_P(1)$ for each $j \in \{1, \ldots, d\}$. Obviously, this means that $\bar{\X}_i = o_P(1)$.
+\end{proof}
 
 \subsection*{Auxiliary results concerning the intermediate statistic}
 
@@ -553,7 +602,7 @@ In this section, we establish some properties of the intermediate test statistic
 
 
 \begin{propA}\label{propA-intermediate-relation}
-For any $x \in \reals$ and $\gamma_{n, T} > 0$, we have
+For any $x \in \reals$ and any $\gamma_{n, T} > 0$, we have
 \begin{align*} \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) - \pr \Big(\big|\doublehattwo{\Phi}_{n,T} &- \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)\le \pr(\widehat{\Phi}_{n, T} \le x) \le \\
 &\le\pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big).
 \end{align*}
@@ -582,7 +631,8 @@ There exists a sequnce of random numbers $\{\gamma_{n, T}\}_T$, that converges t
 \begin{align*} \pr \Big(\big|\doublehattwo{\Phi}_{n,T} &- \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big) = o(1).
 \end{align*}
 \end{propA}
-\begin{proof}
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-intermediate-relation-2}}}] 
+
 Consider $\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big|$. Analogously as in the proof of Proposition \ref{propA-strong-approx-equality}, we can establish that
 \begin{align*}
 \big| \doublehattwo{\Phi}_{n, T} - \widehat{\Phi}_{n, T} \big| \le  \max_{1\le i < j \le n} \bigg( \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2}\max_{(u,h) \in \mathcal{G}_T} \Big| \doublehat{\phi}_{ij, T}(u,h) - \widehat{\phi}_{ij, T}(u,h) \Big|\bigg),
@@ -606,38 +656,88 @@ Hence,
 &+ 2\max_{1\le i < j \le n} \bigg(\{\widehat{\sigma}_i^2+ \widehat{\sigma}_j^2 \}^{-1/2}\big|(\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top\bar{\mathbf{X}}_{i}\big| \max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big|\bigg)
 \end{align}
 
-To begin with, we consider the second summand in \eqref{ineq-diff-1}.
+To begin with, we consider the first summand in \eqref{ineq-diff-1}.
 
-First, by our assumptions $\widehat{\sigma}_i^2 = \sigma_i^2 + o_P(\rho_T)$. Hence, $\max_{1\le i < j \le n}\{\widehat{\sigma}_i^2+ \widehat{\sigma}_j^2 \}^{-1/2}  = O_P(1)$.
+First, by our assumptions $\widehat{\sigma}_i^2 = \sigma_i^2 + o_P(\rho_T)$. Moreover, for all $i \in \{1, \ldots, n\}$ we know $\sigma_i^2 \neq 0$. Hence, $\max_{1\le i < j \le n}\{\widehat{\sigma}_i^2+ \widehat{\sigma}_j^2 \}^{-1/2}  = O_P(1)$.
 
 Then, by Theorem \ref{theo-regs}, we know that $|\bm{\beta}_i - \widehat{\bm{\beta}}_i| = O_P(1/\sqrt{T})$.
 
-Next, we want to show that $\bar{\X}_i = O_P(1)$. 
+Now consider the term $\big| \sum_{t=1}^T w_{t,T}(u,h) \mathbf{X}_{it}  \big|$. Without loss of generality, we can regard the covariates $\mathbf{X}_{it}$ to be scalars $X_{it}$, not vectors. The proof in case of vectors proceeds analogously.
+
+ 
+By construction the weights $w_{t, T}(u, h)$ are not equal to $0$ if and only if \linebreak $T(u-h) \le t \le T(u+h)$. We can use this fact to rewrite
+\begin{align*}
+\Big| \sum_{t=1}^T w_{t,T}(u,h) X_{it}   \Big|  = \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}   \Big|.
+\end{align*}
+%Note that 
+%\begin{align*}
+%E\big[w_{t,T}(u,h)X_{it} \big] = w_{t,T}(u,h)  E [X_{it}]  = 0
+%\end{align*}
+%and, according to \ref{C-reg3},
+%\begin{align*}
+%E\big[w^2_{t,T}(u,h)X_{it}^2\big] =w^2_{t,T}(u,h) E\big[X_{it}^2\big] = w^2_{t,T}(u,h) E\big[X_{i0}^2\big] < \infty.
+%\end{align*}
+%Analogously, according to \ref{C-reg3},
+%\begin{align*}
+%E\big[w^{q^\prime}_{t,T}(u,h)X_{it}^{q^\prime}\big] =w^{q^\prime}_{t,T}(u,h) E\big[X_{it}^{q^\prime}\big] = w^{q^\prime}_{t,T}(u,h) E\big[X_{i0}^{q^\prime}\big] < \infty.
+%\end{align*}
+We want to show that 
+\begin{align}\label{ineq-diff-2}
+\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=1}^{T} w_{t,T}(u,h)X_{it} \Big| = \max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it} \Big| = o_P({\sqrt{T}}).
+\end{align}
+
+Note that
+\begin{align*}
+\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w^2_{t,T}(u,h) &= \sum_{t=1}^T w^2_{t,T}(u,h) =\\
+&= \sum_{t=1}^T\frac{K^2\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]^2}{ \bigg\{\sum\nolimits_{s=1}^T  K^2\Big(\frac{\frac{s}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{s}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]^2 \bigg\} } =\\
+&= 1.
+\end{align*}
+Denoting by $D_{T, u, h}$ the number of integers between $\lfloor T(u-h) \rfloor$ and $\lceil T(u+h) \rceil$ incl. (with obvious bounds $2Th \leq D_{T, u, h} \leq 2Th + 2$), we can normalize the weights as follows:
+\begin{align*}
+\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} \big(\sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h)\big)^2 = D_{T, u, h}.
+\end{align*}
+
+According to Theorem \ref{theo-wu} (Theorem 2(ii) in \cite{Wu2016}), denoting the weights from the theorem as $a_t = \sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h)$ we can bound the following probability:
+\begin{align*}
+\pr&\left(\Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} \sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h)X_{it}  \Big| \geq x\right) \leq\\
+&\leq C_1 \frac{\big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |\sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h)|^{q^\prime}\big) ||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha}}{ x^{q^\prime}} + C_2 \exp \left(-\frac{C_3  x^2}{D_{T, u, h}||X_{i\cdot}||^{2}_{2, \alpha}}\right)=\\
+&= C_1 \frac{(\sqrt{D_{T, u, h}})^{q^\prime}\big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime}\big) ||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha}}{ x^{q^\prime}} + C_2 \exp \left(-\frac{C_3  x^2}{D_{T, u, h}||X_{i\cdot}||^{2}_{2, \alpha}}\right)  
+\end{align*}
+
+We want to prove \eqref{ineq-diff-2}. For that, take any $\delta>0$:
+\begin{align*}
+\pr &\left(\frac{\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}  \Big|}{\sqrt{T}} \geq \delta \right) =\\
+&=\pr\left(\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}  \Big| \geq \delta \sqrt{T} \right) \leq \\
+&\overset{\text{Boole's inequality}}{\leq} \sum_{(u, h) \in \mathcal{G}_T} \pr \left( \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}  \Big| \geq \delta \sqrt{T} \right) = \\
+&\overset{\text{``normalisation''}}{=} \sum_{(u, h) \in \mathcal{G}_T} \pr \left( \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} \sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h)X_{it}  \Big| \geq \delta\sqrt{D_{T, u, h}T}  \right) \leq \\
+&\overset{\text{Wu's Theorem}}{\leq} \sum_{(u, h) \in \mathcal{G}_T} \left[C_1 \frac{(\sqrt{D_{T, u, h}})^{q^\prime}\big( \sum |w_{t,T}(u,h)|^{q^\prime}\big) ||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha}}{ \big(\delta\sqrt{D_{T, u, h}T}\big)^{q^\prime}} + C_2 \exp \left(-\frac{C_3 \big(\delta\sqrt{D_{T, u, h}T}\big)^2}{D_{T, u, h}||X_{i\cdot}||^{2}_{2, \alpha}}\right) \right] =\\
+&\overset{\text{simplification}}{=} \sum_{(u, h) \in \mathcal{G}_T} \left[C_1 \frac{\big( \sum |w_{t,T}(u,h)|^{q^\prime}\big) ||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha}}{ \big(\delta \sqrt{T}\big)^{q^\prime}} + C_2 \exp \left(-\frac{C_3 \delta^2 T }{||X_{i\cdot}||^{2}_{2, \alpha}}\right) \right] \leq\\
+&\leq C_1 \frac{ T^\theta ||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha}}{T^{q^\prime/2}\cdot \delta^{q^\prime}} \max_{(u, h) \in \mathcal{G}_T} \left( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime}\right)+ C_2 T^\theta \exp \left(-\frac{C_3 \delta^2 T}{||X_{i\cdot}||^{2}_{2, \alpha}}\right) = \\
+&\leq C \frac{ T^{\theta - q^\prime/2}}{\delta^{q^\prime}} + C T^\theta \exp \left(-C T \delta^2\right).
+\end{align*}
+where the symbol $C$ denotes a universal real constant that does not depend neither on $T$ nor on $\delta$ and that takes a different value on each occurrence. Here in the last equality we used the following facts:
+\begin{enumerate}
+	\item $||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha} = \sup_{t\geq 0} (t+1)^{\alpha} \sum_{s=t}^{\infty} \delta_{q^\prime}(H_{i}, s)  < \infty$ holds true since $\sum_{s=t}^{\infty}\delta_{q^\prime}(H_{i}, s) = O(t^{-\alpha})$ by Assumption \ref{C-reg5};
+	\item $\max_{(u, h) \in \mathcal{G}_T} \left( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime}\right) < \infty$ because for every $x \in [0, 1]$ we have $ 0 \leq |x|^{q^\prime/2} \leq x \leq 1$. Thus, since $\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w^2_{t,T}(u,h) = 1$, we have \linebreak $0 \leq w^2_{t,T}(u,h) \leq 1$ for all $t$ and
+$$ 0 \leq |w_{t,T}(u,h)|^{q^\prime} =  |w^2_{t,T}(u,h)|^{q^\prime/2} \leq w^2_{t,T}(u,h) \leq 1.$$
+This leads us to a bound:  
+\begin{align*}
+\max_{(u, h) \in \mathcal{G}_T} \left( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime}\right) \leq
+\max_{(u, h) \in \mathcal{G}_T} \left( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{2}\right) =1 < \infty.
+\end{align*}
+	\item $||X_{i\cdot}||^{2}_{2, \alpha} < \infty$ (follows from $1$).
+\end{enumerate}
 
 
-For every element $\bar{X}_{i, j}, j = 1, \ldots, d$ of a vector $\bar{\X}_{i}$ we have 
-\[\ex[\bar{X}_{i, j}] =  \ex \Big[ \frac{1}{T}\sum_{t=1}^T H_{i,j}(\mathcal{U}_{it})\Big] = \frac{1}{T}\sum_{t=1}^T \ex [H_{i,j}(\mathcal{U}_{it})] = 0\]
-and 
+By Assumption \ref{C-reg3}, $\theta - q^\prime/2 <0$ and the term on the RHS of the above inequality is converging to $0$ as $T \to \infty$ for any fixed $\delta >0$. Hence, 
 \begin{align*}
-\var [\bar{X}_{i, j}] &= \var \Big[ \frac{1}{T}\sum_{t=1}^T H_{i,j}(\mathcal{U}_{it})\Big] =\frac{1}{T^2} \ex\bigg[ \Big(\sum_{t=1}^T H_{i,j}(\mathcal{U}_{it})\Big)^2\bigg] = \\
-&=\frac{1}{T^2} \sum_{t=1}^T \ex [H^2_{i,j}(\mathcal{U}_{it})] + \frac{1}{T^2} \sum_{t=1}^T \sum_{s = 1, s\neq t}^T \ex [H_{i,j}(\mathcal{U}_{it})H_{i,j}(\mathcal{U}_{is})] = \\
-&=\frac{1}{T} \ex [H^2_{i,j}(\mathcal{U}_{i0})] + \frac{1}{T^2} \sum_{t=1}^T \sum_{s = 1, s\neq t}^T \ex [H_{i,j}(\mathcal{U}_{it})H_{i,j}(\mathcal{U}_{is})] \leq \\
-&\leq \frac{1}{T} \ex [H^2_{i,j}(\mathcal{U}_{i0})] + \frac{1}{T^2} \sum_{t=1}^T \sum_{s = 1, s\neq t}^T \sqrt{\ex [H^2_{i,j}(\mathcal{U}_{it})]}\sqrt{\ex [H^2_{i,j}(\mathcal{U}_{is})]} = \\
-&= \frac{1}{T} \ex [H^2_{i,j}(\mathcal{U}_{i0})] + \frac{T-1}{T} \ex [H^2_{i,j}(\mathcal{U}_{i0})] = \\
-&= \ex\big[H_{i,j}^2(\mathcal{U}_{i0})\big],
+\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}  \Big| = o_P(\sqrt{T}).
 \end{align*}
-by Chebyshev's inequality we have that $|\bar{X}_{i,j}| = \Big|\frac{1}{T}\sum_{t=1}^T H_{i, j}(\mathcal{U}_{it})\Big| = O_P(1)$ for each $j\in\{1, \ldots, d\} $. And this in turn implies that
-\begin{align*}
-\big| \bar{\X}_i\big| = \Big|\frac{1}{T}\sum_{t=1}^T \mathbf{H}_i (\mathcal{U}_{it}) \Big| = O_P(1).
-\end{align*}
-\textcolor{red}{Prove here that the value above is $o_P(1)$!!!}
-
-Finally, consider the local linear kernel weights $w_{t,T}(u,h)$ defined in \eqref{weights}. By construction the weights $w_{t, T}(u, h)$ are not equal to $0$ if and only if \linebreak $T(u-h) \le t \le T(u+h)$. We can use this fact to bound  $\max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big|$ using the Cacuhy Schwarz inequality:
-\begin{align*}
-\Big| \sum_{t=1}^T w_{t,T}(u,h)   \Big| & = \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)   \Big| \leq \sqrt{\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w^2_{t,T}(u,h)}\sqrt{\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} 1^2} =\\
-&=1 \cdot \sqrt{\lceil T(u+h) \rceil -  \lfloor T(u-h) \rfloor +1 } \leq \sqrt{2Th + 2} \leq \sqrt{2Th_{\max} +2}.
-\end{align*}
-Hence, $\max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big| = O(\sqrt{T})$.
+Combining all of the above results, we get the following:
+\begin{align}\label{ineq-diff-3}
+2&\max_{1\le i < j \le n}\bigg( \{\widehat{\sigma}_i^2+ \widehat{\sigma}_j^2 \}^{-1/2} |\bm{\beta}_i - \widehat{\bm{\beta}}_i|^\top \max_{(u,h) \in \mathcal{G}_T} \Big| \sum_{t=1}^T w_{t,T}(u,h) \mathbf{X}_{it} \Big|\bigg)  =\nonumber  \\
+&=O_P(1) \cdot O_P(1/\sqrt{T}) \cdot o_P(\sqrt{T}) = o_P(1).
+\end{align}
 %We can rewrite them as follows.
 %\begin{align*}
 %w_{t,T}(u,h) = \frac{\frac{1}{\sqrt{Th}} K\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]}{ \bigg\{\frac{1}{Th}\sum\nolimits_{t=1}^T  K^2\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]^2 \bigg\}^{1/2} }, 
@@ -663,90 +763,36 @@ Hence, $\max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big| =
 %\end{proof}
 
 
+Now, consider the second summand in \eqref{ineq-diff-1}. 
+
+Similarly as before, $\max_{1\le i < j \le n}\{\widehat{\sigma}_i^2+ \widehat{\sigma}_j^2 \}^{-1/2}  = O_P(1)$ and $|\bm{\beta}_i - \widehat{\bm{\beta}}_i| = O_P(1/\sqrt{T})$.
+
+Then, by Proposition \ref{propA-reg-5} $\bar{\X}_i = o_P(1)$. 
 
 
-
-
-Now, back to the first summand in \eqref{ineq-diff-1}. 
-
-Similarly as before, by our assumptions $\widehat{\sigma}_i^2 = \sigma_i^2 + o_P(\rho_T)$. Hence, $$\max_{1\le i < j \le n}\{\widehat{\sigma}_i^2+ \widehat{\sigma}_j^2 \}^{-1/2}  = O_P(1).$$
-
-Then, by Theorem \ref{theo-regs}, we know that $|\bm{\beta}_i - \widehat{\bm{\beta}}_i| = O_P(1/\sqrt{T})$.
-
-
-Consider the term $\big| \sum_{t=1}^T w_{t,T}(u,h) \mathbf{X}_{it}  \big|$. Without loss of generality, we can regard the covariates $\mathbf{X}_{it}$ to be scalars $X_{it}$, not vectors. The proof in case of vectors proceeds analogously.
-
- 
-By construction the weights $w_{t, T}(u, h)$ are not equal to $0$ if and only if \linebreak $T(u-h) \le t \le T(u+h)$. We can use this fact to rewrite
+Finally, consider the local linear kernel weights $w_{t,T}(u,h)$ defined in \eqref{weights}. Again, by construction the weights $w_{t, T}(u, h)$ are not equal to $0$ if and only if \linebreak $T(u-h) \le t \le T(u+h)$. We can use this fact to bound  $\max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big|$ using the Cauchy-Schwarz inequality:
 \begin{align*}
-\Big| \sum_{t=1}^T w_{t,T}(u,h) X_{it}   \Big|  = \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}   \Big|.
+\Big| \sum_{t=1}^T w_{t,T}(u,h)   \Big| & = \left| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)   \right| = \left| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)\cdot  1 \right| \leq\\
+&\leq \sqrt{\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w^2_{t,T}(u,h)}\sqrt{\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} 1^2} =\\
+&=\sqrt{1}\cdot\sqrt{D_{T, u, h}}   \leq \sqrt{2Th + 2} \leq \sqrt{2Th_{\max} +2} \leq \sqrt{T+2}.
 \end{align*}
-%Note that 
-%\begin{align*}
-%E\big[w_{t,T}(u,h)X_{it} \big] = w_{t,T}(u,h)  E [X_{it}]  = 0
-%\end{align*}
-%and, according to \ref{C-reg3},
-%\begin{align*}
-%E\big[w^2_{t,T}(u,h)X_{it}^2\big] =w^2_{t,T}(u,h) E\big[X_{it}^2\big] = w^2_{t,T}(u,h) E\big[X_{i0}^2\big] < \infty.
-%\end{align*}
-%Analogously, according to \ref{C-reg3},
-%\begin{align*}
-%E\big[w^{q^\prime}_{t,T}(u,h)X_{it}^{q^\prime}\big] =w^{q^\prime}_{t,T}(u,h) E\big[X_{it}^{q^\prime}\big] = w^{q^\prime}_{t,T}(u,h) E\big[X_{i0}^{q^\prime}\big] < \infty.
-%\end{align*}
-We want to show that 
-\begin{align*}
-\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=1}^{T} w_{t,T}(u,h)X_{it} \Big| = \max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it} \Big| = o_P({\sqrt{T}}).
-\end{align*}
+Hence, $\max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big| = O(\sqrt{T})$.
 
-Note that
-\begin{align*}
-\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w^2_{t,T}(u,h) &= \sum_{t=1}^T w^2_{t,T}(u,h) =\\
-&= \sum_{t=1}^T\frac{K^2\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]^2}{ \bigg\{\sum\nolimits_{s=1}^T  K^2\Big(\frac{\frac{s}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{s}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]^2 \bigg\} } =\\
-&= 1.
-\end{align*}
-Denoting by $D_{T, u, h}$ the number of integers between $\lfloor T(u-h) \rfloor$ and $\lceil T(u+h) \rceil$ incl. (with obvious bounds $2Th \leq D_{T, u, h} \leq 2Th + 2$), we can rewrite the weights as follows:
-\begin{align*}
-\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} \big(\sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h)\big)^2 = D_{T, u, h}.
-\end{align*}
+Combining the results above, we get the following:
+\begin{align}\label{ineq-diff-4}
+2&\max_{1\le i < j \le n} \bigg(\{\widehat{\sigma}_i^2+ \widehat{\sigma}_j^2 \}^{-1/2}\big|(\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top\bar{\mathbf{X}}_{i}\big| \max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big|\bigg)  =\nonumber  \\
+&=O_P(1) \cdot O_P(1/\sqrt{T}) \cdot o_P(1) \cdot O(\sqrt{T}) = o_P(1).
+\end{align}
 
-According to Theorem \ref{theo-wu} (Theorem 2 in \cite{Wu2016}), using the weights $a_t = \sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h)$ we can bound the following probability:
-\begin{align*}
-\pr&\left(\Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} \sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h)X_{it}  \Big| \geq x\right) \leq\\
-&\leq C_1 \frac{\big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |\sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h)|^{q^\prime}\big) ||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha}}{ x^{q^\prime}} + C_2 \exp \left(-\frac{C_3  x^2}{D_{T, u, h}||X_{i\cdot}||^{2}_{2, \alpha}}\right)=\\
-&= C_1 \frac{(\sqrt{D_{T, u, h}})^{q^\prime}\big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime}\big) ||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha}}{ x^{q^\prime}} + C_2 \exp \left(-\frac{C_3  x^2}{D_{T, u, h}||X_{i\cdot}||^{2}_{2, \alpha}}\right)  
-\end{align*}
-
-We want to prove that $\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}  \Big| = o_P(\sqrt{T})$. For that, take any $\delta>0$:
-\begin{align*}
-\pr &\left(\frac{\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}  \Big|}{\sqrt{T}} \geq \delta \right) =\\
-&=\pr\left(\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}  \Big| \geq \delta \sqrt{T} \right) \leq \\
-&\overset{\text{Boole's inequality}}{\leq} \sum_{(u, h) \in \mathcal{G}_T} \pr \left( \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}  \Big| \geq \delta \sqrt{T} \right) = \\
-&\overset{\text{``normalisation''}}{=} \sum_{(u, h) \in \mathcal{G}_T} \pr \left( \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} \sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h)X_{it}  \Big| \geq \delta\sqrt{D_{T, u, h}T}  \right) \leq \\
-&\overset{\text{Wu's Theorem}}{\leq} \sum_{(u, h) \in \mathcal{G}_T} \left[C_1 \frac{(\sqrt{D_{T, u, h}})^{q^\prime}\big( \sum |w_{t,T}(u,h)|^{q^\prime}\big) ||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha}}{ \big(\delta\sqrt{D_{T, u, h}T}\big)^{q^\prime}} + C_2 \exp \left(-\frac{C_3 \big(\delta\sqrt{D_{T, u, h}T}\big)^2}{D_{T, u, h}||X_{i\cdot}||^{2}_{2, \alpha}}\right) \right] =\\
-&\overset{\text{simplification}}{=} \sum_{(u, h) \in \mathcal{G}_T} \left[C_1 \frac{\big( \sum |w_{t,T}(u,h)|^{q^\prime}\big) ||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha}}{ \big(\delta \sqrt{T}\big)^{q^\prime}} + C_2 \exp \left(-\frac{C_3 \delta^2 T }{||X_{i\cdot}||^{2}_{2, \alpha}}\right) \right] \leq\\
-&\leq C_1 \frac{ T^\theta ||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha}}{T^{q^\prime/2}\cdot \delta^{q^\prime}} \max_{(u, h) \in \mathcal{G}_T} \left( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime}\right)+ C_2 T^\theta \exp \left(-\frac{C_3 \delta^2 T}{D_{T, u, h}||X_{i\cdot}||^{2}_{2, \alpha}}\right) = \\
-&\leq C \frac{ T^{\theta - q^\prime/2}}{\delta^{q^\prime}} + C T^\theta \exp \left(-C T \delta^2\right).
-\end{align*}
-where in the last equality we used the following facts:
-\begin{enumerate}
-	\item $||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha} < \infty$ by the assumption \ref{C-reg5};
-	\textcolor{red}{\item $\max_{(u, h) \in \mathcal{G}_T} \left( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime}\right) < \infty$; (still need to fomally write down)}
-	\item $||X_{i\cdot}||^{2}_{2, \alpha} < \infty$ (follows from $(1)$).
-\end{enumerate}
-If we take $\theta - q^\prime/2 <0$, then the term on the RHS is converging to can $0$ as $T \to \infty$ for any fixed $\delta >0$. Hence, 
-\begin{align*}
-\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}  \Big| = o_P(\sqrt{T}).
-\end{align*}
-
-Plugging all the equations derived above together, we can establish that the first summand is also $o_P(1)$. Hence, $\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| = o_P(1)$ and the statement of the theorem follows.
+Plugging \eqref{ineq-diff-3} and \eqref{ineq-diff-4} in \eqref{ineq-diff-2}, we get that $\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| = o_P(1)$ and the statement of the theorem follows.
 \end{proof}
 
 \begin{propA}\label{propA-final}
 Under the conditions of Theorem \ref{theo-stat-equality}, it holds that 
 \[ \sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = o(1). \]
 \end{propA}
-\begin{proof}
-First, we consider those $x\in \reals$ such that $\pr(\widehat{\Phi}_{n,T} \le x) \geq \pr(\Phi_{n, T} \le x)$. Then by Proposition \ref{propA-intermediate-relation} and taking $\gamma_{n, T}$ from the Proposition \ref{propA-intermediate-relation-2} we have
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-final}}}] 
+First, we consider those $x\in \reals$ such that\linebreak $\pr(\widehat{\Phi}_{n,T} \le x) \geq \pr(\Phi_{n, T} \le x)$. Then by Proposition \ref{propA-intermediate-relation} and taking $\gamma_{n, T}$ from the Proposition \ref{propA-intermediate-relation-2} we have
 \begin{align*}
 0 &\le \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x)  \le \nonumber\\
 &\le \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)   - \pr\Big(\Phi_{n,T} \le x\Big) = \nonumber\\
@@ -845,22 +891,22 @@ Similarly,
 \]
  
 With these assumptions we can prove the following propositions.
-\begin{prop}\label{prop-reg-1}
+\begin{propA}\label{propA-reg-1}
 Under Assumptions \ref{C-reg1} and \ref{C-reg3}, $|| \Delta \mathbf{H}_i(\mathcal{U}_{it})||_4 < \infty$.
-\end{prop}
+\end{propA}
 
-\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{prop-reg-1}}}]
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-reg-1}}}]
 By Assumption \ref{C-reg3},
 \[
  || \Delta \mathbf{H}_i(\mathcal{U}_{it})||_4 \leq  ||\mathbf{H}_i(\mathcal{U}_{it})||_4 +  || \mathbf{H}_i(\mathcal{U}_{it-1})||_4 < \infty.
 \]
 \end{proof} 
 
-\begin{prop}\label{prop-reg-2}
+\begin{propA}\label{propA-reg-2}
 Under Assumption \ref{C-reg4}, $\Delta \mathbf{X}_{it}$ (elementwise) and $\Delta \varepsilon_{it}$ are uncorrelated for each $t\in \{1, \ldots, T\}$.
-\end{prop}
+\end{propA}
 
-\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{prop-reg-2}}}]
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-reg-2}}}]
 By Assumption \ref{C-reg4},
 \begin{align*}
 \ex [\Delta \mathbf{X}_{it}\Delta \varepsilon_{it}] &= \ex \big[(\mathbf{X}_{it} - \mathbf{X}_{it-1}) (\varepsilon_{it} - \varepsilon_{it-1})\big] =\\
@@ -871,14 +917,14 @@ By Assumption \ref{C-reg4},
 \end{proof} 
 
 
-\begin{prop}\label{prop-reg-3}
+\begin{propA}\label{propA-reg-3}
 Define 
 \[ \Delta \mathbf{U}_i(\mathcal{I}_{i, t}) := \Delta \mathbf{H}_i(\mathcal{U}_{it}) \Delta G_i(\mathcal{J}_{it}).
 \]
 Under Assumptions \ref{C-err2} - \ref{C-err3}, \ref{C-reg5} - \ref{C-reg6}, we have that $\sum_{s=0}^\infty \delta_2(\Delta \mathbf{U}_i, s) < \infty$.
-\end{prop}
+\end{propA}
 
-\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{prop-reg-3}}}]
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-reg-3}}}]
 Note the following
 \begin{align*}
  &\delta_2(\Delta \mathbf{U}_i, t) = || \Delta\mathbf{U}_i(\mathcal{I}_{i, t}) - \Delta \mathbf{U}_i(\mathcal{I}_{i,t}^\prime) ||_2 =\\
@@ -910,13 +956,13 @@ This leads us to
 \end{proof}
 
 
-\begin{prop}\label{prop-reg-4}
+\begin{propA}\label{propA-reg-4}
 Under Assumptions \ref{C-err1} - \ref{C-reg6},
 \[ \Big| \frac{1}{\sqrt{T}}\sum_{t=1}^T \Delta \mathbf{X}_{it}\Delta \varepsilon_{it} \Big| = O_P(1).
 \]
-\end{prop}
+\end{propA}
 
-\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{prop-reg-4}}}]
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-reg-4}}}]
 We need the following notation:
 \begin{alignat*}{2}
 &\mathcal{P}_{i,t}(\cdot) &&:= \ex[\cdot|\mathcal{I}_{i, t}] -\ex[\cdot|\mathcal{I}_{i, t-1}], \\
@@ -945,10 +991,10 @@ Moreover,
 &= \frac{1}{T}\sum_{t=1}^T \sum_{s=0}^\infty \big( \ex ( \Delta \mathbf{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i,t-s} ) - \ex ( \Delta \mathbf{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i,t-s-1} )  \big) =\\
 &= \frac{1}{T}\sum_{t=1}^T \sum_{s=0}^\infty \mathcal{P}_{i, t-s} (\Delta \mathbf{X}_{it}\Delta \varepsilon_{it}) = \sum_{s=0}^\infty \kappa_{i, s}^{\mathcal{P}}.
 \end{align*}
-Thus, by Proposition \ref{prop-reg-3},
+Thus, by Proposition \ref{propA-reg-3},
 \[ || \kappa_i - \ex \kappa_i || \leq \sum_{s=0}^\infty ||\kappa_{i, s}^{\mathcal{P}} || \leq \frac{1}{\sqrt{T}}\sum_{s=0}^\infty \delta_2(\Delta \mathbf{U}_i, s) = O\Big(\frac{1}{\sqrt{T}}\Big)
 \]
-Since $\ex \kappa_i = 0$ by Proposition \ref{prop-reg-2}, we conclude that
+Since $\ex \kappa_i = 0$ by Proposition \ref{propA-reg-2}, we conclude that
 \[  \Big|\Big| \frac{1}{T}\sum_{t=1}^T  \Delta \mathbf{X}_{it}\Delta \varepsilon_{it} \Big|\Big| = O\Big(\frac{1}{\sqrt{T}}\Big).
 \]
 Therefore, the proposition follows.
@@ -969,18 +1015,13 @@ This leads to
 \sqrt{T}( \widehat{\bm{\beta}}_i - \bm{\beta}_i) &=  \Big(\frac{1}{T} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1}\frac{1}{\sqrt{T}} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \varepsilon_{it} +\\
 &+  O\Big(\frac{1}{\sqrt{T}}\Big) \Big( \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it}.
 \end{align*}
-
-Since 
-\[\ex \Big[ \frac{1}{T}\sum_{t=1}^T \Delta H_{ij}(\mathcal{U}_{it})\Big] = 0\]
-and 
-\[\var \Big[ \frac{1}{T}\sum_{t=1}^T \Delta H_{ij}(\mathcal{U}_{it})\Big] \leq \frac{4}{T^2} \ex\big[H_{ij}^2(\mathcal{U}_{it})\big],\]
-by Chebyshev's inequality we have that $\Big|\frac{1}{T}\sum_{t=1}^T \Delta H_{ij}(\mathcal{U}_{it})\Big| = O_P(1)$ for each $j\in\{1, \ldots, d\} $. And this in turn implies that
+By Proposition \ref{propA-reg-5}, 
 \begin{align}\label{proof-1}
-\Big|\frac{1}{T}\sum_{t=1}^T \Delta \mathbf{H}_i (\mathcal{U}_{it}) \Big| = \Big| \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it}\Big| = O_P(1).
+\Big|\frac{1}{T}\sum_{t=1}^T \Delta \mathbf{H}_i (\mathcal{U}_{it}) \Big| = \Big| \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it}\Big| \leq  \Big| \frac{1}{T}\sum_{t=1}^T \mathbf{X}_{it}\Big| -  \Big| \frac{1}{T}\sum_{t=1}^T \mathbf{X}_{i(t-1)}\Big|= o_P(1).
 \end{align}
 
 
-Similarly, by Proposition \ref{prop-reg-1} and Chebyshev's inequality, we have that for each $j, k\in\{1, \ldots, d\}$
+Similarly, by Proposition \ref{propA-reg-1} and Chebyshev's inequality, we have that for each $j, k\in\{1, \ldots, d\}$
 \[  \Big|\frac{1}{T}\sum_{t=1}^T \Delta H_{ij}(\mathcal{U}_{it}) \Delta H_{ik}(\mathcal{U}_{it})\Big| = O_P(1),
 \]
 which leads to 
@@ -991,7 +1032,7 @@ where $||A||$ with $A$ being a matrix is any matrix norm.
 
 By Assumption \ref{C-reg2}, we know that $\ex [\Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top] = \ex [\Delta \mathbf{X}_{i0} \Delta \mathbf{X}_{i0}^\top]$ is invertible, thus, 
 \[\Bigg| \Bigg| \Big(\frac{1}{T}\sum_{t=1}^T\Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top\Big)^{-1}\Bigg|\Bigg| = O_P(1).\]
-By applying Proposition \ref{prop-reg-4}, \eqref{proof-1} and \eqref{proof-2}, the statement of the theorem follows.
+By applying Proposition \ref{propA-reg-4}, \eqref{proof-1} and \eqref{proof-2}, the statement of the theorem follows.
 \end{proof}
 
 
