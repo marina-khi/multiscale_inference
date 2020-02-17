@@ -340,6 +340,57 @@ where $\widehat{\bm{\beta}}_i$ is the differencing estimator given by \eqref{dif
 \section{Appendix}\label{sec-appendix}
 In this section, we prove the theoretical results from Section \ref{sec-test}. We use the following notation: The symbol $C$ denotes a universal real constant which may take a different value on each occurrence. For $a,b \in \reals$, we write $a_+ = \max \{0,a\}$ and $a \vee b = \max\{a,b\}$. For any set $A$, the symbol $|A|$ denotes the cardinality of $A$. The notation $X \stackrel{\mathcal{D}}{=} Y$ means that the two random variables $X$ and $Y$ have the same distribution. Finally, $f_0(\cdot)$ and $F_0(\cdot)$ denote the density and the distribution function of the standard normal distribution, respectively.
 
+\subsection{Statistics used in the Appendix}\label{subsec-appendix-stats}
+
+\begin{table}[h!]
+  \begin{center}
+    \caption{All the statistics used in the proofs}
+    \label{tab:app-table1}
+    \begin{tabular}{l|l|l} 
+      \textbf{Statistic} & \textbf{Notation} & \textbf{Formula}\\
+      \hline
+      Multiscale statistics & $ \widehat{\Psi}_{n,T}$ & $\begin{array} {l@{}l@{}} \widehat{\Psi}_{n,T}  &{}= \max_{1 \le i < j \le n} \widehat{\Psi}_{ij,T}\\
+      \widehat{\Psi}_{ij,T} & {}= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widehat{\psi}_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\}\end{array}$ \\
+	\hline
+	``Gaussian'' statistic & $ \Phi_{n, T}$ & $\begin{array} {l@{}l@{}}       \Phi_{n, T} &{}= \max_{1 \le i < j \le n} \Phi_{ij,T},\\
+        \Phi_{ij,T}  & {}= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\phi_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \} \end{array}$  \\
+      \hline
+      Auxiliary statistic & $ \widehat{\Phi}_{n, T}$ & $\begin{array} {l@{}l@{}}        \widehat{\Phi}_{n, T} &{}= \max_{1 \le i < j \le n} \widehat{\Phi}_{ij,T},\\
+        \widehat{\Phi}_{ij,T}  & {}= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \} \end{array}$ 
+      \\
+      \hline
+      \begin{tabular}[c]{@{}l@{}}
+      Statistics that is identically\\
+      distributed as $ \widehat{\Phi}_{n, T}$
+      \end{tabular} & $\widetilde{\Phi}_{n, T}$ & \\
+      3 & 23.113231 & c\\
+    \end{tabular}
+      \hline          Intermediate statistic& $ \widehat{\Phi}_{n, T}$ & $\begin{array} {l@{}l@{}}        \widehat{\Phi}_{n, T} &{}= \max_{1 \le i < j \le n} \widehat{\Phi}_{ij,T},\\
+        \widehat{\Phi}_{ij,T}  & {}= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \} \end{array}$ 
+      \\
+    \doublehattwo{\Phi}_{n, T}
+  \end{center}
+\end{table}
+The kernel averages are defined as follows:
+\begin{align*}
+      &\widehat{\psi}_{ij,T}(u,h) = \sum\limits_{t=1}^T w_{t,T}(u,h)(\widehat{Y}_{it} - \widehat{Y}_{jt}),\\
+      &\phi_{ij,T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\},\\
+      & \widehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) + (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - (\varepsilon_{jt} - \bar{\varepsilon}_j) -  (\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\}.
+\end{align*}
+
+$\begin{array}{|r|l|}
+\hline
+\text{Notation} & \text{Exact formula} \\
+\hline
+& \\
+\Phi_{n,T} & \\
+ &  \widehat{\Phi}_{n, T} = \max_{1 \le i < j \le n} \widehat{\Phi}_{ij,T}, \quad \widehat{\Phi}_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \}\\
+&\\
+\doublehattwo{\Phi}_{n, T} & x-y \\
+\widetilde{\Phi}_{n, T} & \\
+\hline
+\end{array}$
+
 \subsection{Proof of Theorem \ref{theo-stat-equality}}\label{subsec-appendix-stat-equaility}
 
 We will build the proof of Theorem \ref{theo-stat-equality} on the auxiliary results derived below. The steps of the proof are as follows.
@@ -514,8 +565,7 @@ $$\overline{\mu} = \max_{1\leq l \leq (n-1)np} |\mu_{l}| \leq C \sqrt{\log T},$$
 and (ii) $\sigma_{l}^2 := \var(U^\prime_{l}) = 1$ for all $1 \leq l \leq (n-1)np$. Hence, $a_{(n-1)np} = b_{(n-1)np}$. Moreover, as the variables $(U^\prime_l - \mu_l)/\sigma_l$ are standard normal, we have that $a_{(n-1)np} = b_{(n-1)np} \le C\sqrt{\log ((n-1)np)} \leq C \sqrt{\log T}$. With this notation at hand, we can apply Proposition \ref{theo-anticon} to obtain that 
 \[ \sup_{x \in \reals} \pr \Big( \big| \Phi_{n, T} - x \big| \le \delta_T \Big) \le C \delta_T \Big[ \sqrt{\log T} + \sqrt{ \log(1/\delta_T) } \Big] = o(1) \]
 with $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}/\sqrt{h_{\min}}$, which is the statement of Proposition \ref{propA-anticon-equality}.
-{\color{red} This part does not go through! We need additional assumptions on $h_{\min}$!
-
+{\color{red} This part does not go through!
 For this part to go through we need stricter assumption on $\rho_T$: $$\rho_T = O\left(\frac{1}{T^{1/2 - 1/q} \sqrt{\log T}}\right)!$$}
 \end{proof}
 
@@ -978,21 +1028,78 @@ Therefore, the proposition follows.
 
 
 \begin{proof}[\textnormal{\textbf{Proof of Theorem \ref{theo-regs}}}]
+Define $\Delta m_{it} = m_i \left( \frac{t}{T} \right) - m_i \left(\frac{t-1}{T}\right)$.
+
 Recall the differencing estimator $\widehat{\bm{\beta}}_i$:
 \begin{align*}
 \widehat{\bm{\beta}}_i &= \Big( \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta Y_{it} =\\
-& =  \Big( \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \sum_{t=1}^T \Delta \mathbf{X}_{it} \bigg(\Delta \mathbf{X}_{it}^\top \bm{\beta}_i + \Delta \varepsilon_{it} + O\Big(\frac{1}{T}\Big) \bigg) =\\
+& =  \Big( \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \sum_{t=1}^T \Delta \mathbf{X}_{it} \bigg(\Delta \mathbf{X}_{it}^\top \bm{\beta}_i + \Delta \varepsilon_{it} +  \Delta m_{it}\bigg) =\\
 &= \bm{\beta}_i +  \Big( \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \varepsilon_{it}
-+  O\Big(\frac{1}{T}\Big) \Big( \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \sum_{t=1}^T \Delta \mathbf{X}_{it}. 
++   \Big( \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta m_{it}. 
 \end{align*}
 This leads to
+\begin{align}\label{theo-regs-proof-1}
+\begin{split}
+\big| \sqrt{T}( \widehat{\bm{\beta}}_i - \bm{\beta}_i) \big| \leq & \bigg| \Big(\frac{1}{T} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1}\frac{1}{\sqrt{T}} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \varepsilon_{it} \bigg|+\\
+&+  \bigg|\Big( \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \frac{1}{\sqrt{T}}\sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta m_{it}\bigg|.
+\end{split}
+\end{align}
+First, we take a closer look at the second summand in \eqref{theo-regs-proof-1}. By the assumption in Theorem \ref{theo-regs}, $m_i(\cdot)$ is Lipschitz continuous, that is,  $|\Delta m_{it}| = \left|m_i \left( \frac{t}{T} \right) - m_i \left(\frac{t-1}{T}\right) \right| \leq C \frac{1}{T}$ for all $t \in \{1, \ldots, T\}$ and some constant $C > 0$. Hence, 
+\begin{align}\label{theo-regs-proof-2}
+\begin{split}
+	\left|\frac{1}{\sqrt{T}}\sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta m_{it} \right| &= \left| \frac{1}{\sqrt{T}}\sum_{t=1}^T \Delta  \mathbf{H}_i (\mathcal{U}_{it})\Delta m_{it}\right| \leq \\
+	&\leq \frac{1}{\sqrt{T}}\sum_{t=1}^T \left|\Delta  \mathbf{H}_i (\mathcal{U}_{it})\right| \cdot \left| \Delta m_{it} \right| \leq \\
+	&\leq \frac{1}{\sqrt{T}} \sum_{t=1}^T \left|\Delta  \mathbf{H}_i (\mathcal{U}_{it})\right| \cdot \left| \Delta m_{it} \right|  \leq \frac{C}{\sqrt{T}} \cdot \frac{1}{T} \sum_{t=1}^T \left|\Delta  \mathbf{H}_i (\mathcal{U}_{it})\right|.
+\end{split}
+\end{align}
+
+Now, in order to show that the whole vector $\frac{1}{T} \sum_{t=1}^T \left|\Delta  \mathbf{H}_i (\mathcal{U}_{it})\right|$ is $O_P(1)$, we will do that for every element $\frac{1}{T} \sum_{t=1}^T \left|\Delta  H_{ij} (\mathcal{U}_{it})\right|$ of this vector separately.
+
+Fix $j \in {1, \ldots, d}$. By Chebyshev's inequality we have
+\begin{align}\label{theo-regs-proof-3}
+\pr \left(\frac{1}{T} \sum_{t=1}^T \left|\Delta  H_{ij} (\mathcal{U}_{it})\right| > a \right) \leq \frac{\ex \left[ \left(\frac{1}{T} \sum_{t=1}^T \left|\Delta  H_{ij} (\mathcal{U}_{it})\right|\right)^2 \right]}{a^2}
+\end{align}
+and 
+\begin{align}\label{theo-regs-proof-4}
+\begin{split}
+\ex &\left[ \left(\frac{1}{T} \sum_{t=1}^T \left|\Delta  H_{ij} (\mathcal{U}_{it})\right|\right)^2 \right] = \frac{1}{T^2}\ex \left[ \left(\sum_{t=1}^T \left|\Delta  H_{ij} (\mathcal{U}_{it})\right|\right)^2 \right]  =\\
+&=  \frac{1}{T^2}\sum_{t=1}^T \ex \left[ \Delta  H^2_{ij} (\mathcal{U}_{it})  \right] + \frac{1}{T^2}\sum_{t=1, s = 1, t\neq s}^T\ex \big[ \left|\Delta  H_{ij} (\mathcal{U}_{it}) \Delta  H_{ij} (\mathcal{U}_{is})\right| \big].
+\end{split}
+\end{align}
+Note that by the Cauchy-Scwarz inequality for all $t$ and $s$ we have
 \begin{align*}
-\sqrt{T}( \widehat{\bm{\beta}}_i - \bm{\beta}_i) &=  \Big(\frac{1}{T} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1}\frac{1}{\sqrt{T}} \sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \varepsilon_{it} +\\
-&+  O\Big(\frac{1}{\sqrt{T}}\Big) \Big( \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it}.
+0 \leq \ex \big[ \left| H_{ij}(\mathcal{U}_{it}) H_{ij}(\mathcal{U}_{is})\right| \big] \leq \sqrt{\ex\big[ H^2_{ij}(\mathcal{U}_{it})\big]} \sqrt{ \ex \big[H^2_{ij}(\mathcal{U}_{is})\big]} = \ex \left[ H^2_{ij}(\mathcal{U}_{i0}) \right] 
 \end{align*}
-By Proposition \ref{propA-reg-5}, 
-\begin{align}\label{proof-1}
-\Big|\frac{1}{T}\sum_{t=1}^T \Delta \mathbf{H}_i (\mathcal{U}_{it}) \Big| = \Big| \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{X}_{it}\Big| \leq  \Big| \frac{1}{T}\sum_{t=1}^T \mathbf{X}_{it}\Big| -  \Big| \frac{1}{T}\sum_{t=1}^T \mathbf{X}_{i(t-1)}\Big|= o_P(1).
+and 
+\begin{align}\label{theo-regs-proof-5}
+0 \leq  \left|\ex \big[ H_{ij}(\mathcal{U}_{it}) H_{ij}(\mathcal{U}_{is}) \big]\right|\leq \ex \big[ \left| H_{ij}(\mathcal{U}_{it}) H_{ij}(\mathcal{U}_{is})\right| \big] \leq  \ex \left[ H^2_{ij}(\mathcal{U}_{i0}) \right].
+\end{align}
+
+Hence, 
+\begin{align*}
+0 \leq  \ex \left[ \Delta  H^2_{ij} (\mathcal{U}_{it})  \right]  &= \ex \left[ \left(H_{ij} (\mathcal{U}_{it}) - H_{ij}(\mathcal{U}_{it-1}) \right)^2  \right] =\\
+&=  \ex \left[ H^2_{ij} (\mathcal{U}_{it}) \right] - 2\ex \left[ H_{ij} (\mathcal{U}_{it}) H_{ij}(\mathcal{U}_{it-1}) \right]  + \ex \left[ H^2_{ij}(\mathcal{U}_{it-1}) \right] \leq \\
+& \leq \ex \left[ H^2_{ij} (\mathcal{U}_{i0}) \right] + 2\ex \left[ H^2_{ij} (\mathcal{U}_{i0}) \right]  + \ex \left[ H^2_{ij}(\mathcal{U}_{i0}) \right] = \\
+&= 4 \ex \left[ H^2_{ij} (\mathcal{U}_{i0}) \right]
+\end{align*}
+and the first summand in \eqref{theo-regs-proof-4} can be bounded by $\frac{4}{T} \ex \left[ H^2_{ij} (\mathcal{U}_{i0}) \right]$.
+
+Now to the second summand in \eqref{theo-regs-proof-4}:
+\begin{align*}
+0 &\leq \ex \big[ \left|\Delta  H_{ij} (\mathcal{U}_{it}) \Delta  H_{ij} (\mathcal{U}_{is})\right| \big] =  \ex \Big[ \big| \left(H_{ij} (\mathcal{U}_{it}) - H_{ij} (\mathcal{U}_{it-1}) \right) \left(H_{ij} (\mathcal{U}_{is}) - H_{ij} (\mathcal{U}_{is-1})\right)\big| \Big] \leq \\
+&\leq \ex \big[ \left| H_{ij} (\mathcal{U}_{it}) H_{ij} (\mathcal{U}_{is}) \right|\big] + \ex \big[ \left| H_{ij} (\mathcal{U}_{it-1}) H_{ij} (\mathcal{U}_{is}) \right|\big] +\\
+&\quad + \ex \big[ \left| H_{ij} (\mathcal{U}_{it}) H_{ij} (\mathcal{U}_{is-1}) \right|\big] + \ex \big[ \left| H_{ij} (\mathcal{U}_{it-1}) H_{ij} (\mathcal{U}_{is-1}) \right|\big] \leq \\
+&\leq  4\ex \left[ H^2_{ij}(\mathcal{U}_{i0}) \right],
+\end{align*}
+where in the last inequality we used \eqref{theo-regs-proof-5}. This means that the second summand in \eqref{theo-regs-proof-4} can be bounded by $\frac{4T(T-1)}{T^2} \ex \left[ H^2_{ij} (\mathcal{U}_{i0}) \right]= \frac{4(T-1)}{T} \ex \left[ H^2_{ij} (\mathcal{U}_{i0}) \right] $.
+
+Plugging these bounds in \eqref{theo-regs-proof-4}, we get
+\begin{align*}
+\ex &\left[ \left(\frac{1}{T} \sum_{t=1}^T \left|\Delta  H_{ij} (\mathcal{U}_{it})\right|\right)^2 \right] \leq \frac{4}{T} \ex \left[ H^2_{ij} (\mathcal{U}_{i0}) \right] + \frac{4(T-1)}{T} \ex \left[ H^2_{ij} (\mathcal{U}_{i0}) \right] = 4 \ex \left[ H^2_{ij} (\mathcal{U}_{i0}) \right],
+\end{align*}
+which together with \eqref{theo-regs-proof-3} leads to $\frac{1}{T}\sum_{t=1}^T \big|\Delta H_{ij}(\mathcal{U}_{it})\big| = O_P(1)$. Since it holds for each $j\in\{1, \ldots, d\}$, we can establish that
+\begin{align}\label{theo-regs-proof-6}
+\frac{1}{T}\sum_{t=1}^T \big| \Delta \mathbf{H}_i (\mathcal{U}_{it}) \big| =  \frac{1}{T}\sum_{t=1}^T \big|\Delta \mathbf{X}_{it}\big| = O_P(1).
 \end{align}
 
 
@@ -1000,16 +1107,45 @@ Similarly, by Proposition \ref{propA-reg-1} and Chebyshev's inequality, we have 
 \[  \Big|\frac{1}{T}\sum_{t=1}^T \Delta H_{ij}(\mathcal{U}_{it}) \Delta H_{ik}(\mathcal{U}_{it})\Big| = O_P(1),
 \]
 which leads to 
-\begin{align}\label{proof-2}
-\Big|\Big| \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{H}_i (\mathcal{U}_{it})\Delta \mathbf{H}_i (\mathcal{U}_{it})^\top \Big|\Big| =\Big|\Big|\frac{1}{T}\sum_{t=1}^T\Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top\Big|\Big| = O_P(1),
-\end{align}
-where $||A||$ with $A$ being a matrix is any matrix norm.
+\begin{align*}
+\Big| \frac{1}{T}\sum_{t=1}^T \Delta \mathbf{H}_i (\mathcal{U}_{it})\Delta \mathbf{H}_i (\mathcal{U}_{it})^\top \Big| =\Big|\frac{1}{T}\sum_{t=1}^T\Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top\Big| = O_P(1),
+\end{align*}
+where $|A|$ with $A$ being a matrix is any matrix norm.
 
 By Assumption \ref{C-reg2}, we know that $\ex [\Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top] = \ex [\Delta \mathbf{X}_{i0} \Delta \mathbf{X}_{i0}^\top]$ is invertible, thus, 
-\[\Bigg| \Bigg| \Big(\frac{1}{T}\sum_{t=1}^T\Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top\Big)^{-1}\Bigg|\Bigg| = O_P(1).\]
-By applying Proposition \ref{propA-reg-4}, \eqref{proof-1} and \eqref{proof-2}, the statement of the theorem follows.
+\begin{align}\label{theo-regs-proof-7}
+\Bigg|  \Big(\frac{1}{T}\sum_{t=1}^T\Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top\Big)^{-1}\Bigg| = O_P(1).
+\end{align}
+Plugging \eqref{theo-regs-proof-6} into \eqref{theo-regs-proof-2} and combining it with \eqref{theo-regs-proof-7}, we get that the second summand in \eqref{theo-regs-proof-1} is $O_P(1/\sqrt{T})$.
+
+Furthermore, we can apply the Proposition \ref{propA-reg-4} together with \eqref{theo-regs-proof-7} to get that the first summand in \eqref{theo-regs-proof-1} is $O_P(1)$. The statement of the theorem follows.
 \end{proof}
 
+
+%\[\var \Big[ \frac{1}{T}\sum_{t=1}^T \Delta H_{ij}(\mathcal{U}_{it})\Big] \leq \frac{4}{T^2} \ex\big[H_{ij}^2(\mathcal{U}_{it})\big],\]
+%by Chebyshev's inequality we have that $\Big|\frac{1}{T}\sum_{t=1}^T \Delta H_{ij}(\mathcal{U}_{it})\Big| = O_P(1)$. for each $j\in\{1, \ldots, d\} $. 
+%
+%The latter is true because
+%\begin{align*}
+%E\big[(X_{it} - \bar{X}_{i})^2\big] = E X_{it}^2 - 2 E (X_{it}\bar{X}_i) + E \bar{X}_i^2.
+%\end{align*}
+%Now according to \ref{C-reg1}, we have $ E X_{it}^2 = E X_{i0}^2$. Moreover, 
+%and
+%\begin{align*}
+%E \bar{X}_i^2 &= \frac{1}{T^2} \sum_{t=1}^T \sum_{s=1}^T E (X_{it} X_{is})  \leq \\
+%&\leq \frac{1}{T^2} \sum_{t=1}^T \sum_{s=1}^T \sqrt{E X_{it}^2 E X_{is}^2} = \frac{1}{T^2} \sum_{t=1}^T \sum_{s=1}^T E X_{i0}^2  = E X_{i0}^2.
+%\end{align*}
+%Hence,, 
+%\begin{align*}
+%E\big[(X_{it} - \bar{X}_{i})^2\big] \leq 4 E X_{i0}^2 < \infty,
+%\end{align*}
+%which proves \eqref{sec-moment}.
+%together with the Cauchy-Schwarz inequality to obtain
+%\begin{align*}
+%\Big| \sum_{t=1}^T w_{t,T}(u,h) (X_{it} - \bar{X}_{j})  \Big| &= \Big| \sum_{t=1}^T w_{t,T}(u,h) \mathbf{1}_{\{T(u-h) \le t \le T(u+h)\}} (X_{it} - \bar{X}_{i})  \Big| \le \\
+%&\le  \Big( \sum_{t=1}^T w^2_{t,T}(u,h) \Big)^{1/2} \Big( \sum_{t=1}^T \mathbf{1}_{\{T(u-h) \le t \le T(u+h)\}} (X_{it} - \bar{X}_{i})^2  \Big)^{1/2} = \\
+%& =  \Big( \sum_{t=1}^T w^2_{t,T}(u,h) \Big)^{1/2} \Big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} (X_{it} - \bar{X}_{i})^2  \Big)^{1/2}.
+%\end{align*}
 
 
 
