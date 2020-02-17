@@ -354,6 +354,9 @@ In this section, we prove the theoretical results from Section \ref{sec-test}. W
 	\hline
 	``Gaussian'' statistic & $ \Phi_{n, T}$ & $\begin{array} {l@{}l@{}}       \Phi_{n, T} &{}= \max_{1 \le i < j \le n} \Phi_{ij,T},\\
         \Phi_{ij,T}  & {}= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\phi_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \} \end{array}$  \\
+        	\hline
+	True Gaussian statistic & $ \Phi^\prime_{n, T}$ & $\begin{array} {l@{}l@{}}       \Phi^\prime_{n, T} &{}= \max_{1 \le i < j \le n} \Phi^\prime_{ij,T},\\
+        \Phi^\prime_{ij,T}  & {}= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\phi^\prime_{ij,T}(u,h)} {\{ \sigma_i^2 + \sigma_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \} \end{array}$  \\
       \hline
       Auxiliary statistic & $ \widehat{\Phi}_{n, T}$ & $\begin{array} {l@{}l@{}}        \widehat{\Phi}_{n, T} &{}= \max_{1 \le i < j \le n} \widehat{\Phi}_{ij,T},\\
         \widehat{\Phi}_{ij,T}  & {}= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \} \end{array}$ 
@@ -363,46 +366,36 @@ In this section, we prove the theoretical results from Section \ref{sec-test}. W
       Statistics that is identically\\
       distributed as $ \widehat{\Phi}_{n, T}$
       \end{tabular} & $\widetilde{\Phi}_{n, T}$ & \\
-      3 & 23.113231 & c\\
+      \hline
+      Intermediate statistic & $ \doublehattwo{\Phi}_{n, T}$ & $\begin{array} {l@{}l@{}} 
+\doublehattwo{\Phi}_{n,T} &{}= \max_{1 \le i < j \le n} \doublehattwo{\Phi}_{ij,T}, \\
+        \doublehattwo{\Phi}_{ij,T} &{}= \max_{(u,h) \in \mathcal{G}_T} \big\{ \Big|\frac{\doublehat{\phi}_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\} \end{array}$ 
+      \\     
+      \hline
     \end{tabular}
-      \hline          Intermediate statistic& $ \widehat{\Phi}_{n, T}$ & $\begin{array} {l@{}l@{}}        \widehat{\Phi}_{n, T} &{}= \max_{1 \le i < j \le n} \widehat{\Phi}_{ij,T},\\
-        \widehat{\Phi}_{ij,T}  & {}= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \} \end{array}$ 
-      \\
-    \doublehattwo{\Phi}_{n, T}
   \end{center}
 \end{table}
 The kernel averages are defined as follows:
 \begin{align*}
       &\widehat{\psi}_{ij,T}(u,h) = \sum\limits_{t=1}^T w_{t,T}(u,h)(\widehat{Y}_{it} - \widehat{Y}_{jt}),\\
       &\phi_{ij,T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\},\\
-      & \widehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) + (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - (\varepsilon_{jt} - \bar{\varepsilon}_j) -  (\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\}.
+      &\phi^\prime_{ij,T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \sigma_i (Z_{it} - \bar{Z}_i) - \sigma_j (Z_{jt} - \bar{Z}_j) \big\},\\
+      & \widehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) + (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - (\varepsilon_{jt} - \bar{\varepsilon}_j) -  (\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\},\\
+      &\doublehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) - (\varepsilon_{jt} - \bar{\varepsilon}_j)  \big\}.
 \end{align*}
-
-$\begin{array}{|r|l|}
-\hline
-\text{Notation} & \text{Exact formula} \\
-\hline
-& \\
-\Phi_{n,T} & \\
- &  \widehat{\Phi}_{n, T} = \max_{1 \le i < j \le n} \widehat{\Phi}_{ij,T}, \quad \widehat{\Phi}_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \}\\
-&\\
-\doublehattwo{\Phi}_{n, T} & x-y \\
-\widetilde{\Phi}_{n, T} & \\
-\hline
-\end{array}$
 
 \subsection{Proof of Theorem \ref{theo-stat-equality}}\label{subsec-appendix-stat-equaility}
 
 We will build the proof of Theorem \ref{theo-stat-equality} on the auxiliary results derived below. The steps of the proof are as follows.
 \begin{itemize}
-\item First, by Proposition \ref{propA-strong-approx-equality}, there exist statistics $\widetilde{\Phi}_{n, T}$ for $T = 1,2,\ldots$ which are distributed as $\doublehattwo{\Phi}_{n, T}$ for any $T \ge 1$ and which have the property that 
+\item First, we look at the intermediate statistic $\doublehattwo{\Phi}_{n, T}$ (defined below) that can be regarded as the version of the statistics $\widehat{\Phi}_{n, T}$ but without the regressors. Then by Proposition \ref{propA-strong-approx-equality}, there exist statistics $\widetilde{\Phi}_{n, T}$ for $T = 1,2,\ldots$ which are distributed as $\doublehattwo{\Phi}_{n, T}$ for any $T \ge 1$ and which have the property that 
 \begin{align}\label{eq-theo-stat-equality-step1}
 \big| \widetilde{\Phi}_{n, T} - \Phi_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} &+ \frac{\rho_T}{\sqrt{h_{\min}}}\sqrt{\log T} \Big),
 \end{align}
 where $\Phi_{n, T}$ is a Gaussian statistic as defined in \eqref{Phi-statistic}. The approximation result \eqref{eq-theo-stat-equality-step1} allows us to replace the multiscale statistic $\doublehattwo{\Phi}_{n, T}$ by an identically distributed version $\widetilde{\Phi}_{n, T}$ which is close to the Gaussian statistic $\Phi_{n, T}$.
-\item Second, by Proposition \ref{propA-anticon-equality} we show that $\Phi_{n,T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$ with $\delta_T$ converging to zero. Or, in other words, it holds that 
+\item Second, by Proposition \ref{propA-anticon-equality} we show that $\Phi^\prime_{n,T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$ with $\delta_T$ converging to zero. Or, in other words, it holds that 
 \begin{align}\label{eq-theo-stat-equality-step2}
-\sup_{x \in \reals} \pr \big( | \Phi_{n,T} - x | \le \delta_T \big) = o(1),
+\sup_{x \in \reals} \pr \big( | \Phi^\prime_{n,T} - x | \le \delta_T \big) = o(1),
 \end{align}
 where $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}/ \sqrt{h_{\min}}$.
 \item In the third step we make use of Lemma \ref{lemma1-theo-stat} to show that
