@@ -371,89 +371,93 @@ In this section, we prove the theoretical results from Section \ref{sec-test}. W
     \end{tabular}
   \end{center}
 \end{table}
-In the proof of Theorem \ref{theo-stat-equality}, we use a number of different test statistics, either defined in Section \ref{sec-test} or auxuliary ones. Each of these statistics plays an important role in one of the steps of the proof. In what follows, we present these test statistics, describe how they are constructed and explain in which parts of the proof they are used. Table \ref{tab:app-table1} is a useful guide for connecting these statistics with their places in the proof strategy presented below.
-
-Multiscale statistics that is calculated based on data (defined in \eqref{Psi-hat-statistic}):
+In the proof of Theorem \ref{theo-stat-equality}, we use a number of different test statistics, either defined in Section \ref{sec-test} or the auxuliary statistics defined below. Each of these statistics plays an important role in one or more steps of the proof. In the following list, we present these test statistics, describe how they are constructed and explain in which parts of the proof they are used. Table \ref{tab:app-table1} is a useful guide for connecting these statistics with their places in the proof strategy presented below.
+\begin{itemize}
+\item Multiscale statistics that is calculated based on data (defined in \eqref{Psi-hat-statistic}):
 \begin{align}\label{eq-stat-1}
 	\widehat{\Psi}_{n,T} & = \max_{1 \le i < j \le n} \widehat{\Psi}_{ij,T}\nonumber\\
       	\widehat{\Psi}_{ij,T} &= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widehat{\psi}_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\},\\
-        \widehat{\psi}_{ij,T}(u,h) &= \sum\limits_{t=1}^T w_{t,T}(u,h)(\widehat{Y}_{it} - \widehat{Y}_{jt}). \nonumber    	
+        \widehat{\psi}_{ij,T}(u,h) &= \sum\limits_{t=1}^T w_{t,T}(u,h)(\widehat{Y}_{it} - \widehat{Y}_{jt}). \nonumber
 \end{align}
 
-Auxiliary statistics that can be regarded as the version of our multiscale statistic $\widehat{\Psi}_{n, T}$ under $H_0$ (defined in \eqref{Phi-hat-statistic}):
+\item Auxiliary statistics that can be regarded as the version of our multiscale statistic $\widehat{\Psi}_{n, T}$ under $H_0$ (defined in \eqref{Phi-hat-statistic}):
 \begin{align}\label{eq-stat-2}
 	\widehat{\Phi}_{n,T} &= \max_{1 \le i < j \le n} \widehat{\Phi}_{ij,T},\nonumber \\
 	\widehat{\Phi}_{ij,T} &= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \}, \\
-	\widehat{\phi}_{ij,T}(u,h) &= \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) + (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - (\varepsilon_{jt} - \bar{\varepsilon}_j) -  (\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j})\big\}.\nonumber 
+	\widehat{\phi}_{ij,T}(u,h) &= \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) + (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) -\nonumber \\
+	&\quad\quad - (\varepsilon_{jt} - \bar{\varepsilon}_j) -  (\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j})\big\}.\nonumber 
 \end{align}
 
-Intermediate statistics that is based on the kernel averages that do not include the covariates:
+\item Intermediate statistics that is close to $\widehat{\Phi}_{n, T}$ but is based on the kernel averages that do not include the covariates:
 \begin{align}\label{eq-stat-3}
 	\doublehattwo{\Phi}_{n,T} &= \max_{1 \le i < j \le n} \doublehattwo{\Phi}_{ij,T},\nonumber \\
 	\doublehattwo{\Phi}_{ij,T} &= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\doublehat{\phi}_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \}, \\
 	 \doublehat{\phi}_{ij,T}(u,h) &= \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) - (\varepsilon_{jt} - \bar{\varepsilon}_j)  \big\}.\nonumber 
 \end{align}
-Auxiliary statistic that has the same distribution as $\doublehattwo{\Phi}_{n, T}$ for each $T = 1, 2, \ldots$
+\item Auxiliary statistic that has the same distribution as $\doublehattwo{\Phi}_{n, T}$ for each $T = 1, 2, \ldots$
 \begin{align}\label{eq-stat-4}
-\widetilde{\Phi}_{n,T} &= \max_{1 \le i < j \le n} \widetilde{\Phi}_{ij,T},\\
+\widetilde{\Phi}_{n,T} &= \max_{1 \le i < j \le n} \widetilde{\Phi}_{ij,T},\nonumber\\
 \widetilde{\Phi}_{ij, T} &= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widetilde{\phi}_{ij, T}(u,h)}{\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big\}, \\
-\widetilde{\phi}_{ij, T}(u,h) &= \sum\nolimits_{t=1}^T w_{t,T}(u,h) \big\{ (\widetilde{\varepsilon}_{it} - \bar{\widetilde{\varepsilon}}_i)  - (\widetilde{\varepsilon}_{jt} - \bar{\widetilde{\varepsilon}}_j)\big\}.
+\widetilde{\phi}_{ij, T}(u,h) &= \sum\nolimits_{t=1}^T w_{t,T}(u,h) \big\{ (\widetilde{\varepsilon}_{it} - \bar{\widetilde{\varepsilon}}_i)  - (\widetilde{\varepsilon}_{jt} - \bar{\widetilde{\varepsilon}}_j)\big\}\nonumber
 \end{align}
-Here 
+with $[\widetilde{\varepsilon}_{i1},\ldots,\widetilde{\varepsilon}_{iT}] \stackrel{\mathcal{D}}{=} [\varepsilon_{i1},\ldots,\varepsilon_{iT}]$ for each $i$ and $T$.
 
-The true Gaussian statistics that differs from $\pseudogaussianstat_{n,T}$ only by using true long-run variances $\sigma_i^2$ in construction of the statistics instead of the estimated ones $\widehat{\sigma}_i^2$:  
+\item The true Gaussian statistics that differs from $\pseudogaussianstat_{n,T}$ only by using true long-run variances $\sigma_i^2$ in construction of the statistics instead of the estimated ones $\widehat{\sigma}_i^2$:  
 \begin{align}\label{eq-stat-5}
 	\gaussianstat_{n,T}  &= \max_{1 \le i < j \le n} \gaussianstat_{ij,T}, \nonumber\\
       	\gaussianstat_{ij,T} &= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\gaussiankernel_{ij,T}(u,h)}{(\sigma_i^2 + \sigma_j^2)^{1/2}}\Big| - \lambda(h) \Big\},\\
        \gaussiankernel_{ij,T}(u,h) &= \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \sigma_i (Z_{it} - \bar{Z}_i) - \sigma_j (Z_{jt} - \bar{Z}_j) \big\}.\nonumber
 \end{align}
 
-The ``Gaussian'' statistics that is calculated for the critical values (defined in \eqref{Phi-statistic}):
+\item The ``Gaussian'' statistics that is calculated for the critical values (defined in \eqref{Phi-statistic}):
 \begin{align}\label{eq-stat-6}
 	\pseudogaussianstat_{n,T}  &= \max_{1 \le i < j \le n} \pseudogaussianstat_{ij,T}, \nonumber\\
       	\pseudogaussianstat_{ij,T} &= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\pseudogaussiankernel_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\},\\
 	 \pseudogaussiankernel_{ij,T}(u,h) & = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}.\nonumber
 \end{align}
-
-
+\end{itemize}
 
 
 
 \subsection{Proof of Theorem \ref{theo-stat-equality}}\label{subsec-appendix-stat-equaility}
 
 We will build the proof of Theorem \ref{theo-stat-equality} on the auxiliary results derived below. The steps of the proof are as follows.
-\begin{itemize}
-\item First, we introduce the intermediate statistic $\doublehattwo{\Phi}_{n, T}$ that can be regarded as the version of the statistics $\widehat{\Phi}_{n, T}$ but without the regressors and in Proposition \ref{propA-intermediate-relation-2} we show that this intermediate statistic is close to $\widehat{\Phi}_{n, T}$, i.e. there exists a sequence $\gamma_{n, T}$ that converges to $0$ as $T \to \infty$ such that
+\begin{enumerate}
+\item First, we introduce the intermediate statistic $\doublehattwo{\Phi}_{n, T}$ that can be regarded as the version of the statistics $\widehat{\Phi}_{n, T}$ but without the regressors and in Propositions \ref{propA-intermediate-relation-1} and \ref{propA-intermediate-relation-2} we show that this intermediate statistic is close to $\widehat{\Phi}_{n, T}$, i.e. there exists a sequence $\gamma_{n, T}$ that converges to $0$ as $T \to \infty$ such that for all $x\in \reals$
 \begin{align}\label{eq-theo-stat-equality-step1}
-\pr \Big(\big|\doublehattwo{\Phi}_{n,T} &- \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big) = o(1).
+\pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) - \pr \Big(\big|\doublehattwo{\Phi}_{n,T} &- \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)\le \pr(\widehat{\Phi}_{n, T} \le x) \le \\
+&\le\pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big).\nonumber
 \end{align}
+and
+\begin{align*} \pr \Big(\big|\doublehattwo{\Phi}_{n,T} &- \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big) = o(1).
+\end{align*}
 \item Second, by Proposition \ref{propA-strong-approx-equality}, there exist statistics $\widetilde{\Phi}_{n, T}$ for $T = 1,2,\ldots$ which are distributed as $\doublehattwo{\Phi}_{n, T}$ for any $T \ge 1$ and which have the property that 
 \begin{align}\label{eq-theo-stat-equality-step2}
 \big| \widetilde{\Phi}_{n, T} - \gaussianstat_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} &+ \frac{\rho_T}{\sqrt{h_{\min}}}\sqrt{\log T} \Big),
 \end{align}
-where $\gaussianstat_{n, T}$ is a true Gaussian statistic that is very similar to the pseudo-Gaussian statistic $\pseudogaussianstat_{n, T}$ defined in \eqref{Phi-statistic}. This approximation result \eqref{eq-theo-stat-equality-step2} allows us to replace the multiscale statistic $\doublehattwo{\Phi}_{n, T}$ by an identically distributed version $\widetilde{\Phi}_{n, T}$ which is close to the Gaussian statistic $\Phi_{n, T}$.
-\item Second, by Proposition \ref{propA-anticon-equality} we show that $\Phi^\prime_{n,T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$ with $\delta_T$ converging to zero. Or, in other words, it holds that 
+where $\gaussianstat_{n, T}$ is a true Gaussian statistic that is very similar to the pseudo-Gaussian statistic $\pseudogaussianstat_{n, T}$ defined in \eqref{Phi-statistic}. This approximation result \eqref{eq-theo-stat-equality-step2} allows us to replace the multiscale statistic $\doublehattwo{\Phi}_{n, T}$ by an identically distributed version $\widetilde{\Phi}_{n, T}$ which is close to the true Gaussian statistic $\gaussianstat_{n, T}$.
+\item Then, by Proposition \ref{propA-anticon-equality} we show that $\gaussianstat_{n,T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$ with $\delta_T$ converging to zero. Or, in other words, it holds that 
 \begin{align}\label{eq-theo-stat-equality-step3}
-\sup_{x \in \reals} \pr \big( | \Phi^\prime_{n,T} - x | \le \delta_T \big) = o(1),
+\sup_{x \in \reals} \pr \big( | \gaussianstat_{n,T} - x | \le \delta_T \big) = o(1),
 \end{align}
 where $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}/ \sqrt{h_{\min}}$.
-\item In the third step we make use of Lemma \ref{lemma1-theo-stat} to show that
+\item In the fourth step we make use of Lemma \ref{lemma1-theo-stat} to show that
 \begin{equation}\label{eq-theo-stat-equality-step4}
 \sup_{x \in \reals} \big| \pr(\doublehattwo{\Phi}_{n, T} \le x) - \pr(\gaussianstat_{n,T} \le x) \big| = o(1). 
 \end{equation}
 This statement directly follows from the previous two steps and the fact that $\widetilde{\Phi}_{n, T}$ is distributed as $\doublehattwo{\Phi}_{n, T}$ for any $n \ge 2$, $T \ge 1$.
-\item In the fourth step, by the means of Proposition \ref{propA-final} we prove that  
+\item In the fifth step, by the means of Proposition \ref{propA-final} we prove that  
 \begin{equation}\label{eq-theo-stat-equality-step5}
 \sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\gaussianstat_{n,T} \le x) \big| = o(1).
 \end{equation}
 \item And finally, in Proposition \ref{propA-pseudogaussian} we connect the quantiles of the true Gaussian statistics $\gaussianstat_{n, T}$ (that can not be simulated because they include the unknown parameters $\sigma_i^2$) to the quantiles of the ``Gaussian'' statistic $\pseudogaussianstat_{n, T}$ (that can be simulated and used for testing):
 \begin{equation}
-\sup_{x \in \reals} \big| \pr(\pseudogaussianstat_{n, T} \le x) - \pr(\gaussianstat_{n,T} \le x) \big| = o(1),
+\sup_{x \in \reals} \big| \pr(\gaussianstat_{n, T} \le x) - \pr(\pseudogaussianstat_{n,T} \le x) \big| = o(1),
 \end{equation}
 which immediately implies the statement of Theorem \ref{theo-stat-equality}.
-\end{itemize}
+\end{enumerate}
 
-\subsection*{Connection between $\widehat{\Phi}_{n, T}$ and $\doublehattwo{\Phi}_{n, T}$}
+\subsection*{Step 1}
 
 The auxiliary statistic $\widehat{\Phi}_{n,T}$ defined in Section \ref{subsec-test-theo} (which is equal to our multiscale statistics $\widehat{\Psi}_{n,T}$ under the null hypothesis) heavily depends on the known covariates $\mathbf{X}_{it}$, whereas the ``Gaussian'' version $\pseudogaussianstat_{n,T}$ does not. This is the reason why we need to introduce additional intermediate test statistic without the covariates that connects $\widehat{\Phi}_{n,T}$ and $\pseudogaussianstat_{n,T}$. 
 
@@ -652,16 +656,16 @@ Plugging \eqref{ineq-diff-3} and \eqref{ineq-diff-4} in \eqref{ineq-diff-2}, we 
 
 
 
-\subsection*{Connection between $\doublehattwo{\Phi}_{n, T}$, $\widetilde{\Phi}_{n, T}$ and $\gaussianstat_{n,T}$}
+\subsection*{Step 2}
 
-The main purpose of this section is to prove that there is a version of the multiscale statistic $\doublehattwo{\Phi}_{n,T}$ which is close to a true Gaussian statistic $\gaussianstat_{n,T}$ (defined in \eqref{eq-stat-3}) whose distribution is known. More specifically, we prove the following result. 
+The main purpose of this section is to prove that there is a version of the multiscale statistic $\doublehattwo{\Phi}_{n,T}$ which is close to a true Gaussian statistic $\gaussianstat_{n,T}$ (defined in \eqref{eq-stat-5}) whose distribution is known (given that we know $\sigma_i^2$). More specifically, we prove the following result. 
 
 \begin{propA}\label{propA-strong-approx-equality}
 Under the conditions of Theorem \ref{theo-stat-equality}, there exist statistics $\widetilde{\Phi}_{n,T}$ for $T = 1,2,\ldots$ with the following two properties: (i) $\widetilde{\Phi}_{n, T}$ has the same distribution as $\doublehattwo{\Phi}_{n, T}$ for any $T$, and (ii)
 \begin{align*}
 \big| \widetilde{\Phi}_{n, T} - \gaussianstat_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} &+ \frac{\rho_T}{\sqrt{h_{\min}}}\sqrt{\log T} \Big),
 \end{align*}
-where $\gaussianstat_{n,T}$ is a Gaussian statistic as defined in \eqref{eq-stat-3}. 
+where $\gaussianstat_{n,T}$ is a Gaussian statistic as defined in \eqref{eq-stat-5}. 
 \end{propA}
 \begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-strong-approx-equality}}}] 
 For the proof, we draw on strong approximation theory for each stationary process $\mathcal{E}_i = \{\varepsilon_{it}: 1 \leq t \leq T\}$ that fulfill the conditions \ref{C-err1}--\ref{C-err3}. By Theorem 2.1 and Corollary 2.1 in \cite{BerkesLiuWu2014}, the following strong approximation result holds true: On a richer probability space, there exists a standard Brownian motion $\mathbb{B}_i$ and a sequence $\{ \widetilde{\varepsilon}_{it}: t \in \naturals \}$ such that $[\widetilde{\varepsilon}_{i1},\ldots,\widetilde{\varepsilon}_{iT}] \stackrel{\mathcal{D}}{=} [\varepsilon_{i1},\ldots,\varepsilon_{iT}]$ for each $T$ and 
@@ -670,7 +674,9 @@ For the proof, we draw on strong approximation theory for each stationary proces
 \end{equation}
 where $\sigma^2_i = \sum_{k \in \integers} \cov(\varepsilon_{i0}, \varepsilon_{ik})$ denotes the long-run error variance.
 
-We apply this result for each stationary process $\mathcal{E}_i = \{\varepsilon_{it}: 1 \leq t \leq T\}$ so that each process $\widetilde{\mathcal{E}}_i = \{\widetilde{\varepsilon}_{it}: t\in \naturals\}$ is independent of $\widetilde{\mathcal{E}}_j$ for $i \neq j$. In order to do this, we define 
+We apply this result for each stationary process $\mathcal{E}_i = \{\varepsilon_{it}: 1 \leq t \leq T\}$ so that each process $\widetilde{\mathcal{E}}_i = \{\widetilde{\varepsilon}_{it}: t\in \naturals\}$ is independent of $\widetilde{\mathcal{E}}_j= \{\widetilde{\varepsilon}_{jt}: t\in \naturals\}$ for $i \neq j$.
+
+Furthermore, we define 
 \begin{align*}
 \widetilde{\Phi}_{n,T} &= \max_{1 \le i < j \le n} \widetilde{\Phi}_{ij,T},\\
 \widetilde{\Phi}_{ij, T} &= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widetilde{\phi}_{ij, T}(u,h)}{\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big\},
@@ -678,8 +684,7 @@ We apply this result for each stationary process $\mathcal{E}_i = \{\varepsilon_
 where $\widetilde{\phi}_{ij, T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \big\{ (\widetilde{\varepsilon}_{it} - \bar{\widetilde{\varepsilon}}_i)  - (\widetilde{\varepsilon}_{jt} - \bar{\widetilde{\varepsilon}}_j)\big\}$ and $\widetilde{\sigma}^2_i$ are the same estimators as $\widehat{\sigma}^2_i$ with $\widehat{Y}_{it} = (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top \mathbf{X}_{it} + m_i ( t/T) + \big( \alpha_i - \widehat{\alpha}_i \big) + \varepsilon_{it}$
 replaced by $\widetilde{Y}_{it} = \linebreak = (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top \mathbf{X}_{it} + m_i(t/T) + \big( \alpha_i - \widehat{\alpha}_i \big) + \widetilde{\varepsilon}_{it}$  for $1 \le t \le T$. In addition, we let
 \begin{align*}
-\Phi_{n, T} & = \max_{1\leq i < j \leq n} \Phi_{ij, T}= \max_{1\leq i < j \leq n} \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij, T}(u,h)}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}}\Big| - \lambda(h) \Big\} \text{ as in \eqref{Phi-statistic}}, \\
-\text{ and }\Phi_{n, T}^{\diamond} & =\max_{1\leq i < j \leq n} \Phi_{ij, T}^{\diamond} = \max_{1\leq i< j \leq n}\max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij, T}(u,h)}{\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{1/2}}\Big| - \lambda(h) \Big\} 
+\Phi_{n, T}^{\diamond} & =\max_{1\leq i < j \leq n} \Phi_{ij, T}^{\diamond} = \max_{1\leq i< j \leq n}\max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij, T}(u,h)}{\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{1/2}}\Big| - \lambda(h) \Big\} 
 \end{align*}
 with $$\phi_{ij, T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}$$ and $Z_{it} = \mathbb{B}_i(t) - \mathbb{B}_i(t-1)$. With this notation, we can write 
 \begin{equation}\label{eq-strongapprox-bound1}
@@ -872,7 +877,7 @@ Under the conditions of Theorem \ref{theo-stat-equality}, it holds that
 \[ \sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = o(1). \]
 \end{propA}
 \begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-final}}}] 
-First, we consider those $x\in \reals$ such that\linebreak $\pr(\widehat{\Phi}_{n,T} \le x) \geq \pr(\Phi_{n, T} \le x)$. Then by Proposition \ref{propA-intermediate-relation} and taking $\gamma_{n, T}$ from the Proposition \ref{propA-intermediate-relation-2} we have
+First, we consider those $x\in \reals$ such that\linebreak $\pr(\widehat{\Phi}_{n,T} \le x) \geq \pr(\Phi_{n, T} \le x)$. Then by Proposition \ref{propA-intermediate-relation-1} and taking $\gamma_{n, T}$ from the Proposition \ref{propA-intermediate-relation-2} we have
 \begin{align*}
 0 &\le \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x)  \le \nonumber\\
 &\le \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)   - \pr\Big(\Phi_{n,T} \le x\Big) = \nonumber\\
