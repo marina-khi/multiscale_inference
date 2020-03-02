@@ -424,36 +424,36 @@ with $[\widetilde{\varepsilon}_{i1},\ldots,\widetilde{\varepsilon}_{iT}] \stackr
 We will build the proof of Theorem \ref{theo-stat-equality} on the auxiliary results derived below. The steps of the proof are as follows.
 \begin{enumerate}
 \item First, we introduce the intermediate statistic $\doublehattwo{\Phi}_{n, T}$ that can be regarded as the version of the statistics $\widehat{\Phi}_{n, T}$ but without the regressors and in Propositions \ref{propA-intermediate-relation-1} and \ref{propA-intermediate-relation-2} we show that this intermediate statistic is close to $\widehat{\Phi}_{n, T}$, i.e. there exists a sequence $\gamma_{n, T}$ that converges to $0$ as $T \to \infty$ such that for all $x\in \reals$
-\begin{align}\label{eq-theo-stat-equality-step1}
+\begin{align*}
 \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) - \pr \Big(\big|\doublehattwo{\Phi}_{n,T} &- \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)\le \pr(\widehat{\Phi}_{n, T} \le x) \le \\
 &\le\pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big).\nonumber
-\end{align}
+\end{align*}
 and
 \begin{align*} \pr \Big(\big|\doublehattwo{\Phi}_{n,T} &- \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big) = o(1).
 \end{align*}
 \item Second, by Proposition \ref{propA-strong-approx-equality}, there exist statistics $\widetilde{\Phi}_{n, T}$ for $T = 1,2,\ldots$ which are distributed as $\doublehattwo{\Phi}_{n, T}$ for any $T \ge 1$ and which have the property that 
-\begin{align}\label{eq-theo-stat-equality-step2}
-\big| \widetilde{\Phi}_{n, T} - \gaussianstat_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} &+ \frac{\rho_T}{\sqrt{h_{\min}}}\sqrt{\log T} \Big),
-\end{align}
-where $\gaussianstat_{n, T}$ is a true Gaussian statistic that is very similar to the pseudo-Gaussian statistic $\pseudogaussianstat_{n, T}$ defined in \eqref{Phi-statistic}. This approximation result \eqref{eq-theo-stat-equality-step2} allows us to replace the multiscale statistic $\doublehattwo{\Phi}_{n, T}$ by an identically distributed version $\widetilde{\Phi}_{n, T}$ which is close to the true Gaussian statistic $\gaussianstat_{n, T}$.
+\begin{align*}
+\big| \widetilde{\Phi}_{n, T} - \gaussianstat_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} + \rho_T\sqrt{\log T} \Big),
+\end{align*}
+where $\gaussianstat_{n, T}$ is a true Gaussian statistic that is very similar to the pseudo-Gaussian statistic $\pseudogaussianstat_{n, T}$ defined in \eqref{Phi-statistic}. This approximation result allows us to replace the multiscale statistic $\doublehattwo{\Phi}_{n, T}$ by an identically distributed version $\widetilde{\Phi}_{n, T}$ which is close to the true Gaussian statistic $\gaussianstat_{n, T}$.
 \item Then, by Proposition \ref{propA-anticon-equality} we show that $\gaussianstat_{n,T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$ with $\delta_T$ converging to zero. Or, in other words, it holds that 
-\begin{align}\label{eq-theo-stat-equality-step3}
+\begin{align*}
 \sup_{x \in \reals} \pr \big( | \gaussianstat_{n,T} - x | \le \delta_T \big) = o(1),
-\end{align}
-where $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}/ \sqrt{h_{\min}}$.
+\end{align*}
+where $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$.
 \item In the fourth step we make use of Lemma \ref{lemma1-theo-stat} to show that
-\begin{equation}\label{eq-theo-stat-equality-step4}
+\begin{equation*}
 \sup_{x \in \reals} \big| \pr(\doublehattwo{\Phi}_{n, T} \le x) - \pr(\gaussianstat_{n,T} \le x) \big| = o(1). 
-\end{equation}
+\end{equation*}
 This statement directly follows from the previous two steps and the fact that $\widetilde{\Phi}_{n, T}$ is distributed as $\doublehattwo{\Phi}_{n, T}$ for any $n \ge 2$, $T \ge 1$.
 \item In the fifth step, by the means of Proposition \ref{propA-final} we prove that  
-\begin{equation}\label{eq-theo-stat-equality-step5}
+\begin{equation*}
 \sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\gaussianstat_{n,T} \le x) \big| = o(1).
-\end{equation}
+\end{equation*}
 \item And finally, in Proposition \ref{propA-pseudogaussian} we connect the quantiles of the true Gaussian statistics $\gaussianstat_{n, T}$ (that can not be simulated because they include the unknown parameters $\sigma_i^2$) to the quantiles of the ``Gaussian'' statistic $\pseudogaussianstat_{n, T}$ (that can be simulated and used for testing):
-\begin{equation}
+\begin{equation*}
 \sup_{x \in \reals} \big| \pr(\gaussianstat_{n, T} \le x) - \pr(\pseudogaussianstat_{n,T} \le x) \big| = o(1),
-\end{equation}
+\end{equation*}
 which immediately implies the statement of Theorem \ref{theo-stat-equality}.
 \end{enumerate}
 
@@ -473,9 +473,11 @@ are close to the kernel averages $\widehat{\phi}_{ij,T}(u,h)$ because of the pro
 
 \begin{propA}\label{propA-intermediate-relation-1}
 For any $x \in \reals$ and any $\gamma_{n, T} > 0$, we have
-\begin{align*} \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) - \pr \Big(\big|\doublehattwo{\Phi}_{n,T} &- \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)\le \pr(\widehat{\Phi}_{n, T} \le x) \le \\
+\begin{align}\label{eq-intermediate-relation-1}
+\begin{split}\pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) -& \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)\le \pr(\widehat{\Phi}_{n, T} \le x) \le \\
 &\le\pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big).
-\end{align*}
+\end{split}
+\end{align}
 \end{propA}
 
 \begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-intermediate-relation-1}}}] 
@@ -498,8 +500,9 @@ The aim of the next proposition is to determine the value of $\gamma_{n, T}$ suc
 
 \begin{propA}\label{propA-intermediate-relation-2}
 There exists a sequence of random numbers $\{\gamma_{n, T}\}_T$, that converges to $0$ as $T\to \infty$, such that
-\begin{align*} \pr \Big(\big|\doublehattwo{\Phi}_{n,T} &- \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big) = o(1).
-\end{align*}
+\begin{align}\label{eq-intermediate-relation-2}
+\pr \Big(\big|\doublehattwo{\Phi}_{n,T} &- \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big) = o(1).
+\end{align}
 \end{propA}
 \begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-intermediate-relation-2}}}] 
 
@@ -654,17 +657,15 @@ Plugging \eqref{ineq-diff-3} and \eqref{ineq-diff-4} in \eqref{ineq-diff-2}, we 
 \end{proof}
 
 
-
-
 \subsection*{Step 2}
 
 The main purpose of this section is to prove that there is a version of the multiscale statistic $\doublehattwo{\Phi}_{n,T}$ which is close to a true Gaussian statistic $\gaussianstat_{n,T}$ (defined in \eqref{eq-stat-5}) whose distribution is known (given that we know $\sigma_i^2$). More specifically, we prove the following result. 
 
 \begin{propA}\label{propA-strong-approx-equality}
 Under the conditions of Theorem \ref{theo-stat-equality}, there exist statistics $\widetilde{\Phi}_{n,T}$ for $T = 1,2,\ldots$ with the following two properties: (i) $\widetilde{\Phi}_{n, T}$ has the same distribution as $\doublehattwo{\Phi}_{n, T}$ for any $T$, and (ii)
-\begin{align*}
-\big| \widetilde{\Phi}_{n, T} - \gaussianstat_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} &+ \frac{\rho_T}{\sqrt{h_{\min}}}\sqrt{\log T} \Big),
-\end{align*}
+\begin{align}\label{eq-strong-approx-equality}
+\big| \widetilde{\Phi}_{n, T} - \gaussianstat_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} + \rho_T\sqrt{\log T} \Big),
+\end{align}
 where $\gaussianstat_{n,T}$ is a Gaussian statistic as defined in \eqref{eq-stat-5}. 
 \end{propA}
 \begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-strong-approx-equality}}}] 
@@ -682,72 +683,65 @@ Furthermore, we define
 \widetilde{\Phi}_{ij, T} &= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widetilde{\phi}_{ij, T}(u,h)}{\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big\},
 \end{align*}
 where $\widetilde{\phi}_{ij, T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \big\{ (\widetilde{\varepsilon}_{it} - \bar{\widetilde{\varepsilon}}_i)  - (\widetilde{\varepsilon}_{jt} - \bar{\widetilde{\varepsilon}}_j)\big\}$ and $\widetilde{\sigma}^2_i$ are the same estimators as $\widehat{\sigma}^2_i$ with $\widehat{Y}_{it} = (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top \mathbf{X}_{it} + m_i ( t/T) + \big( \alpha_i - \widehat{\alpha}_i \big) + \varepsilon_{it}$
-replaced by $\widetilde{Y}_{it} = \linebreak = (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top \mathbf{X}_{it} + m_i(t/T) + \big( \alpha_i - \widehat{\alpha}_i \big) + \widetilde{\varepsilon}_{it}$  for $1 \le t \le T$. In addition, we let
+replaced by $\widetilde{Y}_{it} = \linebreak = (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top \mathbf{X}_{it} + m_i(t/T) + \big( \alpha_i - \widehat{\alpha}_i \big) + \widetilde{\varepsilon}_{it}$  for $1 \le t \le T$. Since $[\widetilde{\varepsilon}_{i1},\ldots,\widetilde{\varepsilon}_{iT}] \stackrel{\mathcal{D}}{=} [\varepsilon_{i1},\ldots,\varepsilon_{iT}]$, we have $\sum\nolimits_{\ell=-\infty}^{\infty} \cov(\widetilde{\varepsilon}_{i0}, \widetilde{\varepsilon}_{i\ell})  = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_{i0}, \varepsilon_{i\ell})= \sigma_i^2$, hence by construction $\widetilde{\sigma}_i^2 = \sigma_i^2 + o_P(\rho_T)$.
+
+In addition, we let
 \begin{align*}
-\Phi_{n, T}^{\diamond} & =\max_{1\leq i < j \leq n} \Phi_{ij, T}^{\diamond} = \max_{1\leq i< j \leq n}\max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij, T}(u,h)}{\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{1/2}}\Big| - \lambda(h) \Big\} 
+\Phi_{n, T}^{\diamond} & =\max_{1\leq i < j \leq n} \Phi_{ij, T}^{\diamond} = \max_{1\leq i< j \leq n}\max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\gaussiankernel_{ij, T}(u,h)}{\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{1/2}}\Big| - \lambda(h) \Big\} 
 \end{align*}
-with $$\phi_{ij, T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}$$ and $Z_{it} = \mathbb{B}_i(t) - \mathbb{B}_i(t-1)$. With this notation, we can write 
+with $\gaussiankernel_{ij, T}(u,h)$ defined in \eqref{eq-stat-5} and $Z_{it} = \mathbb{B}_i(t) - \mathbb{B}_i(t-1)$. With this notation, we can write 
 \begin{equation}\label{eq-strongapprox-bound1}
-\big| \widetilde{\Phi}_{n, T} - \Phi_{n, T} \big| \le \big| \widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond} \big| + \big| \Phi_{n, T}^{\diamond} - \Phi_{n, T} \big|. 
+\big| \widetilde{\Phi}_{n, T} - \gaussianstat_{n, T} \big| \le \big| \widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond} \big| + \big| \Phi_{n, T}^{\diamond} - \gaussianstat_{n, T} \big|. 
 \end{equation}
 First consider $|\widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond}|$. Straightforward calculations yield that 
 \begin{align}\label{eq-strongapprox-bound2}
-\big| \widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond} \big| \le  \max_{1\le i < j \le n} \Big(\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{-1/2} \max_{(u,h) \in \mathcal{G}_T} \big| \widetilde{\phi}_{ij, T}(u,h) - \phi_{ij, T}(u,h) \big|\Big).
+\big| \widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond} \big| \le  \max_{1\le i < j \le n} \Big(\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{-1/2} \max_{(u,h) \in \mathcal{G}_T} \big| \widetilde{\phi}_{ij, T}(u,h) - \gaussiankernel_{ij, T}(u,h) \big|\Big).
 \end{align}
 Using summation by parts,
 ($\sum_{i=1}^n a_i b_i = \sum_{i=1}^{n-1} A_i (b_i - b_{i+1}) + A_n b_n$ with $A_j = \sum_{j=1}^i a_j$) 
 we further obtain that 
 \begin{align*}
-\big| \widetilde{\phi}_{ij, T}(u,h) &- \phi_{ij, T}(u,h) \big| = \\
-=&\bigg|\sum_{t=1}^T w_{t,T}(u,h) \big\{ (\widetilde{\varepsilon}_{it} - \bar{\widetilde{\varepsilon}}_i) - (\widetilde{\varepsilon}_{jt} - \bar{\widetilde{\varepsilon}}_j) -\widehat{\sigma}_i (Z_{it} - \bar{Z}_i) + \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}\bigg| = \\
+\big| \widetilde{\phi}_{ij, T}(u,h) &- \gaussiankernel_{ij, T}(u,h) \big| = \\
+=&\bigg|\sum_{t=1}^T w_{t,T}(u,h) \big\{ (\widetilde{\varepsilon}_{it} - \bar{\widetilde{\varepsilon}}_i) - (\widetilde{\varepsilon}_{jt} - \bar{\widetilde{\varepsilon}}_j) -{\sigma}_i (Z_{it} - \bar{Z}_i) + {\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}\bigg| = \\
 =&\Big|\sum_{t=1}^{T-1} A_{ij, t} \big(w_{t,T}(u,h) -w_{t+1,T}(u,h)\big) + A_{ij, T} w_{T,T}(u,h)\Big|,
 \end{align*}
 where 
 \begin{align*}
-A_{ij, t} = \sum_{s=1}^t \big\{ (\widetilde{\varepsilon}_{is} - \bar{\widetilde{\varepsilon}}_i)  - (\widetilde{\varepsilon}_{js} - \bar{\widetilde{\varepsilon}}_j) - \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) + \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}.
+A_{ij, t} = \sum_{s=1}^t \big\{ (\widetilde{\varepsilon}_{is} - \bar{\widetilde{\varepsilon}}_i)  - (\widetilde{\varepsilon}_{js} - \bar{\widetilde{\varepsilon}}_j) -{\sigma}_i (Z_{it} - \bar{Z}_i) + {\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}.
 \end{align*}
 Note that by construction $A_{ij, T} = 0$ for all pairs $(i, j)$. Denoting 
 \[ W_T(u,h) = \sum\limits_{t=1}^{T-1} |w_{t+1,T}(u,h) - w_{t,T}(u,h)|,\]
 we have 
 \begin{align}\label{eq-strongapprox-bound3}
-\big| \widetilde{\phi}_{ij, T}(u,h) - \phi_{ij, T}(u,h) \big| =& \Big|\sum_{t=1}^{T-1} A_{ij, t} \big(w_{t,T}(u,h) -w_{t+1,T}(u,h)\big)\Big|\le W_T(u, h)\max_{1 \le t \le T} |A_{ij, t}|.
+\big| \widetilde{\phi}_{ij, T}(u,h) - \gaussiankernel_{ij, T}(u,h) \big| =& \Big|\sum_{t=1}^{T-1} A_{ij, t} \big(w_{t,T}(u,h) -w_{t+1,T}(u,h)\big)\Big|\le W_T(u, h)\max_{1 \le t \le T} |A_{ij, t}|.
 \end{align}
 Now consider $\max_{1 \le t \le T} |A_{ij, t}|$:
 \begin{align*}
-\max_{1 \le t \le T} |A_{ij, t}|  \le & \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t (\widetilde{\varepsilon}_{is} - \bar{\widetilde{\varepsilon}}_{i}) - \widehat{\sigma}_i \sum\limits_{s=1}^t \big\{ Z_{is} - \bar{Z_i} \big\} \Big| + \\
-&+ \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t (\widetilde{\varepsilon}_{js} - \bar{\widetilde{\varepsilon}}_{j}) - \widehat{\sigma}_j \sum\limits_{s=1}^t \big\{ Z_{js} - \bar{Z_j} \big\} \Big| \le \\
-\le & \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \widehat{\sigma}_i \sum\limits_{s=1}^t Z_{is} \Big| + \max_{1 \le t \le T} \Big| t (\bar{\widetilde{\varepsilon}}_{i} - \widehat{\sigma}_i \bar{Z_i}) \Big|+\\
-& + \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \widehat{\sigma}_j \sum\limits_{s=1}^t Z_{js} \Big| + \max_{1 \le t \le T} \Big| t (\bar{\widetilde{\varepsilon}}_{j} -\widehat{\sigma}_j \bar{Z_j}) \Big|= \\
-= & \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \widehat{\sigma}_i \sum\limits_{s=1}^t Z_{is} \Big| + T \Big| \frac{1}{T}\Big(\sum\limits_{s=1}^T \widetilde{\varepsilon}_{is} - \widehat{\sigma}_i \sum\limits_{s=1}^T Z_{is}\Big)\Big|+\\
-& + \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \widehat{\sigma}_j \sum\limits_{s=1}^t Z_{js} \Big| +  T \Big| \frac{1}{T}\Big(\sum\limits_{s=1}^T \widetilde{\varepsilon}_{js} -\widehat{\sigma}_j \sum\limits_{s=1}^T  Z_{js}\Big)\Big| \le \\
-\le & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} -\widehat{\sigma}_i \sum\limits_{s=1}^t Z_{is} \Big| + 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} -\widehat{\sigma}_j \sum\limits_{s=1}^t Z_{js} \Big| =\\
-= & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \widehat{\sigma}_i \sum\limits_{s=1}^t \big(\mathbb{B}_{i}(s) - \mathbb{B}_{i}(s-1) \big) \Big| +\\
-& +  2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} -\widehat{\sigma}_j \sum\limits_{s=1}^t \big(\mathbb{B}_{j}(s) - \mathbb{B}_{j}(s-1) \big) \Big| =\\
-= & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \widehat{\sigma}_i \mathbb{B}_{i}(t) \Big| + 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \widehat{\sigma}_j \mathbb{B}_{j}(t) \Big| \le\\
-\le & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \sigma_i \mathbb{B}_{i}(t) \Big| + 2 \max_{1 \le t \le T}\Big|\sigma_i \mathbb{B}_{i}(t) - \widehat{\sigma}_i \mathbb{B}_{i}(t)  \Big| +\\
-&+ 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \sigma_j \mathbb{B}_{j}(t) \Big| + 2 \max_{1 \le t \le T} \Big| \sigma_j \mathbb{B}_{j}(t) - \widehat{\sigma}_j \mathbb{B}_{j}(t) \Big|
+\max_{1 \le t \le T} |A_{ij, t}|  \le & \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t (\widetilde{\varepsilon}_{is} - \bar{\widetilde{\varepsilon}}_{i}) - {\sigma}_i \sum\limits_{s=1}^t \big\{ Z_{is} - \bar{Z_i} \big\} \Big| + \\
+&+ \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t (\widetilde{\varepsilon}_{js} - \bar{\widetilde{\varepsilon}}_{j}) - {\sigma}_j \sum\limits_{s=1}^t \big\{ Z_{js} - \bar{Z_j} \big\} \Big| \le \\
+\le & \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} -{\sigma}_i \sum\limits_{s=1}^t Z_{is} \Big| + \max_{1 \le t \le T} \Big| t (\bar{\widetilde{\varepsilon}}_{i} - {\sigma}_i \bar{Z_i}) \Big|+\\
+& + \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - {\sigma}_j \sum\limits_{s=1}^t Z_{js} \Big| + \max_{1 \le t \le T} \Big| t (\bar{\widetilde{\varepsilon}}_{j} -{\sigma}_j \bar{Z_j}) \Big|= \\
+= & \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - {\sigma}_i \sum\limits_{s=1}^t Z_{is} \Big| + T \Big| \frac{1}{T}\Big(\sum\limits_{s=1}^T \widetilde{\varepsilon}_{is} - {\sigma}_i \sum\limits_{s=1}^T Z_{is}\Big)\Big|+\\
+& + \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - {\sigma}_j \sum\limits_{s=1}^t Z_{js} \Big| +  T \Big| \frac{1}{T}\Big(\sum\limits_{s=1}^T \widetilde{\varepsilon}_{js} - {\sigma}_j \sum\limits_{s=1}^T  Z_{js}\Big)\Big| \le \\
+\le & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} -{\sigma}_i \sum\limits_{s=1}^t Z_{is} \Big| + 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} -{\sigma}_j \sum\limits_{s=1}^t Z_{js} \Big| =\\
+= & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - {\sigma}_i \sum\limits_{s=1}^t \big(\mathbb{B}_{i}(s) - \mathbb{B}_{i}(s-1) \big) \Big| +\\
+& +  2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} -{\sigma}_j \sum\limits_{s=1}^t \big(\mathbb{B}_{j}(s) - \mathbb{B}_{j}(s-1) \big) \Big| =\\
+= & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - {\sigma}_i \mathbb{B}_{i}(t) \Big| + 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - {\sigma}_j \mathbb{B}_{j}(t) \Big|.
 \end{align*}
-Note that for all $1 \le i \le n$ we have $\widehat{\sigma}_i^2 - \sigma_i^2 = o_P(\rho_T)$ which leads to $\widehat{\sigma}_i - \sigma_i = o_P(\rho_T)$. Furthermore, regarding the standard Brownian motion $\mathbb{B}_{i}(t)$ as a sum of standard normal random variables, we get the following result:
-\begin{align*}
- \max_{1 \le t \le T} |\mathbb{B}_{i}(t) | &=  \max_{1 \le t \le T}\big|\sum_{s=1}^t Z_{is} \big| = \max_{1 \le t \le T}\Big|\sqrt{t} \frac{1}{\sqrt{t}}\sum_{s=1}^t Z_{is} \Big| \le \\
- &\le \max_{1 \le t \le T}\sqrt{t}  \max_{1 \le t \le T}\Big| \frac{1}{\sqrt{t}}\sum_{s=1}^t Z_{is} \Big| = \sqrt{T}  \max_{1 \le t \le T}\Big| \frac{1}{\sqrt{t}}\sum_{s=1}^t Z_{is} \Big| = O_P(\sqrt{T \log T}),
-\end{align*}
-where we used the bound for the maximum of $T$ standard normal random variables and the fact that for each $t$, $1\le t \le T$, $ \frac{1}{\sqrt{t}}\sum_{s=1}^t Z_{is}$ is a standard normal random variable.
 
-Therefore, applying the strong approximation result \eqref{eq-strongapprox-dep}, we can infer that
+Applying the strong approximation result \eqref{eq-strongapprox-dep}, we can infer that
 \begin{align}\label{max_At}
-\max_{1 \le t \le T} |A_{ij, t}|  \le & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \sigma_i \mathbb{B}_{i}(t) \Big| + 2\big|\sigma_i - \widehat{\sigma}_i\big|  \max_{1 \le t \le T}\big|\mathbb{B}_{i}(t) \big| +\nonumber\\
-&+ 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \sigma_j \mathbb{B}_{j}(t) \Big| + 2\big|\sigma_j - \widehat{\sigma}_j\big| \max_{1 \le t \le T} \big| \mathbb{B}_{j}(t) \big| = \nonumber\\
-=& o_P\big(T^{1/q} + \rho_T \sqrt{T \log T}\big). 
+\max_{1 \le t \le T} |A_{ij, t}|  \le & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \sigma_i \mathbb{B}_{i}(t) \Big| + 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \sigma_j \mathbb{B}_{j}(t) \Big|  = \nonumber\\
+=& o_P\big(T^{1/q}\big). 
 \end{align}
 Standard arguments show that $\max_{(u,h) \in \mathcal{G}_T} W_T(u,h) = O( 1/\sqrt{Th_{\min}} )$. Plugging \eqref{max_At} in \eqref{eq-strongapprox-bound3} and then in \eqref{eq-strongapprox-bound2}, we can thus infer that 
 \begin{align}\label{eq-strongapprox-bound4}
 \big| \widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond} \big| &\le \{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{-1/2}  \max_{(u,h) \in \mathcal{G}_T} W_T(u, h) \max_{1\le i < j \le n}\max_{1\le t \le T} |A_{ij, t}|=\nonumber \\
-&= o_P\Big( \frac{T^{1/q}}{\sqrt{Th_{\min}}} + \frac{\rho_T}{\sqrt{h_{\min}}}\sqrt{\log T} \Big).
+&= o_P\Big( \frac{T^{1/q}}{\sqrt{Th_{\min}}} \Big).
 \end{align}
-Now consider $|\Phi_{n, T}^{\diamond} - \Phi_{n, T}|$. Since $\phi_{ij, T}(u,h)$ is distributed as $ \normal(0,\widehat{\sigma}^2_i + \widehat{\sigma}^2_j)$ for all $(u,h) \in \mathcal{G}_T$ and all $1\le i < j \le n$, $|\mathcal{G}_T| = O(T^\theta)$ for some large but fixed constant $\theta$ by Assumption \ref{C-grid}, $n$ is fixed and $\widehat{\sigma}^2_i = \sigma^2_i + o_p(\rho_T)$ as well as $\widetilde{\sigma}^2_i = \sigma^2_i + o_p(\rho_T)$, we can establish that
+Now consider $|\Phi_{n, T}^{\diamond} - \gaussianstat_{n, T}|$. Since $\gaussiankernel_{ij, T}(u,h)$ is distributed as $ \normal(0,{\sigma}^2_i + {\sigma}^2_j)$ for all $(u,h) \in \mathcal{G}_T$ and all $1\le i < j \le n$, $|\mathcal{G}_T| = O(T^\theta)$ for some large but fixed constant $\theta$ by Assumption \ref{C-grid}, $n$ is fixed and $\widetilde{\sigma}^2_i = \sigma^2_i + o_p(\rho_T)$, we can establish that
 \begin{align}\label{eq-strongapprox-bound5}
-\big| \Phi_{n, T}^{\diamond} - \Phi_{n, T} \big| &\le \max_{1\leq i< j \leq n}\max_{(u,h) \in \mathcal{G}_T} \Big|\frac{\phi_{ij, T}(u,h)}{\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{1/2}} - \frac{\phi_{ij, T}(u,h)}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}}\Big| = o_P(\rho_T \sqrt{\log T}).
+\big| \Phi_{n, T}^{\diamond} - \gaussianstat_{n, T} \big| &\le \max_{1\leq i< j \leq n}\max_{(u,h) \in \mathcal{G}_T} \Big|\frac{\gaussiankernel_{ij, T}(u,h)}{\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{1/2}} - \frac{\gaussiankernel_{ij, T}(u,h)}{\{{\sigma}_i^2 + {\sigma}_j^2 \}^{1/2}}\Big| = o_P(\rho_T \sqrt{\log T}).
 \end{align}
 Plugging \eqref{eq-strongapprox-bound4} and \eqref{eq-strongapprox-bound5} in \eqref{eq-strongapprox-bound1} completes the proof.
 \end{proof}
@@ -755,11 +749,10 @@ Plugging \eqref{eq-strongapprox-bound4} and \eqref{eq-strongapprox-bound5} in \e
 
 
 
+\subsection*{Step 3}
 
-\subsection*{Auxiliary results using anti-concentration bounds}
 
-
-In this section, we establish some properties of the Gaussian statistic $\Phi_{n,T}$ defined in \eqref{Phi-statistic}. We in particular show that $\Phi_{n,T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$ with $\delta_T$ converging to zero.  
+In this section, we establish some properties of the Gaussian statistic $\gaussianstat_{n,T}$ defined in \eqref{eq-stat-5}. We in particular show that $\gaussianstat_{n,T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$ with $\delta_T$ converging to zero.  
 
 The main technical tool for proving Proposition \ref{propA-anticon-equality} are anti-concentration bounds for Gaussian random vectors. The following proposition slightly generalizes anti-concentration results derived in \cite{Chernozhukov2015}, in particular Theorem 3 therein.
 
@@ -773,29 +766,29 @@ The proof of Proposition \ref{theo-anticon} is provided in \cite{KhismatullinaVo
 
 \begin{propA}\label{propA-anticon-equality}
 Under the conditions of Theorem \ref{theo-stat-equality}, it holds that 
-\[ \sup_{x \in \reals} \pr \big( | \Phi_{n,T} - x | \le \delta_T \big) = o(1), \]
-where $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}/ \sqrt{h_{\min}}$.
+\begin{align}\label{eq-anticon-equality} \sup_{x \in \reals} \pr \big( | \gaussianstat_{n,T} - x | \le \delta_T \big) = o(1),
+\end{align}
+where $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$.
 \end{propA}
 
 \begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-anticon-equality}}}] 
 
 We write $x = (u,h)$ along with $\mathcal{G}_T = \{ x : x \in \mathcal{G}_T \} = \{x_1,\ldots,x_p\}$, where $p := |\mathcal{G}_T| \le O(T^\theta)$ for some large but fixed $\theta > 0$ by our assumptions. Moreover, for $k = 1,\ldots,p$, we set 
 \begin{align*}
-U_{ij, 2k-1} & = \frac{\phi_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} - \lambda(x_{k2}) \\
-U_{ij, 2k} & = -\frac{\phi_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} - \lambda(x_{k2}) 
+U_{ij, 2k-1} & = \frac{\gaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{{\sigma}_i^2 + {\sigma}_j^2\}^{1/2}} - \lambda(x_{k2}) \\
+U_{ij, 2k} & = -\frac{\gaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{{\sigma}_i^2 + {\sigma}_j^2\}^{1/2}} - \lambda(x_{k2}) 
 \end{align*}
 with $x_k = (x_{k1},x_{k2})$. This notation allows us to write
 \[ \Phi_{n, T} = \max_{1\le i < j \le n} \max_{1 \le k \le 2p} U_{ij, k}, = \max_{1 \leq l \leq (n-1)np} U^\prime_l\]
 where $(U^\prime_{1},\ldots,U^\prime_{(n-1)np})^\top \in \reals^{n(n-1)p}$ is a Gaussian random vector with the following properties: (i) $\mu_{l} := \ex[U^\prime_l] = \{\ex[U_{ij, 2k}] \text{ or }\ex[U_{ij, 2k-1}]\}= - \lambda(x_{k2}) $ and thus
 $$\overline{\mu} = \max_{1\leq l \leq (n-1)np} |\mu_{l}| \leq C \sqrt{\log T},$$
 and (ii) $\sigma_{l}^2 := \var(U^\prime_{l}) = 1$ for all $1 \leq l \leq (n-1)np$. Hence, $a_{(n-1)np} = b_{(n-1)np}$. Moreover, as the variables $(U^\prime_l - \mu_l)/\sigma_l$ are standard normal, we have that $a_{(n-1)np} = b_{(n-1)np} \le C\sqrt{\log ((n-1)np)} \leq C \sqrt{\log T}$. With this notation at hand, we can apply Proposition \ref{theo-anticon} to obtain that 
-\[ \sup_{x \in \reals} \pr \Big( \big| \Phi_{n, T} - x \big| \le \delta_T \Big) \le C \delta_T \Big[ \sqrt{\log T} + \sqrt{ \log(1/\delta_T) } \Big] = o(1) \]
-with $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}/\sqrt{h_{\min}}$, which is the statement of Proposition \ref{propA-anticon-equality}.
-{\color{red} This part does not go through!
-For this part to go through we need stricter assumption on $\rho_T$: $$\rho_T = O\left(\frac{1}{T^{1/2 - 1/q} \sqrt{\log T}}\right)!$$}
+\[ \sup_{x \in \reals} \pr \Big( \big| \gaussianstat_{n, T} - x \big| \le \delta_T \Big) \le C \delta_T \Big[ \sqrt{\log T} + \sqrt{ \log(1/\delta_T) } \Big] = o(1) \]
+with $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$, which is the statement of Proposition \ref{propA-anticon-equality}.
 \end{proof}
 
-\subsection*{Auxiliary results}
+\subsection*{Step 4}
+
 
 \begin{lemmaA}\label{lemma1-theo-stat}
 Let $V_T$ and $W_T$ be real-valued random variables for $T = 1,2,\ldots$ such that $V_T - W_T = o_p(\delta_T)$ with some $\delta_T = o(1)$. If 
@@ -808,6 +801,132 @@ then
 \end{equation}
 \end{lemmaA}
 Proof of this lemma is provided in \cite*{KhismatullinaVogt2018}.
+
+Applying Lemma \ref{lemma1-theo-stat} to $\widetilde{\Phi}_{n, T}$ and $\gaussianstat_{n,T}$ together with the results \eqref{eq-strong-approx-equality} and \eqref{eq-anticon-equality} and noting the fact that $\widetilde{\Phi}_{n, T}$ is distributed as $\doublehattwo{\Phi}_{n, T}$ for any $n \ge 2$, $T \ge 1$ leads us to
+\begin{equation*}\label{eq-}
+\sup_{x \in \reals} \big| \pr(\doublehattwo{\Phi}_{n, T} \le x) - \pr(\gaussianstat_{n,T} \le x) \big| = o(1). 
+\end{equation*}
+
+\subsection*{Step 5}
+\begin{propA}\label{propA-relation-gaussian}
+Under the conditions of Theorem \ref{theo-stat-equality}, it holds that 
+\begin{equation}\label{eq-relation-gaussian}
+\sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\gaussianstat_{n,T} \le x) \big| = o(1).
+\end{equation}
+\end{propA}
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-relation-gaussian}}}] 
+First, we consider those $x\in \reals$ such that\linebreak $\pr(\widehat{\Phi}_{n,T} \le x) \geq \pr(\gaussianstat_{n, T} \le x)$. Then by Proposition \ref{propA-intermediate-relation-1} and taking $\gamma_{n, T}$ from the Proposition \ref{propA-intermediate-relation-2} we have
+\begin{align*}
+0 &\le \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\gaussianstat_{n,T} \le x) \big| = \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\gaussianstat_{n,T} \le x)  \le \\
+&\le \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)   - \pr\Big(\gaussianstat_{n,T} \le x\Big) = \\
+&= \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) - \pr\Big({\gaussianstat}_{n,T} \le x + \gamma_{n, T}\Big) + \\
+& \quad +  \pr\Big({\gaussianstat}_{n,T} \le x + \gamma_{n, T}\Big)   - \pr\Big(\gaussianstat_{n,T} \le x\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)= \\
+&= \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) - \pr\Big({\gaussianstat}_{n,T} \le x + \gamma_{n, T}\Big) + \\
+&\quad + \pr\Big(x < {\gaussianstat}_{n,T} \le x + \gamma_{n, T}\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)\le \nonumber \\
+&\le \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) - \pr\Big({\gaussianstat}_{n,T} \le x + \gamma_{n, T}\Big) + \\
+&\quad + \pr\Big(\big|{\gaussianstat}_{n,T} - x \big| \le \gamma_{n, T}\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big).
+\end{align*}
+
+Now consider such $x\in \reals$ that $\pr(\widehat{\Phi}_{n,T}\le x) < \pr(\gaussianstat_{n, T}\le x)$. Then again by Proposition \ref{propA-intermediate-relation-1} for $\gamma_{n, T}$ from Proposition \ref{propA-intermediate-relation-2} we have
+\begin{align*}
+0 &\le \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\gaussianstat_{n,T} \le x) \big| =  \pr(\gaussianstat_{n,T} \le x)-  \pr(\widehat{\Phi}_{n, T} \le x) \le \\
+&\le\pr\Big(\gaussianstat_{n,T} \le x\Big)  + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)   - \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) = \\
+&= \pr\Big(\gaussianstat_{n,T} \le x\Big) - \pr\Big(\gaussianstat_{n,T} \le x - \gamma_{n, T}\Big) +\\
+&\quad + \pr\Big(\gaussianstat_{n,T} \le x- \gamma_{n, T}\Big) - \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big)  + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)= \\
+&= \pr\Big(x - \gamma_{n,T} < {\gaussianstat}_{n,T} \le x \Big) +\pr\Big(\gaussianstat_{n,T} \le x- \gamma_{n, T}\Big) - \\
+&\quad - \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big) \le \\
+&\le \pr\Big(\big|{\gaussianstat}_{n,T} - x \big| \le \gamma_{n, T}\Big) +\pr\Big({\gaussianstat}_{n,T} \le x - \gamma_{n, T}\Big) -\pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) +  \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big).  
+\end{align*}
+Now note that since $\gamma_{n,T} \to 0$, we can use the anticoncentration results \eqref{eq-anticon-equality} for the Gaussian statistic ${\gaussianstat}_{n,T}$ to get $\sup_{x\in \reals}\pr\Big(\big|{\gaussianstat}_{n,T} - x \big| \le \gamma_{n, T}\Big) = o(1)$. Moreover, $$\pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big) = o(1)$$ by Proposition \ref{propA-intermediate-relation-2} and does not depend on $x$.
+
+Thus, 
+\begin{align*}
+\sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) &- \pr(\gaussianstat_{n,T} \le x) \big| \le \\
+\le \max \Bigg\{ &\sup_{x \in \reals} \bigg| \pr\Big({\gaussianstat}_{n,T} \le x - \gamma_{n, T}\Big) -\pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big)\bigg|, \\
+&\sup_{x \in \reals} \bigg| \pr\Big({\gaussianstat}_{n,T} \le x + \gamma_{n, T}\Big) -\pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big)\bigg| \Bigg\} + \\
+&+\sup_{x\in \reals}\pr\Big(\big|{\gaussianstat}_{n,T} - x \big| \le \gamma_{n, T}\Big) + \sup_{x\in\reals}\pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big) = \\
+=&\sup_{y \in \reals} \bigg| \pr\Big({\gaussianstat}_{n,T} \le y\Big) -\pr\Big(\doublehattwo{\Phi}_{n,T} \le y\Big)\bigg| + o(1) + o(1) = o(1).
+\end{align*}
+\end{proof}
+
+\subsection*{Step 6}
+
+\begin{propA}\label{propA-pseudogaussian-relation}
+Under the conditions of Theorem \ref{theo-stat-equality}, it holds that 
+\begin{equation}\label{eq-pseudogaussian-relation}
+\sup_{x \in \reals} \big| \pr(\pseudogaussianstat_{n, T} \le x ) - \pr(\gaussianstat_{n,T} \le x) \big| = o(1).
+\end{equation}
+\end{propA}
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-pseudogaussian-relation}}}] 
+It is clear that we can bound $\big| \pr(\pseudogaussianstat_{n, T} \le x ) - \pr(\gaussianstat_{n,T} \le x) \big|$ as follows
+\begin{align}\label{eq-pseudogaussian-relation-1}
+\begin{split}
+\big| \pr(\pseudogaussianstat_{n, T} \le x ) - \pr(\gaussianstat_{n,T} \le x) \big| \leq &  \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \bigg|\frac{\gaussiankernel_{ij,T}(u,h)}{(\sigma_i^2 + \sigma_j^2)^{1/2}} - \frac{\gaussiankernel_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\bigg|+\\
+&+\max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T}\bigg| \frac{\gaussiankernel_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}- \frac{\pseudogaussiankernel_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\bigg|
+\end{split}
+\end{align}
+To begin with, consider the first part in \eqref{eq-pseudogaussian-relation-1}. We can proceed analogously to the proof of Proposition \ref{propA-strong-approx-equality}. Since $\gaussiankernel_{ij, T}(u,h)$ is distributed as $ \normal(0,{\sigma}^2_i + {\sigma}^2_j)$ for all $(u,h) \in \mathcal{G}_T$ and all $1\le i < j \le n$, $|\mathcal{G}_T| = O(T^\theta)$ for some large but fixed constant $\theta$ by Assumption \ref{C-grid}, $n$ is fixed and $\widehat{\sigma}^2_i = \sigma^2_i + o_p(\rho_T)$, we can establish that
+\begin{align*}
+\max_{1\leq i< j \leq n}\max_{(u,h) \in \mathcal{G}_T} \Big|\frac{\gaussiankernel_{ij, T}(u,h)}{({\sigma}_i^2 + {\sigma}_j^2 )^{1/2}} - \frac{\gaussiankernel_{ij, T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2  )^{1/2}}\Big| = o_P(\rho_T \sqrt{\log T}).
+\end{align*}
+
+
+Now let us evaluate the second part in \eqref{eq-pseudogaussian-relation-1}:
+\begin{align*}
+\max_{1 \le i < j \le n} &\max_{(u,h) \in \mathcal{G}_T}\bigg| \frac{\gaussiankernel_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}- \frac{\pseudogaussiankernel_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\bigg| = \\
+&= \max_{1 \le i < j \le n}\left( (\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{-1/2}\max_{(u,h) \in \mathcal{G}_T}\big| \gaussiankernel_{ij,T}(u,h)- \pseudogaussiankernel_{ij,T}(u,h)\big|\right). 
+\end{align*}
+
+We proceed in much the same way as in the proof of Proposition \ref{propA-strong-approx-equality}. Using summation by parts,
+($\sum_{i=1}^n a_i b_i = \sum_{i=1}^{n-1} A_i (b_i - b_{i+1}) + A_n b_n$ with $A_j = \sum_{j=1}^i a_j$) 
+we further obtain that 
+\begin{align*}
+\big| \gaussiankernel_{ij, T}(u,h) &- \pseudogaussiankernel_{ij, T}(u,h) \big| = \\
+=&\bigg|\sum_{t=1}^T w_{t,T}(u,h) \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j)-{\sigma}_i (Z_{it} - \bar{Z}_i) + {\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}\bigg| = \\
+=&\Big|\sum_{t=1}^{T-1} B_{ij, t} \big(w_{t,T}(u,h) -w_{t+1,T}(u,h)\big) + B_{ij, T} w_{T,T}(u,h)\Big|,
+\end{align*}
+where 
+\begin{align*}
+B_{ij, t} = \sum_{s=1}^t \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j)  - {\sigma}_i (Z_{it} - \bar{Z}_i) + {\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}.
+\end{align*}
+Note that by construction $B_{ij, T} = 0$ for all pairs $(i, j)$. Denoting 
+\[ W_T(u,h) = \sum\limits_{t=1}^{T-1} |w_{t+1,T}(u,h) - w_{t,T}(u,h)|,\]
+we have 
+\begin{align*}
+\big| \gaussiankernel_{ij, T}(u,h) - \pseudogaussiankernel_{ij, T}(u,h) \big| =& \Big|\sum_{t=1}^{T-1} A_{ij, t} \big(w_{t,T}(u,h) -w_{t+1,T}(u,h)\big)\Big|\le W_T(u, h)\max_{1 \le t \le T} |B_{ij, t}|.
+\end{align*}
+
+Now we consider $\max_{1 \le t \le T} |B_{ij, t}|$:
+\begin{align*}
+\max_{1 \le t \le T} |B_{ij, t}|  \le & \max_{1 \le t \le T} \Big| (\widehat{\sigma}_i - \sigma_i) \sum\limits_{s=1}^t \big\{ Z_{is} - \bar{Z_i} \big\} \Big| + \max_{1 \le t \le T} \Big| (\widehat{\sigma}_j - \sigma_j) \sum\limits_{s=1}^t \big\{ Z_{js} - \bar{Z_j} \big\} \Big| \le \\
+\le & \max_{1 \le t \le T} \Big| (\widehat{\sigma}_i - \sigma_i) \sum\limits_{s=1}^t Z_{is} \Big| + \max_{1 \le t \le T} \Big| t (\widehat{\sigma}_i - \sigma_i) \bar{Z_i}) \Big|+\\
+& +\max_{1 \le t \le T} \Big| (\widehat{\sigma}_j - \sigma_j) \sum\limits_{s=1}^t Z_{js} \Big| + \max_{1 \le t \le T} \Big| t (\widehat{\sigma}_j - \sigma_j) \bar{Z_j}) \Big|= \\
+= & \max_{1 \le t \le T} \Big|(\widehat{\sigma}_i - \sigma_i) \sum\limits_{s=1}^t Z_{is} \Big| + T \Big| \frac{1}{T}(\widehat{\sigma}_i - \sigma_i) \sum\limits_{s=1}^T Z_{is}\Big|+\\
+& + \max_{1 \le t \le T} \Big| (\widehat{\sigma}_j - \sigma_j) \sum\limits_{s=1}^t Z_{js} \Big| +  T \Big| \frac{1}{T}(\widehat{\sigma}_j - \sigma_j) \sum\limits_{s=1}^T  Z_{js}\Big| \le \\
+\le & \, 2\max_{1 \le t \le T} \Big|(\widehat{\sigma}_i - \sigma_i) \sum\limits_{s=1}^t Z_{is} \Big| + 2\max_{1 \le t \le T} \Big| (\widehat{\sigma}_j - \sigma_j) \sum\limits_{s=1}^t Z_{js} \Big|. \\
+\end{align*}
+Note that for all $1 \le i \le n$ we have $\widehat{\sigma}_i^2 - \sigma_i^2 = o_P(\rho_T)$ which leads to $\widehat{\sigma}_i - \sigma_i = o_P(\rho_T)$. Furthermore, we get the following result:
+\begin{align}\label{eq-pseudogaussian-relation-2}
+\begin{split}
+\max_{1 \le t \le T}\big|\sum_{s=1}^t Z_{is} \big| &= \max_{1 \le t \le T}\Big|\sqrt{t} \frac{1}{\sqrt{t}}\sum_{s=1}^t Z_{is} \Big| \le \\
+ &\le\max_{1 \le t \le T}\sqrt{t}  \max_{1 \le t \le T}\Big| \frac{1}{\sqrt{t}}\sum_{s=1}^t Z_{is} \Big| = \\
+ &=\sqrt{T}  \max_{1 \le t \le T}\Big| \frac{1}{\sqrt{t}}\sum_{s=1}^t Z_{is} \Big| = O_P(\sqrt{T \log T}),
+ \end{split}
+\end{align}
+where we used the bound for the maximum of $T$ standard normal random variables and the fact that for each $t$, $1\le t \le T$, $ \frac{1}{\sqrt{t}}\sum_{s=1}^t Z_{is}$ is a standard normal random variable.
+
+Hence,
+\begin{align*}
+\max_{1 \le t \le T} |B_{ij, t}| = o_P(\rho_T \sqrt{T\log T})
+\end{align*}
+and since as before, $\max_{(u,h) \in \mathcal{G}_T} W_T(u,h) = O( 1/\sqrt{Th_{\min}} )$, we have
+\begin{align*}
+\max_{(u,h) \in \mathcal{G}_T}\big| \gaussiankernel_{ij,T}(u,h)- \pseudogaussiankernel_{ij,T}(u,h)\big| = O( 1/\sqrt{Th_{\min}} ) \cdot o_P(\rho_T \sqrt{T\log T}) = o_P \left(\frac{\rho_T\log T}{\sqrt{h_{\min}}} \right)
+\end{align*}
+\end{proof}
+
+
+\subsection*{Auxiliary results}
 \begin{definitionA} Dependence adjusted norm:
 $||X_{\cdot}||^{q}_{q, \alpha} = \sup_{m\geq 0} (m+1)^{\alpha} \sum_{t=m}^{\infty} \delta_{q}(X, t)$.
 \end{definitionA}
@@ -871,40 +990,6 @@ Furthermore, as a positive, nondecreasing slowly varying function $\mathit{l}$ w
 Hence, $S_T = g(\xi_1) + \ldots + g(\xi_T) = o_{a.s.}[\sqrt{T}\log^{2/{q^\prime} - \beta}(T)]$, or, equivalently, $\bar{X}_{i, j} = S_T/T = o_{a.s.}[\log^{2/{q^\prime} - \beta}(T)/\sqrt{T}] = o_P(1)$ for each $j \in \{1, \ldots, d\}$. Obviously, this means that $\bar{\X}_i = o_P(1)$.
 \end{proof}
 
-\subsection*{FINAL PROPOSITION}
-\begin{propA}\label{propA-final}
-Under the conditions of Theorem \ref{theo-stat-equality}, it holds that 
-\[ \sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = o(1). \]
-\end{propA}
-\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-final}}}] 
-First, we consider those $x\in \reals$ such that\linebreak $\pr(\widehat{\Phi}_{n,T} \le x) \geq \pr(\Phi_{n, T} \le x)$. Then by Proposition \ref{propA-intermediate-relation-1} and taking $\gamma_{n, T}$ from the Proposition \ref{propA-intermediate-relation-2} we have
-\begin{align*}
-0 &\le \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x)  \le \nonumber\\
-&\le \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)   - \pr\Big(\Phi_{n,T} \le x\Big) = \nonumber\\
-&= \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big)  - \pr\Big(\Phi_{n,T} \le x\Big) + o(1)= \nonumber\\
-&= \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) - \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big) +  \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big)   - \pr\Big(\Phi_{n,T} \le x\Big) + o(1)= \nonumber \\
-&= \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) - \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big) +  \pr\Big(x \le {\Phi}_{n,T} \le x + \gamma_{n, T}\Big) + o(1)\le \nonumber \\
-&\le \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) - \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big) +  \pr\Big(\big|{\Phi}_{n,T} - x \big| \le \gamma_{n, T}\Big) + o(1).
-\end{align*}
-
-Now consider such $x\in \reals$ that $\pr(\widehat{\Phi}_{n,T}\le x) < \pr(\Phi_{n, T}\le x)$. Then again by Proposition \ref{propA-intermediate-relation} for $\gamma_{n, T}$ from Proposition \ref{propA-intermediate-relation-2} we have
-\begin{align*}\label{eq-theo-stat-equality-step3_2}
-0 &\le \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| =  \pr(\Phi_{n,T} \le x)-  \pr(\widehat{\Phi}_{n, T} \le x) \le \\
-&\le\pr\Big(\Phi_{n,T} \le x\Big)  + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)   - \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) = \\
-&= \pr\Big(\Phi_{n,T} \le x\Big)- \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big)   + o(1)= \\
-&= \pr\Big(\Phi_{n,T} \le x\Big) - \pr\Big(\Phi_{n,T} \le x - \gamma_{n, T}\Big) + \pr\Big(\Phi_{n,T} \le x- \gamma_{n, T}\Big) - \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big)  + o(1)= \\
-&= \pr\Big(x - \gamma_{n,T} \le {\Phi}_{n,T} \le x \Big) +\pr\Big(\Phi_{n,T} \le x- \gamma_{n, T}\Big) - \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) + o(1)\le \\
-&\le \pr\Big(\big|{\Phi}_{n,T} - x \big| \le \gamma_{n, T}\Big) +\pr\Big({\Phi}_{n,T} \le x - \gamma_{n, T}\Big) -\pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) + o(1).  
-\end{align*}
-Now note that since $\gamma_{n,T} \to 0$, we can use the anticoncentration results for the Gaussian statistic ${\Phi}_{n,T}$ to get $\pr\Big(\big|{\Phi}_{n,T} - x \big| \le \gamma_{n, T}\Big) = o(1)$. Thus, 
-\begin{align*}
-\sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) &- \pr(\Phi_{n,T} \le x) \big| \le \\
-\le \max \Bigg\{ &\sup_{x \in \reals} \bigg| \pr\Big({\Phi}_{n,T} \le x - \gamma_{n, T}\Big) -\pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big)\bigg|, \\
-&\sup_{x \in \reals} \bigg| \pr\Big({\Phi}_{n,T} \le x + \gamma_{n, T}\Big) -\pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big)\bigg| \Bigg\} + o(1) = \\
-=&\sup_{y \in \reals} \bigg| \pr\Big({\Phi}_{n,T} \le y\Big) -\pr\Big(\doublehattwo{\Phi}_{n,T} \le y\Big)\bigg| + o(1) = o(1).
-\end{align*}
-
-
 
 %Hence, 
 %\begin{align}\label{eq-intermediate-relation-1}
@@ -935,8 +1020,6 @@ Now note that since $\gamma_{n,T} \to 0$, we can use the anticoncentration resul
 %\end{align*}
 %
 %Statement of the proposition directly follows from it.
-\end{proof}
-
 
 
 
