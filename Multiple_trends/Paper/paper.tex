@@ -169,8 +169,16 @@ Given $\widehat{\bm{\beta}}_i$, consider an appropriate estimator $\widehat{\alp
 
 Note that $\frac{1}{T}\sum_{i=1}^T \varepsilon_{it} = O_P(T^{-1/2})$ and $\frac{1}{T}\sum_{i=1}^T m_i(t/T) = O(T^{-1})$ due to Lipschitz continuity of $m_i$ and normalization $\int_{0}^1 m_i(u)du = 0$. Furthermore, $\frac{1}{T}\sum_{t=1}^T  \mathbf{X}_{it} = O_P(1)$ by Chebyshev's inequality and $\widehat{\bm{\beta}}_i - \bm{\beta}_i = O_P (T^{-1/2})$. Plugging all these results together in \eqref{alpha-est}, we get that $\widehat{\alpha}_i - \alpha_i = O_P(T^{-1/2})$.Thus, the unobserved variable $Y_{it}^\circ := Y_{it} - \bm{\beta}_i^\top \mathbf{X}_{it} - \alpha_i = m_i(t/T) + \varepsilon_{it}$ can be well approximated by $\widehat{Y}_{it} = Y_{it} -\widehat{\alpha}_i - \widehat{\bm{\beta}}_i^\top \mathbf{X}_{it} = Y_{it}^\circ + O_P(T^{-1/2})$.
 
+
+
 We further let $\widehat{\sigma}_i^2$ be an estimator of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_{i0}, \varepsilon_{i\ell})$ which is computed from the constructed sample $\{ \widehat{Y}_{it}: 1 \le t \le T \}$. We thus regard $\widehat{\sigma}_i^2 = \widehat{\sigma}_i^2(\widehat{Y}_{i1},\ldots,\widehat{Y}_{iT})$ as a function of the variables $\widehat{Y}_{it}$ for $1 \le t \le T$. Throughout the section, we assume that $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$. Details on how to construct estimators of $\sigma_i^2$ are deferred to Section \ref{sec-error-var}. 
 
+Moreover, in the proof of our main theorem \ref{theo-stat-equality} we will need additional auxiliary statistics that do not include the covariates $\mathbf{X}_{it}$. Hence, we imagine that we know the parameters $\bm{\beta}_i$ and consider the unobserved variables 
+\begin{align*}
+\doublehattwo{Y}_{it} :&= Y_{it} - \bm{\beta}_i^\top \mathbf{X}_{it} -  \frac{1}{T}\sum_{t=1}^T \big(Y_{it} - \bm{\beta}_i^\top \mathbf{X}_{it}\big) =\\
+&=m_i \Big( \frac{t}{T} \Big)  - \frac{1}{T}\sum_{t=1}^T  m_i \Big( \frac{t}{T} \Big) + \varepsilon_{it} - \frac{1}{T}\sum_{t=1}^T \varepsilon_{it}.
+\end{align*}
+For this auxiliary statistics we will use the auxiliary estimator $\doublehattwo{\sigma}_i^2$ of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_{i0}, \varepsilon_{i\ell})$ which is computed from the constructed sample $\{ \doublehattwo{Y}_{it}: 1 \le t \le T \}$. We thus regard $\doublehattwo{\sigma}_i^2 = \doublehattwo{\sigma}_i^2(\doublehattwo{Y}_{i1},\ldots,\doublehattwo{Y}_{iT})$ as a function of the variables $\doublehattwo{Y}_{it}$ for $1 \le t \le T$. As with $\widehat{\sigma}_i^2$, we assume that $\doublehattwo{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$.
 
 We are now ready to introduce the multiscale statistic for testing the hypothesis $H_0: m_1 = m_2 = \ldots = m_n$. For any pair of time series $i$ and $j$, we define the kernel averages
 \[ \widehat{\psi}_{ij,T}(u,h) = \sum\limits_{t=1}^T w_{t,T}(u,h)(\widehat{Y}_{it} - \widehat{Y}_{jt}), \]
@@ -229,7 +237,7 @@ where
 \[ \widehat{\Phi}_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \} \]
 and $\widehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) + (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - (\varepsilon_{jt} - \bar{\varepsilon}_j) - \linebreak - (\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\}$ with $\bar{\varepsilon}_i = \bar{\varepsilon}_{i,T} = T^{-1} \sum_{t=1}^T \varepsilon_{it}$ and $ \bar{\mathbf{X}}_{i} =  \bar{\mathbf{X}}_{i, T} = T^{-1}\sum_{t=1}^T  \mathbf{X}_{it}$ respectively. Our first theoretical result characterizes the asymptotic behaviour of the statistic $\widehat{\Phi}_{n,T}$. 
 \begin{theorem}\label{theo-stat-equality}
-Suppose that the error processes $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ are independent across $i$ and satisfy \ref{C-err1}--\ref{C-err3} for each $i$. Moreover, let \ref{C-reg1}--\ref{C-h} be fulfilled and assume that $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$ for each $i$. Then 
+Suppose that the error processes $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ are independent across $i$ and satisfy \ref{C-err1}--\ref{C-err3} for each $i$. Moreover, let \ref{C-reg1}--\ref{C-h} be fulfilled and assume that $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ and $\doublehattwo{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$ (\textcolor{red}{RESTRICTION}) for each $i$. Then 
 \[ \pr \big( \widehat{\Phi}_{n,T} \le q_{n,T}(\alpha) \big) = (1 - \alpha) + o(1) \]
 \end{theorem}
 Theorem \ref{theo-stat-equality} is the main stepping stone to derive the theoretical properties of our multiscale test. The proof of the theorem is provided in the Section \ref{subsec-appendix-stat-equality}.
@@ -366,7 +374,8 @@ In this section, we prove the theoretical results from Section \ref{sec-test}. W
       \hline
 	 $ \gaussianstat_{n, T}$ & & &&\begin{tabular}[c]{@{}l@{}} Lemma \ref{lemma1-theo-stat} \\ with the help of \\Prop. \ref{propA-strong-approx-equality} and \\ Prop. \ref{propA-anticon-equality}\end{tabular}&      \\
       \hline
-	$ \pseudogaussianstat_{n, T}$    & & &&&  \\
+	$ \pseudogaussianstat_{n, T}$    & & &&& \begin{tabular}[c]{@{}l@{}} Prop. \ref{propA-gaussian-relation} and \\
+	Prop. \ref{propA-pseudogaussian-relation}\end{tabular} \\
         	\hline
     \end{tabular}
   \end{center}
@@ -391,7 +400,7 @@ In the proof of Theorem \ref{theo-stat-equality}, we use a number of different t
 \item Intermediate statistics that is close to $\widehat{\Phi}_{n, T}$ but is based on the kernel averages that do not include the covariates:
 \begin{align}\label{eq-stat-3}
 	\doublehattwo{\Phi}_{n,T} &= \max_{1 \le i < j \le n} \doublehattwo{\Phi}_{ij,T},\nonumber \\
-	\doublehattwo{\Phi}_{ij,T} &= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\doublehat{\phi}_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \}, \\
+	\doublehattwo{\Phi}_{ij,T} &= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\doublehat{\phi}_{ij,T}(u,h)} {\{ \doublehattwo{\sigma}_i^2 + \doublehattwo{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \}, \\
 	 \doublehat{\phi}_{ij,T}(u,h) &= \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) - (\varepsilon_{jt} - \bar{\varepsilon}_j)  \big\}.\nonumber 
 \end{align}
 \item Auxiliary statistic that has the same distribution as $\doublehattwo{\Phi}_{n, T}$ for each $T = 1, 2, \ldots$
@@ -419,7 +428,7 @@ with $[\widetilde{\varepsilon}_{i1},\ldots,\widetilde{\varepsilon}_{iT}] \stackr
 
 
 
-\subsection{Proof of Theorem \ref{theo-stat-equality}}\label{subsec-appendix-stat-equaility}
+\subsection{Proof of Theorem \ref{theo-stat-equality}}\label{subsec-appendix-stat-equality}
 
 We will build the proof of Theorem \ref{theo-stat-equality} on the auxiliary results derived below. The steps of the proof are as follows.
 \begin{enumerate}
@@ -446,15 +455,17 @@ where $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$.
 \sup_{x \in \reals} \big| \pr(\doublehattwo{\Phi}_{n, T} \le x) - \pr(\gaussianstat_{n,T} \le x) \big| = o(1). 
 \end{equation*}
 This statement directly follows from the previous two steps and the fact that $\widetilde{\Phi}_{n, T}$ is distributed as $\doublehattwo{\Phi}_{n, T}$ for any $n \ge 2$, $T \ge 1$.
-\item In the fifth step, by the means of Proposition \ref{propA-final} we prove that  
+\item In the fifth step, by the means of Proposition \ref{propA-gaussian-relation} we prove that  
 \begin{equation*}
 \sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\gaussianstat_{n,T} \le x) \big| = o(1).
 \end{equation*}
-\item And finally, in Proposition \ref{propA-pseudogaussian} we connect the quantiles of the true Gaussian statistics $\gaussianstat_{n, T}$ (that can not be simulated because they include the unknown parameters $\sigma_i^2$) to the quantiles of the ``Gaussian'' statistic $\pseudogaussianstat_{n, T}$ (that can be simulated and used for testing):
+\item And finally, in Proposition \ref{propA-pseudogaussian-relation} we connect the quantiles of the true Gaussian statistics $\gaussianstat_{n, T}$ (that can not be simulated because they include the unknown parameters $\sigma_i^2$) to the quantiles of the ``Gaussian'' statistic $\pseudogaussianstat_{n, T}$ (that can be simulated and used for testing):
 \begin{equation*}
 \sup_{x \in \reals} \big| \pr(\gaussianstat_{n, T} \le x) - \pr(\pseudogaussianstat_{n,T} \le x) \big| = o(1),
 \end{equation*}
 which immediately implies the statement of Theorem \ref{theo-stat-equality}.
+
+\textcolor{red}{Here we need conditional distribution for the ``Gaussian'' statistics! NOT DONE YET}
 \end{enumerate}
 
 \subsection*{Step 1}
@@ -466,10 +477,12 @@ We do it in the following way. For each $i$ and $j$, consider the kernel average
 The intermediate statistic is then defined as 
 \begin{align*}
 \doublehattwo{\Phi}_{n,T} &= \max_{1 \le i < j \le n} \doublehattwo{\Phi}_{ij,T}\quad  \text{with} \\
-\doublehattwo{\Phi}_{ij,T} &= \max_{(u,h) \in \mathcal{G}_T} \big\{ \Big|\frac{\doublehat{\phi}_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\}.
+\doublehattwo{\Phi}_{ij,T} &= \max_{(u,h) \in \mathcal{G}_T} \big\{ \Big|\frac{\doublehat{\phi}_{ij,T}(u,h)}{(\doublehattwo{\sigma}_i^2 + \doublehattwo{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\}
 \end{align*}
+with $\doublehattwo{\sigma}_i^2$ being an estmator of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_{i0}, \varepsilon_{i\ell})$ which is computed from the unobserved sample $\{ \doublehattwo{Y}_{it} : 1 \le t \le T \}$. We thus regard $\doublehattwo{\sigma}_i^2 = \doublehattwo{\sigma}_i^2(\doublehattwo{Y}_{i1},\ldots,\doublehattwo{Y}_{iT})$ as a function of the variables $\doublehat{Y}_{it}$ for $1 \le t \le T$. As with the estimator $\widehat{\sigma}_i^2$, we assume that $\doublehattwo{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$. 
+
 This statistic can thus be regarded as an approximation of the statistic $\widehat{\Phi}_{n,T}$. Heuristically, the kernel averages $\doublehat{\phi}_{ij,T}(u,h)$
-are close to the kernel averages $\widehat{\phi}_{ij,T}(u,h)$ because of the properties of our estimators $\widehat{\bbeta}_i$ and assumptions on $\mathbf{X}_{it}$ and in the following two propositions we prove it formally.
+are close to the kernel averages $\widehat{\phi}_{ij,T}(u,h)$ because of the properties of our estimators $\widehat{\bbeta}_i$, $\doublehattwo{\sigma}_i^2$ and assumptions on $\mathbf{X}_{it}$. In the following two propositions we prove it formally.
 
 \begin{propA}\label{propA-intermediate-relation-1}
 For any $x \in \reals$ and any $\gamma_{n, T} > 0$, we have
@@ -507,10 +520,21 @@ There exists a sequence of random numbers $\{\gamma_{n, T}\}_T$, that converges 
 \begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-intermediate-relation-2}}}] 
 
 Consider $\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big|$. Straightforward calculations yield that
+\begin{align}\label{ineq-diff-0}
+\begin{split}
+\big| \doublehattwo{\Phi}_{n, T} - \widehat{\Phi}_{n, T} \big| &\le \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \left( \left|\frac{\doublehat{\phi}_{ij,T}(u,h)}{(\doublehattwo{\sigma}_i^2 + \doublehattwo{\sigma}_j^2)^{1/2}} - \frac{\doublehat{\phi}_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\right| + \left|\frac{\doublehat{\phi}_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}} - \frac{\widehat{\phi}_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \right|\right)\le \\
+&\le \max_{1 \le i < j \le n} \left( \big|\{\doublehattwo{\sigma}_i^2 + \doublehattwo{\sigma}_j^2 \}^{-1/2} - \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2}\big| \max_{(u,h) \in \mathcal{G}_T} \left|\doublehat{\phi}_{ij,T}(u,h)\right|\right) +\\
+&\quad +\max_{1\le i < j \le n} \bigg( \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2}\max_{(u,h) \in \mathcal{G}_T} \Big| \doublehat{\phi}_{ij, T}(u,h) - \widehat{\phi}_{ij, T}(u,h) \Big|\bigg).
+\end{split}
+\end{align}
+To begin with, we consider the first summand in \eqref{ineq-diff-0}. Since $\doublehattwo{\sigma}_i^2 = \sigma_i^2 + o_P(\rho_T)$ and $\widehat{\sigma}_i^2 = \sigma_i^2 + o_P(\rho_T)$ by our assumptions, we have that \[\max_{1 \le i < j \le n} \big|\{\doublehattwo{\sigma}_i^2 + \doublehattwo{\sigma}_j^2 \}^{-1/2} - \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2}\big| = o_P(\rho_T).\]
+Then, 
 \begin{align*}
-\big| \doublehattwo{\Phi}_{n, T} - \widehat{\Phi}_{n, T} \big| \le  \max_{1\le i < j \le n} \bigg( \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2}\max_{(u,h) \in \mathcal{G}_T} \Big| \doublehat{\phi}_{ij, T}(u,h) - \widehat{\phi}_{ij, T}(u,h) \Big|\bigg).
+\max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T}\left|\doublehat{\phi}_{ij,T}(u,h)\right| &= \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T}\left| \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) - (\varepsilon_{jt} - \bar{\varepsilon}_j)  \big\}\right| \le \\
+& \le 2 \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T}\left| \sum_{t=1}^T w_{t,T}(u,h) (\varepsilon_{it} - \bar{\varepsilon}_i) \right|
 \end{align*}
-By the definition of kernel averages, we have
+
+Now to the second summand in \eqref{ineq-diff-0}. By the definition of kernel averages, we have
 \begin{align*}
 \Big| \doublehat{\phi}_{ij, T}(u,h) &- \widehat{\phi}_{ij, T}(u,h) \Big|  =\Big| \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - (\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\} \Big| \le \\
 &\le \Big| \sum_{t=1}^T w_{t,T}(u,h) (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) \Big| +  \Big| \sum_{t=1}^T w_{t,T}(u,h)(\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j})  \Big| =\\
@@ -808,13 +832,13 @@ Applying Lemma \ref{lemma1-theo-stat} to $\widetilde{\Phi}_{n, T}$ and $\gaussia
 \end{equation*}
 
 \subsection*{Step 5}
-\begin{propA}\label{propA-relation-gaussian}
+\begin{propA}\label{propA-gaussian-relation}
 Under the conditions of Theorem \ref{theo-stat-equality}, it holds that 
 \begin{equation}\label{eq-relation-gaussian}
 \sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\gaussianstat_{n,T} \le x) \big| = o(1).
 \end{equation}
 \end{propA}
-\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-relation-gaussian}}}] 
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-gaussian-relation}}}] 
 First, we consider those $x\in \reals$ such that\linebreak $\pr(\widehat{\Phi}_{n,T} \le x) \geq \pr(\gaussianstat_{n, T} \le x)$. Then by Proposition \ref{propA-intermediate-relation-1} and taking $\gamma_{n, T}$ from the Proposition \ref{propA-intermediate-relation-2} we have
 \begin{align*}
 0 &\le \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\gaussianstat_{n,T} \le x) \big| = \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\gaussianstat_{n,T} \le x)  \le \\
@@ -858,24 +882,26 @@ Under the conditions of Theorem \ref{theo-stat-equality}, it holds that
 \end{equation}
 \end{propA}
 \begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-pseudogaussian-relation}}}] 
-It is clear that we can bound $\big| \pr(\pseudogaussianstat_{n, T} \le x ) - \pr(\gaussianstat_{n,T} \le x) \big|$ as follows
+It is clear that we can bound $\big| \pseudogaussianstat_{n, T} - \gaussianstat_{n,T} \big|$ as follows
 \begin{align}\label{eq-pseudogaussian-relation-1}
 \begin{split}
-\big| \pr(\pseudogaussianstat_{n, T} \le x ) - \pr(\gaussianstat_{n,T} \le x) \big| \leq &  \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \bigg|\frac{\gaussiankernel_{ij,T}(u,h)}{(\sigma_i^2 + \sigma_j^2)^{1/2}} - \frac{\gaussiankernel_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\bigg|+\\
+\big| \pseudogaussianstat_{n, T} - \gaussianstat_{n,T} \big| \leq &  \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \bigg|\frac{\gaussiankernel_{ij,T}(u,h)}{(\sigma_i^2 + \sigma_j^2)^{1/2}} - \frac{\gaussiankernel_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\bigg|+\\
 &+\max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T}\bigg| \frac{\gaussiankernel_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}- \frac{\pseudogaussiankernel_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\bigg|
 \end{split}
 \end{align}
 To begin with, consider the first part in \eqref{eq-pseudogaussian-relation-1}. We can proceed analogously to the proof of Proposition \ref{propA-strong-approx-equality}. Since $\gaussiankernel_{ij, T}(u,h)$ is distributed as $ \normal(0,{\sigma}^2_i + {\sigma}^2_j)$ for all $(u,h) \in \mathcal{G}_T$ and all $1\le i < j \le n$, $|\mathcal{G}_T| = O(T^\theta)$ for some large but fixed constant $\theta$ by Assumption \ref{C-grid}, $n$ is fixed and $\widehat{\sigma}^2_i = \sigma^2_i + o_p(\rho_T)$, we can establish that
-\begin{align*}
+\begin{align}\label{eq-pseudogaussian-relation-2}
 \max_{1\leq i< j \leq n}\max_{(u,h) \in \mathcal{G}_T} \Big|\frac{\gaussiankernel_{ij, T}(u,h)}{({\sigma}_i^2 + {\sigma}_j^2 )^{1/2}} - \frac{\gaussiankernel_{ij, T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2  )^{1/2}}\Big| = o_P(\rho_T \sqrt{\log T}).
-\end{align*}
+\end{align}
 
 
 Now let us evaluate the second part in \eqref{eq-pseudogaussian-relation-1}:
-\begin{align*}
+\begin{align}\label{eq-pseudogaussian-relation-3}
+\begin{split}
 \max_{1 \le i < j \le n} &\max_{(u,h) \in \mathcal{G}_T}\bigg| \frac{\gaussiankernel_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}- \frac{\pseudogaussiankernel_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\bigg| = \\
-&= \max_{1 \le i < j \le n}\left( (\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{-1/2}\max_{(u,h) \in \mathcal{G}_T}\big| \gaussiankernel_{ij,T}(u,h)- \pseudogaussiankernel_{ij,T}(u,h)\big|\right). 
-\end{align*}
+&= \max_{1 \le i < j \le n}\left( (\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{-1/2}\max_{(u,h) \in \mathcal{G}_T}\big| \gaussiankernel_{ij,T}(u,h)- \pseudogaussiankernel_{ij,T}(u,h)\big|\right).
+\end{split} 
+\end{align}
 
 We proceed in much the same way as in the proof of Proposition \ref{propA-strong-approx-equality}. Using summation by parts,
 ($\sum_{i=1}^n a_i b_i = \sum_{i=1}^{n-1} A_i (b_i - b_{i+1}) + A_n b_n$ with $A_j = \sum_{j=1}^i a_j$) 
@@ -906,13 +932,11 @@ Now we consider $\max_{1 \le t \le T} |B_{ij, t}|$:
 \le & \, 2\max_{1 \le t \le T} \Big|(\widehat{\sigma}_i - \sigma_i) \sum\limits_{s=1}^t Z_{is} \Big| + 2\max_{1 \le t \le T} \Big| (\widehat{\sigma}_j - \sigma_j) \sum\limits_{s=1}^t Z_{js} \Big|. \\
 \end{align*}
 Note that for all $1 \le i \le n$ we have $\widehat{\sigma}_i^2 - \sigma_i^2 = o_P(\rho_T)$ which leads to $\widehat{\sigma}_i - \sigma_i = o_P(\rho_T)$. Furthermore, we get the following result:
-\begin{align}\label{eq-pseudogaussian-relation-2}
-\begin{split}
+\begin{align*}
 \max_{1 \le t \le T}\big|\sum_{s=1}^t Z_{is} \big| &= \max_{1 \le t \le T}\Big|\sqrt{t} \frac{1}{\sqrt{t}}\sum_{s=1}^t Z_{is} \Big| \le \\
  &\le\max_{1 \le t \le T}\sqrt{t}  \max_{1 \le t \le T}\Big| \frac{1}{\sqrt{t}}\sum_{s=1}^t Z_{is} \Big| = \\
  &=\sqrt{T}  \max_{1 \le t \le T}\Big| \frac{1}{\sqrt{t}}\sum_{s=1}^t Z_{is} \Big| = O_P(\sqrt{T \log T}),
- \end{split}
-\end{align}
+\end{align*}
 where we used the bound for the maximum of $T$ standard normal random variables and the fact that for each $t$, $1\le t \le T$, $ \frac{1}{\sqrt{t}}\sum_{s=1}^t Z_{is}$ is a standard normal random variable.
 
 Hence,
@@ -920,9 +944,25 @@ Hence,
 \max_{1 \le t \le T} |B_{ij, t}| = o_P(\rho_T \sqrt{T\log T})
 \end{align*}
 and since as before, $\max_{(u,h) \in \mathcal{G}_T} W_T(u,h) = O( 1/\sqrt{Th_{\min}} )$, we have
+\begin{align}\label{eq-pseudogaussian-relation-4}
+\max_{(u,h) \in \mathcal{G}_T}\big| \gaussiankernel_{ij,T}(u,h)- \pseudogaussiankernel_{ij,T}(u,h)\big| = O( 1/\sqrt{Th_{\min}} ) \cdot o_P(\rho_T \sqrt{T\log T}) = o_P \left(\frac{\rho_T\log T}{\sqrt{h_{\min}}} \right).
+\end{align}
+
+\textcolor{red}{Since by our assumption we have $\rho_T = O(\sqrt{h_{\min}}/\log T)$, by plugging \eqref{eq-pseudogaussian-relation-4} in \eqref{eq-pseudogaussian-relation-3} we can bound the second part in \eqref{eq-pseudogaussian-relation-1}:}
 \begin{align*}
-\max_{(u,h) \in \mathcal{G}_T}\big| \gaussiankernel_{ij,T}(u,h)- \pseudogaussiankernel_{ij,T}(u,h)\big| = O( 1/\sqrt{Th_{\min}} ) \cdot o_P(\rho_T \sqrt{T\log T}) = o_P \left(\frac{\rho_T\log T}{\sqrt{h_{\min}}} \right)
+\max_{1 \le i < j \le n} &\max_{(u,h) \in \mathcal{G}_T}\bigg| \frac{\gaussiankernel_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}- \frac{\pseudogaussiankernel_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\bigg| = O_P(1) \cdot o_P \left(\frac{\rho_T\log T}{\sqrt{h_{\min}}} \right) = o_P \left(\frac{\rho_T\log T}{\sqrt{h_{\min}}} \right),
 \end{align*}
+which together with \eqref{eq-pseudogaussian-relation-2} yileds the following
+\begin{align}\label{eq-pseudogaussian-relation-5}
+\begin{split}
+\big| \pseudogaussianstat_{n, T} - \gaussianstat_{n,T} \big| = o_P(\rho_T \sqrt{\log T}) + o_P \left(\frac{\rho_T\log T}{\sqrt{h_{\min}}} \right) = o_P \left(\frac{\rho_T\log T}{\sqrt{h_{\min}}} \right).
+\end{split}
+\end{align}
+
+Now we can apply Lemma \ref{lemma1-theo-stat} to $\pseudogaussianstat_{n, T}$ and $\gaussianstat_{n,T}$ together with the results \eqref{eq-pseudogaussian-relation-5} derived above and \eqref{eq-anticon-equality} (anticoncentration result for the true Gaussian statistics $\gaussianstat_{n, T}$), which leads us to the desired conclusion
+\begin{equation*}
+\sup_{x \in \reals} \big| \pr(\pseudogaussianstat_{n, T} \le x) - \pr(\gaussianstat_{n,T} \le x) \big| = o(1). 
+\end{equation*}
 \end{proof}
 
 
@@ -1065,7 +1105,7 @@ By Assumption \ref{C-reg4},
 Define 
 \[ \Delta \mathbf{U}_i(\mathcal{I}_{i, t}) := \Delta \mathbf{H}_i(\mathcal{U}_{it}) \Delta G_i(\mathcal{J}_{it}).
 \]
-Under Assumptions \ref{C-err2} - \ref{C-err3}, \ref{C-reg5} - \ref{C-reg6}, we have that $\sum_{s=0}^\infty \delta_2(\Delta \mathbf{U}_i, s) < \infty$.
+Under Assumptions \ref{C-err2} - \ref{C-err3}, \ref{C-reg5} - \ref{C-reg-err2}, we have that $\sum_{s=0}^\infty \delta_2(\Delta \mathbf{U}_i, s) < \infty$.
 \end{propA}
 
 \begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-reg-3}}}]
@@ -1101,7 +1141,7 @@ This leads us to
 
 
 \begin{propA}\label{propA-reg-4}
-Under Assumptions \ref{C-err1} - \ref{C-reg6},
+Under Assumptions \ref{C-err1} - \ref{C-reg-err2},
 \[ \Big| \frac{1}{\sqrt{T}}\sum_{t=1}^T \Delta \mathbf{X}_{it}\Delta \varepsilon_{it} \Big| = O_P(1).
 \]
 \end{propA}
