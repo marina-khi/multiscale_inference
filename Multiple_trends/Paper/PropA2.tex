@@ -50,11 +50,11 @@ Straightforward calculations yield that
 \end{split}
 \end{align*}
 
-First, consider the maximum of the kernel averages $\left|\doublehat{\phi}_{ij,T}(u,h)\right|$: 
-\begin{align*}
-\max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T}\left|\doublehat{\phi}_{ij,T}(u,h)\right| &= \max_{1 \le i <j\le n} \max_{(u,h) \in \mathcal{G}_T}\left| \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) - (\varepsilon_{jt} - \bar{\varepsilon}_j)  \big\}\right| \le \\
-& \le 2 \max_{1 \le i \le n} \max_{(u,h) \in \mathcal{G}_T}\left| \sum_{t=1}^T w_{t,T}(u,h) (\varepsilon_{it} - \bar{\varepsilon}_i) \right|
-\end{align*}
+%First, consider the maximum of the kernel averages $\left|\doublehat{\phi}_{ij,T}(u,h)\right|$: 
+%\begin{align*}
+%\max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T}\left|\doublehat{\phi}_{ij,T}(u,h)\right| &= \max_{1 \le i <j\le n} \max_{(u,h) \in \mathcal{G}_T}\left| \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) - (\varepsilon_{jt} - \bar{\varepsilon}_j)  \big\}\right| \le \\
+%& \le 2 \max_{1 \le i \le n} \max_{(u,h) \in \mathcal{G}_T}\left| \sum_{t=1}^T w_{t,T}(u,h) (\varepsilon_{it} - \bar{\varepsilon}_i) \right|
+%\end{align*}
 
 Then, consider the difference of the kernel averages:
 \begin{align*}
@@ -68,7 +68,7 @@ Then, consider the difference of the kernel averages:
 Hence,
 \begin{align}\label{ineq-diff-1}
 \begin{split}
-\big| \doublehattwo{\Phi}_{n, T} - \widehat{\Phi}_{n, T} \big| \le  & 2\max_{1 \le i < j \le n} \big|\{\doublehattwo{\sigma}_i^2 + \doublehattwo{\sigma}_j^2 \}^{-1/2} - \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2}\big|\max_{1 \le i \le n} \max_{(u,h) \in \mathcal{G}_T}\left| \sum_{t=1}^T w_{t,T}(u,h) (\varepsilon_{it} - \bar{\varepsilon}_i) \right| + \\
+\big| \doublehattwo{\Phi}_{n, T} - \widehat{\Phi}_{n, T} \big| \le  & \max_{1 \le i < j \le n} \big|\{\doublehattwo{\sigma}_i^2 + \doublehattwo{\sigma}_j^2 \}^{-1/2} - \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2}\big|\max_{1 \le i< j \le n} \max_{(u,h) \in \mathcal{G}_T} \left|\doublehat{\phi}_{ij,T}(u,h)\right| + \\
 &+ 2\max_{1\le i < j \le n} \{\widehat{\sigma}_i^2+ \widehat{\sigma}_j^2 \}^{-1/2} \max_{1 \le i \le n}\left(|\bm{\beta}_i - \widehat{\bm{\beta}}_i|^\top \max_{(u,h) \in \mathcal{G}_T} \Big| \sum_{t=1}^T w_{t,T}(u,h) \mathbf{X}_{it} \Big|\right) + \\
 &+ 2\max_{1\le i < j \le n} \{\widehat{\sigma}_i^2+ \widehat{\sigma}_j^2 \}^{-1/2}\max_{1 \le i \le n}\big|(\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top\bar{\mathbf{X}}_{i}\big| \max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big|
 \end{split}
@@ -76,9 +76,15 @@ Hence,
 
 We start by evaluating the second summand in \eqref{ineq-diff-1}.
 
-First, by our assumptions $\widehat{\sigma}_i^2 = \sigma_i^2 + o_P(\rho_T)$. Moreover, for all $i \in \{1, \ldots, n\}$ we know $\sigma_i^2 \neq 0$. Hence, $\max_{1\le i < j \le n}\{\widehat{\sigma}_i^2+ \widehat{\sigma}_j^2 \}^{-1/2}  = O_P(1)$.
+First, by our assumptions $\widehat{\sigma}_i^2 = \sigma_i^2 + o_P(\rho_T)$. Moreover, for all $i \in \{1, \ldots, n\}$ we know $\sigma_i^2 \neq 0$. Hence, 
+\begin{align}\label{ineq-diff-2}
+\max_{1\le i < j \le n}\{\widehat{\sigma}_i^2+ \widehat{\sigma}_j^2 \}^{-1/2}  = O_P(1).
+\end{align}
 
-Then, by Theorem \ref{theo-regs}, we know that $|\bm{\beta}_i - \widehat{\bm{\beta}}_i| = O_P(1/\sqrt{T})$.
+Then, by Theorem \ref{theo-regs}, we know that 
+\begin{align}\label{ineq-diff-3}
+|\bm{\beta}_i - \widehat{\bm{\beta}}_i| = O_P(1/\sqrt{T}).
+\end{align}
 
 Now consider the term $\big| \sum_{t=1}^T w_{t,T}(u,h) \mathbf{X}_{it}  \big|$. Without loss of generality, we can regard the covariates $\mathbf{X}_{it}$ to be scalars $X_{it}$, not vectors. The proof in case of vectors proceeds analogously.
 
@@ -99,10 +105,6 @@ By construction the weights $w_{t, T}(u, h)$ are not equal to $0$ if and only if
 %\begin{align*}
 %E\big[w^{q^\prime}_{t,T}(u,h)X_{it}^{q^\prime}\big] =w^{q^\prime}_{t,T}(u,h) E\big[X_{it}^{q^\prime}\big] = w^{q^\prime}_{t,T}(u,h) E\big[X_{i0}^{q^\prime}\big] < \infty.
 %\end{align*}
-We want to show that 
-\begin{align}\label{ineq-diff-2}
-\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=1}^{T} w_{t,T}(u,h)X_{it} \Big| = \max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it} \Big| = o_P({\sqrt{T}}).
-\end{align}
 
 Note that
 \begin{align*}
@@ -122,7 +124,7 @@ According to Theorem \ref{theo-wu} (Theorem 2(ii) in \cite{Wu2016}), if we denot
 &= C_1 \frac{(\sqrt{D_{T, u, h}})^{q^\prime}\big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime}\big) ||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha}}{ x^{q^\prime}} + C_2 \exp \left(-\frac{C_3  x^2}{D_{T, u, h}||X_{i\cdot}||^{2}_{2, \alpha}}\right)  
 \end{align*}
 
-We want to prove \eqref{ineq-diff-2}. For that, take any $\delta>0$:
+Now take any $\delta>0$:
 \begin{align*}
 \pr &\left(\frac{\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}  \Big|}{\sqrt{T}} \geq \delta \right) =\\
 &=\pr\left(\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}  \Big| \geq \delta \sqrt{T} \right) \leq \\
@@ -149,10 +151,14 @@ This leads us to a bound:
 
 By Assumption \ref{C-reg3}, $\theta - q^\prime/2 <0$ and the term on the RHS of the above inequality is converging to $0$ as $T \to \infty$ for any fixed $\delta >0$. Hence, 
 \begin{align*}
-\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}  \Big| = o_P(\sqrt{T}).
+\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)X_{it}  \Big| = o_P(\sqrt{T}),
 \end{align*}
-Combining the results above, we get the following:
-\begin{align}\label{ineq-diff-3}
+and similarly
+\begin{align}\label{ineq-diff-4}
+\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)\mathbf{X}_{it}  \Big| = o_P(\sqrt{T}).
+\end{align}
+Combining \eqref{ineq-diff-2}, \eqref{ineq-diff-3} and \eqref{ineq-diff-4}, we get the following:
+\begin{align}\label{ineq-diff-5}
 \begin{split}
 2&\max_{1\le i < j \le n} \{\widehat{\sigma}_i^2+ \widehat{\sigma}_j^2 \}^{-1/2}\max_{1\le i \le n} \bigg(|\bm{\beta}_i - \widehat{\bm{\beta}}_i|^\top \max_{(u,h) \in \mathcal{G}_T} \Big| \sum_{t=1}^T w_{t,T}(u,h) \mathbf{X}_{it} \Big|\bigg)  =  \\
 &=O_P(1) \cdot O_P(1/\sqrt{T}) \cdot o_P(\sqrt{T}) = o_P(1).
@@ -185,81 +191,78 @@ Combining the results above, we get the following:
 
 Now, consider the third summand in \eqref{ineq-diff-1}. 
 
-Similarly as before, $\max_{1\le i < j \le n}\{\widehat{\sigma}_i^2+ \widehat{\sigma}_j^2 \}^{-1/2}  = O_P(1)$ and $|\bm{\beta}_i - \widehat{\bm{\beta}}_i| = O_P(1/\sqrt{T})$.
+Similarly as before, 
+\begin{align}\label{ineq-diff-6}
+\max_{1\le i < j \le n}\{\widehat{\sigma}_i^2+ \widehat{\sigma}_j^2 \}^{-1/2}  = O_P(1)
+\end{align}
+and
+\begin{align}\label{ineq-diff-7}
+|\bm{\beta}_i - \widehat{\bm{\beta}}_i| = O_P(1/\sqrt{T}).
+\end{align}
 
-Then, by Proposition \ref{propA-reg-5} $\bar{\X}_i = o_P(1)$. 
+Then, by Proposition \ref{propA-reg-5} $\bar{\X}_i = o_P(1)$.
 
-
-Finally, consider the local linear kernel weights $w_{t,T}(u,h)$ defined in \eqref{weights}. Again, by construction the weights $w_{t, T}(u, h)$ are not equal to $0$ if and only if \linebreak $T(u-h) \le t \le T(u+h)$. We can use this fact to bound  $\max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big|$ using the Cauchy-Schwarz inequality:
+Finally, consider the local linear kernel weights $w_{t,T}(u,h)$ defined in \eqref{weights}. Again, by construction the weights $w_{t, T}(u, h)$ are not equal to $0$ if and only if \linebreak $T(u-h) \le t \le T(u+h)$. We can use this fact to bound  $\left| \sum_{t=1}^T w_{t,T}(u,h)  \right|$ for all $(u, h) \in \mathcal{G}_T$ using the Cauchy-Schwarz inequality:
 \begin{align*}
 \Big| \sum_{t=1}^T w_{t,T}(u,h)   \Big| & = \left| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)   \right| = \left| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)\cdot  1 \right| \leq\\
 &\leq \sqrt{\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w^2_{t,T}(u,h)}\sqrt{\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} 1^2} =\\
 &=\sqrt{1}\cdot\sqrt{D_{T, u, h}}   \leq \sqrt{2Th + 2} \leq \sqrt{2Th_{\max} +2} \leq \sqrt{T+2}.
 \end{align*}
-Hence, $\max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big| = O(\sqrt{T})$.
+Hence, 
+\begin{align}\label{ineq-diff-8}
+\max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big| = O(\sqrt{T}).
+\end{align}
 
-Combining the results above, we get the following:
-\begin{align}\label{ineq-diff-4}
+Combining \eqref{ineq-diff-6}, \eqref{ineq-diff-7}, Proposition \ref{propA-reg-5} and \eqref{ineq-diff-8}, we get the following:
+\begin{align}\label{ineq-diff-9}
 \begin{split}
 2&\max_{1\le i < j \le n} \{\widehat{\sigma}_i^2+ \widehat{\sigma}_j^2 \}^{-1/2}\max_{1\le i  \le n}\big|(\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top\bar{\mathbf{X}}_{i}\big| \max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big|  =  \\
 &=O_P(1) \cdot O_P(1/\sqrt{T}) \cdot o_P(1) \cdot O(\sqrt{T}) = o_P(1).
 \end{split}
 \end{align}
 
-Lastly, we look at the first summand in \eqref{ineq-diff-1}. Since $\doublehattwo{\sigma}_i^2 = \sigma_i^2 + o_P(\rho_T)$ and $\widehat{\sigma}_i^2 = \sigma_i^2 + o_P(\rho_T)$ by our assumptions, we have that \[\max_{1 \le i < j \le n} \big|\{\doublehattwo{\sigma}_i^2 + \doublehattwo{\sigma}_j^2 \}^{-1/2} - \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2}\big| = o_P(\rho_T).\]
-Then since $\left| \sum_{t=1}^T w_{t,T}(u,h) (\varepsilon_{it} - \bar{\varepsilon}_i) \right| \leq \left| \sum_{t=1}^T w_{t,T}(u,h) \varepsilon_{it} \right| + \left| \sum_{t=1}^T w_{t,T}(u,h)\bar{\varepsilon}_i \right|$ we evaluate 
+Lastly, we look at the first summand in \eqref{ineq-diff-1}. Since $\doublehattwo{\sigma}_i^2 = \sigma_i^2 + o_P(\rho_T)$ and $\widehat{\sigma}_i^2 = \sigma_i^2 + o_P(\rho_T)$ by our assumptions, we have that 
+\begin{align}\label{ineq-diff-10}
+\max_{1 \le i < j \le n} \big|\{\doublehattwo{\sigma}_i^2 + \doublehattwo{\sigma}_j^2 \}^{-1/2} - \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2}\big| = o_P(\rho_T).
+\end{align}
+Then since $\doublehat{\phi}_{ij,T}(u,h)$ has the same distribution as $\widetilde{\phi}_{ij, T}(u, h)$ for each $1\le i < j \le n$ and each $(u, h) \in \mathcal{G}_T$, we can look at $ \max_{(u,h) \in \mathcal{G}_T}\left|\widetilde{\phi}_{ij, T}(u, h)\right|$ instead:
+\begin{align}\label{ineq-diff-11}
+\begin{split}
+\pr&\left(\left|\max_{(u,h) \in \mathcal{G}_T}\left|\doublehat{\phi}_{ij, T}(u, h)\right|\right| \geq c_T\right) = \pr\left(\left|\max_{(u,h) \in \mathcal{G}_T}\left|\widetilde{\phi}_{ij, T}(u, h)\right| \right|\geq c_T\right) =\\
+&= \pr\left(\left|\max_{(u,h) \in \mathcal{G}_T}\left|\widetilde{\phi}_{ij, T}(u, h)\right| - \max_{(u,h) \in \mathcal{G}_T}\left|\gaussiankernel_{ij, T}(u, h)\right| + \max_{(u,h) \in \mathcal{G}_T}\left|\gaussiankernel_{ij, T}(u, h)\right| \right|\geq c_T\right) \leq \\
+& \leq \pr\left(\left|\max_{(u,h) \in \mathcal{G}_T}\left|\widetilde{\phi}_{ij, T}(u, h)\right| - \max_{(u,h) \in \mathcal{G}_T}\left|\gaussiankernel_{ij, T}(u, h)\right|\right| \geq c_T/2 \right) + \pr \left(\left|\max_{(u,h) \in \mathcal{G}_T}\left|\gaussiankernel_{ij, T}(u, h)\right| \right|\geq c_T/2\right) \leq\\
+&\leq \pr\left(\max_{(u,h) \in \mathcal{G}_T}\left|\widetilde{\phi}_{ij, T}(u, h) - \gaussiankernel_{ij, T}(u, h)\right|\geq c_T/2 \right) + \pr \left(\max_{(u,h) \in \mathcal{G}_T}\left|\gaussiankernel_{ij, T}(u, h)\right| \geq c_T/2\right).
+\end{split}
+\end{align}
+Here we will need one result that we will prove further: by \eqref{eq-strongapprox-bound5} we have
 \begin{align*}
-\max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T}\left| \sum_{t=1}^T w_{t,T}(u,h) \varepsilon_{it} \right|   = \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \left| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)\varepsilon_{it} \right|.
+\max_{(u,h) \in \mathcal{G}_T}\left|\widetilde{\phi}_{ij, T}(u, h) - \gaussiankernel_{ij, T}(u, h)\right| = o_P\left(\frac{T^{1/q}}{\sqrt{Th_{\min}}}\right).
 \end{align*}
-and 
+Furthermore, $\gaussiankernel_{ij, T}(u,h)$ is distributed as $ \normal(0,{\sigma}^2_i + {\sigma}^2_j)$ for all $(u,h) \in \mathcal{G}_T$ and all $1\le i < j \le n$ and $|\mathcal{G}_T| = O(T^\theta)$ for some large but fixed constant $\theta$ by Assumption \ref{C-grid}. By the standard results from the probability theory, we know that
 \begin{align*}
-\max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T}\left| \sum_{t=1}^T w_{t,T}(u,h) \bar{\varepsilon}_i \right|   = \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \left|\bar{\varepsilon}_i \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h) \right|.
+\max_{(u,h) \in \mathcal{G}_T}\left|\gaussiankernel_{ij, T}(u, h)\right| = O_P(\sqrt{\log{T}}).
 \end{align*}
-separately. We proceed in the same way as before.
-
-According to Theorem \ref{theo-wu} (Theorem 2(ii) in \cite{Wu2016}), if we denote the weights from the theorem as $a_t = \sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h)$, we can bound the following probability:
+Hence, if we take $c_T = o(\sqrt{\log{T}})$ in \eqref{ineq-diff-11}, we will get the following:
 \begin{align*}
-\pr&\left(\Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} \sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h)\varepsilon_{it}  \Big| \geq x\right) \leq\\
-&\leq C_4 \frac{(\sqrt{D_{T, u, h}})^{q}\big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q}\big) ||\varepsilon_{i\cdot}||^{q}_{q, \tau_q}}{ x^{q}} + C_5 \exp \left(-\frac{C_6  x^2}{D_{T, u, h}||\varepsilon_{i\cdot} ||^{2}_{2, \tau_q}}\right)
+\pr&\left(\left|\max_{(u,h) \in \mathcal{G}_T}\left|\doublehat{\phi}_{ij, T}(u, h)\right|\right| \geq c_T\right) \leq\\
+&\leq \pr\left(\max_{(u,h) \in \mathcal{G}_T}\left|\widetilde{\phi}_{ij, T}(u, h) - \gaussiankernel_{ij, T}(u, h)\right|\geq c_T/2 \right) + \pr \left(\max_{(u,h) \in \mathcal{G}_T}\left|\gaussiankernel_{ij, T}(u, h)\right| \geq c_T/2\right) = \\
+&= o(1) + o (1) = o(1),
 \end{align*}
-and for any $\delta > 0$ we have
-\begin{align*}
-\pr &\left(\frac{\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)\varepsilon_{it}  \Big|}{\sqrt{T}} \geq \delta \right) \leq\\
-&\leq C_4 \frac{ T^\theta ||\varepsilon_{i\cdot}||^{q}_{q, \tau_q}}{T^{q/2}\cdot \delta^{q}} \max_{(u, h) \in \mathcal{G}_T} \left( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q}\right)+ C_5 T^\theta \exp \left(-\frac{C_6 \delta^2 T}{||\varepsilon_{i\cdot}||^{2}_{2, \tau_q}}\right) = \\
-&= C \frac{ T^{\theta - q/2}}{\delta^{q}} + C T^\theta \exp \left(-C T \delta^2\right).
-\end{align*}
-where the symbol $C$ denotes a universal real constant that does not depend neither on $T$ nor on $\delta$ and that takes a different value on each occurrence. Here in the last equality we used the following facts:
-\begin{enumerate}
-	\item $||\varepsilon_{i\cdot}||^{q}_{q, \tau_q} = \sup_{t\geq 0} (t+1)^{\tau_q} \sum_{s=t}^{\infty} \delta_{q}(G_{i}, s)  = \sup_{t\geq 0} (t+1)^{\tau_q} \Theta_{i, t, q} < \infty$ holds true since $\Theta_{i, t, q} =O ( t^{-\tau_q} (\log t)^{-A} )$ and $\tau_q = \{q^2 - 4 + (q-2) \sqrt{q^2 + 20q + 4}\} / 8q > 1/2 - 1/q$ by Assumption \ref{C-err3};
-	\item $\max_{(u, h) \in \mathcal{G}_T} \left( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q}\right) \leq 1 < \infty$ as before.
-	\item $||\varepsilon_{i\cdot}||^{2}_{2, \tau_q} < \infty$ (follows from $1$).
-\end{enumerate}
-
-
-By Assumption ??, $\theta - q/2 <0$ and the term on the RHS of the above inequality is converging to $0$ as $T \to \infty$ for any fixed $\delta >0$. Hence, 
-\begin{align}\label{ineq-diff-5-aux}
-\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)\varepsilon_{it}  \Big| = o_P(\sqrt{T}).
+which means that
+\begin{align}\label{ineq-diff-12}
+\left|\max_{(u,h) \in \mathcal{G}_T}\left|\doublehat{\phi}_{ij, T}(u, h)\right|\right| =o_P(\sqrt{\log{T}})
 \end{align}
 
-Now, consider 
-\begin{align*}
-\max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T}\left| \sum_{t=1}^T w_{t,T}(u,h) \bar{\varepsilon}_i \right|   \leq \max_{1 \le i < j \le n} |\bar{\varepsilon}_i| \max_{(u,h) \in \mathcal{G}_T} \left| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h) \right|.
-\end{align*}
-
-Similarly as before, $\max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big| = O(\sqrt{T})$. Then, by Proposition ?? $\bar{\varepsilon}_i = o_P(1)$. 
-
-Combining \eqref{ineq-diff-5-aux} and \eqref{ineq-diff-5-aux2}, we get the following:
-\begin{align}\label{ineq-diff-5}
+Combining \eqref{ineq-diff-10} and \eqref{ineq-diff-12}, we get the following:
+\begin{align}\label{ineq-diff-13}
 \begin{split}
-&\max_{1 \le i < j \le n} \left(\big|\{\doublehattwo{\sigma}_i^2 + \doublehattwo{\sigma}_j^2 \}^{-1/2} - \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2}\big| \max_{(u,h) \in \mathcal{G}_T}\left| \sum_{t=1}^T w_{t,T}(u,h) (\varepsilon_{it} - \bar{\varepsilon}_i) \right| \right) \leq \\
-&\quad\leq \max_{1\le i < j \le n}\big|\{\doublehattwo{\sigma}_i^2 + \doublehattwo{\sigma}_j^2 \}^{-1/2} - \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2}\big|\max_{1\le i < j \le n}\max_{(u,h) \in \mathcal{G}_T}\left| \sum_{t=1}^T w_{t,T}(u,h) \varepsilon_{it} \right| + \\
-&\quad\quad+ \max_{1\le i < j \le n}\big|\{\doublehattwo{\sigma}_i^2 + \doublehattwo{\sigma}_j^2 \}^{-1/2} - \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2}\big|\max_{1\le i < j \le n}|\bar{\varepsilon}_i|\max_{(u,h) \in \mathcal{G}_T}\left| \sum_{t=1}^T w_{t,T}(u,h) \right| = \\
-&\quad= o_P(\rho_T) \cdot o_P(\sqrt{T}) + o_P(\rho_T) \cdot o_P(1) \cdot O(\sqrt{T}) = \\
-&\quad = o_P(\rho_T \sqrt{T}).
+&\max_{1 \le i < j \le n} \big|\{\doublehattwo{\sigma}_i^2 + \doublehattwo{\sigma}_j^2 \}^{-1/2} - \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2}\big|\max_{1 \le i< j \le n} \max_{(u,h) \in \mathcal{G}_T} \left|\doublehat{\phi}_{ij,T}(u,h)\right| = \\
+&\quad= o_P(\rho_T) \cdot o_P(\sqrt{\log{T}}) = \\
+&\quad = o_P(1).
 \end{split}
 \end{align}
 
-\textcolor{red}{Plugging \eqref{ineq-diff-3}, \eqref{ineq-diff-4} and \eqref{ineq-diff-5} in \eqref{ineq-diff-1}, we get that $\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| = o_P(1)$ and the statement of the theorem follows.}
+Plugging \eqref{ineq-diff-5}, \eqref{ineq-diff-9} and \eqref{ineq-diff-13} in \eqref{ineq-diff-1}, we get that $\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| = o_P(1)$ and the statement of the theorem follows.
 \end{proof}
 
 
