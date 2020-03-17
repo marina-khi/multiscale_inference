@@ -585,11 +585,13 @@ By construction the weights $w_{t, T}(u, h)$ are not equal to $0$ if and only if
 %\end{align*}
 
 Note that
-\begin{align*}
+\begin{align}\label{sum-weights}
+\begin{split}
 \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w^2_{t,T}(u,h) &= \sum_{t=1}^T w^2_{t,T}(u,h) =\\
 &= \sum_{t=1}^T\frac{K^2\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]^2}{ \bigg\{\sum\nolimits_{s=1}^T  K^2\Big(\frac{\frac{s}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{s}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]^2 \bigg\} } =\\
 &= 1.
-\end{align*}
+\end{split}
+\end{align}
 Denoting by $D_{T, u, h}$ the number of integers between $\lfloor T(u-h) \rfloor$ and $\lceil T(u+h) \rceil$ incl. (with obvious bounds $2Th \leq D_{T, u, h} \leq 2Th + 2$), we can normalize the weights as follows:
 \begin{align*}
 \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} \big(\sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h)\big)^2 = D_{T, u, h}.
@@ -728,7 +730,7 @@ Hence, if we take $c_T = o(\sqrt{\log{T}})$ in \eqref{ineq-diff-11}, we will get
 \end{align*}
 which means that
 \begin{align}\label{ineq-diff-12}
-\left|\max_{(u,h) \in \mathcal{G}_T}\left|\doublehat{\phi}_{ij, T}(u, h)\right|\right| =o_P(\sqrt{\log{T}})
+\max_{(u,h) \in \mathcal{G}_T}\left|\doublehat{\phi}_{ij, T}(u, h)\right| =o_P(\sqrt{\log{T}})
 \end{align}
 
 Combining \eqref{ineq-diff-10} and \eqref{ineq-diff-12}, we get the following:
@@ -736,11 +738,10 @@ Combining \eqref{ineq-diff-10} and \eqref{ineq-diff-12}, we get the following:
 \begin{split}
 &\max_{1 \le i < j \le n} \big|\{\doublehattwo{\sigma}_i^2 + \doublehattwo{\sigma}_j^2 \}^{-1/2} - \{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{-1/2}\big|\max_{1 \le i< j \le n} \max_{(u,h) \in \mathcal{G}_T} \left|\doublehat{\phi}_{ij,T}(u,h)\right| = \\
 &\quad= o_P(\rho_T) \cdot o_P(\sqrt{\log{T}}) = \\
-&\quad = o_P(1).
+&\quad = o_P(1)
 \end{split}
 \end{align}
-
-Plugging \eqref{ineq-diff-5}, \eqref{ineq-diff-9} and \eqref{ineq-diff-13} in \eqref{ineq-diff-1}, we get that $\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| = o_P(1)$ and the statement of the theorem follows.
+since by our assumption $\rho_T = O(\sqrt{h_{\min}}/\log T)$. Plugging \eqref{ineq-diff-5}, \eqref{ineq-diff-9} and \eqref{ineq-diff-13} in \eqref{ineq-diff-1}, we get that $\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| = o_P(1)$ and the statement of the theorem follows.
 \end{proof}
 
 
@@ -866,7 +867,7 @@ U_{ij, 2k-1} & = \frac{\gaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{{\sigma}_i^2 + 
 U_{ij, 2k} & = -\frac{\gaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{{\sigma}_i^2 + {\sigma}_j^2\}^{1/2}} - \lambda(x_{k2}) 
 \end{align*}
 with $x_k = (x_{k1},x_{k2})$. This notation allows us to write
-\[ \Phi_{n, T} = \max_{1\le i < j \le n} \max_{1 \le k \le 2p} U_{ij, k}, = \max_{1 \leq l \leq (n-1)np} U^\prime_l\]
+\[ \Phi_{n, T} = \max_{1\le i < j \le n} \max_{1 \le k \le 2p} U_{ij, k} = \max_{1 \leq l \leq (n-1)np} U^\prime_l\]
 where $(U^\prime_{1},\ldots,U^\prime_{(n-1)np})^\top \in \reals^{n(n-1)p}$ is a Gaussian random vector with the following properties: (i) $\mu_{l} := \ex[U^\prime_l] = \{\ex[U_{ij, 2k}] \text{ or }\ex[U_{ij, 2k-1}]\}= - \lambda(x_{k2}) $ and thus
 $$\overline{\mu} = \max_{1\leq l \leq (n-1)np} |\mu_{l}| \leq C \sqrt{\log T},$$
 and (ii) $\sigma_{l}^2 := \var(U^\prime_{l}) = 1$ for all $1 \leq l \leq (n-1)np$. Hence, $a_{(n-1)np} = b_{(n-1)np}$. Moreover, as the variables $(U^\prime_l - \mu_l)/\sigma_l$ are standard normal, we have that $a_{(n-1)np} = b_{(n-1)np} \le C\sqrt{\log ((n-1)np)} \leq C \sqrt{\log T}$. With this notation at hand, we can apply Proposition \ref{theo-anticon} to obtain that 
@@ -1032,7 +1033,7 @@ Now we can apply Lemma \ref{lemma1-theo-stat} to $\pseudogaussianstat_{n, T}$ an
 \begin{propA}\label{propA-pseudogaussian}
 Under the conditions of Theorem \ref{theo-stat-equality}, it holds that 
 \begin{equation}\label{eq-pseudogaussian}
-\sup_{x \in \reals} \big| \pr(\pseudogaussianstat_{n, T} \le x ) - \pr(\pseudogaussianstat_{n,T} \le x) \big| = o(1).
+\sup_{x \in \reals} \big| \pr(\pseudogaussianstat_{n, T} \le x | \X_{it} ) - \pr(\pseudogaussianstat_{n,T} \le x) \big| = ??.
 \end{equation}
 \end{propA}
 \begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-pseudogaussian}}}] 
@@ -1040,14 +1041,87 @@ This proof will be based on Lemma \ref{lemma-chern} (Lemma 3.1 in \cite{Chernozh
 
 We proceed in the same way as in the proof of Proposition \ref{propA-anticon-equality}. We write $x = (u,h)$ along with $\mathcal{G}_T = \{ x : x \in \mathcal{G}_T \} = \{x_1,\ldots,x_p\}$, where $p := |\mathcal{G}_T| \le O(T^\theta)$ for some large but fixed $\theta > 0$ by Assumption \ref{C-grid}. Moreover, for $k = 1,\ldots,p$, we set 
 \begin{align*}
-U_{ij, 2k-1} & = \frac{\gaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{{\sigma}_i^2 + {\sigma}_j^2\}^{1/2}} - \lambda(x_{k2}) \\
-U_{ij, 2k} & = -\frac{\gaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{{\sigma}_i^2 + {\sigma}_j^2\}^{1/2}} - \lambda(x_{k2}) 
+Y_{ij, 2k-1}^\prime & = \frac{\pseudogaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} - \lambda(x_{k2}) \\
+Y_{ij, 2k}^\prime & = -\frac{\pseudogaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} - \lambda(x_{k2}) 
 \end{align*}
 with $x_k = (x_{k1},x_{k2})$. This notation allows us to write
-\[ \Phi_{n, T} = \max_{1\le i < j \le n} \max_{1 \le k \le 2p} U_{ij, k}, = \max_{1 \leq l \leq (n-1)np} U^\prime_l\]
-where $(U^\prime_{1},\ldots,U^\prime_{(n-1)np})^\top \in \reals^{n(n-1)p}$ is a Gaussian random vector with the following properties: (i) $\mu_{l} := \ex[U^\prime_l] = \{\ex[U_{ij, 2k}] \text{ or }\ex[U_{ij, 2k-1}]\}= - \lambda(x_{k2}) $ and thus
-$$\overline{\mu} = \max_{1\leq l \leq (n-1)np} |\mu_{l}| \leq C \sqrt{\log T},$$
-and (ii) $\sigma_{l}^2 := \var(U^\prime_{l}) = 1$ for all $1 \leq l \leq (n-1)np$. Hence, $a_{(n-1)np} = b_{(n-1)np}$. Moreover, as the variables $(U^\prime_l - \mu_l)/\sigma_l$ are standard normal, we have that $a_{(n-1)np} = b_{(n-1)np} \le C\sqrt{\log ((n-1)np)} \leq C \sqrt{\log T}$. With this notation at hand, we can apply Proposition \ref{theo-anticon} to obtain that 
+\[ \pseudogaussianstat_{n, T} = \max_{1\le i < j \le n} \max_{1 \le k \le p} \{Y_{ij, 2k-1}^\prime, Y_{ij, 2k}^\prime \} = \max_{1 \leq l \leq (n-1)np} Y_l\]
+where $(Y_{1},\ldots,Y_{(n-1)np})^\top \in \reals^{n(n-1)p}$ is a Gaussian random vector conditional on $\{\X_{it}\}_{i, t}$ with the following properties: 
+\[\mu_{l}|\X_{it} := \ex\left[Y_l|\X_{it}\right] = \{\ex[Y^\prime_{ij, 2k}|\X_{it}] \text{ or }\ex[Y^\prime_{ij, 2k-1}|\X_{it}]\}= - \lambda(x_{k2}) \]
+and by the LIE 
+\[\mu_{l} := \ex\left[Y_l\right] = \ex\left[\ex\left[Y_l|\X_{it}\right]\right] = - \lambda(x_{k2}). \]
+Now consider the following random value which we will need to calculate the entries of the covariance matrix:
+\begin{align*}
+&\frac{\pseudogaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} \frac{\pseudogaussiankernel_{i^\prime j^\prime , T}(x_{k^\prime 1},x_{k^\prime 2})}{\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} =\\
+&\,= \frac{\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \widehat{\sigma}_{i^\prime} (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) - \widehat{\sigma}_{j^\prime} (Z_{{j^\prime}t} - \bar{Z}_{j^\prime}) \big\}}
+{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} = \\
+&\, = \frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
+{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} - \\
+&\quad - \frac{\widehat{\sigma}_j\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{jt} - \bar{Z}_j)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
+{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} - \\
+&\quad - \frac{\widehat{\sigma}_i\widehat{\sigma}_{j^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{j^\prime}t} - \bar{Z}_{j^\prime}) \right) }
+{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} + \\
+&\quad + \frac{\widehat{\sigma}_j\widehat{\sigma}_{j^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{jt} - \bar{Z}_j)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{j^\prime}t} - \bar{Z}_{j^\prime}) \right) }
+{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}.
+\end{align*}
+Now remember that $Z_{it}$ are independent of $\X_{js}$ for all possible combinations of $i, j, s$ and $t$. Hence, we write the unconditional and conditional expectations as
+\begin{align*}
+&\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
+{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] =\\
+&=	\ex\left[\frac{\widehat{\sigma}_i \widehat{\sigma}_{i^\prime}}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] \ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right)\left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right)\right]
+\end{align*}
+and
+\begin{align*}
+&\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
+{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\bigg| \X_{it}\right] =\\
+&=	\frac{\widehat{\sigma}_i \widehat{\sigma}_{i^\prime}}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right)\left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}), \right)\right]
+\end{align*}
+respectively. Consider two cases:
+\begin{enumerate}
+\item $i \neq i^\prime$. Then 
+\begin{align*}
+&\ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right)\left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right)\right] = \\
+&\quad = \ex \left[\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right] \ex \left[ \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime})\right] =\\
+&\quad = 0
+\end{align*}
+\item $i = i^\prime$. Then
+\begin{align*}
+&\ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right)\left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right)\right] = \\
+&\quad = \ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right)^2\right] =\\
+&\quad = \ex \left[\sum\nolimits_{t=1}^T w^2_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)^2\right] + \ex \left[\sum_{t, s =1, t\neq s}^T w_{t,T}(u,h)w_{s,T}(u,h) \, (Z_{it} - \bar{Z}_i)(Z_{is} - \bar{Z}_i)\right] =\\
+&\quad =\sum\nolimits_{t=1}^T w^2_{t,T}(u,h) \ex \left[Z_{it}^2 \right] - 2\sum\nolimits_{t=1}^T w^2_{t,T}(u,h) \ex \left[Z_{it}\bar{Z}_i \right] + \sum\nolimits_{t=1}^T w^2_{t,T}(u,h) \ex \left[\bar{Z}_{i}^2  \right] + \\
+&\quad \quad + \sum_{t, s =1, t\neq s}^T w_{t,T}(u,h)w_{s,T}(u,h)\ex [Z_{it} Z_{is}] -\sum_{t, s =1, t\neq s}^T w_{t,T}(u,h)w_{s,T}(u,h)\ex [\bar{Z}_{i} Z_{is}] -\\
+&\quad \quad - \sum_{t, s =1, t\neq s}^T w_{t,T}(u,h)w_{s,T}(u,h)\ex [Z_{it} \bar{Z}_{i}] + \sum_{t, s =1, t\neq s}^T w_{t,T}(u,h)w_{s,T}(u,h)\ex [\bar{Z}_{i}^2].
+\end{align*}
+Since $\{Z_{it}\}_{t}$ are i.i.d. standard normal random variables, we have obvious equalities: $\ex \left[Z_{it}^2 \right] = 1$, $\ex \left[\bar{Z}_{i}^2\right] = 1/T$, $\ex [Z_{it} Z_{is}] = \ex[Z_{it}] \ex[Z_{is}] = 0$ for $t \neq s$ and $\ex [Z_{it} \bar{Z}_{i}] = 1/T$. Then, knowing that $\sum\nolimits_{t=1}^T w^2_{t,T}(u,h) = 1$ from \eqref{sum-weights}, we have
+\begin{align*}
+&\ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right)^2\right] =\\
+&\quad =\sum\nolimits_{t=1}^T w^2_{t,T}(u,h) - \frac{2}{T}\sum\nolimits_{t=1}^T w^2_{t,T}(u,h) + \frac{1}{T}\sum\nolimits_{t=1}^T w^2_{t,T}(u,h)  - \\
+&\quad \quad  -\frac{2}{T}\sum_{t, s =1, t\neq s}^T w_{t,T}(u,h)w_{s,T}(u,h) + \frac{1}{T}\sum_{t, s =1, t\neq s}^T w_{t,T}(u,h)w_{s,T}(u,h) = \\
+&\quad =  1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2.
+\end{align*}
+
+
+\end{enumerate}
+
+the entries of the conditional covariance matrices are
+\begin{align*}
+\Sigma^Y_{l l^\prime}|\X_{it} :&= \ex[Y_l Y_{l^\prime} | \X_{it}] - \ex[Y_l|\X_{it}]\ex[Y_{l^\prime}|\X_{it}] = \\
+&= \ex[Y^\prime_{ij, k} Y^\prime_{i^\prime j^\prime, k^\prime} | \X_{it}] - \ex[Y^\prime_{ij, k}|\X_{it}]\ex[Y^\prime_{i^\prime j^\prime, k^\prime}|\X_{it}] =\\
+&=\ex \left[\left(\pm \frac{\pseudogaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} - \lambda(x_{k2})\right) \left(\pm \frac{\pseudogaussiankernel_{i^\prime j^\prime , T}(x_{k^\prime 1},x_{k^\prime 2})}{\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} - \lambda(x_{k^\prime 2})\right) \bigg|\X_{it}\right] - \lambda(x_{k2}) \lambda(x_{k^\prime 2}) = \\
+&=\pm \ex \left[\frac{\pseudogaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} \frac{\pseudogaussiankernel_{i^\prime j^\prime , T}(x_{k^\prime 1},x_{k^\prime 2})}{\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} \bigg|\X_{it}\right] + \lambda(x_{k2}) \lambda(x_{k^\prime 2})- \lambda(x_{k2}) \lambda(x_{k^\prime 2}) =\\
+&=\pm \frac{\ex \left[\pseudogaussiankernel_{ij, T}(x_{k1},x_{k2})\pseudogaussiankernel_{i^\prime j^\prime , T}(x_{k^\prime 1},x_{k^\prime 2}) \big|\X_{it}\right]}
+{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}  =\\
+&=\pm \frac{\ex \left[\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}\big|\X_{it}\right]}
+{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} =\\
+&= \begin{cases}
+0, \text{ if } i \neq i^\prime, j^\prime \text{ and } j \neq i^\prime, j^\prime;\\
+\pm \frac{\ex \left[\pseudogaussiankernel^2_{ij, T}(x_{k1},x_{k2})\big|\X_{it}\right]}
+{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2}, \text{ if } i = i^\prime \text{ and } j = j^\prime;\\
+ \text{ if } i = i^\prime \text{ but } j \neq j^\prime
+\end{cases} 
+\end{align*}
+for all $1 \leq l \leq (n-1)np$. Hence, $a_{(n-1)np} = b_{(n-1)np}$. Moreover, as the variables $(U^\prime_l - \mu_l)/\sigma_l$ are standard normal, we have that $a_{(n-1)np} = b_{(n-1)np} \le C\sqrt{\log ((n-1)np)} \leq C \sqrt{\log T}$. With this notation at hand, we can apply Proposition ?? to obtain that 
 \[ \sup_{x \in \reals} \pr \Big( \big| \gaussianstat_{n, T} - x \big| \le \delta_T \Big) \le C \delta_T \Big[ \sqrt{\log T} + \sqrt{ \log(1/\delta_T) } \Big] = o(1) \]
 with $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$, which is the statement of Proposition \ref{propA-anticon-equality}.
 
