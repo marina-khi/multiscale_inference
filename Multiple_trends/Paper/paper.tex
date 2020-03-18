@@ -1041,16 +1041,16 @@ This proof will be based on Lemma \ref{lemma-chern} (Lemma 3.1 in \cite{Chernozh
 
 We proceed in the same way as in the proof of Proposition \ref{propA-anticon-equality}. We write $x = (u,h)$ along with $\mathcal{G}_T = \{ x : x \in \mathcal{G}_T \} = \{x_1,\ldots,x_p\}$, where $p := |\mathcal{G}_T| \le O(T^\theta)$ for some large but fixed $\theta > 0$ by Assumption \ref{C-grid}. Moreover, for $k = 1,\ldots,p$, we set 
 \begin{align*}
-Y_{ij, 2k-1}^\prime & = \frac{\pseudogaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} - \lambda(x_{k2}) \\
-Y_{ij, 2k}^\prime & = -\frac{\pseudogaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} - \lambda(x_{k2}) 
+Y_{ij, 2k-1} & = \frac{\pseudogaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}}, \\
+Y_{ij, 2k} & = -\frac{\pseudogaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} 
 \end{align*}
 with $x_k = (x_{k1},x_{k2})$. This notation allows us to write
-\[ \pseudogaussianstat_{n, T} = \max_{1\le i < j \le n} \max_{1 \le k \le p} \{Y_{ij, 2k-1}^\prime, Y_{ij, 2k}^\prime \} = \max_{1 \leq l \leq (n-1)np} Y_l\]
-where $(Y_{1},\ldots,Y_{(n-1)np})^\top \in \reals^{n(n-1)p}$ is a Gaussian random vector conditional on $\{\X_{it}\}_{i, t}$ with the following properties: 
-\[\mu_{l}|\X_{it} := \ex\left[Y_l|\X_{it}\right] = \{\ex[Y^\prime_{ij, 2k}|\X_{it}] \text{ or }\ex[Y^\prime_{ij, 2k-1}|\X_{it}]\}= - \lambda(x_{k2}) \]
+\[ \pseudogaussianstat_{n, T} = \max_{1\le i < j \le n} \max_{1 \le k \le p} \{Y_{ij, 2k-1}^\prime - \lambda(x_{k2}), Y_{ij, 2k}^\prime - \lambda(x_{k2}) \}\]
+where $(Y_{12, 1},\ldots,Y_{(n-1)n, 2p})^\top \in \reals^{n(n-1)p}$ is a centered Gaussian random vector conditional on $\{\X_{it}\}_{i, t}$ with the following properties: 
+\[\ex\left[Y_{ij, 2k-1}|\X_{it}\right] = \ex[Y_{ij, 2k}|\X_{it}] = 0 \]
 and by the LIE 
-\[\mu_{l} := \ex\left[Y_l\right] = \ex\left[\ex\left[Y_l|\X_{it}\right]\right] = - \lambda(x_{k2}). \]
-Now consider the following random value which we will need to calculate the entries of the covariance matrix:
+\[\ex\left[Y_{ij, 2k-1}\right] = \ex\left[Y_{ij, 2k}\right]  = 0. \]
+Now consider the following random value which we will need further to calculate the entries of the covariance matrix:
 \begin{align*}
 &\frac{\pseudogaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} \frac{\pseudogaussiankernel_{i^\prime j^\prime , T}(x_{k^\prime 1},x_{k^\prime 2})}{\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} =\\
 &\,= \frac{\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \widehat{\sigma}_{i^\prime} (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) - \widehat{\sigma}_{j^\prime} (Z_{{j^\prime}t} - \bar{Z}_{j^\prime}) \big\}}
@@ -1066,15 +1066,14 @@ Now consider the following random value which we will need to calculate the entr
 \end{align*}
 Now remember that $Z_{it}$ are independent of $\X_{js}$ for all possible combinations of $i, j, s$ and $t$. Hence, we write the unconditional and conditional expectations as
 \begin{align*}
-&\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
-{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] =\\
-&=	\ex\left[\frac{\widehat{\sigma}_i \widehat{\sigma}_{i^\prime}}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] \ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right)\left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right)\right]
+&\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] =\\
+&=	\ex\left[\frac{\widehat{\sigma}_i \widehat{\sigma}_{i^\prime}}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] \ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right)\left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right)\right]
 \end{align*}
 and
 \begin{align*}
 &\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
 {\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\bigg| \X_{it}\right] =\\
-&=	\frac{\widehat{\sigma}_i \widehat{\sigma}_{i^\prime}}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right)\left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}), \right)\right]
+&=	\frac{\widehat{\sigma}_i \widehat{\sigma}_{i^\prime}}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right)\left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}), \right)\right]
 \end{align*}
 respectively. Consider two cases:
 \begin{enumerate}
@@ -1083,6 +1082,14 @@ respectively. Consider two cases:
 &\ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right)\left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right)\right] = \\
 &\quad = \ex \left[\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right] \ex \left[ \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime})\right] =\\
 &\quad = 0
+\end{align*}
+and
+\begin{align*}
+&\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
+{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] =\\
+& =\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
+{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\bigg| \X_{it}\right] =\\
+&=	0.
 \end{align*}
 \item $i = i^\prime$. Then
 \begin{align*}
@@ -1100,30 +1107,59 @@ Since $\{Z_{it}\}_{t}$ are i.i.d. standard normal random variables, we have obvi
 &\quad \quad  -\frac{2}{T}\sum_{t, s =1, t\neq s}^T w_{t,T}(u,h)w_{s,T}(u,h) + \frac{1}{T}\sum_{t, s =1, t\neq s}^T w_{t,T}(u,h)w_{s,T}(u,h) = \\
 &\quad =  1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2.
 \end{align*}
-
+Then,
+\begin{align*}
+&\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
+{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] =\\
+&=	\ex\left[\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] \left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right)
+\end{align*}
+and
+\begin{align*}
+&\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
+{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\bigg| \X_{it}\right] =\\
+&=	\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right).
+\end{align*}
 
 \end{enumerate}
-
-the entries of the conditional covariance matrices are
+Now we are ready to calculate the elements of the unconditional and conditional covariance matrices. In what follows, we consider the case of $Y_{i, j, 2k-1}$. The case $Y_{i, j, 2k}$ is calculated analogously, the only difference being the sign.
 \begin{align*}
-\Sigma^Y_{l l^\prime}|\X_{it} :&= \ex[Y_l Y_{l^\prime} | \X_{it}] - \ex[Y_l|\X_{it}]\ex[Y_{l^\prime}|\X_{it}] = \\
-&= \ex[Y^\prime_{ij, k} Y^\prime_{i^\prime j^\prime, k^\prime} | \X_{it}] - \ex[Y^\prime_{ij, k}|\X_{it}]\ex[Y^\prime_{i^\prime j^\prime, k^\prime}|\X_{it}] =\\
-&=\ex \left[\left(\pm \frac{\pseudogaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} - \lambda(x_{k2})\right) \left(\pm \frac{\pseudogaussiankernel_{i^\prime j^\prime , T}(x_{k^\prime 1},x_{k^\prime 2})}{\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} - \lambda(x_{k^\prime 2})\right) \bigg|\X_{it}\right] - \lambda(x_{k2}) \lambda(x_{k^\prime 2}) = \\
-&=\pm \ex \left[\frac{\pseudogaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} \frac{\pseudogaussiankernel_{i^\prime j^\prime , T}(x_{k^\prime 1},x_{k^\prime 2})}{\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} \bigg|\X_{it}\right] + \lambda(x_{k2}) \lambda(x_{k^\prime 2})- \lambda(x_{k2}) \lambda(x_{k^\prime 2}) =\\
-&=\pm \frac{\ex \left[\pseudogaussiankernel_{ij, T}(x_{k1},x_{k2})\pseudogaussiankernel_{i^\prime j^\prime , T}(x_{k^\prime 1},x_{k^\prime 2}) \big|\X_{it}\right]}
-{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}  =\\
-&=\pm \frac{\ex \left[\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}\big|\X_{it}\right]}
-{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} =\\
+&\Sigma^Y_{(ij, 2k-1), (i^\prime j^\prime, 2k^\prime-1)}|\X_{it} :=  \ex[Y_{ij, 2k-1} Y_{i^\prime j^\prime, 2k^\prime-1} | \X_{it}] - \ex[Y_{ij, 2k-1}|\X_{it}]\ex[Y_{i^\prime j^\prime, 2k^\prime-1}|\X_{it}] =\\
+&=\ex \left[\frac{\pseudogaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} \frac{\pseudogaussiankernel_{i^\prime j^\prime , T}(x_{k^\prime 1},x_{k^\prime 2})}{\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} \bigg|\X_{it}\right] =\\
+& = \ex \left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} \bigg|\X_{it}\right]- \\
+&\quad - \ex \left[\frac{\widehat{\sigma}_j\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{jt} - \bar{Z}_j)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\bigg|\X_{it}\right] - \\
+&\quad - \ex \left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{j^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{j^\prime}t} - \bar{Z}_{j^\prime}) \right) }{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} \bigg|\X_{it}\right]+ \\
+&\quad + \ex \left[\frac{\widehat{\sigma}_j\widehat{\sigma}_{j^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{jt} - \bar{Z}_j)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{j^\prime}t} - \bar{Z}_{j^\prime}) \right) } {\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\bigg|\X_{it}\right]=\\
 &= \begin{cases}
 0, \text{ if } i \neq i^\prime, j^\prime \text{ and } j \neq i^\prime, j^\prime;\\
-\pm \frac{\ex \left[\pseudogaussiankernel^2_{ij, T}(x_{k1},x_{k2})\big|\X_{it}\right]}
-{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2}, \text{ if } i = i^\prime \text{ and } j = j^\prime;\\
- \text{ if } i = i^\prime \text{ but } j \neq j^\prime
+1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2, \text{ if } i = i^\prime \text{ and } j = j^\prime;\\
+\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right), \text{ if } i = i^\prime \text{ but } j \neq j^\prime;\\
+\frac{\widehat{\sigma}_j^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j}^2\}^{1/2}}\left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right), \text{ if } j = j^\prime \text{ but } i \neq i^\prime;\\
+-\frac{\widehat{\sigma}_j^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{j}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right), \text{ if } j = i^\prime \text{ but } i \neq j^\prime;\\
+-\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{i}^2\}^{1/2}}\left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right), \text{ if } i = j^\prime \text{ but }  j\neq i^\prime
 \end{cases} 
 \end{align*}
-for all $1 \leq l \leq (n-1)np$. Hence, $a_{(n-1)np} = b_{(n-1)np}$. Moreover, as the variables $(U^\prime_l - \mu_l)/\sigma_l$ are standard normal, we have that $a_{(n-1)np} = b_{(n-1)np} \le C\sqrt{\log ((n-1)np)} \leq C \sqrt{\log T}$. With this notation at hand, we can apply Proposition ?? to obtain that 
-\[ \sup_{x \in \reals} \pr \Big( \big| \gaussianstat_{n, T} - x \big| \le \delta_T \Big) \le C \delta_T \Big[ \sqrt{\log T} + \sqrt{ \log(1/\delta_T) } \Big] = o(1) \]
-with $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$, which is the statement of Proposition \ref{propA-anticon-equality}.
+since $i<j$ and $i^\prime < j^\prime$.
+Similarly,
+\begin{align*}
+&\Sigma^Y_{(ij, 2k-1), (i^\prime j^\prime, 2k^\prime-1)} := \ex[Y_{ij, 2k-1} Y_{i^\prime j^\prime, 2k^\prime-1}] - \ex[Y_{ij, 2k-1}]\ex[Y_{i^\prime j^\prime, 2k^\prime-1}] =\\
+&\quad= \begin{cases}
+0, \text{ if } i \neq i^\prime, j^\prime \text{ and } j \neq i^\prime, j^\prime;\\
+1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2, \text{ if } i = i^\prime \text{ and } j = j^\prime;\\
+\ex\left[\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right]\left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right), \text{ if } i = i^\prime \text{ but } j \neq j^\prime;\\
+\ex\left[\frac{\widehat{\sigma}_j^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j}^2\}^{1/2}}\right]\left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right), \text{ if } j = j^\prime \text{ but } i \neq i^\prime;\\
+-\ex\left[\frac{\widehat{\sigma}_j^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{j}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right]\left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right), \text{ if } j = i^\prime \text{ but } i \neq j^\prime;\\
+-\ex\left[\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{i}^2\}^{1/2}}\right]\left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right), \text{ if } i = j^\prime \text{ but }  j\neq i^\prime.
+\end{cases} 
+\end{align*}
+Now we can calculate 
+\begin{align*}
+\Delta_0 := \max_{\substack{1 \leq i < j \leq n,\\ 1 \le i^\prime < j^\prime < n, 1 \le k \le p}} \big\{&\left|\Sigma^{Y}_{(ij, 2k-1), (i^\prime j^\prime, 2k^\prime-1)}|\X_{it} - \Sigma^{Y}_{(ij, 2k-1), (i^\prime j^\prime, 2k^\prime-1)}\right|,\\
+&\left|\Sigma^{Y}_{(ij, 2k), (i^\prime j^\prime, 2k^\prime-1)}|\X_{it} - \Sigma^{Y}_{(ij, 2k), (i^\prime j^\prime, 2k^\prime-1)}\right|,\\
+&\left|\Sigma^{Y}_{(ij, 2k-1), (i^\prime j^\prime, 2k^\prime)}|\X_{it} - \Sigma^{Y}_{(ij, 2k-1), (i^\prime j^\prime, 2k^\prime)}\right|,\\
+&\left|\Sigma^{Y}_{(ij, 2k-1), (i^\prime j^\prime, 2k^\prime-1)}|\X_{it} - \Sigma^{Y}_{(ij, 2k-1), (i^\prime j^\prime, 2k^\prime-1)}\right|\big\} = \\
+\max_{\substack{1 \leq i < j \leq n,\\ 1 \le j^\prime \le n, j^\prime \neq i, j^\prime \neq j}} &\left| \frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}-  \ex\left[\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] \right| \cdot \\
+&\quad \cdot \left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right)
+\end{align*}
 
 \end{proof}
 
