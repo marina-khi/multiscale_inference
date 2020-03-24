@@ -587,9 +587,7 @@ By construction the weights $w_{t, T}(u, h)$ are not equal to $0$ if and only if
 Note that
 \begin{align}\label{sum-weights}
 \begin{split}
-\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w^2_{t,T}(u,h) &= \sum_{t=1}^T w^2_{t,T}(u,h) =\\
-&= \sum_{t=1}^T\frac{K^2\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]^2}{ \bigg\{\sum\nolimits_{s=1}^T  K^2\Big(\frac{\frac{s}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{s}{T}-u}{h}\Big) S_{T,1}(u,h) \Big]^2 \bigg\} } =\\
-&= 1.
+\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w^2_{t,T}(u,h) &= \sum_{t=1}^T w^2_{t,T}(u,h) = \sum_{t=1}^T\frac{\Lambda^2_{t,T}(u,h)}{\sum\nolimits_{s=1}^T\Lambda^2_{s,T}(u,h) } = 1.
 \end{split}
 \end{align}
 Denoting by $D_{T, u, h}$ the number of integers between $\lfloor T(u-h) \rfloor$ and $\lceil T(u+h) \rceil$ incl. (with obvious bounds $2Th \leq D_{T, u, h} \leq 2Th + 2$), we can normalize the weights as follows:
@@ -618,7 +616,7 @@ Now take any $\delta>0$:
 where the symbol $C$ denotes a universal real constant that does not depend neither on $T$ nor on $\delta$ and that takes a different value on each occurrence. Here in the last equality we used the following facts:
 \begin{enumerate}
 	\item $||X_{i\cdot}||^{q^\prime}_{q^\prime, \alpha} = \sup_{t\geq 0} (t+1)^{\alpha} \sum_{s=t}^{\infty} \delta_{q^\prime}(H_{i}, s)  < \infty$ holds true since $\sum_{s=t}^{\infty}\delta_{q^\prime}(H_{i}, s) = O(t^{-\alpha})$ by Assumption \ref{C-reg5};
-	\item $\max_{(u, h) \in \mathcal{G}_T} \left( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime}\right) < \infty$ because for every $x \in [0, 1]$ we have $ 0 \leq |x|^{q^\prime/2} \leq x \leq 1$. Thus, since $\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w^2_{t,T}(u,h) = 1$, we have \linebreak $0 \leq w^2_{t,T}(u,h) \leq 1$ for all $t$ and
+	\item $\max_{(u, h) \in \mathcal{G}_T} \left( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime}\right) < \infty$ because for every $x \in [0, 1]$ we have $ 0 \leq |x|^{q^\prime/2} \leq x \leq 1$. Thus, since $\sum_{t=1}^{T} w^2_{t,T}(u,h) = 1$, we have \linebreak $0 \leq w^2_{t,T}(u,h) \leq 1$ for all $t\in \{1, \ldots, T\}$ and all $(u, h) \in \mathcal{G}_T$ and
 $$ 0 \leq |w_{t,T}(u,h)|^{q^\prime} =  |w^2_{t,T}(u,h)|^{q^\prime/2} \leq w^2_{t,T}(u,h) \leq 1.$$
 This leads us to a bound:  
 \begin{align*}
@@ -683,11 +681,13 @@ and
 Then, by Proposition \ref{propA-reg-5} $\bar{\X}_i = o_P(1)$.
 
 Finally, consider the local linear kernel weights $w_{t,T}(u,h)$ defined in \eqref{weights}. Again, by construction the weights $w_{t, T}(u, h)$ are not equal to $0$ if and only if \linebreak $T(u-h) \le t \le T(u+h)$. We can use this fact to bound  $\left| \sum_{t=1}^T w_{t,T}(u,h)  \right|$ for all $(u, h) \in \mathcal{G}_T$ using the Cauchy-Schwarz inequality:
-\begin{align*}
+\begin{align}\label{weights-cauchy-schwarz}
+\begin{split}
 \Big| \sum_{t=1}^T w_{t,T}(u,h)   \Big| & = \left| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)   \right| = \left| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)\cdot  1 \right| \leq\\
 &\leq \sqrt{\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w^2_{t,T}(u,h)}\sqrt{\sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} 1^2} =\\
 &=\sqrt{1}\cdot\sqrt{D_{T, u, h}}   \leq \sqrt{2Th + 2} \leq \sqrt{2Th_{\max} +2} \leq \sqrt{T+2}.
-\end{align*}
+\end{split}
+\end{align}
 Hence, 
 \begin{align}\label{ineq-diff-8}
 \max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big| = O(\sqrt{T}).
@@ -1053,89 +1053,97 @@ and by the LIE
 Now consider the following random value which we will need further to calculate the entries of the covariance matrix:
 \begin{align*}
 &\frac{\pseudogaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} \frac{\pseudogaussiankernel_{i^\prime j^\prime , T}(x_{k^\prime 1},x_{k^\prime 2})}{\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} =\\
-&\,= \frac{\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \widehat{\sigma}_{i^\prime} (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) - \widehat{\sigma}_{j^\prime} (Z_{{j^\prime}t} - \bar{Z}_{j^\prime}) \big\}}
+&= \frac{\sum_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \, \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}\sum_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \, \big\{ \widehat{\sigma}_{i^\prime} (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) - \widehat{\sigma}_{j^\prime} (Z_{{j^\prime}t} - \bar{Z}_{j^\prime}) \big\}}
 {\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} = \\
-&\, = \frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
+&= \frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
 {\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} - \\
-&\quad - \frac{\widehat{\sigma}_j\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{jt} - \bar{Z}_j)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
+&\quad - \frac{\widehat{\sigma}_j\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \, (Z_{jt} - \bar{Z}_j)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
 {\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} - \\
-&\quad - \frac{\widehat{\sigma}_i\widehat{\sigma}_{j^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{j^\prime}t} - \bar{Z}_{j^\prime}) \right) }
+&\quad - \frac{\widehat{\sigma}_i\widehat{\sigma}_{j^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \,  (Z_{{j^\prime}t} - \bar{Z}_{j^\prime}) \right) }
 {\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} + \\
-&\quad + \frac{\widehat{\sigma}_j\widehat{\sigma}_{j^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{jt} - \bar{Z}_j)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{j^\prime}t} - \bar{Z}_{j^\prime}) \right) }
+&\quad + \frac{\widehat{\sigma}_j\widehat{\sigma}_{j^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \, (Z_{jt} - \bar{Z}_j)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \,  (Z_{{j^\prime}t} - \bar{Z}_{j^\prime}) \right) }
 {\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}.
 \end{align*}
 Now remember that $Z_{it}$ are independent of $\X_{js}$ for all possible combinations of $i, j, s$ and $t$. Hence, we write the unconditional and conditional expectations as
 \begin{align*}
-&\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] =\\
-&=	\ex\left[\frac{\widehat{\sigma}_i \widehat{\sigma}_{i^\prime}}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] \ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right)\left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right)\right]
+&\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] =\\
+&=	\ex\left[\frac{\widehat{\sigma}_i \widehat{\sigma}_{i^\prime}}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] \ex \left[\sum_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \, (Z_{it} - \bar{Z}_i)\sum_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right]
 \end{align*}
 and
 \begin{align*}
 &\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
 {\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\bigg| \X_{it}\right] =\\
-&=	\frac{\widehat{\sigma}_i \widehat{\sigma}_{i^\prime}}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right)\left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}), \right)\right]
+&=	\frac{\widehat{\sigma}_i \widehat{\sigma}_{i^\prime}}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\ex \left[\left(\sum_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \, (Z_{it} - \bar{Z}_i)\right)\left( \sum_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}), \right)\right]
 \end{align*}
 respectively. Consider two cases:
 \begin{enumerate}
 \item $i \neq i^\prime$. Then 
 \begin{align*}
-&\ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right)\left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right)\right] = \\
-&\quad = \ex \left[\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right] \ex \left[ \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime})\right] =\\
+&\ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \, (Z_{it} - \bar{Z}_i)\right)\left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right)\right] = \\
+&\quad = \ex \left[\sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \, (Z_{it} - \bar{Z}_i)\right] \ex \left[ \sum\nolimits_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime})\right] =\\
 &\quad = 0
 \end{align*}
 and
 \begin{align*}
-&\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
+&\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
 {\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] =\\
-& =\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
+& =\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
 {\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\bigg| \X_{it}\right] =\\
 &=	0.
 \end{align*}
+
 \item $i = i^\prime$. Then
 \begin{align*}
-&\ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right)\left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right)\right] = \\
-&\quad = \ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right)^2\right] =\\
-&\quad = \ex \left[\sum\nolimits_{t=1}^T w^2_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)^2\right] + \ex \left[\sum_{t, s =1, t\neq s}^T w_{t,T}(u,h)w_{s,T}(u,h) \, (Z_{it} - \bar{Z}_i)(Z_{is} - \bar{Z}_i)\right] =\\
-&\quad =\sum\nolimits_{t=1}^T w^2_{t,T}(u,h) \ex \left[Z_{it}^2 \right] - 2\sum\nolimits_{t=1}^T w^2_{t,T}(u,h) \ex \left[Z_{it}\bar{Z}_i \right] + \sum\nolimits_{t=1}^T w^2_{t,T}(u,h) \ex \left[\bar{Z}_{i}^2  \right] + \\
-&\quad \quad + \sum_{t, s =1, t\neq s}^T w_{t,T}(u,h)w_{s,T}(u,h)\ex [Z_{it} Z_{is}] -\sum_{t, s =1, t\neq s}^T w_{t,T}(u,h)w_{s,T}(u,h)\ex [\bar{Z}_{i} Z_{is}] -\\
-&\quad \quad - \sum_{t, s =1, t\neq s}^T w_{t,T}(u,h)w_{s,T}(u,h)\ex [Z_{it} \bar{Z}_{i}] + \sum_{t, s =1, t\neq s}^T w_{t,T}(u,h)w_{s,T}(u,h)\ex [\bar{Z}_{i}^2].
+&\ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \, (Z_{it} - \bar{Z}_i)\right)\left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \,  (Z_{{i}t} - \bar{Z}_{i}) \right)\right] = \\
+&\quad = \ex \left[\sum_{t=1}^T w_{t,T}(x_{k1},x_{k2})w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \, (Z_{it} - \bar{Z}_i)^2\right] +\\
+&\quad \quad + \ex \left[\sum_{t, s =1, t\neq s}^T w_{t,T}(x_{k1},x_{k2})w_{s,T}(x_{k^\prime 1},x_{k^\prime 2}) \, (Z_{it} - \bar{Z}_i)(Z_{is} - \bar{Z}_i)\right] =\\
+&\quad =\sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) w_{t, T}(x_{k^\prime 1},x_{k^\prime 2}) \ex \left[Z_{it}^2 \right] -\\
+&\quad \quad - 2\sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) w_{t, T} (x_{k^\prime 1},x_{k^\prime 2}) \ex \left[Z_{it}\bar{Z}_i \right] +\\
+&\quad \quad + \quad \sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) w_{t, T}(x_{k^\prime 1},x_{k^\prime 2}) \ex \left[\bar{Z}_{i}^2  \right] + \\
+&\quad \quad + \sum_{t, s =1, t\neq s}^T w_{t,T}(x_{k1},x_{k2})w_{s,T}(x_{k^\prime 1},x_{k^\prime 2})\ex [Z_{it} Z_{is}] -\\
+&\quad \quad - \sum_{t, s =1, t\neq s}^T w_{t,T}(x_{k1},x_{k2})w_{s,T}(x_{k^\prime 1},x_{k^\prime 2})\ex [\bar{Z}_{i} Z_{is}] -\\
+&\quad \quad - \sum_{t, s =1, t\neq s}^T w_{t,T}(x_{k1},x_{k2})w_{s,T}(x_{k^\prime 1},x_{k^\prime 2})\ex [Z_{it} \bar{Z}_{i}] +\\
+&\quad \quad +  \sum_{t, s =1, t\neq s}^T w_{t,T}(x_{k1},x_{k2})w_{s,T}(x_{k^\prime 1},x_{k^\prime 2})\ex [\bar{Z}_{i}^2].
 \end{align*}
-Since $\{Z_{it}\}_{t}$ are i.i.d. standard normal random variables, we have obvious equalities: $\ex \left[Z_{it}^2 \right] = 1$, $\ex \left[\bar{Z}_{i}^2\right] = 1/T$, $\ex [Z_{it} Z_{is}] = \ex[Z_{it}] \ex[Z_{is}] = 0$ for $t \neq s$ and $\ex [Z_{it} \bar{Z}_{i}] = 1/T$. Then, knowing that $\sum\nolimits_{t=1}^T w^2_{t,T}(u,h) = 1$ from \eqref{sum-weights}, we have
+Since $\{Z_{it}\}_{t}$ are i.i.d. standard normal random variables, we have obvious equalities: $\ex \left[Z_{it}^2 \right] = 1$, $\ex \left[\bar{Z}_{i}^2\right] = 1/T$, $\ex [Z_{it} Z_{is}] = \ex[Z_{it}] \ex[Z_{is}] = 0$ for $t \neq s$ and $\ex [Z_{it} \bar{Z}_{i}] = 1/T$. Then, 
 \begin{align*}
-&\ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right)^2\right] =\\
-&\quad =\sum\nolimits_{t=1}^T w^2_{t,T}(u,h) - \frac{2}{T}\sum\nolimits_{t=1}^T w^2_{t,T}(u,h) + \frac{1}{T}\sum\nolimits_{t=1}^T w^2_{t,T}(u,h)  - \\
-&\quad \quad  -\frac{2}{T}\sum_{t, s =1, t\neq s}^T w_{t,T}(u,h)w_{s,T}(u,h) + \frac{1}{T}\sum_{t, s =1, t\neq s}^T w_{t,T}(u,h)w_{s,T}(u,h) = \\
-&\quad =  1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2.
+&\ex \left[\left(\sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \, (Z_{it} - \bar{Z}_i)\right)\left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \,  (Z_{{i}t} - \bar{Z}_{i}) \right)\right] = \\
+&\quad =\sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) w_{t, T}(x_{k^\prime 1},x_{k^\prime 2}) - \frac{2}{T}\sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2})w_{t, T}(x_{k^\prime 1},x_{k^\prime 2}) +\\
+&\quad \quad +  \frac{1}{T}\sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2})w_{t,T}(x_{k^\prime 1},x_{k^\prime 2})  - \\
+&\quad \quad  -\frac{2}{T}\sum_{t, s =1, t\neq s}^T w_{t,T}(x_{k1},x_{k2})w_{s,T}(x_{k^\prime 1},x_{k^\prime 2}) +\\
+&\quad \quad + \frac{1}{T}\sum_{t, s =1, t\neq s}^T w_{t,T}(x_{k1},x_{k2})w_{s,T}(x_{k^\prime 1},x_{k^\prime 2}) = \\
+&\quad =  \sum_{t=1}^T w_{t,T}(x_{k1},x_{k2}) w_{t, T}(x_{k^\prime 1},x_{k^\prime 2}) - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \right)\left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \right).
 \end{align*}
-Then,
+For ease of notation, we denote the above value by $\mathcal{W}_{k, k^\prime, T}$. Then,
 \begin{align*}
-&\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
+&\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
 {\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] =\\
-&=	\ex\left[\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] \left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right)
+&=	\ex\left[\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] \cdot \mathcal{W}_{k, k^\prime, T}.
 \end{align*}
 and
 \begin{align*}
-&\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
+&\ex\left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }
 {\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\bigg| \X_{it}\right] =\\
-&=	\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right).
+&=	\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\cdot \mathcal{W}_{k, k^\prime, T}.
 \end{align*}
+
 
 \end{enumerate}
 Now we are ready to calculate the elements of the unconditional and conditional covariance matrices. In what follows, we consider the case of $Y_{i, j, 2k-1}$. The case $Y_{i, j, 2k}$ is calculated analogously, the only difference being the sign.
 \begin{align*}
 &\Sigma^Y_{(ij, 2k-1), (i^\prime j^\prime, 2k^\prime-1)}|\X_{it} :=  \ex[Y_{ij, 2k-1} Y_{i^\prime j^\prime, 2k^\prime-1} | \X_{it}] - \ex[Y_{ij, 2k-1}|\X_{it}]\ex[Y_{i^\prime j^\prime, 2k^\prime-1}|\X_{it}] =\\
 &=\ex \left[\frac{\pseudogaussiankernel_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} \frac{\pseudogaussiankernel_{i^\prime j^\prime , T}(x_{k^\prime 1},x_{k^\prime 2})}{\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} \bigg|\X_{it}\right] =\\
-& = \ex \left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} \bigg|\X_{it}\right]- \\
-&\quad - \ex \left[\frac{\widehat{\sigma}_j\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{jt} - \bar{Z}_j)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\bigg|\X_{it}\right] - \\
-&\quad - \ex \left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{j^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{j^\prime}t} - \bar{Z}_{j^\prime}) \right) }{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} \bigg|\X_{it}\right]+ \\
-&\quad + \ex \left[\frac{\widehat{\sigma}_j\widehat{\sigma}_{j^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, (Z_{jt} - \bar{Z}_j)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,  (Z_{{j^\prime}t} - \bar{Z}_{j^\prime}) \right) } {\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\bigg|\X_{it}\right]=\\
+& = \ex \left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} \bigg|\X_{it}\right]- \\
+&\quad - \ex \left[\frac{\widehat{\sigma}_j\widehat{\sigma}_{i^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(x_{k 1},x_{k 2}) \, (Z_{jt} - \bar{Z}_j)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \,  (Z_{{i^\prime}t} - \bar{Z}_{i^\prime}) \right) }{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\bigg|\X_{it}\right] - \\
+&\quad - \ex \left[\frac{\widehat{\sigma}_i\widehat{\sigma}_{j^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(x_{k 1},x_{k2}) \, (Z_{it} - \bar{Z}_i)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \,  (Z_{{j^\prime}t} - \bar{Z}_{j^\prime}) \right) }{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} \bigg|\X_{it}\right]+ \\
+&\quad + \ex \left[\frac{\widehat{\sigma}_j\widehat{\sigma}_{j^\prime}\left(\sum\nolimits_{t=1}^T w_{t,T}(x_{k 1},x_{k2}) \, (Z_{jt} - \bar{Z}_j)\right) \left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k^\prime 1},x_{k^\prime 2}) \,  (Z_{{j^\prime}t} - \bar{Z}_{j^\prime}) \right) } {\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\bigg|\X_{it}\right]=\\
 &= \begin{cases}
 0, \text{ if } i \neq i^\prime, j^\prime \text{ and } j \neq i^\prime, j^\prime;\\
-1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2, \text{ if } i = i^\prime \text{ and } j = j^\prime;\\
-\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right), \text{ if } i = i^\prime \text{ but } j \neq j^\prime;\\
-\frac{\widehat{\sigma}_j^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j}^2\}^{1/2}}\left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right), \text{ if } j = j^\prime \text{ but } i \neq i^\prime;\\
--\frac{\widehat{\sigma}_j^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{j}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right), \text{ if } j = i^\prime \text{ but } i \neq j^\prime;\\
--\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{i}^2\}^{1/2}}\left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right), \text{ if } i = j^\prime \text{ but }  j\neq i^\prime
+\mathcal{W}_{k, k^\prime, T}, \text{ if } i = i^\prime \text{ and } j = j^\prime;\\
+\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} \mathcal{W}_{k, k^\prime, T}, \text{ if } i = i^\prime \text{ but } j \neq j^\prime;\\
+\frac{\widehat{\sigma}_j^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j}^2\}^{1/2}}\mathcal{W}_{k, k^\prime, T}, \text{ if } j = j^\prime \text{ but } i \neq i^\prime;\\
+-\frac{\widehat{\sigma}_j^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{j}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}} \mathcal{W}_{k, k^\prime, T}, \text{ if } j = i^\prime \text{ but } i \neq j^\prime;\\
+-\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{i}^2\}^{1/2}} \mathcal{W}_{k, k^\prime, T}, \text{ if } i = j^\prime \text{ but }  j\neq i^\prime
 \end{cases} 
 \end{align*}
 since $i<j$ and $i^\prime < j^\prime$.
@@ -1144,12 +1152,30 @@ Similarly,
 &\Sigma^Y_{(ij, 2k-1), (i^\prime j^\prime, 2k^\prime-1)} := \ex[Y_{ij, 2k-1} Y_{i^\prime j^\prime, 2k^\prime-1}] - \ex[Y_{ij, 2k-1}]\ex[Y_{i^\prime j^\prime, 2k^\prime-1}] =\\
 &\quad= \begin{cases}
 0, \text{ if } i \neq i^\prime, j^\prime \text{ and } j \neq i^\prime, j^\prime;\\
-1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2, \text{ if } i = i^\prime \text{ and } j = j^\prime;\\
-\ex\left[\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right]\left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right), \text{ if } i = i^\prime \text{ but } j \neq j^\prime;\\
-\ex\left[\frac{\widehat{\sigma}_j^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j}^2\}^{1/2}}\right]\left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right), \text{ if } j = j^\prime \text{ but } i \neq i^\prime;\\
--\ex\left[\frac{\widehat{\sigma}_j^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{j}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right]\left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right), \text{ if } j = i^\prime \text{ but } i \neq j^\prime;\\
--\ex\left[\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{i}^2\}^{1/2}}\right]\left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right), \text{ if } i = j^\prime \text{ but }  j\neq i^\prime.
+\mathcal{W}_{k, k^\prime, T}, \text{ if } i = i^\prime \text{ and } j = j^\prime;\\
+\ex\left[\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right]\cdot \mathcal{W}_{k, k^\prime, T}, \text{ if } i = i^\prime \text{ but } j \neq j^\prime;\\
+\ex\left[\frac{\widehat{\sigma}_j^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{j}^2\}^{1/2}}\right]\cdot \mathcal{W}_{k, k^\prime, T}, \text{ if } j = j^\prime \text{ but } i \neq i^\prime;\\
+-\ex\left[\frac{\widehat{\sigma}_j^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{j}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right]\cdot \mathcal{W}_{k, k^\prime, T}, \text{ if } j = i^\prime \text{ but } i \neq j^\prime;\\
+-\ex\left[\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i^\prime}^2 + \widehat{\sigma}_{i}^2\}^{1/2}}\right]\cdot \mathcal{W}_{k, k^\prime, T}, \text{ if } i = j^\prime \text{ but }  j\neq i^\prime.
 \end{cases} 
+\end{align*}
+In order to apply Lemma \ref{lemma-chern}, we need to check that there exist two constants such that the elements on the diagonal of the unconditional covariance matrix are bounded from below and above by these constants. Specifically,
+\begin{align*}
+\Sigma_{(ij, 2k-1), (ij, 2k-1)} &= \mathcal{W}_{k, k, T} = \\
+&= \sum_{t=1}^T w^2_{t,T}(x_{k1},x_{k2}) - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \right)^2 = \\
+& = 1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \right)^2.
+\end{align*}
+Now remember that due to \eqref{weights-cauchy-schwarz}, for all $(u, h) \in \mathcal{G}_T$ we have
+\begin{align*}
+\Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big| \leq \sqrt{2Th + 2} \leq \sqrt{2Th_{\max} +2}.
+\end{align*}
+ then we can bound the diagonal elements of the unconditional covariance matrix as follows:
+\begin{align*}
+1 - 2h_{\max} - 2/T \leq \Sigma_{(ij, 2k-1), (ij, 2k-1)} = 1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(x_{k1},x_{k2}) \right)^2 \leq 1.
+\end{align*}
+\textcolor{red}{Now we take $h_{\max} \leq 1/3$ (for example! anything smaller than 1/2 will do)}, then for all $T \ge 7$ and for all $1 \le i < j \le n$ and $k\in \{1, \ldots, p\}$ we have
+\begin{align*}
+0 < 1/21 \leq 1 - 2 h_{\max} - 2/T \leq \Sigma_{(ij, 2k-1), (ij, 2k-1)} \leq 1.
 \end{align*}
 Now we can calculate 
 \begin{align*}
@@ -1157,10 +1183,9 @@ Now we can calculate
 &\left|\Sigma^{Y}_{(ij, 2k), (i^\prime j^\prime, 2k^\prime-1)}|\X_{it} - \Sigma^{Y}_{(ij, 2k), (i^\prime j^\prime, 2k^\prime-1)}\right|,\\
 &\left|\Sigma^{Y}_{(ij, 2k-1), (i^\prime j^\prime, 2k^\prime)}|\X_{it} - \Sigma^{Y}_{(ij, 2k-1), (i^\prime j^\prime, 2k^\prime)}\right|,\\
 &\left|\Sigma^{Y}_{(ij, 2k-1), (i^\prime j^\prime, 2k^\prime-1)}|\X_{it} - \Sigma^{Y}_{(ij, 2k-1), (i^\prime j^\prime, 2k^\prime-1)}\right|\big\} = \\
-\max_{\substack{1 \leq i < j \leq n,\\ 1 \le j^\prime \le n, j^\prime \neq i, j^\prime \neq j}} &\left| \frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}-  \ex\left[\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] \right| \cdot \\
-&\quad \cdot \left(1 - \frac{1}{T} \left( \sum\nolimits_{t=1}^T w_{t,T}(u,h) \right)^2\right)
+\max_{\substack{1 \leq i < j \leq n,\\ 1 \le j^\prime \le n, j^\prime \neq i, j^\prime \neq j}} &\left| \frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}-  \ex\left[\frac{\widehat{\sigma}_i^2}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}\{\widehat{\sigma}_{i}^2 + \widehat{\sigma}_{j^\prime}^2\}^{1/2}}\right] \right|\cdot  \max_{1 \le k, k^\prime \le p} |\mathcal{W}_{k, k^\prime, T}|
 \end{align*}
-
+\textcolor{red}{Here the first factor is $O_P(1)$ (since we are taking the maximum over the finite number of random values) and the second factor is $O(1)$ (definitely not converging to $0$ as was shown in the calculations directly above). So the question: where am I going wrong?}
 \end{proof}
 
 
