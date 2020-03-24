@@ -169,16 +169,14 @@ Given $\widehat{\bm{\beta}}_i$, consider an appropriate estimator $\widehat{\alp
 
 Note that $\frac{1}{T}\sum_{i=1}^T \varepsilon_{it} = O_P(T^{-1/2})$ and $\frac{1}{T}\sum_{i=1}^T m_i(t/T) = O(T^{-1})$ due to Lipschitz continuity of $m_i$ and normalization $\int_{0}^1 m_i(u)du = 0$. Furthermore, $\frac{1}{T}\sum_{t=1}^T  \mathbf{X}_{it} = O_P(1)$ by Chebyshev's inequality and $\widehat{\bm{\beta}}_i - \bm{\beta}_i = O_P (T^{-1/2})$. Plugging all these results together in \eqref{alpha-est}, we get that $\widehat{\alpha}_i - \alpha_i = O_P(T^{-1/2})$.Thus, the unobserved variable $Y_{it}^\circ := Y_{it} - \bm{\beta}_i^\top \mathbf{X}_{it} - \alpha_i = m_i(t/T) + \varepsilon_{it}$ can be well approximated by $\widehat{Y}_{it} = Y_{it} -\widehat{\alpha}_i - \widehat{\bm{\beta}}_i^\top \mathbf{X}_{it} = Y_{it}^\circ + O_P(T^{-1/2})$.
 
-
-
-We further let $\widehat{\sigma}_i^2$ be an estimator of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_{i0}, \varepsilon_{i\ell})$ which is computed from the constructed sample $\{ \widehat{Y}_{it}: 1 \le t \le T \}$. We thus regard $\widehat{\sigma}_i^2 = \widehat{\sigma}_i^2(\widehat{Y}_{i1},\ldots,\widehat{Y}_{iT})$ as a function of the variables $\widehat{Y}_{it}$ for $1 \le t \le T$. Throughout the section, we assume that $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$. Details on how to construct estimators of $\sigma_i^2$ are deferred to Section \ref{sec-error-var}. 
+We now turn to the estimator of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_{i0}, \varepsilon_{i\ell})$. For the moment, we assume that the long-run variance does not depend on $i$, that is $\sigma_i^2 = \sigma^2$ for all $i$. We further let $\widehat{\sigma}_i^2$ be an estimator of $\sigma_i^2 = \sigma^2$ which is computed from the constructed sample $\{ \widehat{Y}_{it}: 1 \le t \le T \}$. We thus regard $\widehat{\sigma}_i^2 = \widehat{\sigma}_i^2(\widehat{Y}_{i1},\ldots,\widehat{Y}_{iT})$ as a function of the variables $\widehat{Y}_{it}$ for $1 \le t \le T$. Hence, whereas the true long-run variance is the sme for all time series, the estimators are different. Throughout the section, we assume that $\widehat{\sigma}_i^2 = \sigma_i + o_p(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$. Details on how to construct $\widehat{\sigma}_i^2$ are deferred to Section \ref{sec-error-var}. 
 
 Moreover, in the proof of our main theorem \ref{theo-stat-equality} we will need additional auxiliary statistics that do not include the covariates $\mathbf{X}_{it}$. Hence, we imagine that we know the parameters $\bm{\beta}_i$ and consider the unobserved variables 
 \begin{align*}
 \doublehattwo{Y}_{it} :&= Y_{it} - \bm{\beta}_i^\top \mathbf{X}_{it} -  \frac{1}{T}\sum_{t=1}^T \big(Y_{it} - \bm{\beta}_i^\top \mathbf{X}_{it}\big) =\\
 &=m_i \Big( \frac{t}{T} \Big)  - \frac{1}{T}\sum_{t=1}^T  m_i \Big( \frac{t}{T} \Big) + \varepsilon_{it} - \frac{1}{T}\sum_{t=1}^T \varepsilon_{it}.
 \end{align*}
-For this auxiliary statistics we will use the auxiliary estimator $\doublehattwo{\sigma}_i^2$ of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_{i0}, \varepsilon_{i\ell})$ which is computed from the constructed sample $\{ \doublehattwo{Y}_{it}: 1 \le t \le T \}$. We thus regard $\doublehattwo{\sigma}_i^2 = \doublehattwo{\sigma}_i^2(\doublehattwo{Y}_{i1},\ldots,\doublehattwo{Y}_{iT})$ as a function of the variables $\doublehattwo{Y}_{it}$ for $1 \le t \le T$. As with $\widehat{\sigma}_i^2$, we assume that $\doublehattwo{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$.
+For this auxiliary statistics we will use the auxiliary estimator $\doublehattwo{\sigma}_i^2$ of the long-run error variance $\sigma_i$ which is computed from the augmented sample $\{ \doublehattwo{Y}_{it}: 1 \le t \le T \}$. We thus regard $\doublehattwo{\sigma}_i^2 = \doublehattwo{\sigma}_i^2(\doublehattwo{Y}_{i1},\ldots,\doublehattwo{Y}_{iT})$ as a function of the variables $\doublehattwo{Y}_{it}$ for $1 \le t \le T$. As with $\widehat{\sigma}_i^2$, we assume that $\doublehattwo{\sigma}_i^2 = \sigma^2 + o_p(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$.
 
 We are now ready to introduce the multiscale statistic for testing the hypothesis $H_0: m_1 = m_2 = \ldots = m_n$. For any pair of time series $i$ and $j$, we define the kernel averages
 \[ \widehat{\psi}_{ij,T}(u,h) = \sum\limits_{t=1}^T w_{t,T}(u,h)(\widehat{Y}_{it} - \widehat{Y}_{jt}), \]
@@ -218,8 +216,14 @@ that is, we define it as the maximal distance $\widehat{\Psi}_{ij,T}$ between an
 
 
 Let $Z_{it}$ for $1 \le t \le T$ and $1 \le i \le n$ be independent standard normal random variables which are independent of the error terms $\varepsilon_{it}$ and the covariates $\mathbf{X}_{it}$. Denote the empirical average of the variables $Z_{i1},\ldots,Z_{iT}$ by $\bar{Z}_{i,T} = T^{-1} \sum_{t=1}^T Z_{it}$. To simplify notation, we write $\bar{Z}_i = \bar{Z}_{i,T}$ in what follows. For each $i$ and $j$, we introduce the Gaussian statistic 
-\[\Phi_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \big\{ \Big|\frac{\phi_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\}, \] 
-where $\phi_{ij,T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}$. Moreover, we define the statistic
+\begin{align}\label{Phi-ij-statistic}
+\Phi_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij,T}(u,h)}{(\sigma_i^2 + \sigma_j^2)^{1/2}}\Big| - \lambda(h) \Big\},
+\end{align}
+where $\phi_{ij,T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \sigma_i (Z_{it} - \bar{Z}_i) - \sigma_j (Z_{jt} - \bar{Z}_j) \big\}$. Since by our assumption $\sigma_i^2 = \sigma^2_j = \sigma^2$, we can rewrite the Gaussian statistic as follows:
+\[\Phi_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \left\{\frac{1}{\sqrt{2}} \Big|\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ (Z_{it} - \bar{Z}_i) - (Z_{jt} - \bar{Z}_j) \big\}\Big| - \lambda(h) \right\}, \] 
+which means that $\Phi_{ij,T}$ does not depend on any unknown quantities such as $\sigma^2$ and the distribution of this random valuable is fully known. However, we will stick to the notation in \eqref{Phi-ij-statistic} for the sake of similarity to $\widehat{\Psi}_{ij,T}$.
+
+Moreover, we define the statistic
 \begin{align}\label{Phi-statistic}
 \Phi_{n,T} = \max_{1 \le i < j \le n} \Phi_{ij,T}
 \end{align}
@@ -237,7 +241,7 @@ where
 \[ \widehat{\Phi}_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \} \]
 and $\widehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) + (\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - (\varepsilon_{jt} - \bar{\varepsilon}_j) - \linebreak - (\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\}$ with $\bar{\varepsilon}_i = \bar{\varepsilon}_{i,T} = T^{-1} \sum_{t=1}^T \varepsilon_{it}$ and $ \bar{\mathbf{X}}_{i} =  \bar{\mathbf{X}}_{i, T} = T^{-1}\sum_{t=1}^T  \mathbf{X}_{it}$ respectively. Our first theoretical result characterizes the asymptotic behaviour of the statistic $\widehat{\Phi}_{n,T}$. 
 \begin{theorem}\label{theo-stat-equality}
-Suppose that the error processes $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ are independent across $i$ and satisfy \ref{C-err1}--\ref{C-err3} for each $i$. Moreover, let \ref{C-reg1}--\ref{C-h} be fulfilled and assume that $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ and $\doublehattwo{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$ (\textcolor{red}{RESTRICTION}) for each $i$. Then 
+Suppose that the error processes $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ are independent across $i$ and satisfy \ref{C-err1}--\ref{C-err3} for each $i$. Moreover, let \ref{C-reg1}--\ref{C-h} be fulfilled and assume that for all $i \in \{1, \ldots, n\}$ we have $\sigma_i^2 = \sigma^2$, $\widehat{\sigma}_i^2 = \sigma^2 + o_p(\rho_T)$ and $\doublehattwo{\sigma}_i^2 = \sigma^2 + o_p(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$. Then 
 \[ \pr \big( \widehat{\Phi}_{n,T} \le q_{n,T}(\alpha) \big) = (1 - \alpha) + o(1) \]
 \end{theorem}
 Theorem \ref{theo-stat-equality} is the main stepping stone to derive the theoretical properties of our multiscale test. The proof of the theorem is provided in the Section \ref{subsec-appendix-stat-equality}.
@@ -360,22 +364,18 @@ In this section, we prove the theoretical results from Section \ref{sec-test}. W
 
 \begin{table}[h!]
   \begin{center}
-    \caption{Relationship between statistics used in the proofs}
-    \label{tab:app-table1}
-    \begin{tabular}{c|c|c|c|c|c} 
-       &$ \widehat{\Psi}_{n, T}$& $ \widehat{\Phi}_{n,T}$ &$ \doublehattwo{\Phi}_{n, T}$ &      $\widetilde{\Phi}_{n, T}$ & $ \gaussianstat_{n, T}$ \\
+    \caption{Relationship between statistics used in the proofs}\label{tab:app-table1}
+    	\vskip 3mm
+    	\begin{tabular}{c|c|c|c|c} 
+       &$ \widehat{\Phi}_{n, T}$& $ \doublehattwo{\Phi}_{n,T}$ &$ \widetilde{\Phi}_{n, T}$ &      ${\Phi}_{n, T}$ \\
       \hline
-     %$ \widehat{\Psi}_{n,T}$ & & &&&& \\	\hline
-       $ \widehat{\Phi}_{n, T}$ & Equal under $H_0$ && && \\
+       $ \widehat{\Psi}_{n, T}$ & Equal under $H_0$ && & \\
       \hline
-      $ \doublehattwo{\Phi}_{n, T}$ & &\begin{tabular}[c]{@{}l@{}} Close due to \\Prop. \ref{propA-intermediate-relation-2} \end{tabular}  &&&    \\     
+      $ \widehat{\Phi}_{n, T}$ & &\begin{tabular}[c]{@{}l@{}} Close due to \\Prop. \ref{propA-intermediate-relation-2} \end{tabular}  &&    \\     
       \hline
-      $\widetilde{\Phi}_{n, T}$  & &  &\begin{tabular}[c]{@{}l@{}} Same distribution \\ (Prop. \ref{propA-strong-approx-equality})\end{tabular}&&  \\
+      $\doublehattwo{\Phi}_{n, T}$  & &  &\begin{tabular}[c]{@{}l@{}} Same distribution \\ (Prop. \ref{propA-strong-approx-equality})\end{tabular}&  \\
       \hline
-	 $ \gaussianstat_{n, T}$ & & &&\begin{tabular}[c]{@{}l@{}} Lemma \ref{lemma1-theo-stat} \\ with the help of \\Prop. \ref{propA-strong-approx-equality} and \\ Prop. \ref{propA-anticon-equality}\end{tabular}&      \\
-      \hline
-	$ \pseudogaussianstat_{n, T}$    & & &&& \begin{tabular}[c]{@{}l@{}} Prop. \ref{propA-gaussian-relation} and \\
-	Prop. \ref{propA-pseudogaussian-relation}\end{tabular} \\
+	 $ \widetilde{\Phi}_{n, T}$ & & &&\begin{tabular}[c]{@{}l@{}} Lemma \ref{lemma1-theo-stat} \\ with the help of \\Prop. \ref{propA-strong-approx-equality} and \\ Prop. \ref{propA-anticon-equality}\end{tabular}      \\
         	\hline
     \end{tabular}
   \end{center}
@@ -411,18 +411,11 @@ In the proof of Theorem \ref{theo-stat-equality}, we use a number of different t
 \end{align}
 with $[\widetilde{\varepsilon}_{i1},\ldots,\widetilde{\varepsilon}_{iT}] \stackrel{\mathcal{D}}{=} [\varepsilon_{i1},\ldots,\varepsilon_{iT}]$ for each $i$ and $T$.
 
-\item The true Gaussian statistics that differs from $\pseudogaussianstat_{n,T}$ only by using true long-run variances $\sigma_i^2$ in construction of the statistics instead of the estimated ones $\widehat{\sigma}_i^2$:  
-\begin{align}\label{eq-stat-5}
-	\gaussianstat_{n,T}  &= \max_{1 \le i < j \le n} \gaussianstat_{ij,T}, \nonumber\\
-      	\gaussianstat_{ij,T} &= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\gaussiankernel_{ij,T}(u,h)}{(\sigma_i^2 + \sigma_j^2)^{1/2}}\Big| - \lambda(h) \Big\},\\
-       \gaussiankernel_{ij,T}(u,h) &= \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \sigma_i (Z_{it} - \bar{Z}_i) - \sigma_j (Z_{jt} - \bar{Z}_j) \big\}.\nonumber
-\end{align}
-
-\item The ``Gaussian'' statistics that is calculated for the critical values (defined in \eqref{Phi-statistic}):
+\item The Gaussian statistics that is used to calculate the critical values (defined in \eqref{Phi-statistic}):
 \begin{align}\label{eq-stat-6}
-	\pseudogaussianstat_{n,T}  &= \max_{1 \le i < j \le n} \pseudogaussianstat_{ij,T}, \nonumber\\
-      	\pseudogaussianstat_{ij,T} &= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\pseudogaussiankernel_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\},\\
-	 \pseudogaussiankernel_{ij,T}(u,h) & = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}.\nonumber
+	\gaussianstat_{n,T}  &= \max_{1 \le i < j \le n} \gaussianstat_{ij,T}, \nonumber\\
+      	\gaussianstat_{ij,T} &= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\gaussiankernel_{ij,T}(u,h)}{({\sigma}_i^2 + {\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\},\\
+	 \gaussiankernel_{ij,T}(u,h) & = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{{\sigma}_i (Z_{it} - \bar{Z}_i) - {\sigma}_j (Z_{jt} - \bar{Z}_j) \big\}.\nonumber
 \end{align}
 \end{itemize}
 
