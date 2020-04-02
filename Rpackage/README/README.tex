@@ -1,0 +1,68 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb,amsthm,graphicx}
+\usepackage{enumitem}
+\usepackage{color}
+\usepackage{epsfig}
+\usepackage{graphics}
+\usepackage{pdfpages}
+\usepackage{subcaption}
+\usepackage[font=small]{caption}
+\usepackage[hang,flushmargin]{footmisc} 
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage[mathscr]{euscript}
+\usepackage{natbib}
+\usepackage{setspace}
+\usepackage{mathrsfs}
+\usepackage[Q=yes]{examplep}
+\usepackage[T1]{fontenc}
+%\usepackage{hanging}
+\usepackage[left=3cm,right=3cm,bottom=3cm,top=3cm]{geometry}
+\renewcommand{\baselinestretch}{1.05}\normalsize
+\parindent0pt
+
+
+
+
+\begin{document}
+
+
+
+\begin{center}
+{\LARGE \bf Code documentation}
+\end{center}
+\vspace{0.5cm}
+
+
+\setlength{\parskip}{0.2cm} 
+This document describes the R code that can be used to replicate the empirical results reported in the paper \textit{Multiscale Inference and Long-Run Variance Estimation in Nonparametric Regression with Time Series Errors}. The overall structure of the code is as follows. There are four main files each of which produces a specific part of the simulations and applications:
+\vspace{0.2cm}
+
+\everypar{\hangafter=1\hangindent=1.45cm\relax}
+\verb|main_size.r| \hspace{1pt} produces the size simulations for our multiscale test and dependent SiZer reported in Section 5.1.1.
+
+\verb|main_power.r| \hspace{1pt} produces the power simulations for our multiscale test and dependent SiZer reported in Section 5.1.2.
+
+\verb|main_lrv.r| \hspace{1pt} produces the simulation results for our long-run variance estimator, the estimator of Hall and Van Keilegom (2003) and the oracle estimator reported in Section 5.2.
+
+\verb|main_app.r| \hspace{1pt} produces the application results from Section 6, where our multiscale test is applied to UK and global temperature data.
+
+
+\everypar{\hangafter=0\relax}
+These main files read in a number of functions which are collected in the folder \verb|functions|. The simulation and application results are stored either as figures or as \verb|.tex| files (for tables) in the folder \verb|plots|. The tables and figures are as in the paper up to seed.
+\vspace{0.2cm}
+
+Each main file is divided into several blocks, each block being responsible for one part of the calculations with either a table or a series of plots as a result. Each block has a title that shortly describes what it is responsible for. The blocks are separated by a series of hashes ($\#$) and are independent of each other. If you want to run only one specific part of the calculations, you need to run the code in the very beginning of the main file (that contains all the references to the libraries and auxiliary functions) and then the code of the corresponding block. You do not need to run previous blocks.
+\vspace{0.2cm}
+
+In order to run the code on your computer, you will need R packages \verb|Rcpp| and \verb|xtable|. Theses packages are freely available on \verb|CRAN|.
+\vspace{0.2cm}
+
+All programs are written in R with some functions in C++. They are all quite self-explanatory and commented. The code is self-sufficient and the parts from C++ are read into the R code automatically. 
+%parsed on the fly, the shared library is then built and its exported functions and Rcpp modules are made available in the specified environment. Additional compilation is not necessary. 
+
+
+
+
+\end{document}

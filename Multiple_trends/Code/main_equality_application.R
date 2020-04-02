@@ -2,13 +2,13 @@ library(car)
 library(xtable)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
-source("Equality/C_code/psihat_statistic.R")
-dyn.load("Equality/C_code/psihat_statistic_ll.dll")
-dyn.load("Equality/C_code/psihat_statistic_nw.dll")
-source("Equality/C_code/estimating_sigma.R")
-dyn.load("Equality/C_code/estimating_sigma.dll")
-source("Equality/functions.R")
-source("Equality/testing_different_time_trends.R")
+source("C_code/psihat_statistic.R")
+dyn.load("C_code/psihat_statistic_ll.dll")
+dyn.load("C_code/psihat_statistic_nw.dll")
+source("C_code/estimating_sigma.R")
+dyn.load("C_code/estimating_sigma.dll")
+source("functions/functions.R")
+source("functions/testing_different_time_trends.R")
 
 
 ##############################
@@ -25,7 +25,7 @@ kernel_method <- "ll" #Only "nw" (Nadaraya-Watson) and "ll" (local linear) metho
 ###########################################
 
 for (i in 1:N_ts){
-  filename = paste("Equality/data/txt", i, ".txt", sep = "")
+  filename = paste("data/txt", i, ".txt", sep = "")
   temperature_tmp  <- read.table(filename, header = FALSE, skip = 7,
                                  col.names = c("year", "month", "tmax", "tmin", "af", "rain", "sun", "aux"), fill = TRUE,  na.strings = c("---"))
   monthly_temp_tmp <- data.frame('1' = as.numeric(temperature_tmp[['year']]), '2' = as.numeric(temperature_tmp[['month']]),
