@@ -94,8 +94,7 @@ double s_t_2(double u, double h, int T){
 }
 
 
-// [[Rcpp::export]]
-Rcpp::List kernel_averages(int T, Rcpp::NumericVector gset, Rcpp::NumericVector correct, Rcpp::NumericVector data, double sigmahat, int N){
+NumericVector kernel_average(int T, NumericVector gset, NumericVector correct, NumericVector data, double sigmahat, int N){
 
    /* Inputs: 
       T        	  length of time series
@@ -118,8 +117,8 @@ Rcpp::List kernel_averages(int T, Rcpp::NumericVector gset, Rcpp::NumericVector 
 
    NumericVector result(N);
    NumericVector result_cor(N);
-   NumericVector stat_ms(1);
-   
+    
+
    for(i = 0; i < N; i++){
       u = gset[i];
       h = gset[i+N];
@@ -148,13 +147,57 @@ Rcpp::List kernel_averages(int T, Rcpp::NumericVector gset, Rcpp::NumericVector 
       }
       result[i] = result_temp / (sqrt(weight_norm) * sigmahat);
       result_cor[i] = awert(result[i]) - correct[i];
-      if(i == 0){
-        stat_ms[0] = result_cor[i];
-      } else if (stat_ms[0] < result_cor[i]){
-        stat_ms[0] = result_cor[i];
-      }
    }
-  return Rcpp::List::create(Rcpp::Named("vals") = result,
-                            Rcpp::Named("vals_cor") = result_cor,
-                            Rcpp::Named("stat") = stat_ms);
+  return (result_cor);
+}
+
+// [[Rcpp::export]]
+NumericVector gaussian_stat_distr(int T, int N_ts, int SimRuns, Rcpp::NumericVector gset, int N,
+                                        Rcpp::NumericVector sigma_vec){
+  
+  /* Inputs: 
+    T        	  length of time series
+    N_ts        number of time series
+    SimRuns     number of simulations to produce the quantiles
+    gset        vector of location-bandwidth points (u_1,...,u_N,h_1,...h_N)
+    correct     vector of corrections of lenghth N (lambda(h_1), ..., lambda(h_N))
+    data        time series of length T (y_1, ..., y_T)
+    N           number of location-bandwidth points in gset
+  
+  Output:
+  list with the following components
+  vals        vector of normalised kernel averages 
+  (\phi(u_1,h_1)/sigmahat, \phi(u_2,h_2)/sigmahat,...,\phi(u_N,h_N)/sigmahat)
+  vals_cor    vector of absolute value of normalised kernel averages with correction 
+  (abs(\phi(u_1,h_1)/sigmahat) - \lambda(h_1),...,abs(\phi(u_N,h_N)/sigmahat) - \lambda(h_N))
+  stat        multiscale statistic calculated as max(vals_cor)
+  */
+  Rcpp::NumericVector Phi_vec(SimRuns);
+  Rcpp::NumericVector correct(N);
+  Rcpp::NumericMatrix Phi(N_ts, N_ts);
+  NumericVector Phi_ij_tmp(N);
+  NumericVector data(T);
+  int pos, i, j, k;
+  double sigmahat;
+  
+  for (k = 0; k < N; k++){
+    correct[k] = sqrt(2 * log(1 / (2 * gset[k+N])));
+  }
+    
+  for(pos = 0; pos < SimRuns; pos++){
+    NumericMatrix Z(T, N_ts);
+    for (i = 0; i < N_ts; i++){
+      Z(_, i) = rnorm(T);
+    }
+    for (i = 0; i < N_ts - 1; i++){
+      for (j = i + 1; j < N_ts; j++){
+        data = sigma_vec(i) * (Z(_, i) - mean(Z(_, i)))- sigma_vec(j) * (Z(_, j) - mean(Z(_, j)));
+        sigmahat = sqrt(sigma_vec(i) * sigma_vec(i) + sigma_vec(j) * sigma_vec(j));
+        Phi_ij_tmp = kernel_average(T, gset, correct, data, sigmahat, N);
+        Phi(i, j) = max(Phi_ij_tmp);
+      }
+    }
+    Phi_vec[pos] = max(Phi);
+  }
+  return(Phi_vec);
 }
