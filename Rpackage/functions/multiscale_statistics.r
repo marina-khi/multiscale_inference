@@ -15,13 +15,6 @@ multiscale_statistics <- function(data, sigmahat, grid){
   gset    <- grid$gset
   correct <- grid$correct
 
-  T                      <- as.integer(length(data)) 
-  N                      <- as.integer(dim(grid$gset)[1])
-  gset_cpp               <- as.matrix(gset)
-  gset_cpp               <- as.vector(gset_cpp) 
-  storage.mode(gset_cpp) <- "double"
-  data                   <- as.vector(data)
-  correct                <- as.vector(correct)
   
   result     <- kernel_averages(T, gset_cpp, correct, data, sigmahat, N)
   values     <- as.vector(result$vals)

@@ -20,70 +20,51 @@ source("functions/multiscale_quantiles.r")
 source("functions/multiscale_testing.r")
 source("functions/minimal_intervals.r")
 source("functions/functions.r")
-sourceCpp("functions/multiscale_quantiles.cpp")
-sourceCpp("functions/kernel_averages.cpp")
+sourceCpp("functions/multiscale_statistics.cpp")
 
-
-N_ts = 25
-SimRuns = 1000
-Tlen = 300
-grid <- grid_construction(Tlen)
-gset <- grid$gset
-
-N                      <- as.integer(dim(grid$gset)[1])
-gset_cpp               <- as.matrix(gset)
-gset_cpp               <- as.vector(gset_cpp) 
-storage.mode(gset_cpp) <- "double"
-
-set.seed(1)
-sigma_vec <- rep(1, N_ts)
-tic("With C method")
-a <- gaussian_stat_distr(T = Tlen, N_ts = N_ts, SimRuns = SimRuns, gset = gset_cpp, N = N,
-                    sigma_vec = sigma_vec)
-toc()
-set.seed(1)
-b <- multiscale_quantiles(T = Tlen, grid = grid, sigma_vector = sigma_vec, SimRuns= SimRuns, N_ts = N_ts)
-  
-all.equal(a, b)
 
 ##############################
 #Defining necessary constants#
 ##############################
 
-N_ts          <- 34 #number of different time series for application to analyze
-alpha         <- 0.05 #confidence level for application
+N_ts    <- 15 #number of different time series for application to analyze
+alpha   <- 0.05 #confidence level for application
+SimRuns <- 100
 
 
 ###########################################
 #Loading the real station data for England#
 ###########################################
 
+data_frame <- read.csv("data/returns.csv", stringsAsFactors = FALSE)
+a <- split(data_frame[, c(1, 2, 9)], data_frame$PERMNO)
+
+
 for (i in 1:N_ts){
-  filename = paste("data/txt", i, ".txt", sep = "")
-  temperature_tmp  <- read.table(filename, header = FALSE, skip = 7,
-                                 col.names = c("year", "month", "tmax", "tmin", "af", "rain", "sun", "aux"), fill = TRUE,  na.strings = c("---"))
-  monthly_temp_tmp <- data.frame('1' = as.numeric(temperature_tmp[['year']]), '2' = as.numeric(temperature_tmp[['month']]),
-                                 '3' = (temperature_tmp[["tmax"]] + temperature_tmp[["tmin"]]) / 2)
-  colnames(monthly_temp_tmp) <- c('year', 'month', paste0("tmean", i))
+  returns_tmp <- a[[i]][, c(2, 3)]
+  returns_tmp[,2] <- log(as.numeric(returns_tmp[, 2])^2)
+  colnames(returns_tmp) <- c('DATE', paste0("returns", i))
   if (i == 1){
-    monthly_temp <- monthly_temp_tmp
+    returns <- returns_tmp
   } else {
-    monthly_temp <- merge(monthly_temp, monthly_temp_tmp, by = c("year", "month"), all.x = TRUE, all.y = TRUE)
+    returns <- merge(returns, returns_tmp, by = 'DATE', all.x = TRUE, all.y = TRUE)
   }
 }
 
-rm(monthly_temp_tmp, temperature_tmp)
+rm(a, returns_tmp)
 
-monthly_temp <- subset(monthly_temp, year >= 1986) #Subsetting years 1986 - 2018 because of closed and new stations
-monthly_temp <- monthly_temp[,colSums(is.na(monthly_temp)) <= 2] #Ommitting the time series with too sparse data
-monthly_temp <- na.omit(monthly_temp)#Deleting the rows with ommitted variables
+returns <- as.matrix(returns)
 
-date               <- paste(sprintf("%02d", monthly_temp$month), monthly_temp$year,  sep='-')
-monthly_temp       <- cbind(date, monthly_temp)
-TemperatureColumns <- setdiff(names(monthly_temp), c("year", "month", "date"))
-Tlen               <- nrow(monthly_temp)
-N_ts               <- ncol(monthly_temp) - 3 #Updating the number of time series because of dropped stations
+returns <- returns[,colSums(is.na(returns)) <= 2] #Ommitting the time series with too sparse data
+returns[!is.finite(returns)] <- NA
+returns <- na.omit(returns)#Deleting the rows with ommitted variables
 
+for (i in 2:(N_ts+1)){
+  returns[, i] <- returns[, i] - mean(returns[, i])
+}
+
+Tlen          <- nrow(returns)
+N_ts          <- ncol(returns) - 1 #Updating the number of time series because of dropped stations
 
 ######################
 #Deseasonalizing data#
@@ -102,34 +83,22 @@ order <- 1
 q     <- 25
 r.bar <- 10
 
-#Construct grid
-grid    <- grid_construction(Tlen)
-gset    <- grid$gset
-u.grid  <- sort(unique(gset[,1]))
-h.grid  <- sort(unique(gset[,2]))
-correct <- sqrt(2*log(1/(2*gset[,2])))
-
-# Compute kernel weights and critical value for multiscale test
-Tlen                   <- as.integer(Tlen) 
-N                      <- as.integer(dim(grid$gset)[1])
-gset_cpp               <- as.matrix(grid$gset)
-gset_cpp               <- as.vector(gset_cpp) 
-storage.mode(gset_cpp) <- "double"
 
 #Calculating each sigma_i separately
-sigmahat_vector_2 <- c()
-for (i in TemperatureColumns){
-  AR.struc          <- AR_lrv(data = monthly_temp[[i]], q = q, r.bar = r.bar, p=order)
-  sigma_hat_i       <- sqrt(AR.struc$lrv)
-  sigmahat_vector_2 <- c(sigmahat_vector_2, AR.struc$lrv)
+sigmahat_vector <- c()
+for (i in 2:(N_ts+1)){
+  AR.struc        <- AR_lrv(data = returns[, i], q = q, r.bar = r.bar, p=order)
+  sigma_hat_i     <- sqrt(AR.struc$lrv)
+  sigmahat_vector <- c(sigmahat_vector, sigma_hat_i)
 }
 
-SimRuns <- 10
 
 
 #Calculating the statistic for real data
-statistic <- multiscale_testing(alpha, y_data, N_ts, g_t_set, sigmahat_vector_2, kernel_method)
+grid <- grid_construction(Tlen)
+gset <- grid$gset
 
+result <- multiscale_testing(alpha, returns[, -1], grid, sigma_vec = sigmahat_vector, N_ts = N_ts)
 
 
 
