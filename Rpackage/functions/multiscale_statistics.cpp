@@ -209,12 +209,12 @@ Rcpp::NumericMatrix multiscale_statistics_multiple(int T, int N_ts, Rcpp::Numeri
                               int N, Rcpp::NumericVector sigma_vec){
 
    /* Inputs: 
-    T        	 length of time series
+    T           length of time series
     N_ts        number of time series
-    gset        vector of location-bandwidth points (u_1,...,u_N,h_1,...h_N)
-    correct     vector of corrections of lenghth N (lambda(h_1), ..., lambda(h_N))
     data        matrix of N_ts time series of length T
+    gset        vector of location-bandwidth points (u_1,...,u_N,h_1,...h_N)
     N           number of location-bandwidth points in gset
+    sigma_vec   vector of estimated sqrt(long-run variance) with an entry for each time series
     
     Output:
     Psi         matrix of pairwise multiscale statistics Psi_ij

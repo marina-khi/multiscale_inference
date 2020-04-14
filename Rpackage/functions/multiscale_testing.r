@@ -21,7 +21,6 @@ multiscale_testing <- function(alpha, data, grid, sigma_vec, SimRuns = 1000, N_t
   #                                bandwidth h (because the point (u,h) is excluded from  
   #                                the grid as specified by the 'deletions'-option in the
   #                                function 'grid_construction')  
-  gset    <- grid$gset
   
   if(N_ts == 1){
     Tlen <- length(data) 
@@ -45,13 +44,19 @@ multiscale_testing <- function(alpha, data, grid, sigma_vec, SimRuns = 1000, N_t
   quant <- quant[pos]
 
   # Compute test results
-  N                      <- as.integer(dim(grid$gset)[1])
+  gset                   <- grid$gset
+  N                      <- as.integer(dim(gset)[1])
   gset_cpp               <- as.matrix(gset)
   gset_cpp               <- as.vector(gset_cpp) 
   storage.mode(gset_cpp) <- "double"
 
-  Psi_ij <- multiscale_statistics_multiple(T = Tlen, N_ts = N_ts, data = data, gset = gset_cpp,
-                                 N, sigma_vec)  
+  if (N_ts == 1){
+    sigma <- as.double(sigma_vec[1])
+    Psi = multiscale_statistics(T = Tlen, data = data, gset = gset_cpp, N, sigma)
+  } else {
+    Psi_ij <- multiscale_statistics_multiple(T = Tlen, N_ts = N_ts, data = data, gset = gset_cpp,
+                                 N, sigma_vec)
+  }
   # results for multiscale test
   #test.results <- (vals2 > quant.ms) * sign(values)
 
