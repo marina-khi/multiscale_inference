@@ -131,9 +131,7 @@ for (i in 2:(N_ts+1)){
 
 
 #Calculating the statistic for real data
-grid <- grid_construction(Tlen)
-
-result <- multiscale_testing(alpha, returns[, -1], grid, sigma_vec = sigmahat_vector, SimRuns = SimRuns, N_ts = N_ts)
+result <- multiscale_testing(alpha = alpha, data = returns[, -1], sigma_vec = sigmahat_vector, SimRuns = SimRuns, N_ts = N_ts)
 
 #And now the testing itself
 if (max(result$Psi_ij) > result$quant) {
@@ -234,10 +232,8 @@ for (i in TemperatureColumns){
 }
 
 #Calculating the statistic for real data
-grid <- grid_construction(T_tempr)
-
 monthly_temp <- do.call(cbind, monthly_temp)
-result <- multiscale_testing(alpha, monthly_temp[, -c(1, 2, 3)], grid, sigma_vec = sigmahat_vector, SimRuns = SimRuns, N_ts = N_ts)
+result <- multiscale_testing(alpha = alpha, data = monthly_temp[, -c(1, 2, 3)], sigma_vec = sigmahat_vector, SimRuns = SimRuns, N_ts = N_ts)
 
 #And now the testing itself
 if (max(result$Psi_ij) > result$quant) {

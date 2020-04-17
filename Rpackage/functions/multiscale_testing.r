@@ -1,4 +1,4 @@
-multiscale_testing <- function(alpha, data, grid, sigma_vec, SimRuns = 1000, N_ts = 1){ 
+multiscale_testing <- function(alpha, data, sigma_vec, grid = NULL,  SimRuns = 1000, N_ts = 1){ 
   # Function that carries out the multiscale test given that the values of the test  
   # statistics and estimatates of long-run variance have already been computed 
   #
@@ -22,6 +22,7 @@ multiscale_testing <- function(alpha, data, grid, sigma_vec, SimRuns = 1000, N_t
   #                                the grid as specified by the 'deletions'-option in the
   #                                function 'grid_construction')  
   
+  
   if(N_ts == 1){
     Tlen <- length(data) 
   } else {
@@ -29,6 +30,11 @@ multiscale_testing <- function(alpha, data, grid, sigma_vec, SimRuns = 1000, N_t
   }
   
   Tlen <- as.integer(Tlen)
+
+  #If grid is not supplied, we construct it by default
+  if(is.null(grid)){
+    grid <- grid_construction(Tlen)
+  }
   
   # Select (1-alpha) quantile of the multiscale statistic under the null
   quantiles <- multiscale_quantiles(Tlen, grid, N_ts, sigma_vector = sigma_vec, SimRuns = SimRuns)
