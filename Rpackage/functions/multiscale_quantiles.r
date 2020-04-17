@@ -1,4 +1,4 @@
-multiscale_quantiles <- function(Tlen, grid, N_ts = 1, sigma_vector = NULL, SimRuns=10, probs=seq(0.5,0.995,by=0.005)){
+multiscale_quantiles <- function(Tlen, grid, N_ts = 1, sigma_vector = NULL, SimRuns=1000, probs=seq(0.5,0.995,by=0.005)){
   # Function that computes the quantiles of the multiscale test statistics under the null.
   #
   # Inputs:

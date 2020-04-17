@@ -1,0 +1,132 @@
+# This is the main file for the analysis of both applications which is reported in Section 6.
+rm(list=ls())
+
+library(Rcpp)
+library(tictoc)
+#library(xtable)
+#options(xtable.floating = FALSE)
+#options(xtable.timestamp = "")
+
+# The following file contains functions that are used to estimate the AR parameters, in particular, to compute
+# the estimators of the coefficients, a_1, ... ,a_p, the estimator of the variance of the innovation term, sigma_eta^2 
+# and the estimator of the long-run variance sigma^2.
+source("functions/long_run_variance.r")
+
+#Load necessary functions  
+source("functions/ConstructGrid.r")
+source("functions/multiscale_statistics.r")
+source("functions/multiscale_quantiles.r")
+source("functions/multiscale_testing.r")
+source("functions/minimal_intervals.r")
+source("functions/functions.r")
+sourceCpp("functions/multiscale_statistics.cpp")
+
+
+##############################
+#Defining necessary constants#
+##############################
+
+alpha   <- 0.05 #confidence level for application
+SimRuns <- 5000
+
+
+###########################################
+#Loading the real station data for England#
+###########################################
+
+exchange_rates <- read.csv("data/exchange_rates.csv", sep = ",", dec = ".", stringsAsFactors = FALSE)
+exchange_rates <- within(exchange_rates, rm("exusal", "exusec", "exuseu", "exusir", "exusnz", "exusuk", "twexb", "twexm", "twexo", "indexgx"))
+
+#exchange_rates <- as.matrix(exchange_rates)
+colSums(is.na(exchange_rates))
+
+exchange_rates <- exchange_rates[,colSums(is.na(exchange_rates)) <= 100] #Ommitting the time series with too sparse data
+exchange_rates <- na.omit(exchange_rates)#Deleting the rows with ommitted variables
+
+Tlen          <- nrow(exchange_rates)
+N_ts          <- ncol(exchange_rates) - 1 #Updating the number of time series because of dropped stations
+
+#column_names <- names(exchange_rates)
+
+#exchange_rates <-matrix(unlist(exchange_rates), nrow = Tlen)
+
+#colnames(exchange_rates) <- column_names
+exchange_rates[, 2:(N_ts + 1)] <- scale(exchange_rates[, 2:(N_ts + 1)], scale = FALSE)
+
+
+#####################
+#Estimating variance#
+#####################
+
+#Order selection
+q <- 30:60
+r <- 10:15
+order_results <- c()
+
+for (j in 2:( N_ts + 1)){
+  criterion_matrix <- expand.grid(q = q, r = r)
+  
+  criterion_matrix$FPE  <- numeric(length = nrow(criterion_matrix))
+  criterion_matrix$AIC  <- numeric(length = nrow(criterion_matrix))
+  criterion_matrix$AICC <- numeric(length = nrow(criterion_matrix))
+  criterion_matrix$SIC  <- numeric(length = nrow(criterion_matrix))
+  criterion_matrix$HQ   <- numeric(length = nrow(criterion_matrix))
+  
+  for (i in 1:nrow(criterion_matrix)){
+    FPE <- c()
+    AIC <- c()
+    AICC <- c()
+    SIC <- c()
+    HQ <- c()
+    
+    different_orders <- (1:9)
+    
+    for (order in different_orders){
+      AR.struc      <- AR_lrv(data=exchange_rates[[j]], q=criterion_matrix$q[[i]], r.bar=criterion_matrix$r[[i]], p=order)
+      sigma_eta_hat <- sqrt(AR.struc$vareta)
+      FPE <- c(FPE, (sigma_eta_hat^2 * (Tlen + order)) / (Tlen - order))
+      AIC <- c(AIC, Tlen * log(sigma_eta_hat^2) + 2 * order)
+      AICC <- c(AICC, Tlen * log(sigma_eta_hat^2) + Tlen * (1 + order / Tlen)/(1 - (order +2)/Tlen))
+      SIC <- c(SIC, log(sigma_eta_hat^2) + order * log(Tlen) / Tlen)
+      HQ <- c(HQ, log(sigma_eta_hat^2) + 2 * order * log(log(Tlen)) / Tlen)
+    }
+    criterion_matrix$FPE[[i]]  <- which.min(FPE)
+    criterion_matrix$AIC[[i]]  <- which.min(AIC)
+    criterion_matrix$AICC[[i]] <- which.min(AICC)
+    criterion_matrix$SIC[[i]]  <- which.min(SIC)
+    criterion_matrix$HQ[[i]]   <- which.min(HQ)
+  }
+  maxim <- max(criterion_matrix[, 3:7])
+  order_results <- c(order_results, maxim)
+  cat("For stock ", names(exchange_rates)[j], " the results are as follows: ", max(criterion_matrix$FPE), " ", max(criterion_matrix$AIC), " ", max(criterion_matrix$AICC), " ", max(criterion_matrix$SIC), " ", max(criterion_matrix$HQ), " \n")
+}
+
+
+
+#Setting tuning parameters for testing
+q     <- 55
+r.bar <- 10
+
+
+#Calculating each sigma_i separately
+sigmahat_vector <- c()
+for (i in 2:(N_ts+1)){
+  AR.struc        <- AR_lrv(data = exchange_rates[[i]], q = q, r.bar = r.bar, p=order_results[i-1])
+  sigma_hat_i     <- sqrt(AR.struc$lrv)
+  sigmahat_vector <- c(sigmahat_vector, sigma_hat_i)
+}
+
+
+
+#Calculating the statistic for real data
+
+result <- multiscale_testing(alpha = alpha, data = matrix(unlist(exchange_rates[, 2:(N_ts + 1)]), ncol = N_ts, byrow = FALSE), sigma_vec = sigmahat_vector, SimRuns = SimRuns, N_ts = N_ts)
+
+#And now the testing itself
+if (max(result$Psi_ij) > result$quant) {
+  cat("We reject H_0 with probability", alpha, "Psihat_statistic = ", max(result$Psi_ij),
+      "Gaussian quantile value = ", result$quant, "\n")
+} else {
+  cat("We fail to reject H_0 with probability", alpha, "Psihat_statistic = ", max(result$Psi_ij),
+      "Gaussian quantile value = ", result$quant, "\n")
+}

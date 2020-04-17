@@ -1,4 +1,4 @@
-multiscale_testing <- function(alpha, data, grid, sigma_vec, SimRuns = 1000, N_ts = 1){ 
+multiscale_testing <- function(alpha, data, sigma_vec, grid = NULL,  SimRuns = 1000, N_ts = 1){ 
   # Function that carries out the multiscale test given that the values of the test  
   # statistics and estimatates of long-run variance have already been computed 
   #
@@ -21,7 +21,7 @@ multiscale_testing <- function(alpha, data, grid, sigma_vec, SimRuns = 1000, N_t
   #                                bandwidth h (because the point (u,h) is excluded from  
   #                                the grid as specified by the 'deletions'-option in the
   #                                function 'grid_construction')  
-  gset    <- grid$gset
+  
   
   if(N_ts == 1){
     Tlen <- length(data) 
@@ -30,6 +30,11 @@ multiscale_testing <- function(alpha, data, grid, sigma_vec, SimRuns = 1000, N_t
   }
   
   Tlen <- as.integer(Tlen)
+
+  #If grid is not supplied, we construct it by default
+  if(is.null(grid)){
+    grid <- grid_construction(Tlen)
+  }
   
   # Select (1-alpha) quantile of the multiscale statistic under the null
   quantiles <- multiscale_quantiles(Tlen, grid, N_ts, sigma_vector = sigma_vec, SimRuns = SimRuns)
@@ -45,13 +50,19 @@ multiscale_testing <- function(alpha, data, grid, sigma_vec, SimRuns = 1000, N_t
   quant <- quant[pos]
 
   # Compute test results
-  N                      <- as.integer(dim(grid$gset)[1])
+  gset                   <- grid$gset
+  N                      <- as.integer(dim(gset)[1])
   gset_cpp               <- as.matrix(gset)
   gset_cpp               <- as.vector(gset_cpp) 
   storage.mode(gset_cpp) <- "double"
 
-  Psi_ij <- multiscale_statistics_multiple(T = Tlen, N_ts = N_ts, data = data, gset = gset_cpp,
-                                 N, sigma_vec)  
+  if (N_ts == 1){
+    sigma <- as.double(sigma_vec[1])
+    Psi = multiscale_statistics(T = Tlen, data = data, gset = gset_cpp, N, sigma)
+  } else {
+    Psi_ij <- multiscale_statistics_multiple(T = Tlen, N_ts = N_ts, data = data, gset = gset_cpp,
+                                 N, sigma_vec)
+  }
   # results for multiscale test
   #test.results <- (vals2 > quant.ms) * sign(values)
 
