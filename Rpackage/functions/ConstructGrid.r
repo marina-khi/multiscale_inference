@@ -29,8 +29,8 @@ grid_construction <- function(T, u.grid=NULL, h.grid=NULL, deletions=NULL){
   { grid.type <- "default"
     #Tlen <- min(T,1000)
     Tlen <- T
-    u.grid <- seq(from = 5/Tlen, to = 1, by = 5/Tlen)
-    h.grid <- seq(from = 5/Tlen, to = 1/4, by = 5/Tlen)
+    u.grid <- seq(from = 1/Tlen, to = 1, by = 1/Tlen)
+    h.grid <- seq(from = 1/Tlen, to = 1/4, by = 1/Tlen)
     h.grid <- h.grid[h.grid > log(Tlen)/Tlen]
   }
 

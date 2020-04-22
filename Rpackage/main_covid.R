@@ -25,17 +25,17 @@ sourceCpp("functions/multiscale_statistics.cpp")
 ##############################
 
 alpha   <- 0.05 #confidence level for application
-SimRuns <- 10
+SimRuns <- 5000
 
 
 ###########################################
 #Loading the real station data for England#
 ###########################################
 
-covid <- read.csv("data/COVID-19.csv", sep = ";", dec = ".", stringsAsFactors = FALSE, na.strings = "N/A")
-covid <- within(covid, rm("day", "month", "year", "cases.cum", "death.cum", "countryterritoryCode", "countriesAndTerritories"))
+covid <- read.csv("data/COVID-19.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "N/A")
+covid <- within(covid, rm("day", "month", "year", "countryterritoryCode", "countriesAndTerritories", "continentExp"))
 
-covid$dateRep <- as.Date(covid$dateRep, format = "%d.%m.%Y")
+covid$dateRep <- as.Date(covid$dateRep, format = "%d/%m/%Y")
 
 covid <- complete(covid, dateRep = seq.Date(min(dateRep), max(dateRep), by='day'), geoId, fill = list(cases = 0, deaths = 0))
 
@@ -45,49 +45,54 @@ covid$cumdeaths <- 0
 countries <- unique(covid$geoId)
 dates <- unique(covid$dateRep)
 
-covid_df <- data.frame(dates)
+covid_list <- list()
 #covid_df$dates <- as.Date(covid_df$dates, format = "%d.%m.%Y")
 #covid_df <- covid_df[order(covid_df$dates), ]
-
-
 
 for (country in countries){
   covid[covid$geoId == country, "cumcases"] <- cumsum(covid[covid$geoId == country, "cases"])
   covid[covid$geoId == country, "cumdeaths"] <- cumsum(covid[covid$geoId == country, "deaths"])
   tmp <- covid[covid$geoId == country, c("dateRep", "cases", "deaths", "cumcases", "cumdeaths")]
-  if (max(tmp$cumdeaths) < 1000){
-    covid <- covid[!covid$geoId == country, ]
-  } else {
-    tmp <- covid[covid$cumcases >= 100, ]
-    colnames(tmp) <- c("dateRep", paste0("cases", country), paste0("deaths", country), paste0("cumcases", country), paste0("cumdeaths", country))
-    covid_df      <- merge(covid_df, tmp, by.x = 'dates', by.y = 'dateRep', all = TRUE)
-    #covid_df[is.na(covid_df)] <- 0
-    #covid_df[, ncol(covid_df)] <- cumsum(covid_df[, ncol(covid_df) - 2])
-    #covid_df[, ncol(covid_df) - 1] <- cumsum(covid_df[, ncol(covid_df) - 3])
+  if (max(tmp$cumdeaths) >= 1000){
+    covid_list[[country]] <- covid[(covid$geoId == country & covid$cumcases >= 100), c("dateRep", "cases", "deaths", "cumcases", "cumdeaths")]
   }
 }
 
+rm(tmp)
+
+min_dates <- min(sapply(covid_list[names(covid_list) != "CN"], NROW))
+max_dates <- max(sapply(covid_list[names(covid_list) != "CN"], NROW))
+
+countries_num <- length(covid_list)
+
+covid_mat_min <- matrix(NA, ncol = countries_num, nrow = min_dates)
+covid_mat_max <- matrix(NA, ncol = countries_num, nrow = max_dates)
+colnames(covid_mat_min) <- names(covid_list)
+colnames(covid_mat_max) <- names(covid_list)
 
 
-length(unique(covid$geoId))
-length(dates)
-covid_df$dates <- as.Date(covid_df$dates, format = "%d.%m.%Y")
+i = 1
+for (country in names(covid_list)) {
+  covid_mat_min[, i] <- log(covid_list[[country]]$cumcases[1:min_dates])
+  len <- length(covid_list[[country]]$deaths)
+  if (len < max_dates){
+    covid_mat_max[, i] <- c(log(covid_list[[country]]$cumcases), rep(0, max_dates - len))
+  } else {
+    covid_mat_max[, i] <- log(covid_list[[country]]$cumcases[1:max_dates])
+  }
+  i = i + 1
+}
 
+dev.new()
+matplot(1:min_dates, covid_mat_min, type = 'l', lty = 1, col = 1:min_dates, xlab = 'Number of deaths since 100th case', ylab = 'Deaths')
+legend(1, 1200, legend = names(covid_list), lty = 1, col = 1:min_dates, cex = 0.8)
 
-#exchange_rates <- as.matrix(exchange_rates)
-colSums(is.na(covid))
+#dev.off()
 
-covid <- na.omit(covid)#Deleting the rows with ommitted variables
+Tlen          <- min_dates
+N_ts          <- countries_num #Updating the number of time series because of dropped stations
 
-Tlen          <- nrow(exchange_rates)
-N_ts          <- ncol(exchange_rates) - 1 #Updating the number of time series because of dropped stations
-
-#column_names <- names(exchange_rates)
-
-#exchange_rates <-matrix(unlist(exchange_rates), nrow = Tlen)
-
-#colnames(exchange_rates) <- column_names
-exchange_rates[, 2:(N_ts + 1)] <- scale(exchange_rates[, 2:(N_ts + 1)], scale = FALSE)
+covid_mat_min <- scale(covid_mat_min, scale = FALSE)
 
 
 #####################
@@ -95,11 +100,11 @@ exchange_rates[, 2:(N_ts + 1)] <- scale(exchange_rates[, 2:(N_ts + 1)], scale = 
 #####################
 
 #Order selection
-q <- 30:60
-r <- 10:15
+q <- 5:15
+r <- 5:10
 order_results <- c()
 
-for (j in 2:( N_ts + 1)){
+for (j in 1:N_ts){
   criterion_matrix <- expand.grid(q = q, r = r)
   
   criterion_matrix$FPE  <- numeric(length = nrow(criterion_matrix))
@@ -118,7 +123,7 @@ for (j in 2:( N_ts + 1)){
     different_orders <- (1:9)
     
     for (order in different_orders){
-      AR.struc      <- AR_lrv(data=exchange_rates[[j]], q=criterion_matrix$q[[i]], r.bar=criterion_matrix$r[[i]], p=order)
+      AR.struc      <- AR_lrv(data=covid_mat_min[, j], q=criterion_matrix$q[[i]], r.bar=criterion_matrix$r[[i]], p=order)
       sigma_eta_hat <- sqrt(AR.struc$vareta)
       FPE <- c(FPE, (sigma_eta_hat^2 * (Tlen + order)) / (Tlen - order))
       AIC <- c(AIC, Tlen * log(sigma_eta_hat^2) + 2 * order)
@@ -134,20 +139,20 @@ for (j in 2:( N_ts + 1)){
   }
   maxim <- max(criterion_matrix[, 3:7])
   order_results <- c(order_results, maxim)
-  cat("For stock ", names(exchange_rates)[j], " the results are as follows: ", max(criterion_matrix$FPE), " ", max(criterion_matrix$AIC), " ", max(criterion_matrix$AICC), " ", max(criterion_matrix$SIC), " ", max(criterion_matrix$HQ), " \n")
+  cat("For country ", colnames(covid_mat_min)[j], " the results are as follows: ", max(criterion_matrix$FPE), " ", max(criterion_matrix$AIC), " ", max(criterion_matrix$AICC), " ", max(criterion_matrix$SIC), " ", max(criterion_matrix$HQ), " \n")
 }
 
 
 
 #Setting tuning parameters for testing
-q     <- 55
+q     <- 10
 r.bar <- 10
 
 
 #Calculating each sigma_i separately
 sigmahat_vector <- c()
-for (i in 2:(N_ts+1)){
-  AR.struc        <- AR_lrv(data = exchange_rates[[i]], q = q, r.bar = r.bar, p=order_results[i-1])
+for (i in 1:N_ts){
+  AR.struc        <- AR_lrv(data = covid_mat_min[, i], q = q, r.bar = r.bar, p=1)
   sigma_hat_i     <- sqrt(AR.struc$lrv)
   sigmahat_vector <- c(sigmahat_vector, sigma_hat_i)
 }
@@ -156,7 +161,7 @@ for (i in 2:(N_ts+1)){
 
 #Calculating the statistic for real data
 
-result <- multiscale_testing(alpha = alpha, data = matrix(unlist(exchange_rates[, 2:(N_ts + 1)]), ncol = N_ts, byrow = FALSE), sigma_vec = sigmahat_vector, SimRuns = SimRuns, N_ts = N_ts)
+result <- multiscale_testing(alpha = alpha, data = covid_mat_min, sigma_vec = sigmahat_vector, SimRuns = SimRuns, N_ts = N_ts)
 
 #And now the testing itself
 if (max(result$Psi_ij) > result$quant) {
