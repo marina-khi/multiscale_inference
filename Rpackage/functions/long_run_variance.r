@@ -13,9 +13,8 @@ emp_acf <- function(data,ell,p)
 }
 
 
-variance_eta <- function(data,coefs,p)
-
-{   # computes variance of AR innovation terms eta   
+variance_eta <- function(data,coefs,p){
+    # computes variance of AR innovation terms eta   
  
     y.diff <- diff(data)
     len    <- length(y.diff)
@@ -47,10 +46,8 @@ corrections <- function(coefs,var.eta,len)
 }
 
 
-AR_coef <- function(data,L1,L2,correct,p)
-
-{   # computes estimator of the AR coefficients  
- 
+AR_coef <- function(data,L1,L2,correct,p){
+    # computes estimator of the AR coefficients  
     pos <- 0
     a.mat <- matrix(0,nrow=L2-L1+1,ncol=p)
     for(ell in L1:L2)
@@ -74,10 +71,8 @@ AR_coef <- function(data,L1,L2,correct,p)
 }
 
 
-AR_lrv <- function(data, q, r.bar, p)
-
-{   # computes long-run variance of error terms
-
+AR_lrv <- function(data, q, r.bar, p){
+    # computes long-run variance of error terms
     a.tilde       <- AR_coef(data=data, L1=q, L2=q, correct=rep(0,max(p,q)+1), p=p)
     sig.eta.tilde <- variance_eta(data=data, coefs=a.tilde, p=p)
     correct       <- corrections(coefs=a.tilde, var.eta=sig.eta.tilde, len=r.bar+1)
@@ -89,10 +84,8 @@ AR_lrv <- function(data, q, r.bar, p)
 }
 
 
-AR_acf <- function(coefs, var.eta, len)
-
-{   # computes autocovariance function based on AR coefficients
-
+AR_acf <- function(coefs, var.eta, len){
+    # computes autocovariance function based on AR coefficients
     p <- length(coefs)  
     len <- max(len,50)
     c.vec <- rep(0,len)
@@ -141,4 +134,32 @@ AR_coef_HvK <- function(data,L1,L2,p)
     a.hat.HvK <- solve(cov.mat) %*% cov.vec 
     a.hat.HvK <- as.vector(a.hat.HvK)
     return(a.hat.HvK)
+}
+
+sigmahat_vec_iid <- function(data){
+  #function that calculates the vector of sqrt(variance) estimators for a number of time series.
+  #It uses the standard first differences method.
+  N    = ncol(data)
+  Tlen = nrow(data)
+  sigmahat_vec <- c()
+  for (i in 1:N){
+    variance_i   <- sum((data[2:Tlen, i] - data[1:(Tlen - 1), i])^2)/(2 * Tlen - 2)
+    sigma_hat_i  <- sqrt(variance_i)
+    sigmahat_vec <- c(sigmahat_vec, sigma_hat_i)
+  }
+  return(sigmahat_vec)
+}
+
+sigmahat_vec_iid2 <- function(data){
+  #function that calculates the vector of sqrt(variance) estimators for a number of time series.
+  #It uses the standard "three neigbours" method.
+  N    = ncol(data)
+  Tlen = nrow(data)
+  sigmahat_vec <- c()
+  for (i in 1:N){
+    variance_i   <- 2 * sum((data[3:Tlen, i]/2 - data[2:(Tlen - 1), i] + data[1:(Tlen - 2), i]/2)^2)/(3 * Tlen - 6)
+    sigma_hat_i  <- sqrt(variance_i)
+    sigmahat_vec <- c(sigmahat_vec, sigma_hat_i)
+  }
+  return(sigmahat_vec)
 }

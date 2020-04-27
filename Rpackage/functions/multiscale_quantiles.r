@@ -29,7 +29,7 @@ multiscale_quantiles <- function(Tlen, grid, N_ts = 1, sigma_vector = NULL, SimR
   
   #Compute the quantiles for the multiscale method
   filename = paste0("quantiles/distr_T_", Tlen, "_N_", N_ts, ".RData")
-  if(!file.exists(filename)) {
+  #if(!file.exists(filename)) {
     Phi    <- gaussian_statistics(T = Tlen, N_ts = N_ts, SimRuns = SimRuns, gset = gset_cpp, N = N,
                                   sigma_vec = sigma_vector)
     quant  <- as.vector(quantile(Phi, probs=probs))
@@ -38,9 +38,9 @@ multiscale_quantiles <- function(Tlen, grid, N_ts = 1, sigma_vector = NULL, SimR
     colnames(quant) <- NULL
     rownames(quant) <- NULL
     
-    save(quant, file = filename)
-  } else {
-    load(filename)
-  }
+  #  save(quant, file = filename)
+  #} else {
+  #  load(filename)
+  #}
   return(quant)
 }

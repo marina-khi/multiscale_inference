@@ -57,25 +57,42 @@ multiscale_testing <- function(alpha, data, sigma_vec, grid = NULL,  SimRuns = 1
   storage.mode(gset_cpp) <- "double"
 
   if (N_ts == 1){
-    sigma <- as.double(sigma_vec[1])
-    Psi = multiscale_statistics(T = Tlen, data = data, gset = gset_cpp, N, sigma)
+    sigma        <- as.double(sigma_vec[1])
+    Psi          <- multiscale_statistics(T = Tlen, data = data, gset = gset_cpp, N, sigma)
+    test.results <- (Psi$vals_cor > quant) * sign(Psi$vals[1:N])
+    gset.full   <- grid$gset_full
+    u.grid.full <- unique(gset.full[,1])
+    h.grid.full <- unique(gset.full[,2])
+    pos.full    <- grid$pos_full
+
+    test.res <- rep(2, length(pos.full))
+    test.res[!is.na(pos.full)] <- test.results
+
+    test <- matrix(test.res, ncol=length(u.grid.full), byrow=TRUE)
+    
+    if (Psi$stat > quant) {
+      cat("For the given time series given we reject H_0 with probability", alpha, ". Psihat_statistic = ", Psi$stat,
+          ". Gaussian quantile value = ", quant, "\n")
+    } else {
+      cat("For the given time series we fail to reject H_0 with probability", alpha, ". Psihat_statistic = ", Psi$stat,
+          ". Gaussian quantile value = ", quant, "\n")
+    }
+    
+    gset$test  <- as.vector(t(test))
+    gset$vals <- as.vector(Psi$vals_cor) 
+  
+    return(list(quant = quant, statistics = Psi$stat, test_matrix = test, gset = gset))
+
   } else {
     Psi_ij <- multiscale_statistics_multiple(T = Tlen, N_ts = N_ts, data = data, gset = gset_cpp,
                                  N, sigma_vec)
+    if (max(Psi_ij) > quant) {
+      cat("We reject H_0 with probability", alpha, ". Psihat_statistic = ", max(Psi_ij), ". Number of pairwise rejections = ", 
+        sum(Psi_ij > quant), ". Gaussian quantile value = ", quant, "\n")
+    } else {
+      cat("We fail to reject H_0 with probability", alpha, ". Psihat_statistic = ", max(Psi_ij),
+          ". Gaussian quantile value = ", quant, "\n")
+    }
+    return(list(quant = quant, statistics = Psi_ij))
   }
-  # results for multiscale test
-  #test.results <- (vals2 > quant.ms) * sign(values)
-
-  #gset.full   <- grid$gset_full
-  #u.grid.full <- unique(gset.full[,1])
-  #h.grid.full <- unique(gset.full[,2])  
-  #pos.full    <- grid$pos_full
-
-  #test.res <- matrix(2,ncol=1,nrow=length(pos.full))
-  #test.res[!is.na(pos.full), 1] <- test.results[,1]
-
-  #test.ms    <- matrix(test.res[,1], ncol=length(u.grid.full), byrow=TRUE)
-
-  #return(list(ugrid=u.grid.full, hgrid=h.grid.full, test_ms=test.ms, quant.ms = quant.ms))
-  return(list(quant = quant, Psi_ij = Psi_ij))
 }
