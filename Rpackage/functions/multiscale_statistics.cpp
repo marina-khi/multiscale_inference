@@ -134,7 +134,7 @@ NumericVector kernel_averages(int T, NumericVector gset, NumericVector correct, 
       } else {
         for(t = t_min; t < (t_max+1); t++){
            x = ((t / (float)T - u) / h);
-           temp = epanc(x) * (s_t_2(u, h, T) - s_t_1(u, h, T) * x);
+           temp = epanc(x) * (s_t_0(u, h, T) * x - s_t_1(u, h, T));
            result_temp = result_temp + temp * data[t-1];
            weight_norm = weight_norm + temp * temp;
          }

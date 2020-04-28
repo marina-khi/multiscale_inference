@@ -29,8 +29,8 @@ grid_construction <- function(T, u.grid=NULL, h.grid=NULL, deletions=NULL){
   { grid.type <- "default"
     #Tlen <- min(T,1000)
     Tlen <- T
-    u.grid <- seq(from = 1/Tlen, to = 1, by = 1/Tlen)
-    h.grid <- seq(from = 1/Tlen, to = 1/4, by = 1/Tlen)
+    u.grid <- seq(from = 5/Tlen, to = 1, by = 5/Tlen)
+    h.grid <- seq(from = 5/Tlen, to = 1/4, by = 5/Tlen)
     h.grid <- h.grid[h.grid > log(Tlen)/Tlen]
   }
 
@@ -51,7 +51,5 @@ grid_construction <- function(T, u.grid=NULL, h.grid=NULL, deletions=NULL){
   for(i in 1:length(bws))
      lengths.u[i] <- sum(gset[,2] == bws[i])
   
-  correct = sqrt(2 * log(1 / (2 * gset[, 2])))   
-  
-  return(list(gset=gset, bws=bws, lens=lengths.u, gtype=grid.type, gset_full=gset.full, pos_full=pos.full, correct = correct))
+  return(list(gset=gset, bws=bws, lens=lengths.u, gtype=grid.type, gset_full=gset.full, pos_full=pos.full))
 }

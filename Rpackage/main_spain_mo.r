@@ -23,7 +23,7 @@ sourceCpp("functions/multiscale_statistics.cpp")
 
 
 alpha   <- 0.05 # alpha for calculating quantiles
-SimRuns <- 500 # number of simulation runs to produce critical values
+SimRuns <- 5000 # number of simulation runs to produce critical values
 
 #Loading the real data for yearly temperature in England
 spain_mo <- read.csv("data/mortality_spain.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "N/A")
@@ -46,13 +46,13 @@ ts_end   = ts_start + Tlen - 1 #the last point of time series
 
 #Estimate the long-run variance
 sigmahat_vector_order_9 <- c()
-AR.struc  <- AR_lrv(data=spain_mo[1:700], q = q, r.bar = r, p = p)
+AR.struc  <- AR_lrv(data=spain_mo, q = q, r.bar = r, p = p)
 sigma_hat <- sqrt(AR.struc$lrv)
 sigmahat_vector_order_9 <- c(sigmahat_vector_order_9, sigma_hat)
 
+set.seed(1)
 #Compute test results for the multiscale method
-results    <- multiscale_testing(alpha = alpha, data = spain_mo, sigma_vec = sigmahat_vector_order_9, SimRuns = SimRuns, N_ts = 1)
-
+results <- multiscale_testing(alpha = alpha, data = spain_mo, sigma_vec = sigmahat_vector_order_9, SimRuns = SimRuns, N_ts = 1)
 quant   <- results$quant
 
 #Produce minimal intervals (Here - only the increases! But this is because we do not have decreases for our applications)
@@ -83,14 +83,14 @@ par(mar = c(0.5, 0.5, 3.5, 0)) #Margins for each plot
 #Plotting the minimal intervals. Do not have any negative minimal intervals, so plotting all (positive) ones
 #ymaxlim = max(p_t_set$values)
 #yminlim = min(min(p_t_set$values), quant.ms)
-plot(NA, xlim=c(ts_start,ts_end), xaxt = "n",  ylim = c(0, 1 + 1/nrow(p_t_set)), mgp=c(2,0.5,0))
+plot(NA, xlim=c(0,Tlen), xaxt = "n",  ylim = c(0, 1 + 1/nrow(p_t_set)), mgp=c(2,0.5,0))
 title(main = expression((b) ~ minimal ~ intervals ~ produced ~ by ~ italic(T)[MS]), line = 1)
 segments(p_t_set[['startpoint']], p_t_set$plottingindex, p_t_set$endpoint, p_t_set$plottingindex, lwd = 2)
 #abline(h = quant.ms, lty = 2)
 
 #SiZer 
 par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
-SiZermap(u.grid, h.grid, test.res$test_ms, plot.title = expression((c) ~ SiZer ~ map ~ 'for' ~ italic(T)[MS]))
+SiZermap(sort(unique(results$gset[,1])), sort(unique(results$gset[,2])), results$test_matrix, plot.title = expression((c) ~ SiZer ~ map ~ 'for' ~ italic(T)[MS]))
 
 axis_at = seq(4/Tlen, 724/Tlen, by = 30/Tlen)
 axis_labels = seq(as.Date("2018/4/4"), as.Date("2020/4/4"), by = 30)
