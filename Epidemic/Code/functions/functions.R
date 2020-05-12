@@ -80,10 +80,12 @@ nadaraya_watson_smoothing <- function(u, data_p, grid_p, bw){
     result      = 0
     norm        = 0
     T_size      = length(data_p)
-    for (i in 1:T_size){
-      result = result + epanechnikov_kernel((grid_p[i] - u) / bw) * data_p[i]
-      norm = norm + epanechnikov_kernel((grid_p[i] - u) / bw)
-    }
+    result = sum((abs((grid_points - u) / bw) <= 1) * data_p)
+    norm = sum((abs((grid_points - u) / bw) <= 1))
+    #for (i in 1:T_size){
+    #  result = result + epanechnikov_kernel((grid_p[i] - u) / bw) * data_p[i]
+    #  norm = norm + epanechnikov_kernel((grid_p[i] - u) / bw)
+    #}
     return(result/norm)
   }
 }
