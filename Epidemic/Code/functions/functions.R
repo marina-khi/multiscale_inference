@@ -70,3 +70,41 @@ local_linear_smoothing <- function(u, data_p, grid_p, bw){
     return(result/norm)
   }
 }
+
+#Local Linear estimator using the epanechnikov kernel. 
+nadaraya_watson_smoothing <- function(u, data_p, grid_p, bw){
+  if (length(data_p) != length(grid_p)){
+    cat("Dimensions of the grid and the data do not match, please check the arguments")
+    return(NULL)
+  } else {
+    result      = 0
+    norm        = 0
+    T_size      = length(data_p)
+    for (i in 1:T_size){
+      result = result + epanechnikov_kernel((grid_p[i] - u) / bw) * data_p[i]
+      norm = norm + epanechnikov_kernel((grid_p[i] - u) / bw)
+    }
+    return(result/norm)
+  }
+}
+
+
+# correction factor for error variance
+
+correct <- function(Y, bw=0.025)
+{  Y <- as.matrix(Y)
+nn <- dim(Y)[2]
+TT <- dim(Y)[1]
+X <- (1:TT)/TT
+const <- rep(0,nn)
+for(i in 1:nn)
+{  lambda.fct <- nw(X,Y[,i],bw,TT)
+resid <- Y[,i] - lambda.fct
+pos <- (lambda.fct > 0)
+resid <- resid[pos]/sqrt(lambda.fct[pos])
+const[i] <- var(resid)
+}   
+const <- mean(const)
+return(const)
+}   
+

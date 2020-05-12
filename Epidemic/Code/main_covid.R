@@ -1,0 +1,178 @@
+########################
+#Analysis of covid data#
+########################
+rm(list=ls())
+
+library(tidyr)
+library(multiscale)
+
+#Defining necessary constants
+set.seed(123)
+alpha   <- 0.05 #confidence level for application
+SimRuns <- 1000
+bw      <- 0.025 #Bandwidth for calculating the residuals for \hat{\sigma}
+
+
+#Loading the world coronavirus data
+
+covid         <- read.csv("data/covid.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "N/A")
+covid$dateRep <- as.Date(covid$dateRep, format = "%d/%m/%Y")
+covid         <- complete(covid, dateRep = seq.Date(min(dateRep), max(dateRep), by='day'), geoId, fill = list(cases = 0, deaths = 0))
+
+covid$cumcases  <- 0
+covid$cumdeaths <- 0
+
+covid_list <- list()
+for (country in unique(covid$geoId)){
+  covid[covid$geoId == country, "cumcases"] <- cumsum(covid[covid$geoId == country, "cases"])
+  covid[covid$geoId == country, "cumdeaths"] <- cumsum(covid[covid$geoId == country, "deaths"])
+  tmp <- max(covid[covid$geoId == country, "cumdeaths"])
+  if (tmp >= 1000){
+    #We restrict our attention only to the contries with more than 1000 deaths and only starting from 100th case
+    covid_list[[country]] <- covid[(covid$geoId == country & covid$cumcases >= 100), c("dateRep", "cases", "deaths", "cumcases", "cumdeaths")]
+    #covid_list[[country]] <- covid[(covid$geoId == country & covid$cumcases >= 100 & covid$cumdeaths > 0), c("dateRep", "cases", "deaths", "cumcases", "cumdeaths")]
+  }
+}
+
+covid_list <- covid_list[c('BE', 'CN', 'DE', 'ES', 'FR', 'IT', 'NL', 'RU', 'UK', 'US')]
+#CN = CHINA
+
+#Calculate the number of days that we have data for all countries.
+min_dates <- min(sapply(covid_list[names(covid_list) != "CN"], NROW)) #We are not considering China as it has too long dataset
+max_dates <- max(sapply(covid_list[names(covid_list) != "CN"], NROW))
+
+countries     <- names(covid_list)
+dates         <- unique(covid$dateRep)
+countries_num <- length(covid_list)
+
+covid_mat_min <- matrix(NA, ncol = countries_num, nrow = min_dates)
+covid_mat_max <- matrix(NA, ncol = countries_num, nrow = max_dates)
+
+colnames(covid_mat_min) <- countries
+colnames(covid_mat_max) <- countries
+
+
+i = 1
+for (country in countries) {
+  covid_mat_min[, i] <- covid_list[[country]]$deaths[1:min_dates]
+  len <- length(covid_list[[country]]$deaths)
+  if (len < max_dates){
+    covid_mat_max[, i] <- c(covid_list[[country]]$deaths, rep(NA, max_dates - len))
+  } else {
+    covid_mat_max[, i] <- covid_list[[country]]$deaths[1:max_dates]
+  }
+  i = i + 1
+}
+
+#Cleaning the data: there are weird cases in the dataset when the number of new cases is negative! 
+covid_mat_min[covid_mat_min < 0] <- abs(covid_mat_min[covid_mat_min < 0])
+
+#Plotting different countries on one plot
+#dev.new()
+#matplot(1:min_dates, covid_mat_min, type = 'l', lty = 1, col = 1:min_dates, xlab = 'Number of deaths since 100th case', ylab = 'Deaths')
+#legend(1, 40000, legend = names(covid_list), lty = 1, col = 1:min_dates, cex = 0.8)
+#dev.off()
+
+#For now, we focus our attention on the "short" time series
+
+Tlen          <- min_dates
+N_ts          <- countries_num #Updating the number of time series because of dropped stations
+
+#covid_mat_min <- scale(covid_mat_min, scale = FALSE)
+
+
+grid <- construct_grid(Tlen, u.grid = seq(from = 4/Tlen, to = 1, by = 7/Tlen),
+                         h.grid = seq(from = 3.5/Tlen, to = 1/4, by = 3.5/Tlen))
+
+source("functions/functions.R")
+grid_points <- seq(from = 1/Tlen, to = 1, length.out = Tlen) #grid points for estimating
+
+smoothed_curve           <- matrix(NA, ncol = N_ts, nrow = min_dates)
+colnames(smoothed_curve) <- countries
+
+sigma_vec <- rep(0, N_ts)
+
+for (i in 1:N_ts){
+  #plot(NA, ylab="", xlab = "", xlim = c(0,1), ylim = c(0, max(covid_mat_min[, i]) + 100), xaxt = 'n', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
+  smoothed_curve[, i] <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(covid_mat_min[, i], grid_points, bw))
+  #r_it <- (covid_mat_min[, i] - smoothed_curve[, i]) / sqrt(smoothed_curve[, i])
+  #for deaths we have negative values for the smoothed curve, so we don't take them into account
+  r_it <- (covid_mat_min[smoothed_curve[, i] > 0, i] - smoothed_curve[smoothed_curve[, i] > 0, i]) / sqrt(smoothed_curve[smoothed_curve[, i] > 0, i])
+  sigma_vec[i] <- sqrt(sum(r_it^2)/Tlen)
+  #lines(grid_points, covid_mat_min[, i])
+  #lines(grid_points, smoothed_curve[, i], col = 'red')
+}
+
+
+result <- multiscale_test(data = covid_mat_min, sigma_vec = sigma_vec, N_ts = N_ts, grid = grid,
+                          SimRuns = SimRuns, epidem = TRUE)
+
+pdf("plots/pairwise_comparison_deaths_bw_0025.pdf", width=7, height=9, paper="special")
+
+l = 1
+for (i in 1:(N_ts - 1)){
+  for (j in (i + 1):N_ts){
+    gset <- result$gset_with_vals[[l]]
+    
+    layout(matrix(c(1, 2, 3, 4),ncol=1), widths=c(3,3,3, 3), heights=c(1,0.8,1, 1), TRUE)
+    #Setting the layout of the graphs
+
+    par(cex = 1, tck = -0.025)
+    par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
+    par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
+    
+    plot(covid_mat_min[, i], ylim=c(min(covid_mat_min), max(covid_mat_min[, c(i, j)])), type="l",
+         col="blue", ylab="", xlab="", mgp=c(1,0.5,0))
+    lines(covid_mat_min[, j], col="red")
+    title(main = expression((a) ~ observed ~ deaths ~ per ~ day), line = 1)
+    legend(x = 0, y = max(covid_mat_min[, c(i, j)]) - 100, legend=c(countries[i], countries[j]), col = c("blue", "red"), lty = 1, cex = 0.95, ncol = 1)
+
+    par(mar = c(0.5, 0.5, 3.5, 0)) #Margins for each plot
+    
+    plot(smoothed_curve[, i], ylim=c(min(covid_mat_min),max(covid_mat_min[, c(i, j)])), type="l",
+         col="blue", ylab="", xlab = "", mgp=c(1,0.5,0))
+    lines(smoothed_curve[, j], col="red")
+    title(main = expression((b) ~ smoothed ~ curve ~ from ~ (a)), line = 1)
+    
+    par(mar = c(0.5, 0.5, 3, 0)) #Margins for each plot
+    
+    a_t_set <- subset(gset, test == 1, select = c(u, h))
+    if (nrow(a_t_set) > 0){
+      p_t_set <- data.frame('startpoint' = (a_t_set$u - a_t_set$h)*Tlen, 'endpoint' = (a_t_set$u + a_t_set$h)*Tlen, 'values' = 0)
+      #p_t_set$endpoint[p_t_set$endpoint > Tlen] <- Tlen
+    
+      #Parameters for plotting
+      p_t_set$plottingindex <- (1:nrow(p_t_set))/nrow(p_t_set)
+    
+      plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1 + 1/nrow(p_t_set)), xlab="days", mgp=c(2,0.5,0))
+      title(main = expression((c) ~ all ~ intervals ~ where ~ the ~ test ~ rejects), line = 1)
+      segments(p_t_set[['startpoint']], p_t_set$plottingindex, p_t_set$endpoint, p_t_set$plottingindex, lwd = 2)
+
+      #Produce minimal intervals
+      p_t_set               <- compute_minimal_intervals(p_t_set)
+      p_t_set$plottingindex <- (1:nrow(p_t_set))/nrow(p_t_set)
+    
+      plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1 + 1/nrow(p_t_set)), xlab="days", mgp=c(2,0.5,0))
+      title(main = expression((d) ~ minimal ~ intervals ~ produced ~ by ~ our ~ test), line = 1)
+      segments(p_t_set[['startpoint']], p_t_set$plottingindex, p_t_set$endpoint, p_t_set$plottingindex, lwd = 2)
+    } else {
+      plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1), xlab="days", mgp=c(2,0.5,0))
+      title(main = expression((c) ~ all ~ intervals ~ where ~ the ~ test ~ rejects), line = 1)
+
+      plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1), xlab="days", mgp=c(2,0.5,0))
+      title(main = expression((d) ~ minimal ~ intervals ~ produced ~ by ~ our ~ test), line = 1)
+    }
+    #SiZer 
+    #par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
+    #plot_SiZer_map(sort(unique(gset[,1])), sort(unique(gset[,2])), test.results = result$test_matrices[[l]], plot.title = expression((c) ~ SiZer ~ map ~ 'for' ~ italic(T)[MS]))
+    
+    #axis_at = seq(4/Tlen, 724/Tlen, by = 30/Tlen)
+    #axis_labels = seq(as.Date("2018/4/4"), as.Date("2020/4/4"), by = 30)
+    #axis(1, at=axis_at, labels = axis_labels, mgp=c(1,0.5,0))
+    
+    l = l + 1
+  }
+}
+
+dev.off()
+#axis(1, at = grid_points[seq(5, 385, by = 20)], labels = monthly_temp$date[seq(5, 385, by = 20)])
