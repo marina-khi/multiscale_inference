@@ -110,3 +110,63 @@ const <- mean(const)
 return(const)
 }   
 
+produce_plots <- function (results, data_i, data_j, smoothed_i, smoothed_j, country_i, country_j, text_){
+  Tlen <- length(data_i)
+  gset <- results$gset_with_vals[[l]]
+
+  layout(matrix(c(1, 2, 3, 4),ncol=1), widths=c(3,3,3, 3), heights=c(1,0.8,1, 1), TRUE)
+  #Setting the layout of the graphs
+
+  par(cex = 1, tck = -0.025)
+  par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
+  par(oma = c(1.5, 1.5, 1.5, 0.2)) #Outer margins
+
+  plot(data_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
+      col="blue", ylab="", xlab="", mgp=c(1,0.5,0))
+  lines(data_j, col="red")
+  title(main = expression((a) ~ observed ~ cases ~ per ~ day), line = 1)
+  legend(x = 0, y = max(data_i, data_j) - 1, legend=c(country_i, country_j), col = c("blue", "red"), lty = 1, cex = 0.95, ncol = 1)
+
+  par(mar = c(0.5, 0.5, 3.5, 0)) #Margins for each plot
+
+  plot(smoothed_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
+     col="blue", ylab="", xlab = "", mgp=c(1,0.5,0))
+  lines(smoothed_j, col="red")
+  title(main = expression((b) ~ smoothed ~ curve ~ from ~ (a)), line = 1)
+
+  par(mar = c(0.5, 0.5, 3, 0)) #Margins for each plot
+
+  a_t_set <- subset(gset, test == 1, select = c(u, h))
+  if (nrow(a_t_set) > 0){
+    p_t_set <- data.frame('startpoint' = (a_t_set$u - a_t_set$h)*Tlen, 'endpoint' = (a_t_set$u + a_t_set$h)*Tlen, 'values' = 0)
+    p_t_set$plottingindex <- (1:nrow(p_t_set))/nrow(p_t_set)
+  
+    plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1 + 1/nrow(p_t_set)), xlab="days", mgp=c(2,0.5,0))
+    title(main = expression((c) ~ all ~ intervals ~ where ~ the ~ test ~ rejects), line = 1)
+    segments(p_t_set[['startpoint']], p_t_set$plottingindex, p_t_set$endpoint, p_t_set$plottingindex, lwd = 2)
+  
+    #Produce minimal intervals
+    p_t_set               <- compute_minimal_intervals(p_t_set)
+    p_t_set$plottingindex <- (1:nrow(p_t_set))/nrow(p_t_set)
+  
+    plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1 + 1/nrow(p_t_set)), xlab="days", mgp=c(2,0.5,0))
+    title(main = expression((d) ~ minimal ~ intervals ~ produced ~ by ~ our ~ test), line = 1)
+    segments(p_t_set[['startpoint']], p_t_set$plottingindex, p_t_set$endpoint, p_t_set$plottingindex, lwd = 2)
+  } else {
+    #If there are no intervals where the test rejects, we produce empty plots
+    plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1), xlab="days", mgp=c(2,0.5,0))
+    title(main = expression((c) ~ all ~ intervals ~ where ~ the ~ test ~ rejects), line = 1)
+    
+    plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1), xlab="days", mgp=c(2,0.5,0))
+    title(main = expression((d) ~ minimal ~ intervals ~ produced ~ by ~ our ~ test), line = 1)
+  }
+  mtext(text_, side = 3, line = 0, outer = TRUE)
+  
+  #SiZer 
+  #par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
+  #plot_SiZer_map(sort(unique(gset[,1])), sort(unique(gset[,2])), test.results = result$test_matrices[[l]], plot.title = expression((c) ~ SiZer ~ map ~ 'for' ~ italic(T)[MS]))
+  
+  #axis_at = seq(4/Tlen, 724/Tlen, by = 30/Tlen)
+  #axis_labels = seq(as.Date("2018/4/4"), as.Date("2020/4/4"), by = 30)
+  #axis(1, at=axis_at, labels = axis_labels, mgp=c(1,0.5,0))
+}
