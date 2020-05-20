@@ -8,9 +8,9 @@ library(multiscale)
 
 #Defining necessary constants
 set.seed(123)
-alpha   <- 0.05 #confidence level for application
-SimRuns <- 1000
-bw      <- 0.05 #Bandwidth for calculating the residuals for \hat{\sigma}
+alpha    <- 0.05 #confidence level for application
+sim_runs <- 1000
+bw       <- 0.05 #Bandwidth for calculating the residuals for \hat{\sigma}
 
 
 #Loading the world coronavirus data
@@ -56,7 +56,7 @@ i = 1
 for (country in countries) {
   covid_mat_min[, i] <- covid_list[[country]]$cases[1:min_dates]
   len <- length(covid_list[[country]]$cases)
-  if (len < max_dates){
+  if (len < max_dates) {
     covid_mat_max[, i] <- c(covid_list[[country]]$cases, rep(NA, max_dates - len))
   } else {
     covid_mat_max[, i] <- covid_list[[country]]$cases[1:max_dates]
@@ -78,10 +78,8 @@ covid_mat_min[covid_mat_min < 0] <- abs(covid_mat_min[covid_mat_min < 0])
 Tlen          <- min_dates
 N_ts          <- countries_num #Updating the number of time series because of dropped stations
 
-#covid_mat_min <- scale(covid_mat_min, scale = FALSE)
-
-u.grid <-  seq(from = 3.5/Tlen, to = 1, by = 3.5/Tlen)
-h.grid <- seq(from = 3.5/Tlen, to = 1/4, by = 3.5/Tlen)
+u_grid      <-  seq(from = 3.5 / Tlen, to = 1, by = 3.5 / Tlen)
+h_grid      <- seq(from = 3.5 / Tlen, to = 1 / 4, by = 3.5 / Tlen)
 grid_matrix <- expand.grid(u.grid, h.grid)
 deletions <- ((grid_matrix$Var1 - grid_matrix$Var2 < 0) | grid_matrix$Var1 + grid_matrix$Var2 > 1 )
 
@@ -107,6 +105,15 @@ for (i in 1:N_ts){
 }
 
 sigma_vec_same <- rep(sqrt(mean(sigma_vec^2)), N_ts)
+
+sigma_bwfree_vec <- rep(0, N_ts)
+
+for (i in 1:N_ts){
+  sigma_bwfree_squared <- sum((covid_mat_min[2:Tlen, i] - covid_mat_min[1:(Tlen - 1), i])^2) / (2 * sum(covid_mat_min[, i]))
+  sigma_bwfree_vec[i] <- sqrt(sigma_bwfree_squared)
+}
+
+sigma_bwfree_vec_same <- rep(sqrt(mean(sigma_bwfree_vec^2)), N_ts)
 
 sigma_mat <- matrix(0.0, nrow = nrow(grid$gset), ncol = N_ts)
 sigma_mat_same <- matrix(0.0, nrow = nrow(grid$gset), ncol = N_ts)
@@ -134,6 +141,10 @@ result_same_bw <- multiscale_test(data = covid_mat_min, sigma_vec = rep(1, N_ts)
 result_diff_bw <- multiscale_test(data = covid_mat_min, sigma_vec = rep(1, N_ts), N_ts = N_ts, grid = grid,
                                   SimRuns = SimRuns, epidem = TRUE, bw_dependent = TRUE, sigma_mat = sigma_mat)
 
+result_bwfree_same <- multiscale_test(data = covid_mat_min, sigma_vec = sigma_bwfree_vec_same, N_ts = N_ts, grid = grid,
+                               SimRuns = SimRuns, epidem = TRUE)
+result_bwfree_diff <- multiscale_test(data = covid_mat_min, sigma_vec = sigma_bwfree_vec, N_ts = N_ts, grid = grid,
+                               SimRuns = SimRuns, epidem = TRUE)
 
 
 l = 1
@@ -160,6 +171,17 @@ for (i in 1:(N_ts - 1)){
                     smoothed_i = smoothed_curve[, i], smoothed_j = smoothed_curve[, j],
                     country_i = countries[i], country_j = countries[j],
                     text_ = "Different bandwidth-specific sigmas for each time trend")
+      
+      produce_plots(results = result_bwfree_same, data_i = covid_mat_min[, i], data_j = covid_mat_min[, j],
+                    smoothed_i = smoothed_curve[, i], smoothed_j = smoothed_curve[, j],
+                    country_i = countries[i], country_j = countries[j],
+                    text_ = "Same bandwidth-free sigmas for all the time trends")
+      
+      produce_plots(results = result_bwfree_diff, data_i = covid_mat_min[, i], data_j = covid_mat_min[, j],
+                    smoothed_i = smoothed_curve[, i], smoothed_j = smoothed_curve[, j],
+                    country_i = countries[i], country_j = countries[j],
+                    text_ = "Different bandwidth-free sigmas for each time trend")
+      
       dev.off()
     }
     l = l + 1
