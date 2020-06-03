@@ -110,11 +110,14 @@ const <- mean(const)
 return(const)
 }   
 
-produce_plots <- function (results, data_i, data_j, smoothed_i, smoothed_j, country_i, country_j, text_){
+produce_plots <- function (results, data_i, data_j, smoothed_i, smoothed_j,
+                           gov_resp_i, gov_resp_j, lagged_gov_resp_i, lagged_gov_resp_j,
+                           country_i, country_j, text_){
   Tlen <- length(data_i)
   gset <- results$gset_with_vals[[l]]
 
-  layout(matrix(c(1, 2, 3, 4),ncol=1), widths=c(3,3,3, 3), heights=c(1,0.8,1, 1), TRUE)
+  layout(matrix(c(1, 2, 3, 4),ncol=1), widths=c(3, 3, 3, 3),
+         heights=c(1, 0.8, 1, 1), TRUE)
   #Setting the layout of the graphs
 
   par(cex = 1, tck = -0.025)
@@ -122,10 +125,11 @@ produce_plots <- function (results, data_i, data_j, smoothed_i, smoothed_j, coun
   par(oma = c(1.5, 1.5, 1.5, 0.2)) #Outer margins
 
   plot(data_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
-      col="blue", ylab="", xlab="", mgp=c(1,0.5,0))
+      col="blue", ylab="", xlab="", mgp=c(1, 0.5, 0))
   lines(data_j, col="red")
   title(main = expression((a) ~ observed ~ cases ~ per ~ day), line = 1)
-  legend(x = 0, y = max(data_i, data_j) - 1, legend=c(country_i, country_j), col = c("blue", "red"), lty = 1, cex = 0.95, ncol = 1)
+  legend(x = 0, y = max(data_i, data_j) - 1, legend=c(country_i, country_j),
+         col = c("blue", "red"), lty = 1, cex = 0.95, ncol = 1)
 
   par(mar = c(0.5, 0.5, 3.5, 0)) #Margins for each plot
 
@@ -134,6 +138,14 @@ produce_plots <- function (results, data_i, data_j, smoothed_i, smoothed_j, coun
   lines(smoothed_j, col="red")
   title(main = expression((b) ~ smoothed ~ curve ~ from ~ (a)), line = 1)
 
+  plot(gov_resp_i, ylim=c(0, 100), type="l",
+       col="blue", ylab="", xlab = "", mgp=c(1,0.5,0))
+  lines(gov_resp_j, col="red")
+  lines(lagged_gov_resp_i, col="blue", lty = "dashed", lwd = 3)
+  lines(lagged_gov_resp_j, col="red", lty = "dashed", lwd = 3)
+  
+  title(main = expression((c) ~ index ~ of ~ government ~ response), line = 1)
+  
   par(mar = c(0.5, 0.5, 3, 0)) #Margins for each plot
 
   a_t_set <- subset(gset, test == 1, select = c(u, h))
@@ -141,9 +153,9 @@ produce_plots <- function (results, data_i, data_j, smoothed_i, smoothed_j, coun
     p_t_set <- data.frame('startpoint' = (a_t_set$u - a_t_set$h)*Tlen, 'endpoint' = (a_t_set$u + a_t_set$h)*Tlen, 'values' = 0)
     p_t_set$plottingindex <- (1:nrow(p_t_set))/nrow(p_t_set)
   
-    plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1 + 1/nrow(p_t_set)), xlab="days", mgp=c(2,0.5,0))
-    title(main = expression((c) ~ all ~ intervals ~ where ~ the ~ test ~ rejects), line = 1)
-    segments(p_t_set[['startpoint']], p_t_set$plottingindex, p_t_set$endpoint, p_t_set$plottingindex, lwd = 2)
+    #plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1 + 1/nrow(p_t_set)), xlab="days", mgp=c(2,0.5,0))
+    #title(main = expression((c) ~ all ~ intervals ~ where ~ the ~ test ~ rejects), line = 1)
+    #segments(p_t_set[['startpoint']], p_t_set$plottingindex, p_t_set$endpoint, p_t_set$plottingindex, lwd = 2)
   
     #Produce minimal intervals
     p_t_set               <- compute_minimal_intervals(p_t_set)
@@ -154,8 +166,8 @@ produce_plots <- function (results, data_i, data_j, smoothed_i, smoothed_j, coun
     segments(p_t_set[['startpoint']], p_t_set$plottingindex, p_t_set$endpoint, p_t_set$plottingindex, lwd = 2)
   } else {
     #If there are no intervals where the test rejects, we produce empty plots
-    plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1), xlab="days", mgp=c(2,0.5,0))
-    title(main = expression((c) ~ all ~ intervals ~ where ~ the ~ test ~ rejects), line = 1)
+    #plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1), xlab="days", mgp=c(2,0.5,0))
+    #title(main = expression((c) ~ all ~ intervals ~ where ~ the ~ test ~ rejects), line = 1)
     
     plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1), xlab="days", mgp=c(2,0.5,0))
     title(main = expression((d) ~ minimal ~ intervals ~ produced ~ by ~ our ~ test), line = 1)
