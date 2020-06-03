@@ -110,7 +110,7 @@ const <- mean(const)
 return(const)
 }   
 
-produce_plots <- function (results, data_i, data_j, smoothed_i, smoothed_j,
+produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
                            gov_resp_i, gov_resp_j, lagged_gov_resp_i, lagged_gov_resp_j,
                            country_i, country_j, text_){
   Tlen <- length(data_i)
