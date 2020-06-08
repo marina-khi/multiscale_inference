@@ -23,7 +23,7 @@ names(gov_responces)[names(gov_responces) == 'Date'] <- 'dateRep'
 covid_tmp         <- read.csv("data/covid.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "")
 covid_tmp         <- covid_tmp[!is.na(covid_tmp$countryterritoryCode), ]
 covid_tmp$dateRep <- as.Date(covid_tmp$dateRep, format = "%d/%m/%Y")
-covid_tmp         <- complete(covid_tmp, dateRep = seq.Date(min(dateRep),max(dateRep), by='day'),
+covid_tmp         <- complete(covid_tmp, dateRep = seq.Date(min(dateRep), max(dateRep), by='day'),
                               countryterritoryCode, fill = list(cases = 0, deaths = 0))
 
 covid <- merge(covid_tmp, gov_responces, by  = c('countryterritoryCode', 'dateRep'), all.x = TRUE)
@@ -140,41 +140,22 @@ result_bwfree <- multiscale_test(data = covid_mat, sigma_vec = sigma_bwfree_vec,
                                 n_ts = n_ts, grid = grid,
                                 sim_runs = sim_runs, epidem = TRUE)
 
-result_DEU_vs_ESP <- multiscale_test(data = covid_mat[, c(1, 2)], sigma_vec = sigma_vec[c(1, 2)],
-                                     n_ts = 2, grid = grid,
-                                     sim_runs = sim_runs, epidem = TRUE)
+#Pairwise coparison DEU vs ESP, DEU vs FRA, DEU vs GBR and DEU vs ITA
+#here we code all the pairs that we want to compare in a matrix
+ijset <- matrix(data = c(1, 2, 1, 3, 1, 4, 1, 5), ncol = 2, byrow = TRUE)
 
-result_bwfree_DEU_vs_ESP <- multiscale_test(data = covid_mat[, c(1, 2)], sigma_vec = sigma_bwfree_vec[c(1, 2)],
-                                            n_ts = 2, grid = grid,
-                                            sim_runs = sim_runs, epidem = TRUE)
+result_some_countries <- multiscale_test(data = covid_mat, sigma_vec = sigma_vec,
+                          n_ts = n_ts, grid = grid, ijset = ijset,
+                          sim_runs = sim_runs, epidem = TRUE)
 
-result_DEU_vs_FRA <- multiscale_test(data = covid_mat[, c(1, 3)], sigma_vec = sigma_vec[c(1, 3)],
-                                     n_ts = 2, grid = grid,
-                                     sim_runs = sim_runs, epidem = TRUE)
+result_bwfree_some_countries <- multiscale_test(data = covid_mat, sigma_vec = sigma_bwfree_vec,
+                                 n_ts = n_ts, grid = grid, ijset = ijset,
+                                 sim_runs = sim_runs, epidem = TRUE)
 
-result_bwfree_DEU_vs_FRA <- multiscale_test(data = covid_mat[, c(1, 3)], sigma_vec = sigma_bwfree_vec[c(1, 3)],
-                                            n_ts = 2, grid = grid,
-                                            sim_runs = sim_runs, epidem = TRUE)
-
-result_DEU_vs_GBR <- multiscale_test(data = covid_mat[, c(1, 4)], sigma_vec = sigma_vec[c(1, 4)],
-                                     n_ts = 2, grid = grid,
-                                     sim_runs = sim_runs, epidem = TRUE)
-
-result_bwfree_DEU_vs_GBR <- multiscale_test(data = covid_mat[, c(1, 4)], sigma_vec = sigma_bwfree_vec[c(1, 4)],
-                                            n_ts = 2, grid = grid,
-                                            sim_runs = sim_runs, epidem = TRUE)
-
-result_DEU_vs_ITA <- multiscale_test(data = covid_mat[, c(1, 5)], sigma_vec = sigma_vec[c(1, 5)],
-                                     n_ts = 2, grid = grid,
-                                     sim_runs = sim_runs, epidem = TRUE)
-
-result_bwfree_DEU_vs_ITA <- multiscale_test(data = covid_mat[, c(1, 5)], sigma_vec = sigma_bwfree_vec[c(1, 5)],
-                                            n_ts = 2, grid = grid,
-                                            sim_runs = sim_runs, epidem = TRUE)
 
 
 #Plotting pairwise comparison for residual based sigma estimator
-pdf(paste0("plots/residual_based_sigma_five_countries.pdf"), width=7, height=9, paper="special")
+pdf(paste0("plots/residual_based_sigma_all_countries.pdf"), width=7, height=9, paper="special")
 l = 1
 for (i in 1:(n_ts - 1)) {
   for (j in (i + 1):n_ts) {
@@ -195,7 +176,7 @@ for (i in 1:(n_ts - 1)) {
 dev.off()
 
 #Plotting pairwise comparison for difference based sigma estimator
-pdf(paste0("plots/bandwidth_free_sigma_five_countries.pdf"), width=7, height=9, paper="special")
+pdf(paste0("plots/bandwidth_free_sigma_all_countries.pdf"), width=7, height=9, paper="special")
 l = 1
 for (i in 1:(n_ts - 1)) {
   for (j in (i + 1):n_ts) {
@@ -215,61 +196,29 @@ for (i in 1:(n_ts - 1)) {
 dev.off()
 
 #Plotting pairwise comparison for difference based sigma estimator
-pdf(paste0("plots/residual_based_sigma_pairwise_comparison.pdf"), width=7, height=9, paper="special")
-produce_plots(results = result_DEU_vs_ESP, l = 1, data_i = covid_mat[, 1], data_j = covid_mat[, 2],
-              smoothed_i = smoothed_curve[, 1], smoothed_j = smoothed_curve[, 2],
-              gov_resp_i = gov_resp[, 1], gov_resp_j = gov_resp[, 2],
-              lagged_gov_resp_i = lagged_gov_resp[, 1], lagged_gov_resp_j = lagged_gov_resp[, 2],
-              country_i = countries[1], country_j = countries[2],
-              text_ = "Same bandwidth-free sigmas for all the time trends")
-produce_plots(results = result_DEU_vs_FRA, l = 1, data_i = covid_mat[, 1], data_j = covid_mat[, 3],
-              smoothed_i = smoothed_curve[, 1], smoothed_j = smoothed_curve[, 3],
-              gov_resp_i = gov_resp[, 1], gov_resp_j = gov_resp[, 3],
-              lagged_gov_resp_i = lagged_gov_resp[, 1], lagged_gov_resp_j = lagged_gov_resp[, 3],
-              country_i = countries[1], country_j = countries[3],
-              text_ = "Same bandwidth-free sigmas for all the time trends")
-produce_plots(results = result_DEU_vs_GBR, l = 1, data_i = covid_mat[, 1], data_j = covid_mat[, 4],
-              smoothed_i = smoothed_curve[, 1], smoothed_j = smoothed_curve[, 4],
-              gov_resp_i = gov_resp[, 1], gov_resp_j = gov_resp[, 4],
-              lagged_gov_resp_i = lagged_gov_resp[, 1], lagged_gov_resp_j = lagged_gov_resp[, 4],
-              country_i = countries[1], country_j = countries[4],
-              text_ = "Same bandwidth-free sigmas for all the time trends")
-produce_plots(results = result_DEU_vs_ITA, l = 1, data_i = covid_mat[, 1], data_j = covid_mat[, 5],
-              smoothed_i = smoothed_curve[, 1], smoothed_j = smoothed_curve[, 5],
-              gov_resp_i = gov_resp[, 1], gov_resp_j = gov_resp[, 5],
-              lagged_gov_resp_i = lagged_gov_resp[, 1], lagged_gov_resp_j = lagged_gov_resp[, 5],
-              country_i = countries[1], country_j = countries[5],
-              text_ = "Same bandwidth-free sigmas for all the time trends")
-
+pdf(paste0("plots/residual_based_sigma_some_countries.pdf"), width=7, height=9, paper="special")
+for (l in 1:nrow(ijset)) {
+  i = ijset[l, 1]
+  j = ijset[l, 2]
+  produce_plots(results = result_some_countries, l = l, data_i = covid_mat[, i], data_j = covid_mat[, j],
+              smoothed_i = smoothed_curve[, i], smoothed_j = smoothed_curve[, j],
+              gov_resp_i = gov_resp[, i], gov_resp_j = gov_resp[, j],
+              lagged_gov_resp_i = lagged_gov_resp[, i], lagged_gov_resp_j = lagged_gov_resp[, j],
+              country_i = countries[i], country_j = countries[j],
+              text_ = "Same residual based sigmas for all the time trends")
+}
 dev.off()
 
-
-#Plotting pairwise comparison for difference based sigma estimator
-pdf(paste0("plots/bandwidth_free_sigma_pairwise_comparison.pdf"), width=7, height=9, paper="special")
-produce_plots(results = result_bwfree_DEU_vs_ESP, l = 1, data_i = covid_mat[, 1], data_j = covid_mat[, 2],
-              smoothed_i = smoothed_curve[, 1], smoothed_j = smoothed_curve[, 2],
-              gov_resp_i = gov_resp[, 1], gov_resp_j = gov_resp[, 2],
-              lagged_gov_resp_i = lagged_gov_resp[, 1], lagged_gov_resp_j = lagged_gov_resp[, 2],
-              country_i = countries[1], country_j = countries[2],
-              text_ = "Same bandwidth-free sigmas for all the time trends")
-produce_plots(results = result_bwfree_DEU_vs_FRA, l = 1, data_i = covid_mat[, 1], data_j = covid_mat[, 3],
-              smoothed_i = smoothed_curve[, 1], smoothed_j = smoothed_curve[, 3],
-              gov_resp_i = gov_resp[, 1], gov_resp_j = gov_resp[, 3],
-              lagged_gov_resp_i = lagged_gov_resp[, 1], lagged_gov_resp_j = lagged_gov_resp[, 3],
-              country_i = countries[1], country_j = countries[3],
-              text_ = "Same bandwidth-free sigmas for all the time trends")
-produce_plots(results = result_bwfree_DEU_vs_GBR, l = 1, data_i = covid_mat[, 1], data_j = covid_mat[, 4],
-              smoothed_i = smoothed_curve[, 1], smoothed_j = smoothed_curve[, 4],
-              gov_resp_i = gov_resp[, 1], gov_resp_j = gov_resp[, 4],
-              lagged_gov_resp_i = lagged_gov_resp[, 1], lagged_gov_resp_j = lagged_gov_resp[, 4],
-              country_i = countries[1], country_j = countries[4],
-              text_ = "Same bandwidth-free sigmas for all the time trends")
-produce_plots(results = result_bwfree_DEU_vs_ITA, l = 1, data_i = covid_mat[, 1], data_j = covid_mat[, 5],
-              smoothed_i = smoothed_curve[, 1], smoothed_j = smoothed_curve[, 5],
-              gov_resp_i = gov_resp[, 1], gov_resp_j = gov_resp[, 5],
-              lagged_gov_resp_i = lagged_gov_resp[, 1], lagged_gov_resp_j = lagged_gov_resp[, 5],
-              country_i = countries[1], country_j = countries[5],
-              text_ = "Same bandwidth-free sigmas for all the time trends")
-
+pdf(paste0("plots/bwfree_sigma_some_countries.pdf"), width=7, height=9, paper="special")
+for (l in 1:nrow(ijset)) {
+  i = ijset[l, 1]
+  j = ijset[l, 2]
+  produce_plots(results = result_bwfree_some_countries, l = l, data_i = covid_mat[, i], data_j = covid_mat[, j],
+                smoothed_i = smoothed_curve[, i], smoothed_j = smoothed_curve[, j],
+                gov_resp_i = gov_resp[, i], gov_resp_j = gov_resp[, j],
+                lagged_gov_resp_i = lagged_gov_resp[, i], lagged_gov_resp_j = lagged_gov_resp[, j],
+                country_i = countries[i], country_j = countries[j],
+                text_ = "Same bandwidth-free sigmas for all the time trends")
+}
 dev.off()
 
