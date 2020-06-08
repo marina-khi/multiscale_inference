@@ -18,9 +18,8 @@ for (country in unique(covid$geoId)){
   }
 }
 
-#covid_list <- covid_list[c('BE', 'CN', 'DE', 'ES', 'FR', 'IT', 'NL', 'RU', 'UK', 'US')]
-#CN = CHINA
-covid_list <- covid_list[c('DE', 'IT')]
+#covid_list <- covid_list[c('BE', 'CN', 'DE', 'ES', 'FR', 'IT', 'NL', 'RU', 'UK', 'US')] #CN = CHINA
+covid_list <- covid_list[c('DE', 'IT', 'ES', 'FR', 'UK')]
 
 #Calculate the number of days that we have data for all countries.
 min_dates <- min(sapply(covid_list[names(covid_list) != "CN"], NROW)) #We are not considering China as it has too long dataset
