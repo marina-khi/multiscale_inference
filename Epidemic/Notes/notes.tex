@@ -262,17 +262,17 @@ We consider the following simulation setup:
 where the noise variables $\eta_{it}$ have zero mean and unit variance.
 
 \item Throughout the simulation study, we assume that the hypothesis $H_0^{(ijk)}$ holds true for all $(i,j,k)$ under consideration, which implies that $\lambda_i = \lambda$ for all $i$. We consider the function 
-\[ \lambda(u) = 5000 \exp\Big(-\frac{(x-3)^2}{2}\Big) + 50, \]
+\[ \lambda(u) = 5000 \exp\Big(-\frac{(8u-3)^2}{2}\Big) + 50, \]
 which has a similar shape as some of the estimated curves in the application of Section \ref{subsec:app}. A plot of the function $\lambda$ is provided in Figure \ref{fig:lambda_F}. 
 
 \item We set the overdispersion parameter $\sigma = 10$. (Alternatively, we may pick $\sigma=15$ or $\sigma=20$.) The estimated values of $\sigma$ in the application take similar values.
 
-\item We consider different values for $T$ and $n$, in particular, $T \in \{50,100\}$ and $n \in \{5,10,50,100\}$. 
+\item We consider different values for $T$ and $n$, in particular, $T \in \{100,200\}$ and $n \in \{5,10,50\}$. 
 
 \item We let $\pairs = \{ (i,j): 1 \le i < j \le n\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$. Moreover, we choose $\intervals$ to be a family of time intervals with $h_k \in \{ 7/T,14/T,21/T,28/T \}$. Hence, all intervals in $\intervals$ have length either 7 days (1 week), 14 days (2 weeks), 21 days (3 weeks), or 28 days (4 weeks). For each length $h_k$, we include all intervals that start at days $t = 1 + 7(j-1)$ and $t = 4 + 7(j-1)$ for $j=1,2,\ldots$ A graphical presentation of the family $\intervals$ is given in Figure \ref{fig:lambda_F}. 
 
 \end{itemize}
-Each simulation experiment is based on $R=1000$ simulated samples $\mathcal{\X}$ of count data. 
+Each simulation experiment is based on $R=10 000$ simulated samples $\mathcal{\X}$ of count data. 
 
 
 \begin{figure}[t!]
