@@ -1,7 +1,7 @@
 rm(list=ls())
 source("functions.r")
 source("data_read.r")
-
+library("tictoc")
 
 Rsim  <- 5000  # number of simulation runs
 alpha <- 0.05  # significance level
@@ -38,7 +38,7 @@ crit.val <- critical.value(nn, TT, alpha)
 
 
 # carry out multiscale test
-
+tic("Simulations")
 test.res <- rep(NA,Rsim)
 for(rsim in 1:Rsim)
 {
@@ -47,7 +47,7 @@ for(rsim in 1:Rsim)
    res <- statistics(Y, scaling)
    test.stat <- max(res$ms, na.rm=TRUE)
    test.res[rsim] <- as.numeric(test.stat > crit.val)
-   print(rsim)
+   #print(rsim)
 }
-
+toc(log = TRUE)
 print(paste("Empirical size: ",  sum(test.res)/Rsim, sep=""))

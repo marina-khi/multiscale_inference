@@ -1,76 +1,3 @@
-#' Epanechnikov kernel function.
-#' @param x A number.
-#' @return 3/4(1-x^2) for |x|<=1 and 0 elsewhere.
-#' @example 
-#' epanechnikov_kernel(1)
-
-epanechnikov_kernel <- function(x)
-{
-  if (abs(x)<=1)
-  {
-    result = 3/4 * (1 - x*x)
-  } else {
-    result = 0
-  }
-  return(result)
-}
-
-#' Function needed for local linear smoothing
-#' @param u      Location at which the local linear smoother is calculated.
-#' @param h      Bandwidth that is used for calculating local linear smoothing function.
-#' @param T_size Sample size
-s_t_1 <- function(u, h, T_size) {
-  result = 0
-  for (i in 1:T_size) {
-    result = result + epanechnikov_kernel((i/T_size - u) / h) * ((i/T_size - u) / h)
-  }
-  return(result / (T_size * h));
-}
-
-#' Function needed for local linear smoothing
-#' @param u      Location at which the local linear smoother is calculated.
-#' @param h      Bandwidth that is used for calculating local linear smoothing function.
-#' @param T_size Sample size
-s_t_2 <- function(u, h, T_size) {
-  result = 0
-  for (i in 1:T_size) {
-    result = result + epanechnikov_kernel((i/T_size - u) / h) * ((i/T_size - u) / h) * ((i/T_size - u) / h)
-  }
-  return(result / (T_size * h));
-}
-
-#' Function needed for local linear smoothing
-#' @param u      Location at which the local linear smoother is calculated.
-#' @param h      Bandwidth that is used for calculating local linear smoothing function.
-#' @param T_size Sample size
-s_t_0 <- function(u, h, T_size) {
-  result = 0
-  for (i in 1:T_size) {
-    result = result + epanechnikov_kernel((i/T_size - u) / h)
-  }
-  return(result / (T_size * h));
-}
-
-#Local Linear estimator using the epanechnikov kernel. 
-local_linear_smoothing <- function(u, data_p, grid_p, bw){
-  if (length(data_p) != length(grid_p)){
-    cat("Dimensions of the grid and the data do not match, please check the arguments")
-    return(NULL)
-  } else {
-    result      = 0
-    norm        = 0
-    T_size      = length(data_p)
-    s_t_2_value = s_t_2(u, bw, T_size)
-    s_t_1_value = s_t_1(u, bw, T_size) 
-    for (i in 1:T_size){
-      k = (s_t_2_value - s_t_1_value * ((grid_p[i] - u) / bw)) * epanechnikov_kernel((grid_p[i] - u) / bw)
-      result = result + k * data_p[i]
-      norm = norm + k 
-    }
-    return(result/norm)
-  }
-}
-
 #Local Linear estimator using the epanechnikov kernel. 
 nadaraya_watson_smoothing <- function(u, data_p, grid_p, bw){
   if (length(data_p) != length(grid_p)){
@@ -90,25 +17,6 @@ nadaraya_watson_smoothing <- function(u, data_p, grid_p, bw){
   }
 }
 
-
-# correction factor for error variance
-
-correct <- function(Y, bw=0.025)
-{  Y <- as.matrix(Y)
-nn <- dim(Y)[2]
-TT <- dim(Y)[1]
-X <- (1:TT)/TT
-const <- rep(0,nn)
-for(i in 1:nn)
-{  lambda.fct <- nw(X,Y[,i],bw,TT)
-resid <- Y[,i] - lambda.fct
-pos <- (lambda.fct > 0)
-resid <- resid[pos]/sqrt(lambda.fct[pos])
-const[i] <- var(resid)
-}   
-const <- mean(const)
-return(const)
-}   
 
 produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
                            gov_resp_i, gov_resp_j, lagged_gov_resp_i, lagged_gov_resp_j,
@@ -182,4 +90,82 @@ produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
   #axis_labels = seq(as.Date("2018/4/4"), as.Date("2020/4/4"), by = 30)
   #axis(1, at=axis_at, labels = axis_labels, mgp=c(1,0.5,0))
   return(a_t_set)
+}
+
+# functions to simulate data
+
+lambda_fct <- function(u) {
+  return (5000 * exp(-(8 * u - 3) ^ 2 / 2) + 50)
+}
+
+r_doublepois <- function(n, mu, theta) {
+  rnbinom(n = n, mu = mu, size = mu/(theta - 1))
+}
+
+simulate_data <- function(n_ts, t_len, lambda_vec, sigma) {
+  data <- matrix(0, ncol = n_ts, nrow = t_len)
+  #for(i in 1:n_ts) {
+  #  data[, i]  <- rdoublepois(n = t_len, m = lambda_vec, s = rep(1 / sigma^2, t_len))
+  #}
+  for(t in 1:t_len) {
+    data[t, ] <- r_doublepois(n = n_ts, lambda_vec[t], sigma^2)
+  }
+  return(data)
+}
+
+calculate_size <- function(t_len, n_ts, alpha_vec, lambda_vec = lambda_vec,
+                           sigma = sigma,
+                           n_sim = 1000, sim_runs = 1000){
+  
+  #Constructing the set of intervals
+  grid                   <- construct_weekly_grid(t_len)
+  gset                   <- grid$gset
+  gset_cpp               <- as.matrix(gset)
+  gset_cpp               <- as.vector(gset_cpp)
+  storage.mode(gset_cpp) <- "double"
+  
+  #Constructing the set of the pairwise comparisons
+  ijset                   <- expand.grid(i = 1:n_ts, j = 1:n_ts)
+  ijset                   <- ijset[ijset$i < ijset$j, ]
+  ijset_cpp               <- as.matrix(ijset)
+  ijset_cpp               <- as.vector(ijset_cpp)
+  storage.mode(ijset_cpp) <- "integer"
+  
+  # compute critical value
+  quantiles <- compute_quantiles(t_len = t_len, grid = grid, n_ts = n_ts, 
+                                 sim_runs = sim_runs, epidem = TRUE)
+  
+  probs <- as.vector(quantiles$quant[1, ])
+  quant <- as.vector(quantiles$quant[2, ])
+  
+  crit_val <- c()
+  for (alpha in alpha_vec){
+    if (sum(probs == (1 - alpha)) == 0)
+      pos <- which.min(abs(probs - (1 - alpha)))
+    if (sum(probs == (1 - alpha)) != 0)
+      pos <- which.max(probs == (1 - alpha))
+    crit_val <- c(crit_val, quant[pos])
+  }
+  
+  
+  # carry out multiscale test
+  test_res <- matrix(NA, ncol = length(alpha_vec), nrow = n_sim)
+  
+  for(sim in 1:n_sim) {
+    Y <- simulate_data(n_ts = n_ts, t_len = t_len, lambda_vec = lambda_vec, sigma = sigma)
+    sigma_vec <- rep(0, n_ts)
+    for (i in 1:n_ts){
+      sigma_squared <- sum((Y[2:t_len, i] - Y[1:(t_len - 1), i]) ^ 2) / (2 * sum(Y[, i]))
+      sigma_vec[i] <- sqrt(sigma_squared)
+    }
+    
+    result <- compute_multiple_statistics(t_len = t_len, n_ts = n_ts, data = Y,
+                                          gset = gset_cpp, ijset = ijset_cpp,
+                                          sigma_vec = sigma_vec, epidem = TRUE)
+    
+    test_stat <- max(result$stat, na.rm = TRUE)
+    test_res[sim, ] <- as.numeric(test_stat > crit_val)
+  }
+  print(paste("Empirical size: ",  colSums(test_res) / n_sim, sep=""))
+  return(colSums(test_res) / n_sim)
 }
