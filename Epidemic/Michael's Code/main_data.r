@@ -73,3 +73,11 @@ for(i in 1:(nn-1))
       dev.off()
    }
 }  
+
+pos = 1
+for(i in 1:(nn-1)) {
+  for(j in (i+1):nn) {
+    cat(countries[i], " vs ", countries[j], ", stat = ", max(res$stats[[pos]]), "\n")
+    pos <- pos+1
+  }
+}

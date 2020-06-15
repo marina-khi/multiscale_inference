@@ -102,6 +102,13 @@ statistics <- function(Y, scaling)
    TT <- dim(Y)[1]
    kernel.mat <- intervals(TT)
    h.vec <- rowSums(kernel.mat)/TT
+   u.vec.max <- rep(0, nrow(kernel.mat))
+   u.vec.min <- rep(0, nrow(kernel.mat))
+   for (i in 1:nrow(kernel.mat)){
+      u.vec.max[i] = max(which(kernel.mat[i, ] == 1))
+      u.vec.min[i] = min(which(kernel.mat[i, ] == 1))
+   } 
+   gset_michael <- cbind(u.vec.min, u.vec.max, h.vec)
    stat.list <- list()
    stat.ms <- matrix(NA,ncol=nn,nrow=nn)
    pos <- 1
@@ -116,7 +123,7 @@ statistics <- function(Y, scaling)
          pos <- pos+1
       }
    }
-   return(list(ms=stat.ms, stats=stat.list))
+   return(list(ms = stat.ms, stats = stat.list, gset = gset_michael))
 }
 
 

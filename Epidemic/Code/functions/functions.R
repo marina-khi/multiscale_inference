@@ -150,20 +150,20 @@ produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
 
   a_t_set <- subset(gset, test == 1, select = c(u, h))
   if (nrow(a_t_set) > 0){
-    p_t_set <- data.frame('startpoint' = (a_t_set$u - a_t_set$h)*Tlen, 'endpoint' = (a_t_set$u + a_t_set$h)*Tlen, 'values' = 0)
-    p_t_set$plottingindex <- (1:nrow(p_t_set))/nrow(p_t_set)
-  
+    p_t_set <- data.frame('startpoint' = a_t_set$u - a_t_set$h, 'endpoint' = a_t_set$u + a_t_set$h, 'values' = 0)
+    p_t_set$values <- (1:nrow(p_t_set))/nrow(p_t_set)
+    
     #plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1 + 1/nrow(p_t_set)), xlab="days", mgp=c(2,0.5,0))
     #title(main = expression((c) ~ all ~ intervals ~ where ~ the ~ test ~ rejects), line = 1)
     #segments(p_t_set[['startpoint']], p_t_set$plottingindex, p_t_set$endpoint, p_t_set$plottingindex, lwd = 2)
   
     #Produce minimal intervals
-    p_t_set               <- compute_minimal_intervals(p_t_set)
-    p_t_set$plottingindex <- (1:nrow(p_t_set))/nrow(p_t_set)
-  
+    p_t_set2               <- compute_minimal_intervals(p_t_set)
+
     plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1 + 1/nrow(p_t_set)), xlab="days", mgp=c(2,0.5,0))
     title(main = expression((d) ~ minimal ~ intervals ~ produced ~ by ~ our ~ test), line = 1)
-    segments(p_t_set[['startpoint']], p_t_set$plottingindex, p_t_set$endpoint, p_t_set$plottingindex, lwd = 2)
+    segments(p_t_set2$startpoint * Tlen, p_t_set2$values, p_t_set2$endpoint *Tlen, p_t_set2$values, lwd = 2)
+    segments(p_t_set$startpoint * Tlen, p_t_set$values, p_t_set$endpoint *Tlen, p_t_set$values, col = "gray")
   } else {
     #If there are no intervals where the test rejects, we produce empty plots
     #plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1), xlab="days", mgp=c(2,0.5,0))
@@ -181,4 +181,5 @@ produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
   #axis_at = seq(4/Tlen, 724/Tlen, by = 30/Tlen)
   #axis_labels = seq(as.Date("2018/4/4"), as.Date("2020/4/4"), by = 30)
   #axis(1, at=axis_at, labels = axis_labels, mgp=c(1,0.5,0))
+  return(a_t_set)
 }
