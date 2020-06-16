@@ -20,7 +20,7 @@ nadaraya_watson_smoothing <- function(u, data_p, grid_p, bw){
 
 produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
                            gov_resp_i, gov_resp_j, lagged_gov_resp_i, lagged_gov_resp_j,
-                           country_i, country_j, text_){
+                           country_i, country_j){
   Tlen <- length(data_i)
   gset <- results$gset_with_vals[[l]]
 
@@ -30,66 +30,54 @@ produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
 
   par(cex = 1, tck = -0.025)
   par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
-  par(oma = c(1.5, 1.5, 1.5, 0.2)) #Outer margins
+  par(oma = c(0.2, 1.5, 2, 0.2)) #Outer margins
 
   plot(data_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
       col="blue", ylab="", xlab="", mgp=c(1, 0.5, 0))
   lines(data_j, col="red")
-  title(main = expression((a) ~ observed ~ cases ~ per ~ day), line = 1)
+  title(main = "(a) observed cases per day", font.main = 1, line = 0.5)
   legend(x = 0, y = max(data_i, data_j) - 1, legend=c(country_i, country_j),
          col = c("blue", "red"), lty = 1, cex = 0.95, ncol = 1)
 
-  par(mar = c(0.5, 0.5, 3.5, 0)) #Margins for each plot
+  par(mar = c(0.5, 0.5, 3, 0)) #Margins for each plot
 
   plot(smoothed_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
      col="blue", ylab="", xlab = "", mgp=c(1,0.5,0))
+  title(main = "(b) smoothed curve from (a)", font.main = 1, line = 0.5)
   lines(smoothed_j, col="red")
-  title(main = expression((b) ~ smoothed ~ curve ~ from ~ (a)), line = 1)
 
   plot(gov_resp_i, ylim=c(0, 100), type="l",
-       col="blue", ylab="", xlab = "", mgp=c(1,0.5,0))
+       col="blue", ylab="", xlab = "", mgp=c(1, 0.5, 0))
+  title(main = "(c) index of government response", font.main = 1, line = 0.5)
   lines(gov_resp_j, col="red")
   lines(lagged_gov_resp_i, col="blue", lty = "dashed", lwd = 3)
   lines(lagged_gov_resp_j, col="red", lty = "dashed", lwd = 3)
   
-  title(main = expression((c) ~ index ~ of ~ government ~ response), line = 1)
+  #title(main = expression((c) ~ index ~ of ~ government ~ response), line = 1)
   
-  par(mar = c(0.5, 0.5, 3, 0)) #Margins for each plot
+  par(mar = c(2.7, 0.5, 3, 0)) #Margins for each plot
 
   a_t_set <- subset(gset, test == 1, select = c(u, h))
   if (nrow(a_t_set) > 0){
     p_t_set <- data.frame('startpoint' = a_t_set$u - a_t_set$h, 'endpoint' = a_t_set$u + a_t_set$h, 'values' = 0)
     p_t_set$values <- (1:nrow(p_t_set))/nrow(p_t_set)
     
-    #plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1 + 1/nrow(p_t_set)), xlab="days", mgp=c(2,0.5,0))
-    #title(main = expression((c) ~ all ~ intervals ~ where ~ the ~ test ~ rejects), line = 1)
-    #segments(p_t_set[['startpoint']], p_t_set$plottingindex, p_t_set$endpoint, p_t_set$plottingindex, lwd = 2)
-  
     #Produce minimal intervals
-    p_t_set2               <- compute_minimal_intervals(p_t_set)
+    p_t_set2  <- compute_minimal_intervals(p_t_set)
 
-    plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1 + 1/nrow(p_t_set)), xlab="days", mgp=c(2,0.5,0))
-    title(main = expression((d) ~ minimal ~ intervals ~ produced ~ by ~ our ~ test), line = 1)
+    plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1 + 1 / nrow(p_t_set)), xlab="", mgp=c(2, 0.5, 0), yaxt = "n")
+    title(main = "(d) minimal intervals produced by our test", font.main = 1, line = 0.5)
+    title(xlab = "days since the hundredth case", line = 1.7, cex.lab = 0.9)
     segments(p_t_set2$startpoint * Tlen, p_t_set2$values, p_t_set2$endpoint *Tlen, p_t_set2$values, lwd = 2)
     segments(p_t_set$startpoint * Tlen, p_t_set$values, p_t_set$endpoint *Tlen, p_t_set$values, col = "gray")
   } else {
     #If there are no intervals where the test rejects, we produce empty plots
-    #plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1), xlab="days", mgp=c(2,0.5,0))
-    #title(main = expression((c) ~ all ~ intervals ~ where ~ the ~ test ~ rejects), line = 1)
-    
-    plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1), xlab="days", mgp=c(2,0.5,0))
-    title(main = expression((d) ~ minimal ~ intervals ~ produced ~ by ~ our ~ test), line = 1)
+
+    plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1), xlab="", ylab = "", mgp=c(2,0.5,0), yaxt = "n")
+    title(main = "(d) minimal intervals produced by our test", font.main = 1, line = 0.5)
+    title(xlab = "days since the hundredth case", line = 1.7, cex.lab = 0.9)
   }
-  mtext(text_, side = 3, line = 0, outer = TRUE)
-  
-  #SiZer 
-  #par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
-  #plot_SiZer_map(sort(unique(gset[,1])), sort(unique(gset[,2])), test.results = result$test_matrices[[l]], plot.title = expression((c) ~ SiZer ~ map ~ 'for' ~ italic(T)[MS]))
-  
-  #axis_at = seq(4/Tlen, 724/Tlen, by = 30/Tlen)
-  #axis_labels = seq(as.Date("2018/4/4"), as.Date("2020/4/4"), by = 30)
-  #axis(1, at=axis_at, labels = axis_labels, mgp=c(1,0.5,0))
-  return(a_t_set)
+  mtext(paste("Comparison of ", country_i, " and ", country_j), side = 3, line = 0, outer = TRUE, font = 1, cex = 1.2)
 }
 
 # functions to simulate data
@@ -112,6 +100,15 @@ simulate_data <- function(n_ts, t_len, lambda_vec, sigma) {
   }
   return(data)
 }
+
+simulate_data_iid <- function(n_ts, t_len, lambda_vec, sigma) {
+  data <- matrix(0, ncol = n_ts, nrow = t_len)
+  for(t in 1:t_len) {
+    data[t, ]  <- lambda_vec[t] + sigma * sqrt(lambda_vec[t]) * rnorm(n_ts)
+  }
+  return(data)
+}
+
 
 calculate_size <- function(t_len, n_ts, alpha_vec, lambda_vec = lambda_vec,
                            sigma = sigma,
@@ -152,7 +149,8 @@ calculate_size <- function(t_len, n_ts, alpha_vec, lambda_vec = lambda_vec,
   test_res <- matrix(NA, ncol = length(alpha_vec), nrow = n_sim)
   
   for(sim in 1:n_sim) {
-    Y <- simulate_data(n_ts = n_ts, t_len = t_len, lambda_vec = lambda_vec, sigma = sigma)
+    #Y <- simulate_data(n_ts = n_ts, t_len = t_len, lambda_vec = lambda_vec, sigma = sigma)
+    Y <- simulate_data_iid(n_ts = n_ts, t_len = t_len, lambda_vec = lambda_vec, sigma = sigma)
     sigma_vec <- rep(0, n_ts)
     for (i in 1:n_ts){
       sigma_squared <- sum((Y[2:t_len, i] - Y[1:(t_len - 1), i]) ^ 2) / (2 * sum(Y[, i]))

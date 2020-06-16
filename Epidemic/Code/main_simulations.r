@@ -9,7 +9,7 @@ options(xtable.timestamp = "")
 n_sim     <- 5000  # number of simulation runs for power and size
 sim_runs  <- 5000 #number for calculating quantiles
 alpha_vec <- c(0.01, 0.05, 0.1)  # significance level
-n_ts_vec  <- c(5, 10, 15)     # number of time series
+n_ts_vec  <- c(5, 10, 50)     # number of time series
 t_len_vec <- c(100, 250, 500)   # time series length
 sigma_vec <- c(10, 15, 20)    # overdispersion parameter
 
@@ -25,6 +25,15 @@ for (sigma in sigma_vec){
     i <- 1
     for (t_len in t_len_vec){
       lambda_vec <- lambda_fct((1:t_len) / t_len)
+      if(t_len == 100) {
+        pdf("plots/lambda_fct.pdf", width=5, height=5, paper="special")
+        par(mar = c(3, 2, 2, 0)) #Margins for each plot
+        par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
+        plot(lambda_vec,  ylim = c(0, max(lambda_vec) + 100), xlab="u", ylab = "", mgp=c(2,0.5,0), type = "l")
+        title(main = expression(Plot ~ of ~ the ~ "function" ~ lambda), line = 1)
+        dev.off()
+      }
+      
       #set.seed(1234) # This is for calculating size for different specifications on comparable datasets
       size <- calculate_size(t_len = t_len, n_ts = n_ts, alpha_vec = alpha_vec,
                              lambda_vec = lambda_vec, sigma = sigma,
@@ -36,5 +45,13 @@ for (sigma in sigma_vec){
   }
   
   print.xtable(xtable(size_matrix, digits = c(3), align = paste(replicate(number_of_cols + 1, "c"), collapse = "")),
-               type="latex", file=paste0("plots/size_overdispersion_", sigma, ".tex"), include.colnames = FALSE)
+               type="latex", file=paste0("plots/size_overdispersion_", sigma, "_simple_model.tex"), include.colnames = FALSE)
 }
+
+Y <- simulate_data_iid(n_ts, t_len, lambda_vec, sigma)
+plot(NA, xlim = c(0, t_len), ylim = c(0, max(Y)))
+for (i in 1:n_ts){
+  lines(Y[, i], type = "l", col = i)
+}
+
+
