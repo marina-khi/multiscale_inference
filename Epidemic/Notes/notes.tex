@@ -67,21 +67,26 @@ We design a method to test the hypothesis $H_0^{(ijk)}$ \textit{simultaneously} 
 Hence, our method allows us to make simultaneous confidence statements (a) about which intensity functions differ from each other and (b) about where, that is, in which time intervals $\mathcal{I}_{k}$ they differ. 
 
 
-%Our method adds to the literature on statistical tests for comparing nonparametric regression curves. Early examples are the tests by \cite{HaerdleMarron1990}, \cite{Hall1990}, \cite{Delgado1993} and \cite{MunkDette1998}. More recent approaches have been developed in \cite{Zhang2012}, \cite{Hidalgo2014}, \cite{DegrasWu2012} and \cite{ChenWu2018}. The main advantage of our method over existing tests is that it is much more informative: Almost all of the existing procedures are designed to test the hypothesis that all trend or regression functions are the same. In our setting, this hypothesis can be formulated as $H_0: \lambda_i = \lambda_j$ for all $i$ and $j$. However, the test are very uninformative when the null $H_0$ is rejected. They do not give any information about which functions $\lambda_i$ are different and where, that is, in which parts of the support $[0,1]$ they differ. Our method, in contrast, conveys this information and even allows to make confidence statements in this context. To the best of our knowledge, there is no other test procedure which allows to do this. To the best of our knowledge, the only other multiscale method for comparing trend curves has been developed in \cite{Park2009}. However, their analysis is mainly methodological and not backed up by a general theory. In particular, theory is only available for the special case $n = 2$. Moreover, the theoretical results are only valid under very severe restrictions on the family of time intervals $\mathcal{F}$. 
+Our method contributes to the literature on statistical tests for comparing nonparametric regression and trend curves. Examples include the tests of \cite{HaerdleMarron1990}, \cite{Hall1990}, \cite{King1991}, \cite{Delgado1993}, \cite{Kulasekera1995}, \cite{YoungBowman1995}, \cite{MunkDette1998}, \cite{NeumeyerDette2003} and \cite{Pardo-Fernandez2007}. More recent approaches were developed in \cite{DegrasWu2012}, \cite{Zhang2012}, \cite{Hidalgo2014} and \cite{ChenWu2018}. Compared to existing methods, our test has the following crucial advantage: it is much more informative. 
+%Most existing procedures are designed to test the hypothesis that all trend or regression functions are the same. In our setting, this hypothesis can be formulated as $H_0: \lambda_i = \lambda_j$ for all $i$ and $j$. If the tests reject the null $H_0$, they however do not give any information on why the rejection occurs. In particular, they do not allow to infer which curves $\lambda_i$ are different and where, that is, in which parts of the support $[0,1]$ they differ. 
+Most existing procedures allow to test whether the regression or trend curves under consideration are all the same or not. However, they do not allow to infer which curves are different and where (that is, in which parts of the support) they differ. Our multiscale approach, in contrast, conveys this information. Indeed, it even allows to make rigorous confidence statements about which curves $\lambda_i$ are different and where they differ. To the best of our knowledge, there is no other method available in the literature which allows to make such simultaneous confidence statements. As far as we know, the only other multiscale test for comparing trend curves has been developed in \cite{Park2009}. However, their analysis is mainly methodological and not backed up by a general theory. In particular, theory is only available for the special case $n = 2$. Moreover, the theoretical results are only valid under very severe restrictions on the family of time intervals $\mathcal{F}$. 
 
 
 %However, to be fair, we need of course to acknoweldge that more recent tests ?ß have been developed under very geenral conditions. Our model setting is more specific and in particular tailored to epidemic applications. However, it is still quite genric and not restricted to the specific example of the COVID-19 crisis. It can rather be used in other ??
 
 
+The paper is structured as follows. Sections \ref{sec:model} and \ref{sec:test} lay out the statistical methodology. In Section \ref{sec:model}, we introduce the model setting in detail which underlies our analysis, while in Section \ref{sec:test}, we develop the multiscale test step by step. To keep the presentation as clear as possible, the technical details are deferred to the Appendix and the Supplementary Material. Section \ref{sec:empirics} contains the empirical part of the paper. There, we apply our methods to a sample of current COVID-19 data. In addition, we run some simulation experiments to demonstrate that the multiscale test has the formal properties predicted by the theory. Even though our multiscale test is motivated by the current COVID-19 crisis, its applicability is by no means restricted to this specific issue. Indeed, it is a general method to compare nonparametric trends in epidemiological count data. In Section \textcolor{red}{[number]}, we show that it is even useful beyond this epidemiological context, for example, in the context of financial volatility modelling. We briefly discuss this as well as some further extensions of our methods in Section \textcolor{red}{[number]}.
 
-\section{Model setting}
+
+
+\section{Model setting}\label{sec:model}
 
 
 As already discussed in the Introduction, the assumption that $\X_{it} \sim P_{\lambda_i(t/T)}$ leads to a nonparametric regression model of the form 
 \begin{equation}\label{eq:model-Poisson}
 \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + u_{it} \quad \text{with} \quad u_{it} = \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, 
 \end{equation}
-where $\eta_{it}$ has zero mean and unit variance. In this model, both the mean and the noise variance are described by the same function $\lambda_i$. In empirical applications, however, the noise variance often tends to be much larger than the mean; cp.\ \textcolor{blue}{[cite]}. To deal with this issue, which is commonly called overdispersion, so-called quasi-Poisson models \citep{McCullagh1989, Efron1986} are frequently used. In our context, a quasi-Poisson model of $\X_{it}$ has the form 
+where $\eta_{it}$ has zero mean and unit variance. In this model, both the mean and the noise variance are described by the same function $\lambda_i$. In empirical applications, however, the noise variance often tends to be much larger than the mean. To deal with this issue, which has been known for a long time in the literature \citep{Cox1983} and which is commonly called overdispersion, so-called quasi-Poisson models \citep{McCullagh1989, Efron1986} are frequently used. In our context, a quasi-Poisson model of $\X_{it}$ has the form 
 \begin{equation}\label{eq:model}
 \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + \varepsilon_{it} \quad \text{with} \quad \varepsilon_{it} = \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, 
 \end{equation}
@@ -90,7 +95,7 @@ where $\sigma$ is a scaling factor that allows the noise variance to be a multip
 
 In order to derive our theoretical results, we impose the following regularity conditions on model \eqref{eq:model}:
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.0cm]
-\item \label{C2} The intensity functions $\lambda_i$ are uniformly Lipschitz continuous, that is, $|\lambda_i(u) - \lambda_i(v)| \le L |u-v|$ for all $u, v \in [0,1]$, where the constant $L$ does not depend on $i$. Moreover, they are uniformly bounded away from zero and infinity, that is, there exist constants $\lambda_{\min}$ and $\lambda_{\max}$ with $0 \le \lambda_{\min} \le \min_{w \in [0,1]} \lambda_i(w) \le \max_{w \in [0,1]} \lambda_i(w) \le \lambda_{\max} < \infty$ for all $i$. 
+\item \label{C2} The functions $\lambda_i$ are uniformly Lipschitz continuous, that is, $|\lambda_i(u) - \lambda_i(v)| \le L |u-v|$ for all $u, v \in [0,1]$, where the constant $L$ does not depend on $i$. Moreover, they are uniformly bounded away from zero and infinity, that is, there exist constants $\lambda_{\min}$ and $\lambda_{\max}$ with $0 \le \lambda_{\min} \le \min_{w \in [0,1]} \lambda_i(w) \le \max_{w \in [0,1]} \lambda_i(w) \le \lambda_{\max} < \infty$ for all $i$. 
 \item \label{C1} The random variables $\eta_{it}$ are independent both across $i$ and $t$. Moreover, for any $i$ and $t$, $\ex[\eta_{it}] = 0$, $\ex[\eta_{it}^2] = 1$ and $\ex[\eta_{it}^\theta] \le C_\theta < \infty$ for some $\theta > 4$. 
 \end{enumerate}
 \ref{C2} imposes some standard-type regularity conditions on the functions $\lambda_i$. In particular, the functions are assumed to be smooth, bounded from above and bounded away from zero. The latter restriction is required because the error variance in model \eqref{eq:model} equals zero if $\lambda_i$ is equal to zero. Since we normalize our test statistics by an estimate of the error variance, we need the latter to be bounded away from zero. 
@@ -166,7 +171,7 @@ This can be achieved by choosing $c_T(\alpha)$ as the $(1-\alpha)$-quantile of t
 where $\hat{\psi}_{ijk,T}^0$ has been introduced in \eqref{eq:stat0}. (Note that both the statistic $\tilde{\Psi}_T$ and the quantile $c_T(\alpha)$ depend on $p$ in general. To keep the notation simple, we however suppress this dependence throughout the paper. We use the same convention for all other quantities that are defined in the sequel.) 
 
 
-A more modern approach assigns different critical values $c_{ijk,T}(\alpha)$ to the test problems $(i,j,k)$. In particular, the critical value for the hypothesis $H_0^{(ijk)}$ is allowed to depend on the length $h_k$ of the time interval $\mathcal{I}_k$, that is, on the scale of the test problem. A general approach to construct scale-dependent critical values was pioneered by \cite{DuembgenSpokoiny2001} and has been used in many other studies since then; cp.\ for example \cite{Duembgen2002}, \cite{Rohde2008}, \cite{DuembgenWalther2008}, \cite{RufibachWalther2010}, \cite{SchmidtHieber2013}, \cite{EckleBissantzDette2017} and \cite{Dunker2019}. In our context, the approach of \cite{DuembgenSpokoiny2001} leads to the critical values 
+A more modern approach assigns different critical values $c_{ijk,T}(\alpha)$ to the test problems $(i,j,k)$. In particular, the critical value for the hypothesis $H_0^{(ijk)}$ is allowed to depend on the length $h_k$ of the time interval $\mathcal{I}_k$, that is, on the scale of the test problem. A general approach to construct scale-dependent critical values was pioneered by \cite{DuembgenSpokoiny2001} and has been used in many other studies since then; cp.\ for example \cite{Rohde2008}, \cite{DuembgenWalther2008}, \cite{RufibachWalther2010}, \cite{SchmidtHieber2013}, \cite{EckleBissantzDette2017} and \cite{Dunker2019}. In our context, the approach of \cite{DuembgenSpokoiny2001} leads to the critical values 
 \begin{equation*}
 c_{ijk,T}(\alpha) = c_T(\alpha,h_k) := b_k + q_T(\alpha)/a_k, 
 \end{equation*}
@@ -290,7 +295,6 @@ Each simulation experiment is based on $R=5 000$ simulated samples $\mathcal{\X}
 \end{figure}
 
 
-
 %\noindent Simulation setting: 
 %\begin{itemize}[label=--,leftmargin=0.5cm]
 
@@ -354,8 +358,6 @@ Each simulation experiment is based on $R=5 000$ simulated samples $\mathcal{\X}
 
 \caption{Summary of the results for the daily numbers of the new cases of COVID-19 in Germany, Spain, France, Italy and The United Kingdom with one subfigure corresponding to the results of one pairwise comparison of these countries. Panel (a) of each subfigure shows the two observed time series. Panel (b) in each subfigure shows the smoothed versions of the time series from (a) using the bandwidth of $7$ days. Panel (c) of each subfigure show the corresponding time series of the Government Response Index (solid line) against the lagged version of itself (dashed line), with lag being 14 days. Panel (d) of each subfigure depicts the set of intervals $\intervals_{\text{reject}}(i,j)$ in gray and the set of minimal intervals constructed on the basis of $\intervals_{\text{reject}}(i,j)$ in black.}\label{fig:MSE_slope10}
 \end{figure}
-
-
 
 \FloatBarrier
 
