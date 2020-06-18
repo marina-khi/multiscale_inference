@@ -5,10 +5,12 @@
 \usepackage{color}
 \usepackage{epsfig}
 \usepackage{graphics}
+\usepackage{pdfpages}
 \usepackage{subcaption}
 \usepackage[font=small]{caption}
 \usepackage[hang,flushmargin]{footmisc} 
 \usepackage{float}
+\usepackage{rotating,tabularx}
 \usepackage{booktabs}
 \usepackage[mathscr]{euscript}
 \usepackage{natbib}
@@ -263,14 +265,14 @@ We consider the following simulation setup:
 where the noise variables $\eta_{it}$ have zero mean and unit variance.
 
 \item Throughout the simulation study, we assume that the hypothesis $H_0^{(ijk)}$ holds true for all $(i,j,k)$ under consideration, which implies that $\lambda_i = \lambda$ for all $i$. We consider the function 
-\[ \lambda(u) = 5000 \exp\Big(-\frac{(8u-3)^2}{2}\Big) + 50, \]
-which has a similar shape as some of the estimated curves in the application of Section \ref{subsec:app}. A plot of the function $\lambda$ is provided in Figure \ref{fig:lambda_F}. 
+\[ \lambda(u) = 5000 \exp\Big(-\frac{(10 u-3)^2}{2}\Big) + 50, \]
+which has a similar shape as some of the estimated curves in the application of Section \ref{subsec:app}. A plot of the function $\lambda$ is provided in Figure \ref{fig:lambda}. 
 
 \item We set the overdispersion parameter $\sigma = 10$. (Alternatively, we may pick $\sigma=15$ or $\sigma=20$.) The estimated values of $\sigma$ in the application take similar values.
 
 \item We consider different values for $T$ and $n$, in particular, $T \in \{100,250, 500\}$ and $n \in \{5,10,50\}$. 
 
-\item We let $\pairs = \{ (i,j): 1 \le i < j \le n\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$. Moreover, we choose $\intervals$ to be a family of time intervals with $h_k \in \{ 7/T,14/T,21/T,28/T \}$. Hence, all intervals in $\intervals$ have length either 7 days (1 week), 14 days (2 weeks), 21 days (3 weeks), or 28 days (4 weeks). For each length $h_k$, we include all intervals that start at days $t = 1 + 7(j-1)$ and $t = 4 + 7(j-1)$ for $j=1,2,\ldots$ A graphical presentation of the family $\intervals$ is given in Figure \ref{fig:lambda_F}. 
+\item We let $\pairs = \{ (i,j): 1 \le i < j \le n\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$. Moreover, we choose $\intervals$ to be a family of time intervals with $h_k \in \{ 7/T,14/T,21/T,28/T \}$. Hence, all intervals in $\intervals$ have length either 7 days (1 week), 14 days (2 weeks), 21 days (3 weeks), or 28 days (4 weeks). For each length $h_k$, we include all intervals that start at days $t = 1 + 7(j-1)$ and $t = 4 + 7(j-1)$ for $j=1,2,\ldots$ A graphical presentation of the family $\intervals$ is given in Figure \ref{fig:intervals}. 
 
 \end{itemize}
 Each simulation experiment is based on $R=5 000$ simulated samples $\mathcal{\X}$ of count data. 
@@ -280,15 +282,33 @@ Each simulation experiment is based on $R=5 000$ simulated samples $\mathcal{\X}
 \centering
 \begin{subfigure}[b]{0.475\textwidth}
 \includegraphics[width=\textwidth]{plots/lambda_fct}
-\caption{}
+\caption{}\label{fig:lambda}
 \end{subfigure}\hspace{0.25cm}
 \begin{subfigure}[b]{0.475\textwidth}
 \includegraphics[width=\textwidth]{plots/all_intervals}
-\caption{}
+\caption{}\label{fig:intervals}
 \end{subfigure}
 \caption{(a) Plot of the function $\lambda$; (b) plot of the family $\intervals$.}\label{fig:lambda_F}
 \end{figure}
 
+\begin{table}[t!]
+\footnotesize{
+\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$.}\label{tab:sim:size}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+$T=100$   & 0.013 & 0.040 & 0.086  & 0.016 & 0.054 & 0.106  & 0.009 & 0.045 & 0.094  \\ 
+$T=250$   & 0.013 & 0.044 & 0.102  & 0.008 & 0.041 & 0.089  & 0.013 & 0.057 & 0.107   \\ 
+$T=500$  & 0.011 & 0.052 & 0.090  & 0.007 & 0.057 & 0.114  & 0.011 & 0.049 & 0.106   \\ 
+\bottomrule
+\end{tabularx}}
+\end{table}
 
 
 %\noindent Simulation setting: 

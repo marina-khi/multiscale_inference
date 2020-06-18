@@ -82,8 +82,8 @@ produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
 
 # functions to simulate data
 
-lambda_fct <- function(u) {
-  return (5000 * exp(-(8 * u - 3) ^ 2 / 2) + 50)
+lambda_fct <- function(u, c) {
+  return (5000 * exp(-(10 * u - 3) ^ 2 / 2) + c)
 }
 
 r_doublepois <- function(n, mu, theta) {
@@ -102,11 +102,12 @@ simulate_data <- function(n_ts, t_len, lambda_vec, sigma) {
 }
 
 simulate_data_iid <- function(n_ts, t_len, lambda_vec, sigma) {
-  data <- matrix(0, ncol = n_ts, nrow = t_len)
+  data_ <- matrix(0, ncol = n_ts, nrow = t_len)
   for(t in 1:t_len) {
-    data[t, ]  <- lambda_vec[t] + sigma * sqrt(lambda_vec[t]) * rnorm(n_ts)
+    data_[t, ]  <- lambda_vec[t] + sigma * sqrt(lambda_vec[t]) * rnorm(n_ts)
   }
-  return(data)
+  data_[data_ < 0] <- 0
+  return(data_)
 }
 
 
@@ -149,8 +150,8 @@ calculate_size <- function(t_len, n_ts, alpha_vec, lambda_vec = lambda_vec,
   test_res <- matrix(NA, ncol = length(alpha_vec), nrow = n_sim)
   
   for(sim in 1:n_sim) {
-    #Y <- simulate_data(n_ts = n_ts, t_len = t_len, lambda_vec = lambda_vec, sigma = sigma)
-    Y <- simulate_data_iid(n_ts = n_ts, t_len = t_len, lambda_vec = lambda_vec, sigma = sigma)
+    Y <- simulate_data(n_ts = n_ts, t_len = t_len, lambda_vec = lambda_vec, sigma = sigma)
+    #Y <- simulate_data_iid(n_ts = n_ts, t_len = t_len, lambda_vec = lambda_vec, sigma = sigma)
     sigma_vec <- rep(0, n_ts)
     for (i in 1:n_ts){
       sigma_squared <- sum((Y[2:t_len, i] - Y[1:(t_len - 1), i]) ^ 2) / (2 * sum(Y[, i]))
