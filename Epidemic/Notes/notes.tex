@@ -111,7 +111,7 @@ In order to derive our theoretical results, we impose the following regularity c
 Let $\pairs \subseteq \{ (i,j): 1 \le i < j \le n \}$ be the set of all pairs of countries $(i,j)$ whose intensity functions $\lambda_i$ and $\lambda_j$ we want to compare. Moreover, as already introduced above, let $\intervals = \{ \mathcal{I}_k: 1 \le k \le K \}$ be the family of (rescaled) time intervals under consideration. Finally, write $\indexset := \pairs \times \{1,\ldots,K\}$ and let $p := |\indexset|$ be the cardinality of $\indexset$. In this section, we devise a method to test the null hypothesis $H_0^{(ijk)}$ simultaneously for all pairs of countries $(i,j) \in \pairs$ and all time intervals $\mathcal{I}_k \in \intervals$, that is, for all $(i,j,k) \in \indexset$. The value $p = |\indexset|$ is the dimensionality of the simultaneous test problem we are dealing with; in particular, it amounts to the number of tests we simultaneously carry out. As shown by our theoretical results in the Appendix, $p$ may be much larger than the time series length $T$, which means that the simultaneous test problem under consideration can be very high-dimensional. 
 
 
-\subsection{Construction of the test statistics} 
+\subsection{Construction of the test statistics}\label{subsec:test:test}
 
 
 A statistic to test the hypothesis $H_0^{(ijk)}$ for a given triple $(i,j,k)$ can be constructed as follows. To start with, we introduce the expression 
@@ -124,7 +124,9 @@ where $\ind(t/T \in \mathcal{I}_k)$ can be regarded as a rectangular kernel weig
 In order to normalize the variance of the statistic $\hat{s}_{ijk,T}$, we scale it by an estimator of $\nu_{ijk,T}$. In particular, we estimate $\nu_{ijk,T}^2$ by 
 \[ \hat{\nu}_{ijk,T}^2 = \frac{\hat{\sigma}^2}{T} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \{ \X_{it} + \X_{jt} \}, \]
 where $\hat{\sigma}^2$ is defined as follows: For each country $i$, let 
-\[ \hat{\sigma}_i^2 = \frac{\sum_{t=2}^T (\X_{it}-\X_{it-1})^2}{2 \sum_{t=1}^T \X_{it}} \]
+\begin{align*}
+\hat{\sigma}_i^2 = \frac{\sum_{t=2}^T (\X_{it}-\X_{it-1})^2}{2 \sum_{t=1}^T \X_{it}}
+\end{align*}
 and set $\hat{\sigma}^2 = |\countries|^{-1} \sum_{i=\countries} \hat{\sigma}_i^2$ with $\countries = \{ \ell: \ell = i$ or $\ell = j$ for some $(i,j) \in \pairs \}$ denoting the set of countries that are taken into account by our test. As shown in the Supplementary Material, $\hat{\sigma}^2$ is a consistent estimator of $\sigma^2$ under our regularity conditions. 
 %The estimator $\hat{\sigma}^2$ is motivated by the fact that under appropriate smoothness conditions on the functions $\lambda_i$ (in particular under the Lipschitz condition of \ref{C2}),  
 %\begin{align*}
@@ -273,7 +275,7 @@ where the noise variables $\eta_{it}$ have zero mean and unit variance.
 \[ \lambda(u) = 5000 \exp\Big(-\frac{(10 u-3)^2}{2}\Big) + 50, \]
 which has a similar shape as some of the estimated curves in the application of Section \ref{subsec:app}. A plot of the function $\lambda$ is provided in Figure \ref{fig:lambda}. 
 
-\item We set the overdispersion parameter $\sigma = 10$. (Alternatively, we may pick $\sigma=15$ or $\sigma=20$.) The estimated values of $\sigma$ in the application take similar values.
+\item We set the overdispersion parameter $\sigma = 15$ (the results of the robustness checks for $\sigma=10$ and $\sigma=20$ are provided in the Supplementary Material). The estimated values of $\sigma$ in the application take similar values.
 
 \item We consider different values for $T$ and $n$, in particular, $T \in \{100,250, 500\}$ and $n \in \{5,10,50\}$. 
 
@@ -296,24 +298,24 @@ Each simulation experiment is based on $R=5 000$ simulated samples $\mathcal{\X}
 \caption{(a) Plot of the function $\lambda$; (b) plot of the family $\intervals$.}\label{fig:lambda_F}
 \end{figure}
 
-%\begin{table}[t!]
-%\footnotesize{
-%\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$.}\label{tab:sim:size}
-%\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-%\newcolumntype{Z}{>{\centering\arraybackslash}X}
-%\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-%\toprule
-% & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-%\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
-% & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
-% & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-%\cmidrule[0.4pt]{1-10}
-%$T=100$   & 0.013 & 0.040 & 0.086  & 0.016 & 0.054 & 0.106  & 0.009 & 0.045 & 0.094  \\ 
-%$T=250$   & 0.013 & 0.044 & 0.102  & 0.008 & 0.041 & 0.089  & 0.013 & 0.057 & 0.107   \\ 
-%$T=500$  & 0.011 & 0.052 & 0.090  & 0.007 & 0.057 & 0.114  & 0.011 & 0.049 & 0.106   \\ 
-%\bottomrule
-%\end{tabularx}}
-%\end{table}
+\begin{table}[t!]
+\footnotesize{
+\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$.}\label{tab:sim:size}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+$T = 100$ &  0.012 & 0.047 & 0.084 &  0.006 & 0.033 & 0.076 &  0.005 & 0.027 & 0.060 \\ 
+ $T =  250$ &  0.010 & 0.043 & 0.088 &  0.008 & 0.039 & 0.081 &  0.004 & 0.030 & 0.062 \\ 
+ $ T = 500$ &  0.006 & 0.039 & 0.083 &  0.005 & 0.033 & 0.069 &  0.005 & 0.028 & 0.066 \\ 
+\bottomrule
+\end{tabularx}}
+\end{table}
 
 %\noindent Simulation setting: 
 %\begin{itemize}[label=--,leftmargin=0.5cm]
@@ -337,34 +339,34 @@ Each simulation experiment is based on $R=5 000$ simulated samples $\mathcal{\X}
 
 \subsection{Analysis of COVID-19 data}\label{subsec:app}
 
+%The COVID-19 pandemic, also known as the coronavirus pandemic, is an ongoing global pandemic of coronavirus disease 2019, caused by severe acute respiratory syndrome coronavirus 2 (SARS‑CoV‑2). The outbreak was first identified in Wuhan, China, in December 2019. On 30 January 2020, the World Health Organization declared that the outbreak constitutes a Public Health Emergency of International Concern, and on 11 March 2020 it was announced as a pandemic. As of 22 June 2020, more than 8.86 million cases of COVID-19 have been reported in 216 countries, areas and territories, resulting in more than 465,000 deaths.
+
+Currently, the analysis of the ongoing global pandemic of coronavirus disease 2019 (COVID-19) is of the the utmost importance in many fields of science. One of the most relevant questions for governments, policy makers, economists and even general public, is the differences in the development of the pandemic in various countries. One of the ways to address this question is to compare the underlying trends of the new cases of COVID-19 per day for different countries. Information on the regions where two trends are significantly different from each other can then be used in order to assess which government policies are more efficient and which are less efficient. In what follows, we use our multiscale test to compare the spread of COVID-19 in five European countries.
+
+Throughout the section, we set the significance level to $\alpha=0.05$ and implement the multiscale test in exactly the same way as in the simulation study of Section \ref{subsec:sim}. 
+
+\subsubsection{Data}
+Epidemiological data for COVID-19 cases in Germany, Spain, France, Italy and United Kingdom was collected from the database created by European Center for Disease Prevention and Control (http://ecdc.europa.eu). In order to be able to account for the differences in the onset of the spread of COVID-19 in various countries, the starting point of the time series for each country was the day of the $100$th case in that country. For our analysis, we considered only those days since the $100$th case for which we have observations for all five countries. Hence, the resulting dataset consists of $n = 5$ time series, each with $T = 103$ observation. We then replaced all the negative values by $0$. Overall, this resulted in $4$ replacements. Plots of the time series are given in panels (a) of Figure \ref{fig:covid19}.
+
+The dataset was then matched with the government response index (GRI) from The Oxford COVID-19 Government Response Tracker (OxCGRT) \linebreak (\cite{Hale2020}). GRI is calculated based on several common policies that governments have taken as a response to the pandemic such as school closures and travel restrictions. GRI ranges from $0$ to $100$, with $0$ corresponding to no response from the government and $100$ corresponding to full lockdown, closure of schools and workplaces, ban on travelling, etc. Detailed information on the collection of the data for government responses and methodology of calculating indices is provided in \cite{Hale2020paper}. Plots of the time series of GRI are given in panels (c) of Figure \ref{fig:covid19}.
+
+\subsubsection{Results}
+
+We assume that for each country $i \in \{1, \ldots, 5\}$ the data $X_{it}$ follows the nonparametric trend model \[ \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, \]
+where the noise variables $\eta_{it}$ have zero mean and unit variance. We estimate the overdispersion parameter $\sigma$ by the procedure described in Section \ref{subsec:test:test}. This results in the estimator $\widehat{\sigma} = 14.49$.
+
+As in Section \ref{subsec:sim}, we let $\pairs = \{ (i,j): 1 \le i < j \le 5\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$. Moreover, we choose $\intervals$ to be a family of time intervals with $h_k \in \{ 7/T,14/T,21/T,28/T \}$. Hence, all intervals in $\intervals$ have length either 7 days (1 week), 14 days (2 weeks), 21 days (3 weeks), or 28 days (4 weeks). For each length $h_k$, we include all intervals that start at days $t = 1 + 7(j-1)$ and $t = 4 + 7(j-1)$ for $j=1,2,\ldots$ Finally, with $K := |\intervals|$ being the cardinality of $\intervals$, we write $\indexset = \mathcal{S} \times \{1, \ldots, K\}$.
+
+With the help of our multiscale method, we now test the null hypotheses $H_0^(i, j, k)$ for each $(i, j, k) \in \indexset$ that $\lambda_i(\cdot) = \lambda_j(\cdot)$ on the interval $\mathcal{I}_k$. The results are presented in Figure \ref{fig:covid19}. As was mentioned before, we produce a plot for each pair of countries. However, for the sake of space, we present here only the results of the pairwise comparison of Italy and each one of the other four countries. Other plots for pairwise comparison can be found in the Supplementary Material. On Figure \ref{fig:covid19}, panels (d) depict in grey the set $\intervals_{reject}(i, j)$ of all the intervals $\mathcal{I}_k$ for which the test rejects the null $H_0^(i, j, k)$. The corresponding set of minimal intervals $\Pi_T$ is depicted in black.
+
+According to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals $\intervals_{reject}(i, j)$ plotted in panel (d). We can claim, with confidence of about $95\%$, that the functions $\lambda_i$ and $\lambda_j$ are different on each of the intervals.
+
 \begin{figure}[t!]
-\begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{plots/DEU_vs_ESP}
-\end{subfigure}\hspace{0.25cm}
-\begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{plots/DEU_vs_FRA}
-\end{subfigure}
-\vspace{0.25cm}
 \begin{subfigure}[b]{0.475\textwidth}
 \includegraphics[width=\textwidth]{plots/DEU_vs_ITA}
 \end{subfigure}\hspace{0.55cm}
 \begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{plots/DEU_vs_GBR}
-\end{subfigure}
-\end{figure}
-\begin{figure}[t!]\ContinuedFloat
-\begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{plots/ESP_vs_GBR}
-\end{subfigure}\hspace{0.55cm}
-\begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{plots/ESP_vs_FRA}
-\end{subfigure}
-\vspace{0.25cm}
-\begin{subfigure}[b]{0.475\textwidth}
 \includegraphics[width=\textwidth]{plots/ESP_vs_ITA}
-\end{subfigure}\hspace{0.55cm}
-\begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{plots/FRA_vs_GBR}
 \end{subfigure}
 \end{figure}
 \begin{figure}[t!]\ContinuedFloat
@@ -376,7 +378,8 @@ Each simulation experiment is based on $R=5 000$ simulated samples $\mathcal{\X}
 \end{subfigure}
 \vspace{0.25cm}
 
-\caption{Summary of the results for the daily numbers of the new cases of COVID-19 in Germany, Spain, France, Italy and The United Kingdom with one subfigure corresponding to the results of one pairwise comparison of these countries. Panel (a) of each subfigure shows the two observed time series. Panel (b) in each subfigure shows the smoothed versions of the time series from (a) using the bandwidth of $7$ days. Panel (c) of each subfigure show the corresponding time series of the Government Response Index (solid line) against the lagged version of itself (dashed line), with lag being 14 days. Panel (d) of each subfigure depicts the set of intervals $\intervals_{\text{reject}}(i,j)$ in gray and the set of minimal intervals constructed on the basis of $\intervals_{\text{reject}}(i,j)$ in black.}\label{fig:MSE_slope10}
+\caption{Summary of the results for the daily numbers of the new cases of COVID-19 in Germany, Spain, France, Italy and The United Kingdom with one subfigure corresponding to the results of pairwise comparison of Italy and one of the other countries. Panel (a) of each subfigure shows the two observed time series. Panel (b) in each subfigure shows the smoothed versions of the time series from (a) using the bandwidth of $7$ days. Panel (c) of each subfigure shows the corresponding time series of the Government Response Index. %(solid line) against the lagged version of itself (dashed line), with lag being equal to 14 days.
+Panel (d) of each subfigure depicts the set of intervals $\intervals_{\text{reject}}(i,j)$ in grey and the set of minimal intervals constructed on the basis of $\intervals_{\text{reject}}(i,j)$ in black.}\label{fig:covid19}
 \end{figure}
 
 \FloatBarrier
@@ -384,6 +387,7 @@ Each simulation experiment is based on $R=5 000$ simulated samples $\mathcal{\X}
 
 
 \newpage
+
 \section*{A \hspace{0.2cm} Appendix}
 \def\theequation{A.\arabic{equation}}
 \setcounter{equation}{0}
@@ -659,6 +663,62 @@ for any $\eta > 0$ with $C$ depending only on the parameter $\delta$ specified i
 for $\eta > 0$ sufficiently small. This contradicts the definition of the quantile $q_{T,\text{Gauss}}(\alpha)$ according to which $q_{T,\text{Gauss}}(\alpha) = \inf_{q \in \reals} \{ \pr(\Phi_T \le q) \ge 1-\alpha \}$. 
 \end{proof}
 
+\newpage
+\subsection*{Robustness checks for Section \ref{subsec:sim}}\label{s:subsec:robustness}
+In what follows, we carry out some robustness checks to assess how sensitive the multiscale test is to the choice of the overdispersion parameter $\sigma$. To do so, we repeat the simulation exercises of Section \ref{subsec:sim} for $\sigma = 10$ and $\sigma = 20$. The results are presented in Tables \ref{s:tab:sim:size:1} and \ref{s:tab:sim:size:2}.
+
+\begin{table}[t!]
+\footnotesize{
+\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$ for $\sigma = 10$.}\label{s:tab:sim:size:1}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.009 & 0.034 & 0.076 & 0.008 & 0.029 & 0.063  & 0.003 & 0.019 & 0.044 \\ 
+ $T =  250$  & 0.008 & 0.046 & 0.085  & 0.008 & 0.041 & 0.078 & 0.006 & 0.030 & 0.072 \\ 
+ $ T =  500$  & 0.010 & 0.045 & 0.091  & 0.005 & 0.044 & 0.085  & 0.011 & 0.042 & 0.075 \\ 
+\bottomrule
+\end{tabularx}}
+\end{table}
+
+
+\newpage
+\subsection*{Additional graphs for Section \ref{subsec:app}}
+
+In what follows, we provide the results of the analysis of COVID-19 data that was omitted in Section \ref{subsec:app}. 
+
+\begin{figure}[t!]
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_ESP}
+\end{subfigure}\hspace{0.25cm}
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_FRA}
+\end{subfigure}
+\end{figure}
+\begin{figure}[t!]\ContinuedFloat
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_GBR}
+\end{subfigure}\hspace{0.55cm}
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_GBR}
+\end{subfigure}
+\end{figure}
+\begin{figure}[t!]\ContinuedFloat
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_FRA}
+\end{subfigure}\hspace{0.55cm}
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{plots/FRA_vs_GBR}
+\end{subfigure}
+\vspace{0.25cm}
+
+\caption{Summary of the results for the daily numbers of the new cases of COVID-19 in Germany, Spain, France, Italy and The United Kingdom with one subfigure corresponding to the results of one pairwise comparison of these countries (excluding comparison between Italy and other countries). Panel (a) of each subfigure shows the two observed time series. Panel (b) in each subfigure shows the smoothed versions of the time series from (a) using the bandwidth of $7$ days. Panel (c) of each subfigure shows the corresponding time series of the Government Response Index (solid line) against the lagged version of itself (dashed line), with lag being equal to 14 days. Panel (d) of each subfigure depicts the set of intervals $\intervals_{\text{reject}}(i,j)$ in gray and the set of minimal intervals constructed on the basis of $\intervals_{\text{reject}}(i,j)$ in black.}\label{s:fig:covid19}
+\end{figure}
 
 
 \end{document}

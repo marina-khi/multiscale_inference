@@ -27,14 +27,14 @@ for (c in const_c){
       i <- 1
       for (t_len in t_len_vec){
         lambda_vec <- lambda_fct((1:t_len) / t_len, c)
-        # if(t_len == 100) {
-        #   pdf("plots/lambda_fct.pdf", width=5, height=5, paper="special")
-        #   par(mar = c(3, 2, 2, 0)) #Margins for each plot
-        #   par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
-        #   plot(lambda_vec,  ylim = c(0, max(lambda_vec) + 100), xlab="u", ylab = "", mgp=c(2,0.5,0), type = "l")
-        #   title(main = expression(Plot ~ of ~ the ~ "function" ~ lambda), line = 1)
-        #   dev.off()
-        # }
+        if(t_len == 100) {
+          pdf("plots/lambda_fct.pdf", width=5, height=3, paper="special")
+          par(mar = c(3, 2, 2, 0)) #Margins for each plot
+          par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
+          plot(lambda_vec,  ylim = c(0, max(lambda_vec) + 100), xlab="u", ylab = "", mgp=c(2,0.5,0), type = "l")
+          title(main = expression(Plot ~ of ~ the ~ "function" ~ lambda), line = 1)
+          dev.off()
+        }
         
         #set.seed(1234) # This is for calculating size for different specifications on comparable datasets
         size <- calculate_size(t_len = t_len, n_ts = n_ts, alpha_vec = alpha_vec,

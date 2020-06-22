@@ -24,8 +24,8 @@ produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
   Tlen <- length(data_i)
   gset <- results$gset_with_vals[[l]]
 
-  layout(matrix(c(1, 2, 3, 4),ncol=1), widths=c(3, 3, 3, 3),
-         heights=c(1, 0.8, 1, 1), TRUE)
+  layout(matrix(c(1, 2, 3, 4),ncol=1), widths=c(2.2, 2.2, 2.2, 2.2),
+         heights=c(1.5, 1.5, 1.5, 1.8), TRUE)
   #Setting the layout of the graphs
 
   par(cex = 1, tck = -0.025)
@@ -36,7 +36,7 @@ produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
       col="blue", ylab="", xlab="", mgp=c(1, 0.5, 0))
   lines(data_j, col="red")
   title(main = "(a) observed cases per day", font.main = 1, line = 0.5)
-  legend(x = 0, y = max(data_i, data_j) - 1, legend=c(country_i, country_j),
+  legend("topright", inset = 0.02, legend=c(country_i, country_j),
          col = c("blue", "red"), lty = 1, cex = 0.95, ncol = 1)
 
   par(mar = c(0.5, 0.5, 3, 0)) #Margins for each plot
@@ -50,8 +50,8 @@ produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
        col="blue", ylab="", xlab = "", mgp=c(1, 0.5, 0))
   title(main = "(c) index of government response", font.main = 1, line = 0.5)
   lines(gov_resp_j, col="red")
-  lines(lagged_gov_resp_i, col="blue", lty = "dashed", lwd = 3)
-  lines(lagged_gov_resp_j, col="red", lty = "dashed", lwd = 3)
+  #lines(lagged_gov_resp_i, col="blue", lty = "dashed", lwd = 3)
+  #lines(lagged_gov_resp_j, col="red", lty = "dashed", lwd = 3)
   
   #title(main = expression((c) ~ index ~ of ~ government ~ response), line = 1)
   
