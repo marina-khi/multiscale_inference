@@ -11,7 +11,7 @@ sim_runs  <- 5000 #number for calculating quantiles
 alpha_vec <- c(0.01, 0.05, 0.1)  # significance level
 n_ts_vec  <- c(5, 10, 50)     # number of time series
 t_len_vec <- c(100, 250, 500)   # time series length
-sigma_vec <- c(10, 15, 20)    # overdispersion parameter
+sigma_vec <- c(20)    # overdispersion parameter
 const_c   <- c(500) #constant in the lambda function
 
 source("functions/functions.r")
