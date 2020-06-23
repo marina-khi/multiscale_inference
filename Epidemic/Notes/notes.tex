@@ -92,9 +92,10 @@ where $\eta_{it}$ has zero mean and unit variance. In this model, both the mean 
 \begin{equation}\label{eq:model}
 \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + \varepsilon_{it} \quad \text{with} \quad \varepsilon_{it} = \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, 
 \end{equation}
-where $\sigma$ is a scaling factor that allows the noise variance to be a multiple of the mean function $\lambda_i$. In what follows, we assume that the observed data $\X_{it}$ are produced by model \eqref{eq:model}, where the noise residuals $\eta_{it}$ have zero mean and unit variance but we do not impose any further distributional assumptions on them. 
+where $\sigma$ is a scaling factor that allows the noise variance to be a multiple of the mean function $\lambda_i$. In what follows, we assume that the observed data $\X_{it}$ are produced by model \eqref{eq:model}, where the noise residuals $\eta_{it}$ have zero mean and unit variance but we do not impose any further distributional assumptions on them.
 
-
+Similar, but less general approach to modelling the number of daily cases was used in \cite{Pellis2020}. They also consider quasi-Poisson model for the observed data with a constant parameter of overdispersion, but they parametrically restrict the mean function to be exponentially growing with a constant growth rate. \cite{Tobias2020} analyze the data on the accumulated number of cases using quasi-Poisson regression with an interaction model to estimate the change in trend. However, both this approaches lacks the ability to capture day-to-day time variation, whereas our testing strategy allows us to do that without imposing any structure on the mean function $\lambda_i$.
+ 
 In order to derive our theoretical results, we impose the following regularity conditions on model \eqref{eq:model}:
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.0cm]
 \item \label{C2} The functions $\lambda_i$ are uniformly Lipschitz continuous, that is, $|\lambda_i(u) - \lambda_i(v)| \le L |u-v|$ for all $u, v \in [0,1]$, where the constant $L$ does not depend on $i$. Moreover, they are uniformly bounded away from zero and infinity, that is, there exist constants $\lambda_{\min}$ and $\lambda_{\max}$ with $0 \le \lambda_{\min} \le \min_{w \in [0,1]} \lambda_i(w) \le \max_{w \in [0,1]} \lambda_i(w) \le \lambda_{\max} < \infty$ for all $i$. 
@@ -682,6 +683,25 @@ In what follows, we carry out some robustness checks to assess how sensitive the
 $T = 100$ & 0.009 & 0.034 & 0.076 & 0.008 & 0.029 & 0.063  & 0.003 & 0.019 & 0.044 \\ 
  $T =  250$  & 0.008 & 0.046 & 0.085  & 0.008 & 0.041 & 0.078 & 0.006 & 0.030 & 0.072 \\ 
  $ T =  500$  & 0.010 & 0.045 & 0.091  & 0.005 & 0.044 & 0.085  & 0.011 & 0.042 & 0.075 \\ 
+\bottomrule
+\end{tabularx}}
+\end{table}
+
+\begin{table}[t!]
+\footnotesize{
+\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$ for $\sigma = 20$.}\label{s:tab:sim:size:2}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+$T = 100$  & 0.010 & 0.045 & 0.087 & 0.010 & 0.037 & 0.074  & 0.005 & 0.033 & 0.060 \\ 
+  $T = 250$  & 0.007 & 0.036 & 0.079  & 0.004 & 0.032 & 0.068  & 0.005 & 0.024 & 0.055 \\ 
+  $T = 500$  & 0.007 & 0.037 & 0.072  & 0.007 & 0.033 & 0.067  & 0.004 & 0.019 & 0.048 \\ 
 \bottomrule
 \end{tabularx}}
 \end{table}
