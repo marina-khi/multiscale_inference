@@ -6,61 +6,95 @@ epan <- function(x)
    return(0.75*(1-x^2)*((sign(1-x^2)+1)/2))
 }
 
-nw <- function(X,Y,bw,N) 
+rect <- function(x)
+{
+   return(0.5*((sign(1-x^2)+1)/2))
+}   
+
+nw <- function(X,Y,bw,TT) 
 {  
-   res <- rep(0,N)
-   for(j in 1:N)
-   {  rh <- sum(epan((X-j/N)/bw) * Y) 
-      fh <- sum(epan((X-j/N)/bw))
-      res[j] <- rh/fh
+   res <- rep(0,TT)
+   for(jj in 1:TT)
+   {  rh <- sum(rect((X-jj/TT)/bw) * Y) 
+      fh <- sum(rect((X-jj/TT)/bw))
+      res[jj] <- rh/fh
    }
    return(res)
 }
 
 
-# correction factor for error variance
+# scaling factor for error variance
 
-correct <- function(Y, bw=0.025)
-{  Y <- as.matrix(Y)
+sigma.square <- function(Y)
+{  
+   Y <- as.matrix(Y)
    nn <- dim(Y)[2]
    TT <- dim(Y)[1]
-   X <- (1:TT)/TT
-   const <- rep(0,nn)
-   for(i in 1:nn)
-   {  lambda.fct <- nw(X,Y[,i],bw,TT)
-      resid <- Y[,i] - lambda.fct
-      pos <- (lambda.fct > 0)
-      resid <- resid[pos]/sqrt(lambda.fct[pos])
-      const[i] <- var(resid)
+   var.vec <- rep(NA,nn)
+   for(ii in 1:nn)
+   {  y <- Y[,ii]
+      y.diff <- diff(y)
+      var.vec[ii] <- sum(y.diff^2)/(2*sum(y))
    }   
-   const <- mean(const)
-   return(const)
+   var.mean <- mean(var.vec)
+   return(list(homo=var.mean, hetero=var.vec))
 }   
-   
 
-# intervals for multiscale statistic
+# scaling <- function(Y, bw=0.05)
+# {  Y <- as.matrix(Y)
+#    nn <- dim(Y)[2]
+#    TT <- dim(Y)[1]
+#    X <- (1:TT)/TT
+#    const <- rep(0,nn)
+#    for(i in 1:nn)
+#    {  lambda.fct <- nw(X,Y[,i],bw,TT)
+#       resid <- Y[,i] - lambda.fct
+#       pos <- (lambda.fct > 0)
+#       resid <- resid[pos]/sqrt(lambda.fct[pos])
+#       const[i] <- var(resid)
+#    }   
+#    const <- mean(const)
+#    return(const)
+# }   
+
+
+# family of intervals for multiscale statistic
 
 intervals <- function(TT, hmin=7, K=4)
 {  
-   ivals.mat <- numeric(0)
+   ints.mat <- numeric(0)
+   step <- floor(hmin/2)
    for(k in 1:K)
-   {  h <- k*hmin  
-      vec <- rep(c(rep(1,h),rep(0,TT-h),rep(0,hmin)), ceiling(TT/hmin))
-      vec <- vec[1:(TT * (floor(TT/hmin) - (k-1)))]              
-      mat <- matrix(vec,ncol=TT,nrow=floor(TT/hmin)-(k-1),byrow=TRUE)
-      ivals.mat <- rbind(ivals.mat,mat)  
+   {  nbr <- floor(TT/hmin)
+      mat.base <- matrix(c(rep(1,k*hmin),rep(0,TT-k*hmin),rep(0,step),rep(1,k*hmin),rep(0,TT-k*hmin-step)),nrow=2,byrow=TRUE)
+      mat.temp <- mat.base
+      if(nbr>1)
+      { for(jj in 1:(nbr-1))
+           mat.temp <- rbind(mat.temp, cbind(matrix(0,ncol=jj*hmin,nrow=2),mat.base[,1:(TT-jj*hmin)]))
+      }  
+      mat.temp <- mat.temp[rowSums(mat.temp)==k*hmin, ]
+      ints.mat <- rbind(ints.mat, mat.temp)
    }
-   return(ivals.mat)
-}
+   return(ints.mat)
+}   
+   
+# ints <- intervals(TT)
+# nb.ints <- dim(ints)[1]
+# ints <- as.vector(ints)
+# ints[ints==0] <- NA
+# ints <- matrix(ints,nrow=nb.ints)
+# plot(ints[1,], type="l", ylim=c(0,dim(ints)[1]+1), ylab="", xlab="time")
+# for(jj in 2:dim(ints)[1])
+#    lines(jj*ints[jj,])
 
 
 # multiscale statistic
 
-statistics <- function(Y, correction)
+statistics <- function(Y, scaling)
 {  
    # Inputs:
    # Y            matrix of time series (nn time series of length TT)
-   # correction   correction factor for noise variance
+   # scaling      scaling factor for noise variance
    # Outputs:
    # stat.ms      nn x nn matrix containing the value of the test statistic for each pair (i,j)
    # stat.list    list of indvidual statistics
@@ -68,19 +102,28 @@ statistics <- function(Y, correction)
    TT <- dim(Y)[1]
    kernel.mat <- intervals(TT)
    h.vec <- rowSums(kernel.mat)/TT
+   u.vec.max <- rep(0, nrow(kernel.mat))
+   u.vec.min <- rep(0, nrow(kernel.mat))
+   for (i in 1:nrow(kernel.mat)){
+      u.vec.max[i] = max(which(kernel.mat[i, ] == 1))
+      u.vec.min[i] = min(which(kernel.mat[i, ] == 1))
+   } 
+   gset_michael <- cbind(u.vec.min, u.vec.max, h.vec)
    stat.list <- list()
-   stat.ms <- matrix(0,ncol=nn,nrow=nn)
+   stat.ms <- matrix(NA,ncol=nn,nrow=nn)
    pos <- 1
    for(i in 1:(nn-1))
    {  for(j in (i+1):nn)
       {  nom <- as.vector(kernel.mat %*% (Y[,i] - Y[,j]))
-         denom <- as.vector(sqrt(correction) * sqrt(kernel.mat %*% (Y[,i] + Y[,j])))
-         stat.list[[pos]] <- abs(nom/denom) - sqrt(2*log(1/h.vec))
-         stat.ms[i,j] <- max(abs(nom/denom) - sqrt(2*log(1/h.vec)))
+         denom <- as.vector(sqrt(scaling) * sqrt(kernel.mat %*% (Y[,i] + Y[,j])))
+         const1 <- sqrt(log(exp(1)/h.vec)) / log(log(exp(1)^exp(1)/h.vec))
+         const2 <- sqrt(2*log(1/h.vec))
+         stat.list[[pos]] <- const1 * (abs(nom/denom) - const2)
+         stat.ms[i,j] <- max(const1 * (abs(nom/denom) - const2))
          pos <- pos+1
       }
    }
-   return(list(ms=stat.ms, stats=stat.list))
+   return(list(ms = stat.ms, stats = stat.list, gset = gset_michael))
 }
 
 
@@ -94,25 +137,27 @@ statistics.sim <- function(Z)
    # stat.sim     nn x nn matrix containing the value of the test statistic for each pair (i,j)
    
    TT <- dim(Z)[1]
+   nn <- dim(Z)[2]
    kernel.mat <- intervals(TT)
    h.vec <- rowSums(kernel.mat)/TT
-   stat.sim <- matrix(0,ncol=nn,nrow=nn)
+   stat.sim <- matrix(NA,ncol=nn,nrow=nn)
    for(i in 1:(nn-1))
    {  for(j in (i+1):nn)
       {  nom <- as.vector(kernel.mat %*% (Z[,i] - Z[,j])) / sqrt(2*TT*h.vec)
-         stat.sim[i,j] <- max(abs(nom) - sqrt(2*log(1/h.vec))) 
+         const1 <- sqrt(log(exp(1)/h.vec)) / log(log(exp(1)^exp(1)/h.vec))
+         const2 <- sqrt(2*log(1/h.vec))
+         stat.sim[i,j] <- max(const1 * (abs(nom) - const2)) 
       }
    }
    return(stat.sim)
 }
-
 
 critical.value <- function(nn, TT, level, Nsim=1000)
 {  
    mstat.vec <- rep(NA, Nsim)
    for(isim in 1:Nsim)
    {  Z <- matrix(rnorm(nn*TT),ncol=nn,nrow=TT)
-      mstat.vec[isim] <- max(statistics.sim(Z))
+      mstat.vec[isim] <- max(statistics.sim(Z), na.rm=TRUE)
    }
    return(as.vector(quantile(mstat.vec, probs=1-level)))  
 }
