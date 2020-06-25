@@ -39,6 +39,7 @@ for (country in unique(covid$countryterritoryCode)){
   covid[covid$countryterritoryCode == country, "cumcases"] <- cumsum(covid[covid$countryterritoryCode == country, "cases"])
   covid[covid$countryterritoryCode == country, "cumdeaths"] <- cumsum(covid[covid$countryterritoryCode == country, "deaths"])
   gov_resp_column <- covid[covid$countryterritoryCode == country, "GovernmentResponseIndex"]
+  #gov_resp_column <- covid[covid$countryterritoryCode == country, "StringencyIndex"]
   time_range      <- length(gov_resp_column)
   covid[covid$countryterritoryCode == country, "lagged_gov_resp"] <- c(rep(NA, 14), gov_resp_column[1:(time_range - 14)])
   

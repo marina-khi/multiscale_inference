@@ -35,7 +35,7 @@ produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
   plot(data_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
       col="blue", ylab="", xlab="", mgp=c(1, 0.5, 0))
   lines(data_j, col="red")
-  title(main = "(a) observed cases per day", font.main = 1, line = 0.5)
+  title(main = "(a) observed new cases per day", font.main = 1, line = 0.5)
   legend("topright", inset = 0.02, legend=c(country_i, country_j),
          col = c("blue", "red"), lty = 1, cex = 0.95, ncol = 1)
 
@@ -48,13 +48,11 @@ produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
 
   plot(gov_resp_i, ylim=c(0, 100), type="l",
        col="blue", ylab="", xlab = "", mgp=c(1, 0.5, 0))
-  title(main = "(c) index of government response", font.main = 1, line = 0.5)
+  title(main = "(c) government response index", font.main = 1, line = 0.5)
   lines(gov_resp_j, col="red")
-  #lines(lagged_gov_resp_i, col="blue", lty = "dashed", lwd = 3)
-  #lines(lagged_gov_resp_j, col="red", lty = "dashed", lwd = 3)
-  
-  #title(main = expression((c) ~ index ~ of ~ government ~ response), line = 1)
-  
+  lines(lagged_gov_resp_i, col="blue", lty = "dashed", lwd = 3)
+  lines(lagged_gov_resp_j, col="red", lty = "dashed", lwd = 3)
+
   par(mar = c(2.7, 0.5, 3, 0)) #Margins for each plot
 
   a_t_set <- subset(gset, test == 1, select = c(u, h))
@@ -113,7 +111,7 @@ simulate_data_iid <- function(n_ts, t_len, lambda_vec, sigma) {
 
 calculate_size <- function(t_len, n_ts, alpha_vec, lambda_vec = lambda_vec,
                            sigma = sigma,
-                           n_sim = 1000, sim_runs = 1000){
+                           n_sim = 1000, sim_runs = 1000, iid = FALSE){
   
   #Constructing the set of intervals
   grid                   <- construct_weekly_grid(t_len)
@@ -150,8 +148,11 @@ calculate_size <- function(t_len, n_ts, alpha_vec, lambda_vec = lambda_vec,
   test_res <- matrix(NA, ncol = length(alpha_vec), nrow = n_sim)
   
   for(sim in 1:n_sim) {
-    Y <- simulate_data(n_ts = n_ts, t_len = t_len, lambda_vec = lambda_vec, sigma = sigma)
-    #Y <- simulate_data_iid(n_ts = n_ts, t_len = t_len, lambda_vec = lambda_vec, sigma = sigma)
+    if (iid){
+      Y <- simulate_data_iid(n_ts = n_ts, t_len = t_len, lambda_vec = lambda_vec, sigma = sigma)
+    } else {
+      Y <- simulate_data(n_ts = n_ts, t_len = t_len, lambda_vec = lambda_vec, sigma = sigma)
+    }
     sigma_vec <- rep(0, n_ts)
     for (i in 1:n_ts){
       sigma_squared <- sum((Y[2:t_len, i] - Y[1:(t_len - 1), i]) ^ 2) / (2 * sum(Y[, i]))
