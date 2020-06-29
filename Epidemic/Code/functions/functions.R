@@ -50,32 +50,37 @@ produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
        col="blue", ylab="", xlab = "", mgp=c(1, 0.5, 0))
   title(main = "(c) government response index", font.main = 1, line = 0.5)
   lines(gov_resp_j, col="red")
-  lines(lagged_gov_resp_i, col="blue", lty = "dashed", lwd = 3)
-  lines(lagged_gov_resp_j, col="red", lty = "dashed", lwd = 3)
+  #lines(lagged_gov_resp_i, col="blue", lty = "dashed", lwd = 3)
+  #lines(lagged_gov_resp_j, col="red", lty = "dashed", lwd = 3)
 
   par(mar = c(2.7, 0.5, 3, 0)) #Margins for each plot
 
   a_t_set <- subset(gset, test == 1, select = c(u, h))
   if (nrow(a_t_set) > 0){
-    p_t_set <- data.frame('startpoint' = a_t_set$u - a_t_set$h, 'endpoint' = a_t_set$u + a_t_set$h, 'values' = 0)
+    p_t_set <- data.frame('startpoint' = (a_t_set$u - a_t_set$h) * Tlen + 0.5,
+                          'endpoint' = (a_t_set$u + a_t_set$h) * Tlen - 0.5, 'values' = 0)
     p_t_set$values <- (1:nrow(p_t_set))/nrow(p_t_set)
     
     #Produce minimal intervals
     p_t_set2  <- compute_minimal_intervals(p_t_set)
 
-    plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1 + 1 / nrow(p_t_set)), xlab="", mgp=c(2, 0.5, 0), yaxt = "n")
+    plot(NA, xlim=c(0, Tlen),  ylim = c(0, 1 + 1 / nrow(p_t_set)), xlab="", mgp=c(2, 0.5, 0), yaxt = "n")
     title(main = "(d) minimal intervals produced by our test", font.main = 1, line = 0.5)
     title(xlab = "days since the hundredth case", line = 1.7, cex.lab = 0.9)
-    segments(p_t_set2$startpoint * Tlen, p_t_set2$values, p_t_set2$endpoint *Tlen, p_t_set2$values, lwd = 2)
-    segments(p_t_set$startpoint * Tlen, p_t_set$values, p_t_set$endpoint *Tlen, p_t_set$values, col = "gray")
+    segments(p_t_set2$startpoint, p_t_set2$values, p_t_set2$endpoint, p_t_set2$values, lwd = 2)
+    segments(p_t_set$startpoint, p_t_set$values, p_t_set$endpoint, p_t_set$values, col = "gray")
   } else {
     #If there are no intervals where the test rejects, we produce empty plots
 
-    plot(NA, xlim=c(0,Tlen),  ylim = c(0, 1), xlab="", ylab = "", mgp=c(2,0.5,0), yaxt = "n")
+    plot(NA, xlim=c(0, Tlen),  ylim = c(0, 1), xlab="", ylab = "", mgp=c(2,0.5,0), yaxt = "n")
     title(main = "(d) minimal intervals produced by our test", font.main = 1, line = 0.5)
     title(xlab = "days since the hundredth case", line = 1.7, cex.lab = 0.9)
   }
-  mtext(paste("Comparison of ", country_i, " and ", country_j), side = 3, line = 0, outer = TRUE, font = 1, cex = 1.2)
+  mtext(paste0("Comparison of ", country_i, " and ", country_j), side = 3, line = 0, outer = TRUE, font = 1, cex = 1.2)
+  print.xtable(xtable(p_t_set2, digits = c(3), align = paste(replicate(4, "c"), collapse = "")),
+               type="latex", file=paste0("plots/", country_i, "_vs_", country_j, ".tex"),
+               include.colnames = FALSE)
+  
 }
 
 # functions to simulate data

@@ -332,7 +332,7 @@ One of the ways to address this question is to compare the underlying trends of 
 Throughout the section, we set the significance level to $\alpha=0.05$ and implement the multiscale test in exactly the same way as in the simulation study of Section \ref{subsec:sim}. 
 
 \subsubsection{Data}
-Epidemiological data for COVID-19 cases in Germany, Spain, France, Italy and United Kingdom was collected from the database created by European Center for Disease Prevention and Control (http://ecdc.europa.eu). In order to be able to account for the differences in the onset of the spread of COVID-19 in various countries, the starting point of the time series for each country was the day of the $100$th case in that country. For our analysis, we considered only those days since the $100$th case for which we have observations for all five countries. Hence, the resulting dataset consists of $n = 5$ time series, each with $T = 111$ observation. We then replaced all the negative values by $0$. Overall, this resulted in $4$ replacements. Plots of the time series are given in panels (a) of Figure \ref{fig:covid19}.
+Epidemiological data for COVID-19 cases in Germany, Spain, France, Italy and United Kingdom was collected from the database created by European Center for Disease Prevention and Control (http://ecdc.europa.eu). In order to be able to account for the differences in the onset of the spread of COVID-19 in various countries, the starting point of the time series for each country was the day of the $100$th case in that country. For our analysis, we considered only those days since the $100$th case for which we have observations for all five countries. Hence, the resulting dataset consists of $n = 5$ time series, each with $T = 112$ observation. We then replaced all negative values by $0$. Overall, this resulted in $4$ replacements. Plots of the time series are given in panels (a) of Figure \ref{fig:covid19}.
 
 The dataset was then matched with the government response index (GRI) from The Oxford COVID-19 Government Response Tracker (OxCGRT) \linebreak (\cite{Hale2020}). GRI is calculated based on several common policies that governments have taken as a response to the pandemic such as school closures and travel restrictions. GRI ranges from $0$ to $100$, with $0$ corresponding to no response from the government and $100$ corresponding to full lockdown, closure of schools and workplaces, ban on travelling, etc. Detailed information on the collection of the data for government responses and methodology of calculating indices is provided in \cite{Hale2020paper}. Plots of the time series of GRI are given in panels (c) of Figure \ref{fig:covid19}.
 
@@ -347,8 +347,7 @@ With the help of our multiscale method, we now test the null hypotheses $H_0^{(i
 
 According to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals $\intervals_{reject}(i, j)$ plotted in panel (d). We can claim, with confidence of about $95\%$, that the functions $\lambda_i$ and $\lambda_j$ are different on each of the intervals.
 
-As we can see from the plots, 
-
+As we can see from the plots, time series for these countries are relatively similar to each other. For example, we do not detect any significant difference between trends in Germany and Spain after 31st day, or between Germany and Italy before 46th day and after 77th day of the course of the pandemic, or between Germany and France after 31st day. The only pairwise comparison that shows significance difference between functions $\lambda_i$ and $\lambda_j$ during the most part of the considered time period is the comparison between Germany and United Kingdom.
 \begin{figure}[t!]
 \begin{subfigure}[b]{0.475\textwidth}
 \includegraphics[width=\textwidth]{plots/DEU_vs_ESP}
@@ -371,7 +370,10 @@ Panel (d) of each subfigure depicts the set of intervals $\intervals_{\text{reje
 \end{figure}
 
 \FloatBarrier
+\subsubsection{Discussion}
+One of the main arguments against any possibility of comparing rates of the spread of infection in different countries, is the fact that different ocu
 
+Therefore, different countries may appear to have different death rates, but only because they have applied different sampling and reporting policies. It is not necessarily because they are managing the virus any better or that the virus has infected fewer or more people.
 
 
 \newpage
