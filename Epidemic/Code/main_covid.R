@@ -5,6 +5,10 @@ rm(list=ls())
 
 library(tidyr)
 library(multiscale)
+library(xtable)
+options(xtable.floating = FALSE)
+options(xtable.timestamp = "")
+
 
 #Defining necessary constants
 alpha    <- 0.05 #confidence level for application
