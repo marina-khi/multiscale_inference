@@ -285,7 +285,7 @@ which has a similar shape as some of the estimated curves in the application of 
 \end{itemize}
 We estimate the probability of Type I error (i.e. the test size) by calculating the percentage of at least one rejection of the null hypothesis $H_0^{(i, j, k)}$ for some $(i, j, k)$ from $R=5 000$ simulated samples $\mathcal{\X}$ of count data.
 
-The results of the size simulations are presented in Table \ref{tab:sim:size}. As can be seen from the table, in all scenarios the empirical FWER is smaller than the nominal size $\alpha$. Moreover, size numbers are biased downwards and this bias does not diminish as the sample size or the number of time series increases. This can be explained by the following fact. For all the sample sizes considered we use the same family of intervals $\intervals$, hence, the length of the smallest interval ($7$ days, i.e. one week) relative to the rescaled time decreases, which leads to the effective sample size staying at the same level rather than increasing with the sample size. If we would let the length of the smallest interval be dependent on the sample size, this would probably diminish the bias in the empirical size compared to the nominal one. To summarize, (a) in finite samples, the test allows us to control empirical FWER($\alpha$) for pre-specified significance level $\alpha$ and (b) the test is somewhat conservative, but this issue may be overcome by using a different set of intervals that depends on the sample size.
+The results of the size simulations are presented in Table \ref{tab:sim:size}. As can be seen from the table, in all scenarios the empirical FWER coincides with the nominal size $\alpha$. Moreover, size numbers are biased downwards, but this bias slowly diminished as the sample size or the number of time series increases. This slow performance increase can be explained by the following fact. For all the sample sizes considered we use the same family of intervals $\intervals$, hence, the length of the smallest interval ($7$ days, i.e. one week) relative to the rescaled time decreases, which leads to the effective sample size staying at the same level rather than increasing with the sample size. If we would let the length of the smallest interval be dependent on the sample size, this would probably diminish the bias in the empirical size compared to the nominal one. To summarize, (a) in finite samples, the test allows us to control empirical FWER($\alpha$) for pre-specified significance level $\alpha$ and (b) the test is somewhat conservative, but this issue may be overcome by using a different set of intervals that depends on the sample size.
 
 \begin{figure}[t!]
 \centering
@@ -312,9 +312,9 @@ The results of the size simulations are presented in Table \ref{tab:sim:size}. A
  & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
  & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
 \cmidrule[0.4pt]{1-10}
-$T = 100$ &  0.012 & 0.047 & 0.084 &  0.006 & 0.033 & 0.076 &  0.005 & 0.027 & 0.060 \\ 
- $T =  250$ &  0.010 & 0.043 & 0.088 &  0.008 & 0.039 & 0.081 &  0.004 & 0.030 & 0.062 \\ 
- $ T = 500$ &  0.006 & 0.039 & 0.083 &  0.005 & 0.033 & 0.069 &  0.005 & 0.028 & 0.066 \\ 
+T = 100 & 0.006 & 0.035 & 0.070 & 0.004 & 0.026 & 0.059 & 0.002 & 0.021 & 0.045 \\ 
+  T = 250 & 0.010 & 0.047 & 0.099 & 0.008 & 0.042 & 0.084 & 0.006 & 0.034 & 0.067 \\ 
+  T = 500 & 0.011 & 0.052 & 0.090 & 0.011 & 0.046 & 0.089 & 0.011 & 0.040 & 0.074 \\ 
 \bottomrule
 \end{tabularx}}
 \end{table}
@@ -378,37 +378,20 @@ Panel (d) of each subfigure depicts the set of intervals $\intervals_{\text{reje
 
 \FloatBarrier
 \subsubsection{Discussion}
-There are 
 
-Probably the first argument against any possibility of comparison the number 
+Direct comparison of the spread of COVID-19 infection is challenging in many ways. One of the most cited arguments against any possibility of reasonable cross-country comparison is different testing regimes. For example, UK mostly tested workers on the frontline and people who need to be hospitalized. On the other hand, Germany is often considered as a country with extensive early testing of contacts to known cases. This means one country’s data may be fundamentally different than others, making direct comparison not .
+conclusive.
 
-Differences in testing regimes (such as sampling and reporting procedures) are a plausible mechanism driving the rate 
+However, there are two reasons that our results are still valid. First, even visual inspection of the raw data confirms our finding that the underlying trends of the spread of infection are similar in different countries even despite possible differences in testing policies. Moreover, our test does not find any significant differences between countries on large parts of the time period, confirming our assumption that the trends of COVID-19 pandemic are comparable across countries.
 
-driving the different detected age structures of cases
+%Second, we are mainly interested in the regions where the trends diverge 
+Second, if we assume that the testing regime is country-specific and does not change over the time period considered, this does not affect our studies in any way. Even if the real number of infected people differ across the country, the trends either follow the same pattern and we do not detect any significant difference between countries; or the trends diverge on some part of the time period and we reject the null hypothesis for the corresponding interval. In both scenarios we do not aim to provide any causal interpretation, but merely reveal the discrepancies in the underlying deterministic trend.
 
-The number of total confirmed infections is likely to be affected by measurement error due to differences in the testing regime between the countries
+%Differences in testing regimes (such as sampling and reporting procedures) are a plausible mechanism driving 
+%The number of total confirmed infections is likely to be affected by measurement error due to differences in the testing regime between the countries
+%Therefore, different countries may appear to have different death rates, but only because they haIt is not necessarily because they are managing the virus any better or that the virus has infected fewer or more people.
 
-
-One of the main arguments against any possibility of comparing rates of the spread of infection in different countries, is the fact that different ocuHowever, these numbers are difficult to compare
-because the countries implemented different testing policies
-
-
-
-Therefore, different countries may appear to have different death rates, but only because they have applied different sampling and reporting policies. It is not necessarily because they are managing the virus any better or that the virus has infected fewer or more people.
-
-For example, Germany is often considered to be a country with extensive early testing of contacts to known cases.
-
- [3, 10, 11]. This is consistent with our finding that differences between
-countries with extensive early testing of contacts to known cases (South Korea, Germany) are
-largely driven by differences in fatality and not by differences in the age distribution, suggesting
-that those countries might be more successful at catching the mild and asymptomatic cases
-among the younger population groups. However, it is also plausible that the extensive testing
-itself in these countries prevented undetected community spread to older population groups.
-Moreover, the data included in our analysis is also based on extensive testing for Italy and to a
-lesser extent for Spain, as these countries ramped up testing as the epidemic spread, making test
-numbers alone an unlikely explanation for the different age structure of detected cases. 
-
-Our test, being mathematically rigorous, only allows researchers to determine the regions of interest where two trends differ from each other, but without telling what caused this difference. The proposed testing procedure provides the necessary basis for further explanatory analysis of the data, distinguishing significant differences in the structure of the data from the artifacts of the sampling noise. However, it is clear that in order to be able to identify the reason for these differences, more detailed analysis is required.
+It is worth to emphasise that our test, being mathematically rigorous, only allows researchers to determine the regions of interest where two trends differ from each other, but without telling what caused this difference. The proposed testing procedure provides the necessary basis for further explanatory analysis of the data, distinguishing significant differences in the structure of the data from the artifacts of the sampling noise. However, it is clear that in order to be able to identify the reason for these differences, more detailed analysis is required.
 
 \newpage
 
