@@ -359,79 +359,136 @@ T = 100 & 0.006 & 0.035 & 0.071 & 0.008 & 0.036 & 0.076 & 0.005 & 0.025 & 0.051 
 \end{table}
 
 
-
 \subsection{Analysis of COVID-19 data}\label{subsec:app}
+
+
+The COVID-19 pandemic is one of the most pressing issues at present. The first outbreak occurred in Wuhan, China, in December 2019. On 30 January 2020, the World Health Organization (WHO) declared that the outbreak constitutes a Public Health Emergency of International Concern, and on 11 March 2020, the WHO characterized it as a pandemic. As of 22 June 2020, more than 8.86 million cases of COVID-19 infections have been reported worldwide, resulting in more than 465,000 deaths. 
+
+
+There are many open questions surrounding the current COVID-19 pandemic. A question which is particularly relevant for governments and policy makers is whether the pandemic has developed similarly in different countries or whether there are notable differences. Identifying these differences may give some insight into which policies have been more efficient in containing the virus than others. In what follows, we use our multiscale test to compare the development of COVID-19 in several European countries. It is important to emphasize that our test allows to identify differences in the development of the epidemic across countries in a statistical rigorous way, but it does not tell what caused these differences. By distinguishing statistically significant differences from artefacts of the sampling noise, the test provides the necessary basis for a further investigation into the causes. Such an investigation, however, goes beyond a mere statistical analysis. 
+
 
 %The COVID-19 pandemic, also known as the coronavirus pandemic, is an ongoing global pandemic of coronavirus disease 2019, caused by severe acute respiratory syndrome coronavirus 2 (SARS‑CoV‑2). The outbreak was first identified in Wuhan, China, in December 2019. On 30 January 2020, the World Health Organization declared that the outbreak constitutes a Public Health Emergency of International Concern, and on 11 March 2020 it was announced as a pandemic. As of 22 June 2020, more than 8.86 million cases of COVID-19 have been reported in 216 countries, areas and territories, resulting in more than 465,000 deaths.
 
-Currently, the analysis of the ongoing global pandemic of coronavirus disease 2019 (COVID-19) is of the the utmost importance in many fields of science. One of the most relevant questions for governments, policy makers, economists and even general public, is the differences in the development of the pandemic in various countries. 
+%Currently, the analysis of the ongoing global pandemic of coronavirus disease 2019 (COVID-19) is of the utmost importance in many fields of science. One of the most relevant questions for governments, policy makers, economists and even general public, is the differences in the development of the pandemic in various countries. 
 
-One of the ways to address this question is to compare the underlying trends of the new cases of COVID-19 per day for different countries. Information on the regions where two trends are significantly different from each other can then be used in order to assess which government policies are more efficient and which are less efficient. In what follows, we use our multiscale test to compare the spread of COVID-19 in five European countries.
+%One of the ways to address this question is to compare the underlying trends of the new cases of COVID-19 per day for different countries. Information on the regions where two trends are significantly different from each other can then be used in order to assess which government policies are more efficient and which are less efficient. In what follows, we use our multiscale test to compare the spread of COVID-19 in five European countries.
 
-Throughout the section, we set the significance level to $\alpha=0.05$ and implement the multiscale test in exactly the same way as in the simulation study of Section \ref{subsec:sim}. 
+%Throughout the section, we set the significance level to $\alpha=0.05$ and implement the multiscale test in exactly the same way as in the simulation study of Section \ref{subsec:sim}. 
+
 
 \subsubsection{Data}
-Epidemiological data for COVID-19 confirmed cases in Germany, Spain, France, Italy and United Kingdom was collected from the database created by European Center for Disease Prevention and Control (http://ecdc.europa.eu). The data was obtained on 26 June 2020. In order to be able to account for the differences in the onset of the COVID-19 pandemic in various countries, we take the day of the $100$th case in each country as the starting point of the time series for that country. As the length of the dataset, we take the minimal number of days for which we have observations for all five countries. The resulting dataset consists of $n = 5$ time series, each with $T = 112$ observation (as of June 25). We then replaced all negative values by $0$. Overall, this resulted in $4$ replacements. Plots of the time series are given in panels (a) of Figure \ref{fig:covid19}.
-
-The dataset was then matched with the Government Response Index (GRI) from The Oxford COVID-19 Government Response Tracker (OxCGRT) \linebreak (\cite{Hale2020}). GRI is calculated based on several common policies that governments have taken as a response to the pandemic such as school closures and travel restrictions. GRI ranges from $0$ to $100$, with $0$ corresponding to no response from the government and $100$ corresponding to full lockdown, closure of schools and workplaces, ban on travelling, etc. Detailed information on the collection of the data for government responses and methodology of calculating indices is provided in \cite{Hale2020paper}. Plots of the time series of GRI are given in panels (c) of Figure \ref{fig:covid19}.
-
-\subsubsection{Results}
-
-We assume that for each country $i \in \{1, \ldots, 5\}$ the data $X_{it}$ follows the nonparametric trend model \[ \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, \]
-where the noise variables $\eta_{it}$ have zero mean and unit variance. We estimate the overdispersion parameter $\sigma$ by the procedure described in Section \ref{subsec:test:test}. This results in the estimator $\widehat{\sigma} = 14.49$.
-
-As in Section \ref{subsec:sim}, we let $\pairs = \{ (i,j): 1 \le i < j \le 5\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$. Moreover, we choose $\intervals$ to be a family of time intervals with $h_k \in \{ 7/T,14/T,21/T,28/T \}$. Hence, all intervals in $\intervals$ have length either 7 days (1 week), 14 days (2 weeks), 21 days (3 weeks), or 28 days (4 weeks). For each length $h_k$, we include all intervals that start at days $t = 1 + 7(j-1)$ and $t = 4 + 7(j-1)$ for $j=1,2,\ldots$ Finally, with $K := |\intervals|$ being the cardinality of $\intervals$, we write $\indexset = \mathcal{S} \times \{1, \ldots, K\}$.
-
-With the help of our multiscale method, we now test the null hypotheses $H_0^{(i, j, k)}$ for each $(i, j, k) \in \indexset$ that $\lambda_i(\cdot) = \lambda_j(\cdot)$ on the interval $\mathcal{I}_k$. The results are presented in Figure \ref{fig:covid19}. As was mentioned before, we produce a plot for each pair of countries. However, for the sake of brevity, we present here only the results of pairwise comparison between Germany and each one of the other four countries. The rest of the results can be found in the Supplementary Material.
-
-On Figure \ref{fig:covid19}, panels (a) show the observed time series for two countries that are being compared, while panels (b) shows the smoothed versions of the time series from (a) using the bandwidth of $7$ days, panels (c) display the corresponding Government Response Index, and panels (d) present the results of out test procedure. Specifically, each panel (d) depicts in grey the set $\intervals_{reject}(i, j)$ of all the intervals $\mathcal{I}_k$ for which the test rejects the null $H_0^{(i, j, k)}$ where $(i, j)$ is the pair of countries being compared. The corresponding set of minimal intervals $\intervals_{reject, minimal}(i, j)$ is depicted in black. According to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals $\intervals_{reject}(i, j)$ plotted in panel (d). We can claim, with confidence of about $95\%$, that the functions $\lambda_i$ and $\lambda_j$ are different on each of the intervals.
-
-As we can see from the plots, time series for these five countries are relatively similar to each other. For example, we do not detect any significant difference between trends in Germany and Spain after day 31 since the start of the pandemic, or between Germany and Italy before day 46 and after day 77, or between Germany and France after day 31. The only pairwise comparison that shows significance difference between functions $\lambda_i$ and $\lambda_j$ during the most part of the considered time period is the comparison between Germany and United Kingdom.
-
-After visual inspection of the plots, it seems that the level of government response to the pandemic is not always the main driven force of the trend behind the spread of COVID-19. For example, consider the case of Germany and Italy. The GRI of Italy is almost always higher than GRI of Germany, but while the time trends of daily new infections in these countries do not differ in the beginning, starting from day 46 Italy tends to have more new cases of COVID-19 per day than Germany. This tendency nearly vanishes after day 77, but again, we can not attribute that to change of policies introduced by government. Most probably, there are other factors that affect the spread of COVID-19 in Germany and Italy.
-
-But the severity of government measures can be an important factor in containing the pandemic. For example, consider the case of Germany and Spain. According to our test, there are significant differences in the onset of pandemic between Spain and Germany up to day 31, with Spain having on average more new cases of daily infections than Germany. But starting from day 31, the trends in these countries become similar and start to decrease with approximately the same rate. That may be due to the fact that in general Spain introduced more severe measures of lockdown than Germany (as can be seen on Figure \ref{fig:covid19}, panel (c)), which helped battle the spread of infection.
 
 
+We analyze data from five European countries: Germany, Italy, Spain, France and the United Kingdom. For each country $i$, we observe a time series $\mathcal{X}_i = \{ X_{it}: 1 \le t \le T \}$, where $X_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available on the homepage of the European Center for Disease Prevention and Control (\texttt{https://www.ecdc.europa.eu}) and were downloaded on 26 June 2020. In order to make the data comparable across countries, we take the day of the $100$th confirmed case in each country as the starting date $t=1$. This way of ``normalizing'' the data is common practice \textcolor{blue}{(cp.\ ??)}. The time series length $T$ is taken to be the minimal number of days for which we have observations for all five countries. The resulting dataset consists of $n = 5$ time series, each with $T = 112$ observations (as of June 26). Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in $4$ replacements. Plots of the observed time series are presented in the upper panels (a) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
 
-\begin{figure}[t!]
-\begin{subfigure}[b]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/DEU_vs_ESP}
-\end{subfigure}\hspace{0.55cm}
-\begin{subfigure}[b]{0.49\textwidth}
+
+To interpret the results produced by our multiscale test, we consider the Government Response Index (GRI) from the Oxford COVID-19 Government Response Tracker (OxCGRT) \citep{Hale2020}. The GRI measures how severe the actions are that are taken by a country's government to contain the virus. It is calculated based on several common government policies such as school closures and travel restrictions. The GRI ranges from $0$ to $100$, with $0$ corresponding to no response from the government at all and $100$ corresponding to full lockdown, closure of schools and workplaces, ban on travelling, etc. Detailed information on the collection of the data for government responses and the methodology for calculating the GRI is provided in \cite{Hale2020paper}. Plots of the GRI time series are given in panels (c) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
+
+
+%Epidemiological data for COVID-19 confirmed cases in Germany, Spain, France, Italy and United Kingdom was collected from the database created by European Center for Disease Prevention and Control (http://ecdc.europa.eu). The data was obtained on 26 June 2020. In order to be able to account for the differences in the onset of the COVID-19 pandemic in various countries, we take the day of the $100$th case in each country as the starting point of the time series for that country. As the length of the dataset, we take the minimal number of days for which we have observations for all five countries. The resulting dataset consists of $n = 5$ time series, each with $T = 112$ observation (as of June 25). We then replaced all negative values by $0$. Overall, this resulted in $4$ replacements. Plots of the time series are given in panels (a) of Figure \ref{fig:covid19}.
+
+%The dataset was then matched with the Government Response Index (GRI) from The Oxford COVID-19 Government Response Tracker (OxCGRT) (\cite{Hale2020}). GRI is calculated based on several common policies that governments have taken as a response to the pandemic such as school closures and travel restrictions. GRI ranges from $0$ to $100$, with $0$ corresponding to no response from the government and $100$ corresponding to full lockdown, closure of schools and workplaces, ban on travelling, etc. Detailed information on the collection of the data for government responses and methodology of calculating indices is provided in \cite{Hale2020paper}. Plots of the time series of GRI are given in panels (c) of Figure \ref{fig:covid19}.
+
+
+\subsubsection{Test results}
+
+
+We assume that the data $X_{it}$ of each country $i$ in our sample follow the nonparametric trend model 
+\[ \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, \]
+which was introduced in equation \eqref{eq:model}. The overdispersion parameter $\sigma$ is estimated by the procedure described in Section \ref{subsec:test:test}, which yields the estimate $\widehat{\sigma} = 14.49$. Throughout the section, we set the significance level to $\alpha=0.05$ and implement the multiscale test in exactly the same way as in the simulation study of Section \ref{subsec:sim}. In particular, we let $\pairs = \{ (i,j): 1 \le i < j \le 5\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$, and we choose $\intervals$ to be the family of time intervals plotted in Figure \ref{fig:intervals}. Hence, all intervals in $\intervals$ have length either 7, 14, 21 or 28 days. 
+%Finally, with $K := |\intervals|$ being the cardinality of $\intervals$, we write $\indexset = \mathcal{S} \times \{1, \ldots, K\}$.
+
+
+With the help of our multiscale method, we simultaneously test the null hypothesis $H_0^{(i, j, k)}$ that $\lambda_i(\cdot) = \lambda_j(\cdot)$ on the interval $\mathcal{I}_k$ for each $(i, j, k) \in \indexset$. The results are presented in Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}, each figure comparing a specific pair of countries $(i,j)$ from our sample. For the sake of brevity, we only show the results for the pairwise comparisons of Germany with each of the four other countries. The remaining figures can be found in Section ?? of the Supplementary Material. Each figure splits into four panels (a)--(d).  Panel (a) shows the observed time series for the two countries $i$ and $j$ that are compared. Panel (b) presents smoothed versions of the time series from (a), that is, it shows nonparametric kernel estimates of the two trend functions $\lambda_i$ and $\lambda_j$, where the bandwidth is set to $7$ days and a rectangular kernel is used. Panel (c) displays the Government Response Index (GRI) of the two countries. Finally, panel (d) presents the results produced by our test. Specifically, it depicts in grey the set $\intervals_{\text{reject}}(i,j)$ of all the intervals $\mathcal{I}_k$ for which the test rejects the null $H_0^{(i, j, k)}$. The minimal intervals in the subset $\intervals_{\text{reject}}^{\text{min}}(i, j)$ are depicted in black. Note that according to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals plotted in panels (d) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}: we can claim, with confidence of about $95\%$, that there is a difference between the functions $\lambda_i$ and $\lambda_j$ on each of these intervals.
+
+
+%We assume that the data $X_{it}$ of each country $i$ in our sample follow the nonparametric trend model 
+%\[ \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, \]
+%where the noise variables $\eta_{it}$ have zero mean and unit variance. We estimate the overdispersion parameter $\sigma$ by the procedure described in Section \ref{subsec:test:test}. This results in the estimator $\widehat{\sigma} = 14.49$.
+
+%Throughout the section, we set the significance level to $\alpha=0.05$ and implement the multiscale test in exactly the same way as in the simulation study of Section \ref{subsec:sim}. 
+
+%As in Section \ref{subsec:sim}, we let $\pairs = \{ (i,j): 1 \le i < j \le 5\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$. Moreover, we choose $\intervals$ to be a family of time intervals with $h_k \in \{ 7/T,14/T,21/T,28/T \}$. Hence, all intervals in $\intervals$ have length either 7 days (1 week), 14 days (2 weeks), 21 days (3 weeks), or 28 days (4 weeks). For each length $h_k$, we include all intervals that start at days $t = 1 + 7(j-1)$ and $t = 4 + 7(j-1)$ for $j=1,2,\ldots$ Finally, with $K := |\intervals|$ being the cardinality of $\intervals$, we write $\indexset = \mathcal{S} \times \{1, \ldots, K\}$.
+
+%With the help of our multiscale method, we now test the null hypotheses $H_0^{(i, j, k)}$ for each $(i, j, k) \in \indexset$ that $\lambda_i(\cdot) = \lambda_j(\cdot)$ on the interval $\mathcal{I}_k$. The results are presented in Figure \ref{fig:covid19}. As was mentioned before, we produce a plot for each pair of countries. However, for the sake of brevity, we present here only the results of pairwise comparison between Germany and each one of the other four countries. The rest of the results can be found in the Supplementary Material.
+
+%On Figure \ref{fig:covid19}, panels (a) show the observed time series for two countries that are being compared, while panels (b) shows the smoothed versions of the time series from (a) using the bandwidth of $7$ days, panels (c) display the corresponding Government Response Index, and panels (d) present the results of out test procedure. Specifically, each panel (d) depicts in grey the set $\intervals_{reject}(i, j)$ of all the intervals $\mathcal{I}_k$ for which the test rejects the null $H_0^{(i, j, k)}$ where $(i, j)$ is the pair of countries being compared. The corresponding set of minimal intervals $\intervals_{reject, minimal}(i, j)$ is depicted in black. According to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals $\intervals_{reject}(i, j)$ plotted in panel (d). We can claim, with confidence of about $95\%$, that the functions $\lambda_i$ and $\lambda_j$ are different on each of the intervals.
+
+
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/DEU_vs_ITA}
-\end{subfigure}
+\caption{Test results for the comparison of Germany and Italy.}\label{fig:Germany:Italy}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_ESP}
+\caption{Test results for the comparison of Germany and Spain.}\label{fig:Germany:Spain}
+\end{minipage}
+
+\caption*{Note: In each figure, panel (a) shows the two observed time series, panel (b) smoothed versions of the time series, and panel (c) the corresponding Government Response Index (GRI). Panel (d) depicts the set of intervals $\intervals_{\text{reject}}(i,j)$ in grey and the subset of minimal intervals $\intervals_{\text{reject}}^{\text{min}}(i,j)$ in black.}
 \end{figure}
-\begin{figure}[t!]\ContinuedFloat
-\begin{subfigure}[b]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/DEU_vs_GBR}
-\end{subfigure}\hspace{0.55cm}
-\begin{subfigure}[b]{0.49\textwidth}
+
+
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/DEU_vs_FRA}
-\end{subfigure}
-\vspace{0.25cm}
+\caption{Test results for the comparison of Germany and France.}\label{fig:Germany:France}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_GBR}
+\caption{Test results for the comparison of Germany and the UK.}\label{fig:Germany:UK}
+\end{minipage}
 
-\caption{Summary of the results for the daily numbers of the new cases of COVID-19 in Germany, Spain, France, Italy and The United Kingdom with one subfigure corresponding to the results of pairwise comparison of Italy and one of the other countries. Panel (a) of each subfigure shows the two observed time series. Panel (b) in each subfigure shows the smoothed versions of the time series from (a) using the bandwidth of $7$ days. Panel (c) of each subfigure shows the corresponding Government Response Index. %(solid line) against the lagged version of itself (dashed line), with lag being equal to 14 days.
-Panel (d) of each subfigure depicts the set of intervals $\intervals_{\text{reject}}(i,j)$ in grey and the set of minimal intervals constructed on the basis of $\intervals_{\text{reject}}(i,j)$ in black.}\label{fig:covid19}
+\caption*{Note: In each figure, panel (a) shows the two observed time series, panel (b) smoothed versions of the time series, and panel (c) the corresponding Government Response Index (GRI). Panel (d) depicts the set of intervals $\intervals_{\text{reject}}(i,j)$ in grey and the subset of minimal intervals $\intervals_{\text{reject}}^{\text{min}}(i,j)$ in black.}
 \end{figure}
 
-\FloatBarrier
+
+We now have a closer look at the results in Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}. Figure \ref{fig:Germany:Italy} presents the comparison of Germany and Italy. The two time series of daily new cases in panel (a) can be seen to be very similar until approximately day $40$. Thereafter, the German time series appears to trend downwards more strongly than the Italian one. The smoothed data in panel (b) give a similar visual impression: the kernel estimates of the German and Italian trend curves $\lambda_i$ and $\lambda_j$ are very close to each other until approximately day $40$ but then start to differ. It is however not clear whether the differences between the two curve estimates reflect differences between the underlying trend curves or whether these are mere artefacts of sampling noise. Our test allows to clarify this issue. Inspecting panel (d), we see that the test detects significant differences between the trend curves in the time period between day $4?$ and $85$. However, it does not find any significant differences up to day $4?$. Taken together, our results provide evidence that the pandemic developed very similarly in Germany and Italy until a peak was reached around day $40$. Thereafter, however, the German time series exhibits a significantly stronger downward trend than the Italian one. 
+
+
+Inspecting Figures \ref{fig:Germany:Spain} and  \ref{fig:Germany:France}, a quite different picture arises when comparing Germany with France and Spain. The test detects significant differences between the German trend and the trends in France and Spain up to (approximately) day $40$ but not thereafter. Hence, we find that the time trends evolve differently during the outbreak of the crisis, but they decrease in more or less the same fashion after a peak was reached. Finally, the comparison of Germany with the UK in Figure \ref{fig:Germany:UK} reveals significant differences between the time trends over essentially the whole observation window. Inspecting the time series in panel (a), it is quite obvious that the UK trend evolves differently from the German one after day $40$. However, our test also detects differences between the trends during the onset of the crisis, which is not obvious from the time series plot in panel (a). 
+
+
 \subsubsection{Discussion}
 
-Direct comparison of the spread of COVID-19 infection is challenging in many ways. One of the most cited arguments against any possibility of reasonable cross-country comparison is different testing regimes. For example, UK mostly tested workers on the frontline and people who need to be hospitalized. On the other hand, Germany is often considered as a country with extensive early testing of contacts to known cases. This means one country’s data may be fundamentally different than others, making direct comparison not conclusive.
 
-However, there are two reasons that our results are still valid. First, even visual inspection of the raw data confirms our finding that the underlying trends of the spread of infection are similar in different countries despite possible differences in testing policies. Moreover, our test does not find any significant differences between countries on large parts of the time period, confirming our assumption that the trends of COVID-19 pandemic are comparable across countries.
+Having identified significant differences between the epidemic trends in the five countries under consideration, one may ask next what are the causes of these differences. As already mentioned at the beginning of this section, this question cannot be answered by our test. Rather, a further analysis which presumably goes beyond pure statistics is needed to shed some light on it. We here do not attempt to provide any answers. We merely discuss some observations which become apparent upon considering our test results in the light of the Government Response Index (GRI). For reasons of brevity, we focus on the comparison of Germany with Italy and Spain in Figures \ref{fig:Germany:Italy} and \ref{fig:Germany:Spain}. 
+
+
+According to our test results in Figure \ref{fig:Germany:Spain}, there are significant differences between the trends in Germany and Spain during the onset of the epidemic up to about day $40$, with Spain having more new cases of infections than Germany on most days. After day $40$, the trends become quite similar and start to decrease at approximately the same rate. This may be due to the fact that Spain in general introduced more severe measures of lockdown than Germany (as can be seen upon inspecting the GRI in panel (c) of Figure \ref{fig:Germany:Spain}), which may have helped to battle the spread of infection. However, a much more thorough analysis is of course needed to find out whether this is indeed the case or whether other factors were mainly responsible. 
+
+
+Turning to the comparison of Germany and Italy, we found that the German trend drops down significantly faster than the Italian one after day $40$. Interestingly, the GRI of Italy almost always lies above that of Germany. Hence, even though Italy has in general taken more severe and restrictive measures against the virus than Germany, it appears that the virus could be contained better in Germany (in the sense that the trend of daily new cases went down significantly faster in Germany than in Italy). This suggests that there are indeed important factors besides the level of government response to the pandemic which substantially influence the trend of new COVID-19 cases. 
+
+
+Our discussion indicates that it is extremely difficult to determine the exact causes of the differences in epidemic trends across countries. Since even similar countries such as those in our sample differ in a variety of aspects that are relevant for the spread of the virus, it is very challenging to pin down these causes. One issue that is often discussed in the context of cross-country comparisons are country-specific test regimes. For example, the UK mostly tested workers on the frontline and people who needed to be hospitalized. Germany, in contrast, is often considered as a country with extensive early testing of contacts to known cases. Differences between epidemic trends may thus be spuriously produced by country-specific test procedures. 
+
+
+Even though we can of course not fully exclude this possibility, our test results are presumably not driven by different test regimes in the countries under consideration. To explain why, we consider again the comparison of Germany and Italy: The test regimes in these two countries are arguably quite different. \textcolor{blue}{(Add details.)} Nevertheless, visual inspection of the raw and smoothed data in panels (a) and (b) of Figure \ref{fig:Germany:Italy} suggest that the underlying time trends are very similar up to approximately day $40$. This is confirmed by our test which does not find any significant differences before that day. Hence, the different test regimes in Germany and Italy do not appear to have an overly strong effect and to produce spurious differences between the time trends all over the sampling period. This suggests that the differences detected by our test indeed reflect differences in the way the virus spreads in Germany and Italy rather than being mere artefacts of different test regimes. 
+
+
+%\subsubsection{Discussion}
+
+%Direct comparison of the spread of COVID-19 infection is challenging in many ways. One of the most cited arguments against any possibility of reasonable cross-country comparison is different testing regimes. For example, UK mostly tested workers on the frontline and people who need to be hospitalized. On the other hand, Germany is often considered as a country with extensive early testing of contacts to known cases. This means one country’s data may be fundamentally different than others, making direct comparison not .
+%conclusive.
+
+%However, there are two reasons that our results are still valid. First, even visual inspection of the raw data confirms our finding that the underlying trends of the spread of infection are similar in different countries even despite possible differences in testing policies. Moreover, our test does not find any significant differences between countries on large parts of the time period, confirming our assumption that the trends of COVID-19 pandemic are comparable across countries.
 
 %Second, we are mainly interested in the regions where the trends diverge 
-Second, if we assume that the testing regime is country-specific and does not change over time, our results are not affected by the differences in these regimes. Even if the real number of infected people differ across the country, the trends either follow the same pattern and we do not detect any significant difference between countries; or the trends diverge on some part of the time period and we reject the null hypothesis for the corresponding interval. In both scenarios we do not aim to provide any causal interpretation, but merely reveal the discrepancies in the underlying deterministic trend.
+%Second, if we assume that the testing regime is country-specific and does not change over the time period considered, this does not affect our studies in any way. Even if the real number of infected people differ across the country, the trends either follow the same pattern and we do not detect any significant difference between countries; or the trends diverge on some part of the time period and we reject the null hypothesis for the corresponding interval. In both scenarios we do not aim to provide any causal interpretation, but merely reveal the discrepancies in the underlying deterministic trend.
 
 %Differences in testing regimes (such as sampling and reporting procedures) are a plausible mechanism driving 
 %The number of total confirmed infections is likely to be affected by measurement error due to differences in the testing regime between the countries
 %Therefore, different countries may appear to have different death rates, but only because they haIt is not necessarily because they are managing the virus any better or that the virus has infected fewer or more people.
 
-It is worth to emphasise that our test, being mathematically rigorous, only allows researchers to determine the regions of interest where two trends differ from each other, but without telling what caused this difference. The proposed testing procedure provides the necessary basis for further explanatory analysis of the data, distinguishing significant differences in the structure of the data from the artifacts of the sampling noise. However, it is clear that in order to be able to identify the reason for these differences, more detailed analysis is required.
+%It is worth to emphasise that our test, being mathematically rigorous, only allows researchers to determine the regions of interest where two trends differ from each other, but without telling what caused this difference. The proposed testing procedure provides the necessary basis for further explanatory analysis of the data, distinguishing significant differences in the structure of the data from the artifacts of the sampling noise. However, it is clear that in order to be able to identify the reason for these differences, more detailed analysis is required.
 
 \newpage
+
+
 
 \section*{A \hspace{0.2cm} Appendix}
 \def\theequation{A.\arabic{equation}}
