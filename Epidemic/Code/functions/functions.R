@@ -20,10 +20,12 @@ nadaraya_watson_smoothing <- function(u, data_p, grid_p, bw){
 
 produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
                            gov_resp_i, gov_resp_j, lagged_gov_resp_i, lagged_gov_resp_j,
-                           country_i, country_j){
+                           country_i, country_j, filename){
   Tlen <- length(data_i)
   gset <- results$gset_with_vals[[l]]
-
+  
+  pdf(filename, width=5.5, height=13, paper="special")
+  
   layout(matrix(c(1, 2, 3, 4),ncol=1), widths=c(2.2, 2.2, 2.2, 2.2),
          heights=c(1.5, 1.5, 1.5, 1.8), TRUE)
   #Setting the layout of the graphs
@@ -77,6 +79,7 @@ produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
     title(xlab = "days since the hundredth case", line = 1.7, cex.lab = 0.9)
   }
   mtext(paste0("Comparison of ", country_i, " and ", country_j), side = 3, line = 0, outer = TRUE, font = 1, cex = 1.2)
+  dev.off()
   print.xtable(xtable(p_t_set, digits = c(3), align = paste(replicate(4, "c"), collapse = "")),
                type="latex", file=paste0("plots/", country_i, "_vs_", country_j, ".tex"),
                include.colnames = FALSE)

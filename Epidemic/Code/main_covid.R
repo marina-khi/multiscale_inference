@@ -154,11 +154,11 @@ countries_names <- c("Germany", "Spain", "France", "United Kingdom", "Italy")
 for (l in seq_len(nrow(result_bwfree$ijset))){
   i <- result_bwfree$ijset[l, 1]
   j <- result_bwfree$ijset[l, 2]
-  pdf(paste0("plots/", countries[i], "_vs_", countries[j], ".pdf"), width=5.5, height=13, paper="special")
+  filename = paste0("plots/", countries[i], "_vs_", countries[j], ".pdf")
   produce_plots(results = result_bwfree, l = l, data_i = covid_mat[, i], data_j = covid_mat[, j],
                 smoothed_i = smoothed_curve[, i], smoothed_j = smoothed_curve[, j],
                 gov_resp_i = gov_resp[, i], gov_resp_j = gov_resp[, j],
                 lagged_gov_resp_i = lagged_gov_resp[, i], lagged_gov_resp_j = lagged_gov_resp[, j],
-                country_i = countries_names[i], country_j = countries_names[j])
-  dev.off()
+                country_i = countries_names[i], country_j = countries_names[j],
+                filename = filename)
 }
