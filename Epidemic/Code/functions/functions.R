@@ -77,16 +77,18 @@ produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
     title(xlab = "days since the hundredth case", line = 1.7, cex.lab = 0.9)
   }
   mtext(paste0("Comparison of ", country_i, " and ", country_j), side = 3, line = 0, outer = TRUE, font = 1, cex = 1.2)
-  print.xtable(xtable(p_t_set2, digits = c(3), align = paste(replicate(4, "c"), collapse = "")),
+  print.xtable(xtable(p_t_set, digits = c(3), align = paste(replicate(4, "c"), collapse = "")),
                type="latex", file=paste0("plots/", country_i, "_vs_", country_j, ".tex"),
+               include.colnames = FALSE)
+  print.xtable(xtable(p_t_set2, digits = c(3), align = paste(replicate(4, "c"), collapse = "")),
+               type="latex", file=paste0("plots/", country_i, "_vs_", country_j, "_min_intervals.tex"),
                include.colnames = FALSE)
   
 }
 
-# functions to simulate data
-
-lambda_fct <- function(u, c) {
-  return (5000 * exp(-(10 * u - 3) ^ 2 / 2) + c)
+# functions for data simulations
+lambda_fct <- function(u, c, height = 5000, position = 10) {
+  return (height * exp(-(position * u - 3) ^ 2 / 2) + c)
 }
 
 r_doublepois <- function(n, mu, theta) {
@@ -95,9 +97,6 @@ r_doublepois <- function(n, mu, theta) {
 
 simulate_data <- function(n_ts, t_len, lambda_vec, sigma) {
   data <- matrix(0, ncol = n_ts, nrow = t_len)
-  #for(i in 1:n_ts) {
-  #  data[, i]  <- rdoublepois(n = t_len, m = lambda_vec, s = rep(1 / sigma^2, t_len))
-  #}
   for(t in 1:t_len) {
     data[t, ] <- r_doublepois(n = n_ts, lambda_vec[t], sigma^2)
   }
@@ -173,4 +172,85 @@ calculate_size <- function(t_len, n_ts, alpha_vec, lambda_vec = lambda_vec,
   }
   print(paste("Empirical size: ",  colSums(test_res) / n_sim, sep=""))
   return(colSums(test_res) / n_sim)
+}
+
+
+calculate_power <- function(t_len, n_ts, alpha_vec, lambda_vec_1 = lambda_vec_1,
+                            lambda_vec_2 = lambda_vec_2,
+                            sigma = sigma,
+                            n_sim = 1000, sim_runs = 1000){
+  
+  #Constructing the set of intervals
+  grid                   <- construct_weekly_grid(t_len)
+  gset                   <- grid$gset
+  gset_cpp               <- as.matrix(gset)
+  gset_cpp               <- as.vector(gset_cpp)
+  storage.mode(gset_cpp) <- "double"
+  
+  localisations <- (gset$u + gset$h <= 0.6)
+  
+  #Constructing the set of the pairwise comparisons
+  ijset                   <- expand.grid(i = 1:n_ts, j = 1:n_ts)
+  ijset                   <- ijset[ijset$i < ijset$j, ]
+  ijset_cpp               <- as.matrix(ijset)
+  ijset_cpp               <- as.vector(ijset_cpp)
+  storage.mode(ijset_cpp) <- "integer"
+  
+  # compute critical value
+  quantiles <- compute_quantiles(t_len = t_len, grid = grid, n_ts = n_ts, 
+                                 sim_runs = sim_runs, epidem = TRUE)
+  
+  probs <- as.vector(quantiles$quant[1, ])
+  quant <- as.vector(quantiles$quant[2, ])
+  
+  crit_val <- c()
+  for (alpha in alpha_vec){
+    if (sum(probs == (1 - alpha)) == 0)
+      pos <- which.min(abs(probs - (1 - alpha)))
+    if (sum(probs == (1 - alpha)) != 0)
+      pos <- which.max(probs == (1 - alpha))
+    crit_val <- c(crit_val, quant[pos])
+  }
+  
+  #We need to extract only those values of our test statistic that
+  #correspond to the pairwise comparison between first time series and one of the others
+  elements_of_group1 <- rep(1, n_ts - 1)
+  for (i in 1:(n_ts - 2)){
+    elements_of_group1[i + 1] <- elements_of_group1[i] + i
+  }
+  
+  
+  # carry out multiscale test
+  test_res       <- matrix(NA, ncol = length(alpha_vec), nrow = n_sim)
+  test_res_local <- matrix(NA, ncol = length(alpha_vec), nrow = n_sim)
+  
+    
+  for(sim in 1:n_sim) {
+    #The first time series has the different mean function then the others
+    Y1 <- simulate_data(n_ts = 1, t_len = t_len, lambda_vec = lambda_vec_1, sigma = sigma)
+    Y2 <- simulate_data(n_ts = n_ts - 1, t_len = t_len, lambda_vec = lambda_vec_2, sigma = sigma)
+    Y  <- cbind(Y1, Y2)
+    
+    sigma_vec <- rep(0, n_ts)
+    for (i in 1:n_ts){
+      sigma_squared <- sum((Y[2:t_len, i] - Y[1:(t_len - 1), i]) ^ 2) / (2 * sum(Y[, i]))
+      sigma_vec[i] <- sqrt(sigma_squared)
+    }
+    
+    result <- compute_multiple_statistics(t_len = t_len, n_ts = n_ts, data = Y,
+                                          gset = gset_cpp, ijset = ijset_cpp,
+                                          sigma_vec = sigma_vec, epidem = TRUE)
+    
+    test_stat_group1 <- max(result$stat[1, ], na.rm = TRUE)
+    test_stat_group2 <- max(result$stat[-1, ], na.rm = TRUE)
+    
+    values_group1 <- result$vals_cor_matrix[localisations, elements_of_group1]
+    values_group2 <- result$vals_cor_matrix[, -elements_of_group1]
+    
+    test_res[sim, ]       <- as.numeric((test_stat_group1 > crit_val) & (test_stat_group2 <= crit_val))
+    test_res_local[sim, ] <- as.numeric((max(values_group1, na.rm = TRUE) > crit_val) & (max(values_group2, na.rm = TRUE) <= crit_val))
+  }
+  print(paste("Global power: ",  colSums(test_res) / n_sim, sep=""))
+  print(paste("Localised power: ",  colSums(test_res_local) / n_sim, sep=""))
+  return(list("global_power" = colSums(test_res) / n_sim, "local_power" = colSums(test_res_local) / n_sim))
 }
