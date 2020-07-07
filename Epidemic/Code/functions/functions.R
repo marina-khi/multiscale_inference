@@ -190,7 +190,7 @@ calculate_power <- function(t_len, n_ts, alpha_vec, lambda_vec_1 = lambda_vec_1,
   gset_cpp               <- as.vector(gset_cpp)
   storage.mode(gset_cpp) <- "double"
   
-  localisations <- (gset$u + gset$h <= 0.6)
+  #localisations <- (gset$u + gset$h <= 0.6)
   
   #Constructing the set of the pairwise comparisons
   ijset                   <- expand.grid(i = 1:n_ts, j = 1:n_ts)
@@ -217,15 +217,15 @@ calculate_power <- function(t_len, n_ts, alpha_vec, lambda_vec_1 = lambda_vec_1,
   
   #We need to extract only those values of our test statistic that
   #correspond to the pairwise comparison between first time series and one of the others
-  elements_of_group1 <- rep(1, n_ts - 1)
-  for (i in 1:(n_ts - 2)){
-    elements_of_group1[i + 1] <- elements_of_group1[i] + i
-  }
+  #elements_of_group1 <- rep(1, n_ts - 1)
+  #for (i in 1:(n_ts - 2)){
+  #  elements_of_group1[i + 1] <- elements_of_group1[i] + i
+  #}
   
   
   # carry out multiscale test
   test_res       <- matrix(NA, ncol = length(alpha_vec), nrow = n_sim)
-  test_res_local <- matrix(NA, ncol = length(alpha_vec), nrow = n_sim)
+  #test_res_local <- matrix(NA, ncol = length(alpha_vec), nrow = n_sim)
   
     
   for(sim in 1:n_sim) {
@@ -247,13 +247,13 @@ calculate_power <- function(t_len, n_ts, alpha_vec, lambda_vec_1 = lambda_vec_1,
     test_stat_group1 <- max(result$stat[1, ], na.rm = TRUE)
     test_stat_group2 <- max(result$stat[-1, ], na.rm = TRUE)
     
-    values_group1 <- result$vals_cor_matrix[localisations, elements_of_group1]
-    values_group2 <- result$vals_cor_matrix[, -elements_of_group1]
+    #values_group1 <- result$vals_cor_matrix[localisations, elements_of_group1]
+    #values_group2 <- result$vals_cor_matrix[, -elements_of_group1]
     
     test_res[sim, ]       <- as.numeric((test_stat_group1 > crit_val) & (test_stat_group2 <= crit_val))
-    test_res_local[sim, ] <- as.numeric((max(values_group1, na.rm = TRUE) > crit_val) & (max(values_group2, na.rm = TRUE) <= crit_val))
+    #test_res_local[sim, ] <- as.numeric((max(values_group1, na.rm = TRUE) > crit_val) & (max(values_group2, na.rm = TRUE) <= crit_val))
   }
-  print(paste("Global power: ",  colSums(test_res) / n_sim, sep=""))
-  print(paste("Localised power: ",  colSums(test_res_local) / n_sim, sep=""))
-  return(list("global_power" = colSums(test_res) / n_sim, "local_power" = colSums(test_res_local) / n_sim))
+  print(paste("Power: ",  colSums(test_res) / n_sim, sep=""))
+  #print(paste("Localised power: ",  colSums(test_res_local) / n_sim, sep=""))
+  return(colSums(test_res) / n_sim)
 }
