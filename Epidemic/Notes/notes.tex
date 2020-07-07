@@ -300,24 +300,7 @@ The results of the size simulations are presented in Table \ref{tab:sim:size}. A
 \caption{(a) Plot of the function $\lambda$; (b) plot of the family $\intervals$.}\label{fig:lambda_F}
 \end{figure}
 
-\begin{table}[t!]
-\footnotesize{
-\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 10$.}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-\toprule
- & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
- & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-\cmidrule[0.4pt]{1-10}
-T = 100 & 0.006 & 0.035 & 0.070 & 0.004 & 0.026 & 0.059 & 0.002 & 0.021 & 0.045 \\ 
-  T = 250 & 0.010 & 0.047 & 0.099 & 0.008 & 0.042 & 0.084 & 0.006 & 0.034 & 0.067 \\ 
-  T = 500 & 0.011 & 0.052 & 0.090 & 0.011 & 0.046 & 0.089 & 0.011 & 0.040 & 0.074 \\ 
-\bottomrule
-\end{tabularx}}
-\end{table}
+
 
 \begin{table}[t!]
 \footnotesize{
@@ -339,9 +322,36 @@ T = 100 & 0.008 & 0.041 & 0.077 & 0.007 & 0.041 & 0.081 & 0.003 & 0.029 & 0.061 
 \end{table}
 
 
+\begin{figure}[t!]
+\centering
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{plots/lambda_fcts_different_heights_100}
+\caption{}
+\end{subfigure}\hspace{0.25cm}
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{plots/lambda_fcts_different_heights_500}
+\caption{}
+\end{subfigure}
+\caption{(a) Plot of the functions $\lambda_1$ and $\lambda_i$ for $T = 100$; (b) Plot of the functions $\lambda_1$ and $\lambda_i$ for $T = 500$.}
+\end{figure}
+
+\begin{figure}[t!]
+\centering
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{plots/lambda_fcts_shift_to_right_100}
+\caption{}
+\end{subfigure}\hspace{0.25cm}
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{plots/lambda_fcts_shift_to_right_500}
+\caption{}
+\end{subfigure}
+\caption{(a) Plot of the functions $\lambda_1$ and $\lambda_i$ for $T = 100$; (b) Plot of the functions $\lambda_1$ and $\lambda_i$ for $T = 500$.}
+\end{figure}
+
+
 \begin{table}[t!]
 \footnotesize{
-\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 20$.}
+\caption{Global ower of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 10$.}\label{tab:sim:gl_power:1}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
@@ -351,19 +361,116 @@ T = 100 & 0.008 & 0.041 & 0.077 & 0.007 & 0.041 & 0.081 & 0.003 & 0.029 & 0.061 
  & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
  & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
 \cmidrule[0.4pt]{1-10}
-T = 100 & 0.006 & 0.035 & 0.071 & 0.008 & 0.036 & 0.076 & 0.005 & 0.025 & 0.051 \\ 
-  T = 250 & 0.005 & 0.034 & 0.072 & 0.004 & 0.035 & 0.075 & 0.004 & 0.023 & 0.049 \\ 
-  T = 500 & 0.006 & 0.040 & 0.081 & 0.004 & 0.027 & 0.054 & 0.004 & 0.023 & 0.047 \\ 
+$T = 100$ & 0.840 & 0.921 & 0.923 & 0.833 & 0.909 & 0.904 & 0.781 & 0.883 & 0.897 \\ 
+  $T = 250$ & 0.983 & 0.972 & 0.942 & 0.981 & 0.966 & 0.929 & 0.980 & 0.951 & 0.911 \\ 
+  $T = 500$ & 0.994 & 0.972 & 0.941 & 0.994 & 0.964 & 0.925 & 0.990 & 0.963 & 0.925 \\ 
+\bottomrule
+\end{tabularx}}
+\end{table}
+
+\begin{table}[t!]
+\footnotesize{
+\caption{Local power of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 10$.}\label{tab:sim:loc_power:1}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.839 & 0.920 & 0.922 & 0.833 & 0.908 & 0.904 & 0.781 & 0.883 & 0.897 \\ 
+  $T = 250$ & 0.983 & 0.972 & 0.942 & 0.981 & 0.966 & 0.929 & 0.980 & 0.951 & 0.911 \\ 
+  $T = 500$ & 0.994 & 0.972 & 0.941 & 0.994 & 0.964 & 0.925 & 0.990 & 0.963 & 0.925 \\ 
 \bottomrule
 \end{tabularx}}
 \end{table}
 
 
+\begin{table}[t!]
+\footnotesize{
+\caption{Global power of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 15$.}\label{tab:sim:gl_power:2}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.329 & 0.525 & 0.609 & 0.306 & 0.486 & 0.558 & 0.208 & 0.363 & 0.428 \\ 
+  $T = 250$ & 0.604 & 0.788 & 0.829 & 0.545 & 0.760 & 0.796 & 0.468 & 0.656 & 0.715 \\ 
+  $T = 500$ & 0.759 & 0.897 & 0.913 & 0.744 & 0.881 & 0.889 & 0.648 & 0.825 & 0.844 \\ 
+\bottomrule
+\end{tabularx}}
+\end{table}
+
+\begin{table}[t!]
+\footnotesize{
+\caption{Local power of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 15$.}\label{tab:sim:loc_power:2}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.327 & 0.519 & 0.600 & 0.304 & 0.483 & 0.554 & 0.207 & 0.362 & 0.426 \\ 
+  $T = 250$ & 0.603 & 0.787 & 0.827 & 0.545 & 0.759 & 0.795 & 0.468 & 0.656 & 0.715 \\ 
+  $T = 500$ & 0.758 & 0.896 & 0.912 & 0.744 & 0.881 & 0.889 & 0.648 & 0.825 & 0.844 \\ 
+\bottomrule
+\end{tabularx}}
+\end{table}
+
+
+\begin{table}[t!]
+\footnotesize{
+\caption{Global power of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 20$.}\label{tab:sim:gl_power:3}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.129 & 0.270 & 0.357 & 0.112 & 0.223 & 0.300 & 0.053 & 0.131 & 0.183 \\ 
+  $T = 250$ & 0.240 & 0.455 & 0.561 & 0.215 & 0.398 & 0.495 & 0.117 & 0.251 & 0.325 \\ 
+  $T = 500$ & 0.332 & 0.573 & 0.675 & 0.317 & 0.535 & 0.627 & 0.184 & 0.361 & 0.454 \\ 
+\bottomrule
+\end{tabularx}}
+\end{table}
+
+\begin{table}[t!]
+\footnotesize{
+\caption{Local power of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 20$.}\label{tab:sim:loc_power:3}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.126 & 0.264 & 0.346 & 0.110 & 0.219 & 0.292 & 0.053 & 0.130 & 0.182 \\ 
+  $T = 250$ & 0.239 & 0.451 & 0.557 & 0.214 & 0.396 & 0.492 & 0.117 & 0.251 & 0.324 \\ 
+  $T = 500$ & 0.331 & 0.572 & 0.672 & 0.316 & 0.534 & 0.625 & 0.184 & 0.360 & 0.454 \\ 
+\bottomrule
+\end{tabularx}}
+\end{table}
+
+
+
 \subsection{Analysis of COVID-19 data}\label{subsec:app}
 
 
-The COVID-19 pandemic is one of the most pressing issues at present. The first outbreak occurred in Wuhan, China, in December 2019. On 30 January 2020, the World Health Organization (WHO) declared that the outbreak constitutes a Public Health Emergency of International Concern, and on 11 March 2020, the WHO characterized it as a pandemic. As of 22 June 2020, more than 8.86 million cases of COVID-19 infections have been reported worldwide, resulting in more than 465,000 deaths. 
-
+The COVID-19 pandemic is one of the most pressing issues at present. The first outbreak occurred in Wuhan, China, in December 2019. On 30 January 2020, the World Health Organization (WHO) declared that the outbreak constitutes a Public Health Emergency of International Concern, and on 11 March 2020, the WHO characterized it as a pandemic. As of 6 July 2020, more than $11.32$ million cases of COVID-19 infections have been reported worldwide, resulting in more than $532,000$ deaths.
 
 There are many open questions surrounding the current COVID-19 pandemic. A question which is particularly relevant for governments and policy makers is whether the pandemic has developed similarly in different countries or whether there are notable differences. Identifying these differences may give some insight into which policies have been more efficient in containing the virus than others. In what follows, we use our multiscale test to compare the development of COVID-19 in several European countries. It is important to emphasize that our test allows to identify differences in the development of the epidemic across countries in a statistical rigorous way, but it does not tell what caused these differences. By distinguishing statistically significant differences from artefacts of the sampling noise, the test provides the necessary basis for a further investigation into the causes. Such an investigation, however, goes beyond a mere statistical analysis. 
 
@@ -770,6 +877,44 @@ for $\eta > 0$ sufficiently small. This contradicts the definition of the quanti
 In what follows, we carry out some robustness checks to assess how sensitive the multiscale test is. To do so, we repeat the simulation exercises of Section \ref{subsec:sim} for the following function:
 \[ \lambda(u) = 5000 \exp\Big(-\frac{(10 u-3)^2}{2}\Big) + 1000. \]
 The results are presented in Tables \ref{s:tab:sim:size:1},  \ref{s:tab:sim:size:2} and \ref{s:tab:sim:size:3}.
+
+\begin{table}[t!]
+\footnotesize{
+\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$, $c = 500$ and $\sigma = 10$.}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+T = 100 & 0.006 & 0.035 & 0.070 & 0.004 & 0.026 & 0.059 & 0.002 & 0.021 & 0.045 \\ 
+  T = 250 & 0.010 & 0.047 & 0.099 & 0.008 & 0.042 & 0.084 & 0.006 & 0.034 & 0.067 \\ 
+  T = 500 & 0.011 & 0.052 & 0.090 & 0.011 & 0.046 & 0.089 & 0.011 & 0.040 & 0.074 \\ 
+\bottomrule
+\end{tabularx}}
+\end{table}
+
+\begin{table}[t!]
+\footnotesize{
+\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$, $c = 500$ and $\sigma = 20$.}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+T = 100 & 0.006 & 0.035 & 0.071 & 0.008 & 0.036 & 0.076 & 0.005 & 0.025 & 0.051 \\ 
+  T = 250 & 0.005 & 0.034 & 0.072 & 0.004 & 0.035 & 0.075 & 0.004 & 0.023 & 0.049 \\ 
+  T = 500 & 0.006 & 0.040 & 0.081 & 0.004 & 0.027 & 0.054 & 0.004 & 0.023 & 0.047 \\ 
+\bottomrule
+\end{tabularx}}
+\end{table}
 
 
 \begin{table}[t!]
