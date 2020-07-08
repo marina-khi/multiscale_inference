@@ -60,7 +60,7 @@ In model \eqref{eq:model-intro}, the outbreak pattern of COVID-19 in country $i$
 %An important question in the current Covid-19 crisis is whether the intensity function $\lambda_i$ has the same shape across countries $i$. If the intensity function of country $i$ differs from that of country $j$, the dynamics of the epidemic are different in the two countries, that is, the virus spreads differently. Differences in the way the virus spreads are caused, among other things, by different policies and measures that countries take against the virus. Hence, a better understanding of how the intensity functions differ across countries may help to learn which measures against the virus are effective and which are not. 
 In this paper, we construct a multiscale test which allows to \textit{identify} and \textit{locate} the differences between the intensity functions $\lambda_i$. More specifically, let $\intervals = \{ \mathcal{I}_k \subseteq[0,1] : k = 1,\ldots,K \}$ be a family of (rescaled) time intervals and let $H_0^{(ijk)}$ be the hypothesis that the intensity functions $\lambda_i$ and $\lambda_j$ are the same on the interval $\mathcal{I}_k$, that is, 
 \[ H_0^{(ijk)}: \lambda_i(w) = \lambda_j(w) \text{ for all } w \in \mathcal{I}_k. \]
-We design a method to test the hypothesis $H_0^{(ijk)}$ \textit{simultaneously} for all pairs of countries $i$ and $j$ and for all intervals $\mathcal{I}_k$ in the family $\intervals$. The main theoretical result of the paper shows that the method controls the familywise error rate, that is, the probability of wrongly rejecting at least one null hypothesis $H_0^{(ijk)}$. As we will see, this allows us to make simultaneous confidence statements of the following form for a given significance level $\alpha \in (0,1)$: 
+We design a method to test the hypothesis $H_0^{(ijk)}$ \textit{simultaneously} for all pairs of countries $i$ and $j$ under consideration and for all intervals $\mathcal{I}_k$ in the family $\intervals$. The main theoretical result of the paper shows that the method controls the familywise error rate, that is, the probability of wrongly rejecting at least one null hypothesis $H_0^{(ijk)}$. As we will see, this allows us to make simultaneous confidence statements of the following form for a given significance level $\alpha \in (0,1)$: 
 \begin{center}
 \begin{minipage}[c][1.25cm][c]{13cm}
 \textit{With probability at least $1-\alpha$, the intensity functions $\lambda_i$ and $\lambda_j$ differ on the interval $\mathcal{I}_k$ for every $(i,j,k)$ for which the test rejects $H_0^{(ijk)}$.} 
@@ -331,7 +331,7 @@ The results of the size simulations are presented in Table \ref{tab:sim:size}. A
 \end{tabularx}}
 \end{table}
 
-In the second part of our simulation study, we estimate the statistical power of the test. In order to do this, we calculate the percentage of the cases where we correctly determined that the first mean function is different from the others while at the same time we did not find any significant differences between all of the other mean functions. That is, based on $R=5 000$ simulated samples $\mathcal{\X}$ of count data we calculate the percentage of simulation runs where the set of $\intervals(1, j)$ is not empty at least for one $j \in \{2, \ldots, n\}$ and at the same time all of the other sets $\intervals(i, j)$ with $\{(i, j): 2 \leq i < j \leq n\}$ are empty.
+In the second part of our simulation study, we estimate the statistical power of the test. In order to do this, we calculate the percentage of the cases where we correctly found significant difference between the first mean function and one of the others while at the same time did not find any significant differences between all of the other mean functions. That is, based on $R=5 000$ simulated samples $\mathcal{\X}$ of count data we calculate the percentage of simulation runs where the set of $\intervals(1, j)$ is not empty at least for one $j \in \{2, \ldots, n\}$ and at the same time all of the other sets $\intervals(i, j)$ with $\{(i, j): 2 \leq i < j \leq n\}$ are empty.
 
 The results of the power simulations for the different heights of the peak (see Figure \ref{fig:lambda_fcts_height}) are presented in Table \ref{tab:sim:power:1}. The results of the power simulations for the different locations of the peak (see Figure \ref{fig:lambda_fcts_shift}) are presented in Table \ref{tab:sim:power:2}.
 
@@ -346,13 +346,13 @@ The results of the power simulations for the different heights of the peak (see 
 \includegraphics[width=\textwidth]{plots/lambda_fcts_shift}
 \caption{}\label{fig:lambda_fcts_shift}
 \end{subfigure}
-\caption{Plot of the functions $\lambda_1$ and $\lambda_2$ for different simulation scenarios.}
+\caption{Plot of the functions $\lambda_1$ and $\lambda_2$ for different power simulation scenarios.}
 \end{figure}
 
 
 \begin{table}[t!]
 \footnotesize{
-\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$ for different heights of the peak.}\label{tab:sim:power:1}
+\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$ for the first simulation scenario where the mean functions differ by the heights of the peak.}\label{tab:sim:power:1}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
@@ -368,7 +368,7 @@ The results of the power simulations for the different heights of the peak (see 
 
 \begin{table}[t!]
 \footnotesize{
-\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$ for different locations of the peak.}\label{tab:sim:power:2}
+\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$ for the second simulation scenario where the mean functions differ by the locations of the peak.}\label{tab:sim:power:2}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
@@ -395,19 +395,10 @@ The COVID-19 pandemic is one of the most pressing issues at present. The first o
 There are many open questions surrounding the current COVID-19 pandemic. A question which is particularly relevant for governments and policy makers is whether the pandemic has developed similarly in different countries or whether there are notable differences. Identifying these differences may give some insight into which policies have been more efficient in containing the virus than others. In what follows, we use our multiscale test to compare the development of COVID-19 in several European countries. It is important to emphasize that our test allows to identify differences in the development of the epidemic across countries in a statistical rigorous way, but it does not tell what caused these differences. By distinguishing statistically significant differences from artefacts of the sampling noise, the test provides the necessary basis for a further investigation into the causes. Such an investigation, however, goes beyond a mere statistical analysis. 
 
 
-%The COVID-19 pandemic, also known as the coronavirus pandemic, is an ongoing global pandemic of coronavirus disease 2019, caused by severe acute respiratory syndrome coronavirus 2 (SARS‑CoV‑2). The outbreak was first identified in Wuhan, China, in December 2019. On 30 January 2020, the World Health Organization declared that the outbreak constitutes a Public Health Emergency of International Concern, and on 11 March 2020 it was announced as a pandemic. As of 22 June 2020, more than 8.86 million cases of COVID-19 have been reported in 216 countries, areas and territories, resulting in more than 465,000 deaths.
-
-%Currently, the analysis of the ongoing global pandemic of coronavirus disease 2019 (COVID-19) is of the utmost importance in many fields of science. One of the most relevant questions for governments, policy makers, economists and even general public, is the differences in the development of the pandemic in various countries. 
-
-%One of the ways to address this question is to compare the underlying trends of the new cases of COVID-19 per day for different countries. Information on the regions where two trends are significantly different from each other can then be used in order to assess which government policies are more efficient and which are less efficient. In what follows, we use our multiscale test to compare the spread of COVID-19 in five European countries.
-
-%Throughout the section, we set the significance level to $\alpha=0.05$ and implement the multiscale test in exactly the same way as in the simulation study of Section \ref{subsec:sim}. 
-
-
 \subsubsection{Data}
 
 
-We analyze data from five European countries: Germany, Italy, Spain, France and the United Kingdom. For each country $i$, we observe a time series $\mathcal{X}_i = \{ X_{it}: 1 \le t \le T \}$, where $X_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available on the homepage of the European Center for Disease Prevention and Control (\texttt{https://www.ecdc.europa.eu}) and were downloaded on 6 July 2020. In order to make the data comparable across countries, we take the day of the $100$th confirmed case in each country as the starting date $t=1$. This way of ``normalizing'' the data is common practice \textcolor{blue}{(cp.\ ??)}. The time series length $T$ is taken to be the minimal number of days for which we have observations for all five countries. The resulting dataset consists of $n = 5$ time series, each with $T = 123$ observations (as of July 6). Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in $6$ replacements. Plots of the observed time series are presented in the upper panels (a) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
+We analyze data from five European countries: Germany, Italy, Spain, France and the United Kingdom. For each country $i$, we observe a time series $\mathcal{X}_i = \{ X_{it}: 1 \le t \le T \}$, where $X_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available on the homepage of the European Center for Disease Prevention and Control (\texttt{https://www.ecdc.europa.eu}) and were downloaded on 6 July 2020. In order to make the data comparable across countries, we take the day of the $100$th confirmed case in each country as the starting date $t=1$. This way of ``normalizing'' the data is common practice (\cite{Cohen2020}). The time series length $T$ is taken to be the minimal number of days for which we have observations for all five countries. The resulting dataset consists of $n = 5$ time series, each with $T = 123$ observations (as of July 6). Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in $6$ replacements. Plots of the observed time series are presented in the upper panels (a) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
 
 
 To interpret the results produced by our multiscale test, we consider the Government Response Index (GRI) from the Oxford COVID-19 Government Response Tracker (OxCGRT) \citep{Hale2020}. The GRI measures how severe the actions are that are taken by a country's government to contain the virus. It is calculated based on several common government policies such as school closures and travel restrictions. The GRI ranges from $0$ to $100$, with $0$ corresponding to no response from the government at all and $100$ corresponding to full lockdown, closure of schools and workplaces, ban on travelling, etc. Detailed information on the collection of the data for government responses and the methodology for calculating the GRI is provided in \cite{Hale2020paper}. Plots of the GRI time series are given in panels (c) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
@@ -422,20 +413,7 @@ which was introduced in equation \eqref{eq:model}. The overdispersion parameter 
 %Finally, with $K := |\intervals|$ being the cardinality of $\intervals$, we write $\indexset = \mathcal{S} \times \{1, \ldots, K\}$.
 
 
-With the help of our multiscale method, we simultaneously test the null hypothesis $H_0^{(i, j, k)}$ that $\lambda_i(\cdot) = \lambda_j(\cdot)$ on the interval $\mathcal{I}_k$ for each $(i, j, k) \in \indexset$. The results are presented in Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}, each figure comparing a specific pair of countries $(i,j)$ from our sample. For the sake of brevity, we only show the results for the pairwise comparisons of Germany with each of the four other countries. The remaining figures can be found in Section ?? of the Supplementary Material. Each figure splits into four panels (a)--(d).  Panel (a) shows the observed time series for the two countries $i$ and $j$ that are compared. Panel (b) presents smoothed versions of the time series from (a), that is, it shows nonparametric kernel estimates of the two trend functions $\lambda_i$ and $\lambda_j$, where the bandwidth is set to $7$ days and a rectangular kernel is used. Panel (c) displays the Government Response Index (GRI) of the two countries. Finally, panel (d) presents the results produced by our test. Specifically, it depicts in grey the set $\intervals_{\text{reject}}(i,j)$ of all the intervals $\mathcal{I}_k$ for which the test rejects the null $H_0^{(i, j, k)}$. The minimal intervals in the subset $\intervals_{\text{reject}}^{\text{min}}(i, j)$ are depicted in black. Note that according to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals plotted in panels (d) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}: we can claim, with confidence of about $95\%$, that there is a difference between the functions $\lambda_i$ and $\lambda_j$ on each of these intervals.
-
-
-%We assume that the data $X_{it}$ of each country $i$ in our sample follow the nonparametric trend model 
-%\[ \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, \]
-%where the noise variables $\eta_{it}$ have zero mean and unit variance. We estimate the overdispersion parameter $\sigma$ by the procedure described in Section \ref{subsec:test:test}. This results in the estimator $\widehat{\sigma} = 14.49$.
-
-%Throughout the section, we set the significance level to $\alpha=0.05$ and implement the multiscale test in exactly the same way as in the simulation study of Section \ref{subsec:sim}. 
-
-%As in Section \ref{subsec:sim}, we let $\pairs = \{ (i,j): 1 \le i < j \le 5\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$. Moreover, we choose $\intervals$ to be a family of time intervals with $h_k \in \{ 7/T,14/T,21/T,28/T \}$. Hence, all intervals in $\intervals$ have length either 7 days (1 week), 14 days (2 weeks), 21 days (3 weeks), or 28 days (4 weeks). For each length $h_k$, we include all intervals that start at days $t = 1 + 7(j-1)$ and $t = 4 + 7(j-1)$ for $j=1,2,\ldots$ Finally, with $K := |\intervals|$ being the cardinality of $\intervals$, we write $\indexset = \mathcal{S} \times \{1, \ldots, K\}$.
-
-%With the help of our multiscale method, we now test the null hypotheses $H_0^{(i, j, k)}$ for each $(i, j, k) \in \indexset$ that $\lambda_i(\cdot) = \lambda_j(\cdot)$ on the interval $\mathcal{I}_k$. The results are presented in Figure \ref{fig:covid19}. As was mentioned before, we produce a plot for each pair of countries. However, for the sake of brevity, we present here only the results of pairwise comparison between Germany and each one of the other four countries. The rest of the results can be found in the Supplementary Material.
-
-%On Figure \ref{fig:covid19}, panels (a) show the observed time series for two countries that are being compared, while panels (b) shows the smoothed versions of the time series from (a) using the bandwidth of $7$ days, panels (c) display the corresponding Government Response Index, and panels (d) present the results of out test procedure. Specifically, each panel (d) depicts in grey the set $\intervals_{reject}(i, j)$ of all the intervals $\mathcal{I}_k$ for which the test rejects the null $H_0^{(i, j, k)}$ where $(i, j)$ is the pair of countries being compared. The corresponding set of minimal intervals $\intervals_{reject, minimal}(i, j)$ is depicted in black. According to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals $\intervals_{reject}(i, j)$ plotted in panel (d). We can claim, with confidence of about $95\%$, that the functions $\lambda_i$ and $\lambda_j$ are different on each of the intervals.
+With the help of our multiscale method, we simultaneously test the null hypothesis $H_0^{(i, j, k)}$ that $\lambda_i(\cdot) = \lambda_j(\cdot)$ on the interval $\mathcal{I}_k$ for each $(i, j, k) \in \indexset$. The results are presented in Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}, each figure comparing a specific pair of countries $(i,j)$ from our sample. For the sake of brevity, we only show the results for the pairwise comparisons of Germany with each of the four other countries. The remaining figures can be found in Section \ref{s:subsec:app} of the Supplementary Material. Each figure splits into four panels (a)--(d).  Panel (a) shows the observed time series for the two countries $i$ and $j$ that are compared. Panel (b) presents smoothed versions of the time series from (a), that is, it shows nonparametric kernel estimates of the two trend functions $\lambda_i$ and $\lambda_j$, where the bandwidth is set to $7$ days and a rectangular kernel is used. Panel (c) displays the Government Response Index (GRI) of the two countries. Finally, panel (d) presents the results produced by our test. Specifically, it depicts in grey the set $\intervals_{\text{reject}}(i,j)$ of all the intervals $\mathcal{I}_k$ for which the test rejects the null $H_0^{(i, j, k)}$. The minimal intervals in the subset $\intervals_{\text{reject}}^{\text{min}}(i, j)$ are depicted in black. Note that according to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals plotted in panels (d) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}: we can claim, with confidence of about $95\%$, that there is a difference between the functions $\lambda_i$ and $\lambda_j$ on each of these intervals.
 
 
 \begin{figure}[p!]
@@ -679,7 +657,9 @@ which gives the statement of Corollary \ref{corollary1}.
 \section*{S \hspace{0.2cm} Supplementary Material}
 \def\theequation{S.\arabic{equation}}
 \setcounter{equation}{0}
-
+\renewcommand{\thesubsection}{S.\arabic{subsection}}
+\setcounter{subsection}{0}
+\subsection{Technical proofs}
 
 In what follows, we provide the technical details omitted in the Appendix. To start with, we prove the following auxiliary lemma.
 \begin{lemmaS}\label{lemmaS1}
@@ -789,8 +769,12 @@ for $\eta > 0$ sufficiently small. This contradicts the definition of the quanti
 \end{proof}
 
 \newpage
-\subsection*{Robustness checks for Section \ref{subsec:sim}}\label{s:subsec:robustness}
-In what follows, we carry out some robustness checks to assess how sensitive the multiscale test is. First, we vary the overdispersion parameter $\sigma$ to see how sensitive our test is to the noise-to-signal ratio. The results of the size simulations are presented in Tables  \ref{s:tab:sim:size:1} and \ref{s:tab:sim:size:2}.
+\subsection{Robustness checks for Section \ref{subsec:sim}}\label{s:subsec:robustness}
+In what follows, we carry out some robustness checks to assess how sensitive our multiscale test is. First, we repeat the size simulations from Section \ref{subsec:sim} for different values of the overdispersion parameter $\sigma$. This overdispersion parameter is responsible for noise-to-signal ratio, hence, varying it, we are able to asses the performance of our test when the trend is less or more pronounced compared to the noise. The results of the size simulations for $\sigma = 10$ and $\sigma = 20$ are presented in Tables \ref{s:tab:sim:size:1} and \ref{s:tab:sim:size:2} respectively. As can be seen from the tables, in all scenarios the empirical FWER is either smaller or approximately equal to the nominal size $\alpha$. However, as one can expect, our test becomes more conservative with higher values of $\sigma$. 
+
+
+
+However, the MSE values become somewhat larger when $\overline{r}$ is chosen bigger. This is of course not very surprising: The main reason why the estimator $\widehat{a}$ works well in the presence of a strong trend is that it is only based on differences of small orders. If we increase $\overline{r}$, we use larger differences to compute $\widehat{a}$, which results in not eliminating the trend $m$ appropriately any more. This becomes visible in somewhat larger MSE values. Nevertheless, overall, our estimators appear not to be strongly influenced by the choice of tuning parameters (in terms of MSE) as long as these are chosen within reasonable bounds. 
 
 \begin{table}[t!]
 \footnotesize{
@@ -804,6 +788,9 @@ In what follows, we carry out some robustness checks to assess how sensitive the
  & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
  & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
 \cmidrule[0.4pt]{1-10}
+ $T = 100$ & 0.009 & 0.043 & 0.085 & 0.008 & 0.039 & 0.075 & 0.005 & 0.023 & 0.055 \\ 
+  $T = 250$ & 0.011 & 0.047 & 0.095 & 0.010 & 0.050 & 0.094 & 0.009 & 0.039 & 0.079 \\ 
+  $T = 500$ & 0.009 & 0.052 & 0.101 & 0.013 & 0.049 & 0.101 & 0.010 & 0.039 & 0.084 \\ 
 \bottomrule
 \end{tabularx}}
 \end{table}
@@ -825,9 +812,10 @@ In what follows, we carry out some robustness checks to assess how sensitive the
 \end{table}
 
 
-Moreover, we repeat the simulation exercises of Section \ref{subsec:sim} for the following function:
+We next repeat the simulation exercises of Section \ref{subsec:sim} with the different mean function. Specifically, we take the following function:
 \[ \lambda(u) = 5000 \exp\Big(-\frac{(10 u-3)^2}{2}\Big) + 500. \]
-The results are presented in Tables \ref{s:tab:sim:size:3},  \ref{s:tab:sim:size:4} and \ref{s:tab:sim:size:5}.
+The results for different values of the overdispersion parameter $\sigma$ are presented in Tables \ref{s:tab:sim:size:3},  \ref{s:tab:sim:size:4} and \ref{s:tab:sim:size:5}. As can be seen, our test appears to be barely influenced by the choice of differnt mean function.
+
 
 
 \begin{table}[t!]
@@ -842,6 +830,7 @@ The results are presented in Tables \ref{s:tab:sim:size:3},  \ref{s:tab:sim:size
  & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
  & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
 \cmidrule[0.4pt]{1-10}
+
 \bottomrule
 \end{tabularx}}
 \end{table}
@@ -879,99 +868,64 @@ The results are presented in Tables \ref{s:tab:sim:size:3},  \ref{s:tab:sim:size
 \end{tabularx}}
 \end{table}
 
-Furthermore, we repeat the simulation exercise with drawing $X_{it}$ from the iid normal distribution with mean $\lambda\left(\frac{t}{T}\right)$ and variance $\sigma^2 \lambda\left(\frac{t}{T}\right)$. The mean function $\lambda$ is taken to be the same as in first part of the simulation study in Section \ref{subsec:sim}: $ \lambda(u) = 5000 \exp\Big(-\frac{(10 u-3)^2}{2}\Big) + 1000$. The results are presented in Tables \ref{s:tab:sim:size:6}, \ref{s:tab:sim:size:7} and \ref{s:tab:sim:size:8}.
+%Furthermore, we repeat the simulation exercise with drawing $X_{it}$ from the iid normal distribution with mean $\lambda\left(\frac{t}{T}\right)$ and variance $\sigma^2 \lambda\left(\frac{t}{T}\right)$. The mean function $\lambda$ is taken to be the same as in first part of the simulation study in Section \ref{subsec:sim}: $ \lambda(u) = 5000 \exp\Big(-\frac{(10 u-3)^2}{2}\Big) + 1000$. The results are presented in Tables \ref{s:tab:sim:size:6}, \ref{s:tab:sim:size:7} and \ref{s:tab:sim:size:8}.
+%
+%
+%\begin{table}[t!]
+%\footnotesize{
+%\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 10$.}\label{s:tab:sim:size:6}
+%\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+%\newcolumntype{Z}{>{\centering\arraybackslash}X}
+%\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+%\toprule
+% & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+%\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+% & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+% & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+%\cmidrule[0.4pt]{1-10}
+%\bottomrule
+%\end{tabularx}}
+%\end{table}
+%
+%\begin{table}[t!]
+%\footnotesize{
+%\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 15$.}\label{s:tab:sim:size:7}
+%\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+%\newcolumntype{Z}{>{\centering\arraybackslash}X}
+%\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+%\toprule
+% & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+%\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+% & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+% & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+%\cmidrule[0.4pt]{1-10}
+%\bottomrule
+%\end{tabularx}}
+%\end{table}
+%
+%
+%\begin{table}[t!]
+%\footnotesize{
+%\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 20$.}\label{s:tab:sim:size:8}
+%\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+%\newcolumntype{Z}{>{\centering\arraybackslash}X}
+%\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+%\toprule
+% & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+%\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+% & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+% & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+%\cmidrule[0.4pt]{1-10}
+%\bottomrule
+%\end{tabularx}}
+%\end{table}
 
-
-\begin{table}[t!]
-\footnotesize{
-\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 10$.}\label{s:tab:sim:size:6}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-\toprule
- & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
- & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-\cmidrule[0.4pt]{1-10}
-\bottomrule
-\end{tabularx}}
-\end{table}
-
-\begin{table}[t!]
-\footnotesize{
-\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 15$.}\label{s:tab:sim:size:7}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-\toprule
- & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
- & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-\cmidrule[0.4pt]{1-10}
-\bottomrule
-\end{tabularx}}
-\end{table}
-
-
-\begin{table}[t!]
-\footnotesize{
-\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 20$.}\label{s:tab:sim:size:8}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-\toprule
- & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
- & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-\cmidrule[0.4pt]{1-10}
-\bottomrule
-\end{tabularx}}
-\end{table}
-
-
-
-
-\begin{table}[t!]
-\footnotesize{
-\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 10$ (different heights).}\label{s:tab:sim:power:1}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-\toprule
- & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
- & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-\cmidrule[0.4pt]{1-10}
-\bottomrule
-\end{tabularx}}
-\end{table}
 
 
 
 \begin{table}[t!]
 \footnotesize{
-\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 20$ (different heights).}\label{s:tab:sim:power:2}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-\toprule
- & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
- & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-\cmidrule[0.4pt]{1-10}
-\bottomrule
-\end{tabularx}}
-\end{table}
-
-
-\begin{table}[t!]
-\footnotesize{
-\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 10$ (different locations).}\label{s:tab:sim:power:3}
+\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$ for the first simulation scenario where the mean functions differ by the heights of the peak with $\sigma = 10$.}\label{s:tab:sim:power:1}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
@@ -989,7 +943,42 @@ Furthermore, we repeat the simulation exercise with drawing $X_{it}$ from the ii
 
 \begin{table}[t!]
 \footnotesize{
-\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 20$ (different locations).}\label{s:tab:sim:power:4}
+\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$ for the first simulation scenario where the mean functions differ by the heights of the peak with $\sigma = 20$.}\label{s:tab:sim:power:2}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+\bottomrule
+\end{tabularx}}
+\end{table}
+
+
+\begin{table}[t!]
+\footnotesize{
+\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$ for the second simulation scenario where the mean functions differ by the location of the peak with $\sigma = 10$.}\label{s:tab:sim:power:3}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+\bottomrule
+\end{tabularx}}
+\end{table}
+
+
+
+\begin{table}[t!]
+\footnotesize{
+\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$ for the second simulation scenario where the mean functions differ by the locations of the peak with $\sigma = 20$.}\label{s:tab:sim:power:4}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
@@ -1005,37 +994,52 @@ Furthermore, we repeat the simulation exercise with drawing $X_{it}$ from the ii
 
 
 \newpage
-\subsection*{Additional graphs for Section \ref{subsec:app}}
+\subsection{Additional graphs for Section \ref{subsec:app}}\label{s:subsec:app}
 
-In what follows, we provide the results of the analysis of COVID-19 data that was omitted in Section \ref{subsec:app}. 
+In what follows, we provide the results of the pairwise comparison between Italy, Spain, the United Kingdom and France  that were omitted in Section \ref{subsec:app}. The results are presented in Figures \ref{s:fig:France:Italy} - \ref{s:fig:France:UK}.
 
-\begin{figure}[t!]
-\begin{subfigure}[b]{0.475\textwidth}
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/FRA_vs_ITA}
-\end{subfigure}\hspace{0.25cm}
-\begin{subfigure}[b]{0.475\textwidth}
+\caption{Test results for the comparison of France and Italy.}\label{s:fig:France:Italy}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/GBR_vs_ITA}
-\end{subfigure}
+\caption{Test results for the comparison of the UK and Italy.}\label{s:fig:UK:Italy}
+\end{minipage}
+\caption*{Note: In each figure, panel (a) shows the two observed time series, panel (b) smoothed versions of the time series, and panel (c) the corresponding Government Response Index (GRI). Panel (d) depicts the set of intervals $\intervals_{\text{reject}}(i,j)$ in grey and the subset of minimal intervals $\intervals_{\text{reject}}^{\text{min}}(i,j)$ in black.}
 \end{figure}
-\begin{figure}[t!]\ContinuedFloat
-\begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{plots/ESP_vs_ITA}
-\end{subfigure}\hspace{0.55cm}
-\begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{plots/ESP_vs_GBR}
-\end{subfigure}
-\end{figure}
-\begin{figure}[t!]\ContinuedFloat
-\begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{plots/ESP_vs_FRA}
-\end{subfigure}\hspace{0.55cm}
-\begin{subfigure}[b]{0.475\textwidth}
-\includegraphics[width=\textwidth]{plots/FRA_vs_GBR}
-\end{subfigure}
-\vspace{0.25cm}
 
-\caption{Summary of the results for the daily numbers of the new cases of COVID-19 in Germany, Spain, France, Italy and The United Kingdom with one subfigure corresponding to the results of one pairwise comparison of these countries (excluding comparison between Italy and other countries). Panel (a) of each subfigure shows the two observed time series. Panel (b) in each subfigure shows the smoothed versions of the time series from (a) using the bandwidth of $7$ days. Panel (c) of each subfigure shows the corresponding time series of the Government Response Index (solid line) against the lagged version of itself (dashed line), with lag being equal to 14 days. Panel (d) of each subfigure depicts the set of intervals $\intervals_{\text{reject}}(i,j)$ in gray and the set of minimal intervals constructed on the basis of $\intervals_{\text{reject}}(i,j)$ in black.}\label{s:fig:covid19}
+
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_ITA}
+\caption{Test results for the comparison of Spain and Italy.}\label{s:fig:Spain:Italy}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_GBR}
+\caption{Test results for the comparison of Spain and the UK.}\label{s:fig:Spain:UK}
+\end{minipage}
+\caption*{Note: In each figure, panel (a) shows the two observed time series, panel (b) smoothed versions of the time series, and panel (c) the corresponding Government Response Index (GRI). Panel (d) depicts the set of intervals $\intervals_{\text{reject}}(i,j)$ in grey and the subset of minimal intervals $\intervals_{\text{reject}}^{\text{min}}(i,j)$ in black.}
+\end{figure}
+
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_FRA}
+\caption{Test results for the comparison of Spain and France.}\label{s:fig:Spain:France}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/FRA_vs_GBR}
+\caption{Test results for the comparison of France and the UK.}\label{s:fig:France:UK}
+\end{minipage}
+
+\caption*{Note: In each figure, panel (a) shows the two observed time series, panel (b) smoothed versions of the time series, and panel (c) the corresponding Government Response Index (GRI). Panel (d) depicts the set of intervals $\intervals_{\text{reject}}(i,j)$ in grey and the subset of minimal intervals $\intervals_{\text{reject}}^{\text{min}}(i,j)$ in black.}
 \end{figure}
 
 
 \end{document}
+
+
