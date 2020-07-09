@@ -33,7 +33,7 @@
 
 %Simultaneous inference on many epidemic trends -- How does the Covid-19 virus spread in different countries? 
 %\begin{abstract}
-%How do the Outbreak Patterns of Covid-19 compare across countries? Are the trends of daily new cases and deaths comparable across countries or is the virsus spreading differently? How do the measures taken in different countries influence the outbreak pattern? We develop a statistical test which allows to approach these questions with statistical precision. In partricular, we construct a method which compare the time trends in different countries and identifies the differences between the trends with pre-specified statistical confidence. 
+%How do the Outbreak Patterns of Covid-19 compare across countries? Are the trends of daily new cases and deaths comparable across countries or is the virsus spreading differently? How do the measures taken in different countries influence the outbreak pattern? We develop a statistical test which allows to approach these questions with statistical precision. In partricular, we construct a method which compare the time trends in different countries and identifies the differences between the trends with pre-specified statistical confidence. Our multiscale test is implemented in the R package \verb|multiscale|, available on GitHub.
 %\end{abstract}
 
 
@@ -254,7 +254,7 @@ To graphically present the test results, we produce a plot for each pair of coun
 \end{equation}
 Hence, we can claim with statistical confidence at least $1-\alpha$ that the functions $\lambda_i$ and $\lambda_j$ differ on each time interval $\mathcal{I}_k$ which is shown in the plots of our graphical device.
 
-As the sample size grows, the number of intervals in the $\intervals_{\text{reject}}(i, j)$ can also increase, making graphical depiction of the results of the test not particularly readable. To reach better visual representation, we propose working with the subset of $\intervals_{\text{reject}}(i, j)$, namely, the subset of minimal intervals which is constructed as follows: As in \cite{Duembgen2002}, we call an interval $\mathcal{I}_{k} \in \intervals_{\text{reject}}(i, j)$ minimal if there is no other interval $\mathcal{I}_{k^\prime} \in \intervals_{\text{reject}}(i, j)$ with $\mathcal{I}_{k^\prime} \subset \mathcal{I}_{k}$. The set of minimal intervals $\mathcal{I}_k$ we denote by $\intervals_{\text{reject}}^{\min}(i, j)$. 
+As the sample size grows, the number of intervals in the $\intervals_{\text{reject}}(i, j)$ can also increase, making graphical depiction of the results of the test not particularly readable. To reach better visual representation, we propose working with the subset of $\intervals_{\text{reject}}(i, j)$, namely, the subset of minimal intervals which is constructed as follows: As in \cite{Duembgen2002}, we call an interval $\mathcal{I}_{k} \in \intervals_{\text{reject}}(i, j)$ minimal if there is no other interval $\mathcal{I}_{k^\prime} \in \intervals_{\text{reject}}(i, j)$ with $\mathcal{I}_{k^\prime} \subset \mathcal{I}_{k}$. We denote the set of minimal intervals by $\intervals_{\text{reject}}^{\min}(i, j)$. 
 
 It is easily seen, that as in \eqref{eq:confidencestatement3}, we can claim with statistical confidence at least $1-\alpha$ that the functions $\lambda_i$ and $\lambda_j$ differ on each time interval $\mathcal{I}_k \in \intervals_{\text{reject}}^{\min}(i, j)$.
 Graphical representation of $\intervals_{\text{reject}}^{\min}(i, j)$ is often more easily understandable, and we in particular use this way of presenting the test results in our application in Section \ref{subsec:app}.
@@ -262,7 +262,7 @@ Graphical representation of $\intervals_{\text{reject}}^{\min}(i, j)$ is often m
 \section{Empirical application to COVID-19 data}\label{sec:empirics} 
 
 
-We now use our test to analyze the outbreak patterns of the COVID-19 virus. We proceed in two steps. In Section \ref{subsec:sim}, we conduct some Monte-Carlo experiments to assess the finite sample performance of our test. Specifically, we run some experiments which show that the test controls the FWER at level $\alpha$ as predicted by the theory. Having established this, we then apply the test to a sample of current COVID-19 data in Section \ref{subsec:app}. 
+We now use our test to analyze the outbreak patterns of the COVID-19 virus. We proceed in two steps. In Section \ref{subsec:sim}, we conduct some Monte-Carlo experiments to assess the finite sample performance of our test. Specifically, we run some experiments which show that the test controls the FWER at level $\alpha$ as predicted by the theory. Having established this, we then apply the test to a sample of current COVID-19 data in Section \ref{subsec:app}. Our multiscale test is implemented in the R package \verb|multiscale|, available on GitHub at \textcolor{red}{...}.
 
 
 \subsection{Simulation experiments}\label{subsec:sim}
@@ -301,7 +301,7 @@ The corresponding mean functions are depicted in Figure \ref{fig:lambda_fcts_shi
 \end{itemize}
 We estimate the probability of Type I error (i.e. the test size) by calculating percentage of at least one rejection of the null hypothesis $H_0^{(i, j, k)}$ for some $(i, j, k)$ from $R=5 000$ simulated samples $\mathcal{\X}$ of count data.
 
-The results of the size simulations are presented in Table \ref{tab:sim:size}. As can be seen from the table, in all scenarios the empirical FWER coincides with the nominal size $\alpha$. Moreover, size numbers are biased downwards, but this bias slowly diminishes as the sample size or the number of time series increases. This slow performance increase can be explained by the following fact. For all the sample sizes considered we use the same family of intervals $\intervals$, hence, the length of the smallest interval ($7$ days, i.e. one week) relative to the rescaled time decreases, which leads to the effective sample size staying at the same level rather than increasing with the sample size. If we would let the length of the smallest interval be dependent on the sample size, this would probably diminish the bias in the empirical size compared to the nominal one. To summarize, (a) in finite samples, the test allows us to control empirical FWER($\alpha$) for pre-specified significance level $\alpha$ and (b) the test is somewhat conservative, but this issue may be overcome by using a different set of intervals that depends on the sample size.
+The results of the size simulations are presented in Table \ref{tab:sim:size}. As can be seen from the table, in all scenarios the empirical FWER coincides with the nominal size $\alpha$. It can also be seen that size numbers are slightly biased downwards, but this bias gets slowly larger as the number of time series increases. The bias does not sgnificantly diminish as we increase the sample size, which can be explained by the following fact: For all the sample sizes considered we use the same family of intervals $\intervals$, hence, the length of the smallest interval ($7$ days, i.e. one week) relative to the rescaled time decreases, which leads to the effective sample size staying at the same level rather than increasing with the sample size. If we would let the length of the smallest interval be dependent on the sample size, this would probably diminish the bias in the empirical size compared to the nominal one. To summarize, (a) in finite samples, the test allows us to control empirical FWER($\alpha$) for pre-specified significance level $\alpha$ and (b) the test is somewhat conservative, but this issue may be overcome by using a different set of intervals that depends on the sample size (and on the number of time series).
 
 \begin{figure}[t!]
 \centering
@@ -339,7 +339,7 @@ $T = 100$ & 0.011 & 0.047 & 0.093 & 0.010 & 0.044 & 0.087 & 0.008 & 0.037 & 0.07
 
 In the second part of our simulation study, we estimate the statistical power of the test. In order to do this, we calculate the percentage of the cases where we correctly found significant difference between the first mean function and one of the others while at the same time did not find any significant differences between all of the other mean functions. That is, based on $R=5 000$ simulated samples $\mathcal{\X}$ of count data we calculate the percentage of simulation runs where the set of $\intervals(1, j)$ is not empty at least for one $j \in \{2, \ldots, n\}$ and at the same time all of the other sets $\intervals(i, j)$ with $\{(i, j): 2 \leq i < j \leq n\}$ are empty.
 
-The results of the power simulations for the different heights of the peak (see Figure \ref{fig:lambda_fcts_height}) are presented in Table \ref{tab:sim:power:1}. The results of the power simulations for the different locations of the peak (see Figure \ref{fig:lambda_fcts_shift}) are presented in Table \ref{tab:sim:power:2}.
+The results of the power simulations for the different heights of the peak (see Figure \ref{fig:lambda_fcts_height}) are presented in Table \ref{tab:sim:power:1}. The results of the power simulations for the different locations of the peak (see Figure \ref{fig:lambda_fcts_shift}) are presented in Table \ref{tab:sim:power:2}. As can be seen, our test is much more powerful when detecting shifts in the underlying trend curves than the difference in their 
 
 
 \begin{figure}[t!]
@@ -368,6 +368,9 @@ The results of the power simulations for the different heights of the peak (see 
  & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
  & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
 \cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.335 & 0.518 & 0.597 & 0.306 & 0.474 & 0.545 & 0.212 & 0.352 & 0.418 \\ 
+  $T = 250$ & 0.615 & 0.790 & 0.836 & 0.580 & 0.764 & 0.800 & 0.470 & 0.648 & 0.705 \\ 
+  $T = 500$ & 0.736 & 0.905 & 0.917 & 0.738 & 0.884 & 0.890 & 0.636 & 0.799 & 0.830 \\ 
 \bottomrule
 \end{tabularx}}
 \end{table}
@@ -821,7 +824,7 @@ $T = 100$ & 0.011 & 0.050 & 0.094 & 0.010 & 0.047 & 0.092 & 0.009 & 0.034 & 0.07
 
 We next repeat the simulation exercises of Section \ref{subsec:sim} with the different mean function. Specifically, we take the following function:
 \[ \lambda(u) = 5000 \exp\Big(-\frac{(10 u-3)^2}{2}\Big) + 500. \]
-The results for different values of the overdispersion parameter $\sigma$ are presented in Tables \ref{s:tab:sim:size:3},  \ref{s:tab:sim:size:4} and \ref{s:tab:sim:size:5}. As can be seen, our test appears to be barely influenced by the choice of differnt mean function.
+The results for different values of the overdispersion parameter $\sigma$ are presented in Tables \ref{s:tab:sim:size:3},  \ref{s:tab:sim:size:4} and \ref{s:tab:sim:size:5}. As can be seen, our test appears to be barely influenced by the choice of different mean function.
 
 
 
@@ -926,7 +929,7 @@ The results for different values of the overdispersion parameter $\sigma$ are pr
 %\end{tabularx}}
 %\end{table}
 
-
+Next, we repeat the power simulations from Section \ref{subsec:sim} for different values of the overdispersion parameter $\sigma$ for both simulation scenarios considered in \ref{subsec:sim}. The results of the power simulations for $\sigma = 10$ and $\sigma = 20$ for the first setting, where two mean functions are only different by the height of their peak, are presented in Tables \ref{s:tab:sim:power:1} and \ref{s:tab:sim:power:2} respectively. The results of the power simulations for $\sigma = 10$ and $\sigma = 20$ for the second setting, where two mean functions have the same heights of the peak but reach their respective peak at different points in time, are presented in Tables \ref{s:tab:sim:power:3} and \ref{s:tab:sim:power:4} respectively. As can be seen, our test is much more powerful for the smaller values of the $\sigma$. This is what one would expect, because higher values of $\sigma$ means that the noise is getting stronger compared to the trend function and the problem of correctly determining the intervals where the mean functions differ become much more complicated. However, even in the presence of the strong noise (in case of $\sigma = 20$), we are able to correctly determine that the first mean function is different from the other but all of the others are the same in more than half of the cases for sufficiently large sample size and small number of time series.
 
 
 \begin{table}[t!]
@@ -959,6 +962,9 @@ The results for different values of the overdispersion parameter $\sigma$ are pr
  & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
  & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
 \cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.144 & 0.275 & 0.352 & 0.115 & 0.231 & 0.304 & 0.048 & 0.120 & 0.163 \\ 
+  $T = 250$ & 0.244 & 0.434 & 0.538 & 0.204 & 0.403 & 0.486 & 0.133 & 0.247 & 0.305 \\ 
+  $T = 500$ & 0.296 & 0.563 & 0.662 & 0.273 & 0.511 & 0.603 & 0.175 & 0.338 & 0.433 \\ 
 \bottomrule
 \end{tabularx}}
 \end{table}

@@ -1,4 +1,4 @@
-#Local Linear estimator using the epanechnikov kernel. 
+#Local Linear estimator using the rectangular kernel. 
 nadaraya_watson_smoothing <- function(u, data_p, grid_p, bw){
   if (length(data_p) != length(grid_p)){
     cat("Dimensions of the grid and the data do not match, please check the arguments")
@@ -90,7 +90,8 @@ produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
 }
 
 # functions for data simulations
-lambda_fct <- function(u, c, height = 5000, position = 10) {
+
+lambda_fct <- function(u, c = 1000, height = 5000, position = 10) {
   return (height * exp(-(position * u - 3) ^ 2 / 2) + c)
 }
 
@@ -118,7 +119,7 @@ simulate_data_iid <- function(n_ts, t_len, lambda_vec, sigma) {
 
 calculate_size <- function(t_len, n_ts, alpha_vec, lambda_vec = lambda_vec,
                            sigma = sigma,
-                           n_sim = 1000, sim_runs = 1000, iid = FALSE){
+                           n_sim = 1000, sim_runs = 1000){
   
   #Constructing the set of intervals
   grid                   <- construct_weekly_grid(t_len)
@@ -155,11 +156,7 @@ calculate_size <- function(t_len, n_ts, alpha_vec, lambda_vec = lambda_vec,
   test_res <- matrix(NA, ncol = length(alpha_vec), nrow = n_sim)
   
   for(sim in 1:n_sim) {
-    if (iid){
-      Y <- simulate_data_iid(n_ts = n_ts, t_len = t_len, lambda_vec = lambda_vec, sigma = sigma)
-    } else {
-      Y <- simulate_data(n_ts = n_ts, t_len = t_len, lambda_vec = lambda_vec, sigma = sigma)
-    }
+    Y <- simulate_data(n_ts = n_ts, t_len = t_len, lambda_vec = lambda_vec, sigma = sigma)
     sigma_vec <- rep(0, n_ts)
     for (i in 1:n_ts){
       sigma_squared <- sum((Y[2:t_len, i] - Y[1:(t_len - 1), i]) ^ 2) / (2 * sum(Y[, i]))
