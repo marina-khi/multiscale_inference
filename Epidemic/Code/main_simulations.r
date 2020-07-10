@@ -94,14 +94,16 @@ number_of_cols <- length(n_ts_vec) * length(alpha_vec) #Needed for the output
 lambda_vec_1 <- lambda_fct((1:100) / 100, c = 1000, height = 6000, position = 10)
 lambda_vec_2 <- lambda_fct((1:100) / 100, c = 1000, height = 5000, position = 10)
 
-pdf(paste0("plots/lambda_fcts_heights.pdf"), width=5, height=4, paper="special")
+pdf(paste0("plots/lambda_fcts_height.pdf"), width=5, height=4, paper="special")
 par(mar = c(3, 2, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
+par(mgp = c(3, 0.5, 0))
 plot((1:100) / 100, lambda_vec_1,  ylim = c(0, max(lambda_vec_1, lambda_vec_2) + 100),
-     xlab="u", ylab = "", type = "l")
+     xlab="", ylab = "", type = "l")
 lines((1:100) / 100, lambda_vec_2, type = "l", col = "red")
 title(main = expression(Plot ~ of ~ the ~ "functions" ~ lambda[1] ~ and ~ lambda[2]), line = 1)
-legend("topright", inset = 0.02, legend=c(expression(lambda[1]), expression(lambda[2])),
+title(xlab="u", line=1.5)
+legend("topright", inset = 0.02, legend=c(expression(lambda[1](u) ~" "), expression(lambda[2](u) ~" ")),
        col = c("black", "red"), lty = 1, cex = 0.95, ncol = 1)
 dev.off()
 
@@ -166,11 +168,13 @@ lambda_vec_2 <- lambda_fct((1:100) / 100, c = 1000, height = 5000, position = 10
 pdf(paste0("plots/lambda_fcts_shift.pdf"), width=5, height=4, paper="special")
 par(mar = c(3, 2, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
+par(mgp = c(3, 0.5, 0))
 plot((1:100) / 100, lambda_vec_1,  ylim = c(0, max(lambda_vec_1, lambda_vec_2) + 100),
-     xlab="u", ylab = "", type = "l")
+     xlab="", ylab = "", type = "l")
 lines((1:100) / 100, lambda_vec_2, type = "l", col = "red")
 title(main = expression(Plot ~ of ~ the ~ "functions" ~ lambda[1] ~ and ~ lambda[2]), line = 1)
-legend("topright", inset = 0.02, legend=c(expression(lambda[1]), expression(lambda[2])),
+title(xlab="u", line=1.5)
+legend("topright", inset = 0.02, legend=c(expression(lambda[1](u) ~" "), expression(lambda[2](u) ~" ")),
        col = c("black", "red"), lty = 1, cex = 0.95, ncol = 1)
 dev.off()
 
@@ -189,18 +193,9 @@ for (sigma in sigma_vec){
   for (n_ts in n_ts_vec){
     i <- 1
     for (t_len in t_len_vec){
+      #Here you can change the functions for the power calculations
       lambda_vec_1 <- lambda_fct((1:t_len) / t_len, c = 1000, height = 5000, position = 9)
       lambda_vec_2 <- lambda_fct((1:t_len) / t_len, c = 1000, height = 5000, position = 10)
-      
-      pdf(paste0("plots/lambda_fcts_shift.pdf"), width=5, height=4, paper="special")
-      par(mar = c(3, 2, 0, 0)) #Margins for each plot
-      par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
-      plot((1:t_len) / t_len, lambda_vec_1,  ylim = c(0, max(lambda_vec_1, lambda_vec_2) + 100), xlab="u", ylab = "", type = "l")
-      lines((1:t_len) / t_len, lambda_vec_2, type = "l", col = "red")
-      title(main = expression(Plot ~ of ~ the ~ "functions" ~ lambda[1] ~ and ~ lambda[2]), line = 1)
-      legend("topright", inset = 0.02, legend=c(expression(lambda[1]), expression(lambda[2])),
-             col = c("black", "red"), lty = 1, cex = 0.95, ncol = 1)
-      dev.off()
       
       set.seed(321) # This is for calculating power for different specifications on comparable datasets
       power <- calculate_power(t_len = t_len, n_ts = n_ts, alpha_vec = alpha_vec,

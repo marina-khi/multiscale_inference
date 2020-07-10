@@ -254,15 +254,14 @@ To graphically present the test results, we produce a plot for each pair of coun
 \end{equation}
 Hence, we can claim with statistical confidence at least $1-\alpha$ that the functions $\lambda_i$ and $\lambda_j$ differ on each time interval $\mathcal{I}_k$ which is shown in the plots of our graphical device.
 
-As the sample size grows, the number of intervals in the $\intervals_{\text{reject}}(i, j)$ can also increase, making graphical depiction of the results of the test not particularly readable. To reach better visual representation, we propose working with the subset of $\intervals_{\text{reject}}(i, j)$, namely, the subset of minimal intervals which is constructed as follows: As in \cite{Duembgen2002}, we call an interval $\mathcal{I}_{k} \in \intervals_{\text{reject}}(i, j)$ minimal if there is no other interval $\mathcal{I}_{k^\prime} \in \intervals_{\text{reject}}(i, j)$ with $\mathcal{I}_{k^\prime} \subset \mathcal{I}_{k}$. We denote the set of minimal intervals by $\intervals_{\text{reject}}^{\min}(i, j)$. 
+As the sample size grows, the number of intervals in the $\intervals_{\text{reject}}(i, j)$ can also increase rapidly, making graphical depiction of the results of the test not particularly readable. To obtain better visual representation, we propose working with the subset of $\intervals_{\text{reject}}(i, j)$, namely, the subset of minimal intervals which is constructed as follows: As in \cite{Duembgen2002}, we call an interval $\mathcal{I}_{k} \in \intervals_{\text{reject}}(i, j)$ minimal if there is no other interval $\mathcal{I}_{k^\prime} \in \intervals_{\text{reject}}(i, j)$ with $\mathcal{I}_{k^\prime} \subset \mathcal{I}_{k}$. We denote the set of minimal intervals by $\intervals_{\text{reject}}^{\min}(i, j)$. 
 
-It is easily seen, that as in \eqref{eq:confidencestatement3}, we can claim with statistical confidence at least $1-\alpha$ that the functions $\lambda_i$ and $\lambda_j$ differ on each time interval $\mathcal{I}_k \in \intervals_{\text{reject}}^{\min}(i, j)$.
-Graphical representation of $\intervals_{\text{reject}}^{\min}(i, j)$ is often more easily understandable, and we in particular use this way of presenting the test results in our application in Section \ref{subsec:app}.
+It is easily seen that as in \eqref{eq:confidencestatement3}, we can claim with statistical confidence at least $1-\alpha$ that the functions $\lambda_i$ and $\lambda_j$ differ on each time interval $\mathcal{I}_k \in \intervals_{\text{reject}}^{\min}(i, j)$. Thus, the simultaneous confidence statement about the set of minimal intervals still remains true while the graphical representation of the results becomes much more understandable. In particular, we use this way of presenting the test results in our application in Section \ref{subsec:app}.
 
 \section{Empirical application to COVID-19 data}\label{sec:empirics} 
 
 
-We now use our test to analyze the outbreak patterns of the COVID-19 virus. We proceed in two steps. In Section \ref{subsec:sim}, we conduct some Monte-Carlo experiments to assess the finite sample performance of our test. Specifically, we run some experiments which show that the test controls the FWER at level $\alpha$ as predicted by the theory. Having established this, we then apply the test to a sample of current COVID-19 data in Section \ref{subsec:app}. Our multiscale test is implemented in the R package \verb|multiscale|, available on GitHub at \textcolor{red}{...}.
+We now use our test to analyze the outbreak patterns of the COVID-19 virus. We proceed in two steps. In Section \ref{subsec:sim}, we conduct some Monte-Carlo experiments to assess the finite sample performance of our test. Specifically, we run some experiments which show that the test controls the FWER at level $\alpha$ as predicted by the theory. Having established this, we then apply the test to a sample of current COVID-19 data in Section \ref{subsec:app}. Our multiscale test is implemented in the R package \verb|multiscale|, available on GitHub at \textcolor{red}{(insert the link)}.
 
 
 \subsection{Simulation experiments}\label{subsec:sim}
@@ -339,8 +338,6 @@ $T = 100$ & 0.011 & 0.047 & 0.093 & 0.010 & 0.044 & 0.087 & 0.008 & 0.037 & 0.07
 
 In the second part of our simulation study, we estimate the statistical power of the test. In order to do this, we calculate the percentage of the cases where we correctly found significant difference between the first mean function and one of the others while at the same time did not find any significant differences between all of the other mean functions. That is, based on $R=5 000$ simulated samples $\mathcal{\X}$ of count data we calculate the percentage of simulation runs where the set of $\intervals(1, j)$ is not empty at least for one $j \in \{2, \ldots, n\}$ and at the same time all of the other sets $\intervals(i, j)$ with $\{(i, j): 2 \leq i < j \leq n\}$ are empty.
 
-The results of the power simulations for the different heights of the peak (see Figure \ref{fig:lambda_fcts_height}) are presented in Table \ref{tab:sim:power:1}. The results of the power simulations for the different locations of the peak (see Figure \ref{fig:lambda_fcts_shift}) are presented in Table \ref{tab:sim:power:2}. As can be seen, our test is much more powerful when detecting shifts in the underlying trend curves than the difference in their 
-
 
 \begin{figure}[t!]
 \centering
@@ -387,10 +384,19 @@ $T = 100$ & 0.335 & 0.518 & 0.597 & 0.306 & 0.474 & 0.545 & 0.212 & 0.352 & 0.41
  & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
  & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
 \cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.824 & 0.910 & 0.903 & 0.812 & 0.893 & 0.890 & 0.738 & 0.847 & 0.857 \\ 
+  $T = 250$ & 0.991 & 0.972 & 0.941 & 0.991 & 0.960 & 0.920 & 0.991 & 0.965 & 0.933 \\ 
+  $T = 500$ & 0.997 & 0.973 & 0.949 & 0.995 & 0.961 & 0.923 & 0.996 & 0.969 & 0.932 \\ 
 \bottomrule
 \end{tabularx}}
 \end{table}
 
+
+The results of the power simulations for the different heights of the peak (see Figure \ref{fig:lambda_fcts_height}) are presented in Table \ref{tab:sim:power:1}. The results of the power simulations for the different locations of the peak (see Figure \ref{fig:lambda_fcts_shift}) are presented in Table \ref{tab:sim:power:2}. As can be seen, our test is much more powerful when detecting shifts in the underlying trend curves than the difference in their intensity. This is what one would expect: In the second power simulation scenario, the mean functions are siginificantly different on wider interval (from $u = 0.2$ to $u = 0.6$), and even on the boundaries the difference is substantial, while in the first power simulation scenario, the main difference is located between $u = 0.2$ and $u = 0.4$.
+
+As can also be seen from the tables, our test is more powerful with smaller number of time seires. This is not surprising, because the problem of making simultaneous confidence statements becomes much more difficult if the number of hypotheses under consideration increases substantially. For example, if we keep the  family of intervals $\intervals$ and the sample size $T$ constant, but only increase the number of time series by the factor of two, the number of pairwise comparisons (and hence the number of null hypotheses $H_0^{(i, j, k)}$) increases more than 4 times. With increase by the factor of $10$, we get the increase in comparisons more than $100$ times. However, even for $n = 50$ our test has almost $80\%$ power for $T = 500$ and $\alpha = 0.05$. 
+
+In the second simulation scenario for sufficiently large sample sizes ($T = 250, 500$), the estimated power is always bigger than $0.9$ for all significance levels $\alpha$ and number of time series $n$. Note that in this setting for $T = 250, 500$ the power numbers get smaller as the significance level $\alpha$ gets larger. This reverse dependance can be explained by the way we calculate power: we count only those cases where we find that the first mean function is different from the others but we do not find any significant difference among all of the others. Hence, we suppose that in this setting the main driving force is the number of false rejections, i.e. the number of cases where the test incorrectly rejects $H_0^{(i, j, k)}$ for some $(i, j, k)$ with $i \neq 1$ and $j \neq 1$. Since this number is controlled by the significant level $\alpha$, it gets higher as the significance level $\alpha$ increases. And since we exclude these cases from calculating the power, the test become slightly less powerful.
 
 
 
@@ -830,7 +836,7 @@ The results for different values of the overdispersion parameter $\sigma$ are pr
 
 \begin{table}[t!]
 \footnotesize{
-\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 10$.}\label{s:tab:sim:size:3}
+\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$ for different mean function and $\sigma = 10$.}\label{s:tab:sim:size:3}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
@@ -846,7 +852,7 @@ The results for different values of the overdispersion parameter $\sigma$ are pr
 
 \begin{table}[t!]
 \footnotesize{
-\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 15$.}\label{s:tab:sim:size:4}
+\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$ for different mean function and $\sigma = 15$.}\label{s:tab:sim:size:4}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
@@ -863,7 +869,7 @@ The results for different values of the overdispersion parameter $\sigma$ are pr
 
 \begin{table}[t!]
 \footnotesize{
-\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 20$.}\label{s:tab:sim:size:5}
+\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$ for different mean function and $\sigma = 20$.}\label{s:tab:sim:size:5}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
@@ -929,7 +935,7 @@ The results for different values of the overdispersion parameter $\sigma$ are pr
 %\end{tabularx}}
 %\end{table}
 
-Next, we repeat the power simulations from Section \ref{subsec:sim} for different values of the overdispersion parameter $\sigma$ for both simulation scenarios considered in \ref{subsec:sim}. The results of the power simulations for $\sigma = 10$ and $\sigma = 20$ for the first setting, where two mean functions are only different by the height of their peak, are presented in Tables \ref{s:tab:sim:power:1} and \ref{s:tab:sim:power:2} respectively. The results of the power simulations for $\sigma = 10$ and $\sigma = 20$ for the second setting, where two mean functions have the same heights of the peak but reach their respective peak at different points in time, are presented in Tables \ref{s:tab:sim:power:3} and \ref{s:tab:sim:power:4} respectively. As can be seen, our test is much more powerful for the smaller values of the $\sigma$. This is what one would expect, because higher values of $\sigma$ means that the noise is getting stronger compared to the trend function and the problem of correctly determining the intervals where the mean functions differ become much more complicated. However, even in the presence of the strong noise (in case of $\sigma = 20$), we are able to correctly determine that the first mean function is different from the other but all of the others are the same in more than half of the cases for sufficiently large sample size and small number of time series.
+Next, we repeat the power simulations from Section \ref{subsec:sim} for different values of the overdispersion parameter $\sigma$ for both simulation scenarios considered in \ref{subsec:sim}. The results of the power simulations for $\sigma = 10$ and $\sigma = 20$ for the first setting, where two mean functions are only different by the height of their peak, are presented in Tables \ref{s:tab:sim:power:1} and \ref{s:tab:sim:power:2} respectively. The results of the power simulations for $\sigma = 10$ and $\sigma = 20$ for the second setting, where two mean functions have the same heights of the peak but reach their respective peak at different points in time, are presented in Tables \ref{s:tab:sim:power:3} and \ref{s:tab:sim:power:4} respectively. As can be seen, our test is much more powerful for the smaller values of the $\sigma$. This is what one would expect, because higher values of $\sigma$ means that the noise is getting stronger compared to the trend function and the problem of correctly determining the intervals where the mean functions differ become much more complicated. However, even in the presence of the strong noise (in case of $\sigma = 20$), we are able to correctly determine that the first mean function is different from the others but all of the others are the same in more than half of the cases for sufficiently large sample size and small number of time series.
 
 
 \begin{table}[t!]
@@ -944,6 +950,9 @@ Next, we repeat the power simulations from Section \ref{subsec:sim} for differen
  & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
  & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
 \cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.836 & 0.915 & 0.911 & 0.833 & 0.903 & 0.898 & 0.777 & 0.874 & 0.882 \\ 
+  $T = 250$ & 0.986 & 0.971 & 0.938 & 0.984 & 0.956 & 0.918 & 0.980 & 0.961 & 0.924 \\ 
+  $T = 500$ & 0.996 & 0.975 & 0.946 & 0.994 & 0.965 & 0.927 & 0.992 & 0.963 & 0.918 \\ 
 \bottomrule
 \end{tabularx}}
 \end{table}
@@ -982,6 +991,9 @@ $T = 100$ & 0.144 & 0.275 & 0.352 & 0.115 & 0.231 & 0.304 & 0.048 & 0.120 & 0.16
  & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
  & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
 \cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.991 & 0.973 & 0.946 & 0.994 & 0.970 & 0.935 & 0.994 & 0.971 & 0.940 \\ 
+  $T = 250$ & 0.993 & 0.969 & 0.941 & 0.993 & 0.959 & 0.919 & 0.991 & 0.960 & 0.925 \\ 
+  $T = 500$ & 0.996 & 0.976 & 0.948 & 0.993 & 0.966 & 0.928 & 0.993 & 0.962 & 0.917 \\ 
 \bottomrule
 \end{tabularx}}
 \end{table}
@@ -1000,6 +1012,9 @@ $T = 100$ & 0.144 & 0.275 & 0.352 & 0.115 & 0.231 & 0.304 & 0.048 & 0.120 & 0.16
  & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
  & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
 \cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.438 & 0.636 & 0.704 & 0.404 & 0.598 & 0.669 & 0.277 & 0.449 & 0.526 \\ 
+  $T = 250$ & 0.864 & 0.934 & 0.927 & 0.850 & 0.923 & 0.915 & 0.811 & 0.891 & 0.898 \\ 
+  $T = 500$ & 0.960 & 0.968 & 0.949 & 0.961 & 0.964 & 0.935 & 0.945 & 0.961 & 0.941 \\ 
 \bottomrule
 \end{tabularx}}
 \end{table}
