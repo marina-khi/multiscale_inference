@@ -6,8 +6,8 @@
 using namespace Rcpp;
 
 // simulate_gaussian
-NumericVector simulate_gaussian(int t_len, int n_ts, int sim_runs, Rcpp::NumericVector gset, Rcpp::IntegerVector ijset, Rcpp::NumericVector sigma_vec, int deriv_order, bool epidem);
-RcppExport SEXP _multiscale_simulate_gaussian(SEXP t_lenSEXP, SEXP n_tsSEXP, SEXP sim_runsSEXP, SEXP gsetSEXP, SEXP ijsetSEXP, SEXP sigma_vecSEXP, SEXP deriv_orderSEXP, SEXP epidemSEXP) {
+NumericVector simulate_gaussian(int t_len, int n_ts, int sim_runs, Rcpp::NumericVector gset, Rcpp::IntegerVector ijset, double sigma, int deriv_order);
+RcppExport SEXP _multiscale_simulate_gaussian(SEXP t_lenSEXP, SEXP n_tsSEXP, SEXP sim_runsSEXP, SEXP gsetSEXP, SEXP ijsetSEXP, SEXP sigmaSEXP, SEXP deriv_orderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -16,16 +16,15 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type sim_runs(sim_runsSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type gset(gsetSEXP);
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type ijset(ijsetSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type sigma_vec(sigma_vecSEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
     Rcpp::traits::input_parameter< int >::type deriv_order(deriv_orderSEXP);
-    Rcpp::traits::input_parameter< bool >::type epidem(epidemSEXP);
-    rcpp_result_gen = Rcpp::wrap(simulate_gaussian(t_len, n_ts, sim_runs, gset, ijset, sigma_vec, deriv_order, epidem));
+    rcpp_result_gen = Rcpp::wrap(simulate_gaussian(t_len, n_ts, sim_runs, gset, ijset, sigma, deriv_order));
     return rcpp_result_gen;
 END_RCPP
 }
 // compute_multiple_statistics
-Rcpp::List compute_multiple_statistics(int t_len, int n_ts, Rcpp::NumericMatrix data, Rcpp::NumericVector gset, Rcpp::IntegerVector ijset, Rcpp::NumericVector sigma_vec, bool epidem);
-RcppExport SEXP _multiscale_compute_multiple_statistics(SEXP t_lenSEXP, SEXP n_tsSEXP, SEXP dataSEXP, SEXP gsetSEXP, SEXP ijsetSEXP, SEXP sigma_vecSEXP, SEXP epidemSEXP) {
+Rcpp::List compute_multiple_statistics(int t_len, int n_ts, Rcpp::NumericMatrix data, Rcpp::NumericVector gset, Rcpp::IntegerVector ijset, double sigma);
+RcppExport SEXP _multiscale_compute_multiple_statistics(SEXP t_lenSEXP, SEXP n_tsSEXP, SEXP dataSEXP, SEXP gsetSEXP, SEXP ijsetSEXP, SEXP sigmaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -34,15 +33,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type data(dataSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type gset(gsetSEXP);
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type ijset(ijsetSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type sigma_vec(sigma_vecSEXP);
-    Rcpp::traits::input_parameter< bool >::type epidem(epidemSEXP);
-    rcpp_result_gen = Rcpp::wrap(compute_multiple_statistics(t_len, n_ts, data, gset, ijset, sigma_vec, epidem));
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    rcpp_result_gen = Rcpp::wrap(compute_multiple_statistics(t_len, n_ts, data, gset, ijset, sigma));
     return rcpp_result_gen;
 END_RCPP
 }
-// compute_statistics
-Rcpp::List compute_statistics(int t_len, Rcpp::NumericVector data, Rcpp::NumericVector gset, double sigma, int deriv_order);
-RcppExport SEXP _multiscale_compute_statistics(SEXP t_lenSEXP, SEXP dataSEXP, SEXP gsetSEXP, SEXP sigmaSEXP, SEXP deriv_orderSEXP) {
+// compute_single_statistics
+Rcpp::List compute_single_statistics(int t_len, Rcpp::NumericVector data, Rcpp::NumericVector gset, double sigma, int deriv_order);
+RcppExport SEXP _multiscale_compute_single_statistics(SEXP t_lenSEXP, SEXP dataSEXP, SEXP gsetSEXP, SEXP sigmaSEXP, SEXP deriv_orderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -51,15 +49,15 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type gset(gsetSEXP);
     Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
     Rcpp::traits::input_parameter< int >::type deriv_order(deriv_orderSEXP);
-    rcpp_result_gen = Rcpp::wrap(compute_statistics(t_len, data, gset, sigma, deriv_order));
+    rcpp_result_gen = Rcpp::wrap(compute_single_statistics(t_len, data, gset, sigma, deriv_order));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_multiscale_simulate_gaussian", (DL_FUNC) &_multiscale_simulate_gaussian, 8},
-    {"_multiscale_compute_multiple_statistics", (DL_FUNC) &_multiscale_compute_multiple_statistics, 7},
-    {"_multiscale_compute_statistics", (DL_FUNC) &_multiscale_compute_statistics, 5},
+    {"_multiscale_simulate_gaussian", (DL_FUNC) &_multiscale_simulate_gaussian, 7},
+    {"_multiscale_compute_multiple_statistics", (DL_FUNC) &_multiscale_compute_multiple_statistics, 6},
+    {"_multiscale_compute_single_statistics", (DL_FUNC) &_multiscale_compute_single_statistics, 5},
     {NULL, NULL, 0}
 };
 

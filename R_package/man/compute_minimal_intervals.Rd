@@ -2,25 +2,41 @@
 % Please edit documentation in R/compute_minimal_intervals.R
 \name{compute_minimal_intervals}
 \alias{compute_minimal_intervals}
-\title{Compute the set of minimal intervals as described in Duembgen (2002)}
+\title{Computes the set of minimal intervals as described in Duembgen (2002)}
 \usage{
 compute_minimal_intervals(dataset)
 }
 \arguments{
-\item{dataset}{Set of all intervals that have a corresponding test
-statistic bigger than the respective critical value.}
+\item{dataset}{Set of the intervals.
+It needs to contain the following columns:
+"startpoint" - left end of the interval;
+"endpoint"   - right end of the interval.}
 }
 \value{
-p_t_set   Set of minimal intervals
+Subset of minimal intervals
 }
 \description{
-The result of our multiscale test is the set of all intervals
-             that have a corresponding test statistic bigger than
-             the respective critical value. In order to make understandable
-             statistic statements about these intervals, we need to find
-             so-called minimal intervals: for a given set of intervals K,
-             all intervals J such that K does not contain a proper subset
-             of J are called minimal. Given K, this function computes the
-             set of minimal intervals.
-             Procedure is described in Duembgen (2002).
+Given a set of intervals, this function computes
+             the corresponding subset of minimal intervals which are defined
+             as follows. For a given set of intervals \eqn{\mathcal{K}},
+             all intervals \eqn{\mathcal{I}_k \in \mathcal{K}}
+             such that  \eqn{\mathcal{K}} does not contain a proper subset of
+             \eqn{\mathcal{I}_k} are called minimal.
+
+             This function is needed for illustrative purposes.
+             The set of all the intervals where our test rejects the null
+             hypothesis may be quite large, hence, we would like to focus
+             our attention on the smaller subset, for which we are still
+             able to make simultaneous confidence intervals. This subset
+             is the subset of minimal intervals, and it helps us to
+             to precisely locate the intervals of further interest.
+
+             More details can be found in Duembgen (2002) and
+             Khismatullina and Vogt (2019, 2020)
+}
+\examples{
+startpoint   <- c(0, 0.5, 1)
+endpoint     <- c(2, 2, 2)
+dataset      <- data.frame(startpoint, endpoint)
+minimal_ints <- compute_minimal_intervals(dataset)
 }

@@ -36,7 +36,3 @@ pos_full    Logical vector indicating which points (u,h) have been
 \description{
 Computes the location-bandwidth weekly grid for the multiscale test.
 }
-\examples{
-construct_weekly_grid(100)
-construct_weekly_grid(100, min_len = 7, nmbr_of_wks = 2)
-}

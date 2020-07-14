@@ -154,25 +154,28 @@ NumericVector kernel_averages(int t_len, NumericVector gset, NumericVector corre
   return (result);
 }
 
-//' Simulates distribution of the gaussian statistics
-//'
-//' @param t_len           Integer. Length of time series for analysis.
-//' @param n_ts        Integer. Number of time series.
-//' @param sim_runs    Integer. Number of simulations needed to produce the quantiles.
-//' @param gset        A double vector of location-bandwidth points (u_1,...,u_n,h_1,...h_n).
-//' @param ijset       An integer vector of indices of the countries for the comparison
-//'                    (i_1, i_2, ..., j_{n_comparisons}).
-//' @param sigma_vec   A double vector of the sqrt of long-run variances.
-//' @param deriv_order Integer. Order of the derivative of the trend that is investigated.
-//'                    Default is 0 => we analyse whether the trend itself >< than 0.
-//' @param epidem      Boolean. Equal to true in cases we are fitting epiemic model. Default is false.
-//' 
-//' @return Phi_vec A double vector of length sim_runs that consists of the calculated Gaussian statistic for each simulation run
 // [[Rcpp::export]]
 NumericVector simulate_gaussian(int t_len, int n_ts, int sim_runs,
                                 Rcpp::NumericVector gset, Rcpp::IntegerVector ijset,
-                                Rcpp::NumericVector sigma_vec,
-                                int deriv_order = 0, bool epidem = false){
+                                double sigma, int deriv_order = 0){
+   /* Inputs: 
+    t_len       Integer, length of time series
+    n_ts        Integer. Number of time series.
+    sim_runs    Integer. Number of simulations needed to produce the quantiles.
+    gset        A double vector of location-bandwidth points (u_1,...,u_n,h_1,...h_n).
+    ijset       An integer vector of indices of the countries for the comparison
+                (i_1, i_2, ..., j_{n_comparisons}).
+    sigma       A double that is equal to sqrt{long-run varaince}
+                in case of n_ts = 1, or the overdispersion in case of
+                n_ts > 1. If not given, then the default is 1.
+    deriv_order Integer. Order of the derivative of the trend that is investigated.
+                Default is 0 => we analyse whether the trend itself >< than 0.
+    
+    Output:
+    Phi_vec     A double vector of length sim_runs that consists of the calculated
+                Gaussian statistic for each simulation run.
+    */
+   
    int n = gset.length() / 2;
    Rcpp::NumericVector Phi_vec(sim_runs);
    Rcpp::NumericVector correct_a(n);
@@ -182,7 +185,7 @@ NumericVector simulate_gaussian(int t_len, int n_ts, int sim_runs,
    NumericVector vals_cor(n);
    NumericVector data(t_len);
    int pos, i, j, k, t, l, n_comparisons;
-   double sigmahat, u, h, len, result_temp;
+   double u, h, len, result_temp;
    
    for (k = 0; k < n; k++){
       len = 2 * gset[k + n];
@@ -195,13 +198,12 @@ NumericVector simulate_gaussian(int t_len, int n_ts, int sim_runs,
       for (pos = 0; pos < sim_runs; pos++) {
          NumericVector Z(t_len);
          Z = rnorm(t_len);
-         data = sigma_vec(0) * Z;
-         sigmahat = sigma_vec(0);
-         vals = kernel_averages(t_len, gset, correct_b, data, sigmahat, n, deriv_order);
+         data = sigma * Z;
+         vals = kernel_averages(t_len, gset, correct_b, data, sigma, n, deriv_order);
          vals_cor = vals[Rcpp::Range(n, 2 * n - 1)];
          Phi_vec(pos) = max(vals_cor);
       }
-   } else if (epidem) {
+   } else {
       
       n_comparisons = ijset.length() / 2;
 
@@ -230,49 +232,32 @@ NumericVector simulate_gaussian(int t_len, int n_ts, int sim_runs,
          }
          Phi_vec[pos] = max(Phi);
       }
-   } else {
-      n_comparisons = ijset.length() / 2;
-      
-      for(pos = 0; pos < sim_runs; pos++) {
-         NumericMatrix Z(t_len, n_ts);
-         for (i = 0; i < n_ts; i++) {
-            Z(_, i) = rnorm(t_len);
-         }
-         for (l = 0; l < n_comparisons; l++) {
-            i = ijset[l] - 1;
-            j = ijset[l + n_comparisons] - 1;
-            data = sigma_vec[i] * (Z(_, i) - mean(Z(_, i)))- sigma_vec[j] * (Z(_, j) - mean(Z(_, j)));
-            sigmahat = sqrt(sigma_vec[i] * sigma_vec[i] + sigma_vec[j] * sigma_vec[j]); 
-            vals = kernel_averages(t_len, gset, correct_b, data, sigmahat, n);
-            vals_cor = vals[Rcpp::Range(n, 2 * n - 1)];
-            Phi(i, j) = max(vals_cor);
-         }
-         Phi_vec[pos] = max(Phi);
-      }
    }
    return(Phi_vec);
 }
 
-//' Calculates the statistics (pairwise and overall) in case of multiple time series
-//'
-//' @param t_len       Integer. Length of time series for analysis.
-//' @param n_ts        Integer. Number of time series.
-//' @param data        Double matrix t_len x n_ts. Each column consists of one time series.
-//' @param gset        A double vector of location-bandwidth points (u_1,..., u_n, h_1, ...h_n).
-//' @param ijset       An integer vector of indices of the countries for the comparison
-//'                    (i_1, i_2, ..., j_{n_comparisons}).
-//' @param sigma_vec   A double vector of length n_ts of the sqrt of long-run variances.
-//' @param epidem      Boolean. Equal to true in cases we are fitting epiemic model. Default is false.
-//' 
-//' @return stat       A double matrix of pairwise multiscale statistics Psi_ij.
-//' @return vals_cor   Matrix with n rows and n_ts * (n_ts - 1) / 2 columns where each column
-//'                    contains values of the normalised Kernel averages in order to be able to perform 
-//'                    the test on every separate interval.
 // [[Rcpp::export]]
 Rcpp::List compute_multiple_statistics(int t_len, int n_ts, Rcpp::NumericMatrix data,
                                        Rcpp::NumericVector gset, Rcpp::IntegerVector ijset,
-                                       Rcpp::NumericVector sigma_vec,
-                                       bool epidem = false){
+                                       double sigma){
+   /* Calculates the statistics (pairwise and overall) in case of multiple time series
+
+        Inputs: 
+    t_len       Integer, length of time series
+    n_ts        Integer. Number of time series.
+    data        Matrix of doubles, each column contains one time series.
+    gset        A double vector of location-bandwidth points (u_1,...,u_n,h_1,...h_n).
+    ijset       An integer vector of indices of the countries for the comparison
+                (i_1, i_2, ..., j_{n_comparisons}).
+    sigma       A double, estimator of the overdispersion parameter.
+
+         Output:
+    stat        A double matrix of pairwise multiscale statistics Psi_ij.
+    vals_cor    Matrix with n rows and n_ts * (n_ts - 1) / 2 columns where each column
+                contains values of the normalised Kernel averages in order to be able to perform 
+                the test on every separate interval.
+    */
+   
    int n = gset.length() / 2;
    Rcpp::NumericVector correct_b(n);
    Rcpp::NumericVector correct_a(n);
@@ -280,10 +265,11 @@ Rcpp::List compute_multiple_statistics(int t_len, int n_ts, Rcpp::NumericMatrix 
    NumericVector vals(2 * n);
    NumericVector vals_cor(n);
    NumericVector time_series(t_len);
-   int i, j, k, l;
+   int i, j, k, l, t;
    int n_comparisons = ijset.length() / 2;
    Rcpp::NumericMatrix vals_cor_mat(n, n_comparisons);
-   double sigmahat, len;
+   double len;
+   double u, h, result_temp, weight_norm;
 
    for (k = 0; k < n; k++){
       len = 2 * gset[k + n];
@@ -292,71 +278,53 @@ Rcpp::List compute_multiple_statistics(int t_len, int n_ts, Rcpp::NumericMatrix 
       correct_a[k] = sqrt(log(exp(1) / len)) / log(log(exp(exp(1)) / len));
    }
    
-   if (epidem){
-      
-      sigmahat = sqrt(mean(sigma_vec * sigma_vec));
-
-      int t;
-      double u, h, result_temp, weight_norm;
-      
-      for (l = 0; l < n_comparisons; l++) {
-         i = ijset[l] - 1;
-         j = ijset[l + n_comparisons] - 1;
-         NumericVector result(n);
-         for(k = 0; k < n; k++){
-            u = gset[k];
-            h = gset[k + n];
+   for (l = 0; l < n_comparisons; l++) {
+      i = ijset[l] - 1;
+      j = ijset[l + n_comparisons] - 1;
+      NumericVector result(n);
+      for(k = 0; k < n; k++){
+         u = gset[k];
+         h = gset[k + n];
                
-            result_temp = 0;
-            weight_norm = 0;
+         result_temp = 0;
+         weight_norm = 0;
                
-            for(t = 1; t < (t_len + 1); t++){
-               if (t / (float)t_len >= (u - h) && t / (float)t_len <= (u + h)){
-                  result_temp += data(t-1, i) - data(t-1, j);
-                  weight_norm += data(t-1, i) + data(t-1, j);
-               }
-               vals_cor[k] = correct_a[k] * (awert(result_temp) / (sqrt(weight_norm) * sigmahat) - correct_b[k]);
+         for(t = 1; t < (t_len + 1); t++){
+            if (t / (float)t_len >= (u - h) && t / (float)t_len <= (u + h)){
+               result_temp += data(t-1, i) - data(t-1, j);
+               weight_norm += data(t-1, i) + data(t-1, j);
             }
+            vals_cor[k] = correct_a[k] * (awert(result_temp) / (sqrt(weight_norm) * sigma) - correct_b[k]);
          }
-         stat(i, j) = max(vals_cor);
-         vals_cor_mat(_, l) = vals_cor;
       }
-   }  else {
-      
-      for (l = 0; l < n_comparisons; l++) {
-         i = ijset[l] - 1;
-         j = ijset[l + n_comparisons] - 1;
-         time_series = data(_, i) - data(_, j);
-         sigmahat = sqrt(sigma_vec(i) * sigma_vec(i) + sigma_vec(j) * sigma_vec(j));
-         vals = kernel_averages(t_len, gset, correct_b, time_series, sigmahat, n);
-         vals_cor = vals[Rcpp::Range(n, 2 * n - 1)];
-         stat(i, j) = max(vals_cor);
-         vals_cor_mat(_, l) = vals_cor;
-      }
+      stat(i, j) = max(vals_cor);
+      vals_cor_mat(_, l) = vals_cor;
    }
    return(Rcpp::List::create(Rcpp::Named("vals_cor_matrix") = vals_cor_mat,
                              Rcpp::Named("stat") = stat));
 }
 
-
-//' Calculates statistics in case of one time series
-//'
-//' @param t_len           Integer. Length of time series for analysis.
-//' @param data        Double vector of length t_len that consists the time series for analysis.
-//' @param gset        A double vector of location-bandwidth points (u_1,...,u_n,h_1,...h_n).
-//' @param sigma       Double. Equal to the sqrt of the long-run variance.
-//' @param deriv_order Integer. Order of the derivative of the trend that is investigated.
-//'                    Default is 0 => we analyse whether the trend itself >< than 0.
-//' 
-//' @return stat       A double matrix of pairwise multiscale statistics Psi_ij.
-//' @return vals       A double vector of length n of kernel averages (sign included).
-//' @return vals_cor   A double vector of absolute value of normalized kernel averages with
-//'                    correction \eqn{(abs(\phi(u_1,h_1)/sigmahat) - \lambda(h_1), ...,
-//'                    abs(\phi(u_n,h_n)/sigmahat) - \lambda(h_n))}
-//' @return stat       Double. Our multiscale statistics calculated as max(vals_cor).
 // [[Rcpp::export]]
-Rcpp::List compute_statistics(int t_len, Rcpp::NumericVector data, Rcpp::NumericVector gset,
+Rcpp::List compute_single_statistics(int t_len, Rcpp::NumericVector data, Rcpp::NumericVector gset,
                               double sigma, int deriv_order) {
+   /* Calculates the statistics in case of a single time series.
+    
+    Inputs: 
+    t_len       Integer, length of time series
+    data        Vector of doubles of length t_len that contains the time series for analysis.
+    gset        A double vector of location-bandwidth points (u_1,...,u_n,h_1,...h_n).
+    sigma       A double, estimator of the overdispersion parameter.
+    deriv_order Integer. Order of the derivative of the trend that is investigated.
+                Default is 0 => we analyse whether the trend itself >< than 0.
+    
+    Output:
+    stat        A double, value of the test statistics calculated as max(vals_cor).
+    vals        A double vector of length n of kernel averages (sign included).
+    vals_cor    A double vector of absolute value of normalized kernel averages with
+                correction \eqn{(abs(\phi(u_1,h_1)/sigmahat) - \lambda(h_1), ...,
+                abs(\phi(u_n,h_n)/sigmahat) - \lambda(h_n))}
+    */
+   
    int n = gset.length() / 2;
    Rcpp::NumericVector correct(n);
    Rcpp::NumericVector vals(2 * n);

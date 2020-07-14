@@ -9,29 +9,34 @@ compute_quantiles(
   grid = NULL,
   n_ts = 1,
   ijset = NULL,
-  sigma_vector = NULL,
+  sigma = 1,
   deriv_order = 0,
   sim_runs = 1000,
-  probs = seq(0.5, 0.995, by = 0.005),
-  epidem = FALSE
+  probs = seq(0.5, 0.995, by = 0.005)
 )
 }
 \arguments{
 \item{t_len}{An integer. Sample size.}
 
 \item{grid}{Grid of location-bandwidth points as produced by
-the function \code{\link{construct_grid}}, list with
+the function \code{\link{construct_grid}} or
+\code{\link{construct_weekly_grid}}, list with
 the elements 'gset', 'bws', 'gtype'. If not provided,
-then the defalt grid is produced and used.}
+then the defalt grid is produced and used.
+For the construction of the default grid,
+see \code{\link{construct_grid}}.}
 
-\item{n_ts}{An integer. Number of time series analyzed. Default is 1}
+\item{n_ts}{An integer. Number of time series analyzed. Default is 1.}
 
-\item{ijset}{Matrix of all pairs of indices (i, j) that we want
-to compare.}
+\item{ijset}{A matrix of integers. In case of multiple time series,
+we need to know which pairwise comparisons to perform.
+This matrix consists of all pairs of indices \eqn{(i, j)}
+that we want to compare. If not provided, then all
+possible pairwise comparison are performed.}
 
-\item{sigma_vector}{A numeric vector of estimated sqrt(long-run variance)
-for each time series. If not given, then the default is
-a vector of ones of length n_ts (1, ..., 1).}
+\item{sigma}{A double that is equal to \eqn{\sqrt{long-run varaince}}
+in case of n_ts = 1, or the overdispersion in case of
+n_ts > 1.If not given, then the default is 1.}
 
 \item{deriv_order}{An integer. Order of the derivative of the trend
 that is being investigated. Default is 0.}
@@ -42,9 +47,6 @@ Default is 1000.}
 \item{probs}{A numeric vector of probability levels (1-alpha)
 for which the quantiles are computed.
 Default is probs=seq(0.5,0.995,by=0.005).}
-
-\item{epidem}{A logical parameter. True if we are investigating
-epidemiological model. Default is FALSE.}
 }
 \value{
 quant       Matrix with 2 rows where the first row contains
@@ -53,8 +55,9 @@ quant       Matrix with 2 rows where the first row contains
                     distribution.
 }
 \description{
-Quantiles from this distribution are used to approximate
-                    the quantiles for the multiscale test.
+Quantiles from the gaussian version of the test
+                    statistics which are used to approximate
+                    the critical values for the multiscale test.
 }
 \examples{
 compute_quantiles(100)

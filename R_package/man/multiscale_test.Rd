@@ -7,14 +7,13 @@ long-run variance have already been computed.}
 \usage{
 multiscale_test(
   data,
-  sigma_vec,
+  sigma,
   n_ts = 1,
   grid = NULL,
   ijset = NULL,
   alpha = 0.05,
   sim_runs = 1000,
-  deriv_order = 0,
-  epidem = FALSE
+  deriv_order = 0
 )
 }
 \arguments{
@@ -22,8 +21,10 @@ multiscale_test(
 n_ts > 1) that contains (a number of) time series
 that needs to be analyzed.}
 
-\item{sigma_vec}{Vector of estimated long-run variances.
-Length must be equal to n_ts.}
+\item{sigma}{A double. Estimator of the square root of the long-run
+variance in case of one time series, or estimator of
+the overdispersion parameter in case of multiple time
+series.}
 
 \item{n_ts}{Number of time series analysed. Default is 1.}
 
@@ -40,9 +41,6 @@ Default is 1000.}
 
 \item{deriv_order}{An integer. Order of the derivative of the trend
 that is being investigated. Default is 0.}
-
-\item{epidem}{Logical. If TRUE, then we are looking at an epidemic
-model. Default is FALSE.}
 }
 \value{
 quant         Quantile that wasused for testing calculated from

@@ -97,8 +97,8 @@ ar_coef <- function(data, l1, l2, correct, p) {
 #'
 #' @description     A difference based estimator for the coefficients and
 #'                  long-run variance in case of a nonparametric regression
-#'                  model \eqn{Y(t) = m(t/T) + \epsilon(t)} where the errors are AR(p).
-#'                  The procedure was first introduced in
+#'                  model \eqn{Y(t) = m(t/T) + \epsilon(t)} where the errors
+#'                  are AR(p). The procedure was first introduced in
 #'                  Khismatullina and Vogt (2019).
 #'
 #' @param data      A vector of Y(1), Y(2), ... Y(T).

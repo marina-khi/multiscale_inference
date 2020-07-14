@@ -85,9 +85,9 @@ construct_grid <- function(t, u_grid = NULL, h_grid = NULL, deletions = NULL) {
 #'
 #' @export
 #'
-#' @examples
-#' construct_weekly_grid(100)
-#' construct_weekly_grid(100, min_len = 7, nmbr_of_wks = 2)
+# @examples
+# construct_weekly_grid(100)
+# construct_weekly_grid(100, min_len = 7, nmbr_of_wks = 2)
 
 construct_weekly_grid <- function(t, min_len = 7, nmbr_of_wks = 4) {
   mat_base <- numeric(0)
