@@ -10,7 +10,8 @@ options(xtable.timestamp = "")
 #All the necessary arguments for these functions are described in detail in the file.
 source("functions/functions.r")
 
-#Random generation of the seed. The seed is necessary for computing all the different specifications on comparable datasets
+#Random generation of the seed. The seed is necessary for computing all the different
+#specifications on comparable datasets.
 seed <- sample(1:100000, 1)
 
 
@@ -43,8 +44,8 @@ dev.off()
 
 #However, you can change this function to whatever you like.
 #In order to do this, change the definition of lambda_vec further in the code.
-#Specifically, you will need to redefine lambda_vec to be a vector of length t_len with the values that 
-#your preferred function takes at time points 1/t_len, 2/t_len, ..., 1.
+#Specifically, you will need to redefine lambda_vec to be a vector of length t_len
+#with the values that your preferred function takes at time points 1/t_len, 2/t_len, ..., 1.
 
 
 # for (sigma in sigma_vec){
