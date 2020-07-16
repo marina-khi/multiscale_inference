@@ -1,7 +1,7 @@
 #' Plots SiZer map from the test results of the multiscale testing procedure.
 #'
-#' @param u_grid       Vector of location points in the unit interval [0,1].
-#' @param h_grid       Vector of bandwidths from (0,0.5).
+#' @param u_grid       Vector of location points in the unit interval \eqn{[0,1]}.
+#' @param h_grid       Vector of bandwidths from \eqn{(0,0.5)}.
 #' @param test_results Matrix of test results created by
 #'                     \code{\link{multiscale_test}}.
 #' @param plot_title   Title of the plot. Default is NA and no title is written.

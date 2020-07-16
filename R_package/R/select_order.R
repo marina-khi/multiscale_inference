@@ -1,31 +1,32 @@
-#' Calculates different information criterions for the number of time series
-#' based on the long-run variance estimator (defined in
-#' Khismatullina and Vogt (2019)) for a range of tuning parameters.
+#' Calculates different information criterions for a single time series
+#' or multiple time series with AR(\eqn{p}) errors
+#' based on the long-run variance estimator(s) for a range of tuning
+#' parameters and different orders \eqn{p}.
 #'
 #' @export
 #'
-#' @description Tries to fit AR(1), ... AR(9) models for all given time series
-#'              and calculates different information criterions (fpe, aic,
-#'              aicc, sic, hq) for each of this fits.
+#' @description This function fits AR(1), ... AR(9) models for all
+#'              given time series and calculates different information
+#'              criterions (FPE, AIC, AICC, SIC, HQ) for each of these fits.
+#'              The result is the best fit in terms of minimizing
+#'              the infromation criteria.
 #' @param data  One or a number of time series in a matrix. Column names
 #'              of the matrix should be reasonable
 #' @param q     A vector of integers that consisits of different tuning
 #'              parameters to analyse. If not supplied, q is taken to be
 #'              \eqn{[2\log{T}]:([2\sqrt{T}] + 1)}.
 #' @param r     A vector of integers that consisits of different tuning
-#'              parameters r_bar to analyse. If not supplied, r = 5:15.
-#'
-#' @return      A list with a number of elements.
-#' orders       A vector of chosen orders of length equal to the number
-#'              of time series.
-#'              For each time series the order is calculated as
-#'              \eqn{\max(which.min(fpe), ... which.min(hq))}
-#' The rest of the elelments of the list are matrices that contain
-#' selected orders (among 1, ..., 9) for each information criterion.
-#' One matrix for each time series.
-
+#'              parameters r_bar for \code{\link{estimate_lrv}}.
+#'              If not supplied, \eqn{r = 5, \ldots, 15}.
+#' @return      A list with a number of elements:
+#' \item{orders}{A vector of chosen orders of length equal to the number
+#'          of time series.
+#'          For each time series the order is calculated as
+#'          \eqn{\max(which.min(FPE), ... which.min(HQ))}}
+#' \item{...}{Matrices with the orders that were selected
+#'            (among \eqn{1, \ldots, 9}) for each information criterion.
+#'            One matrix for each time series.}
 select_order <- function(data, q = NULL, r = 5:15) {
-
   t_len <- nrow(data)
   n_ts <- ncol(data)
 

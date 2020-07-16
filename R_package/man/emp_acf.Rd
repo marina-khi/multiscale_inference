@@ -14,8 +14,8 @@ emp_acf(data, ell, p)
 \item{p}{Maximum lag for the autocovariances}
 }
 \value{
-autocovs  Vector of length (p + 1) that consists of empirical
-                  autocoavariances fr the corresponding lag - 1.
+Vector of length (p + 1) that consists of empirical
+                  autocoavariances for the corresponding lag - 1.
 }
 \description{
 Computes autocovariances at lags 0 to p for the ell-th differences of data.

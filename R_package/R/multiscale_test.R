@@ -1,54 +1,79 @@
 #' Carries out the multiscale test given that the values the estimatates of
 #' long-run variance have already been computed.
 #'
-#' @param n_ts           Number of time series analysed. Default is 1.
-#' @param data           Vector (in case of n_ts = 1) or matrix (in case of
-#'                       n_ts > 1) that contains (a number of) time series
-#'                       that needs to be analyzed.
-#' @param sigma          A double. Estimator of the square root of the long-run
-#'                       variance in case of one time series, or estimator of
-#'                       the overdispersion parameter in case of multiple time
-#'                       series.
-#' @param n_ts           Number of time series analysed. Default is 1.
-#' @param grid           Grid of location-bandwidth points as produced by
-#'                       the function \code{\link{construct_grid}}.
-#' @param ijset          Matrix of all pairs of indices (i, j) that we want
-#'                       to compare.
-#' @param alpha          Significance level. Default is 0.05.
-#' @param sim_runs       Number of simulation runs to produce quantiles.
-#'                       Default is 1000.
-#' @param deriv_order    An integer. Order of the derivative of the trend
-#'                       that is being investigated. Default is 0.
+#' @param n_ts          Number of time series analysed. Default is 1.
+#' @param data          Vector (in case of n_ts = 1) or matrix (in case of
+#'                      n_ts > 1) that contains (a number of) time series
+#'                      that needs to be analyzed. In the latter case,
+#'                      each column of the matrix must contain one time series.
+#' @param sigma        The estimator of the square root of the long-run
+#'                     variance \eqn{\sigma} in case of n_ts = 1,
+#'                     or the estimator of the overdispersion parameter
+#'                     \eqn{\sigma} in case of n_ts > 1.
+#' @param grid         Grid of location-bandwidth points as produced by
+#'                     the functions \code{\link{construct_grid}} or
+#'                     \code{\link{construct_weekly_grid}}, it is a list with
+#'                     the elements 'gset', 'bws', 'gtype'. If not provided,
+#'                     then the defalt grid is used.
+#'                     For the construction of the default grid,
+#'                     see \code{\link{construct_grid}}.
+#' @param ijset        In case of multiple time series (n_ts > 1),
+#'                     we need to know which pairs of time series to compare.
+#'                     This matrix consists of all pairs of indices \eqn{(i, j)}
+#'                     that we want to compare. If not provided, then all
+#'                     possible pairwise comparison are performed.
+#' @param alpha        Significance level. Default is \eqn{0.05}.
+#' @param sim_runs     Number of simulation runs to produce quantiles.
+#'                     Default is 1000.
+#' @param deriv_order  In case of a single time series, this denotes the order of
+#'                     the derivative of the trend that we estimate.
+#'                     Default is 0.
 #' @export
 #'
-#' @return quant         Quantile that wasused for testing calculated from
-#'                       the gaussian distribution.
-#' @return statistics    Value of the multiscale statistics.
-#' @return test_matrix   Return in case of n_ts = 1. Matrix of test results
-#'                       for the multiscale test defined in
-#'                       Khismatullina and Vogt (2019).
-#'                       test_matrix[i,j] = -1: test rejects the null for the
-#'                                j-th location u and the i-th bandwidth h and
-#'                                indicates a decrease in the trend
-#'                       test_matrix[i,j] = 0:  test does not reject the null
-#'                                for the j-th location u and the i-th
-#'                                bandwidth h
-#'                       test_matrix[i,j] = 1:  test rejects the null for the
-#'                                j-th location u and the i-th bandwidth h and
-#'                                indicates an increase in the trend
-#'                       test_matrix[i,j] = 2:  no test is carried out at j-th
-#'                                location u and i-th bandwidth h (because
-#'                                the point (u, h) is excluded from the grid
+#' @return In case of n_ts = 1, the function returns a list
+#' with the following elements:
+#'    \item{quant}{Quantile that was used for testing calculated from
+#'                the gaussian distribution.}
+#'    \item{statistics}{Value of the multiscale statistics.}
+#'    \item{test_matrix}{Matrix of the test results for the multiscale test
+#'                       defined in Khismatullina and Vogt (2019).
+#'                       The matrix is coded as follows:
+#'                       \itemize{
+#'                       \item test_matrix[i,j] = -1: test rejects the null for the
+#'                                j-th location \eqn{u} and the i-th bandwidth \eqn{h} and
+#'                                indicates a decrease in the trend;
+#'                       \item test_matrix[i,j] = 0: test does not reject the null
+#'                                for the j-th location \eqn{u} and the i-th
+#'                                bandwidth \eqn{h};
+#'                       \item test_matrix[i,j] = 1:  test rejects the null for the
+#'                                j-th location \eqn{u} and the i-th bandwidth \eqn{h} and
+#'                                indicates an increase in the trend;
+#'                       \item test_matrix[i,j] = 2: no test is carried out at j-th
+#'                                location \eqn{u} and i-th bandwidth \eqn{h} (because
+#'                                the point \eqn{(u, h)} is excluded from the grid
 #'                                as specified by the 'deletions' option
-#'                                in the function \code{\link{construct_grid}})
-#' @return test_matrices  Return in case of n_ts > 1. List of matrices,
-#'                        each matrix contains test results for the pairwise
-#'                        comparison between time series.
-#'                        Each matrix is coded exactly as in case of n_ts = 1.
-#' @return gset_with_vals Either a matrix (in case of n_ts = 1) or a list of
-#'                        matrices (in case of n_ts > 1) that contains test
-#'                        results together with location-bandwidth points.
-#'
+#'                                in the function \code{\link{construct_grid}})}.
+#'                       }
+#'    \item{gset_with_vals}{A matrix that contains the values of the normalised 
+#'                         kernel averages and test results for each pair
+#'                         of location-bandwidth
+#'                         with the corresponding location and bandwidth.}
+#' In case of n_ts > 1, the function returns a list
+#' with the following elements:
+#'    \item{quant}{Quantile that was used for testing calculated from
+#'                the gaussian distribution.stat}{Value of the multiscale statistics.}
+#'    \item{statistics}{Value of the multiscale statistics.}
+#'    \item{stat_pairwise}{Matrix of the values of the pairwise statistics.}
+#'    \item{ijset}{The matrix that  consists of all pairs of indices
+#'                 \eqn{(i, j)} that we compared. The order of these
+#'                 pairs corresponds to the order in the list
+#'                 gset_with_vals.}
+#'    \item{gset_with_vals}{A list of matrices, each matrix corresponding to a 
+#'                         specific pairwise comparison. The order of the list 
+#'                         is determined by ijset. Each matrix contains
+#'                         the values of the normalisedkernel averages
+#'                         for each pair of location-bandwidth
+#'                         with the corresponding location and bandwidth.}
 multiscale_test <- function(data, sigma, n_ts = 1, grid = NULL,
                             ijset = NULL, alpha = 0.05, sim_runs = 1000,
                             deriv_order = 0) {
@@ -141,6 +166,6 @@ multiscale_test <- function(data, sigma, n_ts = 1, grid = NULL,
     }
 
     return(list(quant = quant, stat = stat, stat_pairwise = psi$stat_pairwise,
-                gset_with_values = gset_with_values, ijset = ijset))
+                ijset = ijset, gset_with_values = gset_with_values))
   }
 }

@@ -4,8 +4,8 @@
 #' @param data       Time series for which we calculate autocovariances.
 #' @param ell        Order of differences used.
 #' @param p          Maximum lag for the autocovariances
-#' @return autocovs  Vector of length (p + 1) that consists of empirical
-#'                   autocoavariances fr the corresponding lag - 1.
+#' @return           Vector of length (p + 1) that consists of empirical
+#'                   autocoavariances for the corresponding lag - 1.
 
 emp_acf <- function(data, ell, p) {
   y_diff   <- diff(data, ell)
@@ -23,7 +23,7 @@ emp_acf <- function(data, ell, p) {
 #' @param data      Time series.
 #' @param coefs     Estimated coefficients.
 #' @param p         AR order of the time series.
-#' @return var.eta  Variance of the innovation term
+#' @return          Variance of the innovation term
 
 variance_eta <- function(data, coefs, p) {
   y_diff <- diff(data)
@@ -67,7 +67,7 @@ corrections <- function(coefs, var_eta, len) {
 #' @param correct   Vector of the corrections, either zero or calculated by
 #'                  the function \code{\link{corrections}}.
 #' @param p         AR order of the time series.
-#' @return a_hat    Vector of length p  of estimated AR coefficients.
+#' @return  Vector of length p  of estimated AR coefficients.
 ar_coef <- function(data, l1, l2, correct, p) {
   pos <- 0
   a_mat <- matrix(0, nrow = l2 - l1 + 1, ncol = p)
@@ -97,16 +97,44 @@ ar_coef <- function(data, l1, l2, correct, p) {
 #'
 #' @description     A difference based estimator for the coefficients and
 #'                  long-run variance in case of a nonparametric regression
-#'                  model \eqn{Y(t) = m(t/T) + \epsilon(t)} where the errors
-#'                  are AR(p). The procedure was first introduced in
-#'                  Khismatullina and Vogt (2019).
-#'
-#' @param data      A vector of Y(1), Y(2), ... Y(T).
-#' @param q,r_bar   Integers, tuning parameters.
+#'                  model are AR(p).
+#'                  
+#'                  Specifically, we assume that we observe \eqn{Y(t)} that satisfy
+#'                  the following equation: \deqn{Y(t) = m(t/T) + \epsilon_t.}
+#'                  Here, \eqn{m(\cdot)} is an unknown function, and the errors
+#'                  \eqn{\epsilon_t} are AR(p) with p known. Specifically, we ler
+#'                  \eqn{\{\epsilon_t\}} be a process of the form
+#'                  \deqn{\epsilon_t = \sum_{j=1}^p a_j \epsilon_{t-j} + \eta_t,} 
+#'                  where \eqn{a_1,a_2,\ldots, a_p} are unknown coefficients and
+#'                  \eqn{\eta_t} are i.i.d.\ with \eqn{E[\eta_t] = 0} and
+#'                  \eqn{E[\eta_t^2] = \nu^2}.
+#'                  
+#'                  This function produces an estimator \eqn{\widehat{\sigma}^2}
+#'                  of the long-run variance 
+#'                  \deqn{\sigma^2 = \sum_{l=-\infty}^{\infty} cov(\epsilon_0,\epsilon_{l})}
+#'                  of the error terms, as well as estimators
+#'                  \eqn{\widehat{a}_1, \ldots, \widehat{a}_p} of the coefficients
+#'                  \eqn{a_1,a_2,\ldots, a_p} and an estimator \eqn{\widehat{\nu}^2} of 
+#'                  the innovation variance \eqn{\nu^2}.
+#'                  
+#'                  The exact estimation procedure as well as description of 
+#'                  the tuning parameters needed for this estimation can be found
+#'                  in Khismatullina and Vogt (2019).
+#'                  
+#' @param data      A vector of \eqn{Y(1), Y(2), \ldots, Y(T)}.
+#' @param q,r_bar   Tuning parameters.
 #' @param p         AR order of the error terms.
-#' @return lrv      Estimator of the long run variance of the error terms.
-#' @return ahat     Vector of length p of estimated AR coefficients.
-#' @return vareta   Estimator of the variance of the innovation term
+#' @return A list with the following elements:
+#'     \item{lrv}{Estimator of the long run variance of the error terms
+#'     \eqn{\sigma^2}.}
+#'     \item{ahat}{Vector of length p of estimated AR coefficients
+#'     \eqn{a_1,a_2,\ldots, a_p}.}
+#'     \item{vareta}{Estimator of the variance of the innovation term \eqn{\nu^2}.}
+#' 
+#' @references Khismatullina M., Vogt M. Multiscale inference and long-run
+#'             variance estimation in non-parametric regression with
+#'             time series errors //Journal of the Royal Statistical Society:
+#'             Series B (Statistical Methodology). - 2019.
 #'
 #' @export
 estimate_lrv <- function(data, q, r_bar, p) {

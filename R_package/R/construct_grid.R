@@ -1,31 +1,32 @@
 #' Computes the location-bandwidth grid for the multiscale test.
 #'
 #' @param t          Sample size.
-#' @param u_grid     Vector of location points in the unit interval [0,1].
-#'                   If u.grid = NULL, a default grid is used.
+#' @param u_grid     Vector of location points in the unit interval
+#'                   \eqn{[0,1]}. If NULL, a default grid is used.
 #' @param h_grid     Vector of bandwidths, each bandwidth is supposed to lie
-#'                   in \eqn{(0, 0.5)}. If h.grid = NULL, a default grid is used.
+#'                   in \eqn{(0, 0.5)}. If NULL, a default grid is used.
 #' @param deletions  Logical vector of the length len(u.grid) * len(h.grid).
 #'                   Each element is either TRUE, which means that
 #'                   the corresponding location-bandwidth point \eqn{(u, h)}
 #'                   is NOT deleted from the grid, or FALSE, which means that
 #'                   the corresponding location-bandwidth point \eqn{(u, h)}
-#'                   IS deleted from the grid. Default is deletions = NULL
+#'                   IS deleted from the grid. Default is NULL
 #'                   in which case nothing is deleted.
 #'                   See vignette for the use.
-#' @return gset      Matrix of location-bandwidth points \eqn{(u, h)}
+#' @return A list with the following elements:
+#'    \item{gset}{Matrix of location-bandwidth points \eqn{(u, h)}
 #'                   that remains after deletions, the i-th row gset[i,]
-#'                   corresponds to the i-th point (u,h).
-#' @return bws       Vector of bandwidths (after deletions).
-#' @return lens      Vector of length = length(bws), lens[i] gives
+#'                   corresponds to the i-th point \eqn{(u,h)}.}
+#'     \item{bws}{Vector of bandwidths (after deletions).}
+#'     \item{lens}{Vector of length = length(bws), lens[i] gives
 #'                   the number of locations in the grid for
-#'                   the i-th bandwidth level.
-#' @return gtype     Type of grid that is used, either 'default' or
-#'                   'non-default'.
-#' @return gset_full Matrix of all location-bandwidth pairs \eqn{(u, h)}
-#'                   including deleted ones.
-#' @return pos_full  Logical vector indicating which points \eqn{(u, h)}
-#'                   have been deleted.
+#'                   the i-th bandwidth level.}
+#'     \item{gtype}{Type of grid that is used, either 'default' or
+#'                   'non-default'.}
+#'     \item{gset_full}{Matrix of all location-bandwidth pairs \eqn{(u, h)}
+#'                   including deleted ones.}
+#'     \item{pos_full}{Logical vector indicating which points \eqn{(u, h)}
+#'                   have been deleted.}
 #'
 #' @export
 #'
@@ -68,21 +69,22 @@ construct_grid <- function(t, u_grid = NULL, h_grid = NULL, deletions = NULL) {
 #' Computes the location-bandwidth weekly grid for the multiscale test.
 #'
 #' @param t            Sample size.
-#' @param min_len      Integer, equal to the minimal length of the interval
-#'                     considered. Default is 7, i.e. a week.
-#' @param nmbr_of_wks  Integer, equal to the numbers of wks considered as
-#'                     maximal interval possible. Default is 4
-#' @return gset        Matrix of location-bandwidth points \eqn{(u, h)},
-#'                     the i-th row gset[i, ] corresponds to the i-th point
-#'                     \eqn{(u, h)}.
-#' @return bws         Vector of bandwidths.
-#' @return lens        Vector of length = length(bws), lens[i] gives the number
-#'                     of locations in the grid for the i-th bandwidth level.
-#' @return gtype       Type of grid that is used, either 'default' or
-#'                     'non-default'.
-#' @return gset_full   Matrix of all location-bandwidth pairs \eqn{(u, h)}.
-#' @return pos_full    Logical vector indicating which points \eqn{(u, h)}
-#'                     have been deleted.
+#' @param min_len      Minimal length of the interval considered. The grid then
+#'                     consists of intervals with lengths min_len,
+#'                     2 * min_len, 3 * min_len, ... Default is 7, i.e. a week.
+#' @param nmbr_of_wks  Number that determines the longest intervals in the grid:
+#'                     the length of this interval is calculated then as 
+#'                     min_len * nmbr_of_wks. Default is 4.
+#' @return A list with the following elements:
+#'    \item{gset}{Matrix of location-bandwidth points \eqn{(u, h)}
+#'                the i-th row gset[i,] corresponds to the i-th point
+#'                \eqn{(u,h)}.}
+#'     \item{bws}{Vector of bandwidths.}
+#'     \item{lens}{Vector of length = length(bws), lens[i] gives
+#'                   the number of locations in the grid for
+#'                   the i-th bandwidth level.}
+#'     \item{gtype}{Type of grid that is used, always 'default'.}
+#'     \item{gset_full}{Matrix of all location-bandwidth pairs \eqn{(u, h)}.}
 #'
 #' @export
 #'

@@ -14,9 +14,9 @@ plot_sizer_map(
 )
 }
 \arguments{
-\item{u_grid}{Vector of location points in the unit interval [0,1].}
+\item{u_grid}{Vector of location points in the unit interval \eqn{[0,1]}.}
 
-\item{h_grid}{Vector of bandwidths from (0,0.5).}
+\item{h_grid}{Vector of bandwidths from \eqn{(0,0.5)}.}
 
 \item{test_results}{Matrix of test results created by
 \code{\link{multiscale_test}}.}

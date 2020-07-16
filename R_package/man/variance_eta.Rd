@@ -14,7 +14,7 @@ variance_eta(data, coefs, p)
 \item{p}{AR order of the time series.}
 }
 \value{
-var.eta  Variance of the innovation term
+Variance of the innovation term
 }
 \description{
 Computes variance of AR(p) innovation terms eta.

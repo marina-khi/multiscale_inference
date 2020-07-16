@@ -34,7 +34,7 @@ This matrix consists of all pairs of indices \eqn{(i, j)}
 that we want to compare. If not provided, then all
 possible pairwise comparison are performed.}
 
-\item{sigma}{Value of \eqn{\sqrt{\sigma}}. In case of n_ts = 1,
+\item{sigma}{Value of \eqn{\sqrt{\sigma^2}}. In case of n_ts = 1,
 \eqn{\sigma^2} denotes the long-run error variance, and
 in case of n_ts > 1, \eqn{\sigma^2} denotes the
 overdispersion parameter.
@@ -49,13 +49,13 @@ Default is 1000.}
 
 \item{probs}{A numeric vector of probability levels \eqn{(1-\alpha)}
 for which the quantiles are computed.
-Default is probs=seq(0.5, 0.995, by=0.005).}
+Default is \eqn{(0.5, 0.505, 0.51, \ldots, 0.995)}.}
 }
 \value{
 Matrix with 2 rows where the first row contains
-                    the vector of probabilities and the second contains
-                    corresponding quantiles of the gaussian statistics
-                    distribution.
+                    the vector of probabilities (probs) and the second
+                    contains corresponding quantiles of the gaussian
+                    statistics distribution.
 }
 \description{
 Quantiles from the gaussian version of the test

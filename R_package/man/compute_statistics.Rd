@@ -20,18 +20,18 @@ n_ts > 1) that contains (a number of) time series
 that needs to be analyzed. In the latter case,
 each column of the matrix must contain one time series.}
 
-\item{sigma}{An estimator of the square root of the long-run
-variance (\eqn{\widehat{\sigma}}) in case of n_ts = 1,
-or estimator of the overdispersion parameter
-(\eqn{\widehat{\sigma}}) in case of n_ts > 1.}
+\item{sigma}{The estimator of the square root of the long-run
+variance \eqn{\sigma} in case of n_ts = 1,
+or the estimator of the overdispersion parameter
+\eqn{\sigma} in case of n_ts > 1.}
 
 \item{n_ts}{Number of time series analysed. Default is 1.}
 
 \item{grid}{Grid of location-bandwidth points as produced by
-the function \code{\link{construct_grid}} or
+the functions \code{\link{construct_grid}} or
 \code{\link{construct_weekly_grid}}, it is a list with
 the elements 'gset', 'bws', 'gtype'. If not provided,
-then the defalt grid is produced and used.
+then the defalt grid is used.
 For the construction of the default grid,
 see \code{\link{construct_grid}}.}
 
@@ -46,31 +46,27 @@ the derivative of the trend that we estimate.
 Default is 0.}
 }
 \value{
-In case of n_ts = 1:
-
-stat           Value of the multiscale statistics.
-
-gset_with_vals A matrix that contains the values of the normalised 
-                       kernel averages for each pair of location-bandwidth
-                       with the corresponding location and bandwidth.
-
-In case of n_ts > 1:
-
-stat           Value of the multiscale statistics.
-
-stat_pairwise  Matrix of the values of the pairwise statistics.
-
-ijset          The matrix that  consists of all pairs of indices
-                       \eqn{(i, j)} that we compared. The order of these
-                       pairs corresponds to the order in the list
-                       gset_with_vals.
-
-gset_with_vals A list of matrices, each matrix corresponding to a 
-                       specific pairwise comparison. The order of the list 
-                       is determined by ijset. Each matrix contains
-                       the values of the normalisedkernel averages
-                       for each pair of location-bandwidth
-                       with the corresponding location and bandwidth.
+In case of n_ts = 1, the function returns a list
+with the following elements:
+\item{stat}{Value of the multiscale statistics.}
+\item{gset_with_vals}{A matrix that contains the values of the normalised 
+                        kernel averages for each pair of location-bandwidth
+                        with the corresponding location and bandwidth.}
+                        
+In case of n_ts > 1, the function returns a list
+with the following elements:
+\item{stat}{Value of the multiscale statistics.}
+\item{stat_pairwise}{Matrix of the values of the pairwise statistics.}
+\item{ijset}{The matrix that  consists of all pairs of indices
+                        \eqn{(i, j)} that we compared. The order of these
+                        pairs corresponds to the order in the list
+                        gset_with_vals.}
+\item{gset_with_vals}{A list of matrices, each matrix corresponding to a 
+                        specific pairwise comparison. The order of the list 
+                        is determined by ijset. Each matrix contains
+                        the values of the normalisedkernel averages
+                        for each pair of location-bandwidth
+                        with the corresponding location and bandwidth.}
 }
 \description{
 Calculates the value of the test statistics both for single time series

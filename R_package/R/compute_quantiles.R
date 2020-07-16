@@ -29,12 +29,12 @@
 #'                     Default is 1000.
 #' @param probs        A numeric vector of probability levels \eqn{(1-\alpha)}
 #'                     for which the quantiles are computed.
-#'                     Default is probs=seq(0.5, 0.995, by=0.005).
+#'                     Default is \eqn{(0.5, 0.505, 0.51, \ldots, 0.995)}.
 #'
 #' @return             Matrix with 2 rows where the first row contains
-#'                     the vector of probabilities and the second contains
-#'                     corresponding quantiles of the gaussian statistics
-#'                     distribution.
+#'                     the vector of probabilities (probs) and the second
+#'                     contains corresponding quantiles of the gaussian
+#'                     statistics distribution.
 #' @export
 #'
 #' @examples
