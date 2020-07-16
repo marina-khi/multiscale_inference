@@ -20,9 +20,10 @@ n_ts > 1) that contains (a number of) time series
 that needs to be analyzed. In the latter case,
 each column of the matrix must contain one time series.}
 
-\item{sigma}{A double. Estimator of the square root of the long-run
-variance in case of n_ts = 1, or estimator of
-the overdispersion parameter in case of n_ts > 1.}
+\item{sigma}{An estimator of the square root of the long-run
+variance (\eqn{\widehat{\sigma}}) in case of n_ts = 1,
+or estimator of the overdispersion parameter
+(\eqn{\widehat{\sigma}}) in case of n_ts > 1.}
 
 \item{n_ts}{Number of time series analysed. Default is 1.}
 
@@ -40,41 +41,36 @@ This matrix consists of all pairs of indices \eqn{(i, j)}
 that we want to compare. If not provided, then all
 possible pairwise comparison are performed.}
 
-\item{deriv_order}{In case of time series, this denotes the order of
+\item{deriv_order}{In case of a single time series, this denotes the order of
 the derivative of the trend that we estimate.
 Default is 0.}
 }
 \value{
 In case of n_ts = 1:
 
-stat        Value of the multiscale statistics.
+stat           Value of the multiscale statistics.
 
-gset_with_vals A matrix (in case of n_ts = 1) that contains
-                       the values of the individual test statistics
-                       for each pair of location-bandwidth together with
-                       the corresponding location and bandwidth.
+gset_with_vals A matrix that contains the values of the normalised 
+                       kernel averages for each pair of location-bandwidth
+                       with the corresponding location and bandwidth.
 
 In case of n_ts > 1:
 
 stat           Value of the multiscale statistics.
 
-stat_pairwise  Matrix of the values of the statistics of the
-                       pairwise comparisons.
-
-test_matrices  Return in case of n_ts > 1. List of matrices,
-                       each matrix contains test results for the pairwise
-                       comparison between time series.
-                       Each matrix is coded exactly as in case of n_ts = 1.
-
-gset_with_vals A list of matrices that contains the values
-                       of the each individual test statistics for each pair
-                       of location-bandwidth together with the corresponding
-                       location and bandwidth.
+stat_pairwise  Matrix of the values of the pairwise statistics.
 
 ijset          The matrix that  consists of all pairs of indices
                        \eqn{(i, j)} that we compared. The order of these
                        pairs corresponds to the order in the list
                        gset_with_vals.
+
+gset_with_vals A list of matrices, each matrix corresponding to a 
+                       specific pairwise comparison. The order of the list 
+                       is determined by ijset. Each matrix contains
+                       the values of the normalisedkernel averages
+                       for each pair of location-bandwidth
+                       with the corresponding location and bandwidth.
 }
 \description{
 Calculates the value of the test statistics both for single time series

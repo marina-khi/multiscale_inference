@@ -6,9 +6,10 @@
 #'                     n_ts > 1) that contains (a number of) time series
 #'                     that needs to be analyzed. In the latter case,
 #'                     each column of the matrix must contain one time series.
-#' @param sigma        A double. Estimator of the square root of the long-run
-#'                     variance in case of n_ts = 1, or estimator of
-#'                     the overdispersion parameter in case of n_ts > 1.
+#' @param sigma        An estimator of the square root of the long-run
+#'                     variance (\eqn{\widehat{\sigma}}) in case of n_ts = 1,
+#'                     or estimator of the overdispersion parameter
+#'                     (\eqn{\widehat{\sigma}}) in case of n_ts > 1.
 #' @param grid         Grid of location-bandwidth points as produced by
 #'                     the function \code{\link{construct_grid}} or
 #'                     \code{\link{construct_weekly_grid}}, it is a list with
@@ -21,34 +22,29 @@
 #'                     This matrix consists of all pairs of indices \eqn{(i, j)}
 #'                     that we want to compare. If not provided, then all
 #'                     possible pairwise comparison are performed.
-#' @param deriv_order  In case of time series, this denotes the order of
+#' @param deriv_order  In case of a single time series, this denotes the order of
 #'                     the derivative of the trend that we estimate.
 #'                     Default is 0.
 #' @export
 #'
 #' @return In case of n_ts = 1:
-#' @return stat        Value of the multiscale statistics.
-#' @return gset_with_vals A matrix (in case of n_ts = 1) that contains
-#'                        the values of the individual test statistics
-#'                        for each pair of location-bandwidth together with
-#'                        the corresponding location and bandwidth.
+#' @return stat           Value of the multiscale statistics.
+#' @return gset_with_vals A matrix that contains the values of the normalised 
+#'                        kernel averages for each pair of location-bandwidth
+#'                        with the corresponding location and bandwidth.
 #' @return In case of n_ts > 1:
 #' @return stat           Value of the multiscale statistics.
-#' @return stat_pairwise  Matrix of the values of the statistics of the
-#'                        pairwise comparisons.
-#' @return test_matrices  Return in case of n_ts > 1. List of matrices,
-#'                        each matrix contains test results for the pairwise
-#'                        comparison between time series.
-#'                        Each matrix is coded exactly as in case of n_ts = 1.
-#' @return gset_with_vals A list of matrices that contains the values
-#'                        of the each individual test statistics for each pair
-#'                        of location-bandwidth together with the corresponding
-#'                        location and bandwidth.
+#' @return stat_pairwise  Matrix of the values of the pairwise statistics.
 #' @return ijset          The matrix that  consists of all pairs of indices
 #'                        \eqn{(i, j)} that we compared. The order of these
 #'                        pairs corresponds to the order in the list
 #'                        gset_with_vals.
-#' @export
+#' @return gset_with_vals A list of matrices, each matrix corresponding to a 
+#'                        specific pairwise comparison. The order of the list 
+#'                        is determined by ijset. Each matrix contains
+#'                        the values of the normalisedkernel averages
+#'                        for each pair of location-bandwidth
+#'                        with the corresponding location and bandwidth.
 #'
 compute_statistics <- function(data, sigma, n_ts = 1, grid = NULL,
                             ijset = NULL, deriv_order = 0) {
@@ -105,6 +101,6 @@ compute_statistics <- function(data, sigma, n_ts = 1, grid = NULL,
     }
 
     return(list(stat = stat_max, stat_pairwise = psi_ij$stat,
-                gset_with_values = gset_with_values, ijset = ijset))
+                ijset = ijset, gset_with_values = gset_with_values))
   }
 }

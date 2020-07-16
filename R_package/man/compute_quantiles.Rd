@@ -6,8 +6,8 @@
 \usage{
 compute_quantiles(
   t_len,
-  grid = NULL,
   n_ts = 1,
+  grid = NULL,
   ijset = NULL,
   sigma = 1,
   deriv_order = 0,
@@ -16,7 +16,9 @@ compute_quantiles(
 )
 }
 \arguments{
-\item{t_len}{An integer. Sample size.}
+\item{t_len}{Sample size.}
+
+\item{n_ts}{Number of time series analyzed. Default is 1.}
 
 \item{grid}{Grid of location-bandwidth points as produced by
 the function \code{\link{construct_grid}} or
@@ -26,32 +28,33 @@ then the defalt grid is produced and used.
 For the construction of the default grid,
 see \code{\link{construct_grid}}.}
 
-\item{n_ts}{An integer. Number of time series analyzed. Default is 1.}
-
 \item{ijset}{A matrix of integers. In case of multiple time series,
 we need to know which pairwise comparisons to perform.
 This matrix consists of all pairs of indices \eqn{(i, j)}
 that we want to compare. If not provided, then all
 possible pairwise comparison are performed.}
 
-\item{sigma}{A double that is equal to \eqn{\sqrt{long-run varaince}}
-in case of n_ts = 1, or the overdispersion in case of
-n_ts > 1.If not given, then the default is 1.}
+\item{sigma}{Value of \eqn{\sqrt{\sigma}}. In case of n_ts = 1,
+\eqn{\sigma^2} denotes the long-run error variance, and
+in case of n_ts > 1, \eqn{\sigma^2} denotes the
+overdispersion parameter.
+If not given, then the default is 1.}
 
-\item{deriv_order}{An integer. Order of the derivative of the trend
-that is being investigated. Default is 0.}
+\item{deriv_order}{In case of a single time series analysed, this parameter
+denotes the order of the derivative of the trend
+function that is being estimated. Default is 0.}
 
 \item{sim_runs}{Number of simulation runs to produce quantiles.
 Default is 1000.}
 
-\item{probs}{A numeric vector of probability levels (1-alpha)
+\item{probs}{A numeric vector of probability levels \eqn{(1-\alpha)}
 for which the quantiles are computed.
-Default is probs=seq(0.5,0.995,by=0.005).}
+Default is probs=seq(0.5, 0.995, by=0.005).}
 }
 \value{
-quant       Matrix with 2 rows where the first row contains
+Matrix with 2 rows where the first row contains
                     the vector of probabilities and the second contains
-                    corresponding quantile of the gaussian statistics
+                    corresponding quantiles of the gaussian statistics
                     distribution.
 }
 \description{

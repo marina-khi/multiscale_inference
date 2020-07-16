@@ -10,29 +10,33 @@ construct_weekly_grid(t, min_len = 7, nmbr_of_wks = 4)
 \item{t}{Sample size.}
 
 \item{min_len}{Integer, equal to the minimal length of the interval
-considered.
-Defaul is 7, i.e. a week.}
+considered. Default is 7, i.e. a week.}
 
 \item{nmbr_of_wks}{Integer, equal to the numbers of wks considered as
 maximal interval possible. Default is 4}
 }
 \value{
-gset        Matrix of location-bandwidth points (u, h), the i-th row
-                    gset[i, ] corresponds to the i-th point (u, h).
+gset        Matrix of location-bandwidth points \eqn{(u, h)},
+                    the i-th row gset[i, ] corresponds to the i-th point
+                    \eqn{(u, h)}.
 
 bws         Vector of bandwidths.
 
-lens        Vector of length=length(bws), lens[i] gives the number of
-                    locations in the grid for the i-th bandwidth level.
+lens        Vector of length = length(bws), lens[i] gives the number
+                    of locations in the grid for the i-th bandwidth level.
 
 gtype       Type of grid that is used, either 'default' or
                     'non-default'.
 
-gset_full   Matrix of all possible location-bandwidth pairs (u,h).
+gset_full   Matrix of all location-bandwidth pairs \eqn{(u, h)}.
 
-pos_full    Logical vector indicating which points (u,h) have been
-                    deleted.
+pos_full    Logical vector indicating which points \eqn{(u, h)}
+                    have been deleted.
 }
 \description{
 Computes the location-bandwidth weekly grid for the multiscale test.
+}
+\examples{
+construct_weekly_grid(100)
+construct_weekly_grid(100, min_len = 7, nmbr_of_wks = 2)
 }

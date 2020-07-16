@@ -32,6 +32,7 @@
 #' minimal_ints <- compute_minimal_intervals(dataset)
 
 compute_minimal_intervals <- function(dataset) {
+  contains <- NULL
   set_cardinality <- nrow(dataset)
   dataset$endpoint <- round(dataset$endpoint, 10)
   dataset$startpoint <- round(dataset$startpoint, 10)

@@ -10,38 +10,39 @@ construct_grid(t, u_grid = NULL, h_grid = NULL, deletions = NULL)
 \item{t}{Sample size.}
 
 \item{u_grid}{Vector of location points in the unit interval [0,1].
-If u.grid=NULL, a default grid is used.}
+If u.grid = NULL, a default grid is used.}
 
 \item{h_grid}{Vector of bandwidths, each bandwidth is supposed to lie
-in (0,0.5). If h.grid=NULL, a default grid is used.}
+in \eqn{(0, 0.5)}. If h.grid = NULL, a default grid is used.}
 
 \item{deletions}{Logical vector of the length len(u.grid) * len(h.grid).
 Each element is either TRUE, which means that
-the corresponding location-bandwidth point (u, h)
+the corresponding location-bandwidth point \eqn{(u, h)}
 is NOT deleted from the grid, or FALSE, which means that
-the corresponding location-bandwidth point (u, h) IS
-deleted from the grid. Default is deletions = NULL
+the corresponding location-bandwidth point \eqn{(u, h)}
+IS deleted from the grid. Default is deletions = NULL
 in which case nothing is deleted.
 See vignette for the use.}
 }
 \value{
-gset      Matrix of location-bandwidth points (u,h) that remains
-                  after deletions, the i-th row gset[i,] corresponds to
-                  the i-th point (u,h).
+gset      Matrix of location-bandwidth points \eqn{(u, h)}
+                  that remains after deletions, the i-th row gset[i,]
+                  corresponds to the i-th point (u,h).
 
 bws       Vector of bandwidths (after deletions).
 
-lens      Vector of length=length(bws), lens[i] gives the number of
-                  locations in the grid for the i-th bandwidth level.
+lens      Vector of length = length(bws), lens[i] gives
+                  the number of locations in the grid for
+                  the i-th bandwidth level.
 
 gtype     Type of grid that is used, either 'default' or
                   'non-default'.
 
-gset_full Matrix of all location-bandwidth pairs (u,h) including
-                  deleted ones.
+gset_full Matrix of all location-bandwidth pairs \eqn{(u, h)}
+                  including deleted ones.
 
-pos_full  Logical vector indicating which points (u,h) have been
-                  deleted.
+pos_full  Logical vector indicating which points \eqn{(u, h)}
+                  have been deleted.
 }
 \description{
 Computes the location-bandwidth grid for the multiscale test.

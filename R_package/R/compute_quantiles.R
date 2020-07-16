@@ -3,7 +3,8 @@
 #' @description        Quantiles from the gaussian version of the test
 #'                     statistics which are used to approximate
 #'                     the critical values for the multiscale test.
-#' @param t_len        An integer. Sample size.
+#' @param t_len        Sample size.
+#' @param n_ts         Number of time series analyzed. Default is 1.
 #' @param grid         Grid of location-bandwidth points as produced by
 #'                     the function \code{\link{construct_grid}} or
 #'                     \code{\link{construct_weekly_grid}}, list with
@@ -11,33 +12,35 @@
 #'                     then the defalt grid is produced and used.
 #'                     For the construction of the default grid,
 #'                     see \code{\link{construct_grid}}.
-#' @param n_ts         An integer. Number of time series analyzed. Default is 1.
 #' @param ijset        A matrix of integers. In case of multiple time series,
 #'                     we need to know which pairwise comparisons to perform.
 #'                     This matrix consists of all pairs of indices \eqn{(i, j)}
 #'                     that we want to compare. If not provided, then all
 #'                     possible pairwise comparison are performed.
-#' @param sigma        A double that is equal to \eqn{\sqrt{long-run varaince}}
-#'                     in case of n_ts = 1, or the overdispersion in case of
-#'                     n_ts > 1.If not given, then the default is 1.
-#' @param deriv_order  An integer. Order of the derivative of the trend
-#'                     that is being investigated. Default is 0.
+#' @param sigma        Value of \eqn{\sqrt{\sigma^2}}. In case of n_ts = 1,
+#'                     \eqn{\sigma^2} denotes the long-run error variance, and
+#'                     in case of n_ts > 1, \eqn{\sigma^2} denotes the
+#'                     overdispersion parameter.
+#'                     If not given, then the default is 1.
+#' @param deriv_order  In case of a single time series analysed, this parameter
+#'                     denotes the order of the derivative of the trend
+#'                     function that is being estimated. Default is 0.
 #' @param sim_runs     Number of simulation runs to produce quantiles.
 #'                     Default is 1000.
-#' @param probs        A numeric vector of probability levels (1-alpha)
+#' @param probs        A numeric vector of probability levels \eqn{(1-\alpha)}
 #'                     for which the quantiles are computed.
-#'                     Default is probs=seq(0.5,0.995,by=0.005).
+#'                     Default is probs=seq(0.5, 0.995, by=0.005).
 #'
-#' @return quant       Matrix with 2 rows where the first row contains
+#' @return             Matrix with 2 rows where the first row contains
 #'                     the vector of probabilities and the second contains
-#'                     corresponding quantile of the gaussian statistics
+#'                     corresponding quantiles of the gaussian statistics
 #'                     distribution.
 #' @export
 #'
 #' @examples
 #' compute_quantiles(100)
 
-compute_quantiles <- function(t_len, grid = NULL, n_ts = 1,
+compute_quantiles <- function(t_len, n_ts = 1, grid = NULL,
                               ijset = NULL, sigma = 1,
                               deriv_order = 0, sim_runs=1000,
                               probs=seq(0.5, 0.995, by = 0.005)) {

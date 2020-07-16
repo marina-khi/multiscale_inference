@@ -4,10 +4,11 @@
 \name{multiscale-package}
 \alias{multiscale-package}
 \alias{multiscale}
-\title{Multiscale Inference for Nonparametric Regression(s)}
+\title{Multiscale Inference for Nonparametric Time Trends}
 \description{
-This package performs a multiscale analysis of a nonparametric
-  regression or nonparametric regressions with time series errors.
+This package performs a multiscale analysis of a single nonparametric 
+  time trends (Khismatullina and Vogt (2019)) or multiple nonparametric 
+  time trends (Khismatullina and Vogt (2020)).
 
   In case of a single nonparametric regression, the multiscale method to
   test qualitative hypotheses about the nonparametric time trend \eqn{m}
@@ -20,30 +21,30 @@ This package performs a multiscale analysis of a nonparametric
   \eqn{\sigma^2 = \sum_{l=-\infty}^{\infty} Cov(\epsilon_0, \epsilon_l)}.
   Hence, the package also provides the difference-based
   estimator for the case that the errors belong to the class of
-  \eqn{AR(\infty)} processes. The estimator was first proposed in
+  \eqn{AR(\infty)} processes. The estimator was also proposed in
   Khismatullina and Vogt (2019).
 
-  In case of multiple nonparametric regressions, the multiscale method
-  to test qualitative hypotheses about the nonparametric time trends
-  in the context of epidemic modelling is provided. Specifically,
-  we assume that the we observe a sample of the count data
+  In case of multiple nonparametric regressions, we provide
+  the multiscale method to test qualitative hypotheses about
+  the nonparametric time trends in the context of epidemic modelling.
+  Specifically, we assume that the we observe a sample of the count data
   \eqn{\{\mathcal{X}_i = \{ X_{it}: 1 \le 1 \le T \}\}}, where \eqn{X_{it}}
   are quasi-Poisson distributed with time-varying intensity parameter
   \eqn{\lambda_i(t/T)}. The multiscale method allows to test whether
   intenisty parameters are different or not, and if they are, it detects
-  the regions where the trends significantly differ from each other.
-  The method was first proposed in Khismatullina and Vogt (2020) and can be
-  used for comparing the rates of infection of COVID-19 across countries.
-}
-\details{
-This package performs a multiscale analysis of a nonparametric regression
-or nonparametric regressions with time series errors.
+  with a prespicified significance level the regions where these differences
+  most probably occur. The method was introduced in
+  Khismatullina and Vogt (2020) and can be used for comparing the rates of
+  infection of COVID-19 across countries.
 }
 \references{
 Khismatullina M., Vogt M. Multiscale inference and long-run
             variance estimation in non-parametric regression with
             time series errors //Journal of the Royal Statistical Society:
             Series B (Statistical Methodology). - 2019.
+            
+            Khismatullina M., Vogt M. Simultaneous statistical inference
+            for epidemic trends //???. - 2020.
 }
 \seealso{
 \url{https://rss.onlinelibrary.wiley.com/doi/full/10.1111/rssb.12347}
