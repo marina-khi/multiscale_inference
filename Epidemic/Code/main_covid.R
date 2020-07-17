@@ -12,7 +12,7 @@ options(xtable.timestamp = "")
 
 #Defining necessary constants
 alpha    <- 0.05 #confidence level for application
-sim_runs <- 1000
+sim_runs <- 5000
 bw       <- 0.05 #Bandwidth for calculating the residuals for \hat{\sigma}
 
 #We load government response index as well
@@ -95,12 +95,6 @@ for (country in countries) {
 #Cleaning the data: there are weird cases in the dataset when the number of new cases is negative! 
 covid_mat[covid_mat < 0] <- 0
 
-#Plotting different countries on one plot
-#dev.new()
-#matplot(1:min_dates, covid_mat, type = 'l', lty = 1, col = 1:min_dates, xlab = 'Number of deaths since 100th case', ylab = 'Deaths')
-#legend(1, 40000, legend = names(covid_list), lty = 1, col = 1:min_dates, cex = 0.8)
-#dev.off()
-
 Tlen          <- min_dates
 n_ts          <- countries_num #Updating the number of time series because of dropped stations
 grid          <- construct_weekly_grid(Tlen) 
@@ -126,7 +120,6 @@ smoothed_curve           <- matrix(NA, ncol = n_ts, nrow = min_dates)
 colnames(smoothed_curve) <- countries
 
 # #This is the first method of estimating sigma from the variance
-sigma_vec <- rep(0, n_ts)
 for (i in 1:n_ts){
   smoothed_curve[, i] <- mapply(nadaraya_watson_smoothing, grid_points,
                                 MoreArgs = list(covid_mat[, i], grid_points, bw = 3.5 / Tlen))
@@ -136,14 +129,16 @@ for (i in 1:n_ts){
   #sigma_vec[i] <- sqrt(mean(r_it^2))
 }
 
-#This is the second method of estimating sigma from the variance
-sigma_bwfree_vec <- rep(0, n_ts)
+sigma_vec <- rep(0, n_ts)
+#We estimate the overdispersion parameter:
 for (i in 1:n_ts){
-  sigma_bwfree_squared <- sum((covid_mat[2:Tlen, i] - covid_mat[1:(Tlen - 1), i])^2) / (2 * sum(covid_mat[, i]))
-  sigma_bwfree_vec[i] <- sqrt(sigma_bwfree_squared)
+  sigma_squared <- sum((covid_mat[2:Tlen, i] - covid_mat[1:(Tlen - 1), i])^2) / (2 * sum(covid_mat[, i]))
+  sigma_vec[i] <- sqrt(sigma_squared)
 }
 
-result_bwfree <- multiscale_test(data = covid_mat, sigma_vec = sigma_bwfree_vec,
+sigmahat <- mean(sigma_vec * sigma_vec)
+
+result_bwfree <- multiscale_test(data = covid_mat, sigma = sigmahat,
                                 n_ts = n_ts, grid = grid,
                                 sim_runs = sim_runs, epidem = TRUE)
 

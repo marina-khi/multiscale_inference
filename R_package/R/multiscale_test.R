@@ -132,7 +132,7 @@ multiscale_test <- function(data, sigma, n_ts = 1, grid = NULL,
                                          byrow = TRUE)
 
     if (stat > quant) {
-      cat("For the given time series given we reject H_0 with probability",
+      cat("For the given time series we reject H_0 with probability",
           alpha, ". Psihat_statistic = ", stat,
           ". Gaussian quantile value = ", quant, "\n")
     } else {
