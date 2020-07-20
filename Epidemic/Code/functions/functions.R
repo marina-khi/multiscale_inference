@@ -1,4 +1,5 @@
-#Local Linear estimator using the rectangular kernel. 
+#Local linear estimator of the trend function 
+#using the rectangular kernel. 
 nadaraya_watson_smoothing <- function(u, data_p, grid_p, bw){
   if (length(data_p) != length(grid_p)){
     cat("Dimensions of the grid and the data do not match, please check the arguments")
@@ -7,18 +8,18 @@ nadaraya_watson_smoothing <- function(u, data_p, grid_p, bw){
     result      = 0
     norm        = 0
     T_size      = length(data_p)
-    result = sum((abs((grid_points - u) / bw) <= 1) * data_p)
-    norm = sum((abs((grid_points - u) / bw) <= 1))
+    result = sum((abs((grid_p - u) / bw) <= 1) * data_p)
+    norm = sum((abs((grid_p - u) / bw) <= 1))
     return(result/norm)
   }
 }
 
 
-produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
-                           gov_resp_i, gov_resp_j, lagged_gov_resp_i, lagged_gov_resp_j,
+produce_plots <- function (results, l, data_i, data_j,
+                           gov_resp_i, gov_resp_j,
                            country_i, country_j, filename){
   Tlen <- length(data_i)
-  gset <- results$gset_with_vals[[l]]
+  gset <- results$gset_with_values[[l]]
   
   pdf(filename, width=5.5, height=13, paper="special")
   
@@ -39,6 +40,14 @@ produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
 
   par(mar = c(0.5, 0.5, 3, 0)) #Margins for each plot
 
+  #Plotting the smoothed version of the time series that we have
+  grid_points <- seq(from = 1 / Tlen, to = 1, length.out = Tlen) #grid points for estimating
+  smoothed_i  <- mapply(nadaraya_watson_smoothing, grid_points,
+                        MoreArgs = list(data_i, grid_points, bw = 3.5 / Tlen))
+  
+  smoothed_j  <- mapply(nadaraya_watson_smoothing, grid_points,
+                        MoreArgs = list(data_j, grid_points, bw = 3.5 / Tlen))
+  
   plot(smoothed_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
      col="blue", ylab="", xlab = "", mgp=c(1,0.5,0))
   title(main = "(b) smoothed curve from (a)", font.main = 1, line = 0.5)
@@ -48,12 +57,10 @@ produce_plots <- function (results, l, data_i, data_j, smoothed_i, smoothed_j,
        col="blue", ylab="", xlab = "", mgp=c(1, 0.5, 0))
   title(main = "(c) government response index", font.main = 1, line = 0.5)
   lines(gov_resp_j, col="red")
-  #lines(lagged_gov_resp_i, col="blue", lty = "dashed", lwd = 3)
-  #lines(lagged_gov_resp_j, col="red", lty = "dashed", lwd = 3)
 
   par(mar = c(2.7, 0.5, 3, 0)) #Margins for each plot
 
-  a_t_set <- subset(gset, test == 1, select = c(u, h))
+  a_t_set <- subset(gset, test == TRUE, select = c(u, h))
   if (nrow(a_t_set) > 0){
     p_t_set <- data.frame('startpoint' = (a_t_set$u - a_t_set$h) * Tlen + 0.5,
                           'endpoint' = (a_t_set$u + a_t_set$h) * Tlen - 0.5, 'values' = 0)
