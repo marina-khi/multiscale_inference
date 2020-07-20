@@ -149,8 +149,8 @@ multiscale_test <- function(data, sigma, n_ts = 1, grid = NULL,
   } else {
     if (stat > quant) {
       cat("We reject H_0 with probability", alpha, ". Psihat_statistic = ",
-          stat, ". Number of pairwise rejections = ",
-          sum(stat > quant, na.rm = TRUE),
+          stat, ".\n Number of pairwise rejections = ",
+          sum(psi$stat_pairwise > quant, na.rm = TRUE), "out of ", nrow(ijset),
           ". Gaussian quantile value = ", quant, "\n")
     } else {
       cat("We fail to reject H_0 with probability", alpha,
