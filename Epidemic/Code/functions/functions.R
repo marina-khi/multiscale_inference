@@ -93,7 +93,6 @@ produce_plots <- function (results, l, data_i, data_j,
 }
 
 # functions for data simulations
-
 lambda_fct <- function(u, c = 1000, height = 5000, position = 10) {
   return (height * exp(-(position * u - 3) ^ 2 / 2) + c)
 }
@@ -110,37 +109,21 @@ simulate_data <- function(n_ts, t_len, lambda_vec, sigma) {
   return(data)
 }
 
-simulate_data_iid <- function(n_ts, t_len, lambda_vec, sigma) {
-  data_ <- matrix(0, ncol = n_ts, nrow = t_len)
-  for(t in 1:t_len) {
-    data_[t, ]  <- lambda_vec[t] + sigma * sqrt(lambda_vec[t]) * rnorm(n_ts)
-  }
-  data_[data_ < 0] <- 0
-  return(data_)
-}
-
-
 calculate_size <- function(t_len, n_ts, alpha_vec, lambda_vec = lambda_vec,
                            sigma = sigma,
                            n_sim = 1000, sim_runs = 1000){
   
   #Constructing the set of intervals
-  grid                   <- construct_weekly_grid(t_len)
-  gset                   <- grid$gset
-  gset_cpp               <- as.matrix(gset)
-  gset_cpp               <- as.vector(gset_cpp)
-  storage.mode(gset_cpp) <- "double"
-  
+  grid  <- construct_weekly_grid(t_len)
+
   #Constructing the set of the pairwise comparisons
-  ijset                   <- expand.grid(i = 1:n_ts, j = 1:n_ts)
-  ijset                   <- ijset[ijset$i < ijset$j, ]
-  ijset_cpp               <- as.matrix(ijset)
-  ijset_cpp               <- as.vector(ijset_cpp)
-  storage.mode(ijset_cpp) <- "integer"
-  
+  ijset <- expand.grid(i = 1:n_ts, j = 1:n_ts)
+  ijset <- ijset[ijset$i < ijset$j, ]
+
   # compute critical value
-  quantiles <- compute_quantiles(t_len = t_len, grid = grid, n_ts = n_ts, 
-                                 sim_runs = sim_runs, epidem = TRUE)
+  quantiles <- compute_quantiles(t_len = t_len, n_ts = n_ts, 
+                                 grid = grid, ijset = ijset,
+                                 sim_runs = sim_runs)
   
   probs <- as.vector(quantiles$quant[1, ])
   quant <- as.vector(quantiles$quant[2, ])
@@ -165,12 +148,13 @@ calculate_size <- function(t_len, n_ts, alpha_vec, lambda_vec = lambda_vec,
       sigma_squared <- sum((Y[2:t_len, i] - Y[1:(t_len - 1), i]) ^ 2) / (2 * sum(Y[, i]))
       sigma_vec[i] <- sqrt(sigma_squared)
     }
+
+    sigmahat <- sqrt(mean(sigma_vec * sigma_vec))
     
-    result <- compute_multiple_statistics(t_len = t_len, n_ts = n_ts, data = Y,
-                                          gset = gset_cpp, ijset = ijset_cpp,
-                                          sigma_vec = sigma_vec, epidem = TRUE)
+    result <- compute_statistics(data = Y, sigma = sigmahat, n_ts = n_ts,
+                                 grid = grid, ijset = ijset)
     
-    test_stat <- max(result$stat, na.rm = TRUE)
+    test_stat       <- max(result$stat, na.rm = TRUE)
     test_res[sim, ] <- as.numeric(test_stat > crit_val)
   }
   print(paste("Empirical size: ",  colSums(test_res) / n_sim, sep=""))
@@ -184,24 +168,16 @@ calculate_power <- function(t_len, n_ts, alpha_vec, lambda_vec_1 = lambda_vec_1,
                             n_sim = 1000, sim_runs = 1000){
   
   #Constructing the set of intervals
-  grid                   <- construct_weekly_grid(t_len)
-  gset                   <- grid$gset
-  gset_cpp               <- as.matrix(gset)
-  gset_cpp               <- as.vector(gset_cpp)
-  storage.mode(gset_cpp) <- "double"
-  
-  #localisations <- (gset$u + gset$h <= 0.6)
-  
+  grid  <- construct_weekly_grid(t_len)
+
   #Constructing the set of the pairwise comparisons
-  ijset                   <- expand.grid(i = 1:n_ts, j = 1:n_ts)
-  ijset                   <- ijset[ijset$i < ijset$j, ]
-  ijset_cpp               <- as.matrix(ijset)
-  ijset_cpp               <- as.vector(ijset_cpp)
-  storage.mode(ijset_cpp) <- "integer"
-  
+  ijset <- expand.grid(i = 1:n_ts, j = 1:n_ts)
+  ijset <- ijset[ijset$i < ijset$j, ]
+
   # compute critical value
-  quantiles <- compute_quantiles(t_len = t_len, grid = grid, n_ts = n_ts, 
-                                 sim_runs = sim_runs, epidem = TRUE)
+  quantiles <- compute_quantiles(t_len = t_len, n_ts = n_ts, 
+                                 grid = grid, ijset = ijset,
+                                 sim_runs = sim_runs)
   
   probs <- as.vector(quantiles$quant[1, ])
   quant <- as.vector(quantiles$quant[2, ])
@@ -215,19 +191,10 @@ calculate_power <- function(t_len, n_ts, alpha_vec, lambda_vec_1 = lambda_vec_1,
     crit_val <- c(crit_val, quant[pos])
   }
   
-  #We need to extract only those values of our test statistic that
-  #correspond to the pairwise comparison between first time series and one of the others
-  #elements_of_group1 <- rep(1, n_ts - 1)
-  #for (i in 1:(n_ts - 2)){
-  #  elements_of_group1[i + 1] <- elements_of_group1[i] + i
-  #}
-  
-  
+
   # carry out multiscale test
   test_res       <- matrix(NA, ncol = length(alpha_vec), nrow = n_sim)
-  #test_res_local <- matrix(NA, ncol = length(alpha_vec), nrow = n_sim)
-  
-    
+
   for(sim in 1:n_sim) {
     #The first time series has the different mean function then the others
     Y1 <- simulate_data(n_ts = 1, t_len = t_len, lambda_vec = lambda_vec_1, sigma = sigma)
@@ -240,20 +207,16 @@ calculate_power <- function(t_len, n_ts, alpha_vec, lambda_vec_1 = lambda_vec_1,
       sigma_vec[i] <- sqrt(sigma_squared)
     }
     
-    result <- compute_multiple_statistics(t_len = t_len, n_ts = n_ts, data = Y,
-                                          gset = gset_cpp, ijset = ijset_cpp,
-                                          sigma_vec = sigma_vec, epidem = TRUE)
+    sigmahat <- sqrt(mean(sigma_vec * sigma_vec))
     
-    test_stat_group1 <- max(result$stat[1, ], na.rm = TRUE)
-    test_stat_group2 <- max(result$stat[-1, ], na.rm = TRUE)
+    result <- compute_statistics(data = Y, sigma = sigmahat, n_ts = n_ts,
+                                 grid = grid, ijset = ijset)
     
-    #values_group1 <- result$vals_cor_matrix[localisations, elements_of_group1]
-    #values_group2 <- result$vals_cor_matrix[, -elements_of_group1]
+    test_stat_group1 <- max(result$stat_pairwise[1, ], na.rm = TRUE)
+    test_stat_group2 <- max(result$stat_pairwise[-1, ], na.rm = TRUE)
     
     test_res[sim, ]       <- as.numeric((test_stat_group1 > crit_val) & (test_stat_group2 <= crit_val))
-    #test_res_local[sim, ] <- as.numeric((max(values_group1, na.rm = TRUE) > crit_val) & (max(values_group2, na.rm = TRUE) <= crit_val))
   }
   print(paste("Power: ",  colSums(test_res) / n_sim, sep=""))
-  #print(paste("Localised power: ",  colSums(test_res_local) / n_sim, sep=""))
   return(colSums(test_res) / n_sim)
 }
