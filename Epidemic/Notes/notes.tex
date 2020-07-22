@@ -260,8 +260,7 @@ Hence, we can claim with statistical confidence at least $1-\alpha$ that the fun
 \section{Empirical application to COVID-19 data}\label{sec:empirics} 
 
 
-We now use our test to analyze the outbreak patterns of the COVID-19 epidemic. We proceed in two steps. In Section \ref{subsec:sim}, we assess the finite sample performance of our test by Monte-Carlo experiments. Specifically, we run a series of experiments which show that the test controls the FWER at level $\alpha$ as predicted by the theory and that it has good power properties. In Section \ref{subsec:app}, we then apply the test to a sample of COVID-19 data from different European countries. Our multiscale test is implemented in the R package \verb|multiscale|, available on GitHub at \textcolor{red}{(insert the link)}.
-
+We now use our test to analyze the outbreak patterns of the COVID-19 epidemic. We proceed in two steps. In Section \ref{subsec:sim}, we assess the finite sample performance of our test by Monte-Carlo experiments. Specifically, we run a series of experiments which show that the test controls the FWER at level $\alpha$ as predicted by the theory and that it has good power properties. In Section \ref{subsec:app}, we then apply the test to a sample of COVID-19 data from different European countries. Our multiscale test is implemented in the R package \verb|multiscale|, available on GitHub at \texttt{https://github.com/marina-khi/multiscale}.
 
 \subsection{Simulation experiments}\label{subsec:sim}
 
@@ -272,7 +271,7 @@ where the noise variables $\eta_{it}$ have zero mean and unit variance. The func
 %Robustness checks with $\sigma=10$ and $\sigma=20$ are provided in the Supplementary Material.
 
 
-We consider different values for $T$ and $n$, in particular, $T \in \{100,250, 500\}$ and $n \in \{5,10,50\}$. Note that in the application, we have $T=137$ and $n=5$. We let $\pairs = \{ (i,j): 1 \le i < j \le n\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$. Moreover, we choose $\intervals$ to be a family of time intervals $\mathcal{I}_k$ with length $h_k \in \{ 7/T,14/T,21/T,28/T \}$. Hence, the intervals in $\intervals$ have length either $7$, $14$, $21$ or $28$ days (i.e., $1$, $2$, $3$ or $4$ weeks). For each length $h_k$, we include all intervals that start at days $t = 1 + 7(j-1)$ and $t = 4 + 7(j-1)$ for $j=1,2,\ldots$ A graphical presentation of the family $\intervals$ for $T = 139$ (as in the application) is given in Figure \ref{fig:intervals}. All our simulation experiments are based on $R=5000$ simulation runs. 
+We consider different values for $T$ and $n$, in particular, $T \in \{100,250, 500\}$ and $n \in \{5,10,50\}$. Note that in the application, we have $T=139$ and $n=5$. We let $\pairs = \{ (i,j): 1 \le i < j \le n\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$. Moreover, we choose $\intervals$ to be a family of time intervals $\mathcal{I}_k$ with length $h_k \in \{ 7/T,14/T,21/T,28/T \}$. Hence, the intervals in $\intervals$ have length either $7$, $14$, $21$ or $28$ days (i.e., $1$, $2$, $3$ or $4$ weeks). For each length $h_k$, we include all intervals that start at days $t = 1 + 7(j-1)$ and $t = 4 + 7(j-1)$ for $j=1,2,\ldots$ A graphical presentation of the family $\intervals$ for $T = 139$ (as in the application) is given in Figure \ref{fig:intervals}. All our simulation experiments are based on $R=5000$ simulation runs. 
 
 
 \begin{figure}[t!]
