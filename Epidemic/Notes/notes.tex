@@ -379,7 +379,7 @@ $T = 100$ & 0.824 & 0.910 & 0.903 & 0.812 & 0.893 & 0.890 & 0.738 & 0.847 & 0.85
 \end{table}
 
 
-The results for Scenario A (see Figure \ref{fig:lambda_fcts_height}) are presented in Table \ref{tab:sim:power:1} and those for Scenario B (see Figure \ref{fig:lambda_fcts_shift}) in Table \ref{tab:sim:power:2}. As can be seen, the test has substantial power in all the considered simulation settings. It is more powerful in Scenario B than in Scenario A, which is most presumably due to the fact that the differences $|\lambda_1(u) - \lambda(u)|$ are much larger in Scenario A. Moreover, it is less powerful for larger numbers of time series $n$, which reflects the fact that the test problem gets more high-dimensional and thus more complex as $n$ increases. As one would expect, the power numbers become larger as the time series length $T$ and the significance level $\alpha$ increase. Only in Scenario B for $T=250$ and $T=500$, the power numbers drop down a bit as $\alpha$ gets larger. This reverse dependance can be explained by the way we calculate power: we exclude simulation runs where the test spuriously detects differences between the trends $\lambda_i$ for $i > 1$. The number of spurious findings increases as we make the significance level $\alpha$ larger, which presumably causes the slight drop in power.
+The results for Scenario A (see Figure \ref{fig:lambda_fcts_height}) are presented in Table \ref{tab:sim:power:1} and those for Scenario B (see Figure \ref{fig:lambda_fcts_shift}) in Table \ref{tab:sim:power:2}. As can be seen, the test has substantial power in all the considered simulation settings. It is more powerful in Scenario B than in Scenario A, which is most presumably due to the fact that the differences $|\lambda_1(u) - \lambda(u)|$ are much larger in Scenario A. Moreover, it is less powerful for larger numbers of time series $n$, which reflects the fact that the test problem gets more high-dimensional and thus more complex as $n$ increases. As one would expect, the power numbers become larger as the time series length $T$ and the significance level $\alpha$ increase. Only in Scenario B for $T=250$ and $T=500$, the power numbers drop down a bit as $\alpha$ gets larger. This reverse dependance can be explained by the way we calculate power: we exclude simulation runs where the test spuriously detects differences between the trends in countries $i$ and $j$ with $i, j \neq 1$. The number of spurious findings increases as we make the significance level $\alpha$ larger, which presumably causes the slight drop in power.
 
 
 \subsection{Analysis of COVID-19 data}\label{subsec:app}
@@ -824,7 +824,7 @@ In what follows, we carry out some robustness checks to assess how sensitive our
 
 \begin{table}[b!]
 \footnotesize{
-\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 10$.}\label{s:tab:sim:size:1}
+\caption{Size of the test for different values of $n$ and $T$ for $\sigma = 10$.}\label{s:tab:sim:size:1}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
@@ -843,7 +843,7 @@ In what follows, we carry out some robustness checks to assess how sensitive our
 
 \begin{table}[b!]
 \footnotesize{
-\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 20$.}\label{s:tab:sim:size:2}
+\caption{Size of the test for different values of $n$ and $T$ for $\sigma = 20$.}\label{s:tab:sim:size:2}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
@@ -861,60 +861,60 @@ $T = 100$ & 0.011 & 0.050 & 0.094 & 0.010 & 0.047 & 0.092 & 0.009 & 0.034 & 0.07
 \end{table}
 
 
-We next repeat the simulation exercises of Section \ref{subsec:sim} with the different mean function. Specifically, we take the following function:
-\[ \lambda(u) = 5000 \exp\Big(-\frac{(10 u-3)^2}{2}\Big) + 500. \]
-The results for different values of the overdispersion parameter $\sigma$ are presented in Tables \ref{s:tab:sim:size:3},  \ref{s:tab:sim:size:4} and \ref{s:tab:sim:size:5}. As can be seen, our test appears to be barely influenced by the choice of different mean function.
-
-
-
-\begin{table}[t!]
-\footnotesize{
-\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$ for different mean function and $\sigma = 10$.}\label{s:tab:sim:size:3}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-\toprule
- & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
- & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-\cmidrule[0.4pt]{1-10}
-\bottomrule
-\end{tabularx}}
-\end{table}
-
-\begin{table}[t!]
-\footnotesize{
-\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$ for different mean function and $\sigma = 15$.}\label{s:tab:sim:size:4}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-\toprule
- & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
- & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-\cmidrule[0.4pt]{1-10}
-\bottomrule
-\end{tabularx}}
-\end{table}
-
-
-\begin{table}[t!]
-\footnotesize{
-\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$ for different mean function and $\sigma = 20$.}\label{s:tab:sim:size:5}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-\toprule
- & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
- & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-\cmidrule[0.4pt]{1-10}
-\bottomrule
-\end{tabularx}}
-\end{table}
+%We next repeat the simulation exercises of Section \ref{subsec:sim} with the different mean function. Specifically, we take the following function:
+%\[ \lambda(u) = 5000 \exp\Big(-\frac{(10 u-3)^2}{2}\Big) + 500. \]
+%The results for different values of the overdispersion parameter $\sigma$ are presented in Tables \ref{s:tab:sim:size:3},  \ref{s:tab:sim:size:4} and \ref{s:tab:sim:size:5}. As can be seen, our test appears to be barely influenced by the choice of different mean function.
+%
+%
+%
+%\begin{table}[t!]
+%\footnotesize{
+%\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$ for different mean function and $\sigma = 10$.}\label{s:tab:sim:size:3}
+%\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+%\newcolumntype{Z}{>{\centering\arraybackslash}X}
+%\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+%\toprule
+% & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+%\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+% & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+% & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+%\cmidrule[0.4pt]{1-10}
+%\bottomrule
+%\end{tabularx}}
+%\end{table}
+%
+%\begin{table}[t!]
+%\footnotesize{
+%\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$ for different mean function and $\sigma = 15$.}\label{s:tab:sim:size:4}
+%\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+%\newcolumntype{Z}{>{\centering\arraybackslash}X}
+%\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+%\toprule
+% & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+%\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+% & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+% & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+%\cmidrule[0.4pt]{1-10}
+%\bottomrule
+%\end{tabularx}}
+%\end{table}
+%
+%
+%\begin{table}[t!]
+%\footnotesize{
+%\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$ for different mean function and $\sigma = 20$.}\label{s:tab:sim:size:5}
+%\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+%\newcolumntype{Z}{>{\centering\arraybackslash}X}
+%\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+%\toprule
+% & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+%\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+% & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+% & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+%\cmidrule[0.4pt]{1-10}
+%\bottomrule
+%\end{tabularx}}
+%\end{table}
 
 %Furthermore, we repeat the simulation exercise with drawing $X_{it}$ from the iid normal distribution with mean $\lambda\left(\frac{t}{T}\right)$ and variance $\sigma^2 \lambda\left(\frac{t}{T}\right)$. The mean function $\lambda$ is taken to be the same as in first part of the simulation study in Section \ref{subsec:sim}: $ \lambda(u) = 5000 \exp\Big(-\frac{(10 u-3)^2}{2}\Big) + 1000$. The results are presented in Tables \ref{s:tab:sim:size:6}, \ref{s:tab:sim:size:7} and \ref{s:tab:sim:size:8}.
 %
@@ -968,12 +968,12 @@ The results for different values of the overdispersion parameter $\sigma$ are pr
 %\end{tabularx}}
 %\end{table}
 
-Next, we repeat the power simulations from Section \ref{subsec:sim} for different values of the overdispersion parameter $\sigma$ for both simulation scenarios considered in \ref{subsec:sim}. The results of the power simulations for $\sigma = 10$ and $\sigma = 20$ for the first setting, where two mean functions are only different by the height of their peak, are presented in Tables \ref{s:tab:sim:power:1} and \ref{s:tab:sim:power:2} respectively. The results of the power simulations for $\sigma = 10$ and $\sigma = 20$ for the second setting, where two mean functions have the same heights of the peak but reach their respective peak at different points in time, are presented in Tables \ref{s:tab:sim:power:3} and \ref{s:tab:sim:power:4} respectively. As can be seen, our test is much more powerful for the smaller values of the $\sigma$. This is what one would expect, because higher values of $\sigma$ means that the noise is getting stronger compared to the trend function and the problem of correctly determining the intervals where the mean functions differ become much more complicated. However, even in the presence of the strong noise (in case of $\sigma = 20$), we are able to correctly determine that the first mean function is different from the others but all of the others are the same in more than half of the cases for sufficiently large sample size and small number of time series.
+Next, we repeat the power simulations from Section \ref{subsec:sim} for different values of the overdispersion parameter $\sigma$ for both simulation scenarios considered in \ref{subsec:sim}. The results of the power simulations for $\sigma = 10$ and $\sigma = 20$ for Scenario A, where two mean functions differ by the heights of their peak, are presented in Tables \ref{s:tab:sim:power:1} and \ref{s:tab:sim:power:2} respectively. The results of the power simulations for $\sigma = 10$ and $\sigma = 20$ for Scenario B, where two mean functions have the same heights of the peak but reach their respective peaks at different points in time, are presented in Tables \ref{s:tab:sim:power:3} and \ref{s:tab:sim:power:4} respectively. As can be seen, our test is much more powerful for the smaller values of the $\sigma$. This is what one would expect, because higher values of $\sigma$ means that the noise is getting stronger compared to the trend function and the problem of correctly determining the intervals where the mean functions differ become much more complicated. However, even in the presence of the strong noise (in case of $\sigma = 20$), we are able to correctly determine that the first mean function is different from the others but all of the others are the same in more than half of the cases for sufficiently large sample size and small number of time series.
 
 
 \begin{table}[t!]
 \footnotesize{
-\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$ for the first simulation scenario where the mean functions differ by the heights of the peak with $\sigma = 10$.}\label{s:tab:sim:power:1}
+\caption{Power of the test for different values of $n$ and $T$ in Scenario A for $\sigma = 10$.}\label{s:tab:sim:power:1}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
@@ -994,7 +994,7 @@ $T = 100$ & 0.836 & 0.915 & 0.911 & 0.833 & 0.903 & 0.898 & 0.777 & 0.874 & 0.88
 
 \begin{table}[t!]
 \footnotesize{
-\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$ for the first simulation scenario where the mean functions differ by the heights of the peak with $\sigma = 20$.}\label{s:tab:sim:power:2}
+\caption{Power of the test for different values of $n$ and $T$ in Scenario A for $\sigma = 20$.}\label{s:tab:sim:power:2}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
@@ -1014,7 +1014,7 @@ $T = 100$ & 0.144 & 0.275 & 0.352 & 0.115 & 0.231 & 0.304 & 0.048 & 0.120 & 0.16
 
 \begin{table}[t!]
 \footnotesize{
-\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$ for the second simulation scenario where the mean functions differ by the location of the peak with $\sigma = 10$.}\label{s:tab:sim:power:3}
+\caption{Power of the test for different values of $n$ and $T$ in Scenario B for $\sigma = 10$.}\label{s:tab:sim:power:3}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
@@ -1035,7 +1035,7 @@ $T = 100$ & 0.991 & 0.973 & 0.946 & 0.994 & 0.970 & 0.935 & 0.994 & 0.971 & 0.94
 
 \begin{table}[t!]
 \footnotesize{
-\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$ for the second simulation scenario where the mean functions differ by the locations of the peak with $\sigma = 20$.}\label{s:tab:sim:power:4}
+\caption{Power of the test for different values of $n$ and $T$ in Scenario B for $\sigma = 20$.}\label{s:tab:sim:power:4}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 

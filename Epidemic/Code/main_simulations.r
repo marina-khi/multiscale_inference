@@ -96,15 +96,15 @@ number_of_cols <- length(n_ts_vec) * length(alpha_vec) #Needed for the output
 #Here are the plots of these functions:
 
 lambda_vec_1 <- lambda_fct((1:100) / 100, c = 1000, height = 6000, position = 10)
-lambda_vec_2 <- lambda_fct((1:100) / 100, c = 1000, height = 5000, position = 10)
+lambda_vec   <- lambda_fct((1:100) / 100, c = 1000, height = 5000, position = 10)
 
 pdf(paste0("plots/lambda_fcts_height.pdf"), width=5, height=4, paper="special")
 par(mar = c(3, 2, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
 par(mgp = c(3, 0.5, 0))
-plot((1:100) / 100, lambda_vec_1,  ylim = c(0, max(lambda_vec_1, lambda_vec_2) + 100),
+plot((1:100) / 100, lambda_vec_1,  ylim = c(0, max(lambda_vec_1, lambda_vec) + 100),
      xlab="", ylab = "", type = "l")
-lines((1:100) / 100, lambda_vec_2, type = "l", col = "red")
+lines((1:100) / 100, lambda_vec, type = "l", col = "red")
 title(main = expression(Plot ~ of ~ the ~ "functions" ~ lambda[1] ~ and ~ lambda), line = 1)
 title(xlab="u", line=1.5)
 legend("topright", inset = 0.02, legend=c(expression(lambda[1](u) ~" "), expression(lambda(u) ~" ")),
@@ -112,8 +112,8 @@ legend("topright", inset = 0.02, legend=c(expression(lambda[1](u) ~" "), express
 dev.off()
 
 #However, you can change the function to whatever you like.
-#In order to do this, change the definition of lambda_vec_1 and lambda_vec_2 further in the code.
-#Specifically, you will need to redefine lambda_vec_1 and lambda_vec_2 to be vectors
+#In order to do this, change the definition of lambda_vec_1 and lambda_vec further in the code.
+#Specifically, you will need to redefine lambda_vec_1 and lambda_vec to be vectors
 #of length t_len with the values that your preferred functions take at time points 1/t_len, 2/t_len, ..., 1.
 
 
@@ -126,11 +126,11 @@ for (sigma in sigma_vec){
     for (t_len in t_len_vec){
       #Here you can change the functions for the power calculations
       lambda_vec_1 <- lambda_fct((1:t_len) / t_len, c = 1000, height = 6000, position = 10)
-      lambda_vec_2 <- lambda_fct((1:t_len) / t_len, c = 1000, height = 5000, position = 10)
+      lambda_vec   <- lambda_fct((1:t_len) / t_len, c = 1000, height = 5000, position = 10)
 
       set.seed(321)
       power <- calculate_power(t_len = t_len, n_ts = n_ts, alpha_vec = alpha_vec,
-                               lambda_vec_1 = lambda_vec_1, lambda_vec_2 = lambda_vec_2,
+                               lambda_vec_1 = lambda_vec_1, lambda_vec_2 = lambda_vec,
                                sigma = sigma, n_sim = n_sim, sim_runs = sim_runs)
       power_matrix[i, (k * length(alpha_vec) - (length(alpha_vec) - 1)):(k * length(alpha_vec))] <- power
       i <- i + 1
@@ -167,15 +167,15 @@ number_of_cols <- length(n_ts_vec) * length(alpha_vec) #Needed for the output
 #Here are the plots of these functions:
 
 lambda_vec_1 <- lambda_fct((1:100) / 100, c = 1000, height = 5000, position = 9)
-lambda_vec_2 <- lambda_fct((1:100) / 100, c = 1000, height = 5000, position = 10)
+lambda_vec   <- lambda_fct((1:100) / 100, c = 1000, height = 5000, position = 10)
 
 pdf(paste0("plots/lambda_fcts_shift.pdf"), width=5, height=4, paper="special")
 par(mar = c(3, 2, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
 par(mgp = c(3, 0.5, 0))
-plot((1:100) / 100, lambda_vec_1,  ylim = c(0, max(lambda_vec_1, lambda_vec_2) + 100),
+plot((1:100) / 100, lambda_vec_1,  ylim = c(0, max(lambda_vec_1, lambda_vec) + 100),
      xlab="", ylab = "", type = "l")
-lines((1:100) / 100, lambda_vec_2, type = "l", col = "red")
+lines((1:100) / 100, lambda_vec, type = "l", col = "red")
 title(main = expression(Plot ~ of ~ the ~ "functions" ~ lambda[1] ~ and ~ lambda), line = 1)
 title(xlab="u", line=1.5)
 legend("topright", inset = 0.02, legend=c(expression(lambda[1](u) ~" "), expression(lambda(u) ~" ")),
@@ -184,8 +184,8 @@ dev.off()
 
 
 #However, you can change the function to whatever you like.
-#In order to do this, change the definition of lambda_vec_1 and lambda_vec_2 further in the code.
-#Specifically, you will need to redefine lambda_vec_1 and lambda_vec_2 to be vectors
+#In order to do this, change the definition of lambda_vec_1 and lambda_vec further in the code.
+#Specifically, you will need to redefine lambda_vec_1 and lambda_vec to be vectors
 #of length t_len with the values that your preferred functions take at time points 1/t_len, 2/t_len, ..., 1.
 
 
@@ -199,11 +199,11 @@ for (sigma in sigma_vec){
     for (t_len in t_len_vec){
       #Here you can change the functions for the power calculations
       lambda_vec_1 <- lambda_fct((1:t_len) / t_len, c = 1000, height = 5000, position = 9)
-      lambda_vec_2 <- lambda_fct((1:t_len) / t_len, c = 1000, height = 5000, position = 10)
+      lambda_vec   <- lambda_fct((1:t_len) / t_len, c = 1000, height = 5000, position = 10)
       
       set.seed(321) # This is for calculating power for different specifications on comparable datasets
       power <- calculate_power(t_len = t_len, n_ts = n_ts, alpha_vec = alpha_vec,
-                               lambda_vec_1 = lambda_vec_1, lambda_vec_2 = lambda_vec_2,
+                               lambda_vec_1 = lambda_vec_1, lambda_vec_2 = lambda_vec,
                                sigma = sigma, n_sim = n_sim, sim_runs = sim_runs)
       power_matrix2[i, (k * length(alpha_vec) - (length(alpha_vec) - 1)):(k * length(alpha_vec))] <- power
       i <- i + 1

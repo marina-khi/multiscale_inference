@@ -81,6 +81,7 @@ for (country in countries) {
 }
 
 #Cleaning the data: there are weird cases in the dataset when the number of new cases is negative! 
+sum(covid_mat < 0)
 covid_mat[covid_mat < 0] <- 0
 
 #We construct the grid (family of intervals) for our test statistics
