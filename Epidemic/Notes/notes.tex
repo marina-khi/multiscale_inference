@@ -27,6 +27,7 @@
 \begin{document}
 
 
+
 \heading{Simultaneous statistical inference}{for epidemic trends}
 %Simultaneous inference on many epidemic trends -- How does the Covid-19 virus spread in different countries? 
 
@@ -44,12 +45,13 @@
 \noindent The COVID-19 pandemic is one of the most pressing issues at present. A question which is particularly important for governments and policy makers is the following: Does the virus spread in the same way in different countries? Or are there significant differences in the development of the epidemic? In this paper, we devise new inference methods that allow to detect differences in the development of the COVID-19 epidemic across countries in a statistically rigorous way. In our empirical study, we use the methods to compare the outbreak patterns of the epidemic in a number of European countries.
 \end{abstract}
 
-
 \renewcommand{\baselinestretch}{1.2}\normalsize
 
 \noindent \textbf{Key words:} simultaneous hypothesis testing; multiscale test; time trend; panel data; COVID-19.
 
 \noindent \textbf{JEL classifications:} C12; C23; C54.
+
+%\noindent \textbf{AMS 2010 subject classifications:} 62E20; 62G10; 62G15; 62G20.
 
 
 
@@ -63,10 +65,10 @@ Let $\X_{it}$ be the number of new infections on day $t$ in country $i$ and supp
 \begin{equation}\label{eq:model-intro}
 \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + u_{it} 
 \end{equation}
-for $1 \le t \le T$, where $u_{it} = \X_{it} - \ex[\X_{it}]$ with $\ex[u_{it}] = 0$ and $\var(u_{it}) = \lambda_i(t/T)$. As usual in nonparametric regression \citep[cp.][]{Robinson1989}, we let the regression function $\lambda_i$ in model \eqref{eq:model-intro} depend on rescaled time $t/T$ rather than on real time $t$. Hence, $\lambda_i: [0,1] \rightarrow \reals$ can be regarded as a function on the unit interval, which allows us to estimate it by techniques from nonparametric regression. Since $\lambda_i$ is a function of rescaled time $t/T$, the variables $\X_{it}$ in model \eqref{eq:model-intro} depend on the time series length $T$ in general, that is, $\X_{it} = \X_{it,T}$. To keep the notation simple, we however suppress this dependence throughout the paper. In Section \ref{sec:model}, we introduce the model setting in detail which underlies our analysis. As we will see there, it is a generalized version of the Poisson model \eqref{eq:model-intro}.
+for $1 \le t \le T$, where $u_{it} = \X_{it} - \ex[\X_{it}]$ with $\ex[u_{it}] = 0$ and $\var(u_{it}) = \lambda_i(t/T)$. As usual in nonparametric regression \citep[cp.][]{Robinson1989}, we let the regression function $\lambda_i$ in model \eqref{eq:model-intro} depend on rescaled time $t/T$ rather than on real time $t$. Hence, $\lambda_i: [0,1] \rightarrow \reals$ can be regarded as a function on the unit interval, which allows us to estimate it by standard techniques from nonparametric regression. Since $\lambda_i$ is a function of rescaled time $t/T$, the variables $\X_{it}$ in model \eqref{eq:model-intro} depend on the time series length $T$ in general, that is, $\X_{it} = \X_{it,T}$. To keep the notation simple, we however suppress this dependence throughout the paper. In Section \ref{sec:model}, we introduce the model setting in detail which underlies our analysis. As we will see there, it is a generalized version of the Poisson model \eqref{eq:model-intro}.
 
 
-In model \eqref{eq:model-intro}, the time trend of new COVID-19 infections in country $i$ is described by the intensity function $\lambda_i$ of the underlying Poisson distribution. Hence, the question whether the time trends are comparable across countries amounts to the question whether the intensity functions $\lambda_i$ have the same shape across countries $i$. In this paper, we construct a multiscale test which allows to \textit{identify} and \textit{locate} the differences between the functions $\lambda_i$. More specifically, let $\intervals = \{ \mathcal{I}_k \subseteq[0,1] : k = 1,\ldots,K \}$ be a family of (rescaled) time intervals $\mathcal{I}_k$ and let $H_0^{(ijk)}$ be the hypothesis that the functions $\lambda_i$ and $\lambda_j$ are the same on the interval $\mathcal{I}_k$, that is, 
+In model \eqref{eq:model-intro}, the time trend of new COVID-19 infections in country $i$ is described by the intensity function $\lambda_i$ of the underlying Poisson distribution. Hence, the question whether the time trends are comparable across countries amounts to the question whether the intensity functions $\lambda_i$ have the same shape across countries $i$. In this paper, we construct a multiscale test which allows to \textit{identify} and \textit{locate} the differences between the functions $\lambda_i$. More specifically, let $\intervals = \{ \mathcal{I}_k \subseteq[0,1] : 1 \le k \le K \}$ be a family of (rescaled) time intervals $\mathcal{I}_k$ and let $H_0^{(ijk)}$ be the hypothesis that the functions $\lambda_i$ and $\lambda_j$ are the same on the interval $\mathcal{I}_k$, that is, 
 \[ H_0^{(ijk)}: \lambda_i(w) = \lambda_j(w) \text{ for all } w \in \mathcal{I}_k. \]
 We design a method to test the hypothesis $H_0^{(ijk)}$ \textit{simultaneously} for all pairs of countries $i$ and $j$ under consideration and for all intervals $\mathcal{I}_k$ in the family $\intervals$. The main theoretical result of the paper shows that the method controls the familywise error rate, that is, the probability of wrongly rejecting at least one null hypothesis $H_0^{(ijk)}$. As we will see, this allows us to make simultaneous confidence statements of the following form for a given significance level $\alpha \in (0,1)$: 
 \begin{center}
@@ -77,7 +79,7 @@ We design a method to test the hypothesis $H_0^{(ijk)}$ \textit{simultaneously} 
 Hence, the method allows us to make simultaneous confidence statements (a) about which time trend functions differ from each other and (b) about where, that is, in which time intervals $\mathcal{I}_{k}$ they differ. 
 
 
-Even though our multiscale test is motivated by the current COVID-19 crisis, its applicability is by no means restricted to this specific event. It is a general method to compare nonparametric trends in epidemiological (count) data. It thus contributes to the literature on statistical tests for equality of nonparametric regression and trend curves. Examples include the tests of \cite{HaerdleMarron1990}, \cite{Hall1990}, \cite{King1991}, \cite{Delgado1993}, \cite{Kulasekera1995}, \cite{YoungBowman1995}, \cite{MunkDette1998}, \cite{Lavergne2001}, \cite{NeumeyerDette2003} and \cite{Pardo-Fernandez2007}. More recent approaches were developed in \cite{DegrasWu2012}, \cite{Zhang2012}, \cite{Hidalgo2014} and \cite{ChenWu2018}. Compared to existing methods, our test has the following crucial advantage: it is much more informative. Most existing procedures allow to test whether the regression or trend curves under consideration are all the same or not. However, they do not allow to infer which curves are different and where (that is, in which parts of the support) they differ. Our multiscale approach, in contrast, conveys this information. Indeed, it even allows to make rigorous confidence statements about which curves $\lambda_i$ are different and where they differ. To the best of our knowledge, there is no other method available in the literature which allows to make such simultaneous confidence statements. As far as we know, the only other multiscale test for comparing trend curves has been developed in \cite{Park2009}. However, their analysis is mainly methodological and not backed up by a general theory. In particular, theory is only available for the special case $n = 2$. Moreover, the theoretical results are only valid under very severe restrictions on the family of time intervals $\mathcal{F}$. 
+Even though our multiscale test is motivated by the current COVID-19 crisis, its applicability is by no means restricted to this specific event. It is a general method to compare nonparametric trends in epidemiological (count) data. It thus contributes to the literature on statistical tests for equality of nonparametric regression and trend curves. Examples of such tests can be found in \cite{HaerdleMarron1990}, \cite{Hall1990}, \cite{King1991}, \cite{Delgado1993}, \cite{Kulasekera1995}, \cite{YoungBowman1995}, \cite{MunkDette1998}, \cite{Lavergne2001}, \cite{NeumeyerDette2003} and \cite{Pardo-Fernandez2007}. More recent approaches were developed in \cite{DegrasWu2012}, \cite{Zhang2012}, \cite{Hidalgo2014} and \cite{ChenWu2018}. Compared to existing methods, our test has the following crucial advantage: it is much more informative. Most existing procedures allow to test \textit{whether} the regression or trend curves under consideration are all the same or not. However, they do not allow to infer \textit{which} curves are different and \textit{where} (that is, in which parts of the support) they differ. Our multiscale approach, in contrast, conveys this information. Indeed, it even allows to make rigorous confidence statements about which curves $\lambda_i$ are different and where they differ. To the best of our knowledge, there is no other method available in the literature which allows to make such simultaneous confidence statements. As far as we know, the only other multiscale test for comparing trend curves has been developed in \cite{Park2009}. However, their analysis is mainly methodological and not backed up by a general theory. In particular, theory is only available for the special case $n = 2$. Moreover, the theoretical results are only valid under very severe restrictions on the family of time intervals $\mathcal{F}$. 
 
 
 The paper is structured as follows. As already mentioned above, Section \ref{sec:model} details the model setting which underlies our analysis. The multiscale test is developed step by step in Section \ref{sec:test}. To keep the presentation as clear as possible, the technical details are deferred to the Appendix and the Supplementary Material. Section \ref{sec:empirics} contains the empirical part of the paper. There, we run some simulation experiments to demonstrate that the multiscale test has the formal properties predicted by the theory. Moreover, we use the test to compare the outbreak patterns of the COVID-19 epidemic in a number of European countries. 
@@ -93,50 +95,50 @@ As already discussed in the Introduction, the assumption that $\X_{it} \sim P_{\
 \begin{equation}\label{eq:model-Poisson}
 \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + u_{it} \quad \text{with} \quad u_{it} = \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, 
 \end{equation}
-where $\eta_{it}$ has zero mean and unit variance. In this model, both the mean and the noise variance are described by the same function $\lambda_i$. In empirical applications, however, the noise variance often tends to be much larger than the mean. To deal with this issue, which has been known for a long time in the literature \citep{Cox1983} and which is commonly called overdispersion, so-called quasi-Poisson models \citep{McCullagh1989, Efron1986} are frequently used. In our context, a quasi-Poisson model of $\X_{it}$ has the form 
+where $\eta_{it}$ has zero mean and unit variance. In this model, both the mean and the variance are described by the same function $\lambda_i$. In empirical applications, however, the variance often tends to be much larger than the mean. To deal with this issue, which has been known for a long time in the literature \citep{Cox1983} and which is commonly called overdispersion, so-called quasi-Poisson models \citep{McCullagh1989, Efron1986} are frequently used. In our context, a quasi-Poisson model of $\X_{it}$ has the form 
 \begin{equation}\label{eq:model}
 \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + \varepsilon_{it} \quad \text{with} \quad \varepsilon_{it} = \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, 
 \end{equation}
-where $\sigma$ is a scaling factor that allows the noise variance to be a multiple of the mean function $\lambda_i$. In what follows, we assume that the observed data $\X_{it}$ are produced by model \eqref{eq:model}, where the noise residuals $\eta_{it}$ have zero mean and unit variance but we do not impose any further distributional assumptions on them.
+where $\sigma$ is a scaling factor that allows the variance to be a multiple of the mean function $\lambda_i$. In what follows, we assume that the observed data $\X_{it}$ are produced by model \eqref{eq:model}, where the noise residuals $\eta_{it}$ have zero mean and unit variance but we do not impose any further distributional assumptions on them.
 
 
-Poisson and quasi-Poisson models are often used in the literature on epidemic modelling. \cite{De2020}, for example, assume that the observed COVID-19 case count in country $i$ follows a Poisson distribution with parameter $\lambda_i$ being a linear function of some covariate $X_i$, that is, $\lambda_i = \beta X_i$. \cite{Pellis2020} consider a quasi-Poisson model for the number of new COVID-19 cases. They in particular examine (a) a version of the model where the mean function is parametrically restricted to be exponentially growing with a constant growth rate and (b) a version where the mean function is modelled nonparametrically by splines. \cite{Tobias2020} analyze data on the accumulated number of cases using quasi-Poisson regression, where the mean function is modelled parametrically as a piecewise linear curve with known change points.
+Poisson and quasi-Poisson models are often used in the literature on epidemic modelling. \cite{De2020}, for example, assume that the observed COVID-19 case count in country $i$ follows a Poisson distribution with parameter $\lambda_i$ being a linear function of some covariate $Z_i$, that is, $\lambda_i = \beta Z_i$. \cite{Pellis2020} consider a quasi-Poisson model for the number of new COVID-19 cases. They in particular examine (a) a version of the model where the mean function is parametrically restricted to be exponentially growing with a constant growth rate and (b) a version where the mean function is modelled nonparametrically by splines. \cite{Tobias2020} analyze data on the accumulated number of cases using quasi-Poisson regression, where the mean function is modelled parametrically as a piecewise linear curve with known change points.
 %Even though these papers consider Poisson and quasi-Poisson models similar to ours, these models are used to analyze different aspects of the COVID-19 pandemic than in our paper.  
  
 
 In order to derive our theoretical results, we impose the following regularity conditions on model \eqref{eq:model}:
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.0cm]
 \item \label{C2} The functions $\lambda_i$ are uniformly Lipschitz continuous, that is, $|\lambda_i(u) - \lambda_i(v)| \le L |u-v|$ for all $u, v \in [0,1]$, where the constant $L$ does not depend on $i$. Moreover, they are uniformly bounded away from zero and infinity, that is, there exist constants $\lambda_{\min}$ and $\lambda_{\max}$ with $0 \le \lambda_{\min} \le \min_{w \in [0,1]} \lambda_i(w) \le \max_{w \in [0,1]} \lambda_i(w) \le \lambda_{\max} < \infty$ for all $i$. 
-\item \label{C1} The random variables $\eta_{it}$ are independent both across $i$ and $t$. Moreover, for any $i$ and $t$, it holds that $\ex[\eta_{it}] = 0$, $\ex[\eta_{it}^2] = 1$ and $\ex[\eta_{it}^\theta] \le C_\theta < \infty$ for some $\theta > 4$. 
+\item \label{C1} The random variables $\eta_{it}$ are independent both across $i$ and $t$. Moreover, for any $i$ and $t$, it holds that $\ex[\eta_{it}] = 0$, $\ex[\eta_{it}^2] = 1$ and $\ex[|\eta_{it}|^\theta] \le C_\theta < \infty$ for some $\theta > 4$. 
 \end{enumerate}
 \pagebreak
-\ref{C2} imposes some standard-type regularity conditions on the functions $\lambda_i$. In particular, the functions are assumed to be smooth, bounded from above and bounded away from zero. The latter restriction is required because the error variance in model \eqref{eq:model} equals zero if $\lambda_i$ is equal to zero. Since we normalize our test statistics by an estimate of the error variance as detailed in Section \ref{sec:test}, we need this variance and thus the function $\lambda_i$ to be bounded away from zero. \ref{C1} assumes the noise terms $\eta_{it}$ to fulfill some mild moment conditions and to be independent both across countries $i$ and time $t$. In the current COVID-19 crisis, independence across countries $i$ seems to be a fairly reasonable assumption due to severe travel restrictions, the closure of borders, etc. Independence across time $t$ is more debatable, but it is by no means unreasonable in our model framework: The time series process $\mathcal{\X}_i = \{X_{it}: 1 \le t \le T\}$ produced by model \eqref{eq:model} is nonstationary for each $i$. Specifically, both the mean $\ex[X_{it}] = \lambda_i(t/T)$ and the variance $\var(X_{it}) = \sigma^2 \lambda_i(t/T)$ are time-varying. A well-known fact in the time series literature is that nonstationarities such as a time-varying mean may produce spurious sample autocorrelations \citep[cp.\ e.g.][]{MikoschStarica2004, Fryzlewicz2008}. Hence, the observed persistence of a time series (captured by the sample autocorrelation function) may be due to nonstationarities rather than real autocorrelations. This insight has led researchers to prefer simple nonstationary models over intricate stationary time series models in some application areas such as finance \citep[cp.][]{MikoschStarica2000, MikoschStarica2004, Fryzlewicz2006, HafnerLinton2010}. In a similar vein, our model accounts for the persistence in the observed time series $\mathcal{\X}_i$ via nonstationarities rather than autocorrelations in the error terms. 
+\ref{C2} imposes some standard-type regularity conditions on the functions $\lambda_i$. In particular, the functions are assumed to be smooth, bounded from above and bounded away from zero. The latter restriction is required because the noise variance in model \eqref{eq:model} equals zero if $\lambda_i$ is equal to zero. Since we normalize our test statistics by an estimate of the noise variance as detailed in Section \ref{sec:test}, we need this variance and thus the functions $\lambda_i$ to be bounded away from zero. \ref{C1} assumes the noise terms $\eta_{it}$ to fulfill some mild moment conditions and to be independent both across countries $i$ and time $t$. In the current COVID-19 crisis, independence across countries $i$ seems to be a fairly reasonable assumption due to severe travel restrictions, the closure of borders, etc. Independence across time $t$ is more debatable, but it is by no means unreasonable in our model framework: The time series process $\mathcal{\X}_i = \{X_{it}: 1 \le t \le T\}$ produced by model \eqref{eq:model} is nonstationary for each $i$. Specifically, both the mean $\ex[X_{it}] = \lambda_i(t/T)$ and the variance $\var(X_{it}) = \sigma^2 \lambda_i(t/T)$ are time-varying. A well-known fact in the time series literature is that nonstationarities such as a time-varying mean may produce spurious sample autocorrelations \citep[cp.\ e.g.][]{MikoschStarica2004, Fryzlewicz2008}. Hence, the observed persistence of a time series (captured by the sample autocorrelation function) may be due to nonstationarities rather than real autocorrelations. This insight has led researchers to prefer simple nonstationary models over intricate stationary time series models in some application areas such as finance \citep[cp.][]{MikoschStarica2000, MikoschStarica2004, Fryzlewicz2006, HafnerLinton2010}. In a similar vein, our model accounts for the persistence in the observed time series $\mathcal{\X}_i$ via nonstationarities rather than autocorrelations in the error terms. 
 
  
 
 \section{The multiscale test}\label{sec:test}
 
 
-Let $\pairs \subseteq \{ (i,j): 1 \le i < j \le n \}$ be the set of all pairs of countries $(i,j)$ whose trend functions $\lambda_i$ and $\lambda_j$ we want to compare. Moreover, as already introduced above, let $\intervals = \{ \mathcal{I}_k: 1 \le k \le K \}$ be the family of (rescaled) time intervals under consideration. Finally, write $\indexset := \pairs \times \{1,\ldots,K\}$ and let $p := |\indexset|$ be the cardinality of $\indexset$. In this section, we devise a method to test the null hypothesis $H_0^{(ijk)}$ simultaneously for all pairs of countries $(i,j) \in \pairs$ and all time intervals $\mathcal{I}_k \in \intervals$, that is, for all $(i,j,k) \in \indexset$. The value $p = |\indexset|$ is the dimensionality of the simultaneous test problem we are dealing with. It amounts to the number of tests we simultaneously carry out. As shown by our theoretical results in the Appendix, $p$ may be much larger than the time series length $T$, which means that the simultaneous test problem under consideration can be very high-dimensional. 
+Let $\pairs \subseteq \{ (i,j): 1 \le i < j \le n \}$ be the set of all pairs of countries $(i,j)$ whose trend functions $\lambda_i$ and $\lambda_j$ we want to compare. Moreover, as already introduced above, let $\intervals = \{ \mathcal{I}_k: 1 \le k \le K \}$ be the family of (rescaled) time intervals under consideration. Finally, write $\indexset := \pairs \times \{1,\ldots,K\}$ and let $p := |\indexset|$ be the cardinality of $\indexset$. In this section, we devise a method to test the null hypothesis $H_0^{(ijk)}$ simultaneously for all pairs of countries $(i,j) \in \pairs$ and all time intervals $\mathcal{I}_k \in \intervals$, that is, for all $(i,j,k) \in \indexset$. The value $p = |\indexset|$ is the dimensionality of the simultaneous test problem we are dealing with. It amounts to the number of tests that we carry out simultaneously. As shown by our theoretical results in the Appendix, $p$ may be much larger than the time series length $T$, which means that the simultaneous test problem under consideration can be very high-dimensional. 
 
 
 \subsection{Construction of the test statistics}\label{subsec:test:test}
 
 
 A statistic to test the hypothesis $H_0^{(ijk)}$ for a given triple $(i,j,k)$ can be constructed as follows. To start with, we introduce the expression 
-\[ \hat{s}_{ijk,T} = \frac{1}{\sqrt{T}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it} - \X_{jt}), \]
-where $\ind(\cdot)$ denotes the indicator function and $\ind(t/T \in \mathcal{I}_k)$ can be regarded as a rectangular kernel weight. A simple application of the law of large numbers yields that $\hat{s}_{ijk,T}/\sqrt{T} = T^{-1} \sum_{t=1}^T \ind(t/T \in \mathcal{I}_k) \{\lambda_i(t/T) - \lambda_j(t/T)\} + o_p(1)$ for any fixed pair of countries $(i,j)$. Hence, the statistic $\hat{s}_{ijk,T}/\sqrt{T}$ estimates the average distance between the functions $\lambda_i$ and $\lambda_j$ on the interval $\mathcal{I}_k$. Under \ref{C1}, it holds that
+\[ \hat{s}_{ijk,T} = \frac{1}{\sqrt{Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it} - \X_{jt}), \]
+where $h_k$ is the length of the time interval $\mathcal{I}_k$, $\ind(\cdot)$ denotes the indicator function and $\ind(t/T \in \mathcal{I}_k)$ can be regarded as a rectangular kernel weight. A simple application of the law of large numbers yields that $\hat{s}_{ijk,T}/\sqrt{Th_k} = (Th_k)^{-1} \sum_{t=1}^T \ind(t/T \in \mathcal{I}_k) \{\lambda_i(t/T) - \lambda_j(t/T)\} + o_p(1)$ for any fixed pair of countries $(i,j)$. Hence, the statistic $\hat{s}_{ijk,T}/\sqrt{Th_k}$ estimates the average distance between the functions $\lambda_i$ and $\lambda_j$ on the interval $\mathcal{I}_k$. Under \ref{C1}, it holds that
 \begin{align*}
 \nu_{ijk,T}^2 := \var(\hat{s}_{ijk,T}) 
- & = \frac{\sigma^2}{T} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big\{ \lambda_i\Big(\frac{t}{T}\Big) + \lambda_j\Big(\frac{t}{T}\Big) \Big\}. 
+ & = \frac{\sigma^2}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big\{ \lambda_i\Big(\frac{t}{T}\Big) + \lambda_j\Big(\frac{t}{T}\Big) \Big\}. 
 \end{align*}
 In order to normalize the variance of the statistic $\hat{s}_{ijk,T}$, we scale it by an estimator of $\nu_{ijk,T}$. In particular, we estimate $\nu_{ijk,T}^2$ by 
-\[ \hat{\nu}_{ijk,T}^2 = \frac{\hat{\sigma}^2}{T} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \{ \X_{it} + \X_{jt} \}, \]
+\[ \hat{\nu}_{ijk,T}^2 = \frac{\hat{\sigma}^2}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \{ \X_{it} + \X_{jt} \}, \]
 where $\hat{\sigma}^2$ is defined as follows: For each country $i$, let 
 \begin{align*}
 \hat{\sigma}_i^2 = \frac{\sum_{t=2}^T (\X_{it}-\X_{it-1})^2}{2 \sum_{t=1}^T \X_{it}}
 \end{align*}
-and set $\hat{\sigma}^2 = |\countries|^{-1} \sum_{i=\countries} \hat{\sigma}_i^2$ with $\countries = \{ \ell: \ell = i$ or $\ell = j$ for some $(i,j) \in \pairs \}$ denoting the set of countries that are taken into account by our test. The idea behind the estimator $\hat{\sigma}_i^2$ is as follows: Since $\lambda_i$ is Lipschitz continuous,  
+and set $\hat{\sigma}^2 = |\countries|^{-1} \sum_{i \in \countries} \hat{\sigma}_i^2$ with $\countries = \{ \ell: \ell = i$ or $\ell = j$ for some $(i,j) \in \pairs \}$ denoting the set of countries that are taken into account by our test. The idea behind the estimator $\hat{\sigma}_i^2$ is as follows: Since $\lambda_i$ is Lipschitz continuous,  
 \[ \X_{it} - \X_{it-1} = \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} (\eta_{it} - \eta_{it-1}) + r_{it}, \]
 where $|r_{it}| \le C(1+|\eta_{it-1}|)/T$ with a sufficiently large constant $C$. This suggests that $T^{-1} \sum_{t=2}^T (\X_{it} - \X_{it-1})^2 = 2 \sigma^2 \{ T^{-1} \sum_{t=2}^T \lambda_i(t/T) \} + o_p(1)$. Moreover, since $T^{-1} \sum_{t=1}^T \X_{it} = T^{-1} \sum_{t=1}^T \lambda_i(t/T) + o_p(1)$, we expect that $\hat{\sigma}_i^2 = \sigma^2 + o_p(1)$ for any $i$ and thus $\hat{\sigma}^2 = \sigma^2 + o_p(1)$. In Lemma \ref{lemmaS1} of the Supplementary Material, we formally show that $\hat{\sigma}^2$ is a consistent estimator of $\sigma^2$ under our regularity conditions. Normalizing the statistic $\hat{s}_{ijk,T}$ by the estimator $\hat{\nu}_{ijk,T}$ yields the expression 
 \begin{equation}\label{eq:stat}
@@ -166,7 +168,7 @@ where $\indexset_0 \subseteq \indexset$ is the set of triples $(i,j,k)$ for whic
 
 There are different ways to construct critical values $c_{ijk,T}(\alpha)$ that ensure control of the FWER at level $\alpha$. In the traditional approach, the same critical value $c_T(\alpha) = c_{ijk,T}(\alpha)$ is used for all $(i,j,k)$. In this case, controlling the FWER at the level $\alpha$ requires to determine the critical value $c_T(\alpha)$ such that
 \begin{equation}\label{eq:FWER-tilde}
-1 - \pr\Big( \max_{(i,j,k) \in \indexset_0} |\hat{\psi}_{ijk,T}| \le c_T(\alpha) \Big) \le \alpha. 
+\text{FWER}(\alpha) = 1 - \pr\Big( \max_{(i,j,k) \in \indexset_0} |\hat{\psi}_{ijk,T}| \le c_T(\alpha) \Big) \le \alpha. 
 \end{equation}
 This can be achieved by choosing $c_T(\alpha)$ as the $(1-\alpha)$-quantile of the statistic 
 \[ \tilde{\Psi}_T = \max_{(i,j,k) \in \indexset} |\hat{\psi}_{ijk,T}^0|, \]
@@ -187,7 +189,7 @@ where $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \l
 \end{align}
 we need to choose the quantity $q_T(\alpha)$ as the $(1-\alpha)$-quantile of the statistic 
 \[ \hat{\Psi}_T = \max_{(i,j,k) \in \indexset} a_k \big( |\hat{\psi}_{ijk,T}^0| - b_k \big) \]
-in order to ensure control of the FWER at level $\alpha$. Comparing \eqref{eq:FWER-hat} with \eqref{eq:FWER-tilde}, the current approach can be seen to differ from the traditional one in the following respect: the maximum statistic $\tilde{\Psi}_T$ is replaced by the rescaled version $\hat{\Psi}_T$ which re-weights the individual statistics $\hat{\psi}_{ijk,T}$ by the scale-dependent constants $a_k$ and $b_k$. As demonstrated above, this translates into scale-dependent critical values $c_{ijk,T}(\alpha) = c_T(\alpha,h_k)$. 
+in order to ensure control of the FWER at level $\alpha$. Comparing \eqref{eq:FWER-hat} with \eqref{eq:FWER-tilde}, the current approach can be seen to differ from the traditional one in the following respect: the maximum statistic $\tilde{\Psi}_T$ is replaced by the rescaled version $\hat{\Psi}_T$ which re-weights the individual statistics $\hat{\psi}_{ijk,T}^0$ by the scale-dependent constants $a_k$ and $b_k$. As demonstrated above, this translates into scale-dependent critical values $c_{ijk,T}(\alpha) = c_T(\alpha,h_k)$. 
 
 
 Our theory allows us to work with both the traditional choice $c_{ijk,T}(\alpha) = c_T(\alpha)$ and the more modern, scale-dependent choice $c_{ijk,T}(\alpha) = c_T(\alpha,h_k)$. Since the latter choice produces a test approach with better theoretical properties in general \citep[cp.][]{DuembgenSpokoiny2001}, we restrict attention to the critical values $c_T(\alpha,h_k)$ in the sequel. There is, however, one complication we need to deal with: As the quantiles $q_T(\alpha)$ are not known in practice, we cannot compute the critical values $c_T(\alpha,h_k)$ exactly in practice but need to approximate them. This can be achieved as follows: Under appropriate regularity conditions, it can be shown that 
@@ -222,7 +224,7 @@ In Theorem \ref{theo1} of the Appendix, we prove that under appropriate regulari
 where $\indexset_0$ is the set of triples $(i,j,k) \in \indexset$ for which $H_0^{(ijk)}$ holds true. Verbally, \eqref{eq:simconfstat} can be expressed as follows:  
 \begin{equation}\label{eq:confidencestatement1}
 \begin{minipage}[c][1cm][c]{13cm}
-\textit{With (asymptotic) probability at least $1-\alpha$, the null $H_0^{(ijk)}$ is violated for all $(i,j,k) \in \indexset$ for which the test rejects $H_0^{(ijk)}$.} 
+\textit{With (asymptotic) probability at least $1-\alpha$, the null hypothesis $H_0^{(ijk)}$ is violated for all $(i,j,k) \in \indexset$ for which the test rejects $H_0^{(ijk)}$.} 
 \end{minipage}
 \end{equation}
 In other words: 
@@ -231,7 +233,7 @@ In other words:
 \textit{With (asymptotic) probability at least $1-\alpha$, the functions $\lambda_i$ and $\lambda_j$ differ on the interval $\mathcal{I}_k$ for all $(i,j,k) \in \indexset$ for which the test rejects $H_0^{(ijk)}$.} 
 \end{minipage}
 \end{equation}
-Hence, the test allows us to make simultaneous confidence statements (a) about which pairs of countries $(i,j)$ have different intensity functions and (b) about where, that is, in which time intervals $\mathcal{I}_k$ the functions differ.
+Hence, the test allows us to make simultaneous confidence statements (a) about which pairs of countries $(i,j)$ have different trend functions and (b) about where, that is, in which time intervals $\mathcal{I}_k$ the functions differ.
 
 
 \subsection{Implementation of the test in practice}
@@ -241,14 +243,14 @@ For a given significance level $\alpha \in (0,1)$, the test procedure defined in
 \begin{enumerate}[label=\textit{Step \arabic*.}, leftmargin=1.45cm]
 \item Compute the quantile $q_{T,\text{Gauss}}(\alpha)$ by Monte Carlo simulations. Specifically, draw a large number $N$ (say $N=5000$) samples of independent standard normal random variables $\{Z_{it}^{(\ell)} : 1 \le t \le T, \, 1 \le i \le n \}$ for $1 \le \ell \le N$. Compute the value $\Phi_T^{(\ell)}$ of the Gaussian statistic $\Phi_T$ for each sample $\ell$ and calculate the empirical $(1-\alpha)$-quantile $\hat{q}_{T,\text{Gauss}}(\alpha)$ from the values $\{ \Phi_T^{(\ell)}: 1 \le \ell \le N \}$. Use $\hat{q}_{T,\text{Gauss}}(\alpha)$ as an approximation of the quantile $q_{T,\text{Gauss}}(\alpha)$. 
 \item Compute the critical values $c_{T,\text{Gauss}}(\alpha,h_k)$ for $1 \le k \le K$ based on the approximation $\hat{q}_{T,\text{Gauss}}(\alpha)$.
-\item Carry out the test for each $(i,j,k) \in \indexset$ and store the test results in the variables $r_{ijk,T} = \ind( |\hat{\psi}_{ijk,T}| > c_{T,\text{Gauss}}(\alpha,h_k))$ for each $(i,j,k) \in \indexset$, that is, let $r_{ijk,T} = 1$ if the hypothesis $H_0^{(ijk)}$ is rejected and $r_{ijk,T} = 0$ otherwise. 
+\item Carry out the test for each $(i,j,k) \in \indexset$ and store the test results in the variable $r_{ijk,T} = \ind( |\hat{\psi}_{ijk,T}| > c_{T,\text{Gauss}}(\alpha,h_k))$ for each $(i,j,k) \in \indexset$, that is, let $r_{ijk,T} = 1$ if the hypothesis $H_0^{(ijk)}$ is rejected and $r_{ijk,T} = 0$ otherwise. 
 \end{enumerate}
 
 
 To graphically present the test results, we produce a plot for each pair of countries $(i,j) \in \pairs$ that shows the intervals $\mathcal{I}_k$ for which the test rejects the null $H_0^{(ijk)}$, that is, the intervals in the set $\intervals_{\text{reject}}(i,j) = \{ \mathcal{I}_k \in \intervals: r_{ijk,T} = 1 \}$. The plot is designed such that it graphically highlights the subset of intervals $\intervals_{\text{reject}}^{\text{min}}(i,j) = \{ \mathcal{I}_k \in \intervals_{\text{reject}}(i,j):$ there exists no $\mathcal{I}_{k^\prime} \in \intervals_{\text{reject}}(i,j)$ with $\mathcal{I}_{k^\prime} \subset \mathcal{I}_k \}$. The elements of $\intervals_{\text{reject}}^{\text{min}}(i,j)$ are called minimal intervals. By definition, there is no other interval $\mathcal{I}_{k^\prime}$ in $\intervals_{\text{reject}}(i,j)$ which is a proper subset of a minimal interval $\mathcal{I}_k$. Hence, the minimal intervals can be regarded as those intervals in $\intervals_{\text{reject}}(i,j)$ which are most informative about the precise location of the differences between the trends $\lambda_i$ and $\lambda_j$. In Section \ref{sec:empirics}, we use the graphical device just described to present the test results of our empirical application; cp.\ panels (d) in Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.  
 
 
-According to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals in $\intervals_{\text{reject}}(i,j)$: 
+According to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals in $\intervals_{\text{reject}}(i,j)$ for $(i,j) \in \pairs$: 
 \begin{equation}\label{eq:confidencestatement3}
 \begin{minipage}[c][1.75cm][c]{13cm}
 \textit{With (asymptotic) probability at least $1-\alpha$, it holds that for every pair of countries $(i,j) \in \pairs$, the functions $\lambda_i$ and $\lambda_j$ differ on each interval in $\intervals_{\text{reject}}(i,j)$.} 
@@ -257,10 +259,24 @@ According to \eqref{eq:simconfstat}, we can make the following simultaneous conf
 Hence, we can claim with statistical confidence at least $1-\alpha$ that the functions $\lambda_i$ and $\lambda_j$ differ on each time interval which is depicted in the plots of our graphical device. Since $\intervals_{\text{reject}}^{\text{min}}(i,j) \subseteq \intervals_{\text{reject}}(i,j)$ for any $(i,j) \in \pairs$, the confidence statement \eqref{eq:confidencestatement3} trivially remains to hold true when the sets $\intervals_{\text{reject}}(i,j)$ are replaced by $\intervals_{\text{reject}}^{\text{min}}(i,j)$.
 
 
+%To graphically present the test results, we produce a plot for each pair of countries $(i,j) \in \pairs$ which shows the intervals $\mathcal{I}_k$ in the set $\intervals_{\text{reject}}(i,j) = \{ \mathcal{I}_k \in \intervals: r_{ijk,T} = 1 \}$, that is, the intervals $\mathcal{I}_k$ for which the test rejects the null $H_0^{(ijk)}$. We in particular use this graphical device to present the test results of our empirical application in Section \ref{sec:empirics}. According to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals in $\intervals_{\text{reject}}(i,j)$: 
+%\begin{equation}\label{eq:confidencestatement3}
+%\begin{minipage}[c][1.75cm][c]{13cm}
+%\textit{With (asymptotic) probability at least $1-\alpha$, it holds that for every pair of countries $(i,j) \in \pairs$, the functions $\lambda_i$ and $\lambda_j$ differ on each interval in $\intervals_{\text{reject}}(i,j)$.} 
+%\end{minipage}
+%\end{equation}
+%Hence, we can claim with statistical confidence at least $1-\alpha$ that the functions $\lambda_i$ and $\lambda_j$ differ on each time interval $\mathcal{I}_k$ which is shown in the plots of our graphical device.
+%
+%As the sample size grows, the number of intervals in the $\intervals_{\text{reject}}(i, j)$ can also increase rapidly, making graphical depiction of the results of the test not particularly readable. To obtain better visual representation, we propose working with the subset of $\intervals_{\text{reject}}(i, j)$, namely, the subset of minimal intervals which is constructed as follows: As in \cite{Duembgen2002}, we call an interval $\mathcal{I}_{k} \in \intervals_{\text{reject}}(i, j)$ minimal if there is no other interval $\mathcal{I}_{k^\prime} \in \intervals_{\text{reject}}(i, j)$ with $\mathcal{I}_{k^\prime} \subset \mathcal{I}_{k}$. We denote the set of minimal intervals by $\intervals_{\text{reject}}^{\min}(i, j)$. 
+%
+%It is easily seen that as in \eqref{eq:confidencestatement3}, we can claim with statistical confidence at least $1-\alpha$ that the functions $\lambda_i$ and $\lambda_j$ differ on each time interval $\mathcal{I}_k \in \intervals_{\text{reject}}^{\min}(i, j)$. Thus, the simultaneous confidence statement about the set of minimal intervals still remains true while the graphical representation of the results becomes much more understandable. In particular, we use this way of presenting the test results in our application in Section \ref{subsec:app}.
+
+
+
 \section{Empirical application to COVID-19 data}\label{sec:empirics} 
 
 
-We now use our test to analyze the outbreak patterns of the COVID-19 epidemic. We proceed in two steps. In Section \ref{subsec:sim}, we assess the finite sample performance of our test by Monte-Carlo experiments. Specifically, we run a series of experiments which show that the test controls the FWER at level $\alpha$ as predicted by the theory and that it has good power properties. In Section \ref{subsec:app}, we then apply the test to a sample of COVID-19 data from different European countries. Our multiscale test is implemented in the R package \verb|multiscale|, available on GitHub at \textcolor{red}{(insert the link)}.
+We now use our test to analyze the outbreak patterns of the COVID-19 epidemic. We proceed in two steps. In Section \ref{subsec:sim}, we assess the finite sample performance of our test by Monte-Carlo experiments. Specifically, we run a series of experiments which show that the test controls the FWER at level $\alpha$ as predicted by the theory and that it has good power properties. In Section \ref{subsec:app}, we then apply the test to a sample of COVID-19 data from different European countries. Our multiscale test is implemented in the R package \verb|multiscale|, available on GitHub at \texttt{https://github.com/marina-khi/multiscale}.
 
 
 \subsection{Simulation experiments}\label{subsec:sim}
@@ -268,11 +284,10 @@ We now use our test to analyze the outbreak patterns of the COVID-19 epidemic. W
 
 We simulate count data $\mathcal{\X} = \{ X_{it}: 1 \le i \le n, 1 \le t \le T \}$ by drawing the observations $X_{it}$ independently from a negative binomial distribution with mean $\lambda_i(t/T)$ and variance $\sigma^2 \lambda_i(t/T)$. By definition, $X_{it}$ has a negative binomial distribution with para\-meters $q$ and $r$ if $\pr(X_{it} = m) = \Gamma(m+r) / (\Gamma(r) m!) q^r (1-q)^m$ for each $m \in \naturals \cup \{0\}$. Since $\ex[X_{it}] = r (1-q)/q$ and $\var(X_{it}) = r(1-q)/q^2$, we can use the parametrization $q = 1/\sigma^2$ and $r = \lambda_i(t/T) / (\sigma^2 - 1)$ to obtain that $\ex[X_{it}] = \lambda_i(t/T)$ and $\var(X_{it}) = \sigma^2 \lambda_i(t/T)$. With this parametrization, the simulated data follow a nonparametric regression model of the form 
 \[ \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, \]
-where the noise variables $\eta_{it}$ have zero mean and unit variance. The functions $\lambda_i$ are specified below. The overdispersion parameter is set to $\sigma = 15$, which is similar to the estimate $\widehat{\sigma} = 14.44$ obtained in the empirical application of Section \ref{subsec:app}. 
-%Robustness checks with $\sigma=10$ and $\sigma=20$ are provided in the Supplementary Material.
+where the noise variables $\eta_{it}$ have zero mean and unit variance. The functions $\lambda_i$ are specified below. The overdispersion parameter is set to $\sigma = 15$, which is similar to the estimate $\hat{\sigma} = 14.44$ obtained in the empirical application of Section \ref{subsec:app}. Robustness checks with $\sigma=10$ and $\sigma=20$ are provided in the Supplementary Material.
 
 
-We consider different values for $T$ and $n$, in particular, $T \in \{100,250, 500\}$ and $n \in \{5,10,50\}$. Note that in the application, we have $T=137$ and $n=5$. We let $\pairs = \{ (i,j): 1 \le i < j \le n\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$. Moreover, we choose $\intervals$ to be a family of time intervals $\mathcal{I}_k$ with length $h_k \in \{ 7/T,14/T,21/T,28/T \}$. Hence, the intervals in $\intervals$ have length either $7$, $14$, $21$ or $28$ days (i.e., $1$, $2$, $3$ or $4$ weeks). For each length $h_k$, we include all intervals that start at days $t = 1 + 7(j-1)$ and $t = 4 + 7(j-1)$ for $j=1,2,\ldots$ A graphical presentation of the family $\intervals$ for $T = 137$ (as in the application) is given in Figure \ref{fig:intervals}. All our simulation experiments are based on $R=5000$ simulation runs. 
+We consider different values for $T$ and $n$, in particular, $T \in \{100,250, 500\}$ and $n \in \{5,10,50\}$. Note that in the application, we have $T=139$ and $n=5$. We let $\pairs = \{ (i,j): 1 \le i < j \le n\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$. Moreover, we choose $\intervals$ to be a family of time intervals $\mathcal{I}_k$ with length $h_k \in \{ 7/T,14/T,21/T,28/T \}$. Hence, the intervals in $\intervals$ have length either $7$, $14$, $21$ or $28$ days (i.e., $1$, $2$, $3$ or $4$ weeks). For each length $h_k$, we include all intervals that start at days $t = 1 + 7(j-1)$ and $t = 4 + 7(j-1)$ for $j=1,2,\ldots$ A graphical presentation of the family $\intervals$ for $T = 139$ (as in the application) is given in Figure \ref{fig:intervals}. All our simulation experiments are based on $R=5000$ simulation runs. 
 
 
 \begin{figure}[t!]
@@ -293,10 +308,10 @@ In the first part of the simulation study, we examine whether our test controls 
 \begin{equation}\label{eq:lambda}
 \lambda(u) = 5000 \exp\Big(-\frac{(10 u-3)^2}{2}\Big) + 1000, 
 \end{equation}
-which is similar in shape to some of the estimated trend curves in the application of Section \ref{subsec:app}. A plot of the function $\lambda$ is provided in Figure \ref{fig:lambda}. To evaluate whether the test controls the FWER at level $\alpha$, we compare the empirical size of the test with the target $\alpha$. The empirical size is computed as the precentage of simulation runs in which the test falsely rejects at least one hypothesis $H_0^{(i, j, k)}$.
+which is similar in shape to some of the estimated trend curves in the application of Section \ref{subsec:app}. A plot of the function $\lambda$ is provided in Figure \ref{fig:lambda}. To evaluate whether the test controls the FWER at level $\alpha$, we compare the empirical size of the test with the target $\alpha$. The empirical size is computed as the precentage of simulation runs in which the test falsely rejects at least one null hypothesis $H_0^{(ijk)}$.
 
 
-The simulation results are reported in Table \ref{tab:sim:size}. As can be seen, the empirical size gives a reasonable approximation to the target $\alpha$ in all scenarios under investigation, even though the size numbers have a slight downward bias. This bias gets larger as the number of time series $n$ increases, which reflects the fact that the test problem becomes more difficult for larger $n$. Already for $n=5$, the number $p$ of hypotheses to be tested is quite high, in particular, $p = 960, 2\,680, 5\,560$ for $T=100,250,500$. This number increases to $p=117\,600, 328\,300, 681\,100$ when $n=50$. Hence, the dimensionality and thus the complexity of the test problem increases considerably as $n$ gets larger. On first sight, it may seem astonishing that the downward bias does not diminish notably as the time series length $T$ increases. This, however, has a simple explanation: For each $T$, we consider the same family of intervals $\intervals$. Hence, the interval lengths remain the same ($7$, $14$, $21$ or $28$ days) as $T$ increases, which implies that the effective sample size for computing the test statistics $\hat{\psi}_{ijk,T}$ does not change as well. To summarize, even though slightly conservative, the test controls the FWER quite accurately in the simulation setting at hand. 
+The simulation results are reported in Table \ref{tab:sim:size}. As can be seen, the empirical size gives a reasonable approximation to the target $\alpha$ in all scenarios under investigation, even though the size numbers have a slight downward bias. This bias gets larger as the number of time series $n$ increases, which reflects the fact that the test problem becomes more difficult for larger $n$. Already for $n=5$, the number $p$ of hypotheses to be tested is quite high, in particular, $p = 960, 2\,680, 5\,560$ for $T=100,250,500$. This number increases to $p=117\,600, 328\,300, 681\,100$ when $n=50$. Hence, the dimensionality and thus the complexity of the test problem increases considerably as $n$ gets larger. On first sight, it may seem astonishing that the downward bias does not diminish notably as the time series length $T$ increases. This, however, has a simple explanation: The interval lengths $h_k$ remain the same ($7$, $14$, $21$ or $28$ days) as $T$ increases, which implies that the effective sample size for computing the test statistics $\hat{\psi}_{ijk,T}$ does not change as well. To summarize, even though slightly conservative, the test controls the FWER quite accurately in the simulation setting at hand. 
 
 
 \begin{table}[t!]
@@ -308,7 +323,7 @@ The simulation results are reported in Table \ref{tab:sim:size}. As can be seen,
 \toprule
  & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
 \cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
  & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
 \cmidrule[0.4pt]{1-10}
 $T = 100$ & 0.011 & 0.047 & 0.093 & 0.010 & 0.044 & 0.087 & 0.008 & 0.037 & 0.075 \\ 
@@ -319,7 +334,7 @@ $T = 100$ & 0.011 & 0.047 & 0.093 & 0.010 & 0.044 & 0.087 & 0.008 & 0.037 & 0.07
 \end{table}
 
 
-In the second part of the simulation study, we investigate the power properties of the test. To do so, we assume that $\lambda_i = \lambda$ for all $i \neq 1$ and that $\lambda_1 \neq \lambda$, where $\lambda$ is defined in \eqref{eq:lambda}. Hence, only the first mean function $\lambda_1$ is different from the others. This implies that the hypothesis $H_0^{(ijk)}$ holds true for all $(i, j, k)$ with $i \neq 1$ and $j \neq 1$, while there is at least one hypothesis $H_0^{(ijk)}$ with either $i = 1$ or $j = 1$ that does not hold true. We consider two different simulation scenarios. In Scenario A, the function $\lambda_1$ has the form 
+In the second part of the simulation study, we investigate the power properties of the test. To do so, we assume that $\lambda_i = \lambda$ for all $i > 1$ and that $\lambda_1 \neq \lambda$, where $\lambda$ is defined in \eqref{eq:lambda}. Hence, only the first mean function $\lambda_1$ is different from the others. This implies that the hypothesis $H_0^{(ijk)}$ holds true for all $(i, j, k)$ with $i > 1$ and $j > 1$, while there is at least one hypothesis $H_0^{(ijk)}$ with either $i = 1$ or $j = 1$ that does not hold true. We consider two different simulation scenarios. In Scenario A, the function $\lambda_1$ has the form 
 \[ \lambda_1(u) = 6000 \exp\Big(-\frac{(10 u-3)^2}{2}\Big) + 1000 \]
 and is plotted together with $\lambda$ in Figure \ref{fig:lambda_fcts_height}. As can be seen, the two functions $\lambda_1$ and $\lambda$ peak at the same point in time, but the peak of $\lambda_1$ is higher than that of $\lambda$. In Scenario B, we let
 \[ \lambda_1(u) = 5000 \exp\Big(-\frac{(9 u-3)^2}{2}\Big) + 1000. \]
@@ -349,7 +364,7 @@ Figure \ref{fig:lambda_fcts_shift} shows that the peaks of $\lambda_1$ and $\lam
 \toprule
  & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
 \cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
  & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
 \cmidrule[0.4pt]{1-10}
 $T = 100$ & 0.335 & 0.518 & 0.597 & 0.306 & 0.474 & 0.545 & 0.212 & 0.352 & 0.418 \\ 
@@ -369,7 +384,7 @@ $T = 100$ & 0.335 & 0.518 & 0.597 & 0.306 & 0.474 & 0.545 & 0.212 & 0.352 & 0.41
 \toprule
  & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
 \cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
  & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
 \cmidrule[0.4pt]{1-10}
 $T = 100$ & 0.824 & 0.910 & 0.903 & 0.812 & 0.893 & 0.890 & 0.738 & 0.847 & 0.857 \\ 
@@ -380,22 +395,22 @@ $T = 100$ & 0.824 & 0.910 & 0.903 & 0.812 & 0.893 & 0.890 & 0.738 & 0.847 & 0.85
 \end{table}
 
 
-The results for Scenario A (see Figure \ref{fig:lambda_fcts_height}) are presented in Table \ref{tab:sim:power:1} and those for Scenario B (see Figure \ref{fig:lambda_fcts_shift}) in Table \ref{tab:sim:power:2}. As can be seen, the test has substantial power in all the considered simulation settings. It is more powerful in Scenario B than in Scenario A, which is most presumably due to the fact that the differences $|\lambda_1(u) - \lambda(u)|$ are much larger in Scenario A. Moreover, it is less powerful for larger numbers of time series $n$, which reflects the fact that the test problem gets more high-dimensional and thus more complex as $n$ increases. As one would expect, the power numbers become larger as the time series length $T$ and the significance level $\alpha$ increase. Only in Scenario B for $T=250$ and $T=500$, the power numbers drop down a bit as $\alpha$ gets larger. This reverse dependance can be explained by the way we calculate power: we exclude simulation runs where the test spuriously detects differences between the trends $\lambda_i$ for $i > 1$. The number of spurious findings increases as we make the significance level $\alpha$ larger, which presumably causes the slight drop in power.
+The results for Scenario A (see Figure \ref{fig:lambda_fcts_height}) are presented in Table \ref{tab:sim:power:1} and those for Scenario B (see Figure \ref{fig:lambda_fcts_shift}) in Table \ref{tab:sim:power:2}. As can be seen, the test has substantial power in all the considered simulation settings. It is more powerful in Scenario B than in Scenario A, which is most presumably due to the fact that the differences $|\lambda_1(u) - \lambda(u)|$ are much larger in Scenario B. Moreover, it is less powerful for larger numbers of time series $n$, which reflects the fact that the test problem gets more high-dimensional and thus more difficult as $n$ increases. As one would expect, the power numbers tend to become larger as the time series length $T$ and the significance level $\alpha$ increase. In Scenario B (mostly for $T=250$ and $T=500$), however, the power numbers drop down a bit as $\alpha$ gets larger. This reverse dependance can be explained by the way we calculate power: we exclude simulation runs where the test spuriously detects differences between the trends in countries $i$ and $j$ with $i, j > 1$. The number of spurious findings increases as we make the significance level $\alpha$ larger, which presumably causes the slight drop in power.
 
 
 \subsection{Analysis of COVID-19 data}\label{subsec:app}
 
 
-The COVID-19 pandemic is one of the most pressing issues at present. The first outbreak occurred in Wuhan, China, in December 2019. On 30 January 2020, the World Health Organization (WHO) declared that the outbreak constitutes a Public Health Emergency of International Concern, and on 11 March 2020, the WHO characterized it as a pandemic. As of 19 July 2020, more than $14.04$ million cases of COVID-19 infections have been reported worldwide, resulting in more than $597\,000$ deaths.
+The COVID-19 pandemic is one of the most pressing issues at present. The first outbreak occurred in Wuhan, China, in December 2019. On 30 January 2020, the World Health Organization (WHO) declared that the outbreak constitutes a Public Health Emergency of International Concern, and on 11 March 2020, the WHO characterized it as a pandemic. As of 22 July 2020, more than $14.56$ million cases of COVID-19 infections have been reported worldwide, resulting in more than $607\,000$ deaths.
 
 
-There are many open questions surrounding the current COVID-19 pandemic. A question which is particularly relevant for governments and policy makers is whether the pandemic has developed similarly in different countries or whether there are notable differences. Identifying these differences may give some insight into which policies have been more efficient in containing the virus than others. In what follows, we use our multiscale test to compare the development of COVID-19 in several European countries. It is important to emphasize that our test allows to identify differences in the development of the epidemic across countries in a statistical rigorous way, but it does not tell what caused these differences. By distinguishing statistically significant differences from artefacts of the sampling noise, the test provides the necessary basis for a further investigation into the causes. Such an investigation, however, goes beyond a mere statistical analysis. 
+There are many open questions surrounding the current COVID-19 pandemic. A question which is particularly relevant for governments and policy makers is whether the pandemic has developed similarly in different countries or whether there are notable differences. Identifying these differences may give some insight into which government policies have been more effective in containing the virus than others. In what follows, we use our multiscale test to compare the development of COVID-19 in several European countries. It is important to emphasize that our test allows to identify differences in the development of the epidemic across countries in a statistically rigorous way, but it does not tell what causes these differences. By distinguishing statistically significant differences from artefacts of the sampling noise, the test provides the basis for a further investigation into the causes. Such an investigation, however, presumably goes beyond a mere statistical analysis. 
 
 
 \subsubsection{Data}
 
 
-We analyze data from five European countries: Germany, Italy, Spain, France and the United Kingdom. For each country $i$, we observe a time series $\mathcal{X}_i = \{ X_{it}: 1 \le t \le T \}$, where $X_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available on the homepage of the European Center for Disease Prevention and Control (\texttt{https://www.ecdc.europa.eu}) and were downloaded on 20 July 2020. As already mentioned in the Introduction, we take the day of the $100$th confirmed case in each country as the starting date $t=1$, which is a common way of ``normalizing'' the data to make them comparable across countries \citep[cp.][]{Cohen2020}. The time series length $T$ is taken to be the minimal number of days for which we have observations for all five countries. The resulting dataset consists of $n = 5$ time series, each with $T = 137$ observations (as of July 20). Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in $6$ replacements. Plots of the observed time series are presented in the upper panels (a) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
+We analyze data from five European countries: Germany, Italy, Spain, France and the United Kingdom. For each country $i$, we observe a time series $\mathcal{X}_i = \{ X_{it}: 1 \le t \le T \}$, where $X_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available on the homepage of the European Center for Disease Prevention and Control (\texttt{https://www.ecdc.europa.eu}) and were downloaded on 22 July 2020. As already mentioned in the Introduction, we take the day of the $100$th confirmed case in each country as the starting date $t=1$, which is a common way of ``normalizing'' the data and making them comparable across countries \citep[cp.][]{Cohen2020}. The time series length $T$ is taken to be the minimal number of days for which we have observations for all five countries. The resulting dataset consists of $n = 5$ time series, each with $T = 139$ observations (as of July 22). Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in $6$ replacements. Plots of the observed time series are presented in the upper panels (a) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
 
 
 To interpret the results produced by our multiscale test, we consider the Government Response Index (GRI) from the Oxford COVID-19 Government Response Tracker (OxCGRT) \citep{Hale2020}. The GRI measures how severe the actions are that are taken by a country's government to contain the virus. It is calculated based on several common government policies such as school closures and travel restrictions. The GRI ranges from $0$ to $100$, with $0$ corresponding to no response from the government at all and $100$ corresponding to full lockdown, closure of schools and workplaces, ban on travelling, etc. Detailed information on the collection of the data for government responses and the methodology for calculating the GRI is provided in \cite{Hale2020paper}. Plots of the GRI time series are given in panels (c) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
@@ -406,10 +421,10 @@ To interpret the results produced by our multiscale test, we consider the Govern
 
 We assume that the data $X_{it}$ of each country $i$ in our sample follow the nonparametric trend model 
 \[ \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, \]
-which was introduced in equation \eqref{eq:model}. The overdispersion parameter $\sigma$ is estimated by the procedure described in Section \ref{subsec:test:test}, which yields the estimate $\widehat{\sigma} = 14.44$. Throughout the section, we set the significance level to $\alpha=0.05$ and implement the multiscale test in exactly the same way as in the simulation study of Section \ref{subsec:sim}. In particular, we let $\pairs = \{ (i,j): 1 \le i < j \le 5\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$, and we choose $\intervals$ to be the family of time intervals plotted in Figure \ref{fig:intervals}. Hence, all intervals in $\intervals$ have length either 7, 14, 21 or 28 days. 
+which was introduced in equation \eqref{eq:model}. The overdispersion parameter $\sigma$ is estimated by the procedure described in Section \ref{subsec:test:test}, which yields the estimate $\hat{\sigma} = 14.44$. Throughout the section, we set the significance level to $\alpha=0.05$ and implement the multiscale test in exactly the same way as in the simulation study of Section \ref{subsec:sim}. In particular, we let $\pairs = \{ (i,j): 1 \le i < j \le 5\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$, and we choose $\intervals$ to be the family of time intervals plotted in Figure \ref{fig:intervals}. Hence, all intervals in $\intervals$ have length either 7, 14, 21 or 28 days. 
 
 
-With the help of our multiscale method, we simultaneously test the null hypo\-thesis $H_0^{(i, j, k)}$ that $\lambda_i(\cdot) = \lambda_j(\cdot)$ on the interval $\mathcal{I}_k$ for each $(i, j, k) \in \indexset$. The results are presented in Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}, each figure comparing a specific pair of countries $(i,j)$ from our sample. For the sake of brevity, we only show the results for the pairwise comparisons of Germany with each of the four other countries. The remaining figures can be found in Section \ref{s:subsec:app} of the Supplementary Material. Each figure splits into four panels (a)--(d).  Panel (a) shows the observed time series for the two countries $i$ and $j$ that are compared. Panel (b) presents smoothed versions of the time series from (a), that is, it shows nonparametric kernel estimates (specifically, Nadaraya-Watson estimates) of the two trend functions $\lambda_i$ and $\lambda_j$, where the bandwidth is set to $7$ days and a rectangular kernel is used. Panel (c) displays the Government Response Index (GRI) of the two countries. Finally, panel (d) presents the results produced by our test: it depicts in grey the set $\intervals_{\text{reject}}(i,j)$ of all the intervals $\mathcal{I}_k$ for which the test rejects the null $H_0^{(i, j, k)}$. The minimal intervals in the subset $\intervals_{\text{reject}}^{\text{min}}(i, j)$ are highlighted by a black frame. Note that according to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals plotted in panels (d) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}: we can claim, with confidence of about $95\%$, that there is a difference between the functions $\lambda_i$ and $\lambda_j$ on each of these intervals.
+With the help of our multiscale method, we simultaneously test the null hypo\-thesis $H_0^{(ijk)}$ that $\lambda_i = \lambda_j$ on the interval $\mathcal{I}_k$ for each $(i, j, k) \in \indexset$. The results are presented in Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}, each figure comparing a specific pair of countries $(i,j)$ from our sample. For the sake of brevity, we only show the results for the pairwise comparisons of Germany with each of the four other countries. The remaining figures can be found in Section \ref{s:subsec:app} of the Supplementary Material. Each figure splits into four panels (a)--(d).  Panel (a) shows the observed time series for the two countries $i$ and $j$ that are compared. Panel (b) presents smoothed versions of the time series from (a), that is, it shows nonparametric kernel estimates (specifically, Nadaraya-Watson estimates) of the two trend functions $\lambda_i$ and $\lambda_j$, where the bandwidth is set to $7$ days and a rectangular kernel is used. Panel (c) displays the Government Response Index (GRI) of the two countries. Finally, panel (d) presents the results produced by our test: it depicts in grey the set $\intervals_{\text{reject}}(i,j)$ of all the intervals $\mathcal{I}_k$ for which the test rejects the null $H_0^{(ijk)}$. The minimal intervals in the subset $\intervals_{\text{reject}}^{\text{min}}(i, j)$ are highlighted by a black frame. Note that according to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals plotted in panels (d) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}: we can claim, with confidence of about $95\%$, that there is a difference between the functions $\lambda_i$ and $\lambda_j$ on each of these intervals.
 
 
 \begin{figure}[p!]
@@ -456,18 +471,18 @@ Inspecting Figures \ref{fig:Germany:Spain} and  \ref{fig:Germany:France}, a quit
 Having identified significant differences between the epidemic trends in the five countries under consideration, one may ask next what are the causes of these differences. As already mentioned at the beginning of this section, this question cannot be answered by our test. Rather, a further analysis which presumably goes beyond pure statistics is needed to shed some light on it. We here do not attempt to provide any answers. We merely discuss some observations which become apparent upon considering our test results in the light of the Government Response Index (GRI). For reasons of brevity, we focus on the comparison of Germany with Italy and Spain in Figures \ref{fig:Germany:Italy} and \ref{fig:Germany:Spain}. 
 
 
-According to our test results in Figure \ref{fig:Germany:Spain}, there are significant differences between the trends in Germany and Spain during the onset of the epidemic up to about day $52$, with Spain having more new cases of infections than Germany on most days. After day $52$, the trends become quite similar and start to decrease at approximately the same rate. This may be due to the fact that Spain in general introduced more severe measures of lockdown than Germany (as can be seen upon inspecting the GRI in panel (c) of Figure \ref{fig:Germany:Spain}), which may have helped to battle the spread of infection. However, a much more thorough analysis is of course needed to find out whether this is indeed the case or whether other factors were mainly responsible. 
+According to our test results in Figure \ref{fig:Germany:Spain}, there are significant differences between the trends in Germany and Spain during the onset of the epidemic up to about day $50$, with Spain having more new cases of infections than Germany on most days. After day $50$, the trends become quite similar and start to decrease at approximately the same rate. This may be due to the fact that Spain in general introduced more severe measures of lockdown than Germany (as can be seen upon inspecting the GRI in panel (c) of Figure \ref{fig:Germany:Spain}), which may have helped to battle the spread of infection. However, a much more thorough analysis is of course needed to find out whether this is indeed the case or whether other factors were mainly responsible. 
 
 
-Turning to the comparison of Germany and Italy, we found that the German trend drops down significantly faster than the Italian one after day $36$. Interestingly, the GRI of Italy almost always lies above that of Germany. Hence, even though Italy has in general taken more severe and restrictive measures against the virus than Germany, it appears that the virus could be contained better in Germany (in the sense that the trend of daily new cases went down significantly faster in Germany than in Italy). This suggests that there are indeed important factors besides the level of government response to the pandemic which substantially influence the trend of new COVID-19 cases. 
+Turning to the comparison of Germany and Italy, we found that the German trend drops down significantly faster than the Italian one after approximately day $40$. Interestingly, the GRI of Italy almost always lies above that of Germany. Hence, even though Italy has in general taken more severe and restrictive measures against the virus than Germany, it appears that the virus could be contained better in Germany (in the sense that the trend of daily new cases went down significantly faster in Germany than in Italy). This suggests that there are indeed important factors besides the level of government response to the pandemic which substantially influence the trend of new COVID-19 cases. 
 
 
-Our discussion indicates that it is extremely difficult to determine the exact causes of the differences in epidemic trends across countries. Since even similar countries such as those in our sample differ in a variety of aspects that are relevant for the spread of the virus, it is very challenging to pin down these causes. One issue that is often discussed in the context of cross-country comparisons are country-specific strategies to test for the coronavirus. The argument is that differences between epidemic trends may be spuriously produced by country-specific test procedures.
+This brief discussion already indicates that it is extremely difficult to determine the exact causes of the differences in epidemic trends across countries. Since even similar countries such as those in our sample differ in a variety of aspects that are relevant for the spread of the virus, it is very challenging to pin down these causes. One issue that is often discussed in the context of cross-country comparisons are country-specific strategies to test for the coronavirus. The argument is that differences between epidemic trends may be spuriously produced by country-specific test procedures.
 
 
 Even though we can of course not fully exclude this possibility, our test results are presumably not driven by different test regimes in the countries under consideration. To see this, we consider again the comparison of Germany and Italy: The test regimes in these two countries are arguably quite different. Germany is often cited as the country that employed early, widespread testing with more than $100\,000$ tests per week even in the beginning of the pandemic \citep{Cohen2020}, while testing in Italy became widespread only in the late stages of the pandemic. 
 %(https://ourworldindata.org/covid-testing-us-uk-korea-italy)
-Nevertheless, visual inspection of the raw and smoothed data in panels (a) and (b) of Figure \ref{fig:Germany:Italy} suggest that the underlying time trends are very similar up to day $36$. This is confirmed by our test which does not find any significant differences before that day. Hence, the different test regimes in Germany and Italy towards the beginning of the pandemic do not appear to have an overly strong effect and to produce spurious differences between the time trends. This suggests that the differences detected by our test indeed reflect differences in the way the virus spread in Germany and Italy rather than being mere artefacts of different test regimes. 
+Nevertheless, visual inspection of the raw and smoothed data in panels (a) and (b) of Figure \ref{fig:Germany:Italy} suggest that the underlying time trends are very similar up to day $36$. This is confirmed by our multiscale test which does not find any significant differences before that day. Hence, the different test regimes in Germany and Italy towards the beginning of the pandemic do not appear to have an overly strong effect and to produce spurious differences between the time trends. This suggests that the differences detected by our multiscale test indeed reflect differences in the way the virus spread in Germany and Italy rather than being mere artefacts of different test regimes. 
 
 
 
@@ -483,15 +498,15 @@ In what follows, we state and prove the main theoretical results on the multisca
 
 
 \begin{theoremA}\label{theo1}
-Let \ref{C1} and \ref{C2} be satisfied. Moreover, assume that (i) $h_{\max} = o(1/\log T)$, (ii) $h_{\min} \ge CT^{-b}$ for some $b \in (0,1)$, and (iii) $p = O(T^{(\theta/2)(1-b)-(1+\delta)})$ for some small $\delta > 0$. Then for any given $\alpha \in (0,1)$,
+Let \ref{C2} and \ref{C1} be satisfied. Moreover, assume that (i) $h_{\max} = o(1/\log T)$, (ii) $h_{\min} \ge CT^{-b}$ for some $b \in (0,1)$, and (iii) $p = O(T^{(\theta/2)(1-b)-(1+\delta)})$ for some small $\delta > 0$. Then for any given $\alpha \in (0,1)$,
 \[ \textnormal{FWER}(\alpha) := \pr \Big( \exists (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \le \alpha + o(1), \]
 where $\indexset_0 \subseteq \indexset$ is the set of all $(i,j,k) \in \indexset$ for which $H_0^{(ijk)}$ holds true. 
 %Hence, the simultaneous test defined in \eqref{eq:test} asymptotically controls the FWER at level $\alpha$ for any given significance level $\alpha \in (0,1)$.
 \end{theoremA}
 
 
-\noindent According to Theorem \ref{theo1}, the multiscale test asymptotically controls the FWER at level $\alpha$ under conditions \ref{C1}--\ref{C2} and the restrictions (i)--(iii) on $h_{\min}$, $h_{\max}$ and $p$. %We briefly comment on the latter restrictions. 
-Restriction (i) allows the maximal interval length $h_{\max}$ to converge to zero very slowly, which means that $h_{\max}$ can be picked very large in practice. According to restriction (ii), the minimal interval length $h_{\min}$ can be chosen to go to zero as any polynomial $T^{-b}$ with some $b \in (0,1)$. Restriction (iii) allows the dimension $p$ of the test problem to grow polynomially in $T$. Specifically, $p$ may grow at most as the polynomial $T^{\gamma}$ with $\gamma = (\theta/2)(1-b)-(1+\delta)$. As one can see, the exponent $\gamma$ depends on the number of error moments $\theta$ defined in \ref{C2} and the parameter $b$ that specifies the minimal interval length $h_{\min}$. In particular, for any given $b \in (0,1)$, the exponent $\gamma$ gets larger as $\theta$ increases. Hence, the larger the number of error moments $\theta$, the faster $p$ may grow in comparison to $T$. In the extreme case where all error moments exist, that is, where $\theta$ can be made as large as desired, $p$ may grow as any polynomial of $T$, no matter how we pick $b \in (0,1)$. Thus, if the error terms have sufficiently many moments, the dimension $p$ can be extremely large in comparison to $T$ and the minimal interval length $h_{\min}$ can be chosen very small. 
+\noindent According to Theorem \ref{theo1}, the multiscale test asymptotically controls the FWER at level $\alpha$ under conditions \ref{C2}--\ref{C1} and the restrictions (i)--(iii) on $h_{\min}$, $h_{\max}$ and $p$. %We briefly comment on the latter restrictions. 
+Restriction (i) allows the maximal interval length $h_{\max}$ to converge to zero very slowly, which means that $h_{\max}$ can be picked very large in practice. According to restriction (ii), the minimal interval length $h_{\min}$ can be chosen to go to zero as any polynomial $T^{-b}$ with some $b \in (0,1)$. Restriction (iii) allows the dimension $p$ of the test problem to grow polynomially in $T$. Specifically, $p$ may grow at most as the polynomial $T^{\gamma}$ with $\gamma = (\theta/2)(1-b)-(1+\delta)$. As one can see, the exponent $\gamma$ depends on the number of error moments $\theta$ defined in \ref{C1} and the parameter $b$ that specifies the minimal interval length $h_{\min}$. In particular, for any given $b \in (0,1)$, the exponent $\gamma$ gets larger as $\theta$ increases. Hence, the larger the number of error moments $\theta$, the faster $p$ may grow in comparison to $T$. In the extreme case where all error moments exist, that is, where $\theta$ can be made as large as desired, $p$ may grow as any polynomial of $T$, no matter how we pick $b \in (0,1)$. Thus, if the error terms have sufficiently many moments, the dimension $p$ can be extremely large in comparison to $T$ and the minimal interval length $h_{\min}$ can be chosen very small. 
 %Restriction (i) allows the maximal interval length $h_{\max}$ to converge to zero very slowly, which means that $h_{\max}$ can be picked very large in practice. According to restrictions (ii) and (iii), the minimal interval length $h_{\min}$ is intertwined with the dimension $p$ of the test problem, which in turn depends on the number of error moments $\theta$ specified in \ref{C2}. As an example, if $\theta > 8$ and $h_{\min} = CT^{-b}$ with $b=1/4$, then we require that $p \le T^2$. More generally speaking, the larger the number of moments $\theta$, the larger $p$ can be compared to $T$ for a given exponent $b$. In the extreme case where all error moments exist, that is, where $\theta$ can be made as large as desired, $p$ may grow as any polynomial of $T$ with arbitrarily large exponent and $b$ can be chosen as any fixed constant in the interval $(0,1)$. Hence, if the error terms have sufficiently many moments, the overall dimension $p$ of the test problem can be extremely large compared to $T$ and the minimal interval length $h_{\min}$ can be extremely small. 
 
 
@@ -547,11 +562,11 @@ For any $q \in \reals$, it holds that
 \begin{align*}
 \pr \big( \Psi_T \le q \big) 
  & = \pr \Big( \max_{(i,j,k) \in \indexset} a_k \Big\{ \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T V^{(ijk)}_t\Big| - b_k \Big\} \le q \Big) \\
- & = \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T V^{(ijk)}_t\Big| \le q_{ijk} \text{ for all } (i,j,k) \in \indexset \Big) \\
- & = \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{V}_t\Big| \le \boldsymbol{q} \Big),
+ & = \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T V^{(ijk)}_t\Big| \le c_{ijk}(q) \text{ for all } (i,j,k) \in \indexset \Big) \\
+ & = \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{V}_t\Big| \le \boldsymbol{c}(q) \Big),
 \end{align*} 
-where $\boldsymbol{q}$ is the $\reals^p$-vector with the entries $q_{ijk} = q/a_k + b_k$. Analogously, we have  
-\[ \pr \big( \Phi_T \le q \big) = \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{q} \Big). \]
+where $\boldsymbol{c}(q) = (c_{ijk}(q): (i,j,k) \in \indexset)$ is the $\reals^p$-vector with the entries $c_{ijk}(q) = q/a_k + b_k$, we use the notation $|v| = (|v_1|,\ldots,|v_p|)^\top$ for vectors $v \in \reals^p$ and the inequality $v \le w$ is to be understood componentwise for $v,w \in \reals^p$. Analogously, we have  
+\[ \pr \big( \Phi_T \le q \big) = \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{c}(q) \Big). \]
 With this notation at hand, we can make use of Proposition 2.1 from \cite{Chernozhukov2017}. In our context, this proposition can be stated as follows: 
 \begin{propA}\label{prop:Chernozhukov}
 Assume that 
@@ -562,12 +577,12 @@ Assume that
 \end{enumerate}
 Then  
 \begin{align}
-\sup_{\boldsymbol{q} \in \reals^p} \Big| \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{V}_t\Big| \le \boldsymbol{q} \Big) & - \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{q} \Big) \Big| \nonumber \\ & \le C \Big\{ \Big( \frac{B_T^2 \log^7(pT)}{T} \Big)^{1/6} + \Big( \frac{B_T^2 \log^3(pT)}{T^{1-2/\theta}} \Big)^{1/3} \Big\}, \label{eq:Chernozhukov}
+\sup_{\boldsymbol{c} \in \reals^p} \Big| \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{V}_t\Big| \le \boldsymbol{c} \Big) & - \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{c} \Big) \Big| \nonumber \\ & \le C \Big\{ \Big( \frac{B_T^2 \log^7(pT)}{T} \Big)^{1/6} + \Big( \frac{B_T^2 \log^3(pT)}{T^{1-2/\theta}} \Big)^{1/3} \Big\}, \label{eq:Chernozhukov}
 \end{align}
 where $C$ depends only on $\delta$ and $\theta$. 
 \end{propA}
 It is straightforward to verify that assumptions (a)--(c) are satisfied under the conditions of Theorem \ref{theo1} for sufficiently large $T$, where $B_T$ can be chosen as $B_T = C p^{1/\theta} h_{\min}^{-1/2}$ with $C$ sufficiently large. Moreover, it can be shown that the right-hand side of \eqref{eq:Chernozhukov} is $o(1)$ for this choice of $B_T$. Hence, Proposition \ref{prop:Chernozhukov} yields that 
-\[ \sup_{\boldsymbol{q} \in \reals^p} \Big| \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{V}_t\Big| \le \boldsymbol{q} \Big) - \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{q} \Big) \Big| = o(1), \]
+\[ \sup_{\boldsymbol{c} \in \reals^p} \Big| \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{V}_t\Big| \le \boldsymbol{c} \Big) - \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{c} \Big) \Big| = o(1), \]
 which in turn implies \eqref{eq:kolmogorov-distance}. 
 
 
@@ -576,27 +591,30 @@ which in turn implies \eqref{eq:kolmogorov-distance}.
 \sup_{q \in \reals} \Big| \pr \big( \hat{\Psi}_T \le q \big) - \pr \big( \Phi_T \le q \big) \Big| = o(1).
 \end{equation}
 To start with, the above supremum can be bounded by 
-\begin{align*}
- & \sup_{q \in \reals} \Big| \pr \big( \hat{\Psi}_T \le q \big) - \pr \big( \Phi_T \le q \big) \Big| \\
- & = \sup_{q \in \reals} \Big| \pr \Big( \Psi_T \le q + \big\{ \Psi_T - \hat{\Psi}_T \big\} \Big) - \pr \big( \Phi_T \le q \big) \Big| \\
- & \le \max \Big\{ \sup_{q \in \reals} \Big| \pr \Big( \Psi_T \le q + \big| \Psi_T - \hat{\Psi}_T \big| \Big) - \pr \big( \Phi_T \le q \big) \Big|, \\
- & \phantom{ \le \max \Big\{ \, } \sup_{q \in \reals} \Big| \pr \Big( \Psi_T \le q - \big| \Psi_T - \hat{\Psi}_T \big| \Big) - \pr \big( \Phi_T \le q \big) \Big| \Big\} \\
- & \le \max \Big\{ \sup_{q \in \reals} \Big| \pr \Big( \Psi_T \le q + r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| +  \pr \Big( \big| \Psi_T - \hat{\Psi}_T \big| > r_T \Big), \\*
- & \phantom{ \le \max \Big\{ \, } \sup_{q \in \reals} \Big| \pr \Big( \Psi_T \le q - r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| +  \pr \Big( \big| \Psi_T - \hat{\Psi}_T \big| > r_T \Big) \Big\}. 
-\end{align*}
-Moreover, 
-\begin{align*}
- & \sup_{q \in \reals} \Big| \pr \Big( \Psi_T \le q \pm r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| +  \pr \Big( \big| \Psi_T - \hat{\Psi}_T \big| > r_T \Big) \\
- & \le \sup_{q \in \reals} \Big| \pr \Big( \Psi_T \le q \pm r_T \Big) - \pr \Big( \Phi_T \le q \pm r_T \Big) \Big| \\
- & \quad + \sup_{q \in \reals} \Big| \pr \Big( \Phi_T \le q \pm r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| + \pr \Big( \big| \Psi_T - \hat{\Psi}_T \big| > r_T \Big) \\
- & = \sup_{q \in \reals} \Big| \pr \Big( \Phi_T \le q \pm r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| + o(1), 
-\end{align*}
-where the last line follows from \eqref{eq:approxerror1} and \eqref{eq:kolmogorov-distance}. Finally, by Nazarov's inequality (cp.\ \citeauthor{Nazarov2003}, \citeyear{Nazarov2003} and Lemma A.1 in \citeauthor{Chernozhukov2017}, \citeyear{Chernozhukov2017}),   
-\begin{align*} 
- & \sup_{q \in \reals} \Big| \pr \Big( \Phi_T \le q \pm r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| \\*
- & = \sup_{\boldsymbol{q} \in \reals^p} \Big| \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{q} \pm r_T \Big) - \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{q} \Big) \Big| \le C r_T \sqrt{\log(2 p)}, 
-\end{align*}
-where $C$ is a constant that depends only on the parameter $\delta$ defined in condition (a) of Proposition \ref{prop:Chernozhukov}.
+\begin{align}
+ & \sup_{q \in \reals} \Big| \pr \big( \hat{\Psi}_T \le q \big) - \pr \big( \Phi_T \le q \big) \Big| \nonumber \\
+ & = \sup_{q \in \reals} \Big| \pr \Big( \Psi_T \le q + \big\{ \Psi_T - \hat{\Psi}_T \big\} \Big) - \pr \big( \Phi_T \le q \big) \Big| \nonumber \\
+ & \le \sup_{q \in \reals} \max \Big\{ \Big| \pr \Big( \Psi_T \le q + \big| \Psi_T - \hat{\Psi}_T \big| \Big) - \pr \big( \Phi_T \le q \big) \Big|, \nonumber \\
+ & \phantom{\le \sup_{q \in \reals} \max \Big\{ \ } \Big| \pr \Big( \Psi_T \le q - \big| \Psi_T - \hat{\Psi}_T \big| \Big) - \pr \big( \Phi_T \le q \big) \Big| \Big\} \nonumber \\
+ & \le \sup_{q \in \reals} \max \Big\{ \Big| \pr \Big( \Psi_T \le q + r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| + \pr \Big( \big| \Psi_T - \hat{\Psi}_T \big| > r_T \Big), \nonumber \\
+ & \phantom{\le \sup_{q \in \reals} \max \Big\{ \ } \Big| \pr \Big( \Psi_T \le q - r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| + \pr \Big( \big| \Psi_T - \hat{\Psi}_T \big| > r_T \Big) \Big\} \nonumber \\
+ & \le \max_{\ell=0,1} \, \sup_{q \in \reals} \Big| \pr \Big( \Psi_T \le q + (-1)^\ell r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| + \pr \Big( \big| \Psi_T - \hat{\Psi}_T \big| > r_T \Big) \nonumber \\
+ & = \max_{\ell=0,1} \, \sup_{q \in \reals} \Big| \pr \Big( \Psi_T \le q + (-1)^\ell r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| + o(1), \label{eq:step3:a}
+\end{align}
+where the last line is by \eqref{eq:approxerror1}. Moreover, for $\ell=0,1$, 
+\begin{align}
+ & \sup_{q \in \reals} \Big| \pr \Big( \Psi_T \le q + (-1)^\ell r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| \nonumber \\
+ & \le \sup_{q \in \reals} \Big| \pr \Big( \Psi_T \le q + (-1)^\ell r_T \Big) - \pr \Big( \Phi_T \le q + (-1)^\ell r_T \Big) \Big| \nonumber \\
+ & \quad + \sup_{q \in \reals} \Big| \pr \Big( \Phi_T \le q + (-1)^\ell r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| \nonumber \\
+ & = \sup_{q \in \reals} \Big| \pr \Big( \Phi_T \le q + (-1)^\ell r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| + o(1), \label{eq:step3:b}
+\end{align}
+the last line following from \eqref{eq:kolmogorov-distance}. Finally, by Nazarov's inequality (cp.\ \citeauthor{Nazarov2003}, \citeyear{Nazarov2003} and Lemma A.1 in \citeauthor{Chernozhukov2017}, \citeyear{Chernozhukov2017}), we have that for $\ell = 0,1$,   
+\begin{align} 
+ & \sup_{q \in \reals} \Big| \pr \Big( \Phi_T \le q + (-1)^\ell r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| \nonumber \\
+ & = \sup_{q \in \reals} \Big| \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{c}(q + (-1)^\ell r_T) \Big) - \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{c}(q) \Big) \Big| \nonumber \\
+ & \le C r_T \sqrt{\log(2 p)}, \label{eq:step3:c}
+\end{align}
+where $C$ is a constant that depends only on the parameter $\delta$ defined in condition (a) of Proposition \ref{prop:Chernozhukov}. Inserting \eqref{eq:step3:b} and \eqref{eq:step3:c} into equation \eqref{eq:step3:a} completes the proof of \eqref{eq:kolmogorov-distance-hat}.
 
 
 \item By definition of the quantile $q_{T,\text{Gauss}}(\alpha)$, it holds that $\pr(\Phi_T \le q_{T,\text{Gauss}}(\alpha)) \ge 1-\alpha$. As shown in the Supplementary Material, we even have that  
@@ -607,7 +625,16 @@ for any $\alpha \in (0,1)$. From this and \eqref{eq:kolmogorov-distance-hat}, it
 \begin{equation}\label{eq:probbound-Psihat}
 \pr \big( \hat{\Psi}_T \le q_{T,\text{Gauss}}(\alpha) \big) = 1 - \alpha + o(1), 
 \end{equation}
-which in turn yields the statement of Theorem \ref{theo1}. \qedhere
+which in turn implies that 
+\begin{align*}
+\text{FWER}(\alpha)
+ & = \pr \Big( \exists (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| > c_{T,\text{Gauss}}(\alpha,h_k) \Big) \\
+ & = \pr \Big( \max_{(i,j,k) \in \indexset_0} a_k \big( |\hat{\psi}_{ijk,T}| - b_k \big) > q_{T,\text{Gauss}}(\alpha) \Big) \\
+ & = \pr \Big( \max_{(i,j,k) \in \indexset_0} a_k \big( |\hat{\psi}_{ijk,T}^0| - b_k \big) > q_{T,\text{Gauss}}(\alpha) \Big) \\
+ & \le \pr \Big( \max_{(i,j,k) \in \indexset} a_k \big( |\hat{\psi}_{ijk,T}^0| - b_k \big) > q_{T,\text{Gauss}}(\alpha) \Big) \\
+ & = \pr \big( \hat{\Psi}_T > q_{T,\text{Gauss}}(\alpha) \big) = \alpha + o(1).
+\end{align*}
+This completes the proof of Theorem \ref{theo1}. \qedhere
 
 
 \end{enumerate}
@@ -653,7 +680,7 @@ which gives the statement of Corollary \ref{corollary1}.
 
 
 
-\subsection{Technical results}
+\subsection{Technical details}
 
 
 In what follows, we provide the technical details omitted in the Appendix. To start with, we prove the following auxiliary lemma.
@@ -677,14 +704,14 @@ R_{i,T}^{(4)} & = \frac{2 \sigma}{T} \sum\limits_{t=2}^T \Big( \lambda_i\Big(\fr
 R_{i,T}^{(5)} & = \frac{\sigma^2}{T} \sum\limits_{t=2}^T  \Big( \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} - \sqrt{\lambda_i\Big(\frac{t-1}{T}\Big)} \Big)^2 \eta_{it-1}^2.
 \end{align*} 
 With the help of an exponential inequality and standard arguments, it can be shown that 
-\[ \max_{i \in \countries} \Big| \frac{1}{T} \sum_{t=1}^T w_i\Big(\frac{t}{T}\Big) \big\{ g(\eta_{it}) - \ex g(\eta_{it}) \big\} \Big| = O_p\Big( \sqrt{\frac{\log p}{T}} \Big), \]
-where we let $g(x) = x$, $g(x) = |x|$ or $g(x) = x^2$, and $w_i(t/T)$ are deterministic weights with the property that $|w_i(t/T)| \le w_{\max} < \infty$ for all $i$, $t$ and $T$ and some positive constant $w_{\max}$. Using this uniform convergence result along with conditions \ref{C1} and \ref{C2}, we obtain that 
+\[ \max_{i \in \countries} \Big| \frac{1}{T} \sum_{t=2}^T w_i\Big(\frac{t}{T}\Big) \big\{ g(\eta_{it},\eta_{it-1}) - \ex g(\eta_{it},\eta_{it-1}) \big\} \Big| = O_p\Big( \sqrt{\frac{\log p}{T}} \Big), \]
+where we let $g(x,y) = x$, $g(x,y) = y$, $g(x,y) = |x|$, $g(x,y) = |y|$, $g(x,y) = x^2$, $g(x,y) = y^2$ or $g(x,y) = xy$, and $w_i(t/T)$ are deterministic weights with the property that $|w_i(t/T)| \le w_{\max} < \infty$ for all $i$, $t$ and $T$ and some positive constant $w_{\max}$. Using this uniform convergence result along with conditions \ref{C2} and \ref{C1}, we obtain that 
 \[ \max_{i \in \countries} \Big| \frac{1}{T} \sum\limits_{t=2}^T \lambda_i\Big(\frac{t}{T}\Big) (\eta_{it} - \eta_{it-1})^2 - \frac{2}{T} \sum\limits_{t=1}^T \lambda_i\Big(\frac{t}{T}\Big) \Big| = O_p\Big( \sqrt{\frac{\log p}{T}} \Big) \]
 and 
 \[ \max_{1 \le \ell \le 5} \max_{i \in \countries} |R_{i,T}^{(\ell)}| = O_p(T^{-1}). \]
 Applying these two statements to \eqref{eq:approxerror:claim3:expansion}, we can infer that
 \begin{equation}\label{eq:approxerror:claim2:1}
-\max_{i \in \countries} \Big| \frac{1}{T} \sum\limits_{t=2}^T (X_{it} - X_{it-1})^2 - \frac{2}{T} \sum\limits_{t=1}^T \lambda_i\Big(\frac{t}{T}\Big) \Big| = O_p\Big( \sqrt{\frac{\log p}{T}} \Big). 
+\max_{i \in \countries} \Big| \frac{1}{T} \sum\limits_{t=2}^T (X_{it} - X_{it-1})^2 - \frac{2\sigma^2}{T} \sum\limits_{t=1}^T \lambda_i\Big(\frac{t}{T}\Big) \Big| = O_p\Big( \sqrt{\frac{\log p}{T}} \Big). 
 \end{equation}
 By similar but simpler arguments, we additionally get that 
 \begin{equation}\label{eq:approxerror:claim2:2}
@@ -733,7 +760,7 @@ We start with the proof of \eqref{eq:approxerror:claim2}. Applying an exponentia
 where $w_i(t/T)$ are general deterministic weights with the property that $|w_i(t/T)| \le w_{\max} < \infty$ for all $i$, $t$ and $T$ and some positive constant $w_{\max}$. This immediately implies \eqref{eq:approxerror:claim2}.
 
 
-We next turn to the proof of \eqref{eq:approxerror:claim1}. As the intensity functions $\lambda_i$ are Lipschitz continuous by \ref{C2}, it can be shown that 
+We next turn to the proof of \eqref{eq:approxerror:claim1}. As the functions $\lambda_i$ are uniformly Lipschitz continuous by \ref{C2}, it can be shown that 
 \begin{equation}\label{eq:approxerror:bias}
 \max_{i \in \countries} \max_{1 \le k \le K} \Big| \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \lambda_i \Big(\frac{t}{T}\Big) - \frac{1}{h_k} \int_{w \in \mathcal{I}_k} \lambda_i(w) dw \Big| \le \frac{C}{T h_{\min}}.
 \end{equation}
@@ -769,7 +796,7 @@ for $\eta > 0$ sufficiently small. This contradicts the definition of the quanti
 \subsection{Additional graphs for Section \ref{subsec:app}}\label{s:subsec:app}
 
 
-Here, we provide the pairwise comparisons between Italy, France, Spain and the UK that were omitted in Section \ref{subsec:app}. The plots have the same format as Figures \ref{fig:Germany:Italy}-\ref{fig:Germany:UK}. 
+Here, we provide the pairwise comparisons between Italy, France, Spain and the UK that were omitted in Section \ref{subsec:app}. The plots have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}. 
 
 
 \begin{figure}[h!]
@@ -813,26 +840,23 @@ Here, we provide the pairwise comparisons between Italy, France, Spain and the U
 
 
 \newpage
-\subsection*{Robustness checks for Section \ref{subsec:sim}}\label{s:subsec:robustness}
+\subsection{Robustness checks for Section \ref{subsec:sim}}\label{s:subsec:robustness}
 
 
-%In what follows, we supplement the simulation experiments of Section \ref{subsec:sim} by some robustness checks. In particular, we repeat the first part of our simulation study with different values of the overdispersion parameter $\sigma$ to assess how sensitive our test is to changes in the noise-to-signal ratio. The results for $\sigma = 10$ and $\sigma = 20$ are reported in Tables \ref{s:tab:sim:size:1} and \ref{s:tab:sim:size:2}, respectively. Compatring them with the results in Table ?? of Section \ref{subsec:sim}, where $\sigma = 15$, we see the following: As expected, the size numbers get more accurate when the $\sigma$ is reduced to $10$ and they deteriorate somewhat when $\sigma$ is increased to $20$. However, even for the high noise-to-signal ratio with $\sigma = 20$, we still obtain empirical size numbers that approximate the target $\alpha$ reasonably well. 
+In what follows, we supplement the simulation experiments of Section \ref{subsec:sim} by some robustness checks. Specifically, we repeat the experiments with different values of the overdispersion parameter $\sigma$. The larger we choose $\sigma$, the more noise we put on top of the time trend, that is, on top of the underlying signal. Hence, by varying $\sigma$, we can assess how sensitive our test is to changes in the noise-to-signal ratio. We first repeat the size simulations for $\sigma = 10$ and $\sigma = 20$. The results are presented in Tables \ref{s:tab:sim:size:1} and \ref{s:tab:sim:size:2}, respectively. As can be seen, the empirical size numbers are very similar to those for $\sigma=15$ in Table \ref{tab:sim:size}. We next rerun the power simulations for $\sigma = 10$ and $\sigma = 20$, where we consider the two Scenarios A and B as in Section \ref{subsec:sim}. The results can be found in Tables \ref{s:tab:sim:power:1}--\ref{s:tab:sim:power:4}. They show that the test is much more powerful for $\sigma=10$ than for $\sigma=20$. This is what one would expect, since a higher value of $\sigma$ corresponds to a higher noise-to-signal ratio. In particular, the higher $\sigma$, the more noisy the data, and thus the more difficult it is to identify differences between the trend curves. Nevertheless, even in the very noisy case with $\sigma = 20$, our test has quite some power, which tends to increase swiftly as $T$ gets larger. 
+\vspace{0.4cm}
 
 
-In what follows, we carry out some robustness checks to assess how sensitive our multiscale test is. First, we repeat the size simulations from Section \ref{subsec:sim} for different values of the overdispersion parameter $\sigma$. This overdispersion parameter is responsible for noise-to-signal ratio, hence, varying it, we are able to asses the performance of our test when the trend is less or more pronounced compared to the noise. The results of the size simulations for $\sigma = 10$ and $\sigma = 20$ are presented in Tables \ref{s:tab:sim:size:1} and \ref{s:tab:sim:size:2} respectively. As can be seen from the tables, in all scenarios the empirical FWER is either smaller or approximately equal to the nominal size $\alpha$. However, as one can expect, our test becomes more conservative with higher values of $\sigma$.
-
-%However, the MSE values become somewhat larger when $\overline{r}$ is chosen bigger. This is of course not very surprising: The main reason why the estimator $\widehat{a}$ works well in the presence of a strong trend is that it is only based on differences of small orders. If we increase $\overline{r}$, we use larger differences to compute $\widehat{a}$, which results in not eliminating the trend $m$ appropriately any more. This becomes visible in somewhat larger MSE values. Nevertheless, overall, our estimators appear not to be strongly influenced by the choice of tuning parameters (in terms of MSE) as long as these are chosen within reasonable bounds. 
-
-\begin{table}[b!]
+\begin{table}[h!]
 \footnotesize{
-\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 10$.}\label{s:tab:sim:size:1}
+\caption{Empirical size of the test for $\sigma = 10$.}\label{s:tab:sim:size:1}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
 \toprule
  & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
 \cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
  & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
 \cmidrule[0.4pt]{1-10}
  $T = 100$ & 0.009 & 0.043 & 0.085 & 0.008 & 0.039 & 0.075 & 0.005 & 0.023 & 0.055 \\ 
@@ -842,16 +866,17 @@ In what follows, we carry out some robustness checks to assess how sensitive our
 \end{tabularx}}
 \end{table}
 
-\begin{table}[b!]
+
+\begin{table}[h!]
 \footnotesize{
-\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$, $\sigma = 20$.}\label{s:tab:sim:size:2}
+\caption{Empirical size of the test for $\sigma = 20$.}\label{s:tab:sim:size:2}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
 \toprule
  & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
 \cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
  & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
 \cmidrule[0.4pt]{1-10}
 $T = 100$ & 0.011 & 0.050 & 0.094 & 0.010 & 0.047 & 0.092 & 0.009 & 0.034 & 0.070 \\ 
@@ -862,60 +887,149 @@ $T = 100$ & 0.011 & 0.050 & 0.094 & 0.010 & 0.047 & 0.092 & 0.009 & 0.034 & 0.07
 \end{table}
 
 
-We next repeat the simulation exercises of Section \ref{subsec:sim} with the different mean function. Specifically, we take the following function:
-\[ \lambda(u) = 5000 \exp\Big(-\frac{(10 u-3)^2}{2}\Big) + 500. \]
-The results for different values of the overdispersion parameter $\sigma$ are presented in Tables \ref{s:tab:sim:size:3},  \ref{s:tab:sim:size:4} and \ref{s:tab:sim:size:5}. As can be seen, our test appears to be barely influenced by the choice of different mean function.
-
+\pagebreak
 
 
 \begin{table}[t!]
 \footnotesize{
-\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$ for different mean function and $\sigma = 10$.}\label{s:tab:sim:size:3}
+\caption{Power of the test in Scenario A for $\sigma = 10$.}\label{s:tab:sim:power:1}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
 \toprule
  & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
 \cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
  & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
 \cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.836 & 0.915 & 0.911 & 0.833 & 0.903 & 0.898 & 0.777 & 0.874 & 0.882 \\ 
+  $T = 250$ & 0.986 & 0.971 & 0.938 & 0.984 & 0.956 & 0.918 & 0.980 & 0.961 & 0.924 \\ 
+  $T = 500$ & 0.996 & 0.975 & 0.946 & 0.994 & 0.965 & 0.927 & 0.992 & 0.963 & 0.918 \\ 
 \bottomrule
 \end{tabularx}}
+\vspace{0.5cm}
 \end{table}
+
 
 \begin{table}[t!]
 \footnotesize{
-\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$ for different mean function and $\sigma = 15$.}\label{s:tab:sim:size:4}
+\caption{Power of the test in Scenario A for $\sigma = 20$.}\label{s:tab:sim:power:2}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
 \toprule
  & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
 \cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
  & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
 \cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.144 & 0.275 & 0.352 & 0.115 & 0.231 & 0.304 & 0.048 & 0.120 & 0.163 \\ 
+  $T = 250$ & 0.244 & 0.434 & 0.538 & 0.204 & 0.403 & 0.486 & 0.133 & 0.247 & 0.305 \\ 
+  $T = 500$ & 0.296 & 0.563 & 0.662 & 0.273 & 0.511 & 0.603 & 0.175 & 0.338 & 0.433 \\ 
 \bottomrule
 \end{tabularx}}
+\vspace{0.5cm}
 \end{table}
 
 
 \begin{table}[t!]
 \footnotesize{
-\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$ for different mean function and $\sigma = 20$.}\label{s:tab:sim:size:5}
+\caption{Power of the test in Scenario B for $\sigma = 10$.}\label{s:tab:sim:power:3}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 \begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
 \toprule
  & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
 \cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+ & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
  & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
 \cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.991 & 0.973 & 0.946 & 0.994 & 0.970 & 0.935 & 0.994 & 0.971 & 0.940 \\ 
+  $T = 250$ & 0.993 & 0.969 & 0.941 & 0.993 & 0.959 & 0.919 & 0.991 & 0.960 & 0.925 \\ 
+  $T = 500$ & 0.996 & 0.976 & 0.948 & 0.993 & 0.966 & 0.928 & 0.993 & 0.962 & 0.917 \\ 
+\bottomrule
+\end{tabularx}}
+\vspace{0.5cm}
+\end{table}
+
+
+\begin{table}[t!]
+\footnotesize{
+\caption{Power of the test in Scenario B for $\sigma = 20$.}\label{s:tab:sim:power:4}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.438 & 0.636 & 0.704 & 0.404 & 0.598 & 0.669 & 0.277 & 0.449 & 0.526 \\ 
+  $T = 250$ & 0.864 & 0.934 & 0.927 & 0.850 & 0.923 & 0.915 & 0.811 & 0.891 & 0.898 \\ 
+  $T = 500$ & 0.960 & 0.968 & 0.949 & 0.961 & 0.964 & 0.935 & 0.945 & 0.961 & 0.941 \\ 
 \bottomrule
 \end{tabularx}}
 \end{table}
+
+
+\phantom{end}
+
+
+%We next repeat the simulation exercises of Section \ref{subsec:sim} with the different mean function. Specifically, we take the following function:
+%\[ \lambda(u) = 5000 \exp\Big(-\frac{(10 u-3)^2}{2}\Big) + 500. \]
+%The results for different values of the overdispersion parameter $\sigma$ are presented in Tables \ref{s:tab:sim:size:3},  \ref{s:tab:sim:size:4} and \ref{s:tab:sim:size:5}. As can be seen, our test appears to be barely influenced by the choice of different mean function.
+%
+%
+%
+%\begin{table}[t!]
+%\footnotesize{
+%\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$ for different mean function and $\sigma = 10$.}\label{s:tab:sim:size:3}
+%\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+%\newcolumntype{Z}{>{\centering\arraybackslash}X}
+%\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+%\toprule
+% & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+%\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+% & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+% & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+%\cmidrule[0.4pt]{1-10}
+%\bottomrule
+%\end{tabularx}}
+%\end{table}
+%
+%\begin{table}[t!]
+%\footnotesize{
+%\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$ for different mean function and $\sigma = 15$.}\label{s:tab:sim:size:4}
+%\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+%\newcolumntype{Z}{>{\centering\arraybackslash}X}
+%\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+%\toprule
+% & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+%\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+% & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+% & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+%\cmidrule[0.4pt]{1-10}
+%\bottomrule
+%\end{tabularx}}
+%\end{table}
+%
+%
+%\begin{table}[t!]
+%\footnotesize{
+%\caption{Size of the test for different number of time series $n \in \{5, 10, 50\}$ for different mean function and $\sigma = 20$.}\label{s:tab:sim:size:5}
+%\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+%\newcolumntype{Z}{>{\centering\arraybackslash}X}
+%\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+%\toprule
+% & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+%\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+% & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
+% & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+%\cmidrule[0.4pt]{1-10}
+%\bottomrule
+%\end{tabularx}}
+%\end{table}
 
 %Furthermore, we repeat the simulation exercise with drawing $X_{it}$ from the iid normal distribution with mean $\lambda\left(\frac{t}{T}\right)$ and variance $\sigma^2 \lambda\left(\frac{t}{T}\right)$. The mean function $\lambda$ is taken to be the same as in first part of the simulation study in Section \ref{subsec:sim}: $ \lambda(u) = 5000 \exp\Big(-\frac{(10 u-3)^2}{2}\Big) + 1000$. The results are presented in Tables \ref{s:tab:sim:size:6}, \ref{s:tab:sim:size:7} and \ref{s:tab:sim:size:8}.
 %
@@ -968,90 +1082,6 @@ The results for different values of the overdispersion parameter $\sigma$ are pr
 %\bottomrule
 %\end{tabularx}}
 %\end{table}
-
-Next, we repeat the power simulations from Section \ref{subsec:sim} for different values of the overdispersion parameter $\sigma$ for both simulation scenarios considered in \ref{subsec:sim}. The results of the power simulations for $\sigma = 10$ and $\sigma = 20$ for the first setting, where two mean functions are only different by the height of their peak, are presented in Tables \ref{s:tab:sim:power:1} and \ref{s:tab:sim:power:2} respectively. The results of the power simulations for $\sigma = 10$ and $\sigma = 20$ for the second setting, where two mean functions have the same heights of the peak but reach their respective peak at different points in time, are presented in Tables \ref{s:tab:sim:power:3} and \ref{s:tab:sim:power:4} respectively. As can be seen, our test is much more powerful for the smaller values of the $\sigma$. This is what one would expect, because higher values of $\sigma$ means that the noise is getting stronger compared to the trend function and the problem of correctly determining the intervals where the mean functions differ become much more complicated. However, even in the presence of the strong noise (in case of $\sigma = 20$), we are able to correctly determine that the first mean function is different from the others but all of the others are the same in more than half of the cases for sufficiently large sample size and small number of time series.
-
-
-\begin{table}[t!]
-\footnotesize{
-\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$ for the first simulation scenario where the mean functions differ by the heights of the peak with $\sigma = 10$.}\label{s:tab:sim:power:1}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-\toprule
- & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
- & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-\cmidrule[0.4pt]{1-10}
-$T = 100$ & 0.836 & 0.915 & 0.911 & 0.833 & 0.903 & 0.898 & 0.777 & 0.874 & 0.882 \\ 
-  $T = 250$ & 0.986 & 0.971 & 0.938 & 0.984 & 0.956 & 0.918 & 0.980 & 0.961 & 0.924 \\ 
-  $T = 500$ & 0.996 & 0.975 & 0.946 & 0.994 & 0.965 & 0.927 & 0.992 & 0.963 & 0.918 \\ 
-\bottomrule
-\end{tabularx}}
-\end{table}
-
-
-
-\begin{table}[t!]
-\footnotesize{
-\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$ for the first simulation scenario where the mean functions differ by the heights of the peak with $\sigma = 20$.}\label{s:tab:sim:power:2}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-\toprule
- & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
- & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-\cmidrule[0.4pt]{1-10}
-$T = 100$ & 0.144 & 0.275 & 0.352 & 0.115 & 0.231 & 0.304 & 0.048 & 0.120 & 0.163 \\ 
-  $T = 250$ & 0.244 & 0.434 & 0.538 & 0.204 & 0.403 & 0.486 & 0.133 & 0.247 & 0.305 \\ 
-  $T = 500$ & 0.296 & 0.563 & 0.662 & 0.273 & 0.511 & 0.603 & 0.175 & 0.338 & 0.433 \\ 
-\bottomrule
-\end{tabularx}}
-\end{table}
-
-
-\begin{table}[t!]
-\footnotesize{
-\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$ for the second simulation scenario where the mean functions differ by the location of the peak with $\sigma = 10$.}\label{s:tab:sim:power:3}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-\toprule
- & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
- & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-\cmidrule[0.4pt]{1-10}
-$T = 100$ & 0.991 & 0.973 & 0.946 & 0.994 & 0.970 & 0.935 & 0.994 & 0.971 & 0.940 \\ 
-  $T = 250$ & 0.993 & 0.969 & 0.941 & 0.993 & 0.959 & 0.919 & 0.991 & 0.960 & 0.925 \\ 
-  $T = 500$ & 0.996 & 0.976 & 0.948 & 0.993 & 0.966 & 0.928 & 0.993 & 0.962 & 0.917 \\ 
-\bottomrule
-\end{tabularx}}
-\end{table}
-
-
-
-\begin{table}[t!]
-\footnotesize{
-\caption{Power of the test for different number of time series $n \in \{5, 10, 50\}$ for the second simulation scenario where the mean functions differ by the locations of the peak with $\sigma = 20$.}\label{s:tab:sim:power:4}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-\toprule
- & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{nominal size $\alpha$} &\multicolumn{3}{c}{nominal size $\alpha$} & \multicolumn{3}{c}{nominal size $\alpha$} \\
- & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-\cmidrule[0.4pt]{1-10}
-$T = 100$ & 0.438 & 0.636 & 0.704 & 0.404 & 0.598 & 0.669 & 0.277 & 0.449 & 0.526 \\ 
-  $T = 250$ & 0.864 & 0.934 & 0.927 & 0.850 & 0.923 & 0.915 & 0.811 & 0.891 & 0.898 \\ 
-  $T = 500$ & 0.960 & 0.968 & 0.949 & 0.961 & 0.964 & 0.935 & 0.945 & 0.961 & 0.941 \\ 
-\bottomrule
-\end{tabularx}}
-\end{table}
 
 
 
