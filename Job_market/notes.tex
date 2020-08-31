@@ -86,7 +86,11 @@ The paper is structured as follows. As already mentioned above, Section \ref{sec
 %Importantly, even though our multiscale test is motivated by the current COVID-19 crisis, its applicability is by no means restricted to this specific event. It is a general method to compare nonparametric trends in epidemiological (count) data and is thus useful beyond the context of the COVID-19 pandemic. 
 %In Section ??, we show that it is even useful beyond this epidemiological context, for example, in the context of financial volatility modelling. We briefly discuss this as well as some further extensions of our methods in Section ??.
 
+{\color{red}
+\section{Literature review on COVID-19}
 
+\cite{Alfano2020} analyse the effect (or lack thereof) of lockdown measures on the number of daily new cases across countries. Specifically, they consider a panel model where one of the covariates is a dummy-variable that indicates whether the country has a lockdown policy for a specific number of days or not. They find out that this dummy variable has a negative and statistically significant coefficient for the whole range of days considered, suggesting that countries that implemented the lockdown have fewer new cases per day than countries that did not. However, when considering the European subsample the coefficient is positive and statistically significant up to day 13, statistically insignificant between days 13 and 17, and negative and statistically significant from day 17 on. These results suggest that the relationship between the number of new cases per day and the governmental response policies might be much more complicated than just linear.
+}
 
 \section{Model setting}\label{sec:model}
 
@@ -484,7 +488,21 @@ Even though we can of course not fully exclude this possibility, our test result
 %(https://ourworldindata.org/covid-testing-us-uk-korea-italy)
 Nevertheless, visual inspection of the raw and smoothed data in panels (a) and (b) of Figure \ref{fig:Germany:Italy} suggest that the underlying time trends are very similar up to day $36$. This is confirmed by our multiscale test which does not find any significant differences before that day. Hence, the different test regimes in Germany and Italy towards the beginning of the pandemic do not appear to have an overly strong effect and to produce spurious differences between the time trends. This suggests that the differences detected by our multiscale test indeed reflect differences in the way the virus spread in Germany and Italy rather than being mere artefacts of different test regimes. 
 
+{\color{red}
+\section{Possible issues}
+\begin{itemize}
+	\item Adjusting to the size of the country: dividing by population.
+	
+	Obviously, the size of the country matters. However, it is not straightforward to normalise the data properly. Simply dividing by the population of the given country 
+	would not be sufficient in our case, because the outbreak of the virus in a specific country is a quite local event (Wuhan in China, Lombardy in Italy, etc.). Clearly,     	this locality does not play any role in the later stages of the epidemic because additional local outbreaks occur over time and their number will presumably be 		larger in countries with a larger population. So, overall, the relationship between the population size and the epidemic curve can be very complicated. As for our 	paper, in the application sections we consider the European countries that are fairly similar (in population size but also in other characteristics), we opted for not 	normalising the data by population size at all rather than "wrongly normalising".
+	\item Building in some policy changes.
+	
+	Need to think how to do that correctly. Look at \cite{Alfano2020} and \cite{Courtemanche2020}.
+	\item Measurement error.
+	\item Why not case-fatality rate?
+\end{itemize}
 
+}
 
 \newpage
 \section*{A \hspace{0.2cm} Appendix}
