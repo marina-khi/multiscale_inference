@@ -100,6 +100,25 @@ There are many papers on comparing case-fatality rates across countries: \cite{K
 \cite{Banholzer2020} - Bayesian hierarchical model, how lockdown affected number of cases in 20 countries. 
 
 \cite{deBrower2020} compare the basic reproduction rate of COVID-19 disease before and after the introduction of the lockdown across different countries. They use the SEIR (Susceptible, Exposed, Infected, Removed) model that is widely-spread in the context of the epidemic modelling. However, the authors assume that the lockdown enforcement results in a discrete, instantaneous change in average number of infections an infectious individual will cause, which is a questionable assumption in our setting. Most countries implemented the lockdown measures gradually, which probably affect the spread of the infection differently at different stages. Hence, our completely nonparametric approach seems more plausible in this setting.
+
+A susceptible(S)-exposed(E)-infected(I)-removed(R) (SEIR) model is one of the most widely used models in the study of the spread of COVID-19: \cite{Yang2020}, \cite{Wu2020}
+%
+%``Traditional SEIR model assumes that each individual transmits to one of the other states at a fixed rate. Chinese government has taken intensive interventional policies to control the spread of COVID-19, which definitely changed the transmission dynamics.
+%
+%Kucharski et al. fitted a stochastic transmission dynamic model to multiple publicly available datasets on cases in Wuhan and internationally exported cases from Wuhan (4). Chinazzi et al. used a Global Epidemic and Mobility Model (GLEAM), an individual-based, stochastic, and spatial epidemic model, to model the international spread of the COVID-19 out-break by emulating the flow of travelers among over 3,200 sub-populations using real transportation data (5).
+%
+%Pan et al. described the distinct patterns of the effective reproduction numbers at the different stages, characterized by different degrees of interventions, of the epidemic in Wuhan (6). Yang et al. also included an additional parameter r(t) (not the effective regeneration number), which denotes the number of contacts for each individual per day. The authors used r(t)=15, 3, and 10, for the days before January 23rd (no intervention), between January 23 and March 1st (fully controls) and after March 1st (mild controls). The inclusion of r(t) made it possible to introduce the effect of interventional and control policies, including travelling and public gathering restrictions. Wei et al. further proposed a SEIR+CAQ model which integrated information on the mechanisms of transmission, profiles of infections and quarantine policies (7).''
+%
+%As an example, on February 5th, 2020, the National Health Commission of the People’s Republic of China announced the release of the tentative fifth revised edition of the Diagnosis and Treatment Plan for COVID-19 which dramatically changed the curve of confirmed COVID-19 cases in China. It is not possible for any model to predict the exact date of the release, let alone that some studies only used data before January 23rd 2020. Although including more parameters may in theory increase the performance of a predictive model, it is almost impossible to have a stable solution at the early stage of an outbreak with very limited information.
+%
+%The value of dynamic models, however, lies in the early warning of infectious disease outbreaks, the decision supporting before the implementation of prevention and control measures, and the evaluation of the effects of public health intervention after the outbreak. Yang et al. estimated that the effect of initiating the interventions five days after the actual time would increase the number of cases exponentially to 173,372 cases on March 4, 2020. Our estimation based on SEIR showed that the policies constraining public transportations reduced 85% of infections (8).
+%
+%However, we propose that it is important to notice that when declaring some intervention is the “cause” of the reduction of COVID-19 cases, it should be stated in a “causal” language. That is, what would have been if this intervention had not been performed? A common framework of policy evaluation is the “counter factual”, in which the causal intervention effect is defined as the difference between the epidemics in the real world, compared to the epidemics had no interventions been performed, maybe contrary to the fact. Of course, it is impossible as in the real world the interventions are either performed or not. Thus when making policies evaluation, the scientists should bear in mind that whether conditions are “exchangeable” for the epidemics with or without the intervention. It is recommended that the sensitivity analysis should be applied to assess the robustness of the evaluation. Scientists should also carefully evaluate whether the data collected is sufficient to make a causal policy evaluation.
+%
+%Besides, given that the interventions from the government is a combination of various policies and methods, it is almost impossible to evaluate a single method, such as the “lockdown” of Wuhan city, the recommendation of wearing mask, or the restriction of public transportation, keeping social distance, building mobile cabin hospital, etc.. As an example, the “lockdown” of Wuhan city not only prevented transportations from or into the city, but also raised the awareness of the people in the whole country against the virus. Peoples stayed at home, reduced unnecessary gathering, washed hands more frequently than before. These behaviors also made the curve of the epidemic flatter than that had no public health “level 1” emergency response been taken. One possible solution for the evaluation of individual policy or intervention is to use an agent based simulation of infectious disease (9,10).
+%
+%With the rapid improvement on computational capacity, machine learning methods have been widely used in medical research. The authors used long short term memory (LSTM) model, an improvement of recurrent neural network (RNN), to predict the number of new cases. The RNN and LSTM models had been widely used in the natural language processing to predict the future elements in a word or a sentence given the previous elements. As most of the machine learning methods are data-driven, it is important use an independent sample to validate the present model. The authors used the 2003 SARS data as the training set, and COVID-19 as the testing set. Their results showed a remarkable agreement between the actual number of cases and the results. Hu et al. developed the modified auto-encoder (MAE), an artificial intelligence (AI) based method, for real time forecasting the number of the new and cumulative confirmed cases and deaths of COVID-19 under various intervention scenarios in more than 100 countries (11). While we believe that there will be more and more AI ML based methods applied in the analysis of COVID-19, it should be noted that the ML base methods only relax the assumptions for the form of traditional dynamic models. In agreement with Zhong’s opinions, we believe that the integration of deep learning, web scraping, and other big data technologies will hopefully improve the precision of COVID-19 predictions (12). However, policy evaluation based on ML analysis still need the scientists to understand what the estimand is and whether the data can answer a causal question.
+
 }
 \section{Model setting}\label{sec:model}
 
@@ -558,7 +577,12 @@ Combining \eqref{eq:aux1} and \eqref{eq:aux2} together, we get $\hat{s}^*_{ijk,T
  = &\frac{1}{Th_k} \var \bigg( \frac{\sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) X_{it}}{\frac{1}{T}\sum\nolimits_{t=1}^T X_{it}} \bigg) + \frac{1}{Th_k} \var \bigg( \frac{\sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) X_{jt}}{\frac{1}{T}\sum\nolimits_{t=1}^T X_{jt}} \bigg),
 \end{align*}
 hence, we 'normalize' $\hat{s}^*_{ijk,T}$ intuitively by dividing it by the following value:
-\[ (\hat{\nu}^*_{ijk,T})^2 = \frac{\hat{\sigma}^2}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \{ \X^*_{it} + \X^*_{jt} \}.\]
+\[ (\hat{\nu}^*_{ijk,T})^2 = \frac{(\hat{\sigma}^*)^2}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \{ \X^*_{it} + \X^*_{jt} \}.\]
+Here we use $(\hat{\sigma}^*)^2$ instead of $\hat{\sigma}^2$ with
+\begin{align*}
+(\widehat{\sigma}^*)^2 &= |\countries|^{-1} \sum_{i \in \countries} (\widehat{\sigma}^*_i)^2 \text{ and }\\
+(\hat{\sigma}_i^*)^2 &= \frac{\sum_{t=2}^T (\X^*_{it}-\X^*_{it-1})^2}{2 \sum_{t=1}^T \X^*_{it}} = \frac{\sum_{t=2}^T (\frac{\X_{it}}{\widehat{c}_i}-\frac{\X_{it-1}}{\widehat{c}_i})^2}{2 \sum_{t=1}^T \frac{\X_{it}}{\widehat{c}_i}} = \frac{\sum_{t=2}^T (\X_{it}-\X_{it-1})^2}{2\, \widehat{c}_i \sum_{t=1}^T \X_{it}}
+\end{align*}
 Normalizing the statistic $\hat{s}_{ijk,T}$ by the estimator $\hat{\nu}_{ijk,T}$ yields the expression 
 \begin{equation*}
 \hat{\psi}^*_{ijk,T} := \frac{\hat{s}^*_{ijk,T}}{\hat{\nu}^*_{ijk,T}} = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it} - \X^*_{jt})}{ \hat{\sigma}\{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it} + \X^*_{jt}) \}^{1/2}}, 
@@ -569,13 +593,9 @@ which serves as our test statistic of the hypothesis $H_0^{(ijk)}$. For later re
 \end{equation*}
 with $\overline{\lambda}_{ij}(u) = \{ \lambda_i(u) + \lambda_j(u) \}/2$, which is identical to $\hat{\psi}_{ijk,T}$ under $H_0^{(ijk)}$. 
 
-%
-%
-%where $(\hat{\sigma}^*)^2$ is defined as follows: For each country $i$, let 
-%\begin{align*}
-%(\hat{\sigma}_i^*)^2 = \frac{\sum_{t=2}^T (\X^*_{it}-\X^*_{it-1})^2}{2 \sum_{t=1}^T \X^*_{it}} = \frac{\sum_{t=2}^T (\frac{\X_{it}}{\widehat{c}_i}-\frac{\X_{it-1}}{\widehat{c}_i})^2}{2 \sum_{t=1}^T \frac{\X_{it}}{\widehat{c}_i}} = \frac{\widehat{\sigma}_i^2}{\widehat{c}_i}
-%\end{align*}
-%and set $(\widehat{\sigma}^*)^2 = |\countries|^{-1} \sum_{i \in \countries} (\widehat{\sigma}^*_i)^2$. We have already shown that $\widehat{\sigma}_i^2 = \sigma^2 + o_p(1)$ and $\hat{c}_i = c_i + o_P(1)$ for any $i$ and thus $(\widehat{\sigma}_i^*)^2 = \frac{\sigma^2}{c_i} + o_p(1)$.
+\textbf{What about making the overdispersion parameter also scalable, i.e. make an assumption that the model is actually $$X_{it} = c_i \lambda_i(t/T) + \frac{\sigma_i}{\sqrt{c_i}} \sqrt{c_i \lambda_i(t/T)} \eta_{it}$$ with $\sigma_i / \sqrt{c_i} = \sigma$ for all $i$?}
+
+%and set $$. We have already shown that $\widehat{\sigma}_i^2 = \sigma^2 + o_p(1)$ and $\hat{c}_i = c_i + o_P(1)$ for any $i$ and thus $(\widehat{\sigma}_i^*)^2 = \frac{\sigma^2}{c_i} + o_p(1)$.
 %
 %
 %\subsection{Construction of the test} 
@@ -631,13 +651,28 @@ with $\overline{\lambda}_{ij}(u) = \{ \lambda_i(u) + \lambda_j(u) \}/2$, which i
 \begin{itemize}
 	\item Adjusting to the size of the country: dividing by population.
 	
-	Obviously, the size of the country matters. However, it is not straightforward to normalise the data properly. Simply dividing by the population of the given country 
-	would not be sufficient in our case, because the outbreak of the virus in a specific country is a quite local event (Wuhan in China, Lombardy in Italy, etc.). Clearly,     	this locality does not play any role in the later stages of the epidemic because additional local outbreaks occur over time and their number will presumably be 		larger in countries with a larger population. So, overall, the relationship between the population size and the epidemic curve can be very complicated. As for our 	paper, in the application sections we consider the European countries that are fairly similar (in population size but also in other characteristics), we opted for not 	normalising the data by population size at all rather than "wrongly normalising".
+	Obviously, the size of the country matters. However, it is not straightforward to normalise the data properly. Simply dividing by the population of the given country would not be sufficient in our case, because the outbreak of the virus in a specific country is a quite local event (Wuhan in China, Lombardy in Italy, etc.). Clearly, this locality does not play any role in the later stages of the epidemic because additional local outbreaks occur over time and their number will presumably be larger in countries with a larger population. So, overall, the relationship between the population size and the epidemic curve can be very complicated. As for our paper, in the application sections we consider the European countries that are fairly similar (in population size but also in other characteristics), we opted for not normalising the data by population size at all rather than "wrongly normalising".
 	\item Building in some policy changes.
 	
 	Need to think how to do that correctly. Look at \cite{Alfano2020} and \cite{Courtemanche2020}.
 	\item Measurement error.
+	\item SEIR (susceptible(S)-exposed(E)-infected(I)-removed(R)) models.
+	
+	A lot of assumptions underneath. For example, ``incubation period is reported to be between $2$ and $14$ days, we chose the midpoint of $7$ days''. Plus there are no data on the number of people exposed to infection under different social distancing measures, because this kind of lockdown does not have any precedent.
+	
+	Another problem lies in the fact that traditional SEIR model assumes a closed system (no individuals move in or out). Under the travel ban, this is a reasonable assumption. But many countries either only introduced travel restrictions very late in the duration of the pandemic.
+	
+	Futhermore, SEIR framework only takes into account human-to-human transmission of the infection, whereas the indirect transmission pathway from the environment to human hosts is also a highly possible route to spread the infection. Incorporating such transmission pathway into SEIR model can be very challenging.
+	
+	``Another limitation of the current COVID-19 models is that the transmission rates are typically fixed as constants, rendering simplicity for both mathematical analysis and data fitting. In practice, however, the transmission rates may change with the epidemiological and socioeconomic status and may be impacted by the outbreak control. For example, many countries (China in particular) implemented strong disease control measures, including large-scale quarantine, intensive tracking of movement and contact, strict isolation of infected individuals, expanded medical facilities, and social distancing, which can effectively (and, in some places, rapidly) reduce the transmissibility of the virus. Meanwhile, when the reported infection level is high, people would be motivated to take voluntary action to reduce the contact with the infected individuals and contaminated environment so as to protect themselves and their family members. As a result, the actual transmission rates may decrease with an ascending outbreak, and may increase at a time of low disease prevalence.''
+
+
 	\item Why not case-fatality rate?
+	
+	\item How to proceed further? Or what are the possible policy implications?
+	Maybe tell a bit about machine learning approach on top of our method for example?
+	
+``A promising direction to advance mathematical modeling in epidemiology is to connect the models with data-driven techniques, particularly machine learning. The work by Yang et al. (1) applied a machine learning approach based on a recurrent neural network that is trained by utilizing a 2003 SARS epidemic dataset as well as incorporating the COVID-19 epidemiological parameters. They found consistent patterns in the predictions from the SEIR model and from the machine learning. For another example, Gao et al. (11) developed a deep learning algorithm to analyze the infectivity of the novel coronavirus and predict its potential hosts, and their findings indicated that bats and minks may be two animal hosts of this virus. These results are encouraging for wider applications of data analysis and computing approaches to study epidemics and pandemics, particularly COVID-19. Machine learning and other artificial intelligence techniques can complement and improve mathematical epidemic models by taking advantage of the large data sets currently available, including epidemic, genetic, demographic, geospatial and mobility data, the scale of which is typically far beyond the applicability of a standard mathematical model. On the other hand, mathematical modeling can provide a meaningful way to validate machine learning predictions and to guide the development of more efficient and robust algorithms in machine learning and data analytics. Thus, the development and advancement of these two different quantitative approaches could be mutually beneficial, and their integration could lead to potentially transformative progress in the study of COVID-19 and beyond.''
 \end{itemize}
 
 }
