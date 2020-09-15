@@ -515,29 +515,29 @@ Nevertheless, visual inspection of the raw and smoothed data in panels (a) and (
 \section{Extensions}
 Now suppose that instead of \eqref{eq:model}, we consider the following nonparametric regression equation:
 \begin{equation*}
-\X_{it} = c_i \lambda_i\Big(\frac{t}{T}\Big) + \varepsilon_{it} \quad \text{with} \quad \varepsilon_{it} = \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, 
+\X_{it} = c_i \lambda_i\Big(\frac{t}{T}\Big) + \varepsilon_{it} \quad \text{with} \quad \varepsilon_{it} = \sigma \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, 
 \end{equation*}
 where $c_i$ is the country-specific scaling parameter that accounts for the size of the country or population density. We introduce this additional parameter in order to be able to compare countries that differ substantially in terms of the population, i.e. Luxembourg and Russia. In our application, we compare 5 European countries that are similar in many aspects, including size, but for further research we need to be able to account for the differences between the countries.
 
-Hence, we would like to test the hypothesis that the time trends of new COVID-19 cases in different countries are the same up to some scaling parameter. For the identification purposes, we will need to assume that for each $i \in \mathcal{C}$ we have $\int_0^1 \lambda_i(u)du = 1$. Only then we are able to estimate the scaling parameter $c_i$. Thus, the testing procedure is as follows.
+Hence, we would like to test the hypothesis that the time trends of new COVID-19 cases in different countries are the same up to some scaling parameter. For the identification purposes, we will need to assume that for each $i \in \mathcal{C}$ we have $\int_0^1 \lambda_i(u)du = 1$. Only then we are able to estimate the scaling parameter $c_i$. Furthermore, we need to assume that $0 <c_{\min} \leq c_i \leq c_{\max}$ for all $i \in \mathcal{C}$. Thus, the testing procedure is as follows.
 
 \textit{Step 1}
 
 First, we estimate the scaling parameter:
 \begin{align*}
 \widehat{c_i} &= \frac{1}{T}\sum_{t = 1}^T X_{it} \\
-&= c_i \frac{1}{T}\sum_{t = 1}^T \lambda_i\Big(\frac{t}{T}\Big) + \sigma\frac{1}{T}\sum_{t = 1}^T \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}\\
+&= c_i \frac{1}{T}\sum_{t = 1}^T \lambda_i\Big(\frac{t}{T}\Big) + \sigma\frac{1}{T}\sum_{t = 1}^T \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}\\
 & = c_i \frac{1}{T}\sum_{t = 1}^T \lambda_i\Big(\frac{t}{T}\Big) + o_P(1)\\
-& = c_i + o_P(1),
+& \stackrel{(*)}{=} c_i + o_P(1),
 \end{align*}
-where in the last inequality we used the normalization $\int_0^1 \lambda_i(u)du = 1$. Hence, $\widehat{c}_i$ is a consistent estimator of $c_i$.
+where in $(*)$ we used the normalization $\int_0^1 \lambda_i(u)du = 1$. Hence, $\widehat{c}_i$ is a consistent estimator of $c_i$.
 
 \textit{Step 2}
 
 Instead of working with $X_{it}$, we consider the following variables:
 \begin{align*}
 X^*_{it} &= \frac{X_{it}}{\frac{1}{T}\sum_{t = 1}^T X_{it}} \\
-&= \frac{c_i}{\widehat{c}_i} \lambda_i \Big(\frac{t}{T}\Big) + \frac{\sigma}{\widehat{c}_i} \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}.
+&= \frac{c_i}{\widehat{c}_i} \lambda_i \Big(\frac{t}{T}\Big) + \frac{\sigma}{\widehat{c}_i} \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}.
 \end{align*}
 
 A statistic to test the hypothesis $H_0^{(ijk)}$ for a given triple $(i,j,k)$ is then constructed as follows. Instead of $\hat{s}_{ijk,T}$, we work with 
@@ -550,7 +550,7 @@ Then
 where
 \begin{align*}
 R_1 &= \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \bigg( \Big(\frac{c_i}{\widehat{c}_i} - 1 \Big) \lambda_i \Big(\frac{t}{T}\Big)  - \Big(\frac{c_j}{\widehat{c}_j} - 1 \Big) \lambda_j \Big(\frac{t}{T}\Big)\bigg),\\
-R_2& =  \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big( \frac{\sigma}{\widehat{c}_i} \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} - \frac{\sigma}{\widehat{c}_j} \sqrt{\lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt} \Big).
+R_2& =  \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big( \frac{\sigma}{\widehat{c}_i} \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} - \frac{\sigma}{\widehat{c}_j} \sqrt{c_j \lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt} \Big).
 \end{align*}
 Since $\widehat{c}_i = c_i + o_P(1)$ and $0 \leq  \sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) \lambda_i \big(\frac{t}{T}\big) \leq h_k \lambda_{max}$, we have
 \begin{align}\label{eq:aux1}
@@ -559,9 +559,9 @@ Since $\widehat{c}_i = c_i + o_P(1)$ and $0 \leq  \sum\nolimits_{t=1}^T \ind\big
 \end{align}
 Furthermore, applying the law of large numbers, we get:
 \begin{align*}
- \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}  = o_P(1).
+ \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}  = o_P(1).
 \end{align*}
-Hence, if we uniformly bound the scaling parameters away from 0, i.e. $\exists \, c_{min}$ such that for all $i \in \mathcal{C}$ we have $0 < c_{min} \leq c_i$, we can use the fact that $\frac{\sigma}{\widehat{c}_i} = O_P(1)$ to get that
+Hence, if we uniformly bound the scaling parameters away from 0, i.e. $\exists \, c_{\min}$ such that for all $i \in \mathcal{C}$ we have $0 < c_{\min} \leq c_i$, we can use the fact that $\frac{\sigma}{\widehat{c}_i} = O_P(1)$ to get that
 \begin{align}\label{eq:aux2}
 R_2& =  \frac{\sigma}{\widehat{c}_i} \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} -\frac{\sigma}{\widehat{c}_j}\frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)  \sqrt{\lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt}\nonumber\\
 & = o_P(1).
@@ -572,24 +572,32 @@ Combining \eqref{eq:aux1} and \eqref{eq:aux2} together, we get $\hat{s}^*_{ijk,T
 =&\frac{1}{Th_k} \var \Big( \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) X_{it}^*\Big) + \frac{1}{Th_k} \var \Big( \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) X_{jt}^*\Big)\\
  = &\frac{1}{Th_k} \var \bigg( \frac{\sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) X_{it}}{\frac{1}{T}\sum\nolimits_{t=1}^T X_{it}} \bigg) + \frac{1}{Th_k} \var \bigg( \frac{\sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) X_{jt}}{\frac{1}{T}\sum\nolimits_{t=1}^T X_{jt}} \bigg),
 \end{align*}
-hence, we 'normalize' $\hat{s}^*_{ijk,T}$ intuitively by dividing it by the following value:
-\[ (\hat{\nu}^*_{ijk,T})^2 = \frac{(\hat{\sigma}^*)^2}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \{ \X^*_{it} + \X^*_{jt} \}.\]
-Here we use $(\hat{\sigma}^*)^2$ instead of $\hat{\sigma}^2$ with
+but we can heuristically approximate it. Suppose that we actually know $c_i$ instead of estimating it. Then we have
 \begin{align*}
-(\widehat{\sigma}^*)^2 &= |\countries|^{-1} \sum_{i \in \countries} (\widehat{\sigma}^*_i)^2 \text{ and }\\
-(\hat{\sigma}_i^*)^2 &= \frac{\sum_{t=2}^T (\X^*_{it}-\X^*_{it-1})^2}{2 \sum_{t=1}^T \X^*_{it}} = \frac{\sum_{t=2}^T (\frac{\X_{it}}{\widehat{c}_i}-\frac{\X_{it-1}}{\widehat{c}_i})^2}{2 \sum_{t=1}^T \frac{\X_{it}}{\widehat{c}_i}} = \frac{\sum_{t=2}^T (\X_{it}-\X_{it-1})^2}{2\, \widehat{c}_i \sum_{t=1}^T \X_{it}}
+& \var \bigg( \frac{\sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) X_{it}}{c_i} \bigg) \\
+&\quad= \var \bigg(\sum\nolimits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \lambda_i \big(\frac{t}{T}\big) + \sum\nolimits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)\frac{\sigma}{\sqrt{c_i}} \sqrt{\lambda_i \big(\frac{t}{T}\big)} \eta_{it} \bigg) \\
+&\quad = \frac{\sigma^2}{c_i}  \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)\lambda_i \big(\frac{t}{T}\big) \var (\eta_{it})\\
+&\quad = \frac{\sigma^2}{c_i}  \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)\lambda_i \big(\frac{t}{T}\big).
+\end{align*}
+Then (very heuristically) we have
+\begin{align*}
+ \var(\hat{s}^*_{ijk,T})  \approx\frac{\sigma^2}{Th_k}  \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big\{ \frac{\lambda_i \big(\frac{t}{T}\big)}{c_i} + \frac{\lambda_j \big(\frac{t}{T}\big)}{c_j} \Big\} 
+ \end{align*}
+hence, we 'normalize' $\hat{s}^*_{ijk,T}$ intuitively by dividing it by the following value:
+\[ (\hat{\nu}^*_{ijk,T})^2 = \frac{\hat{\sigma}^2}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big\{ \frac{\X^*_{it}}{\hat{c}_i} + \frac{\X^*_{jt}}{\hat{c}_j} \Big\}.\]
+As before,
+\begin{align*}
+\widehat{\sigma}^2 = |\countries|^{-1} \sum_{i \in \countries} \widehat{\sigma}_i^2\quad \text{ and } \quad\hat{\sigma}_i^2 = \frac{\sum_{t=2}^T (\X_{it}-\X_{it-1})^2}{2 \sum_{t=1}^T \X_{it}}.
 \end{align*}
 Normalizing the statistic $\hat{s}_{ijk,T}$ by the estimator $\hat{\nu}_{ijk,T}$ yields the expression 
 \begin{equation*}
-\hat{\psi}^*_{ijk,T} := \frac{\hat{s}^*_{ijk,T}}{\hat{\nu}^*_{ijk,T}} = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it} - \X^*_{jt})}{ \hat{\sigma}\{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it} + \X^*_{jt}) \}^{1/2}}, 
+\hat{\psi}^*_{ijk,T} := \frac{\hat{s}^*_{ijk,T}}{\hat{\nu}^*_{ijk,T}} = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it} - \X^*_{jt})}{ \hat{\sigma}\{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it}/\hat{c}_i + \X^*_{jt}/\hat{c}_j )\}^{1/2}}, 
 \end{equation*}
 which serves as our test statistic of the hypothesis $H_0^{(ijk)}$. For later reference, we additionally introduce the statistic 
 \begin{equation*}
-\hat{\psi}_{ijk,T}^{*, 0} = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \Big(\big( \frac{c_i}{\hat{c}_i} - \frac{c_j}{\hat{c}_j} \big)\overline{\lambda}_{ij} + \big(\frac{\sigma}{\hat{c}_i} - \frac{\sigma}{\hat{c}_j} \big) \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\eta_{it} - \eta_{jt}) \Big)}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it} + \X^*_{jt}) \}^{1/2}}
+\hat{\psi}_{ijk,T}^{*, 0} = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \Big(\big( \frac{c_i}{\hat{c}_i} - \frac{c_j}{\hat{c}_j} \big)\overline{\lambda}_{ij} +  \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\frac{\sigma}{\hat{c}_i} \sqrt{c_i} \eta_{it} - \frac{\sigma}{\hat{c}_j} \sqrt{c_j}\eta_{jt}) \Big)}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it}/\hat{c}_i + \X^*_{jt}/\hat{c}_j) \}^{1/2}}
 \end{equation*}
 with $\overline{\lambda}_{ij}(u) = \{ \lambda_i(u) + \lambda_j(u) \}/2$, which is identical to $\hat{\psi}_{ijk,T}$ under $H_0^{(ijk)}$. 
-
-\textbf{What about making the overdispersion parameter also scalable, i.e. make an assumption that the model is actually $$X_{it} = c_i \lambda_i(t/T) + \frac{\sigma_i}{\sqrt{c_i}} \sqrt{c_i \lambda_i(t/T)} \eta_{it}$$ with $\sigma_i / \sqrt{c_i} = \sigma$ for all $i$?}
 
 %and set $$. We have already shown that $\widehat{\sigma}_i^2 = \sigma^2 + o_p(1)$ and $\hat{c}_i = c_i + o_P(1)$ for any $i$ and thus $(\widehat{\sigma}_i^*)^2 = \frac{\sigma^2}{c_i} + o_p(1)$.
 %
