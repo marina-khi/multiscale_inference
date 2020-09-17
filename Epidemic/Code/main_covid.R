@@ -16,14 +16,14 @@ alpha    <- 0.05 #confidence level for application
 sim_runs <- 5000 #Number of simulation runs to produce the Gaussian qauntiles
 
 #Loading the world coronavirus data
-covid_tmp         <- read.csv("data/covid.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "")
+covid_tmp         <- read.csv("data/covid_new.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "")
 covid_tmp         <- covid_tmp[!is.na(covid_tmp$countryterritoryCode), ]
 covid_tmp$dateRep <- as.Date(covid_tmp$dateRep, format = "%d/%m/%Y")
 covid_tmp         <- complete(covid_tmp, dateRep = seq.Date(min(dateRep), max(dateRep), by='day'),
                               countryterritoryCode, fill = list(cases = 0, deaths = 0))
 
 #We load government response index as well
-gov_responces      <- read.csv("data/OxCGRT_latest.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "N/A")
+gov_responces      <- read.csv("data/OxCGRT_latest_new.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "N/A")
 gov_responces$Date <- as.Date(as.character(gov_responces$Date), format = "%Y%m%d")
 names(gov_responces)[names(gov_responces) == 'CountryCode'] <- 'countryterritoryCode'
 names(gov_responces)[names(gov_responces) == 'Date']        <- 'dateRep'
@@ -122,7 +122,7 @@ countries_names <- c("Germany", "Spain", "France", "United Kingdom", "Italy")
 for (l in seq_len(nrow(result$ijset))){
   i <- result$ijset[l, 1]
   j <- result$ijset[l, 2]
-  filename = paste0("plots/", countries[i], "_vs_", countries[j], ".pdf")
+  filename = paste0("plots_new/", countries[i], "_vs_", countries[j], ".pdf")
   produce_plots(results = result, l = l, data_i = covid_mat[, i], data_j = covid_mat[, j],
                 gov_resp_i = gov_resp[, i], gov_resp_j = gov_resp[, j],
                 country_i = countries_names[i], country_j = countries_names[j],

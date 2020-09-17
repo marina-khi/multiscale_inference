@@ -1,0 +1,612 @@
+\documentclass[10pt]{beamer}
+
+\usetheme[progressbar=frametitle]{metropolis}
+
+\usepackage{appendixnumberbeamer}
+
+\usepackage{booktabs}
+\usepackage{blkarray}
+%\usepackage{ccicons}
+\usepackage{graphicx}
+\usepackage{color}
+
+\definecolor{UniBlue}{RGB}{7,82,154}
+\definecolor{UniYellow}{RGB}{234,185,12}
+
+%\setbeamercolor{title}{fg=UniBlue, bg = UniYellow}
+%\setbeamercolor{frametitle}{fg=UniBlue, bg= UniYellow}
+%\setbeamercolor{structure}{fg=UniBlue, bg= UniYellow}
+%\setbeamercolor{progress bar}{fg=UniBlue, bg= UniYellow}
+\usepackage{xspace}
+
+\title{Multiscale Inference in Nonparametric regression with Time Series Errors}
+\date{CFE-CMStatistics 2018}
+\author{Marina Khismatullina \inst{1} \and Michael Vogt \inst{1}}
+\institute{\inst{1} University of Bonn}
+\setbeamertemplate{frame footer}{Multiscale Inference for Nonparametric Time Trends}
+\metroset{block=fill}
+% \titlegraphic{\hfill\includegraphics[height=1.5cm]{logo.pdf}}
+
+\newcommand{\Prob}{\mathrm{P}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Corr}{\mathrm{Corr}}
+\newcommand{\sgn}{\text{sgn}}
+\newtheorem{prop}{Proposition}
+
+
+\begin{document}
+
+\maketitle
+
+%\begin{frame}{Table of contents}
+%  \setbeamertemplate{section in toc}[sections numbered]
+%  \tableofcontents[hideallsubsections]
+%\end{frame}
+
+\section{Introduction}
+
+\begin{frame}{Motivation}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{temperature_data.pdf}
+		\caption{Yearly mean temperature in Central England from 1659 to 2017}
+		\label{figure:temperature_data}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Motivation}
+  \begin{figure}
+    \centering
+    \includegraphics[height=0.85\textheight]{threegraphics_testing_constant_method_ll.pdf}
+    %\caption{Summary of the application results for testing shape}
+    \label{figure:shape_results}
+  \end{figure}
+\end{frame}
+
+%\begin{frame}{Idea}
+%    \begin{block}{Research question}
+%	Develop multiscale methods to test qualitative hypotheses about nonapametric time trends.\pause
+%	
+%	One time series is observed:
+%	\begin{itemize}
+%		\item Test the null hypothesis of the existence of a time trend.
+%		\item Identify time regions with upward or downward movement in the trend.
+%	\end{itemize}\pause
+%	Multiple time series are observed:
+%	\begin{itemize}
+%		\item  Detect which time trends are different and where.
+%	\end{itemize}
+%    \end{block}
+%\end{frame}
+
+\section{Model}
+\begin{frame}{Model}
+We observe a single time series $\{Y_t: 1 \le t \le T \}$ of length $T$. The observations come from the following model:
+\begin{equation*}\label{model1}
+Y_t = m \Big( \frac{t}{T} \Big) + \varepsilon_t 
+\end{equation*}
+\vspace{-6mm}
+\begin{itemize}
+\item $m$ is an unknown trend function on $[0,1]$;
+\item $\{ \varepsilon_t: 1 \le t \le T \}$ is a zero-mean stationary error process.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Literature}
+	Multiscale approaches for independent data
+	\begin{itemize}
+		\item SiZer method (Chaudhuri and Marron, 1999, 2000)
+		\item Testing monotonicity of the trend function (Hall and Heckman, 2000)
+		\item Testing qualitative hypotheses (D{\"u}mbgen and Spokoiny, 2001)
+	\end{itemize}\pause
+	Multiscale methods for dependent data
+	\begin{itemize}
+		\item Extensions to SiZer method (Park et al. 2004, 2009, Rondonotti et al. 2007)
+	\end{itemize}
+\end{frame}
+
+\section{The multiscale method}
+\subsection{Testing problem}
+\begin{frame}{Testing}
+Testing problem:
+\begin{align*}
+H_0:\quad &m^{\prime} = 0\\
+H_1:\quad &m^{\prime}\not= 0
+\end{align*}
+\end{frame}
+
+\begin{frame}{Test Statistic}
+For a given location $u \in [0,1]$ and bandwidth $h$ we construct the kernel averages
+\begin{equation*}
+\widehat{\psi}_T(u,h) = \sum\limits_{t=1}^T w_{t,T}(u,h) Y_t, 
+\end{equation*}
+\vspace{-3mm}
+where 
+\begin{align*}
+&w_{t,T}(u,h) = \frac{\Lambda_{t,T}(u,h)}{ \{\sum\nolimits_{t=1}^T \Lambda_{t,T}(u,h)^2\}^{1/2} } ,\\
+&\Lambda_{t,T}(u,h) = K\Big(\frac{t/T-u}{h}\Big) \Big[ S_{T,0}(u,h)\Big(\frac{t/T-u}{h}\Big) - S_{T,1}(u,h)  \Big] \\
+&S_{T,\ell}(u,h) = \frac{1}{Th} \sum\nolimits_{t=1}^T K\Big(\frac{t/T-u}{h}\Big) \Big(\frac{t/T-u}{h}\Big)^\ell
+\end{align*}
+for $\ell = 0,1,2$ and $K$ is a kernel function.
+\end{frame}
+
+\begin{frame}[label = frame_teststatistic]{Test Statistic}
+Test statistic is defined as follows
+\begin{equation*}
+\widehat{\Psi}_T = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widehat{\psi}_T(u,h)}{\widehat{\sigma}}\Big| - \lambda(h) \Big\}, 
+\end{equation*} 
+where 
+\begin{itemize}
+\item $\lambda(h) = \sqrt{2 \log \{ 1/(2h) \}}$ is an additive correction term; \hyperlink{frame_lambda}{\beamerbutton{Idea}}\pause
+\item $\mathcal{G}_T$ is the set of points $(u,h)$ that are taken into consideration;\pause
+\item $\widehat{\sigma}^2$ is an appropriate estimator of the long-run variance $\sigma^2$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Test procedure}
+Gaussian version of the test statistic:
+\begin{align*}
+\Phi_T = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_T(u,h)}{\sigma}\Big| - \lambda(h) \Big\},
+\end{align*} 
+\vspace{-3mm}
+where
+\begin{itemize}
+\item $\phi_T(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \sigma Z_t$;
+\item $Z_t$ are independent standard normal random variables;
+\item $q_T(\alpha)$ is $(1 - \alpha)$ quantile of $\Phi_T$.
+\end{itemize}\pause
+\begin{block}{Test procedure}
+For a given significance level $\alpha \in (0,1)$, we reject $H_0$ if $\widehat{\Psi}_T > q_T(\alpha)$.
+\end{block}
+\end{frame}
+
+\section{Theoretical properties}
+\begin{frame}{Assumptions}
+\begin{itemize}
+\onslide<1->\item[$\mathcal{C}1$] \label{C-err1} The variables $\varepsilon_t$ are weakly dependent.
+\onslide<2->\item[$\mathcal{C}2$] \label{C-err2} It holds that $\| \varepsilon_t \|_q < \infty$ for some $q > 4$.
+\onslide<3->\item[$\mathcal{C}3$] \label{C-ker} Standard assumptions on the kernel function $K$.
+\onslide<4->\item[$\mathcal{C}4$] Assume that  $\widehat{\sigma}^2 = \sigma^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$.
+\onslide<5->\item[$\mathcal{C}5$] \label{C-grid} $|\mathcal{G}_T| = O(T^\theta)$ for some arbitrarily large but fixed constant $\theta > 0$.
+\begin{overprint}
+\onslide<6>
+\vspace{-3mm}
+\begin{align*}
+\mathcal{G}_T = \big\{ & (u,h): u = t/T \text{ for some } 1 \le t \le T \text{ and } h \in [h_{\min},h_{\max}] \\ & \text{ with } h = t/T \text{ for some } 1 \le t \le T  \big\},
+\end{align*}
+\onslide<7>
+\vspace{-3mm}
+\item[$\mathcal{C}6$] \label{C-h} $h_{\min} \gg T^{-(1-\frac{2}{q})} \log T$ and $h_{\max} = o(1)$.
+
+\end{overprint}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Theoretical properties}
+\begin{prop}\label{prop-shape-1}
+Under our assumptions and under $H_0: m^{\prime}= 0$ it holds that 
+\vspace{-3mm}
+\begin{align*}
+\Prob \big( \widehat{\Psi}_T \le q_T(\alpha) \big) = (1 - \alpha) + o(1).
+\end{align*}
+\end{prop}\pause
+\begin{prop}\label{prop-shape-2}
+Under our assumptions and under local alternatives, we have 
+\vspace{-3mm}
+\begin{align*}
+\Prob \big( \widehat{\Psi}_T \le q_T(\alpha) \big) = o(1).
+\end{align*}
+\end{prop}
+\end{frame}
+
+
+\begin{frame}{Strategy of the proof}
+\begin{itemize}
+\item Replace the statistic $\widehat{\Psi}_T$ under $H_0: m = 0$ by a statistic $\widetilde{\Phi}_T$ with the same distribution and the property that 
+\begin{equation*}\label{eq-theo-stat-strategy-step1}
+\big| \widetilde{\Phi}_T - \Phi_T \big| = o_p(\delta_T),
+\end{equation*}
+where $\delta_T = o(1)$. To do so, we make use of strong approximation theory for dependent processes as derived in Berkes et al. (2014)\pause
+\vspace{2mm}
+\item Using the anti-concentration results for Gaussian random vectors (Chernozhukov et al. 2015), prove that $\Phi_T$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$, i.e.
+\begin{equation*}\label{eq-theo-stat-strategy-step2}
+\sup_{x \in \mathbb{R}} \Prob \big( |\Phi_T - x| \le \delta_T \big) = o(1).
+\end{equation*}\pause
+\vspace{-2mm}
+\item Show that 
+\begin{equation*}\label{eq-theo-stat-strategy-claim}
+\sup_{x \in \mathbb{R}} \big| \Prob(\widetilde{\Phi}_T \le x) - \Prob(\Phi_T \le x) \big| = o(1). 
+\end{equation*}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Theoretical properties}
+Define
+\begin{align*}
+\Pi_T^+ = \big\{ I_{u,h} = [u-h,u+h]: (u,h) \in \mathcal{A}_T^+ \text{ and } I_{u, h} \subseteq [0,1] \big\}\\
+\onslide<2->{\Pi_T^- = \big\{ I_{u,h} = [u-h,u+h]: (u,h) \in \mathcal{A}_T^- \text{ and } I_{u, h} \subseteq [0,1] \big\}}
+\end{align*}
+\vspace{-5mm}
+with
+\begin{align*} 
+&\mathcal{A}_T^+ = \Big\{ (u,h) \in \mathcal{G}_T: \frac{\widehat{\psi}_T(u,h)}{\widehat{\sigma}} > q_T(\alpha)  + \lambda(h)  \Big\}\\
+&\onslide<2->{\mathcal{A}_T^- = \Big\{ (u,h) \in \mathcal{G}_T: -\frac{\widehat{\psi}_T(u,h)}{\widehat{\sigma}} > q_T(\alpha)  + \lambda(h)  \Big\}}
+\end{align*}
+\end{frame}
+
+\begin{frame}{Theoretical properties}
+\begin{prop}\label{prop-shape-3}
+Under our assumptions, for events $E_T^+ = \Big\{ \forall I_{u,h} \in \Pi_T^+: m^{\prime}(v) > 0 \text{ for some } v \in I_{u,h}\Big\}$
+\only<1>{ it holds that}
+\onslide<2->{and $E_T^{-} = \Big\{ \forall I_{u,h} \in \Pi_T^-: m^{\prime}(v) < 0 \text{ for some } v \in I_{u,h}\Big\}$ it holds that } 
+\begin{align*}
+\Prob \big( E_T^+ \big) \ge (1-\alpha) + o(1)\\
+\onslide<2->{\Prob \big( E_T^- \big) \ge (1-\alpha) + o(1)}
+\end{align*} 
+\end{prop}
+\end{frame}
+
+\begin{frame}{Graphical representation}
+\begin{block}{Minimal intervals}
+An interval $I_{u, h} \in \Pi^+_T$ is called \textbf{minimal} if there is no other interval $I_{u^\prime, h^\prime} \in \Pi^+_T$ with $I_{u^\prime, h^\prime} \subset I_{u, h}$.
+\end{block}\pause
+Define
+\begin{align*}
+\Pi^{min, +}_T &= \text{ set of minimal intervals from }\Pi^+_T,\\
+E_T^{min, +} &= \Big\{ \forall I_{u,h} \in \Pi_T^{min, +}: m'(v) > 0 \text{ for some } v \in I_{u,h}\Big\}
+\end{align*}\pause
+Since $E_T^{min, +} = E_T^{+}$, we have
+\begin{align*}
+\Prob \big( E_T^{min, +} \big) \ge (1-\alpha) + o(1).
+\end{align*}
+\end{frame}
+
+\begin{frame}{Graphical representation, $a_1 = 0.25$}
+  \begin{figure}
+    \centering
+    \includegraphics[height=0.85\textheight]{min_int_with_T_500_a1_25.pdf}
+    %\caption{Summary of the application results for testing shape}
+    \label{figure:comparison_results_1}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Graphical representation, $a_1 = -0.5$}
+  \begin{figure}
+    \centering
+    \includegraphics[height=0.85\textheight]{min_int_with_T_500_a1_-50.pdf}
+    %\caption{Summary of the application results for testing shape}
+    \label{figure:comparison_results_2}
+  \end{figure}
+\end{frame}
+
+
+
+\begin{frame}{Application}
+  \begin{figure}
+    \centering
+    \includegraphics[height=0.85\textheight]{threegraphics_testing_constant_method_ll.pdf}
+    %\caption{Summary of the application results for testing shape}
+    \label{figure:shape_results_2}
+  \end{figure}
+\end{frame}
+
+
+\section{Conclusion}
+\begin{frame}{Conclusion}
+We developed multiscale methods to test qualitative hypotheses about nonparametric time trends:
+\begin{itemize}
+\item whether the trend is present at all;
+\item whether the trend function is constant;
+\item in which time regions there is an upward/downward movement in the trend.
+\end{itemize}
+We derived asymptotic theory for the proposed tests.
+
+As an application of our method, we analyzed the behavior of the yearly mean temperature in Central England from 1659 to 2017.
+\end{frame}
+
+
+\begin{frame}[standout]
+  Thank you!
+\end{frame}
+
+
+
+
+\appendix
+
+%\begin{frame}{Simulation results of the multiscale test for constant trend function}
+%\scriptsize{\begin{table}[t]
+%\begin{center}
+%\caption{Size of the multiscale test.}
+%\label{tab:size_shape}
+%\input{Plots/sizetable_ll_testing_constant}
+%\end{center}
+%\end{table}}
+%\begin{center}
+%\normalsize{Power of the multiscale test for different slope parameters $\beta$.}
+%\end{center}
+%\vspace{-5mm}
+%\scriptsize{\begin{columns}
+%\begin{column}[b]{0.33\textwidth}
+%\begin{table}[t]
+%\centering
+%\caption{$\beta = 1.25$}\label{tab:power_050_ll_shape}
+%\input{Plots/powertable_50_ll_testing_constant}
+%\end{table}
+%\end{column}
+%\begin{column}[b]{0.33\textwidth}
+%\begin{table}[t]
+%\centering
+%\caption{$\beta = 1.875$}\label{tab:power_075_ll_shape}
+%\input{Plots/powertable_75_ll_testing_constant}
+%\end{table}
+%\end{column}
+%\begin{column}[b]{0.33\textwidth}
+%\begin{table}[t]
+%\centering
+%\caption{$\beta = 2.5$}\label{tab:power_100_ll_shape}
+%\input{Plots/powertable_100_ll_testing_constant}
+%\end{table}
+%\end{column}
+%\end{columns}}
+%\end{frame}
+
+\begin{frame}
+\thispagestyle{empty}
+\begin{center}
+\Large{\textbf{Long-run error variance estimator}}
+\end{center}
+\end{frame}
+
+\begin{frame}{Setting}
+Estimate the long-run error variance $\sigma^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \Cov(\varepsilon_0,\varepsilon_{\ell})$ of the error terms $\{\varepsilon_t\}$ in the model 
+\begin{equation*}
+Y_t = m \Big( \frac{t}{T} \Big) + \varepsilon_t, 
+\end{equation*}
+where $\{\varepsilon_t\}$ is a stationary and causal AR($p$) process of the form 
+\begin{equation*}
+\varepsilon_t = \sum_{j=1}^p a_j \varepsilon_{t-j} + \eta_t. 
+\end{equation*} \pause
+\begin{itemize}
+	\item $\boldsymbol{a} = (a_1,\ldots,a_p)$ is a vector of the unknown parameters;\pause
+	\item $\eta_t$ are i.i.d.\ innovations with $\E[\eta_t] = 0$ and $\E[\eta_t^2] = \nu^2$;\pause
+	\item $p$ is known.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Estimator, first stage}
+Yule-Walker equations yield 
+\begin{equation*}\label{YU-eq}
+\boldsymbol{\Gamma}_q \boldsymbol{a} = \boldsymbol{\gamma}_q + \nu^2 \boldsymbol{c}_q,  
+\end{equation*} 
+where
+\vspace{-3mm}
+\begin{itemize}
+	\item $\boldsymbol{c}_q = (c_{q-1},\dots,c_{q-p})^\top$ are the coefficients from the MA($\infty$) expansion of $\{ \varepsilon_t \}$;\pause
+	\item $\boldsymbol{\gamma}_q = (\gamma_q(1),\dots,\gamma_q(p))^\top$ with $\gamma_q(\ell) = \Cov(\Delta_q \varepsilon_t,$ $\Delta_q \varepsilon_{t-\ell})$;\pause
+	\item and $\boldsymbol{\Gamma}_q$ is the $p \times p$ covariance matrix $\boldsymbol{\Gamma}_q = (\gamma_q(i-j): 1 \le i,j \le p)$.
+\end{itemize}\pause
+\begin{block}{Note}
+\vspace{-3mm}
+\begin{center}
+$\boldsymbol{\Gamma}_q \boldsymbol{a} \approx \boldsymbol{\gamma}_q$ for large values of $q$.
+\end{center}\vspace{-3mm}\end{block}\pause
+\vspace{-3mm}
+
+We construct the first-stage estimator by
+\begin{equation*}
+\widetilde{\boldsymbol{a}}_q = \widehat{\boldsymbol{\Gamma}}_q^{-1} \widehat{\boldsymbol{\gamma}}_q, 
+\end{equation*}
+where $\widehat{\boldsymbol{\Gamma}}_q$ and $\widehat{\boldsymbol{\gamma}}_q$ are constructed from the sample autocovariances $\widehat{\gamma}_q(\ell) = (T-q)^{-1} \sum_{t=q+\ell+1}^T \Delta_q Y_{t,T} \Delta_q Y_{t-\ell,T}$. 
+\end{frame}
+
+\begin{frame}{Estimator, second stage}
+\begin{block}{Problem}
+If the trend $m$ is pronounced, the estimator $\widetilde{\boldsymbol{a}}_q$ will have a strong bias.
+\end{block}\pause
+\vspace{-2mm}
+Solution:
+\begin{itemize}
+	\item \vspace{-2mm} Compute estimators $\widetilde{c}_k$ of $c_k$ based on $\widetilde{\boldsymbol{a}}_q$.\pause
+	\item Estimate the innovation variance $\nu^2$ by $\widetilde{\nu}^2 = (2T)^{-1} \sum_{t=p+1}^T \widetilde{r}_{t,T}^2$, where $\widetilde{r}_{t,T} = \Delta_1 Y_{t,T} - \sum_{j=1}^p \widetilde{a}_j \Delta_1 Y_{t-j,T}$.\pause
+	\item Estimate $\boldsymbol{a}$ by 
+\begin{equation*}\label{est-AR-SS} 
+\widehat{\boldsymbol{a}}_r = \widehat{\boldsymbol{\Gamma}}_r^{-1} (\widehat{\boldsymbol{\gamma}}_r + \widetilde{\nu}^2 \widetilde{\boldsymbol{c}}_r).
+\end{equation*}\pause
+	\item \vspace{-2mm} Average the estimators $\widehat{\boldsymbol{a}}_r$: $\widehat{\boldsymbol{a}} = \frac{1}{\overline{r}} \sum\limits_{r=1}^{\overline{r}} \widehat{\boldsymbol{a}}_r$.\pause
+	\item Estimate the long-run variance $\sigma^2$ by 
+\begin{equation*} \label{est-lrv}
+\widehat{\sigma}^2 = \frac{\widehat{\nu}^2}{(1 - \sum_{j=1}^p \widehat{a}_j)^2}. 
+\end{equation*}
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}{Motivation for the estimator}
+If $\{\varepsilon_t\}$ is an AR($p$) process, then the time series $\{ \Delta_q \varepsilon_t \}$ of the differences $\Delta_q \varepsilon_t = \varepsilon_t - \varepsilon_{t-q}$ is an ARMA($p,q$) process of the form 
+\begin{equation*}
+\Delta_q \varepsilon_t - \sum_{j=1}^p a_j \Delta_q \varepsilon_{t-j} = \eta_t - \eta_{t-q}. 
+\end{equation*}\pause
+
+Then $\Delta_q Y_{t, T} = Y_{t, T} - Y_{t-q, T}$ is approximately an ARMA($p,q$) process.
+\end{frame}
+
+\begin{frame}{Theoretical properties of the estimator}
+Performance:
+\begin{itemize}
+\item Our estimator $\widehat{\boldsymbol{a}}$ produces accurate estimation results even when the AR polynomial $A(z) = 1 - \sum_{j=1}^p a_j z^j$ has a root close to the unit circle.\pause
+\item Our pilot estimator $\widetilde{\boldsymbol{a}}_q$ tends to have a substantial bias when the trend $m$ is pronounced. Our estimator $\widehat{\boldsymbol{a}}$ reduces this bias considerably.\pause
+\end{itemize}
+\begin{prop}{}
+Our estimators $\widetilde{\boldsymbol{a}}_q$, $\widehat{\boldsymbol{a}}$ and $\widehat{\sigma}^2$ are $\sqrt{T}$-consistent. 
+\end{prop}
+\end{frame}
+
+\begin{frame}
+\thispagestyle{empty}
+\begin{center}
+\Large{\textbf{Testing for equality of the time trends}}
+\end{center}
+\end{frame}
+
+\begin{frame}{Model}
+We observe $n$ time series $\mathcal{Y}_i = \{Y_{it}: 1 \le t \le T \}$ of length $T$ for $1 \le i \le n$
+\begin{equation*}\label{model2}
+Y_{it} = m_i \Big( \frac{t}{T} \Big) + \varepsilon_{it} 
+\end{equation*}\pause
+\vspace{-3mm}
+where
+\begin{itemize}
+\item $m_i$ is an unknown trend function on $[0,1]$, that are Lipschitz continuous and normalized such that $\int_0^1 m_i(u)du = 0$;
+\item $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ is a zero-mean stationary error process;
+\item $\mathcal{E}_i$ are independent across $i$.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Test Statistic}
+For a given location $u \in [0,1]$, bandwidth $h$ and a pair of time series $i$ and $j$ we construct the kernel averages
+\begin{equation*}
+\widehat{\psi}_{ij,T}(u,h) = \sum\limits_{t=1}^T w_{t,T}(u,h) {\color<2->{mLightBrown}(Y_{it} -Y_{jt})}, 
+\end{equation*}\pause
+\vspace{-3mm}
+where 
+\begin{align*}
+w_{t,T}(u,h) &= \frac{\Lambda_{t,T}(u,h)}{ \{\sum\nolimits_{t=1}^T \Lambda_{t,T}^2(u,h)\}^{1/2} } ,\\
+\Lambda_{t,T}(u,h) &= K\Big(\frac{t/T-u}{h}\Big) \Big[ S_{T,2}(u,h) - S_{T,1}(u,h) \Big(\frac{t/T-u}{h}\Big) \Big], \\
+S_{T,\ell}(u,h) &= \frac{1}{Th} \sum\nolimits_{t=1}^T K\Big(\frac{t/T-u}{h}\Big) \Big(\frac{t/T-u}{h}\Big)^\ell
+\end{align*}
+for $\ell = 0,1,2$ and $K$ is a kernel function.
+\end{frame}
+
+\begin{frame}{Test Statistic}
+Our multiscale statistic is defined as follows
+\begin{align*}
+\color<2>{mLightBrown}\widehat{\Psi}_{n,T} & \color<2>{mLightBrown}=\max_{1\le i < j \le n}\widehat{\Psi}_{ij,T}, \\
+\widehat{\Psi}_{ij,T} &= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widehat{\psi}_{ij,T}(u,h)}{{\color<2>{mLightBrown}(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}}\Big| - \lambda(h) \Big\}, 
+\end{align*} 
+where 
+\begin{itemize}
+\item $\lambda(h) = \sqrt{2 \log \{ 1/(2h) \}}$ is an additive correction term;
+\item $\mathcal{G}_T$ is the set of points $(u,h)$ that are taken into consideration;
+\item $\widehat{\sigma}^2_i$ is an appropriate estimator of the long-run variance $\sigma^2_i$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Test procedure}
+Testing problem:
+\vspace{-3mm}
+\begin{align*}
+H_0: \quad m_1 = m_2 = \ldots = m_n
+\end{align*} \pause
+\vspace{-2mm}
+Gaussian version of the test statistic:
+\begin{align*}
+\color<3>{mLightBrown}\Phi_{n, T} &\color<3->{mLightBrown}= \max_{1 \le i < j \le n} \Phi_{ij, T},\\
+\Phi_{ij,T} &= \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij,T}(u,h)}{{\color<3>{mLightBrown}(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}}\Big| - \lambda(h) \Big\},
+\end{align*} 
+\vspace{-3mm}
+where
+\begin{align*}
+\phi_{ij,T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \,\Big\{ {\color<3>{mLightBrown}\widehat{\sigma}_i \Big(Z_{it} - \frac{1}{T}\sum_{t=1}^T Z_{it} \Big) - \widehat{\sigma}_j \Big(Z_{jt} - \frac{1}{T}\sum_{t=1}^T Z_{jt}\Big)} \Big\};
+\end{align*}
+$Z_t$ are independent standard normal random variables;
+
+$q_{n,T}(\alpha)$ is  $(1 - \alpha)$ quantile of $\Phi_{n,T}$.\pause\pause
+\begin{block}{Test procedure}
+For a given significance level $\alpha \in (0,1)$, we reject $H_0$ if $\widehat{\Psi}_{n,T} > q_{n,T}(\alpha)$.
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Theoretical properties}
+\begin{prop}\label{prop-equality-1}
+Supose that $\mathcal{E}_i$ are independent across $i$ and satisfy $\mathcal{C}1- \mathcal{C}2$ for each $i$. Under our remaining assumptions and under $H_0: m_1 = m_2 =\ldots = m_n$ it holds that 
+\vspace{-3mm}
+\begin{align*}
+\Prob \big( \widehat{\Psi}_{n, T} \le q_{n,T}(\alpha) \big) = (1 - \alpha) + o(1).
+\end{align*}
+\end{prop}\pause
+
+\begin{prop}\label{prop-equality-2}
+Let the conditions of previous proposition be satisfied. Under local alternatives we have
+\vspace{-3mm}
+\begin{align*}
+\Prob \big( \widehat{\Psi}_{n,T} \le q_{n,T}(\alpha) \big) = o(1).
+\end{align*}
+\end{prop}
+\end{frame}
+
+\begin{frame}{Clustering, group structure}
+\begin{itemize}
+\item The null hypothesis $H_0: m_1 = m_2 = \ldots = m_n$ is violated.\pause
+\item There exist sets or groups of time series $G_1,\ldots,G_N$ with $N \le n$ and $\{1,\ldots,n\} = \mathbin{\dot{\bigcup}}_{\ell=1}^{N} G_\ell$ such that for each $1 \le \ell \le N$ we have $m_i = g_\ell \quad \text{for all } i \in G_\ell$, where $g_\ell$ are group-specific trend functions.\pause
+\item For any $\ell \ne \ell^\prime$, the trends $g_{\ell,T}$ and $g_{\ell^\prime,T}$ differ in the following sense: There exists $(u,h) \in \mathcal{G}_T$ with $[u-h,u+h] \subseteq [0,1]$ such that $g_{\ell,T}(w) - g_{\ell^\prime,T}(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$ or $g_{\ell^\prime,T}(w) - g_{\ell,T}(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$, where $0 < c_T \rightarrow \infty$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Clustering, algorithm}
+Dissimilarity measure between two sets of time series $S$ and $S^{\prime}$:
+\begin{equation*}\label{dissimilarity}
+\widehat{\Delta}(S,S^\prime) = \max_{\substack{i \in S, \\ j \in S^\prime}} \widehat{\Psi}_{ij,T}. 
+\end{equation*}
+\begin{center}
+\textbf{Clustering algorithm}
+\end{center}
+
+\textit{Step $0$ (Initialization):} Let $\widehat{G}_i^{[0]} = \{ i \}$ denote the $i$-th singleton cluster for $1 \le i \le n$ and define $\{\widehat{G}_1^{[0]},\ldots,\widehat{G}_n^{[0]} \}$ to be the initial partition of time series into clusters. 
+
+\noindent \textit{Step $r$ (Iteration):} Let $\widehat{G}_1^{[r-1]},\ldots,\widehat{G}_{n-(r-1)}^{[r-1]}$ be the $n-(r-1)$ clusters from the previous step. Determine the pair of clusters $\widehat{G}_{\ell}^{[r-1]}$ and $\widehat{G}_{{\ell}^\prime}^{[r-1]}$ for which 
+\begin{align*}
+\widehat{\Delta}(\widehat{G}_{\ell}^{[r-1]},\widehat{G}_{{\ell}^\prime}^{[r-1]}) = \min_{1 \le k < k^\prime \le n-(r-1)} \widehat{\Delta}(\widehat{G}_{k}^{[r-1]},\widehat{G}_{k^\prime}^{[r-1]})
+\end{align*}
+and merge them into a new cluster. 
+\end{frame}
+
+\begin{frame}{Clustering, theoretical properties}
+The estimator of the number of groups is
+\begin{align*}
+\widehat{N} = \min \Big\{ r = 1,2,\ldots \Big| \max_{1 \le \ell \le r} \widehat{\Delta} \big( \widehat{G}_\ell^{[n-r]} \big) \le q_{n,T}(\alpha) \Big\}.
+\end{align*}\pause
+\begin{prop}\label{prop-clustering-1}
+Let the conditions of previous propositions be satisfied. Then 
+\begin{align*}
+\Prob \Big( \big\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}} \big\} = \{ G_1,\ldots,G_N \} \Big) \ge (1-\alpha) + o(1)
+\end{align*}
+and 
+\begin{align*}
+\Prob \big( \widehat{N} = N \big) \ge (1-\alpha) + o(1).
+\end{align*}
+\end{prop}
+\end{frame}
+\begin{frame}{Testing for equality of different temperature time trends}
+  \begin{figure}
+    \centering
+    \includegraphics[height=0.85\textheight]{stations_data.pdf}
+    %\caption{Local linear kernel estimates of the $n = 25$ time trends}
+    \label{figure:station_data}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[label = frame_lambda]{Idea behind the additive correction}
+\onslide<1->{Consider the uncorrected statistic
+\begin{align*}
+\widehat{\Psi}_{T, \text{uncorrected}} = \max_{(u,h) \in \mathcal{G}_T} \Big|\frac{\widehat{\psi}_T(u,h)}{\widehat{\sigma}}\Big|
+\end{align*}
+under the null hypothesis $H_0: m = 0$ and under simplifying assumptions:
+\begin{itemize}
+\item the errors $\varepsilon_i$ are i.i.d. normally distributed;
+\item $\widehat{\sigma} = \sigma$;
+\item $\mathcal{G}_T = \{(u_k, h_l) | u_k = (2k - 1)h_l \text{ for } 1\le k \le 1/2h_l, 1 \le l \le L\}$.\pause
+\end{itemize}}
+\onslide<2->{\begin{align*}
+\widehat{\Psi}_{T, \text{uncorrected}} = \max_{1 \le l \le L} \max_{1\le k \le 1/2h_l} \Big|{\color<3>{mLightBrown}\frac{\widehat{\psi}_T(u_k,h_l)}{\sigma}}\Big|
+\end{align*}}
+\onslide<4->{$\Rightarrow \quad \max_k \frac{\widehat{\psi}_T(u_k,h_l)}{\sigma} ={\color<5->{mLightBrown}\sqrt{2\log(1/2h_l)}} + o_P(1) \to \infty$ as $h \to 0$ and the stochastic behavior of $\widehat{\Psi}_{T, \text{uncorrected}}$ is dominated by $\frac{\widehat{\psi}_T(u_k,h_l)}{\sigma}$ for small bandwidths $h_l$. \hyperlink{frame_teststatistic}{\beamerbutton{Go back}}}
+\end{frame}
+
+\end{document}

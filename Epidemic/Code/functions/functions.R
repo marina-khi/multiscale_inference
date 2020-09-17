@@ -74,6 +74,12 @@ produce_plots <- function (results, l, data_i, data_j,
     title(xlab = "days since the hundredth case", line = 1.7, cex.lab = 0.9)
     segments(p_t_set2$startpoint, p_t_set2$values, p_t_set2$endpoint, p_t_set2$values, lwd = 2)
     segments(p_t_set$startpoint, p_t_set$values, p_t_set$endpoint, p_t_set$values, col = "gray")
+    print.xtable(xtable(p_t_set, digits = c(3), align = paste(replicate(4, "c"), collapse = "")),
+                 type="latex", file=paste0("plots/", country_i, "_vs_", country_j, ".tex"),
+                 include.colnames = FALSE)
+    print.xtable(xtable(p_t_set2, digits = c(3), align = paste(replicate(4, "c"), collapse = "")),
+                 type="latex", file=paste0("plots/", country_i, "_vs_", country_j, "_min_intervals.tex"),
+                 include.colnames = FALSE)
   } else {
     #If there are no intervals where the test rejects, we produce empty plots
 
@@ -83,13 +89,6 @@ produce_plots <- function (results, l, data_i, data_j,
   }
   mtext(paste0("Comparison of ", country_i, " and ", country_j), side = 3, line = 0, outer = TRUE, font = 1, cex = 1.2)
   dev.off()
-  print.xtable(xtable(p_t_set, digits = c(3), align = paste(replicate(4, "c"), collapse = "")),
-               type="latex", file=paste0("plots/", country_i, "_vs_", country_j, ".tex"),
-               include.colnames = FALSE)
-  print.xtable(xtable(p_t_set2, digits = c(3), align = paste(replicate(4, "c"), collapse = "")),
-               type="latex", file=paste0("plots/", country_i, "_vs_", country_j, "_min_intervals.tex"),
-               include.colnames = FALSE)
-  
 }
 
 # functions for data simulations
