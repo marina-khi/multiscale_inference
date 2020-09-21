@@ -93,7 +93,7 @@ all_intervals <- data.frame('startpoint' = (grid$gset$u - grid$gset$h) * t_len,
                             'values' = 0)
 all_intervals$values <- (1:nrow(all_intervals)) / nrow(all_intervals)
 
-pdf("plots/all_intervals.pdf", width=5, height=5, paper="special")
+pdf("plots_new/all_intervals.pdf", width=5, height=5, paper="special")
 par(mar = c(3, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
 plot(NA, xlim=c(0,t_len),  ylim = c(0, 1 + 1/nrow(all_intervals)), xlab="days", ylab = "", yaxt= "n", mgp=c(2,0.5,0))
