@@ -136,7 +136,7 @@ Poisson and quasi-Poisson models are often used in the literature on epidemic mo
 
 In order to derive our theoretical results, we impose the following regularity conditions on model \eqref{eq:model}:
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.0cm]
-\item \label{C2} The functions $\lambda_i$ are uniformly Lipschitz continuous, that is, $|\lambda_i(u) - \lambda_i(v)| \le L |u-v|$ for all $u, v \in [0,1]$, where the constant $L$ does not depend on $i$. Moreover, they are uniformly bounded away from zero and infinity, that is, there exist constants $\lambda_{\min}$ and $\lambda_{\max}$ with $0 {\color{red} <} \lambda_{\min} \le \min_{w \in [0,1]} \lambda_i(w) \le \max_{w \in [0,1]} \lambda_i(w) \le \lambda_{\max} < \infty$ for all $i$. 
+\item \label{C2} The functions $\lambda_i$ are uniformly Lipschitz continuous, that is, $|\lambda_i(u) - \lambda_i(v)| \le L |u-v|$ for all $u, v \in [0,1]$, where the constant $L$ does not depend on $i$. Moreover, they are uniformly bounded away from zero and infinity, that is, there exist constants $\lambda_{\min}$ and $\lambda_{\max}$ with $0 < \lambda_{\min} \le \min_{w \in [0,1]} \lambda_i(w) \le \max_{w \in [0,1]} \lambda_i(w) \le \lambda_{\max} < \infty$ for all $i$. 
 \item \label{C1} The random variables $\eta_{it}$ are independent both across $i$ and $t$. Moreover, for any $i$ and $t$, it holds that $\ex[\eta_{it}] = 0$, $\ex[\eta_{it}^2] = 1$ and $\ex[|\eta_{it}|^\theta] \le C_\theta < \infty$ for some $\theta > 4$. 
 \end{enumerate}
 \ref{C2} imposes some standard-type regularity conditions on the functions $\lambda_i$. In particular, the functions are assumed to be smooth, bounded from above and bounded away from zero. The latter restriction is required because the noise variance in model \eqref{eq:model} equals zero if $\lambda_i$ is equal to zero. Since we normalize our test statistics by an estimate of the noise variance as detailed in Section \ref{sec:test}, we need this variance and thus the functions $\lambda_i$ to be bounded away from zero. \ref{C1} assumes the noise terms $\eta_{it}$ to fulfill some mild moment conditions and to be independent both across countries $i$ and time $t$. In the current COVID-19 crisis, independence across countries $i$ seems to be a fairly reasonable assumption due to severe travel restrictions, the closure of borders, etc. Independence across time $t$ is more debatable, but it is by no means unreasonable in our model framework: The time series process $\mathcal{\X}_i = \{X_{it}: 1 \le t \le T\}$ produced by model \eqref{eq:model} is nonstationary for each $i$. Specifically, both the mean $\ex[X_{it}] = \lambda_i(t/T)$ and the variance $\var(X_{it}) = \sigma^2 \lambda_i(t/T)$ are time-varying. A well-known fact in the time series literature is that nonstationarities such as a time-varying mean may produce spurious sample autocorrelations \citep[cp.\ e.g.][]{MikoschStarica2004, Fryzlewicz2008}. Hence, the observed persistence of a time series (captured by the sample autocorrelation function) may be due to nonstationarities rather than real autocorrelations. This insight has led researchers to prefer simple nonstationary models over intricate stationary time series models in some application areas such as finance \citep[cp.][]{MikoschStarica2000, MikoschStarica2004, Fryzlewicz2006, HafnerLinton2010}. In a similar vein, our model accounts for the persistence in the observed time series $\mathcal{\X}_i$ via nonstationarities rather than autocorrelations in the error terms. 
@@ -187,8 +187,7 @@ where $c_{ijk,T}(\alpha)$ is the critical value for the $(i,j,k)$-th test proble
 \begin{align*}
 \text{FWER}(\alpha) 
  & = \pr \Big( \exists (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| > c_{ijk,T}(\alpha) \Big) \\
- & =  1 - \pr \Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{ijk,T}(\alpha) \Big) \\
- & = 1 - \pr\Big( \max_{(i,j,k) \in \indexset_0} |\hat{\psi}_{ijk,T}| \le c_{ijk,T}(\alpha) \Big), 
+ & =  1 - \pr \Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{ijk,T}(\alpha) \Big), 
 \end{align*}
 where $\indexset_0 \subseteq \indexset$ is the set of triples $(i,j,k)$ for which $H_0^{(ijk)}$ holds true.  
 
@@ -245,23 +244,44 @@ where $c_{T,\text{Gauss}}(\alpha,h_k) = b_k + q_{T,\text{Gauss}}(\alpha)/a_k$ wi
 
 
 In Theorem \ref{theo1} of the Appendix, we prove that under appropriate regularity conditions, the test defined in \eqref{eq:test} (asymptotically) controls the familywise error rate $\text{FWER}(\alpha)$ for each pre-specified significance level $\alpha$. As shown in Corollary \ref{corollary1}, this has the following implication: 
-\begin{align}
-\pr\Big( \forall (i,j,k) \in \indexset: \text{ If } |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k), \text{ then } & (i,j,k) \notin \indexset_0 \Big) \nonumber \\ & \ge 1 - \alpha + o(1), \label{eq:simconfstat}
-\end{align} 
+%\begin{align}
+%\pr\Big( \forall (i,j,k) \in \indexset: \text{ If } |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k), \text{ then } & (i,j,k) \notin \indexset_0 \Big) \nonumber \\ & \ge 1 - \alpha + o(1), \label{eq:simconfstat}
+%\end{align} 
+{\color{red}
+\begin{align}\label{eq:simconfstat}
+\pr\Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \ge 1 - \alpha + o(1)
+\end{align}
+}
 where $\indexset_0$ is the set of triples $(i,j,k) \in \indexset$ for which $H_0^{(ijk)}$ holds true. Verbally, \eqref{eq:simconfstat} can be expressed as follows:  
 \begin{equation}\label{eq:confidencestatement1}
 \begin{minipage}[c][1cm][c]{13cm}
 \textit{With (asymptotic) probability at least $1-\alpha$, the null hypothesis $H_0^{(ijk)}$ is violated for all $(i,j,k) \in \indexset$ for which the test rejects $H_0^{(ijk)}$.} 
 \end{minipage}
 \end{equation}
-In other words: 
+In other words:
+
+{\color{red}
 \begin{equation}\label{eq:confidencestatement2}
 \begin{minipage}[c][1cm][c]{13cm}
-\textit{With (asymptotic) probability at least $1-\alpha$, the functions $\lambda_i$ and $\lambda_j$ differ on the interval $\mathcal{I}_k$ for all $(i,j,k) \in \indexset$ for which the test rejects $H_0^{(ijk)}$.} 
+\textit{With (asymptotic) probability at least $1-\alpha$, the set of the intervals where the functions $\lambda_i$ and $\lambda_j$ differ is contained in the set of the intervals for which the test rejects $H_0^{(ijk)}$.} 
 \end{minipage}
 \end{equation}
-Hence, the test allows us to make simultaneous confidence statements (a) about which pairs of countries $(i,j)$ have different trend functions and (b) about where, that is, in which time intervals $\mathcal{I}_k$ the functions differ.
+}
+%\begin{equation}\label{eq:confidencestatement2}
+%\begin{minipage}[c][1cm][c]{13cm}
+%\textit{With (asymptotic) probability at least $1-\alpha$, the functions $\lambda_i$ and $\lambda_j$ differ on the interval $\mathcal{I}_k$ for all $(i,j,k) \in \indexset$ for which the test rejects $H_0^{(ijk)}$.} 
+%\end{minipage}
+%\end{equation}
+%Hence, the test allows us to make simultaneous confidence statements (a) about which pairs of countries $(i,j)$ have different trend functions and (b) about where, that is, in which time intervals $\mathcal{I}_k$ the functions differ.
 
+{\color{red} The second result characterizes the power of the multiscale test against local alternatives. To formulate it, we consider any sequence of functions $\lambda_{i_0} = \lambda_{i_0,T}$, $\lambda_{j_0} = \lambda_{j_0, T}$ with the following property: There exists $\mathcal{I}_{k_0} \in \intervals$ such that 
+\begin{equation}\label{loc-alt}
+\lambda_{i_0, T}(w) - \lambda_{j_0, T}(w) \ge c_T \sqrt{T \log T / h_{k_0}} \quad \text{for all } w \in \mathcal{I}_{k_0}, 
+\end{equation}
+where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$. According to Corollary \ref{corollary2} in the Appendix, we can make the following statement about the asymptotic power of the test:
+\[ \pr\Big( \forall (i,j,k) \in \indexset: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = o(1). \]
+Hence, our test has asymptotic power $1$ against local alternatives of the form \eqref{loc-alt}. The proof can be found in the Supplementary Material.
+}
 
 \subsection{Implementation of the test in practice}
 
@@ -699,12 +719,18 @@ The following corollary is an immediate consequence of Theorem \ref{theo1}. It p
 
 \begin{corollaryA}\label{corollary1}
 Under the conditions of Theorem \ref{theo1}, 
-\[ \pr\Big( \forall (i,j,k) \in \indexset: \text{ If } |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k), \text{ then } (i,j,k) \notin \indexset_0 \Big) \ge 1 - \alpha + o(1) \]
+%\[ \pr\Big( \forall (i,j,k) \in \indexset: \text{ If } |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k), \text{ then } (i,j,k) \notin \indexset_0 \Big) \ge 1 - \alpha + o(1) \]
+$$ {\color{red} \pr\Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \ge 1 - \alpha + o(1) } $$
 for any given $\alpha \in (0,1)$.   
 %Hence, with asymptotic probability at least $1-\alpha$, the two intensity functions $\lambda_i$ and $\lambda_j$ differ on the interval $\mathcal{I}_k$ for all $(i,j,k) \in \indexset$ for which the test rejects $H_0^{(ijk)}$. 
 \end{corollaryA} 
-
-
+{\color{red}
+\begin{corollaryA}\label{corollary2}
+Let the conditions of Theorem \ref{theo1} be satisfied and consider two sequences of functions $\lambda_{i_0, T}$ and $\lambda_{j_0, T}$ with the property \eqref{loc-alt}. Then 
+\[ \pr\Big( \forall (i,j,k) \in \indexset: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = o(1) \]
+for any given $\alpha \in (0, 1)$. 
+\end{corollaryA}
+}
 \begin{proof}[\textnormal{\textbf{Proof of Theorem \ref{theo1}.}}] The proof proceeds in several steps. 
 \begin{enumerate}[label=\textit{Step \arabic*.}, leftmargin=0cm, itemindent=1.45cm]
 
@@ -831,11 +857,52 @@ By Theorem \ref{theo1},
 1 - \alpha + o(1) 
  & \le 1 - \textnormal{FWER}(\alpha) \\
  & = \pr \Big( \nexists (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \\
- & = \pr\Big( \forall (i,j,k) \in \indexset: \text{ If } |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k), \text{ then } (i,j,k) \notin \indexset_0 \Big),
+ %& = \pr\Big( \forall (i,j,k) \in \indexset: \text{ If } |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k), \text{ then } (i,j,k) \notin \indexset_0 \Big),
+& ={\color{red}\pr\Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big)},
 \end{align*}
 which gives the statement of Corollary \ref{corollary1}.
 \end{proof}
 
+{\color{red}
+
+\begin{proof}[\textnormal{\textbf{Proof of Corollary \ref{corollary2}.}}]
+
+
+
+To start with, we introduce the notation $\widehat{\psi}_{ijk, T} = \widehat{\psi}_{ijk, T}^A + \widehat{\psi}_{ijk, T}^B$ with
+\[ \widehat{\psi}_{ijk, T}^A = \frac{\sigma \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \Big(\sqrt{\lambda_{i}\big(\frac{t}{T}\big)} \eta_{it} - \sqrt{\lambda_{j}\big(\frac{t}{T}\big)}\eta_{jt}\Big)}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}} \]
+and
+\[ \widehat{\psi}_{ijk, T}^B = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \big(\lambda_{i}\big(\frac{t}{T}\big) - \lambda_{j}\big(\frac{t}{T}\big)\big)}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}}. \]
+By assumption, there exists $\mathcal{I}_{k_0} \in \intervals$ such that $\lambda_{i_0, T}(w) - \lambda_{j_0, T}(w) \ge c_T \sqrt{T \log T / h_{k_0}}$ for all $w \in \mathcal{I}_{k_0}$. Furthermore, by \eqref{eq:approxerror:claim1:infer1} in the Supplementary Material,
+\begin{align*}
+0 \le\sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{i_0 t} + \X_{j_0 t}) \le 4 \lambda_{\max} T h_k
+\end{align*}
+for large enough $T$. Together with the facts that the indicator function is non-negative, $\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) = h_k$, and that $\hat{\sigma}$ is a consistent estimator of $\sigma$, we have
+\begin{align}\label{eq:psiB}
+\widehat{\psi}_{i_o j_0 k_0, T}^B &\ge \frac{c_T h_{k_0} \sqrt{T \log T / h_{k_0}}}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_{k_o}) (\X_{i_0 t} + \X_{j_0 t}) \}^{1/2}} \nonumber \\
+& \ge  \frac{c_T\sqrt{T h_{k_0} \log T}}{2 \sqrt{ \lambda_{\max}T h_{k_0}}}\nonumber \\
+& =\frac{ c_T}{2 \sqrt{\lambda_{\max}}} \sqrt{\log T}
+\end{align}
+for sufficiently large $T$. Moreover, by the arguments completely analogous to those for the proof of \eqref{eq:approxerror:claim2} in the Supplementary Material, we have
+\begin{align}\label{eq:psiA}
+\max_{(i,j,k) \in \indexset} \big|\widehat\psi_{ijk,T}^A\big|  = O_p\big(\sqrt{\log p}\big) = O_p\big(\sqrt{\log T}\big),
+\end{align}
+because $p = T^{\gamma}$ for a fixed $\gamma$. With the help of \eqref{eq:psiB}, \eqref{eq:psiA}, and the fact that $$b_k = \sqrt{2 \log(1/h_k)} \le \sqrt{2 \log(1/h_{\min})} \le C \sqrt{\log T}$$ and 
+$$a_k = \frac{\{\log(e/h_k)\}^{1/2}}{ \log \log(e^e / h_k) }\le \frac{\{\log(e/h_{\min})\}^{1/2} }{\log \log(e^e / h_{\max})} \le C\frac{\sqrt{\log T}}{\log \log \log T},$$ we can infer that
+\begin{align}
+\max_{(i,j,k) \in \indexset} a_k (|\hat{\psi}_{ijk,T}| - b_k) & \ge \max_{(i, j, k) \in \indexset} a_k |\widehat{\psi}_{ijk, T}^B| - \max_{(i, j, k) \in \indexset} a_k (|\widehat{\psi}_{ijk, T}^A| + b_k) \nonumber \\
+ & = \max_{(i, j, k) \in \indexset} a_k |\widehat{\psi}_{ijk, T}^B| + O_p\bigg(\frac{\sqrt{\log T}}{\log \log \log T} \sqrt{\log T}\bigg) \nonumber \\
+ & \ge C \cdot c_T \log T + O_p(\log T) \label{eq-proof-prop-test-2-conclusion}
+\end{align}
+for sufficiently large $T$. Since $q_{T, \text{Gauss}}(\alpha) = O(\log T)$ for any fixed $\alpha \in (0,1)$, \eqref{eq-proof-prop-test-2-conclusion} together with 
+\begin{align*}
+1 & - \pr\Big( \forall (i,j,k) \in \indexset: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \\
+& = \pr \Big( \exists (i,j,k) \in \indexset: |\hat{\psi}_{ijk,T}| > c_{T,\text{Gauss}}(\alpha,h_k) \Big) \\
+& = \pr \Big( \max_{(i,j,k) \in \indexset} a_k \big( |\hat{\psi}_{ijk,T}| - b_k \big) > q_{T,\text{Gauss}}(\alpha) \Big) 
+\end{align*}
+immediately yields the statement of Corollary \ref{corollary2}.
+\end{proof}
+}
 
 
 \bibliographystyle{ims}
