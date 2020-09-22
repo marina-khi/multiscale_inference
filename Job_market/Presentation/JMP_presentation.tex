@@ -218,7 +218,7 @@ Under our assumptions, for events $E_T^+ = \Big\{ \forall I_{u,h} \in \Pi_T^+: m
 
 \begin{frame}{Graphical representation}
 \begin{block}{Minimal intervals}
-An interval $\mathcal{I}_k \in \mathcal{F}_{\text{reject}}(i, j)$ is called \textbf{minimal} if there is no other interval $\mathcal{I}_{k^\prime} \in \mathcal{F}_{\text{reject}}(i, j)$ with $\mathcal{I}_{k^\prime} \subset \mathcal{I}_k$. The set of minimal intervals is denoted $\mathcal{F}_{\text{reject}}^\min (i, j)$.
+An interval $\mathcal{I}_k \in \mathcal{F}_{\text{reject}}(i, j)$ is called \textbf{minimal} if there is no other interval $\mathcal{I}_{k^\prime} \in \mathcal{F}_{\text{reject}}(i, j)$ with $\mathcal{I}_{k^\prime} \subset \mathcal{I}_k$. The set of minimal intervals is denoted $\mathcal{F}_{\text{reject}}^{\min} (i, j)$.
 \end{block}\pause
 Define
 \begin{align*}
@@ -403,10 +403,27 @@ under the null hypothesis $H_0: m = 0$ and under simplifying assumptions:
 \end{frame}
 
 \begin{frame}[label = frame_sigma]{Idea behind $\hat{\sigma}$}
+We assume that $\lambda_i$ is Lipschitz continuous. Then
+\[ X_{it} - X_{it-1} = \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} (\eta_{it} - \eta_{it-1}) + r_{it}, \]
+where $|r_{it}| \le C(1+|\eta_{it-1}|)/T$ with a sufficiently large $C$.\pause \, Hence,
+\[ \frac{1}{T} \sum_{t=2}^T (X_{it} - X_{it-1})^2 = 2 \sigma^2 \Big\{ \frac{1}{T} \sum_{t=2}^T \lambda_i(t/T) \Big\} + o_p(1).\] \pause
+Together with \[ \frac{1}{T} \sum_{t=1}^T X_{it} = \frac{1}{T} \sum_{t=1}^T \lambda_i(t/T) + o_p(1), \] we get that $\hat{\sigma}_i^2 = \sigma^2 + o_p(1)$ for any $i$ and thus $\hat{\sigma}^2 = \sigma^2 + o_p(1)$.
+
 \hyperlink{frame_teststatistic}{\beamerbutton{Go back}}
 \end{frame}
 
 \begin{frame}[label = frame_constants]{Idea behind $a_k$ and $b_k$}
+How to construct critical values $c_{ijk,T}(\alpha)$? 
+\begin{itemize}
+\item Traditional approach: $c_T(\alpha) = c_{ijk,T}(\alpha)$ for all $(i,j,k)$. \pause
+\item A more modern approach: $c_{ijk,T}(\alpha)$ depend on the length $h_k$ of the time interval (D{\"u}mbgen and Spokoiny (2001)). In our context:
+\begin{equation*}
+c_{ijk,T}(\alpha) = c_T(\alpha,h_k) := b_k + q_T(\alpha)/a_k, 
+\end{equation*}
+where $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$ are scale-dependent constants and $q_T(\alpha)$ is the $(1-\alpha)$-quantile of the statistic 
+\[ \hat{\Psi}_T = \max_{(i,j,k)} a_k \big( |\hat{\psi}_{ijk,T}^0| - b_k \big) \]
+in order to ensure control of the FWER at level $\alpha$.
+\end{itemize}
 \hyperlink{frame_test<4>}{\beamerbutton{Go back}}
 \end{frame}
 
