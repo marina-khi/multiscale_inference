@@ -22,7 +22,7 @@
 \title{Simultaneous statistical inference for epidemic trends: the case of COVID-19}
 \date{01/10/2020}
 \author{Marina Khismatullina \and Michael Vogt}
-\setbeamertemplate{frame footer}{Simultaneous statistical inference for epidemic trends}
+\setbeamertemplate{frame footer}{Simultaneous statistical inference for epidemic trends: the case of COVID-19}
 \metroset{block=fill}
 % \titlegraphic{\hfill\includegraphics[height=1.5cm]{logo.pdf}}
 
@@ -80,17 +80,19 @@ where
 \end{frame}
 
 \begin{frame}{Literature}
-	Curve comparisons
+	Comparison of deterministic trends:
 	\begin{itemize}
-		\item Park et al. (2009)
+		\item Park et al. (2009), Degras et al. (2012), Zhang et al. (2012), Hidalgo and Lee (2014), Chen and Wu (2019).
 	\end{itemize}\pause
-	Studies of COVID-19
+	Studies of COVID-19:
 	\begin{itemize}
-		\item SEIR models
+		\item SEIR models: Yang et al. (2020), Wu et al. (2020), De Brouwer et al. (2020).
+		\item Time series analysis: Gu et al. (2020), Li and Linton (2020).
+		\item Dong et al. (2020).
 	\end{itemize}
 \end{frame}
 
-\section{The multiscale testing method}
+\section{Testing}
 \begin{frame}{Testing problem}
 
 Let $\mathcal{F} =\{ \mathcal{I}_k \subseteq [0, 1]: 1 \le k \le K\}$ be a family of intervals on $[0, 1]$, and for a given interval $\mathcal{I}_k$ we want to test whether the functions $\lambda_i$ and $\lambda_j$ are the same on this interval. Formally, the testing problem is
@@ -104,15 +106,15 @@ We want to test these hypothesis $H_0^{(ijk)}$ simultaneously for all pairs of c
 \begin{frame}{Test statistic}
 For the given interval $\mathcal{I}_k$ and a pair of time series $i$ and $j$ we calculate
 \begin{equation*}
-\hat{s}_{ijk,T} = \frac{1}{\sqrt{T h_k}} \sum\limits_{t=1}^T \ind (X_{it} -X_{jt}), 
+\hat{s}_{ijk,T} = \frac{1}{T h_k} \sum\limits_{t=1}^T \ind (X_{it} -X_{jt}), 
 \end{equation*}
 %\vspace{-3mm}
-where $h_k$ is the length of the interval $\mathcal{I}_k$. \pause Under certain assumptions, 
+where $h_k$ is the length of $\mathcal{I}_k$. \pause The statistic $\hat{s}_{ijk,T}$ estimates the average distance between $\lambda_i$ and $\lambda_j$ on $\mathcal{I}_k$. \pause Under certain assumptions, 
 \begin{align*}
-\Var(\hat{s}_{ijk,T})  & = \frac{\sigma^2}{Th_k} \sum\limits_{t=1}^T \ind \Big\{ \lambda_i\Big(\frac{t}{T}\Big) + \lambda_j\Big(\frac{t}{T}\Big) \Big\}. 
+\Var(\hat{s}_{ijk,T})  & = \frac{\sigma^2}{T^2 h_k^2} \sum\limits_{t=1}^T \ind \Big\{ \lambda_i\Big(\frac{t}{T}\Big) + \lambda_j\Big(\frac{t}{T}\Big) \Big\}. 
 \end{align*}\pause
 In order to normalize the variance of the statistic $\hat{s}_{ijk,T}$, we scale it by an estimator of its variance:
-\[ \widehat{\Var(\hat{s}_{ijk,T})} = \frac{\hat{\sigma}^2}{Th_k} \sum\limits_{t=1}^T \ind (X_{it} + X_{jt} ), \]
+\[ \widehat{\Var(\hat{s}_{ijk,T})} = \frac{\hat{\sigma}^2}{T^2 h_k^2} \sum\limits_{t=1}^T \ind (X_{it} + X_{jt} ), \]
 with $\hat{\sigma}^2 = n^{-1} \sum_{i = 1}^n \hat{\sigma}_i^2$ and $\hat{\sigma}_i^2 = \frac{\sum_{t=2}^T (X_{it}-X_{it-1})^2}{2 \sum_{t=1}^T X_{it}}$.\hyperlink{frame_sigma}{\beamerbutton{Idea}}
 \end{frame}
 
@@ -124,7 +126,7 @@ Test statistic for the hypothesis $H_0^{(ijk)}$ is defined as
 \end{equation*} \pause
 Under certain conditions and under the null, $\widehat{\psi}_{ijk, T}$ can be approximated by the Gaussian version of the test statistic:
 \begin{align*}
-\phi_{ijk,T}(u,h) = \frac{1}{\sqrt{2 T h_k}} \sum\limits_{t=1}^T \ind (Z_{it} - Z_{jt}), 
+\phi_{ijk,T} = \frac{1}{\sqrt{2 T h_k}} \sum\limits_{t=1}^T \ind (Z_{it} - Z_{jt}), 
 \end{align*}
 where $Z_{it}$ are independent standard normal random variables.
 \end{frame}
@@ -134,15 +136,15 @@ where $Z_{it}$ are independent standard normal random variables.
 \begin{align*}
 H_0^{(ijk)}: \quad \lambda_i(w) = \lambda_j(w) \text{ for all } w \in \mathcal{I}_k.
 \end{align*} \pause
-\vspace{-5mm}
+How do determine critical values?\pause
+\vspace{-2mm}
+\begin{enumerate}
+	\item Consider the Gaussian test statistic $ \Phi_T = \max_{(i,j,k)} a_k \big( |\phi_{ijk,T}| - b_k \big) $, where $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$ are scale-dependent constants.\pause
+	\item Denote by $q_{T, \text{Gauss}} (\alpha)$ a $(1-\alpha)$-quantile of $\Phi_T$, which can be computed by Monte Carlo simulations.\pause
+	\item Adjust the quantile $q_{T, \text{Gauss}} (\alpha)$ by the scale-dependent constants: $c_{T,\text{Gauss}}(\alpha,h_k) = b_k + q_{T,\text{Gauss}}(\alpha)/a_k$. \hyperlink{frame_constants}{\beamerbutton{Idea}} \pause
+\end{enumerate}
 \begin{block}{Test procedure}
-For the given significance level $\alpha \in (0,1)$ and for each $(i,j,k)$, reject $H_0^{(ijk)}$ if $|\widehat{\psi}_{ijk,T}| > c_{T,\text{Gauss}}(\alpha,h_k)$\pause, where 
-\begin{itemize}
-	\item $c_{T,\text{Gauss}}(\alpha,h_k) = b_k + q_{T,\text{Gauss}}(\alpha)/a_k$ is a scale-dependent critical value;\pause
-	\item $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$ are scale-dependent constants; \hyperlink{frame_constants}{\beamerbutton{Idea}} \pause
-	\item $q_{T, \text{Gauss}} (\alpha)$ is $(1-\alpha)$-quantile of the Gaussian test statistic $\Phi_T$;\pause
-	\item and $ \Phi_T = \max_{(i,j,k)} a_k \big( |\phi_{ijk,T}| - b_k \big) $ the Gaussian test statistic.
-\end{itemize}
+For the given significance level $\alpha \in (0,1)$ and for each $(i,j,k)$, reject $H_0^{(ijk)}$ if $|\widehat{\psi}_{ijk,T}| > c_{T,\text{Gauss}}(\alpha,h_k)$.
 \end{block}
 \end{frame}
 
@@ -160,246 +162,138 @@ For the given significance level $\alpha \in (0,1)$ and for each $(i,j,k)$, reje
 
 
 \begin{frame}{Theoretical properties}
-\begin{prop}\label{prop-equality-1}
+\begin{prop}\label{prop1}
 Denote $\mathcal{M}_0$ the set of triplets $(i, j, k)$ where $H_0^{(ijk)}$ holds true. Then under $\mathcal{C}1 - \mathcal{C}6$, it holds that 
+\vspace{-2mm}
 \begin{align*}
  \Prob\Big( \forall (i,j,k) \in \mathcal{M}_0: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \ge 1 - \alpha + o(1)
 \end{align*}
+\end{prop}\pause
+\begin{prop}\label{prop2}
+Consider any sequence of functions $\lambda_{i} = \lambda_{i,T}$, $\lambda_{j} = \lambda_{j, T}$ with the following property: There exists an interval $\mathcal{I}_{k}$ such that $\lambda_{i, T}(w) - \lambda_{j, T}(w) \ge c_T \sqrt{T \log T / h_{k}}$ for all $w \in \mathcal{I}_{k}$, and $c_T \rightarrow \infty$. Then under $\mathcal{C}1 - \mathcal{C}6$, it holds that
+\[ \Prob\big(|\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \big) = o(1). \]
 \end{prop}
 \end{frame}
 
+\begin{frame}{Notation}
+\begin{center}
+In order to proceed with the proof, we will need the following notation:
+\end{center}
+\vspace{-2mm}
+\begin{align*}
+\widehat{\psi}_{ijk, T} &= \frac{\sum\nolimits_{t=1}^T \indsmall (X_{it} -X_{jt})}{\hat{\sigma} \big\{ \sum\nolimits_{t=1}^T \indsmall  (X_{it} + X_{jt} )\big\}^{1/2}}, &&\\
+\hat{\psi}_{ijk,T}^0 &= \frac{\sum\nolimits_{t=1}^T \indsmall \, \sigma \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\eta_{it} - \eta_{jt})}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \indsmall (X_{it} + X_{jt}) \}^{1/2}} &&\hat{\Psi}_T^0 = \max_{(i,j,k)} a_k (|\hat{\psi}_{ijk,T}^0| - b_k),\\
+\psi_{ijk,T}^0 &= \frac{1}{\sqrt{2Th_k}} \sum\limits_{t=1}^T \ind (\eta_{it} - \eta_{jt}) &&\Psi_T = \max_{(i,j,k)} a_k (|\psi_{ijk,T}^0| - b_k),\\
+\phi_{ijk,T} &= \frac{1}{\sqrt{2 T h_k}} \sum\limits_{t=1}^T \ind (Z_{it} - Z_{jt}) &&\Phi_T = \max_{(i,j,k)} a_k (|\phi_{ijk,T}| - b_k).
+\end{align*}
+\end{frame}
 
 \begin{frame}{Strategy of the proof}
-\begin{itemize}
-\item Replace the statistic $\widehat{\Psi}_T$ under $H_0: m = 0$ by a statistic $\widetilde{\Phi}_T$ with the same distribution and the property that 
-\begin{equation*}\label{eq-theo-stat-strategy-step1}
-\big| \widetilde{\Phi}_T - \Phi_T \big| = o_p(\delta_T),
+\begin{enumerate}
+\item We prove that  $\big| \hat{\Psi}_T^0 - \Psi_T \big| = o_p(r_T)$, where $\{r_T\}$ is some null sequence.
+
+\item With the help of results from Chernozhukov et al. (2017), we prove
+\begin{equation*}\label{eq:kolmogorov-distance}
+\sup_{q \in \mathbf{R}} \Big| \Prob\big( \Psi_T \le q \big) - \Prob\big( \Phi_T \le q \big) \Big| = o(1).
 \end{equation*}
-where $\delta_T = o(1)$. To do so, we make use of strong approximation theory for dependent processes as derived in Berkes et al. (2014)\pause
-\vspace{2mm}
-\item Using the anti-concentration results for Gaussian random vectors (Chernozhukov et al. 2015), prove that $\Phi_T$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$, i.e.
-\begin{equation*}\label{eq-theo-stat-strategy-step2}
-\sup_{x \in \mathbb{R}} \Prob \big( |\Phi_T - x| \le \delta_T \big) = o(1).
-\end{equation*}\pause
-\vspace{-2mm}
-\item Show that 
-\begin{equation*}\label{eq-theo-stat-strategy-claim}
-\sup_{x \in \mathbb{R}} \big| \Prob(\widetilde{\Phi}_T \le x) - \Prob(\Phi_T \le x) \big| = o(1). 
+\item By using these two results, we now show that 
+\begin{equation}\label{eq:kolmogorov-distance-hat}
+\sup_{q \in \mathbb{R}} \Big| \Prob\big( \hat{\Psi}_T^0 \le q \big) - \Prob\big( \Phi_T \le q \big) \Big| = o(1).
+\end{equation}
+\item $\Prob (\Phi_T \le q_{T,\text{Gauss}}(\alpha)) = 1-\alpha$ by definition of the quantile $q_{T,\text{Gauss}}(\alpha)$. From this and \eqref{eq:kolmogorov-distance-hat}, it immediately follows that  
+\begin{equation*}
+\Prob\big( \hat{\Psi}_T^0 \le q_{T,\text{Gauss}}(\alpha) \big) = 1 - \alpha + o(1), 
 \end{equation*}
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}{Theoretical properties}
-Define
-\begin{align*}
-\Pi_T^+ = \big\{ I_{u,h} = [u-h,u+h]: (u,h) \in \mathcal{A}_T^+ \text{ and } I_{u, h} \subseteq [0,1] \big\}\\
-\onslide<2->{\Pi_T^- = \big\{ I_{u,h} = [u-h,u+h]: (u,h) \in \mathcal{A}_T^- \text{ and } I_{u, h} \subseteq [0,1] \big\}}
-\end{align*}
-\vspace{-5mm}
-with
-\begin{align*} 
-&\mathcal{A}_T^+ = \Big\{ (u,h) \in \mathcal{G}_T: \frac{\widehat{\psi}_T(u,h)}{\widehat{\sigma}} > q_T(\alpha)  + \lambda(h)  \Big\}\\
-&\onslide<2->{\mathcal{A}_T^- = \Big\{ (u,h) \in \mathcal{G}_T: -\frac{\widehat{\psi}_T(u,h)}{\widehat{\sigma}} > q_T(\alpha)  + \lambda(h)  \Big\}}
-\end{align*}
-\end{frame}
-
-\begin{frame}{Theoretical properties}
-\begin{prop}\label{prop-shape-3}
-Under our assumptions, for events $E_T^+ = \Big\{ \forall I_{u,h} \in \Pi_T^+: m^{\prime}(v) > 0 \text{ for some } v \in I_{u,h}\Big\}$
-\only<1>{ it holds that}
-\onslide<2->{and $E_T^{-} = \Big\{ \forall I_{u,h} \in \Pi_T^-: m^{\prime}(v) < 0 \text{ for some } v \in I_{u,h}\Big\}$ it holds that } 
-\begin{align*}
-\Prob \big( E_T^+ \big) \ge (1-\alpha) + o(1)\\
-\onslide<2->{\Prob \big( E_T^- \big) \ge (1-\alpha) + o(1)}
-\end{align*} 
-\end{prop}
+which in turn implies the desired statement.
+\end{enumerate}
 \end{frame}
 
 \begin{frame}{Graphical representation}
 \begin{block}{Minimal intervals}
 An interval $\mathcal{I}_k \in \mathcal{F}_{\text{reject}}(i, j)$ is called \textbf{minimal} if there is no other interval $\mathcal{I}_{k^\prime} \in \mathcal{F}_{\text{reject}}(i, j)$ with $\mathcal{I}_{k^\prime} \subset \mathcal{I}_k$. The set of minimal intervals is denoted $\mathcal{F}_{\text{reject}}^{\min} (i, j)$.
 \end{block}\pause
-Define
+We can make very similar confidence statement about the set of minimal intervals as well:
 \begin{align*}
-\Pi^{min, +}_T &= \text{ set of minimal intervals from }\Pi^+_T,\\
-E_T^{min, +} &= \Big\{ \forall I_{u,h} \in \Pi_T^{min, +}: m'(v) > 0 \text{ for some } v \in I_{u,h}\Big\}
-\end{align*}\pause
-Since $E_T^{min, +} = E_T^{+}$, we have
-\begin{align*}
-\Prob \big( E_T^{min, +} \big) \ge (1-\alpha) + o(1).
+ \Prob\Big( \forall (i,j,k) \in \mathcal{M}_0: \mathcal{I}_k \notin \mathcal{F}_{\text{reject}}^{\min} (i, j) \Big) \ge 1 - \alpha + o(1).
 \end{align*}
 \end{frame}
 
-
-
-\section{Conclusion}
-\begin{frame}{Conclusion}
-We developed multiscale methods to test qualitative hypotheses about nonparametric time trends:
-\begin{itemize}
-\item whether the trend is present at all;
-\item whether the trend function is constant;
-\item in which time regions there is an upward/downward movement in the trend.
-\end{itemize}
-We derived asymptotic theory for the proposed tests.
-
-As an application of our method, we analyzed the behavior of the yearly mean temperature in Central England from 1659 to 2017.
+\section{Application}
+\begin{frame}{Application results}
+	\begin{figure}
+		\includegraphics[width=0.49\textwidth]{plots/DEU_vs_ITA_presentation}
+   		%\caption{Observed new cases per day in Germany and Italy}    			\label{fig:DEUvsITA}
+		\hfill
+		\includegraphics[width=0.49\textwidth]{plots/DEU_vs_ESP_presentation}
+	\end{figure}
 \end{frame}
 
+\begin{frame}{Application results, part 2}
+	\begin{figure}
+		\includegraphics[width=0.49\textwidth]{plots/DEU_vs_GBR_presentation}
+   		%\caption{Observed new cases per day in Germany and Italy}    			\label{fig:DEUvsITA}
+		\hfill
+		\includegraphics[width=0.49\textwidth]{plots/DEU_vs_FRA_presentation}
+	\end{figure}
+\end{frame}
+
+
+\begin{frame}{Discussion}
+We can claim, with confidence of about $95\%$, that we are able to detect all of the differences between the trend functions in different countries.\pause
+
+However, we can not say anything about the causes of such differences. This question requires further (probably not purely statistical) analysis.\pause
+
+Further possible extensions:
+\begin{itemize}
+	\item to introduce scaling factor in the trend function, that allow for adjusting for the size of the country (population, density, testing regimes, etc.);\pause
+	\item to connect with data-driven techniques such as machine learning;\pause
+	\item to build in some policy changes.
+\end{itemize}
+\end{frame}
 
 \begin{frame}[standout]
   Thank you!
 \end{frame}
 
 
-
-
 \appendix
 
-%\begin{frame}{Simulation results of the multiscale test for constant trend function}
-%\scriptsize{\begin{table}[t]
-%\begin{center}
-%\caption{Size of the multiscale test.}
-%\label{tab:size_shape}
-%\input{Plots/sizetable_ll_testing_constant}
-%\end{center}
-%\end{table}}
-%\begin{center}
-%\normalsize{Power of the multiscale test for different slope parameters $\beta$.}
-%\end{center}
-%\vspace{-5mm}
-%\scriptsize{\begin{columns}
-%\begin{column}[b]{0.33\textwidth}
-%\begin{table}[t]
-%\centering
-%\caption{$\beta = 1.25$}\label{tab:power_050_ll_shape}
-%\input{Plots/powertable_50_ll_testing_constant}
-%\end{table}
-%\end{column}
-%\begin{column}[b]{0.33\textwidth}
-%\begin{table}[t]
-%\centering
-%\caption{$\beta = 1.875$}\label{tab:power_075_ll_shape}
-%\input{Plots/powertable_75_ll_testing_constant}
-%\end{table}
-%\end{column}
-%\begin{column}[b]{0.33\textwidth}
-%\begin{table}[t]
-%\centering
-%\caption{$\beta = 2.5$}\label{tab:power_100_ll_shape}
-%\input{Plots/powertable_100_ll_testing_constant}
-%\end{table}
-%\end{column}
-%\end{columns}}
-%\end{frame}
-
-\begin{frame}
-\thispagestyle{empty}
-\begin{center}
-\Large{\textbf{Long-run error variance estimator}}
-\end{center}
-\end{frame}
-
-\begin{frame}{Setting}
-Estimate the long-run error variance $\sigma^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \Cov(\varepsilon_0,\varepsilon_{\ell})$ of the error terms $\{\varepsilon_t\}$ in the model 
-\begin{equation*}
-Y_t = m \Big( \frac{t}{T} \Big) + \varepsilon_t, 
-\end{equation*}
-where $\{\varepsilon_t\}$ is a stationary and causal AR($p$) process of the form 
-\begin{equation*}
-\varepsilon_t = \sum_{j=1}^p a_j \varepsilon_{t-j} + \eta_t. 
-\end{equation*} \pause
-\begin{itemize}
-	\item $\boldsymbol{a} = (a_1,\ldots,a_p)$ is a vector of the unknown parameters;\pause
-	\item $\eta_t$ are i.i.d.\ innovations with $\E[\eta_t] = 0$ and $\E[\eta_t^2] = \nu^2$;\pause
-	\item $p$ is known.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Estimator, first stage}
-Yule-Walker equations yield 
-\begin{equation*}\label{YU-eq}
-\boldsymbol{\Gamma}_q \boldsymbol{a} = \boldsymbol{\gamma}_q + \nu^2 \boldsymbol{c}_q,  
-\end{equation*} 
-where
-\vspace{-3mm}
-\begin{itemize}
-	\item $\boldsymbol{c}_q = (c_{q-1},\dots,c_{q-p})^\top$ are the coefficients from the MA($\infty$) expansion of $\{ \varepsilon_t \}$;\pause
-	\item $\boldsymbol{\gamma}_q = (\gamma_q(1),\dots,\gamma_q(p))^\top$ with $\gamma_q(\ell) = \Cov(\Delta_q \varepsilon_t,$ $\Delta_q \varepsilon_{t-\ell})$;\pause
-	\item and $\boldsymbol{\Gamma}_q$ is the $p \times p$ covariance matrix $\boldsymbol{\Gamma}_q = (\gamma_q(i-j): 1 \le i,j \le p)$.
-\end{itemize}\pause
-\begin{block}{Note}
-\vspace{-3mm}
-\begin{center}
-$\boldsymbol{\Gamma}_q \boldsymbol{a} \approx \boldsymbol{\gamma}_q$ for large values of $q$.
-\end{center}\vspace{-3mm}\end{block}\pause
-\vspace{-3mm}
-
-We construct the first-stage estimator by
-\begin{equation*}
-\widetilde{\boldsymbol{a}}_q = \widehat{\boldsymbol{\Gamma}}_q^{-1} \widehat{\boldsymbol{\gamma}}_q, 
-\end{equation*}
-where $\widehat{\boldsymbol{\Gamma}}_q$ and $\widehat{\boldsymbol{\gamma}}_q$ are constructed from the sample autocovariances $\widehat{\gamma}_q(\ell) = (T-q)^{-1} \sum_{t=q+\ell+1}^T \Delta_q Y_{t,T} \Delta_q Y_{t-\ell,T}$. 
-\end{frame}
-
-\begin{frame}{Estimator, second stage}
-\begin{block}{Problem}
-If the trend $m$ is pronounced, the estimator $\widetilde{\boldsymbol{a}}_q$ will have a strong bias.
-\end{block}\pause
+\begin{frame}{Simulation results for the size of the test}
+\begin{figure}[t!]
+	\includegraphics[height = 0.4\textheight]{plots/lambda_fct}
+\end{figure}
 \vspace{-2mm}
-Solution:
-\begin{itemize}
-	\item \vspace{-2mm} Compute estimators $\widetilde{c}_k$ of $c_k$ based on $\widetilde{\boldsymbol{a}}_q$.\pause
-	\item Estimate the innovation variance $\nu^2$ by $\widetilde{\nu}^2 = (2T)^{-1} \sum_{t=p+1}^T \widetilde{r}_{t,T}^2$, where $\widetilde{r}_{t,T} = \Delta_1 Y_{t,T} - \sum_{j=1}^p \widetilde{a}_j \Delta_1 Y_{t-j,T}$.\pause
-	\item Estimate $\boldsymbol{a}$ by 
-\begin{equation*}\label{est-AR-SS} 
-\widehat{\boldsymbol{a}}_r = \widehat{\boldsymbol{\Gamma}}_r^{-1} (\widehat{\boldsymbol{\gamma}}_r + \widetilde{\nu}^2 \widetilde{\boldsymbol{c}}_r).
-\end{equation*}\pause
-	\item \vspace{-2mm} Average the estimators $\widehat{\boldsymbol{a}}_r$: $\widehat{\boldsymbol{a}} = \frac{1}{\overline{r}} \sum\limits_{r=1}^{\overline{r}} \widehat{\boldsymbol{a}}_r$.\pause
-	\item Estimate the long-run variance $\sigma^2$ by 
-\begin{equation*} \label{est-lrv}
-\widehat{\sigma}^2 = \frac{\widehat{\nu}^2}{(1 - \sum_{j=1}^p \widehat{a}_j)^2}. 
-\end{equation*}
-\end{itemize}
+\scriptsize{\begin{table}[t]
+\begin{center}
+\caption{Size of the multiscale test}
+\label{tab:size_shape}
+\input{plots/size_overdispersion_15}
+\end{center}
+\end{table}}
 \end{frame}
 
-
-
-\begin{frame}{Motivation for the estimator}
-If $\{\varepsilon_t\}$ is an AR($p$) process, then the time series $\{ \Delta_q \varepsilon_t \}$ of the differences $\Delta_q \varepsilon_t = \varepsilon_t - \varepsilon_{t-q}$ is an ARMA($p,q$) process of the form 
-\begin{equation*}
-\Delta_q \varepsilon_t - \sum_{j=1}^p a_j \Delta_q \varepsilon_{t-j} = \eta_t - \eta_{t-q}. 
-\end{equation*}\pause
-
-Then $\Delta_q Y_{t, T} = Y_{t, T} - Y_{t-q, T}$ is approximately an ARMA($p,q$) process.
-\end{frame}
-
-\begin{frame}{Theoretical properties of the estimator}
-Performance:
-\begin{itemize}
-\item Our estimator $\widehat{\boldsymbol{a}}$ produces accurate estimation results even when the AR polynomial $A(z) = 1 - \sum_{j=1}^p a_j z^j$ has a root close to the unit circle.\pause
-\item Our pilot estimator $\widetilde{\boldsymbol{a}}_q$ tends to have a substantial bias when the trend $m$ is pronounced. Our estimator $\widehat{\boldsymbol{a}}$ reduces this bias considerably.\pause
-\end{itemize}
-\begin{prop}{}
-Our estimators $\widetilde{\boldsymbol{a}}_q$, $\widehat{\boldsymbol{a}}$ and $\widehat{\sigma}^2$ are $\sqrt{T}$-consistent. 
-\end{prop}
-\end{frame}
-
-\begin{frame}[label = frame_lambda]{Idea behind the additive correction}
-\onslide<1->{Consider the uncorrected statistic
-\begin{align*}
-\widehat{\Psi}_{T, \text{uncorrected}} = \max_{(u,h) \in \mathcal{G}_T} \Big|\frac{\widehat{\psi}_T(u,h)}{\widehat{\sigma}}\Big|
-\end{align*}
-under the null hypothesis $H_0: m = 0$ and under simplifying assumptions:
-\begin{itemize}
-\item the errors $\varepsilon_i$ are i.i.d. normally distributed;
-\item $\widehat{\sigma} = \sigma$;
-\item $\mathcal{G}_T = \{(u_k, h_l) | u_k = (2k - 1)h_l \text{ for } 1\le k \le 1/2h_l, 1 \le l \le L\}$.\pause
-\end{itemize}}
-\onslide<2->{\begin{align*}
-\widehat{\Psi}_{T, \text{uncorrected}} = \max_{1 \le l \le L} \max_{1\le k \le 1/2h_l} \Big|{\color<3>{mLightBrown}\frac{\widehat{\psi}_T(u_k,h_l)}{\sigma}}\Big|
-\end{align*}}
-\onslide<4->{$\Rightarrow \quad \max_k \frac{\widehat{\psi}_T(u_k,h_l)}{\sigma} ={\color<5->{mLightBrown}\sqrt{2\log(1/2h_l)}} + o_P(1) \to \infty$ as $h \to 0$ and the stochastic behavior of $\widehat{\Psi}_{T, \text{uncorrected}}$ is dominated by $\frac{\widehat{\psi}_T(u_k,h_l)}{\sigma}$ for small bandwidths $h_l$. \hyperlink{frame_teststatistic}{\beamerbutton{Go back}}}
+\begin{frame}{Simulation results for the power of the test}
+\begin{figure}[t!]
+	\onslide<1->\includegraphics[width = 0.49\textwidth, height = 0.4\textheight]{plots/lambda_fcts_height}
+	\onslide<2->\includegraphics[width = 0.49\textwidth, height = 0.4\textheight]{plots/lambda_fcts_shift}	
+\end{figure}\pause
+\vspace{-5mm}
+{\onslide<1>\scriptsize{\begin{table}[t]
+\begin{center}
+\caption{Power of the multiscale test for scenario A}
+\label{tab:size_shape}
+\input{plots/power_sigma_15_higher_peak}
+\end{center}
+\end{table}}}
+{\onslide<2>
+\vspace{-39.5mm}
+\scriptsize{\begin{table}[t]
+\begin{center}
+\caption{Power of the multiscale test for scenario B}
+\label{tab:size_shape}
+\input{plots/power_sigma_15_shifted_peak}
+\end{center}
+\end{table}}}
 \end{frame}
 
 \begin{frame}[label = frame_sigma]{Idea behind $\hat{\sigma}$}
@@ -413,7 +307,7 @@ Together with \[ \frac{1}{T} \sum_{t=1}^T X_{it} = \frac{1}{T} \sum_{t=1}^T \lam
 \end{frame}
 
 \begin{frame}[label = frame_constants]{Idea behind $a_k$ and $b_k$}
-How to construct critical values $c_{ijk,T}(\alpha)$? 
+How to construct critical values $c_{ijk,T}(\alpha)$? \pause
 \begin{itemize}
 \item Traditional approach: $c_T(\alpha) = c_{ijk,T}(\alpha)$ for all $(i,j,k)$. \pause
 \item A more modern approach: $c_{ijk,T}(\alpha)$ depend on the length $h_k$ of the time interval (D{\"u}mbgen and Spokoiny (2001)). In our context:
@@ -426,5 +320,19 @@ in order to ensure control of the FWER at level $\alpha$.
 \end{itemize}
 \hyperlink{frame_test<4>}{\beamerbutton{Go back}}
 \end{frame}
+
+\begin{frame}{Idea behind the additive correction}
+Consider the uncorrected Gaussian statistic
+\begin{align*}
+\Phi_{T}^{\text{uncor}} = \max_{(i,j,k)} |\phi_{ijk, T}|
+\end{align*}\pause
+and let the family of intervals be \[\mathcal{F} = \big\{[(m-1) h_l, m h_l] \text{ for } 1\le m \le 1/h_l, 1 \le l \le L\big\}.\]\pause
+Then we can rewrite the uncorrected test statistic as
+\begin{align*}
+\Phi_{T}^{\text{uncor}} = \max_{i, j} \max_{\substack{1 \le l \le L, \\ 1\le m \le 1/h_l}} \Big|\frac{1}{\sqrt{2 T h_l}} \sum\limits_{t=1}^T 1 \Big( \frac{t}{T} \in [(m-1) h_l, m h_l] \Big) (Z_{it} - Z_{jt})\Big|
+\end{align*}\pause
+$\Rightarrow \quad \max_m \ldots =\sqrt{2\log(1/h_l)} + o_P(1) \to \infty$ as $h \to 0$ and the stochastic behavior of $\Phi_{T}^{\text{uncor}}$ is dominated by the elements with small bandwidths $h_l$. \hyperlink{frame_test<4>}{\beamerbutton{Go back}}
+\end{frame}
+
 
 \end{document}

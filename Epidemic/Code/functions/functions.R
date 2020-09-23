@@ -21,22 +21,29 @@ produce_plots <- function (results, l, data_i, data_j,
   Tlen <- length(data_i)
   gset <- results$gset_with_values[[l]]
   
-  pdf(filename, width=5.5, height=13, paper="special")
+  #pdf(filename, width=5.5, height=13, paper="special")
+  #layout(matrix(c(1, 2, 3, 4),ncol=1), widths=c(2.2, 2.2, 2.2, 2.2),
+  #       heights=c(1.5, 1.5, 1.5, 1.8), TRUE)
+  pdf(filename, width = 5, height = 6.5, paper="special")
+  layout(matrix(c(1, 2), ncol=1), widths=c(2.4, 2.4),
+         heights=c(1.5, 1.8), TRUE)
   
-  layout(matrix(c(1, 2, 3, 4),ncol=1), widths=c(2.2, 2.2, 2.2, 2.2),
-         heights=c(1.5, 1.5, 1.5, 1.8), TRUE)
   #Setting the layout of the graphs
 
   par(cex = 1, tck = -0.025)
   par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
-  par(oma = c(0.2, 1.5, 2, 0.2)) #Outer margins
+  #par(oma = c(0.2, 1.5, 2, 0.2)) #Outer margins
+  par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
 
   plot(data_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
-      col="blue", ylab="", xlab="", mgp=c(1, 0.5, 0))
-  lines(data_j, col="red")
+  #    col="blue", ylab="", xlab="", mgp=c(1, 0.5, 0))
+  #lines(data_j, col="red")
+       col = "#EB811B", ylab="", xlab="", mgp=c(1, 0.5, 0))
+  lines(data_j, col="#604c38")
   title(main = "(a) observed new cases per day", font.main = 1, line = 0.5)
   legend("topright", inset = 0.02, legend=c(country_i, country_j),
-         col = c("blue", "red"), lty = 1, cex = 0.95, ncol = 1)
+         #col = c("blue", "red"), lty = 1, cex = 0.95, ncol = 1)
+         col = c("#604c38", "#EB811B"), lty = 1, cex = 0.95, ncol = 1)
 
   par(mar = c(0.5, 0.5, 3, 0)) #Margins for each plot
 
@@ -44,19 +51,18 @@ produce_plots <- function (results, l, data_i, data_j,
   grid_points <- seq(from = 1 / Tlen, to = 1, length.out = Tlen) #grid points for estimating
   smoothed_i  <- mapply(nadaraya_watson_smoothing, grid_points,
                         MoreArgs = list(data_i, grid_points, bw = 3.5 / Tlen))
-  
   smoothed_j  <- mapply(nadaraya_watson_smoothing, grid_points,
                         MoreArgs = list(data_j, grid_points, bw = 3.5 / Tlen))
   
-  plot(smoothed_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
-     col="blue", ylab="", xlab = "", mgp=c(1,0.5,0))
-  title(main = "(b) smoothed curves from (a)", font.main = 1, line = 0.5)
-  lines(smoothed_j, col="red")
-
-  plot(gov_resp_i, ylim=c(0, 100), type="l",
-       col="blue", ylab="", xlab = "", mgp=c(1, 0.5, 0))
-  title(main = "(c) government response index", font.main = 1, line = 0.5)
-  lines(gov_resp_j, col="red")
+  # plot(smoothed_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
+  #    col="blue", ylab="", xlab = "", mgp=c(1,0.5,0))
+  # title(main = "(b) smoothed curves from (a)", font.main = 1, line = 0.5)
+  # lines(smoothed_j, col="red")
+  # 
+  # plot(gov_resp_i, ylim=c(0, 100), type="l",
+  #      col="blue", ylab="", xlab = "", mgp=c(1, 0.5, 0))
+  # title(main = "(c) government response index", font.main = 1, line = 0.5)
+  # lines(gov_resp_j, col="red")
 
   par(mar = c(2.7, 0.5, 3, 0)) #Margins for each plot
 
@@ -70,7 +76,7 @@ produce_plots <- function (results, l, data_i, data_j,
     p_t_set2  <- compute_minimal_intervals(p_t_set)
 
     plot(NA, xlim=c(0, Tlen),  ylim = c(0, 1 + 1 / nrow(p_t_set)), xlab="", mgp=c(2, 0.5, 0), yaxt = "n")
-    title(main = "(d) minimal intervals produced by our test", font.main = 1, line = 0.5)
+    title(main = "(b) minimal intervals produced by our test", font.main = 1, line = 0.5)
     title(xlab = "days since the hundredth case", line = 1.7, cex.lab = 0.9)
     segments(p_t_set2$startpoint, p_t_set2$values, p_t_set2$endpoint, p_t_set2$values, lwd = 2)
     segments(p_t_set$startpoint, p_t_set$values, p_t_set$endpoint, p_t_set$values, col = "gray")
@@ -87,7 +93,7 @@ produce_plots <- function (results, l, data_i, data_j,
     title(main = "(d) minimal intervals produced by our test", font.main = 1, line = 0.5)
     title(xlab = "days since the hundredth case", line = 1.7, cex.lab = 0.9)
   }
-  mtext(paste0("Comparison of ", country_i, " and ", country_j), side = 3, line = 0, outer = TRUE, font = 1, cex = 1.2)
+  #mtext(paste0("Comparison of ", country_i, " and ", country_j), side = 3, line = 0, outer = TRUE, font = 1, cex = 1.2)
   dev.off()
 }
 
