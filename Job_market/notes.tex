@@ -255,14 +255,9 @@ where $c_{T,\text{Gauss}}(\alpha,h_k) = b_k + q_{T,\text{Gauss}}(\alpha)/a_k$ wi
 
 
 In Theorem \ref{theo1} of the Appendix, we prove that under appropriate regularity conditions, the test defined in \eqref{eq:test} (asymptotically) controls the familywise error rate $\text{FWER}(\alpha)$ for each pre-specified significance level $\alpha$. As shown in Corollary \ref{corollary1}, this has the following implication: 
-%\begin{align}
-%\pr\Big( \forall (i,j,k) \in \indexset: \text{ If } |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k), \text{ then } & (i,j,k) \notin \indexset_0 \Big) \nonumber \\ & \ge 1 - \alpha + o(1), \label{eq:simconfstat}
-%\end{align} 
-{\color{red}
 \begin{align}\label{eq:simconfstat}
 \pr\Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \ge 1 - \alpha + o(1)
 \end{align}
-}
 where $\indexset_0$ is the set of triples $(i,j,k) \in \indexset$ for which $H_0^{(ijk)}$ holds true. Verbally, \eqref{eq:simconfstat} can be expressed as follows:  
 \begin{equation}\label{eq:confidencestatement1}
 \begin{minipage}[c][1cm][c]{13cm}
@@ -274,7 +269,7 @@ In other words:
 {\color{red}
 \begin{equation}\label{eq:confidencestatement2}
 \begin{minipage}[c][1cm][c]{13cm}
-\textit{With (asymptotic) probability at least $1-\alpha$, the set of the intervals where the functions $\lambda_i$ and $\lambda_j$ differ is contained in the set of the intervals for which the test rejects $H_0^{(ijk)}$.} 
+\textit{With (asymptotic) probability at least $1-\alpha$, the set of the intervals where the functions $\lambda_i$ and $\lambda_j$ differ contains the set of the intervals for which the test rejects $H_0^{(ijk)}$.} 
 \end{minipage}
 \end{equation}
 }
@@ -285,14 +280,15 @@ In other words:
 %\end{equation}
 %Hence, the test allows us to make simultaneous confidence statements (a) about which pairs of countries $(i,j)$ have different trend functions and (b) about where, that is, in which time intervals $\mathcal{I}_k$ the functions differ.
 
-{\color{red} The second result characterizes the power of the multiscale test against local alternatives. To formulate it, we consider any sequence of functions $\lambda_{i_0} = \lambda_{i_0,T}$, $\lambda_{j_0} = \lambda_{j_0, T}$ with the following property: There exists $\mathcal{I}_{k_0} \in \intervals$ such that 
+The second result characterizes the power of the multiscale test against local alternatives. To formulate it, consider a sequence of the functions $\lambda_{i}= \lambda_{i, T}$ and $\lambda_j =\lambda_{j, T}$ with the following property: There exists $\mathcal{I}_{k} \in \intervals$ such that 
 \begin{equation}\label{loc-alt}
-\lambda_{i_0, T}(w) - \lambda_{j_0, T}(w) \ge c_T \sqrt{T \log T / h_{k_0}} \quad \text{for all } w \in \mathcal{I}_{k_0}, 
+\lambda_{i, T}(w) - \lambda_{j, T}(w) \ge c_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k}, 
 \end{equation}
-where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$. According to Corollary \ref{corollary2} in the Appendix, we can make the following statement about the asymptotic power of the test:
-\[ \pr\Big( \forall (i,j,k) \in \indexset: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = o(1). \]
+where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$ faster than $\frac{\sqrt{\log T}\sqrt{\log \log T}}{\log \log \log T}$ We denote the set of triplets $(i, j, k) \in \indexset$ for which \eqref{loc-alt} holds true as $\indexset_1$. Clearly $\indexset_0 \cap \indexset_1 = \emptyset$. According to Corollary \ref{corollary2} in the Appendix, we can make the following statement about the asymptotic power of the test:
+\begin{equation}\label{eq:power}
+\pr\Big( \forall (i,j,k) \in \indexset_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1).
+\end{equation}
 Hence, our test has asymptotic power $1$ against local alternatives of the form \eqref{loc-alt}. The proof can be found in the Supplementary Material.
-}
 
 \subsection{Implementation of the test in practice}
 
@@ -731,17 +727,15 @@ The following corollary is an immediate consequence of Theorem \ref{theo1}. It p
 \begin{corollaryA}\label{corollary1}
 Under the conditions of Theorem \ref{theo1}, 
 %\[ \pr\Big( \forall (i,j,k) \in \indexset: \text{ If } |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k), \text{ then } (i,j,k) \notin \indexset_0 \Big) \ge 1 - \alpha + o(1) \]
-$$ {\color{red} \pr\Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \ge 1 - \alpha + o(1) } $$
+$$ \pr\Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \ge 1 - \alpha + o(1) $$
 for any given $\alpha \in (0,1)$.   
 %Hence, with asymptotic probability at least $1-\alpha$, the two intensity functions $\lambda_i$ and $\lambda_j$ differ on the interval $\mathcal{I}_k$ for all $(i,j,k) \in \indexset$ for which the test rejects $H_0^{(ijk)}$. 
 \end{corollaryA} 
-{\color{red}
 \begin{corollaryA}\label{corollary2}
-Let the conditions of Theorem \ref{theo1} be satisfied and consider two sequences of functions $\lambda_{i_0, T}$ and $\lambda_{j_0, T}$ with the property \eqref{loc-alt}. Then 
-\[ \pr\Big( \forall (i,j,k) \in \indexset: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = o(1) \]
+Let the conditions of Theorem \ref{theo1} be satisfied and consider two sequences of functions $\lambda_{i, T}$ and $\lambda_{j, T}$ with the property \eqref{loc-alt} for $c_T$ going to infinity faster than $\frac{\sqrt{\log T}\sqrt{\log \log T}}{\log \log \log T}$. Then 
+\[ \pr\Big( \forall (i,j,k) \in \indexset_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1) \]
 for any given $\alpha \in (0, 1)$. 
 \end{corollaryA}
-}
 \begin{proof}[\textnormal{\textbf{Proof of Theorem \ref{theo1}.}}] The proof proceeds in several steps. 
 \begin{enumerate}[label=\textit{Step \arabic*.}, leftmargin=0cm, itemindent=1.45cm]
 
@@ -868,13 +862,10 @@ By Theorem \ref{theo1},
 1 - \alpha + o(1) 
  & \le 1 - \textnormal{FWER}(\alpha) \\
  & = \pr \Big( \nexists (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \\
- %& = \pr\Big( \forall (i,j,k) \in \indexset: \text{ If } |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k), \text{ then } (i,j,k) \notin \indexset_0 \Big),
-& ={\color{red}\pr\Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big)},
+& = \pr\Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big),
 \end{align*}
 which gives the statement of Corollary \ref{corollary1}.
 \end{proof}
-
-{\color{red}
 
 \begin{proof}[\textnormal{\textbf{Proof of Corollary \ref{corollary2}.}}]
 
@@ -884,36 +875,52 @@ To start with, we introduce the notation $\widehat{\psi}_{ijk, T} = \widehat{\ps
 \[ \widehat{\psi}_{ijk, T}^A = \frac{\sigma \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \Big(\sqrt{\lambda_{i}\big(\frac{t}{T}\big)} \eta_{it} - \sqrt{\lambda_{j}\big(\frac{t}{T}\big)}\eta_{jt}\Big)}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}} \]
 and
 \[ \widehat{\psi}_{ijk, T}^B = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \big(\lambda_{i}\big(\frac{t}{T}\big) - \lambda_{j}\big(\frac{t}{T}\big)\big)}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}}. \]
-By assumption, there exists $\mathcal{I}_{k_0} \in \intervals$ such that $\lambda_{i_0, T}(w) - \lambda_{j_0, T}(w) \ge c_T \sqrt{T \log T / h_{k_0}}$ for all $w \in \mathcal{I}_{k_0}$. Furthermore, by \eqref{eq:approxerror:claim1:infer1} in the Supplementary Material,
+Now consider any $(i, j, k) \in \indexset_1$. By \eqref{loc-alt}, we know that $\lambda_{i, T}(w) - \lambda_{j, T}(w) \ge c_T \sqrt{\log T / (Th_{k})}$ for all $w \in \mathcal{I}_{k}$. Furthermore, by \eqref{eq:approxerror:claim1:infer1} in the Supplementary Material,
 \begin{align*}
-0 \le\sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{i_0 t} + \X_{j_0 t}) \le 4 \lambda_{\max} T h_k
+0 \le\sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{i t} + \X_{j t}) \le 4 \lambda_{\max} T h_k
 \end{align*}
-for large enough $T$. Together with the facts that the indicator function is non-negative, $\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) = h_k$, and that $\hat{\sigma}$ is a consistent estimator of $\sigma$, we have
+uniformlly over all $(i, j, k) \in \indexset$ with probability tending to $1$ as $T \to \infty$. Together with the facts that the indicator function is non-negative and $\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) = T h_k$ we have
 \begin{align}\label{eq:psiB}
-\widehat{\psi}_{i_o j_0 k_0, T}^B &\ge \frac{c_T h_{k_0} \sqrt{T \log T / h_{k_0}}}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_{k_o}) (\X_{i_0 t} + \X_{j_0 t}) \}^{1/2}} \nonumber \\
-& \ge  \frac{c_T\sqrt{T h_{k_0} \log T}}{2 \sqrt{ \lambda_{\max}T h_{k_0}}}\nonumber \\
-& =\frac{ c_T}{2 \sqrt{\lambda_{\max}}} \sqrt{\log T}
+\widehat{\psi}_{i j k, T}^B &\ge \frac{c_T T h_{k} \sqrt{\log T / (T h_k)}}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_{k}) (\X_{i t} + \X_{j t}) \}^{1/2}} \nonumber \\
+& \ge  \frac{c_T\sqrt{T h_{k} \log T}}{2 \widehat{\sigma} \sqrt{ \lambda_{\max}T h_{k}}}\nonumber \\
+& =\frac{ c_T}{2\widehat{\sigma} \sqrt{\lambda_{\max}}} \sqrt{\log T}
 \end{align}
-for sufficiently large $T$. Moreover, by the arguments completely analogous to those for the proof of \eqref{eq:approxerror:claim2} in the Supplementary Material, we have
+uniformlly over all $(i, j, k) \in \indexset_1$ with probability tending to $1$ as $T \to \infty$. Moreover, by the arguments completely analogous to those for the proof of \eqref{eq:approxerror:claim2} in the Supplementary Material, we have
 \begin{align}\label{eq:psiA}
 \max_{(i,j,k) \in \indexset} \big|\widehat\psi_{ijk,T}^A\big|  = O_p\big(\sqrt{\log p}\big) = O_p\big(\sqrt{\log T}\big),
 \end{align}
-because $p = T^{\gamma}$ for a fixed $\gamma$. With the help of \eqref{eq:psiB}, \eqref{eq:psiA}, and the fact that $$b_k = \sqrt{2 \log(1/h_k)} \le \sqrt{2 \log(1/h_{\min})} \le C \sqrt{\log T}$$ and 
-$$a_k = \frac{\{\log(e/h_k)\}^{1/2}}{ \log \log(e^e / h_k) }\le \frac{\{\log(e/h_{\min})\}^{1/2} }{\log \log(e^e / h_{\max})} \le C\frac{\sqrt{\log T}}{\log \log \log T},$$ we can infer that
-\begin{align}
-\max_{(i,j,k) \in \indexset} a_k (|\hat{\psi}_{ijk,T}| - b_k) & \ge \max_{(i, j, k) \in \indexset} a_k |\widehat{\psi}_{ijk, T}^B| - \max_{(i, j, k) \in \indexset} a_k (|\widehat{\psi}_{ijk, T}^A| + b_k) \nonumber \\
- & = \max_{(i, j, k) \in \indexset} a_k |\widehat{\psi}_{ijk, T}^B| + O_p\bigg(\frac{\sqrt{\log T}}{\log \log \log T} \sqrt{\log T}\bigg) \nonumber \\
- & \ge C \cdot c_T \log T + O_p(\log T) \label{eq-proof-prop-test-2-conclusion}
-\end{align}
-for sufficiently large $T$. Since $q_{T, \text{Gauss}}(\alpha) = O(\log T)$ for any fixed $\alpha \in (0,1)$, \eqref{eq-proof-prop-test-2-conclusion} together with 
+because $p = T^{\gamma}$ for a fixed $\gamma$. With the help of \eqref{eq:psiB}, \eqref{eq:psiA}, and the fact that 
 \begin{align*}
-1 & - \pr\Big( \forall (i,j,k) \in \indexset: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \\
-& = \pr \Big( \exists (i,j,k) \in \indexset: |\hat{\psi}_{ijk,T}| > c_{T,\text{Gauss}}(\alpha,h_k) \Big) \\
-& = \pr \Big( \max_{(i,j,k) \in \indexset} a_k \big( |\hat{\psi}_{ijk,T}| - b_k \big) > q_{T,\text{Gauss}}(\alpha) \Big) 
+b_k &= \sqrt{2 \log(1/h_k)} \le \sqrt{2 \log(1/h_{\min})} \le C \sqrt{\log T}, \\
+a_k &= \frac{\{\log(e/h_k)\}^{1/2}}{ \log \log(e^e / h_k) }\le \frac{\{\log(e/h_{\min})\}^{1/2} }{\log \log(e^e / h_{\max})} \le C\frac{\sqrt{\log T}}{\log \log \log T} \text{ and}\\
+a_k & \ge \frac{\{\log(e/h_{\max})\}^{1/2} }{\log \log(e^e / h_{\min})} \ge C\frac{\sqrt{\log \log T}}{\log \log T} = C \frac{1}{\sqrt{\log \log T}}
 \end{align*}
-immediately yields the statement of Corollary \ref{corollary2}.
+for large enough $T$, we can infer that
+\begin{align}
+\min_{(i,j,k) \in \indexset_1} a_k (|\hat{\psi}_{ijk,T}| - b_k) & \ge \min_{(i, j, k) \in \indexset_1} a_k |\widehat{\psi}_{ijk, T}^B| - \max_{(i, j, k) \in \indexset} a_k (|\widehat{\psi}_{ijk, T}^A| + b_k) \nonumber \\
+ & = \min_{(i, j, k) \in \indexset_1} a_k |\widehat{\psi}_{ijk, T}^B| + O_p\bigg(\frac{\sqrt{\log T}}{\log \log \log T} \sqrt{\log T}\bigg) \nonumber \\
+ & \ge \min_{(i, j, k) \in \indexset_1} a_k  \min_{(i, j, k) \in \indexset_1} |\widehat{\psi}_{ijk, T}^B| + O_p\bigg(\frac{\log T}{\log \log \log T} \bigg) \nonumber \\
+ & = O_P\Big( \frac{c_T \sqrt{\log T}}{\sqrt{\log \log T}}\Big) + O_p\Big(\frac{\log T}{\log \log \log T}\Big). \label{eq-proof-prop-test-2-conclusion}
+\end{align}
+Now we want to show that $q_{T, \text{Gauss}} (\alpha) \leq C \frac{\log T}{\log \log \log T}$. Indeed,
+\begin{align*}
+&\pr \bigg(\max_{(i,j,k) \in \indexset} a_k \big( |\phi_{ijk,T}| - b_k \big) \le C \frac{\log T}{\log \log \log T}\bigg)\\
+&\ge \pr \bigg(\max_{(i,j,k) \in \indexset} a_k  \max_{(i,j,k) \in \indexset} \big( |\phi_{ijk,T}| - b_k \big) \le C \frac{\log T}{\log \log \log T}\bigg)\\
+&\ge \pr \bigg(\frac{\sqrt{\log T}}{\log \log \log T}  \max_{(i,j,k) \in \indexset} |\phi_{ijk,T}|  \le C \frac{\log T}{\log \log \log T}\bigg)\\
+&= \pr \bigg(\max_{(i,j,k) \in \indexset} |\phi_{ijk,T}| \le C \sqrt{\log T}\bigg)\\
+& \ge 1 - \alpha,
+\end{align*}
+since $|\phi_{ijk, T}|$ are normally distributed random variables. Hence,
+\begin{align}\label{eq:gaussianquant}
+q_{T, \text{Gauss}} (\alpha) = O \bigg(\frac{\log T}{\log \log \log T}\bigg).
+\end{align}
+Noting that 
+\begin{align*}
+&\pr\Big( \forall (i,j,k) \in \indexset_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = \\
+& \quad = \pr\Big( \min_{(i,j,k) \in \indexset_1} \big\{a_k (|\hat{\psi}_{ijk,T}| - b_k \big\} > q_{T,\textnormal{Gauss}}(\alpha) \Big)
+\end{align*}
+and taking the sequence $c_T$ that goes to $\infty$ faster than $\frac{\sqrt{\log T}\sqrt{\log \log T}}{\log \log \log T}$, \eqref{eq-proof-prop-test-2-conclusion} together with \eqref{eq:gaussianquant} yields the statement of Corollary \ref{corollary2}.
 \end{proof}
-}
 
 
 \bibliographystyle{ims}

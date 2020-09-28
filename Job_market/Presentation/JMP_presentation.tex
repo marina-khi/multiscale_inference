@@ -49,8 +49,7 @@
 
 
 \begin{frame}{Motivation}
-	\textbf{Research question:}
-	
+	\textbf{Research question:}	
 	How do outbreak patterns of COVID-19 compare across countries?
 	\begin{figure}
     		\centering
@@ -60,13 +59,20 @@
   	\end{figure}\pause
 	\vspace{-3mm}
 	\begin{block}{Aim of the paper}
-	To develop new inference methods that allow to \textit{identify} and \textit{locate} differences between time trends.
+	To develop new inference methods that allow to \textit{identify} and \textit{locate} differences between epidemic time trends.
 	\end{block}
 \end{frame}
 
 \section{Model}
 \begin{frame}{Model}
-We observe $n$ time series $\mathcal{X}_i = \{X_{it}: 1 \le t \le T \}$ of length $T$:
+One of the ways to model the count data is to use a Poisson distribution $X_{it} \sim P_{\lambda_i(t/T)}$:
+\vspace{-2mm}
+\begin{equation}\label{eq:model-Poisson}
+X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + u_{it} \quad \text{with} \quad u_{it} = \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}.
+\end{equation}\pause
+In empirical applications, however, the variance tends to be larger than the mean. Hence, quasi-Poisson models are used.
+
+Specifically, we observe $n$ time series $\mathcal{X}_i = \{X_{it}: 1 \le t \le T \}$ of length $T$:
 \begin{equation*}
 X_{it} = \lambda_i \Big( \frac{t}{T} \Big) + \sigma\sqrt{\lambda_i \Big( \frac{t}{T} \Big)} \eta_{it},
 \end{equation*}\pause
@@ -86,7 +92,7 @@ where
 	\end{itemize}\pause
 	Studies of COVID-19:
 	\begin{itemize}
-		\item SEIR models: Yang et al. (2020), Wu et al. (2020), De Brouwer et al. (2020).
+		\item SIR models: Yang et al. (2020), Wu et al. (2020), De Brouwer et al. (2020).
 		\item Time series analysis: Gu et al. (2020), Li and Linton (2020).
 		\item Dong et al. (2020).
 	\end{itemize}
@@ -95,11 +101,16 @@ where
 \section{Testing}
 \begin{frame}{Testing problem}
 
-Let $\mathcal{F} =\{ \mathcal{I}_k \subseteq [0, 1]: 1 \le k \le K\}$ be a family of intervals on $[0, 1]$, and for a given interval $\mathcal{I}_k$ we want to test whether the functions $\lambda_i$ and $\lambda_j$ are the same on this interval. Formally, the testing problem is
+Let $\mathcal{F} =\{ \mathcal{I}_k \subseteq [0, 1]: 1 \le k \le K\}$ be a family of rescaled time intervals on $[0, 1]$, and let $H_0^{(ijk)}$ be the hypothesis that the functions $\lambda_i$ and $\lambda_j$ are equal on an interval $\mathcal{I}_k$, i.e.
 \begin{align*}
 H_0^{(ijk)}:\quad  \lambda_i(w) = \lambda_j(w) \text{ for all } w\in \mathcal{I}_k.
 \end{align*}\pause
-We want to test these hypothesis $H_0^{(ijk)}$ simultaneously for all pairs of countries $i$ and $j$ and all intervals $\mathcal{I}_k$ in the family $\mathcal{F}$.
+We want to test these hypothesis $H_0^{(ijk)}$ simultaneously for all pairs of countries $i$ and $j$ and all intervals $\mathcal{I}_k$ in the family $\mathcal{F}$ and we want to control the familywise error rate (FWER) at level $\alpha$.\pause
+
+Let $\mathcal{M}_0 := \big\{(i, j, k)\big| H_0^{(ijk)} \text{ holds true}\big\}$. Then,
+\begin{align*}
+\text{FWER}(\alpha) = \Prob \Big( \exists (i,j,k) \in \mathcal{M}_0: \text{we reject } H_0^{(ijk)} \Big).
+\end{align*}
 \end{frame} 
 
 
@@ -124,25 +135,48 @@ Test statistic for the hypothesis $H_0^{(ijk)}$ is defined as
 \begin{equation*}
 \widehat{\psi}_{ijk, T} = \frac{\sum\nolimits_{t=1}^T \indsmall (X_{it} -X_{jt})}{\hat{\sigma} \big\{ \sum\nolimits_{t=1}^T \indsmall  (X_{it} + X_{jt} )\big\}^{1/2}}. 
 \end{equation*} \pause
-Under certain conditions and under the null, $\widehat{\psi}_{ijk, T}$ can be approximated by the Gaussian version of the test statistic:
+Under certain conditions and under the null, $\widehat{\psi}_{ijk, T}$ can be approximated by a Gaussian version of the test statistic:
 \begin{align*}
 \phi_{ijk,T} = \frac{1}{\sqrt{2 T h_k}} \sum\limits_{t=1}^T \ind (Z_{it} - Z_{jt}), 
 \end{align*}
 where $Z_{it}$ are independent standard normal random variables.
 \end{frame}
 
+\begin{frame}{Critical values}
+How to construct critical values $c_{ijk,T}(\alpha)$ while controlling the FWER?\pause
+\begin{itemize} 
+\item Traditional approach: $c_{ijk,T}(\alpha) = c_T(\alpha)$ for all $(i,j,k)$. \pause
+\item More modern approach: $c_{ijk,T}(\alpha)$ depend on the length $h_k$ of the time interval (D{\"u}mbgen and Spokoiny (2001)).
+\end{itemize}\pause
+In our context: 
+\vspace{-2mm}
+\[c_{ijk,T}(\alpha) = c_T(\alpha,h_k) := b_k + q_T(\alpha)/a_k,\] where $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$ are scale-dependent constants and $q_T(\alpha)$ is chosen such that we control FWER.
+\end{frame}
+
+
+\begin{frame}{Critical values, part 2}
+We want to control FWER:
+\begin{align*}
+\text{FWER}(\alpha) &= \Prob \Big( \exists (i,j,k) \in\mathcal{M}_0: |\widehat{\psi}_{ijk, T} | > c_{ijk, T}(\alpha) \Big) \\
+&= 1 - \Prob \Big( \forall (i,j,k) \in\mathcal{M}_0: |\widehat{\psi}_{ijk, T} | \le c_{ijk, T}(\alpha) \Big)\\
+ & =  1 - \Prob \Big( \forall (i,j,k) \in \mathcal{M}_0: a_k \big(|\hat{\psi}_{ijk,T}| - b_k\big) \le q_T(\alpha) \Big)\\
+ & = 1 - \Prob\Big( \max_{(i,j,k) \in \mathcal{M}_0} a_k \big( |\hat{\psi}_{ijk,T}| - b_k \big) \le q_T(\alpha) \Big)\\
+ & \le \alpha.
+\end{align*}\pause
+Hence, we choose $q_T(\alpha)$ as the $(1-\alpha)$-quantile of the statistic 
+\[ \hat{\Psi}_T = \max_{(i,j,k)} a_k \big( |\hat{\psi}_{ijk,T}^0| - b_k \big), \]
+where $\hat{\psi}_{ijk,T}^0$ is equal to $\hat{\psi}_{ijk,T}$ under the null.
+\end{frame}
 
 \begin{frame}[label = frame_test]{Test procedure}
-\begin{align*}
-H_0^{(ijk)}: \quad \lambda_i(w) = \lambda_j(w) \text{ for all } w \in \mathcal{I}_k.
-\end{align*} \pause
-How do determine critical values?\pause
-\vspace{-2mm}
+
 \begin{enumerate}
-	\item Consider the Gaussian test statistic $ \Phi_T = \max_{(i,j,k)} a_k \big( |\phi_{ijk,T}| - b_k \big) $, where $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$ are scale-dependent constants.\pause
-	\item Denote by $q_{T, \text{Gauss}} (\alpha)$ a $(1-\alpha)$-quantile of $\Phi_T$, which can be computed by Monte Carlo simulations.\pause
-	\item Adjust the quantile $q_{T, \text{Gauss}} (\alpha)$ by the scale-dependent constants: $c_{T,\text{Gauss}}(\alpha,h_k) = b_k + q_{T,\text{Gauss}}(\alpha)/a_k$. \hyperlink{frame_constants}{\beamerbutton{Idea}} \pause
+	\item Consider the Gaussian test statistic 
+	\vspace{-2mm} \[ \Phi_T = \max_{(i,j,k)} a_k \big( |\phi_{ijk,T}| - b_k \big), \] where $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$ are scale-dependent constants.\pause
+	\item Compute a $(1-\alpha)$-quantile $q_{T, \text{Gauss}} (\alpha)$ of $\Phi_T$ by Monte Carlo simulations.\pause
+	\item Adjust $q_{T, \text{Gauss}} (\alpha)$ by the scale-dependent constants: \[c_{T,\text{Gauss}}(\alpha,h_k) = b_k + q_{T,\text{Gauss}}(\alpha)/a_k.\] \pause
 \end{enumerate}
+\vspace{-5mm}
 \begin{block}{Test procedure}
 For the given significance level $\alpha \in (0,1)$ and for each $(i,j,k)$, reject $H_0^{(ijk)}$ if $|\widehat{\psi}_{ijk,T}| > c_{T,\text{Gauss}}(\alpha,h_k)$.
 \end{block}
@@ -163,15 +197,18 @@ For the given significance level $\alpha \in (0,1)$ and for each $(i,j,k)$, reje
 
 \begin{frame}{Theoretical properties}
 \begin{prop}\label{prop1}
-Denote $\mathcal{M}_0$ the set of triplets $(i, j, k)$ where $H_0^{(ijk)}$ holds true. Then under $\mathcal{C}1 - \mathcal{C}6$, it holds that 
+Let $\mathcal{M}_0$ be the set of triplets $(i, j, k)$, for which $H_0^{(ijk)}$ holds true. Then under $\mathcal{C}1 - \mathcal{C}6$, it holds that 
 \vspace{-2mm}
 \begin{align*}
  \Prob\Big( \forall (i,j,k) \in \mathcal{M}_0: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \ge 1 - \alpha + o(1)
 \end{align*}
 \end{prop}\pause
 \begin{prop}\label{prop2}
-Consider any sequence of functions $\lambda_{i} = \lambda_{i,T}$, $\lambda_{j} = \lambda_{j, T}$ with the following property: There exists an interval $\mathcal{I}_{k}$ such that $\lambda_{i, T}(w) - \lambda_{j, T}(w) \ge c_T \sqrt{T \log T / h_{k}}$ for all $w \in \mathcal{I}_{k}$, and $c_T \rightarrow \infty$. Then under $\mathcal{C}1 - \mathcal{C}6$, it holds that
-\[ \Prob\big(|\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \big) = o(1). \]
+Consider a sequence of functions $\lambda_{i} = \lambda_{i,T}$, $\lambda_{j} = \lambda_{j, T}$ such that $$\exists \, \mathcal{I}_{k}:  \lambda_{i, T}(w) - \lambda_{j, T}(w) \ge c_T \sqrt{\log T / (T h_{k})} \,\, \forall w \in \mathcal{I}_{k},$$ and $c_T \rightarrow \infty$ faster than $\frac{\sqrt{\log T}\sqrt{\log \log T}}{\log \log \log T}$. Let $\mathcal{M}_1$ be the set of triplets $(i, j, k)$ for which this holds true. Then under $\mathcal{C}1 - \mathcal{C}6$, it holds that
+\vspace{-2mm}
+\begin{equation*}
+\Prob\Big( \forall (i,j,k) \in \mathcal{M}_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1).
+\end{equation*}
 \end{prop}
 \end{frame}
 
@@ -190,17 +227,16 @@ In order to proceed with the proof, we will need the following notation:
 
 \begin{frame}{Strategy of the proof}
 \begin{enumerate}
-\item We prove that  $\big| \hat{\Psi}_T^0 - \Psi_T \big| = o_p(r_T)$, where $\{r_T\}$ is some null sequence.
-
+\item We prove that  $\big| \hat{\Psi}_T^0 - \Psi_T \big| = o_p(r_T)$, where $\{r_T\}$ is some null sequence.\pause
 \item With the help of results from Chernozhukov et al. (2017), we prove
 \begin{equation*}\label{eq:kolmogorov-distance}
 \sup_{q \in \mathbf{R}} \Big| \Prob\big( \Psi_T \le q \big) - \Prob\big( \Phi_T \le q \big) \Big| = o(1).
-\end{equation*}
+\end{equation*}\pause
 \item By using these two results, we now show that 
 \begin{equation}\label{eq:kolmogorov-distance-hat}
 \sup_{q \in \mathbb{R}} \Big| \Prob\big( \hat{\Psi}_T^0 \le q \big) - \Prob\big( \Phi_T \le q \big) \Big| = o(1).
-\end{equation}
-\item $\Prob (\Phi_T \le q_{T,\text{Gauss}}(\alpha)) = 1-\alpha$ by definition of the quantile $q_{T,\text{Gauss}}(\alpha)$. From this and \eqref{eq:kolmogorov-distance-hat}, it immediately follows that  
+\end{equation}\pause
+\item It can be shown that $\Prob (\Phi_T \le q_{T,\text{Gauss}}(\alpha)) = 1-\alpha$. From this and \eqref{eq:kolmogorov-distance-hat}, it immediately follows that  
 \begin{equation*}
 \Prob\big( \hat{\Psi}_T^0 \le q_{T,\text{Gauss}}(\alpha) \big) = 1 - \alpha + o(1), 
 \end{equation*}
@@ -239,7 +275,7 @@ We can make very similar confidence statement about the set of minimal intervals
 
 
 \begin{frame}{Discussion}
-We can claim, with confidence of about $95\%$, that we are able to detect all of the differences between the trend functions in different countries.\pause
+We can claim, with confidence of about $95\%$, that the null hypothesis is violated for all intervals (and all pairs of countries) for which our test rejects the null. \pause
 
 However, we can not say anything about the causes of such differences. This question requires further (probably not purely statistical) analysis.\pause
 
@@ -308,20 +344,6 @@ Together with \[ \frac{1}{T} \sum_{t=1}^T X_{it} = \frac{1}{T} \sum_{t=1}^T \lam
 \hyperlink{frame_teststatistic}{\beamerbutton{Go back}}
 \end{frame}
 
-\begin{frame}[label = frame_constants]{Idea behind $a_k$ and $b_k$}
-How to construct critical values $c_{ijk,T}(\alpha)$? \pause
-\begin{itemize}
-\item Traditional approach: $c_T(\alpha) = c_{ijk,T}(\alpha)$ for all $(i,j,k)$. \pause
-\item A more modern approach: $c_{ijk,T}(\alpha)$ depend on the length $h_k$ of the time interval (D{\"u}mbgen and Spokoiny (2001)). In our context:
-\begin{equation*}
-c_{ijk,T}(\alpha) = c_T(\alpha,h_k) := b_k + q_T(\alpha)/a_k, 
-\end{equation*}
-where $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$ are scale-dependent constants and $q_T(\alpha)$ is the $(1-\alpha)$-quantile of the statistic 
-\[ \hat{\Psi}_T = \max_{(i,j,k)} a_k \big( |\hat{\psi}_{ijk,T}^0| - b_k \big) \]
-in order to ensure control of the FWER at level $\alpha$.
-\end{itemize}
-\hyperlink{frame_test<4>}{\beamerbutton{Go back}}
-\end{frame}
 
 \begin{frame}{Idea behind the additive correction}
 Consider the uncorrected Gaussian statistic
