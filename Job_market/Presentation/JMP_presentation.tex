@@ -1,4 +1,4 @@
-\documentclass[10pt]{beamer}
+\documentclass[10pt, handout]{beamer}
 
 \usetheme[progressbar=frametitle]{metropolis}
 
@@ -65,12 +65,12 @@
 
 \section{Model}
 \begin{frame}{Model}
-One of the ways to model the count data is to use a Poisson distribution $X_{it} \sim P_{\lambda_i(t/T)}$:
+We can model the count data using a Poisson distribution $X_{it} \sim P_{\lambda_i(t/T)}$.\pause Since $\lambda_i(t/T) = \E[X_{it}] = \Var(X_{it})$, we can rewrite $X_{it}$ as
 \vspace{-2mm}
-\begin{equation}\label{eq:model-Poisson}
+\begin{equation*}
 X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + u_{it} \quad \text{with} \quad u_{it} = \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}.
-\end{equation}\pause
-In empirical applications, however, the variance tends to be larger than the mean. Hence, quasi-Poisson models are used.
+\end{equation*}\pause
+In empirical applications, however, the variance tends to be larger than the mean. Hence, quasi-Poisson models are used.\pause
 
 Specifically, we observe $n$ time series $\mathcal{X}_i = \{X_{it}: 1 \le t \le T \}$ of length $T$:
 \begin{equation*}
@@ -105,32 +105,32 @@ Let $\mathcal{F} =\{ \mathcal{I}_k \subseteq [0, 1]: 1 \le k \le K\}$ be a famil
 \begin{align*}
 H_0^{(ijk)}:\quad  \lambda_i(w) = \lambda_j(w) \text{ for all } w\in \mathcal{I}_k.
 \end{align*}\pause
-We want to test these hypothesis $H_0^{(ijk)}$ simultaneously for all pairs of countries $i$ and $j$ and all intervals $\mathcal{I}_k$ in the family $\mathcal{F}$ and we want to control the familywise error rate (FWER) at level $\alpha$.\pause
+We want to test $H_0^{(ijk)}$ simultaneously for all pairs of countries $i$ and $j$ and all intervals $\mathcal{I}_k$ in the family $\mathcal{F}$ and we want to control the familywise error rate (FWER) at level $\alpha$.\pause
 
-Let $\mathcal{M}_0 := \big\{(i, j, k)\big| H_0^{(ijk)} \text{ holds true}\big\}$. Then,
+Let $\mathcal{M}_0 := \big\{(i, j, k): H_0^{(ijk)} \text{ holds true}\big\}$. Then, FWER is defined as
 \begin{align*}
 \text{FWER}(\alpha) = \Prob \Big( \exists (i,j,k) \in \mathcal{M}_0: \text{we reject } H_0^{(ijk)} \Big).
 \end{align*}
 \end{frame} 
 
 
-\begin{frame}{Test statistic}
+\begin{frame}[label = frame_teststatistic]{Test statistic}
 For the given interval $\mathcal{I}_k$ and a pair of time series $i$ and $j$ we calculate
 \begin{equation*}
 \hat{s}_{ijk,T} = \frac{1}{T h_k} \sum\limits_{t=1}^T \ind (X_{it} -X_{jt}), 
 \end{equation*}
 %\vspace{-3mm}
-where $h_k$ is the length of $\mathcal{I}_k$. \pause The statistic $\hat{s}_{ijk,T}$ estimates the average distance between $\lambda_i$ and $\lambda_j$ on $\mathcal{I}_k$. \pause Under certain assumptions, 
+where $h_k$ is the length of $\mathcal{I}_k$. \pause $\hat{s}_{ijk,T}$ estimates the average distance between $\lambda_i$ and $\lambda_j$ on $\mathcal{I}_k$. \pause Under certain assumptions, 
 \begin{align*}
 \Var(\hat{s}_{ijk,T})  & = \frac{\sigma^2}{T^2 h_k^2} \sum\limits_{t=1}^T \ind \Big\{ \lambda_i\Big(\frac{t}{T}\Big) + \lambda_j\Big(\frac{t}{T}\Big) \Big\}. 
 \end{align*}\pause
 In order to normalize the variance of the statistic $\hat{s}_{ijk,T}$, we scale it by an estimator of its variance:
 \[ \widehat{\Var(\hat{s}_{ijk,T})} = \frac{\hat{\sigma}^2}{T^2 h_k^2} \sum\limits_{t=1}^T \ind (X_{it} + X_{jt} ), \]
-with $\hat{\sigma}^2 = n^{-1} \sum_{i = 1}^n \hat{\sigma}_i^2$ and $\hat{\sigma}_i^2 = \frac{\sum_{t=2}^T (X_{it}-X_{it-1})^2}{2 \sum_{t=1}^T X_{it}}$.\hyperlink{frame_sigma}{\beamerbutton{Idea}}
+with $\hat{\sigma}^2$ being an appropriate estimator of $\sigma^2$. \hyperlink{frame_sigma}{\beamerbutton{Details}}
 \end{frame}
 
 
-\begin{frame}[label = frame_teststatistic]{Test statistic}
+\begin{frame}{Test statistic}
 Test statistic for the hypothesis $H_0^{(ijk)}$ is defined as
 \begin{equation*}
 \widehat{\psi}_{ijk, T} = \frac{\sum\nolimits_{t=1}^T \indsmall (X_{it} -X_{jt})}{\hat{\sigma} \big\{ \sum\nolimits_{t=1}^T \indsmall  (X_{it} + X_{jt} )\big\}^{1/2}}. 
@@ -335,13 +335,12 @@ Further possible extensions:
 \end{frame}
 
 \begin{frame}[label = frame_sigma]{Idea behind $\hat{\sigma}$}
+We estimate the overdispersion paramter $\sigma^2$ by \[\widehat{\sigma}^2= \frac{1}{n} \sum_{i = 1}^n \hat{\sigma}_i^2 \text{ and } \hat{\sigma}_i^2 = \frac{\sum_{t=2}^T (X_{it}-X_{it-1})^2}{2 \sum_{t=1}^T X_{it}}.\] \pause
 We assume that $\lambda_i$ is Lipschitz continuous. Then
 \[ X_{it} - X_{it-1} = \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} (\eta_{it} - \eta_{it-1}) + r_{it}, \]
 where $|r_{it}| \le C(1+|\eta_{it-1}|)/T$ with a sufficiently large $C$.\pause \, Hence,
 \[ \frac{1}{T} \sum_{t=2}^T (X_{it} - X_{it-1})^2 = 2 \sigma^2 \Big\{ \frac{1}{T} \sum_{t=2}^T \lambda_i(t/T) \Big\} + o_p(1).\] \pause
-Together with \[ \frac{1}{T} \sum_{t=1}^T X_{it} = \frac{1}{T} \sum_{t=1}^T \lambda_i(t/T) + o_p(1), \] we get that $\hat{\sigma}_i^2 = \sigma^2 + o_p(1)$ for any $i$ and thus $\hat{\sigma}^2 = \sigma^2 + o_p(1)$.
-
-\hyperlink{frame_teststatistic}{\beamerbutton{Go back}}
+Together with \[ \frac{1}{T} \sum_{t=1}^T X_{it} = \frac{1}{T} \sum_{t=1}^T \lambda_i(t/T) + o_p(1), \] we get that $\hat{\sigma}_i^2 = \sigma^2 + o_p(1)$ for any $i$ and thus $\hat{\sigma}^2 = \sigma^2 + o_p(1)$. \hyperlink{frame_teststatistic<4>}{\beamerbutton{Go back}}
 \end{frame}
 
 
