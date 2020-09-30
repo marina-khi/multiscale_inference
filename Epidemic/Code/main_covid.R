@@ -16,17 +16,18 @@ alpha    <- 0.05 #confidence level for application
 sim_runs <- 5000 #Number of simulation runs to produce the Gaussian qauntiles
 
 #Loading the world coronavirus data
-covid_tmp         <- read.csv("data/covid.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "")
+covid_tmp         <- read.csv("data/covid_new.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "")
 covid_tmp         <- covid_tmp[!is.na(covid_tmp$countryterritoryCode), ]
 covid_tmp$dateRep <- as.Date(covid_tmp$dateRep, format = "%d/%m/%Y")
 covid_tmp         <- complete(covid_tmp, dateRep = seq.Date(min(dateRep), max(dateRep), by='day'),
                               countryterritoryCode, fill = list(cases = 0, deaths = 0))
 
 #We load government response index as well
-gov_responces      <- read.csv("data/OxCGRT_latest.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "N/A")
+gov_responces      <- read.csv("data/OxCGRT_latest_new.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "N/A")
 gov_responces$Date <- as.Date(as.character(gov_responces$Date), format = "%Y%m%d")
 names(gov_responces)[names(gov_responces) == 'CountryCode'] <- 'countryterritoryCode'
 names(gov_responces)[names(gov_responces) == 'Date']        <- 'dateRep'
+gov_responces      <- gov_responces[gov_responces$RegionCode == "", ]
 
 #Merging the two datasets
 covid <- merge(covid_tmp, gov_responces, by  = c('countryterritoryCode', 'dateRep'), all.x = TRUE)
@@ -58,7 +59,8 @@ covid_list <- covid_list[names(covid_list) %in% c("DEU", "FRA", "GBR", "ESP", "I
 
 #Calculate the number of days that we have data for all fivecountries.
 #We are not considering CHN = China as it has too long dataset.
-t_len     <- min(sapply(covid_list[names(covid_list) != "CHN"], NROW))
+t_len     <- 120
+#t_len     <- min(sapply(covid_list[names(covid_list) != "CHN"], NROW))
 countries <- names(covid_list)
 dates     <- unique(covid$dateRep)
 n_ts      <- length(covid_list) #Number of time series
@@ -98,7 +100,7 @@ par(mar = c(3, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
 plot(NA, xlim=c(0,t_len),  ylim = c(0, 1 + 1/nrow(all_intervals)), xlab="days", ylab = "", yaxt= "n", mgp=c(2,0.5,0))
 title(main = expression(The ~ family ~ of ~ intervals ~ italic(F)), line = 1)
-segments(all_intervals$startpoint, all_intervals$values, all_intervals$endpoint, all_intervals$values, lwd = 2)
+segments(all_intervals$startpoint, all_intervals$values, all_intervals$endpoint, all_intervals$values, lwd = 1)
 dev.off()
 
 #We also need to estimate the overdispersion parameter

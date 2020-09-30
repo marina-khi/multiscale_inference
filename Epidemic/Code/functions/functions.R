@@ -43,7 +43,7 @@ produce_plots <- function (results, l, data_i, data_j,
   title(main = "(a) observed new cases per day", font.main = 1, line = 0.5)
   legend("topright", inset = 0.02, legend=c(country_i, country_j),
          #col = c("blue", "red"), lty = 1, cex = 0.95, ncol = 1)
-         col = c("#604c38", "#EB811B"), lty = 1, cex = 0.95, ncol = 1)
+         col = c("#EB811B", "#604c38"), lty = 1, cex = 0.95, ncol = 1)
 
   par(mar = c(0.5, 0.5, 3, 0)) #Margins for each plot
 
