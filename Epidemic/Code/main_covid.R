@@ -16,18 +16,18 @@ alpha    <- 0.05 #confidence level for application
 sim_runs <- 5000 #Number of simulation runs to produce the Gaussian qauntiles
 
 #Loading the world coronavirus data
-covid_tmp         <- read.csv("data/covid_new.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "")
+covid_tmp         <- read.csv("data/covid.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "")
 covid_tmp         <- covid_tmp[!is.na(covid_tmp$countryterritoryCode), ]
 covid_tmp$dateRep <- as.Date(covid_tmp$dateRep, format = "%d/%m/%Y")
 covid_tmp         <- complete(covid_tmp, dateRep = seq.Date(min(dateRep), max(dateRep), by='day'),
                               countryterritoryCode, fill = list(cases = 0, deaths = 0))
 
 #We load government response index as well
-gov_responces      <- read.csv("data/OxCGRT_latest_new.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "N/A")
+gov_responces      <- read.csv("data/OxCGRT_latest.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "N/A")
 gov_responces$Date <- as.Date(as.character(gov_responces$Date), format = "%Y%m%d")
 names(gov_responces)[names(gov_responces) == 'CountryCode'] <- 'countryterritoryCode'
 names(gov_responces)[names(gov_responces) == 'Date']        <- 'dateRep'
-gov_responces      <- gov_responces[gov_responces$RegionCode == "", ]
+#gov_responces      <- gov_responces[gov_responces$RegionCode == "", ]
 
 #Merging the two datasets
 covid <- merge(covid_tmp, gov_responces, by  = c('countryterritoryCode', 'dateRep'), all.x = TRUE)
@@ -36,19 +36,23 @@ rm(gov_responces)
 
 #Now we "normalize" the data counting only the countries with more than 1000 deaths overall
 #and taking the day of 100th case as the starting point
+covid$weekday         <- weekdays(covid$dateRep)
 covid$cumcases        <- 0
 covid$cumdeaths       <- 0
 covid$lagged_gov_resp <- 0
 
 covid_list <- list()
 for (country in unique(covid$countryterritoryCode)){
-  covid[covid$countryterritoryCode == country, "cumcases"] <- cumsum(covid[covid$countryterritoryCode == country, "cases"])
+  covid[covid$countryterritoryCode == country, "cumcases"]  <- cumsum(covid[covid$countryterritoryCode == country, "cases"])
   covid[covid$countryterritoryCode == country, "cumdeaths"] <- cumsum(covid[covid$countryterritoryCode == country, "deaths"])
   tmp <- max(covid[covid$countryterritoryCode == country, "cumdeaths"])
   if (tmp >= 1000){
-    covid_list[[country]] <- covid[(covid$countryterritoryCode == country & covid$cumcases >= 100),
-                                   c("dateRep", "cases", "deaths", "cumcases", "cumdeaths",
-                                     "GovernmentResponseIndex")]
+    tmp_df <- covid[(covid$countryterritoryCode == country & covid$cumcases >= 100),
+                    c("dateRep", "cases", "deaths", "cumcases", "cumdeaths", "weekday",
+                      "GovernmentResponseIndex")]
+    tmp_index <- match("Monday", tmp_df[, "weekday"])
+    #tmp_index = 1 #If we do not want to normalize by Mondays
+    covid_list[[country]] <- tmp_df[tmp_index:nrow(tmp_df), ]
   }
 }
 
@@ -59,8 +63,8 @@ covid_list <- covid_list[names(covid_list) %in% c("DEU", "FRA", "GBR", "ESP", "I
 
 #Calculate the number of days that we have data for all fivecountries.
 #We are not considering CHN = China as it has too long dataset.
-t_len     <- 120
-#t_len     <- min(sapply(covid_list[names(covid_list) != "CHN"], NROW))
+#t_len     <- 120
+t_len     <- min(sapply(covid_list[names(covid_list) != "CHN"], NROW))
 countries <- names(covid_list)
 dates     <- unique(covid$dateRep)
 n_ts      <- length(covid_list) #Number of time series
@@ -95,7 +99,7 @@ all_intervals <- data.frame('startpoint' = (grid$gset$u - grid$gset$h) * t_len,
                             'values' = 0)
 all_intervals$values <- (1:nrow(all_intervals)) / nrow(all_intervals)
 
-pdf("plots_new/all_intervals.pdf", width=5, height=3, paper="special")
+pdf("plots/all_intervals.pdf", width=5, height=3, paper="special")
 par(mar = c(3, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
 plot(NA, xlim=c(0,t_len),  ylim = c(0, 1 + 1/nrow(all_intervals)), xlab="days", ylab = "", yaxt= "n", mgp=c(2,0.5,0))
@@ -124,7 +128,7 @@ countries_names <- c("Germany", "Spain", "France", "United Kingdom", "Italy")
 for (l in seq_len(nrow(result$ijset))){
   i <- result$ijset[l, 1]
   j <- result$ijset[l, 2]
-  filename = paste0("plots_new/", countries[i], "_vs_", countries[j], "_presentation.pdf")
+  filename = paste0("plots/", countries[i], "_vs_", countries[j], "_Monday.pdf")
   produce_plots(results = result, l = l, data_i = covid_mat[, i], data_j = covid_mat[, j],
                 gov_resp_i = gov_resp[, i], gov_resp_j = gov_resp[, j],
                 country_i = countries_names[i], country_j = countries_names[j],
