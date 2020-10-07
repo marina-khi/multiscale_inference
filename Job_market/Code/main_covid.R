@@ -63,8 +63,8 @@ covid_list <- covid_list[names(covid_list) %in% c("DEU", "FRA", "GBR", "ITA", "E
 
 #Calculate the number of days that we have data for all fivecountries.
 #We are not considering CHN = China as it has too long dataset.
-#t_len     <- 150
-t_len     <- min(sapply(covid_list[names(covid_list) != "CHN"], NROW))
+t_len     <- 150
+#t_len     <- min(sapply(covid_list[names(covid_list) != "CHN"], NROW))
 countries <- names(covid_list)
 dates     <- unique(covid$dateRep)
 n_ts      <- length(covid_list) #Number of time series

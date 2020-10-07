@@ -113,18 +113,19 @@ Our paper addresses most of these issues. First of all, our approach is practica
  approach does not have this limitation.
 
 \cite{LiLinton2020}
+ \cite{Alfano2020} and \cite{Courtemanche2020}.
 
-%A lot of assumptions underneath. For example, `` is reported to be between $2$ and $14$ days, we chose the midpoint of $7$ days''. Plus there are no data on the number of people exposed to infection under different social distancing measures, because this kind of lockdown does not have any precedent.
+A lot of assumptions underneath. For example, `` is reported to be between $2$ and $14$ days, we chose the midpoint of $7$ days''. Plus there are no data on the number of people exposed to infection under different social distancing measures, because this kind of lockdown does not have any precedent.
 	
-%Kucharski et al. fitted a stochastic transmission dynamic model to multiple publicly available datasets on cases in Wuhan and internationally exported cases from Wuhan (4). Chinazzi et al. used a Global Epidemic and Mobility Model (GLEAM), an individual-based, stochastic, and spatial epidemic model, to model the international spread of the COVID-19 out-break by emulating the flow of travelers among over 3,200 sub-populations using real transportation data (5).
-%
-%Pan et al. described the distinct patterns of the effective reproduction numbers at the different stages, characterized by different degrees of interventions, of the epidemic in Wuhan (6). Yang et al. also included an additional parameter r(t) (not the effective regeneration number), which denotes the number of contacts for each individual per day. The authors used r(t)=15, 3, and 10, for the days before January 23rd (no intervention), between January 23 and March 1st (fully controls) and after March 1st (mild controls). The inclusion of r(t) made it possible to introduce the effect of interventional and control policies, including travelling and public gathering restrictions. Wei et al. further proposed a SEIR+CAQ model which integrated information on the mechanisms of transmission, profiles of infections and quarantine policies (7).''
-%%
-%The value of dynamic models, however, lies in the early warning of infectious disease outbreaks, the decision supporting before the implementation of prevention and control measures, and the evaluation of the effects of public health intervention after the outbreak. Yang et al. estimated that the effect of initiating the interventions five days after the actual time would increase the number of cases exponentially to 173,372 cases on March 4, 2020. Our estimation based on SEIR showed that the policies constraining public transportations reduced 85% of infections (8).
-%
-%However, we propose that it is important to notice that when declaring some intervention is the “cause” of the reduction of COVID-19 cases, it should be stated in a “causal” language. That is, what would have been if this intervention had not been performed? A common framework of policy evaluation is the “counter factual”, in which the causal intervention effect is defined as the difference between the epidemics in the real world, compared to the epidemics had no interventions been performed, maybe contrary to the fact. Of course, it is impossible as in the real world the interventions are either performed or not. Thus when making policies evaluation, the scientists should bear in mind that whether conditions are “exchangeable” for the epidemics with or without the intervention. It is recommended that the sensitivity analysis should be applied to assess the robustness of the evaluation. Scientists should also carefully evaluate whether the data collected is sufficient to make a causal policy evaluation.
-%
-%With the rapid improvement on computational capacity, machine learning methods have been widely used in medical research. The authors used long short term memory (LSTM) model, an improvement of recurrent neural network (RNN), to predict the number of new cases. The RNN and LSTM models had been widely used in the natural language processing to predict the future elements in a word or a sentence given the previous elements. As most of the machine learning methods are data-driven, it is important use an independent sample to validate the present model. The authors used the 2003 SARS data as the training set, and COVID-19 as the testing set. Their results showed a remarkable agreement between the actual number of cases and the results. Hu et al. developed the modified auto-encoder (MAE), an artificial intelligence (AI) based method, for real time forecasting the number of the new and cumulative confirmed cases and deaths of COVID-19 under various intervention scenarios in more than 100 countries (11). While we believe that there will be more and more AI ML based methods applied in the analysis of COVID-19, it should be noted that the ML base methods only relax the assumptions for the form of traditional dynamic models. In agreement with Zhong’s opinions, we believe that the integration of deep learning, web scraping, and other big data technologies will hopefully improve the precision of COVID-19 predictions (12). However, policy evaluation based on ML analysis still need the scientists to understand what the estimand is and whether the data can answer a causal question.
+Kucharski et al. fitted a stochastic transmission dynamic model to multiple publicly available datasets on cases in Wuhan and internationally exported cases from Wuhan (4). Chinazzi et al. used a Global Epidemic and Mobility Model (GLEAM), an individual-based, stochastic, and spatial epidemic model, to model the international spread of the COVID-19 out-break by emulating the flow of travelers among over 3,200 sub-populations using real transportation data (5).
+
+Pan et al. described the distinct patterns of the effective reproduction numbers at the different stages, characterized by different degrees of interventions, of the epidemic in Wuhan (6). Yang et al. also included an additional parameter r(t) (not the effective regeneration number), which denotes the number of contacts for each individual per day. The authors used r(t)=15, 3, and 10, for the days before January 23rd (no intervention), between January 23 and March 1st (fully controls) and after March 1st (mild controls). The inclusion of r(t) made it possible to introduce the effect of interventional and control policies, including travelling and public gathering restrictions. Wei et al. further proposed a SEIR+CAQ model which integrated information on the mechanisms of transmission, profiles of infections and quarantine policies (7).''
+
+The value of dynamic models, however, lies in the early warning of infectious disease outbreaks, the decision supporting before the implementation of prevention and control measures, and the evaluation of the effects of public health intervention after the outbreak. Yang et al. estimated that the effect of initiating the interventions five days after the actual time would increase the number of cases exponentially to 173,372 cases on March 4, 2020. Our estimation based on SEIR showed that the policies constraining public transportations reduced 85\% of infections (8).
+
+However, we propose that it is important to notice that when declaring some intervention is the “cause” of the reduction of COVID-19 cases, it should be stated in a “causal” language. That is, what would have been if this intervention had not been performed? A common framework of policy evaluation is the “counter factual”, in which the causal intervention effect is defined as the difference between the epidemics in the real world, compared to the epidemics had no interventions been performed, maybe contrary to the fact. Of course, it is impossible as in the real world the interventions are either performed or not. Thus when making policies evaluation, the scientists should bear in mind that whether conditions are “exchangeable” for the epidemics with or without the intervention. It is recommended that the sensitivity analysis should be applied to assess the robustness of the evaluation. Scientists should also carefully evaluate whether the data collected is sufficient to make a causal policy evaluation.
+
+With the rapid improvement on computational capacity, machine learning methods have been widely used in medical research. The authors used long short term memory (LSTM) model, an improvement of recurrent neural network (RNN), to predict the number of new cases. The RNN and LSTM models had been widely used in the natural language processing to predict the future elements in a word or a sentence given the previous elements. As most of the machine learning methods are data-driven, it is important use an independent sample to validate the present model. The authors used the 2003 SARS data as the training set, and COVID-19 as the testing set. Their results showed a remarkable agreement between the actual number of cases and the results. Hu et al. developed the modified auto-encoder (MAE), an artificial intelligence (AI) based method, for real time forecasting the number of the new and cumulative confirmed cases and deaths of COVID-19 under various intervention scenarios in more than 100 countries (11). While we believe that there will be more and more AI ML based methods applied in the analysis of COVID-19, it should be noted that the ML base methods only relax the assumptions for the form of traditional dynamic models. In agreement with Zhong’s opinions, we believe that the integration of deep learning, web scraping, and other big data technologies will hopefully improve the precision of COVID-19 predictions (12). However, policy evaluation based on ML analysis still need the scientists to understand what the estimand is and whether the data can answer a causal question.
 
 }
 \section{Model setting}\label{sec:model}
@@ -526,166 +527,147 @@ This brief discussion already indicates that it is extremely difficult to determ
 
 Even though we can of course not fully exclude this possibility, our test results are presumably not driven by different test regimes in the countries under consideration. To see this, we consider again the comparison of Germany and Italy: The test regimes in these two countries are arguably quite different. Germany is often cited as the country that employed early, widespread testing with more than $100\,000$ tests per week even in the beginning of the pandemic \citep{Cohen2020}, while testing in Italy became widespread only in the late stages of the pandemic. 
 %(https://ourworldindata.org/covid-testing-us-uk-korea-italy)
-Nevertheless, visual inspection of the raw and smoothed data in panels (a) and (b) of Figure \ref{fig:Germany:Italy} suggest that the underlying time trends are very similar up to day $36$. This is confirmed by our multiscale test which does not find any significant differences before that day. Hence, the different test regimes in Germany and Italy towards the beginning of the pandemic do not appear to have an overly strong effect and to produce spurious differences between the time trends. This suggests that the differences detected by our multiscale test indeed reflect differences in the way the virus spread in Germany and Italy rather than being mere artefacts of different test regimes. 
+Nevertheless, visual inspection of the raw and smoothed data in panels (a) and (b) of Figure \ref{fig:Germany:Italy} suggests that the underlying time trends are very similar up to day $36$. This is confirmed by our multiscale test which does not find any significant differences before that day. Hence, the different test regimes in Germany and Italy towards the beginning of the pandemic do not appear to have an overly strong effect and to produce spurious differences between the time trends. This suggests that the differences detected by our multiscale test indeed reflect differences in the way the virus spread in Germany and Italy rather than being mere artefacts of different test regimes. 
 
-%{\color{red}
-%\section{Extensions}
-%Now suppose that instead of \eqref{eq:model}, we consider the following nonparametric regression equation:
+{\color{red}
+\section{Extensions}
+Now suppose that instead of \eqref{eq:model}, we consider the following nonparametric regression equation:
+\begin{equation*}
+\X_{it} = c_i \lambda_i\Big(\frac{t}{T}\Big) + \varepsilon_{it} \quad \text{with} \quad \varepsilon_{it} = \sigma \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, 
+\end{equation*}
+where $c_i$ is the country-specific scaling parameter that accounts for the size of the country or population density. We introduce this additional parameter in order to be able to compare countries that differ substantially in terms of the population, i.e. Luxembourg and Russia. In our application, we compare 5 European countries that are similar in many aspects, including size, but for further research we need to be able to account for the differences between the countries.
+
+Hence, we would like to test the hypothesis that the time trends of new COVID-19 cases in different countries are the same up to some scaling parameter. For the identification purposes, we will need to assume that for each $i \in \mathcal{C}$ we have $\int_0^1 \lambda_i(u)du = 1$. Only then we are able to estimate the scaling parameter $c_i$. Furthermore, we need to assume that $0 <c_{\min} \leq c_i \leq c_{\max}$ for all $i \in \mathcal{C}$. Thus, the testing procedure is as follows.
+
+\textit{Step 1}
+
+First, we estimate the scaling parameter:
+\begin{align*}
+\widehat{c_i} &= \frac{1}{T}\sum_{t = 1}^T X_{it} \\
+&= c_i \frac{1}{T}\sum_{t = 1}^T \lambda_i\Big(\frac{t}{T}\Big) + \sigma\frac{1}{T}\sum_{t = 1}^T \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}\\
+& = c_i \frac{1}{T}\sum_{t = 1}^T \lambda_i\Big(\frac{t}{T}\Big) + o_P(1)\\
+& \stackrel{(*)}{=} c_i + o_P(1),
+\end{align*}
+where in $(*)$ we used the normalization $\int_0^1 \lambda_i(u)du = 1$. Hence, $\widehat{c}_i$ is a consistent estimator of $c_i$.
+
+\textit{Step 2}
+
+Instead of working with $X_{it}$, we consider the following variables:
+\begin{align*}
+X^*_{it} &= \frac{X_{it}}{\frac{1}{T}\sum_{t = 1}^T X_{it}} \\
+&= \frac{c_i}{\widehat{c}_i} \lambda_i \Big(\frac{t}{T}\Big) + \frac{\sigma}{\widehat{c}_i} \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}.
+\end{align*}
+
+A statistic to test the hypothesis $H_0^{(ijk)}$ for a given triple $(i,j,k)$ is then constructed as follows. Instead of $\hat{s}_{ijk,T}$, we work with 
+\[ \hat{s}_{ijk,T}^* = \frac{1}{\sqrt{Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it}^* - \X_{jt}^*). \]
+Then
+\begin{align*}
+\frac{\hat{s}_{ijk,T}^*}{\sqrt{Th_k}} =& \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it}^* - \X_{jt}^*)\\
+=& \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \bigg( \lambda_i \Big(\frac{t}{T}\Big)  - \lambda_j \Big(\frac{t}{T}\Big)\bigg) + R_1 + R_2,
+\end{align*}
+where
+\begin{align*}
+R_1 &= \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \bigg( \Big(\frac{c_i}{\widehat{c}_i} - 1 \Big) \lambda_i \Big(\frac{t}{T}\Big)  - \Big(\frac{c_j}{\widehat{c}_j} - 1 \Big) \lambda_j \Big(\frac{t}{T}\Big)\bigg),\\
+R_2& =  \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big( \frac{\sigma}{\widehat{c}_i} \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} - \frac{\sigma}{\widehat{c}_j} \sqrt{c_j \lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt} \Big).
+\end{align*}
+Since $\widehat{c}_i = c_i + o_P(1)$ and $0 \leq  \sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) \lambda_i \big(\frac{t}{T}\big) \leq h_k \lambda_{max}$, we have
+\begin{align}\label{eq:aux1}
+|R_1| &\leq \Big|\frac{c_i}{\widehat{c}_i} - 1 \Big| \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \lambda_i \Big(\frac{t}{T}\Big)  + \Big|\frac{c_j}{\widehat{c}_j} - 1 \Big| \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \lambda_j \Big(\frac{t}{T}\Big),\nonumber \\
+&= o_P(1) \cdot \frac{\lambda_{max}}{T} + o_P(1) \cdot \frac{\lambda_{max}}{T} = o_P\Big(\frac{1}{T}\Big).
+\end{align}
+Furthermore, applying the law of large numbers, we get:
+\begin{align*}
+ \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}  = o_P(1).
+\end{align*}
+Hence, if we uniformly bound the scaling parameters away from 0, i.e. $\exists \, c_{\min}$ such that for all $i \in \mathcal{C}$ we have $0 < c_{\min} \leq c_i$, we can use the fact that $\frac{\sigma}{\widehat{c}_i} = O_P(1)$ to get that
+\begin{align}\label{eq:aux2}
+R_2& =  \frac{\sigma}{\widehat{c}_i} \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} -\frac{\sigma}{\widehat{c}_j}\frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)  \sqrt{\lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt}\nonumber\\
+& = o_P(1).
+\end{align}
+Combining \eqref{eq:aux1} and \eqref{eq:aux2} together, we get $\hat{s}^*_{ijk,T}/\sqrt{Th_k} = (Th_k)^{-1} \sum_{t=1}^T \ind(t/T \in \mathcal{I}_k) \{\lambda_i(t/T) - \lambda_j(t/T)\} + o_p(1)$ for any fixed pair of countries $(i,j)$. Hence, the statistic $\hat{s}^*_{ijk,T}/\sqrt{Th_k}$ estimates the average distance between the functions $\lambda_i$ and $\lambda_j$ on the interval $\mathcal{I}_k$. The variance of $\hat{s}^*_{ijk,T}$ can not be easily calculated:
+\begin{align*}
+ \var(\hat{s}^*_{ijk,T})  =&\frac{1}{Th_k} \var \Big( \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (X_{it}^* - X_{jt}^*) \Big)\\
+=&\frac{1}{Th_k} \var \Big( \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) X_{it}^*\Big) + \frac{1}{Th_k} \var \Big( \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) X_{jt}^*\Big)\\
+ = &\frac{1}{Th_k} \var \bigg( \frac{\sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) X_{it}}{\frac{1}{T}\sum\nolimits_{t=1}^T X_{it}} \bigg) + \frac{1}{Th_k} \var \bigg( \frac{\sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) X_{jt}}{\frac{1}{T}\sum\nolimits_{t=1}^T X_{jt}} \bigg),
+\end{align*}
+but we can heuristically approximate it. Suppose that we actually know $c_i$ instead of estimating it. Then we have
+\begin{align*}
+& \var \bigg( \frac{\sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) X_{it}}{c_i} \bigg) \\
+&\quad= \var \bigg(\sum\nolimits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \lambda_i \big(\frac{t}{T}\big) + \sum\nolimits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)\frac{\sigma}{\sqrt{c_i}} \sqrt{\lambda_i \big(\frac{t}{T}\big)} \eta_{it} \bigg) \\
+&\quad = \frac{\sigma^2}{c_i}  \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)\lambda_i \big(\frac{t}{T}\big) \var (\eta_{it})\\
+&\quad = \frac{\sigma^2}{c_i}  \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)\lambda_i \big(\frac{t}{T}\big).
+\end{align*}
+Then (very heuristically) we have
+\begin{align*}
+ \var(\hat{s}^*_{ijk,T})  \approx\frac{\sigma^2}{Th_k}  \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big\{ \frac{\lambda_i \big(\frac{t}{T}\big)}{c_i} + \frac{\lambda_j \big(\frac{t}{T}\big)}{c_j} \Big\} 
+ \end{align*}
+hence, we 'normalize' $\hat{s}^*_{ijk,T}$ intuitively by dividing it by the following value:
+\[ (\hat{\nu}^*_{ijk,T})^2 = \frac{\hat{\sigma}^2}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big\{ \frac{\X^*_{it}}{\hat{c}_i} + \frac{\X^*_{jt}}{\hat{c}_j} \Big\}.\]
+As before,
+\begin{align*}
+\widehat{\sigma}^2 = |\countries|^{-1} \sum_{i \in \countries} \widehat{\sigma}_i^2\quad \text{ and } \quad\hat{\sigma}_i^2 = \frac{\sum_{t=2}^T (\X_{it}-\X_{it-1})^2}{2 \sum_{t=1}^T \X_{it}}.
+\end{align*}
+Normalizing the statistic $\hat{s}_{ijk,T}$ by the estimator $\hat{\nu}_{ijk,T}$ yields the expression 
+\begin{equation*}
+\hat{\psi}^*_{ijk,T} := \frac{\hat{s}^*_{ijk,T}}{\hat{\nu}^*_{ijk,T}} = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it} - \X^*_{jt})}{ \hat{\sigma}\{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it}/\hat{c}_i + \X^*_{jt}/\hat{c}_j )\}^{1/2}}, 
+\end{equation*}
+which serves as our test statistic of the hypothesis $H_0^{(ijk)}$. For later reference, we additionally introduce the statistic 
+\begin{equation*}
+\hat{\psi}_{ijk,T}^{*, 0} = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \Big(\big( \frac{c_i}{\hat{c}_i} - \frac{c_j}{\hat{c}_j} \big)\overline{\lambda}_{ij} +  \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\frac{\sigma}{\hat{c}_i} \sqrt{c_i} \eta_{it} - \frac{\sigma}{\hat{c}_j} \sqrt{c_j}\eta_{jt}) \Big)}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it}/\hat{c}_i + \X^*_{jt}/\hat{c}_j) \}^{1/2}}
+\end{equation*}
+with $\overline{\lambda}_{ij}(u) = \{ \lambda_i(u) + \lambda_j(u) \}/2$, which is identical to $\hat{\psi}_{ijk,T}$ under $H_0^{(ijk)}$. 
+}
+%and set $$. We have already shown that $\widehat{\sigma}_i^2 = \sigma^2 + o_p(1)$ and $\hat{c}_i = c_i + o_P(1)$ for any $i$ and thus $(\widehat{\sigma}_i^*)^2 = \frac{\sigma^2}{c_i} + o_p(1)$.
+%
+%
+%\subsection{Construction of the test} 
+%
+%
+%Our multiscale test is carried out as follows: For a given significance level $\alpha \in (0,1)$ and each $(i,j,k) \in \indexset$, we reject $H_0^{(ijk)}$ if 
+%\[ |\hat{\psi}_{ijk,T}| > c_{ijk,T}(\alpha), \]
+%where $c_{ijk,T}(\alpha)$ is the critical value for the $(i,j,k)$-th test problem. The critical values $c_{ijk,T}(\alpha)$ are chosen such that the familywise error rate (FWER) is controlled at level $\alpha$, which is defined as the probability of wrongly rejecting $H_0^{(ijk)}$ for at least one $(i,j,k)$. More formally speaking, for a given significance level $\alpha \in (0,1)$, the FWER is 
+%\begin{align*}
+%\text{FWER}(\alpha) 
+% & = \pr \Big( \exists (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| > c_{ijk,T}(\alpha) \Big) \\
+% & =  1 - \pr \Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{ijk,T}(\alpha) \Big) \\
+% & = 1 - \pr\Big( \max_{(i,j,k) \in \indexset_0} |\hat{\psi}_{ijk,T}| \le c_{ijk,T}(\alpha) \Big), 
+%\end{align*}
+%where $\indexset_0 \subseteq \indexset$ is the set of triples $(i,j,k)$ for which $H_0^{(ijk)}$ holds true. As before, the critical values are chosen as
 %\begin{equation*}
-%\X_{it} = c_i \lambda_i\Big(\frac{t}{T}\Big) + \varepsilon_{it} \quad \text{with} \quad \varepsilon_{it} = \sigma \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, 
+%c_{ijk,T}(\alpha) = c_T(\alpha,h_k) := b_k + q_T(\alpha)/a_k, 
 %\end{equation*}
-%where $c_i$ is the country-specific scaling parameter that accounts for the size of the country or population density. We introduce this additional parameter in order to be able to compare countries that differ substantially in terms of the population, i.e. Luxembourg and Russia. In our application, we compare 5 European countries that are similar in many aspects, including size, but for further research we need to be able to account for the differences between the countries.
-%
-%Hence, we would like to test the hypothesis that the time trends of new COVID-19 cases in different countries are the same up to some scaling parameter. For the identification purposes, we will need to assume that for each $i \in \mathcal{C}$ we have $\int_0^1 \lambda_i(u)du = 1$. Only then we are able to estimate the scaling parameter $c_i$. Furthermore, we need to assume that $0 <c_{\min} \leq c_i \leq c_{\max}$ for all $i \in \mathcal{C}$. Thus, the testing procedure is as follows.
-%
-%\textit{Step 1}
-%
-%First, we estimate the scaling parameter:
+%where $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$ are scale-dependent constants and the quantity $q_T(\alpha)$ is determined by the following consideration: Since 
 %\begin{align*}
-%\widehat{c_i} &= \frac{1}{T}\sum_{t = 1}^T X_{it} \\
-%&= c_i \frac{1}{T}\sum_{t = 1}^T \lambda_i\Big(\frac{t}{T}\Big) + \sigma\frac{1}{T}\sum_{t = 1}^T \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}\\
-%& = c_i \frac{1}{T}\sum_{t = 1}^T \lambda_i\Big(\frac{t}{T}\Big) + o_P(1)\\
-%& \stackrel{(*)}{=} c_i + o_P(1),
+%\text{FWER}(\alpha)
+%  & = \pr \Big( \exists (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| > c_T(\alpha,h_k) \Big)  \\
+% & =  1 - \pr \Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_T(\alpha,h_k) \Big) \\
+% & =  1 - \pr \Big( \forall (i,j,k) \in \indexset_0: a_k \big(|\hat{\psi}_{ijk,T}| - b_k\big) \le q_T(\alpha) \Big) \\
+% & = 1 - \pr\Big( \max_{(i,j,k) \in \indexset_0} a_k \big( |\hat{\psi}_{ijk,T}| - b_k \big) \le q_T(\alpha) \Big),
 %\end{align*}
-%where in $(*)$ we used the normalization $\int_0^1 \lambda_i(u)du = 1$. Hence, $\widehat{c}_i$ is a consistent estimator of $c_i$.
-%
-%\textit{Step 2}
-%
-%Instead of working with $X_{it}$, we consider the following variables:
+%we need to choose the quantity $q_T(\alpha)$ as the $(1-\alpha)$-quantile of the statistic 
+%\[ \hat{\Psi}_T = \max_{(i,j,k) \in \indexset} a_k \big( |\hat{\psi}_{ijk,T}^0| - b_k \big) \]
+%in order to ensure control of the FWER at level $\alpha$. As the quantiles $q_T(\alpha)$ are not known in practice, we cannot compute the critical values $c_T(\alpha,h_k)$ exactly in practice but need to approximate them. This can be achieved as follows: Under appropriate regularity conditions, it can be shown that 
 %\begin{align*}
-%X^*_{it} &= \frac{X_{it}}{\frac{1}{T}\sum_{t = 1}^T X_{it}} \\
-%&= \frac{c_i}{\widehat{c}_i} \lambda_i \Big(\frac{t}{T}\Big) + \frac{\sigma}{\widehat{c}_i} \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}.
-%\end{align*}
-%
-%A statistic to test the hypothesis $H_0^{(ijk)}$ for a given triple $(i,j,k)$ is then constructed as follows. Instead of $\hat{s}_{ijk,T}$, we work with 
-%\[ \hat{s}_{ijk,T}^* = \frac{1}{\sqrt{Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it}^* - \X_{jt}^*). \]
-%Then
-%\begin{align*}
-%\frac{\hat{s}_{ijk,T}^*}{\sqrt{Th_k}} =& \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it}^* - \X_{jt}^*)\\
-%=& \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \bigg( \lambda_i \Big(\frac{t}{T}\Big)  - \lambda_j \Big(\frac{t}{T}\Big)\bigg) + R_1 + R_2,
-%\end{align*}
-%where
-%\begin{align*}
-%R_1 &= \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \bigg( \Big(\frac{c_i}{\widehat{c}_i} - 1 \Big) \lambda_i \Big(\frac{t}{T}\Big)  - \Big(\frac{c_j}{\widehat{c}_j} - 1 \Big) \lambda_j \Big(\frac{t}{T}\Big)\bigg),\\
-%R_2& =  \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big( \frac{\sigma}{\widehat{c}_i} \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} - \frac{\sigma}{\widehat{c}_j} \sqrt{c_j \lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt} \Big).
-%\end{align*}
-%Since $\widehat{c}_i = c_i + o_P(1)$ and $0 \leq  \sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) \lambda_i \big(\frac{t}{T}\big) \leq h_k \lambda_{max}$, we have
-%\begin{align}\label{eq:aux1}
-%|R_1| &\leq \Big|\frac{c_i}{\widehat{c}_i} - 1 \Big| \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \lambda_i \Big(\frac{t}{T}\Big)  + \Big|\frac{c_j}{\widehat{c}_j} - 1 \Big| \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \lambda_j \Big(\frac{t}{T}\Big),\nonumber \\
-%&= o_P(1) \cdot \frac{\lambda_{max}}{T} + o_P(1) \cdot \frac{\lambda_{max}}{T} = o_P\Big(\frac{1}{T}\Big).
-%\end{align}
-%Furthermore, applying the law of large numbers, we get:
-%\begin{align*}
-% \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}  = o_P(1).
-%\end{align*}
-%Hence, if we uniformly bound the scaling parameters away from 0, i.e. $\exists \, c_{\min}$ such that for all $i \in \mathcal{C}$ we have $0 < c_{\min} \leq c_i$, we can use the fact that $\frac{\sigma}{\widehat{c}_i} = O_P(1)$ to get that
-%\begin{align}\label{eq:aux2}
-%R_2& =  \frac{\sigma}{\widehat{c}_i} \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} -\frac{\sigma}{\widehat{c}_j}\frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)  \sqrt{\lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt}\nonumber\\
-%& = o_P(1).
-%\end{align}
-%Combining \eqref{eq:aux1} and \eqref{eq:aux2} together, we get $\hat{s}^*_{ijk,T}/\sqrt{Th_k} = (Th_k)^{-1} \sum_{t=1}^T \ind(t/T \in \mathcal{I}_k) \{\lambda_i(t/T) - \lambda_j(t/T)\} + o_p(1)$ for any fixed pair of countries $(i,j)$. Hence, the statistic $\hat{s}^*_{ijk,T}/\sqrt{Th_k}$ estimates the average distance between the functions $\lambda_i$ and $\lambda_j$ on the interval $\mathcal{I}_k$. The variance of $\hat{s}^*_{ijk,T}$ can not be easily calculated:
-%\begin{align*}
-% \var(\hat{s}^*_{ijk,T})  =&\frac{1}{Th_k} \var \Big( \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (X_{it}^* - X_{jt}^*) \Big)\\
-%=&\frac{1}{Th_k} \var \Big( \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) X_{it}^*\Big) + \frac{1}{Th_k} \var \Big( \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) X_{jt}^*\Big)\\
-% = &\frac{1}{Th_k} \var \bigg( \frac{\sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) X_{it}}{\frac{1}{T}\sum\nolimits_{t=1}^T X_{it}} \bigg) + \frac{1}{Th_k} \var \bigg( \frac{\sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) X_{jt}}{\frac{1}{T}\sum\nolimits_{t=1}^T X_{jt}} \bigg),
-%\end{align*}
-%but we can heuristically approximate it. Suppose that we actually know $c_i$ instead of estimating it. Then we have
-%\begin{align*}
-%& \var \bigg( \frac{\sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) X_{it}}{c_i} \bigg) \\
-%&\quad= \var \bigg(\sum\nolimits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \lambda_i \big(\frac{t}{T}\big) + \sum\nolimits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)\frac{\sigma}{\sqrt{c_i}} \sqrt{\lambda_i \big(\frac{t}{T}\big)} \eta_{it} \bigg) \\
-%&\quad = \frac{\sigma^2}{c_i}  \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)\lambda_i \big(\frac{t}{T}\big) \var (\eta_{it})\\
-%&\quad = \frac{\sigma^2}{c_i}  \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)\lambda_i \big(\frac{t}{T}\big).
-%\end{align*}
-%Then (very heuristically) we have
-%\begin{align*}
-% \var(\hat{s}^*_{ijk,T})  \approx\frac{\sigma^2}{Th_k}  \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big\{ \frac{\lambda_i \big(\frac{t}{T}\big)}{c_i} + \frac{\lambda_j \big(\frac{t}{T}\big)}{c_j} \Big\} 
-% \end{align*}
-%hence, we 'normalize' $\hat{s}^*_{ijk,T}$ intuitively by dividing it by the following value:
-%\[ (\hat{\nu}^*_{ijk,T})^2 = \frac{\hat{\sigma}^2}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big\{ \frac{\X^*_{it}}{\hat{c}_i} + \frac{\X^*_{jt}}{\hat{c}_j} \Big\}.\]
-%As before,
-%\begin{align*}
-%\widehat{\sigma}^2 = |\countries|^{-1} \sum_{i \in \countries} \widehat{\sigma}_i^2\quad \text{ and } \quad\hat{\sigma}_i^2 = \frac{\sum_{t=2}^T (\X_{it}-\X_{it-1})^2}{2 \sum_{t=1}^T \X_{it}}.
-%\end{align*}
-%Normalizing the statistic $\hat{s}_{ijk,T}$ by the estimator $\hat{\nu}_{ijk,T}$ yields the expression 
+%\hat{\psi}_{ijk,T}^0 
+% & = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \, \sigma \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\eta_{it} - \eta_{jt})}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}} \\
+% & \approx \frac{1}{\sqrt{2Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \{ \eta_{it} - \eta_{jt} \}.
+%\end{align*} 
+%A Gaussian version of the statistic displayed in the final line above is given by 
 %\begin{equation*}
-%\hat{\psi}^*_{ijk,T} := \frac{\hat{s}^*_{ijk,T}}{\hat{\nu}^*_{ijk,T}} = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it} - \X^*_{jt})}{ \hat{\sigma}\{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it}/\hat{c}_i + \X^*_{jt}/\hat{c}_j )\}^{1/2}}, 
+%\phi_{ijk,T} = \frac{1}{\sqrt{2Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \big\{ Z_{it} - Z_{jt} \big\},
 %\end{equation*}
-%which serves as our test statistic of the hypothesis $H_0^{(ijk)}$. For later reference, we additionally introduce the statistic 
-%\begin{equation*}
-%\hat{\psi}_{ijk,T}^{*, 0} = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \Big(\big( \frac{c_i}{\hat{c}_i} - \frac{c_j}{\hat{c}_j} \big)\overline{\lambda}_{ij} +  \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\frac{\sigma}{\hat{c}_i} \sqrt{c_i} \eta_{it} - \frac{\sigma}{\hat{c}_j} \sqrt{c_j}\eta_{jt}) \Big)}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it}/\hat{c}_i + \X^*_{jt}/\hat{c}_j) \}^{1/2}}
-%\end{equation*}
-%with $\overline{\lambda}_{ij}(u) = \{ \lambda_i(u) + \lambda_j(u) \}/2$, which is identical to $\hat{\psi}_{ijk,T}$ under $H_0^{(ijk)}$. 
-%
-%%and set $$. We have already shown that $\widehat{\sigma}_i^2 = \sigma^2 + o_p(1)$ and $\hat{c}_i = c_i + o_P(1)$ for any $i$ and thus $(\widehat{\sigma}_i^*)^2 = \frac{\sigma^2}{c_i} + o_p(1)$.
-%%
-%%
-%%\subsection{Construction of the test} 
-%%
-%%
-%%Our multiscale test is carried out as follows: For a given significance level $\alpha \in (0,1)$ and each $(i,j,k) \in \indexset$, we reject $H_0^{(ijk)}$ if 
-%%\[ |\hat{\psi}_{ijk,T}| > c_{ijk,T}(\alpha), \]
-%%where $c_{ijk,T}(\alpha)$ is the critical value for the $(i,j,k)$-th test problem. The critical values $c_{ijk,T}(\alpha)$ are chosen such that the familywise error rate (FWER) is controlled at level $\alpha$, which is defined as the probability of wrongly rejecting $H_0^{(ijk)}$ for at least one $(i,j,k)$. More formally speaking, for a given significance level $\alpha \in (0,1)$, the FWER is 
-%%\begin{align*}
-%%\text{FWER}(\alpha) 
-%% & = \pr \Big( \exists (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| > c_{ijk,T}(\alpha) \Big) \\
-%% & =  1 - \pr \Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{ijk,T}(\alpha) \Big) \\
-%% & = 1 - \pr\Big( \max_{(i,j,k) \in \indexset_0} |\hat{\psi}_{ijk,T}| \le c_{ijk,T}(\alpha) \Big), 
-%%\end{align*}
-%%where $\indexset_0 \subseteq \indexset$ is the set of triples $(i,j,k)$ for which $H_0^{(ijk)}$ holds true. As before, the critical values are chosen as
-%%\begin{equation*}
-%%c_{ijk,T}(\alpha) = c_T(\alpha,h_k) := b_k + q_T(\alpha)/a_k, 
-%%\end{equation*}
-%%where $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$ are scale-dependent constants and the quantity $q_T(\alpha)$ is determined by the following consideration: Since 
-%%\begin{align*}
-%%\text{FWER}(\alpha)
-%%  & = \pr \Big( \exists (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| > c_T(\alpha,h_k) \Big)  \\
-%% & =  1 - \pr \Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_T(\alpha,h_k) \Big) \\
-%% & =  1 - \pr \Big( \forall (i,j,k) \in \indexset_0: a_k \big(|\hat{\psi}_{ijk,T}| - b_k\big) \le q_T(\alpha) \Big) \\
-%% & = 1 - \pr\Big( \max_{(i,j,k) \in \indexset_0} a_k \big( |\hat{\psi}_{ijk,T}| - b_k \big) \le q_T(\alpha) \Big),
-%%\end{align*}
-%%we need to choose the quantity $q_T(\alpha)$ as the $(1-\alpha)$-quantile of the statistic 
-%%\[ \hat{\Psi}_T = \max_{(i,j,k) \in \indexset} a_k \big( |\hat{\psi}_{ijk,T}^0| - b_k \big) \]
-%%in order to ensure control of the FWER at level $\alpha$. As the quantiles $q_T(\alpha)$ are not known in practice, we cannot compute the critical values $c_T(\alpha,h_k)$ exactly in practice but need to approximate them. This can be achieved as follows: Under appropriate regularity conditions, it can be shown that 
-%%\begin{align*}
-%%\hat{\psi}_{ijk,T}^0 
-%% & = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \, \sigma \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\eta_{it} - \eta_{jt})}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}} \\
-%% & \approx \frac{1}{\sqrt{2Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \{ \eta_{it} - \eta_{jt} \}.
-%%\end{align*} 
-%%A Gaussian version of the statistic displayed in the final line above is given by 
-%%\begin{equation*}
-%%\phi_{ijk,T} = \frac{1}{\sqrt{2Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \big\{ Z_{it} - Z_{jt} \big\},
-%%\end{equation*}
-%%where $Z_{it}$ are independent standard normal random variables for $1 \le t \le T$ and $1 \le i \le n$. Hence, the statistic 
-%%\[ \Phi_T = \max_{(i,j,k) \in \indexset} a_k \big( |\phi_{ijk,T}| - b_k \big) \]
-%%can be regarded as a Gaussian version of the statistic $\hat{\Psi}_T$. We approximate the unknown quantile $q_T(\alpha)$ by the $(1-\alpha)$-quantile $q_{T,\text{Gauss}}(\alpha)$ of $\Phi_T$, which can be computed (approximately) by Monte Carlo simulations and can thus be treated as known. 
-%%
-%%
-%%To summarize, we propose the following procedure to simultaneously test the hypothesis $H_0^{(ijk)}$ for all $(i,j,k) \in \indexset$ at the significance level $\alpha \in (0,1)$: 
-%%\begin{equation}\label{eq:test}
-%%\text{For each } (i,j,k) \in \indexset, \text{ reject } H_0^{(ijk)} \text{ if } |\hat{\psi}_{ijk,T}| > c_{T,\text{Gauss}}(\alpha,h_k),
-%%\end{equation}
-%%where $c_{T,\text{Gauss}}(\alpha,h_k) = b_k + q_{T,\text{Gauss}}(\alpha)/a_k$ with $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$. 
+%where $Z_{it}$ are independent standard normal random variables for $1 \le t \le T$ and $1 \le i \le n$. Hence, the statistic 
+%\[ \Phi_T = \max_{(i,j,k) \in \indexset} a_k \big( |\phi_{ijk,T}| - b_k \big) \]
+%can be regarded as a Gaussian version of the statistic $\hat{\Psi}_T$. We approximate the unknown quantile $q_T(\alpha)$ by the $(1-\alpha)$-quantile $q_{T,\text{Gauss}}(\alpha)$ of $\Phi_T$, which can be computed (approximately) by Monte Carlo simulations and can thus be treated as known. 
 %
 %
-%
-%\section{Possible issues}
-%\begin{itemize}
-%	\item Adjusting to the size of the country: dividing by population.
-%	
-%	Obviously, the size of the country matters. However, it is not straightforward to normalise the data properly. Simply dividing by the population of the given country would not be sufficient in our case, because the outbreak of the virus in a specific country is a quite local event (Wuhan in China, Lombardy in Italy, etc.). Clearly, this locality does not play any role in the later stages of the epidemic because additional local outbreaks occur over time and their number will presumably be larger in countries with a larger population. So, overall, the relationship between the population size and the epidemic curve can be very complicated. As for our paper, in the application sections we consider the European countries that are fairly similar (in population size but also in other characteristics), we opted for not normalising the data by population size at all rather than "wrongly normalising".
-%	\item Building in some policy changes.
-%	
-%	Need to think how to do that correctly. Look at \cite{Alfano2020} and \cite{Courtemanche2020}.
-%	\item Measurement error.
-%	\item Why not case-fatality rate?
-%	
-%	\item How to proceed further? Or what are the possible policy implications?
-%	Maybe tell a bit about machine learning approach on top of our method for example?
-%	
-%``A promising direction to advance mathematical modeling in epidemiology is to connect the models with data-driven techniques, particularly machine learning. The work by Yang et al. (1) applied a machine learning approach based on a recurrent neural network that is trained by utilizing a 2003 SARS epidemic dataset as well as incorporating the COVID-19 epidemiological parameters. They found consistent patterns in the predictions from the SEIR model and from the machine learning. For another example, Gao et al. (11) developed a deep learning algorithm to analyze the infectivity of the novel coronavirus and predict its potential hosts, and their findings indicated that bats and minks may be two animal hosts of this virus. These results are encouraging for wider applications of data analysis and computing approaches to study epidemics and pandemics, particularly COVID-19. Machine learning and other artificial intelligence techniques can complement and improve mathematical epidemic models by taking advantage of the large data sets currently available, including epidemic, genetic, demographic, geospatial and mobility data, the scale of which is typically far beyond the applicability of a standard mathematical model. On the other hand, mathematical modeling can provide a meaningful way to validate machine learning predictions and to guide the development of more efficient and robust algorithms in machine learning and data analytics. Thus, the development and advancement of these two different quantitative approaches could be mutually beneficial, and their integration could lead to potentially transformative progress in the study of COVID-19 and beyond.''
-%\end{itemize}
-%
-%}
+%To summarize, we propose the following procedure to simultaneously test the hypothesis $H_0^{(ijk)}$ for all $(i,j,k) \in \indexset$ at the significance level $\alpha \in (0,1)$: 
+%\begin{equation}\label{eq:test}
+%\text{For each } (i,j,k) \in \indexset, \text{ reject } H_0^{(ijk)} \text{ if } |\hat{\psi}_{ijk,T}| > c_{T,\text{Gauss}}(\alpha,h_k),
+%\end{equation}
+%where $c_{T,\text{Gauss}}(\alpha,h_k) = b_k + q_{T,\text{Gauss}}(\alpha)/a_k$ with $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$. 
+
+
 
 \newpage
 \section*{A \hspace{0.2cm} Appendix}
