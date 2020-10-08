@@ -94,7 +94,13 @@ For each country, corresponding time series process is non-stationary. Specifica
 	
 It is very probable that our test results are not driven by different test regimes in the countries under consideration. Take Germany vs. Italy, for example. Germany is often cited as the country that employed early, widespread testing with more than $100\,000$ tests per week even in the beginning of the pandemic, while testing in Italy became widespread only in the late stages of the pandemic. Nevertheless, even visual inspection of the data suggests that the underlying time trends are very similar in the beginning, and this is confirmed by our multiscale test.
 	\item Can you incorporate change points?
+	
 	Under the null, the approximation of the test statistics by the Gaussian version of it is still valid. If we are not under the null, but we know the dates where these change points occur, then most probably the critical values are still valid. However, we will need to check it.
+	
+	\item Why rescaled time? What does it mean?
+	
+It is a necessary framework for any kind of asymptotic theory. If we defined the trend function in terms of real time, we would not get additional information on the shape of it locally around a fixed time-point as the sample size increases. Within the framework of rescaled time, in contrast, the function is observed on a finer and finer grid of rescaled time-points on the unit interval as the sample size grows. Thus, we obtain more and more information on the local structure of the function around each point in rescaled time.
+
 \end{enumerate}
 
 Unanswered questions:
@@ -107,7 +113,7 @@ Unanswered questions:
 \item What steps can be taken further?
 	
 	``A promising direction is to connect the models with data-driven techniques, particularly machine learning. The work by Yang et al. (1) applied a machine learning approach based on a recurrent neural network that is trained by utilising a 2003 SARS epidemic dataset as well as incorporating the COVID-19 epidemiological parameters. They found consistent patterns in the predictions from the SEIR model and from the machine learning. These results are encouraging for wider applications of data analysis and computing approaches to study epidemics and pandemics, particularly COVID-19. Machine learning and other artificial intelligence techniques can complement and improve mathematical epidemic models by taking advantage of the large data sets currently available, including epidemic, genetic, demographic, geospatial and mobility data, the scale of which is typically far beyond the applicability of a standard mathematical model. On the other hand, mathematical modelling can provide a meaningful way to validate machine learning predictions and to guide the development of more efficient and robust algorithms in machine learning and data analytics. Thus, the development and advancement of these two different quantitative approaches could be mutually beneficial, and their integration could lead to potentially transformative progress in the study of COVID-19 and beyond.''
-\item Why rescaled time? What does it mean?
+
 \item What is the intuition behind the bound on the maximal length $h_{\text{max}}$?
 \item Is the smoothness of the data a reasonable assumption? What if some government policies affects the epidemic such that there is a sudden change in the trend function?
 \item The simulation study is not really consistent with the asymptotic theory. Why?
