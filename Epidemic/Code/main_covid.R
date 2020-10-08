@@ -27,7 +27,7 @@ gov_responces      <- read.csv("data/OxCGRT_latest.csv", sep = ",", dec = ".", s
 gov_responces$Date <- as.Date(as.character(gov_responces$Date), format = "%Y%m%d")
 names(gov_responces)[names(gov_responces) == 'CountryCode'] <- 'countryterritoryCode'
 names(gov_responces)[names(gov_responces) == 'Date']        <- 'dateRep'
-#gov_responces      <- gov_responces[gov_responces$RegionCode == "", ]
+
 
 #Merging the two datasets
 covid <- merge(covid_tmp, gov_responces, by  = c('countryterritoryCode', 'dateRep'), all.x = TRUE)
@@ -36,7 +36,6 @@ rm(gov_responces)
 
 #Now we "normalize" the data counting only the countries with more than 1000 deaths overall
 #and taking the day of 100th case as the starting point
-covid$weekday         <- weekdays(covid$dateRep)
 covid$cumcases        <- 0
 covid$cumdeaths       <- 0
 covid$lagged_gov_resp <- 0
@@ -47,12 +46,9 @@ for (country in unique(covid$countryterritoryCode)){
   covid[covid$countryterritoryCode == country, "cumdeaths"] <- cumsum(covid[covid$countryterritoryCode == country, "deaths"])
   tmp <- max(covid[covid$countryterritoryCode == country, "cumdeaths"])
   if (tmp >= 1000){
-    tmp_df <- covid[(covid$countryterritoryCode == country & covid$cumcases >= 100),
-                    c("dateRep", "cases", "deaths", "cumcases", "cumdeaths", "weekday",
-                      "GovernmentResponseIndex")]
-    tmp_index <- match("Monday", tmp_df[, "weekday"])
-    #tmp_index = 1 #If we do not want to normalize by Mondays
-    covid_list[[country]] <- tmp_df[tmp_index:nrow(tmp_df), ]
+    covid_list[[country]] <- covid[(covid$countryterritoryCode == country & covid$cumcases >= 100),
+                                   c("dateRep", "cases", "deaths", "cumcases", "cumdeaths",
+                                     "GovernmentResponseIndex")]
   }
 }
 
@@ -63,7 +59,6 @@ covid_list <- covid_list[names(covid_list) %in% c("DEU", "FRA", "GBR", "ESP", "I
 
 #Calculate the number of days that we have data for all fivecountries.
 #We are not considering CHN = China as it has too long dataset.
-#t_len     <- 120
 t_len     <- min(sapply(covid_list[names(covid_list) != "CHN"], NROW))
 countries <- names(covid_list)
 dates     <- unique(covid$dateRep)
@@ -128,7 +123,7 @@ countries_names <- c("Germany", "Spain", "France", "United Kingdom", "Italy")
 for (l in seq_len(nrow(result$ijset))){
   i <- result$ijset[l, 1]
   j <- result$ijset[l, 2]
-  filename = paste0("plots/", countries[i], "_vs_", countries[j], "_Monday.pdf")
+  filename = paste0("plots/", countries[i], "_vs_", countries[j], ".pdf")
   produce_plots(results = result, l = l, data_i = covid_mat[, i], data_j = covid_mat[, j],
                 gov_resp_i = gov_resp[, i], gov_resp_j = gov_resp[, j],
                 country_i = countries_names[i], country_j = countries_names[j],
