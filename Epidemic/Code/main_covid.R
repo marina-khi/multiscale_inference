@@ -36,7 +36,6 @@ rm(gov_responces)
 
 #Now we "normalize" the data counting only the countries with more than 1000 deaths overall
 #and taking the day of 100th case as the starting point
-covid$weekday         <- weekdays(covid$dateRep)
 covid$cumcases        <- 0
 covid$cumdeaths       <- 0
 covid$lagged_gov_resp <- 0
@@ -47,12 +46,9 @@ for (country in unique(covid$countryterritoryCode)){
   covid[covid$countryterritoryCode == country, "cumdeaths"] <- cumsum(covid[covid$countryterritoryCode == country, "deaths"])
   tmp <- max(covid[covid$countryterritoryCode == country, "cumdeaths"])
   if (tmp >= 1000){
-    tmp_df <- covid[(covid$countryterritoryCode == country & covid$cumcases >= 100),
-                    c("dateRep", "cases", "deaths", "cumcases", "cumdeaths", "weekday",
-                      "GovernmentResponseIndex")]
-    tmp_index <- match("Monday", tmp_df[, "weekday"])
-    #tmp_index = 1 #If we do not want to normalize by Mondays
-    covid_list[[country]] <- tmp_df[tmp_index:nrow(tmp_df), ]
+    covid_list[[country]] <- covid[(covid$countryterritoryCode == country & covid$cumcases >= 100),
+                                   c("dateRep", "cases", "deaths", "cumcases", "cumdeaths",
+                                     "GovernmentResponseIndex")]
   }
 }
 
