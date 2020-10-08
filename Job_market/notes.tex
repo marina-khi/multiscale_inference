@@ -61,7 +61,7 @@
 There are many questions surrounding the current COVID-19 pandemic that are not well understood yet. A question which is particularly important for governments and policy makers is the following: How do the outbreak patterns of COVID-19 compare across countries? Are the time trends of daily new infections more or less the same across countries, or is the virus spreading differently in different regions of the world? Identifying differences between countries may help, for instance, to better understand which government policies have been more effective in containing the virus than others. The main aim of this paper is to develop new inference methods that allow to detect differences between time trends of COVID-19 infections in a statistically rigorous way.  
 
 
-Let $\X_{it}$ be the number of new infections on day $t$ in country $i$ and suppose we observe a sample of data $\mathcal{\X}_i = \{ \X_{it}: 1 \le 1 \le T \}$ for $n$ different countries $i$. In order to make the data comparable across countries, we take the starting date $t=1$ to be the day of the $100$th confirmed case in each country. This way of ``normalizing'' the data is common practice \citep[cp.\ e.g.][]{Cohen2020}. A simple way to model the count data $\X_{it}$ is to use a Poisson distribution. Specifically, we may assume that the random variables $\X_{it}$ are Poisson distributed with time-varying intensity parameter $\lambda_i(t/T)$, that is, $\X_{it} \sim P_{\lambda_i(t/T)}$. Since $\lambda_i(t/T) = \ex[\X_{it}] = \var(\X_{it})$, we can model the observations $\X_{it}$ by the nonparametric regression equation 
+Let $\X_{it}$ be the number of new infections on day $t$ in country $i$ and suppose we observe a sample of data $\mathcal{\X}_i = \{ \X_{it}: 1 \le 1 \le T \}$ for $n$ different countries $i$. {\color{red} In order to make the data comparable across countries, we take the starting date $t=1$ to be the the first Monday after reaching $100$ confirmed case in each country. Considering only the dates after reaching a certain level is a common practice of ``normalizing'' the data \citep[cp.\ e.g.][]{Cohen2020}. Moreover, aligning the data by starting on Monday takes into account the possible differences in reporting the data on a weekly level.} A simple way to model the count data $\X_{it}$ is to use a Poisson distribution. Specifically, we may assume that the random variables $\X_{it}$ are Poisson distributed with time-varying intensity parameter $\lambda_i(t/T)$, that is, $\X_{it} \sim P_{\lambda_i(t/T)}$. Since $\lambda_i(t/T) = \ex[\X_{it}] = \var(\X_{it})$, we can model the observations $\X_{it}$ by the nonparametric regression equation 
 \begin{equation}\label{eq:model-intro}
 \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + u_{it} 
 \end{equation}
@@ -113,18 +113,19 @@ Our paper addresses most of these issues. First of all, our approach is practica
  approach does not have this limitation.
 
 \cite{LiLinton2020}
+ \cite{Alfano2020} and \cite{Courtemanche2020}.
 
-%A lot of assumptions underneath. For example, `` is reported to be between $2$ and $14$ days, we chose the midpoint of $7$ days''. Plus there are no data on the number of people exposed to infection under different social distancing measures, because this kind of lockdown does not have any precedent.
+A lot of assumptions underneath. For example, `` is reported to be between $2$ and $14$ days, we chose the midpoint of $7$ days''. Plus there are no data on the number of people exposed to infection under different social distancing measures, because this kind of lockdown does not have any precedent.
 	
-%Kucharski et al. fitted a stochastic transmission dynamic model to multiple publicly available datasets on cases in Wuhan and internationally exported cases from Wuhan (4). Chinazzi et al. used a Global Epidemic and Mobility Model (GLEAM), an individual-based, stochastic, and spatial epidemic model, to model the international spread of the COVID-19 out-break by emulating the flow of travelers among over 3,200 sub-populations using real transportation data (5).
-%
-%Pan et al. described the distinct patterns of the effective reproduction numbers at the different stages, characterized by different degrees of interventions, of the epidemic in Wuhan (6). Yang et al. also included an additional parameter r(t) (not the effective regeneration number), which denotes the number of contacts for each individual per day. The authors used r(t)=15, 3, and 10, for the days before January 23rd (no intervention), between January 23 and March 1st (fully controls) and after March 1st (mild controls). The inclusion of r(t) made it possible to introduce the effect of interventional and control policies, including travelling and public gathering restrictions. Wei et al. further proposed a SEIR+CAQ model which integrated information on the mechanisms of transmission, profiles of infections and quarantine policies (7).''
-%%
-%The value of dynamic models, however, lies in the early warning of infectious disease outbreaks, the decision supporting before the implementation of prevention and control measures, and the evaluation of the effects of public health intervention after the outbreak. Yang et al. estimated that the effect of initiating the interventions five days after the actual time would increase the number of cases exponentially to 173,372 cases on March 4, 2020. Our estimation based on SEIR showed that the policies constraining public transportations reduced 85% of infections (8).
-%
-%However, we propose that it is important to notice that when declaring some intervention is the “cause” of the reduction of COVID-19 cases, it should be stated in a “causal” language. That is, what would have been if this intervention had not been performed? A common framework of policy evaluation is the “counter factual”, in which the causal intervention effect is defined as the difference between the epidemics in the real world, compared to the epidemics had no interventions been performed, maybe contrary to the fact. Of course, it is impossible as in the real world the interventions are either performed or not. Thus when making policies evaluation, the scientists should bear in mind that whether conditions are “exchangeable” for the epidemics with or without the intervention. It is recommended that the sensitivity analysis should be applied to assess the robustness of the evaluation. Scientists should also carefully evaluate whether the data collected is sufficient to make a causal policy evaluation.
-%
-%With the rapid improvement on computational capacity, machine learning methods have been widely used in medical research. The authors used long short term memory (LSTM) model, an improvement of recurrent neural network (RNN), to predict the number of new cases. The RNN and LSTM models had been widely used in the natural language processing to predict the future elements in a word or a sentence given the previous elements. As most of the machine learning methods are data-driven, it is important use an independent sample to validate the present model. The authors used the 2003 SARS data as the training set, and COVID-19 as the testing set. Their results showed a remarkable agreement between the actual number of cases and the results. Hu et al. developed the modified auto-encoder (MAE), an artificial intelligence (AI) based method, for real time forecasting the number of the new and cumulative confirmed cases and deaths of COVID-19 under various intervention scenarios in more than 100 countries (11). While we believe that there will be more and more AI ML based methods applied in the analysis of COVID-19, it should be noted that the ML base methods only relax the assumptions for the form of traditional dynamic models. In agreement with Zhong’s opinions, we believe that the integration of deep learning, web scraping, and other big data technologies will hopefully improve the precision of COVID-19 predictions (12). However, policy evaluation based on ML analysis still need the scientists to understand what the estimand is and whether the data can answer a causal question.
+Kucharski et al. fitted a stochastic transmission dynamic model to multiple publicly available datasets on cases in Wuhan and internationally exported cases from Wuhan (4). Chinazzi et al. used a Global Epidemic and Mobility Model (GLEAM), an individual-based, stochastic, and spatial epidemic model, to model the international spread of the COVID-19 out-break by emulating the flow of travelers among over 3,200 sub-populations using real transportation data (5).
+
+Pan et al. described the distinct patterns of the effective reproduction numbers at the different stages, characterized by different degrees of interventions, of the epidemic in Wuhan (6). Yang et al. also included an additional parameter r(t) (not the effective regeneration number), which denotes the number of contacts for each individual per day. The authors used r(t)=15, 3, and 10, for the days before January 23rd (no intervention), between January 23 and March 1st (fully controls) and after March 1st (mild controls). The inclusion of r(t) made it possible to introduce the effect of interventional and control policies, including travelling and public gathering restrictions. Wei et al. further proposed a SEIR+CAQ model which integrated information on the mechanisms of transmission, profiles of infections and quarantine policies (7).''
+
+The value of dynamic models, however, lies in the early warning of infectious disease outbreaks, the decision supporting before the implementation of prevention and control measures, and the evaluation of the effects of public health intervention after the outbreak. Yang et al. estimated that the effect of initiating the interventions five days after the actual time would increase the number of cases exponentially to 173,372 cases on March 4, 2020. Our estimation based on SEIR showed that the policies constraining public transportations reduced 85\% of infections (8).
+
+However, we propose that it is important to notice that when declaring some intervention is the “cause” of the reduction of COVID-19 cases, it should be stated in a “causal” language. That is, what would have been if this intervention had not been performed? A common framework of policy evaluation is the “counter factual”, in which the causal intervention effect is defined as the difference between the epidemics in the real world, compared to the epidemics had no interventions been performed, maybe contrary to the fact. Of course, it is impossible as in the real world the interventions are either performed or not. Thus when making policies evaluation, the scientists should bear in mind that whether conditions are “exchangeable” for the epidemics with or without the intervention. It is recommended that the sensitivity analysis should be applied to assess the robustness of the evaluation. Scientists should also carefully evaluate whether the data collected is sufficient to make a causal policy evaluation.
+
+With the rapid improvement on computational capacity, machine learning methods have been widely used in medical research. The authors used long short term memory (LSTM) model, an improvement of recurrent neural network (RNN), to predict the number of new cases. The RNN and LSTM models had been widely used in the natural language processing to predict the future elements in a word or a sentence given the previous elements. As most of the machine learning methods are data-driven, it is important use an independent sample to validate the present model. The authors used the 2003 SARS data as the training set, and COVID-19 as the testing set. Their results showed a remarkable agreement between the actual number of cases and the results. Hu et al. developed the modified auto-encoder (MAE), an artificial intelligence (AI) based method, for real time forecasting the number of the new and cumulative confirmed cases and deaths of COVID-19 under various intervention scenarios in more than 100 countries (11). While we believe that there will be more and more AI ML based methods applied in the analysis of COVID-19, it should be noted that the ML base methods only relax the assumptions for the form of traditional dynamic models. In agreement with Zhong’s opinions, we believe that the integration of deep learning, web scraping, and other big data technologies will hopefully improve the precision of COVID-19 predictions (12). However, policy evaluation based on ML analysis still need the scientists to understand what the estimand is and whether the data can answer a causal question.
 
 }
 \section{Model setting}\label{sec:model}
@@ -305,27 +306,13 @@ To graphically present the test results, we produce a plot for each pair of coun
 
 
 According to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals in $\intervals_{\text{reject}}(i,j)$ for $(i,j) \in \pairs$: 
+{\color{red}
 \begin{equation}\label{eq:confidencestatement3}
 \begin{minipage}[c][1.75cm][c]{13cm}
-\textit{With (asymptotic) probability at least $1-\alpha$, it holds that for every pair of countries $(i,j) \in \pairs$, the functions $\lambda_i$ and $\lambda_j$ differ on each interval in $\intervals_{\text{reject}}(i,j)$.} 
+\textit{We can claim with (asymptotic) probability at least $1-\alpha$, that for every pair of countries $(i,j) \in \pairs$, the functions $\lambda_i$ and $\lambda_j$ differ on each interval in $\intervals_{\text{reject}}(i,j)$.} 
 \end{minipage}
-\end{equation}
+\end{equation}}
 Hence, we can claim with statistical confidence at least $1-\alpha$ that the functions $\lambda_i$ and $\lambda_j$ differ on each time interval which is depicted in the plots of our graphical device. Since $\intervals_{\text{reject}}^{\text{min}}(i,j) \subseteq \intervals_{\text{reject}}(i,j)$ for any $(i,j) \in \pairs$, the confidence statement \eqref{eq:confidencestatement3} trivially remains to hold true when the sets $\intervals_{\text{reject}}(i,j)$ are replaced by $\intervals_{\text{reject}}^{\text{min}}(i,j)$.
-
-
-%To graphically present the test results, we produce a plot for each pair of countries $(i,j) \in \pairs$ which shows the intervals $\mathcal{I}_k$ in the set $\intervals_{\text{reject}}(i,j) = \{ \mathcal{I}_k \in \intervals: r_{ijk,T} = 1 \}$, that is, the intervals $\mathcal{I}_k$ for which the test rejects the null $H_0^{(ijk)}$. We in particular use this graphical device to present the test results of our empirical application in Section \ref{sec:empirics}. According to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals in $\intervals_{\text{reject}}(i,j)$: 
-%\begin{equation}\label{eq:confidencestatement3}
-%\begin{minipage}[c][1.75cm][c]{13cm}
-%\textit{With (asymptotic) probability at least $1-\alpha$, it holds that for every pair of countries $(i,j) \in \pairs$, the functions $\lambda_i$ and $\lambda_j$ differ on each interval in $\intervals_{\text{reject}}(i,j)$.} 
-%\end{minipage}
-%\end{equation}
-%Hence, we can claim with statistical confidence at least $1-\alpha$ that the functions $\lambda_i$ and $\lambda_j$ differ on each time interval $\mathcal{I}_k$ which is shown in the plots of our graphical device.
-%
-%As the sample size grows, the number of intervals in the $\intervals_{\text{reject}}(i, j)$ can also increase rapidly, making graphical depiction of the results of the test not particularly readable. To obtain better visual representation, we propose working with the subset of $\intervals_{\text{reject}}(i, j)$, namely, the subset of minimal intervals which is constructed as follows: As in \cite{Duembgen2002}, we call an interval $\mathcal{I}_{k} \in \intervals_{\text{reject}}(i, j)$ minimal if there is no other interval $\mathcal{I}_{k^\prime} \in \intervals_{\text{reject}}(i, j)$ with $\mathcal{I}_{k^\prime} \subset \mathcal{I}_{k}$. We denote the set of minimal intervals by $\intervals_{\text{reject}}^{\min}(i, j)$. 
-%
-%It is easily seen that as in \eqref{eq:confidencestatement3}, we can claim with statistical confidence at least $1-\alpha$ that the functions $\lambda_i$ and $\lambda_j$ differ on each time interval $\mathcal{I}_k \in \intervals_{\text{reject}}^{\min}(i, j)$. Thus, the simultaneous confidence statement about the set of minimal intervals still remains true while the graphical representation of the results becomes much more understandable. In particular, we use this way of presenting the test results in our application in Section \ref{subsec:app}.
-
-
 
 \section{Empirical application to COVID-19 data}\label{sec:empirics} 
 
@@ -338,10 +325,10 @@ We now use our test to analyze the outbreak patterns of the COVID-19 epidemic. W
 
 We simulate count data $\mathcal{\X} = \{ X_{it}: 1 \le i \le n, 1 \le t \le T \}$ by drawing the observations $X_{it}$ independently from a negative binomial distribution with mean $\lambda_i(t/T)$ and variance $\sigma^2 \lambda_i(t/T)$. By definition, $X_{it}$ has a negative binomial distribution with para\-meters $q$ and $r$ if $\pr(X_{it} = m) = \Gamma(m+r) / (\Gamma(r) m!) q^r (1-q)^m$ for each $m \in \naturals \cup \{0\}$. Since $\ex[X_{it}] = r (1-q)/q$ and $\var(X_{it}) = r(1-q)/q^2$, we can use the parametrization $q = 1/\sigma^2$ and $r = \lambda_i(t/T) / (\sigma^2 - 1)$ to obtain that $\ex[X_{it}] = \lambda_i(t/T)$ and $\var(X_{it}) = \sigma^2 \lambda_i(t/T)$. With this parametrization, the simulated data follow a nonparametric regression model of the form 
 \[ \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, \]
-where the noise variables $\eta_{it}$ have zero mean and unit variance. The functions $\lambda_i$ are specified below. The overdispersion parameter is set to $\sigma = 15$, which is similar to the estimate $\hat{\sigma} = 14.44$ obtained in the empirical application of Section \ref{subsec:app}. Robustness checks with $\sigma=10$ and $\sigma=20$ are provided in the Supplementary Material.
+where the noise variables $\eta_{it}$ have zero mean and unit variance. The functions $\lambda_i$ are specified below. The overdispersion parameter is set to $\sigma = 15$, which is similar to the estimate $\hat{\sigma} = 14.82$ obtained in the empirical application of Section \ref{subsec:app}. Robustness checks with $\sigma=10$ and $\sigma=20$ are provided in the Supplementary Material.
 
 
-We consider different values for $T$ and $n$, in particular, $T \in \{100,250, 500\}$ and $n \in \{5,10,50\}$. Note that in the application, we have $T=139$ and $n=5$. We let $\pairs = \{ (i,j): 1 \le i < j \le n\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$. Moreover, we choose $\intervals$ to be a family of time intervals $\mathcal{I}_k$ with length $h_k \in \{ 7/T,14/T,21/T,28/T \}$. Hence, the intervals in $\intervals$ have length either $7$, $14$, $21$ or $28$ days (i.e., $1$, $2$, $3$ or $4$ weeks). For each length $h_k$, we include all intervals that start at days $t = 1 + 7(j-1)$ and $t = 4 + 7(j-1)$ for $j=1,2,\ldots$ A graphical presentation of the family $\intervals$ for $T = 139$ (as in the application) is given in Figure \ref{fig:intervals}. All our simulation experiments are based on $R=5000$ simulation runs. 
+We consider different values for $T$ and $n$, in particular, $T \in \{100,250, 500\}$ and $n \in \{5,10,50\}$. Note that in the application, we have $T=150$ and $n=5$. We let $\pairs = \{ (i,j): 1 \le i < j \le n\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$. Moreover, we choose $\intervals$ to be a family of time intervals $\mathcal{I}_k$ with length $h_k \in \{ 7/T,14/T,21/T,28/T \}$. Hence, the intervals in $\intervals$ have length either $7$, $14$, $21$ or $28$ days (i.e., $1$, $2$, $3$ or $4$ weeks). For each length $h_k$, we include all intervals that start at days $t = 1 + 7(j-1)$ and $t = 4 + 7(j-1)$ for $j=1,2,\ldots$ A graphical presentation of the family $\intervals$ for $T = 150$ (as in the application) is given in Figure \ref{fig:intervals}. All our simulation experiments are based on $R=5000$ simulation runs. 
 
 
 \begin{figure}[t!]
@@ -455,7 +442,7 @@ The results for Scenario A (see Figure \ref{fig:lambda_fcts_height}) are present
 \subsection{Analysis of COVID-19 data}\label{subsec:app}
 
 
-The COVID-19 pandemic is one of the most pressing issues at present. The first outbreak occurred in Wuhan, China, in December 2019. On 30 January 2020, the World Health Organization (WHO) declared that the outbreak constitutes a Public Health Emergency of International Concern, and on 11 March 2020, the WHO characterized it as a pandemic. As of 22 July 2020, more than $14.56$ million cases of COVID-19 infections have been reported worldwide, resulting in more than $607\,000$ deaths.
+The COVID-19 pandemic is one of the most pressing issues at present. The first outbreak occurred in Wuhan, China, in December 2019. On 30 January 2020, the World Health Organization (WHO) declared that the outbreak constitutes a Public Health Emergency of International Concern, and on 11 March 2020, the WHO characterized it as a pandemic. As of 5 October 2020, more than $32.7$ million cases of COVID-19 infections have been reported worldwide, resulting in more than $991\,000$ deaths.
 
 
 There are many open questions surrounding the current COVID-19 pandemic. A question which is particularly relevant for governments and policy makers is whether the pandemic has developed similarly in different countries or whether there are notable differences. Identifying these differences may give some insight into which government policies have been more effective in containing the virus than others. In what follows, we use our multiscale test to compare the development of COVID-19 in several European countries. It is important to emphasize that our test allows to identify differences in the development of the epidemic across countries in a statistically rigorous way, but it does not tell what causes these differences. By distinguishing statistically significant differences from artefacts of the sampling noise, the test provides the basis for a further investigation into the causes. Such an investigation, however, presumably goes beyond a mere statistical analysis. 
@@ -464,7 +451,7 @@ There are many open questions surrounding the current COVID-19 pandemic. A quest
 \subsubsection{Data}
 
 
-We analyze data from five European countries: Germany, Italy, Spain, France and the United Kingdom. For each country $i$, we observe a time series $\mathcal{X}_i = \{ X_{it}: 1 \le t \le T \}$, where $X_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available on the homepage of the European Center for Disease Prevention and Control (\texttt{https://www.ecdc.europa.eu}) and were downloaded on 22 July 2020. As already mentioned in the Introduction, we take the day of the $100$th confirmed case in each country as the starting date $t=1$, which is a common way of ``normalizing'' the data and making them comparable across countries \citep[cp.][]{Cohen2020}. The time series length $T$ is taken to be the minimal number of days for which we have observations for all five countries. The resulting dataset consists of $n = 5$ time series, each with $T = 139$ observations (as of July 22). Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in $6$ replacements. Plots of the observed time series are presented in the upper panels (a) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
+We analyze data from five European countries: Germany, Italy, France, Spain and the United Kingdom. For each country $i$, we observe a time series $\mathcal{X}_i = \{ X_{it}: 1 \le t \le T \}$, where $X_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available on the homepage of the European Center for Disease Prevention and Control (\texttt{https://www.ecdc.europa.eu}) and were downloaded on 5 October 2020. {\color{red} As already mentioned in the Introduction, we take the first Monday after reaching $100$ confirmed case in each country as the starting date $t=1$. Beginning the time series for every country on the day when that country reaches 100 confirmed cases is a common way of ``normalizing'' the data \citep[cp.][]{Cohen2020}. Moreover, aligning the data by Monday takes into account the discrepancies in reporting the cases during the weekends, making the data even more comparable across countries. In order to check robustness of such alignment of the data, we report the results of analysis of these five countries but without alignment by the days of the week in the Section \ref{s:subsec:app:2} in the Supplement.} The time series length $T$ is taken {\color{red} to be equal to $150$, which covers the first wave of the pandemic in all of the considered countries. We also repeat the analysis for longer period of time and report the results in Section \ref{s:subsec:app:3} in the Supplement. However, the poor quality of the data in Spain (which can already be seen by the end of the considered time perios) heavily influences the estimation error of $\sigma^2$ which clearly results in more conservative results of the testing procedure.} The resulting dataset consists of $n = 5$ time series, each with $T = 150$ observations. Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in $4$ replacements. Plots of the observed time series are presented in the upper panels (a) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
 
 
 To interpret the results produced by our multiscale test, we consider the Government Response Index (GRI) from the Oxford COVID-19 Government Response Tracker (OxCGRT) \citep{Hale2020}. The GRI measures how severe the actions are that are taken by a country's government to contain the virus. It is calculated based on several common government policies such as school closures and travel restrictions. The GRI ranges from $0$ to $100$, with $0$ corresponding to no response from the government at all and $100$ corresponding to full lockdown, closure of schools and workplaces, ban on travelling, etc. Detailed information on the collection of the data for government responses and the methodology for calculating the GRI is provided in \cite{Hale2020paper}. Plots of the GRI time series are given in panels (c) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
@@ -475,7 +462,7 @@ To interpret the results produced by our multiscale test, we consider the Govern
 
 We assume that the data $X_{it}$ of each country $i$ in our sample follow the nonparametric trend model 
 \[ \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, \]
-which was introduced in equation \eqref{eq:model}. The overdispersion parameter $\sigma$ is estimated by the procedure described in Section \ref{subsec:test:test}, which yields the estimate $\hat{\sigma} = 14.44$. Throughout the section, we set the significance level to $\alpha=0.05$ and implement the multiscale test in exactly the same way as in the simulation study of Section \ref{subsec:sim}. In particular, we let $\pairs = \{ (i,j): 1 \le i < j \le 5\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$, and we choose $\intervals$ to be the family of time intervals plotted in Figure \ref{fig:intervals}. Hence, all intervals in $\intervals$ have length either 7, 14, 21 or 28 days. {\color{red} Choosing this family of intervals can help us overcome different  due to various reasons such as possible delays in reporting on the weekends}
+which was introduced in equation \eqref{eq:model}. The overdispersion parameter $\sigma$ is estimated by the procedure described in Section \ref{subsec:test:test}, which yields the estimate $\hat{\sigma} = 14.82$. Throughout the section, we set the significance level to $\alpha=0.05$ and implement the multiscale test in exactly the same way as in the simulation study of Section \ref{subsec:sim}. In particular, we let $\pairs = \{ (i,j): 1 \le i < j \le 5\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$, and we choose $\intervals$ to be the family of time intervals plotted in Figure \ref{fig:intervals}. Hence, all intervals in $\intervals$ have length either 7, 14, 21 or 28 days. %{\color{red} Choosing this family of intervals can help us overcome different  due to various reasons such as possible delays in reporting on the weekends}
 
 
 With the help of our multiscale method, we simultaneously test the null hypo\-thesis $H_0^{(ijk)}$ that $\lambda_i = \lambda_j$ on the interval $\mathcal{I}_k$ for each $(i, j, k) \in \indexset$. The results are presented in Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}, each figure comparing a specific pair of countries $(i,j)$ from our sample. For the sake of brevity, we only show the results for the pairwise comparisons of Germany with each of the four other countries. The remaining figures can be found in Section \ref{s:subsec:app} of the Supplementary Material. Each figure splits into four panels (a)--(d).  Panel (a) shows the observed time series for the two countries $i$ and $j$ that are compared. Panel (b) presents smoothed versions of the time series from (a), that is, it shows nonparametric kernel estimates (specifically, Nadaraya-Watson estimates) of the two trend functions $\lambda_i$ and $\lambda_j$, where the bandwidth is set to $7$ days and a rectangular kernel is used. Panel (c) displays the Government Response Index (GRI) of the two countries. Finally, panel (d) presents the results produced by our test: it depicts in grey the set $\intervals_{\text{reject}}(i,j)$ of all the intervals $\mathcal{I}_k$ for which the test rejects the null $H_0^{(ijk)}$. The minimal intervals in the subset $\intervals_{\text{reject}}^{\text{min}}(i, j)$ are highlighted by a black frame. Note that according to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals plotted in panels (d) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}: we can claim, with confidence of about $95\%$, that there is a difference between the functions $\lambda_i$ and $\lambda_j$ on each of these intervals.
@@ -483,12 +470,12 @@ With the help of our multiscale method, we simultaneously test the null hypo\-th
 
 \begin{figure}[p!]
 \begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/DEU_vs_ITA}
+\includegraphics[width=\textwidth]{plots/DEU_vs_ITA_Monday}
 \caption{Test results for the comparison of Germany and Italy.}\label{fig:Germany:Italy}
 \end{minipage}
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/DEU_vs_ESP}
+\includegraphics[width=\textwidth]{plots/DEU_vs_ESP_Monday}
 \caption{Test results for the comparison of Germany and Spain.}\label{fig:Germany:Spain}
 \end{minipage}
 
@@ -498,12 +485,12 @@ With the help of our multiscale method, we simultaneously test the null hypo\-th
 
 \begin{figure}[p!]
 \begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/DEU_vs_FRA}
+\includegraphics[width=\textwidth]{plots/DEU_vs_FRA_Monday}
 \caption{Test results for the comparison of Germany and France.}\label{fig:Germany:France}
 \end{minipage}
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/DEU_vs_GBR}
+\includegraphics[width=\textwidth]{plots/DEU_vs_GBR_Monday}
 \caption{Test results for the comparison of Germany and the UK.}\label{fig:Germany:UK}
 \end{minipage}
 
@@ -516,7 +503,11 @@ We now have a closer look at the results in Figures \ref{fig:Germany:Italy}--\re
 Taken together, our results provide evidence that the epidemic developed very similarly in Germany and Italy until a peak was reached around day $40$. Thereafter, however, the German time series exhibits a significantly stronger downward trend than the Italian one. 
 
 
-Inspecting Figures \ref{fig:Germany:Spain} and  \ref{fig:Germany:France}, a quite different picture arises when comparing Germany with France and Spain. The test detects significant differences between the German trend and the trends in France and Spain up to (approximately) day $50$ but not thereafter. Hence, we find that the time trends evolve differently during the outbreak of the crisis, but they appear to decrease in more or less the same fashion after a peak was reached. Finally, the comparison of Germany with the UK in Figure \ref{fig:Germany:UK} reveals significant differences between the time trends over essentially the whole observation window. Inspecting the time series in panel (a), it is quite obvious that the UK trend evolves differently from the German one after day $40$. However, our test also detects differences between the trends during the onset of the crisis, which is not obvious from the time series plot in panel (a). 
+{\color{red} Comparison of Germany and Spain reveals the picture that is almost opposite to the one discussed above: the test detects significant differences approximately up to day $50$ and after day $120$, but not in between. This shows that in the beginning of the pandemic Spain experienced more substantial increase in the number of cases, but after the peak reached almost the same level as Germany. However, the situation seems to repeat during the second wave, and thus the trends in Germany and Spain evolve differently towards the end of the considered time period.
+
+Inspecting Figure \ref{fig:Germany:France}, a quite different picture arises when comparing Germany with France. The test detects significant differences between the German and the French trends up to (approximately) day $40$ but not thereafter. Hence, we find that the time trends evolve differently during the outbreak of the crisis, but they appear to decrease in more or less the same fashion after a peak was reached. Even the high volatility of the French data towards the end of the time period seems to come from the process of data collection and not from the differences in trend functions.
+
+Finally, the comparison of Germany with the UK in Figure \ref{fig:Germany:UK} reveals significant differences between the time trends after approximately day $35$. Inspecting the time series in panel (a), it is quite obvious that the UK trend evolves differently from the German one after day $40$. Moreover, our test does not detect significant differences between the trends during the onset of the crisis, which is not an obvious conclusion from the time series plot in panel (a).}
 
 
 \subsubsection{Discussion}
@@ -525,7 +516,7 @@ Inspecting Figures \ref{fig:Germany:Spain} and  \ref{fig:Germany:France}, a quit
 Having identified significant differences between the epidemic trends in the five countries under consideration, one may ask next what are the causes of these differences. As already mentioned at the beginning of this section, this question cannot be answered by our test. Rather, a further analysis which presumably goes beyond pure statistics is needed to shed some light on it. We here do not attempt to provide any answers. We merely discuss some observations which become apparent upon considering our test results in the light of the Government Response Index (GRI). For reasons of brevity, we focus on the comparison of Germany with Italy and Spain in Figures \ref{fig:Germany:Italy} and \ref{fig:Germany:Spain}. 
 
 
-According to our test results in Figure \ref{fig:Germany:Spain}, there are significant differences between the trends in Germany and Spain during the onset of the epidemic up to about day $50$, with Spain having more new cases of infections than Germany on most days. After day $50$, the trends become quite similar and start to decrease at approximately the same rate. This may be due to the fact that Spain in general introduced more severe measures of lockdown than Germany (as can be seen upon inspecting the GRI in panel (c) of Figure \ref{fig:Germany:Spain}), which may have helped to battle the spread of infection. However, a much more thorough analysis is of course needed to find out whether this is indeed the case or whether other factors were mainly responsible. 
+According to our test results in Figure \ref{fig:Germany:Spain}, there are significant differences between the trends in Germany and Spain during the onset of the epidemic up to about day $50$, with Spain having more new cases of infections than Germany on most days. After day $50$, the trends become quite similar and start to decrease at approximately the same rate {\color{red} until approximately day $120$}. This may be due to the fact that Spain in general introduced more severe measures of lockdown than Germany (as can be seen upon inspecting the GRI in panel (c) of Figure \ref{fig:Germany:Spain}), which may have helped to battle the spread of infection. {\color{red} Furthermore, around days $110$-$120$ the measures in Spain were less strict than in Germany, which could have caused the detected differences in the evolution of the trends towards the end of the time period.} However, a much more thorough analysis is of course needed to find out whether this is indeed the case or whether other factors were mainly responsible. 
 
 
 Turning to the comparison of Germany and Italy, we found that the German trend drops down significantly faster than the Italian one after approximately day $40$. Interestingly, the GRI of Italy almost always lies above that of Germany. Hence, even though Italy has in general taken more severe and restrictive measures against the virus than Germany, it appears that the virus could be contained better in Germany (in the sense that the trend of daily new cases went down significantly faster in Germany than in Italy). This suggests that there are indeed important factors besides the level of government response to the pandemic which substantially influence the trend of new COVID-19 cases. 
@@ -536,7 +527,7 @@ This brief discussion already indicates that it is extremely difficult to determ
 
 Even though we can of course not fully exclude this possibility, our test results are presumably not driven by different test regimes in the countries under consideration. To see this, we consider again the comparison of Germany and Italy: The test regimes in these two countries are arguably quite different. Germany is often cited as the country that employed early, widespread testing with more than $100\,000$ tests per week even in the beginning of the pandemic \citep{Cohen2020}, while testing in Italy became widespread only in the late stages of the pandemic. 
 %(https://ourworldindata.org/covid-testing-us-uk-korea-italy)
-Nevertheless, visual inspection of the raw and smoothed data in panels (a) and (b) of Figure \ref{fig:Germany:Italy} suggest that the underlying time trends are very similar up to day $36$. This is confirmed by our multiscale test which does not find any significant differences before that day. Hence, the different test regimes in Germany and Italy towards the beginning of the pandemic do not appear to have an overly strong effect and to produce spurious differences between the time trends. This suggests that the differences detected by our multiscale test indeed reflect differences in the way the virus spread in Germany and Italy rather than being mere artefacts of different test regimes. 
+Nevertheless, visual inspection of the raw and smoothed data in panels (a) and (b) of Figure \ref{fig:Germany:Italy} suggests that the underlying time trends are very similar up to day $36$. This is confirmed by our multiscale test which does not find any significant differences before that day. Hence, the different test regimes in Germany and Italy towards the beginning of the pandemic do not appear to have an overly strong effect and to produce spurious differences between the time trends. This suggests that the differences detected by our multiscale test indeed reflect differences in the way the virus spread in Germany and Italy rather than being mere artefacts of different test regimes. 
 
 {\color{red}
 \section{Extensions}
@@ -625,7 +616,7 @@ which serves as our test statistic of the hypothesis $H_0^{(ijk)}$. For later re
 \hat{\psi}_{ijk,T}^{*, 0} = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \Big(\big( \frac{c_i}{\hat{c}_i} - \frac{c_j}{\hat{c}_j} \big)\overline{\lambda}_{ij} +  \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\frac{\sigma}{\hat{c}_i} \sqrt{c_i} \eta_{it} - \frac{\sigma}{\hat{c}_j} \sqrt{c_j}\eta_{jt}) \Big)}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it}/\hat{c}_i + \X^*_{jt}/\hat{c}_j) \}^{1/2}}
 \end{equation*}
 with $\overline{\lambda}_{ij}(u) = \{ \lambda_i(u) + \lambda_j(u) \}/2$, which is identical to $\hat{\psi}_{ijk,T}$ under $H_0^{(ijk)}$. 
-
+}
 %and set $$. We have already shown that $\widehat{\sigma}_i^2 = \sigma^2 + o_p(1)$ and $\hat{c}_i = c_i + o_P(1)$ for any $i$ and thus $(\widehat{\sigma}_i^*)^2 = \frac{\sigma^2}{c_i} + o_p(1)$.
 %
 %
@@ -677,25 +668,6 @@ with $\overline{\lambda}_{ij}(u) = \{ \lambda_i(u) + \lambda_j(u) \}/2$, which i
 %where $c_{T,\text{Gauss}}(\alpha,h_k) = b_k + q_{T,\text{Gauss}}(\alpha)/a_k$ with $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$. 
 
 
-
-\section{Possible issues}
-\begin{itemize}
-	\item Adjusting to the size of the country: dividing by population.
-	
-	Obviously, the size of the country matters. However, it is not straightforward to normalise the data properly. Simply dividing by the population of the given country would not be sufficient in our case, because the outbreak of the virus in a specific country is a quite local event (Wuhan in China, Lombardy in Italy, etc.). Clearly, this locality does not play any role in the later stages of the epidemic because additional local outbreaks occur over time and their number will presumably be larger in countries with a larger population. So, overall, the relationship between the population size and the epidemic curve can be very complicated. As for our paper, in the application sections we consider the European countries that are fairly similar (in population size but also in other characteristics), we opted for not normalising the data by population size at all rather than "wrongly normalising".
-	\item Building in some policy changes.
-	
-	Need to think how to do that correctly. Look at \cite{Alfano2020} and \cite{Courtemanche2020}.
-	\item Measurement error.
-	\item Why not case-fatality rate?
-	
-	\item How to proceed further? Or what are the possible policy implications?
-	Maybe tell a bit about machine learning approach on top of our method for example?
-	
-``A promising direction to advance mathematical modeling in epidemiology is to connect the models with data-driven techniques, particularly machine learning. The work by Yang et al. (1) applied a machine learning approach based on a recurrent neural network that is trained by utilizing a 2003 SARS epidemic dataset as well as incorporating the COVID-19 epidemiological parameters. They found consistent patterns in the predictions from the SEIR model and from the machine learning. For another example, Gao et al. (11) developed a deep learning algorithm to analyze the infectivity of the novel coronavirus and predict its potential hosts, and their findings indicated that bats and minks may be two animal hosts of this virus. These results are encouraging for wider applications of data analysis and computing approaches to study epidemics and pandemics, particularly COVID-19. Machine learning and other artificial intelligence techniques can complement and improve mathematical epidemic models by taking advantage of the large data sets currently available, including epidemic, genetic, demographic, geospatial and mobility data, the scale of which is typically far beyond the applicability of a standard mathematical model. On the other hand, mathematical modeling can provide a meaningful way to validate machine learning predictions and to guide the development of more efficient and robust algorithms in machine learning and data analytics. Thus, the development and advancement of these two different quantitative approaches could be mutually beneficial, and their integration could lead to potentially transformative progress in the study of COVID-19 and beyond.''
-\end{itemize}
-
-}
 
 \newpage
 \section*{A \hspace{0.2cm} Appendix}
@@ -1059,55 +1031,6 @@ for any $\eta > 0$ with $C$ depending only on the parameter $\delta$ specified i
 for $\eta > 0$ sufficiently small. This contradicts the definition of the quantile $q_{T,\text{Gauss}}(\alpha)$ according to which $q_{T,\text{Gauss}}(\alpha) = \inf_{q \in \reals} \{ \pr(\Phi_T \le q) \ge 1-\alpha \}$. 
 \end{proof}
 
-
-
-\newpage
-\subsection{Additional graphs for Section \ref{subsec:app}}\label{s:subsec:app}
-
-
-Here, we provide the pairwise comparisons between Italy, France, Spain and the UK that were omitted in Section \ref{subsec:app}. The plots have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}. 
-
-
-\begin{figure}[h!]
-\begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/FRA_vs_ITA}
-\caption{Test results for the comparison of France and Italy.}
-\end{minipage}
-\hspace{0.25cm}
-\begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/GBR_vs_ITA}
-\caption{Test results for the comparison of the UK and Italy.}
-\end{minipage}
-\end{figure}
-
-
-\begin{figure}[p!]
-\begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/ESP_vs_ITA}
-\caption{Test results for the comparison of Spain and Italy.}
-\end{minipage}
-\hspace{0.25cm}
-\begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/ESP_vs_GBR}
-\caption{Test results for the comparison of Spain and the UK.}
-\end{minipage}
-\end{figure}
-
-
-\begin{figure}[p!]
-\begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/ESP_vs_FRA}
-\caption{Test results for the comparison of Spain and France.}
-\end{minipage}
-\hspace{0.25cm}
-\begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/FRA_vs_GBR}
-\caption{Test results for the comparison of France and the UK.}
-\end{minipage}
-\end{figure}
-
-
-
 \newpage
 \subsection{Robustness checks for Section \ref{subsec:sim}}\label{s:subsec:robustness}
 
@@ -1241,6 +1164,246 @@ $T = 100$ & 0.438 & 0.636 & 0.704 & 0.404 & 0.598 & 0.669 & 0.277 & 0.449 & 0.52
 \end{tabularx}}
 \end{table}
 
+
+
+\newpage
+
+\subsection{Additional graphs for Section \ref{subsec:app}}\label{s:subsec:app}
+
+
+Here, we provide the pairwise comparisons between Italy, France, Spain and the UK that were omitted in Section \ref{subsec:app}. The plots have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}. 
+
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/FRA_vs_ITA_Monday}
+\caption{Test results for the comparison of France and Italy.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/GBR_vs_ITA_Monday}
+\caption{Test results for the comparison of the UK and Italy.}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_ITA_Monday}
+\caption{Test results for the comparison of Spain and Italy.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_GBR_Monday}
+\caption{Test results for the comparison of Spain and the UK.}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_FRA_Monday}
+\caption{Test results for the comparison of Spain and France.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/FRA_vs_GBR_Monday}
+\caption{Test results for the comparison of France and the UK.}\label{fig:France:UK}
+\end{minipage}
+\end{figure}
+
+
+\clearpage
+{\color{red}
+\subsection{Robustness checks for Section \ref{subsec:app}}\label{s:subsec:app:2}
+
+In this section, we provide the robustness check of the pairwise comparisons between Germany, Italy, France, Spain and the UK. Specifically, we provide the results of our test method applied to the time series of these five countries that were aligned only by the date of reaching $100$th case. We do not align the data by the days of the week. The plots have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_ITA}
+\caption{Test results for the comparison of Germany and Italy without alignment by the days of the week.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_ESP}
+\caption{Test results for the comparison of Germany and Spain without alignment by the days of the week.}
+\end{minipage}
+\end{figure}
+
+As you can see, the results are essentially the same except for comparisons between Germany and the United Kingdom and between Italy and the United Kingdom. Hence, we can assume that the reporting procedures in the UK were heavily influenced by the days of the week, especially in the beginning of the pandemic.
+
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_FRA}
+\caption{Test results for the comparison of Germany and France without alignment by the days of the week.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_GBR}
+\caption{Test results for the comparison of Germany and the UK without alignment by the days of the week.}
+\end{minipage}
+\end{figure}
+
+
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/FRA_vs_ITA}
+\caption{Test results for the comparison of France and Italy without alignment by the days of the week.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/GBR_vs_ITA}
+\caption{Test results for the comparison of the UK and Italy without alignment by the days of the week.}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_ITA}
+\caption{Test results for the comparison of Spain and Italy without alignment by the days of the week.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_GBR}
+\caption{Test results for the comparison of Spain and the UK without alignment by the days of the week.}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_FRA}
+\caption{Test results for the comparison of Spain and France without alignment by the days of the week.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/FRA_vs_GBR}
+\caption{Test results for the comparison of France and the UK without alignment by the days of the week.}
+\end{minipage}
+\end{figure}
+
+\clearpage
+\subsection{Additional analysis for Section \ref{subsec:app}}\label{s:subsec:app:3}
+
+Here, we provide the results of the multiscale comparison of the time trends between five European countries performed on a longer time period. Specifically, we align the time series as before, taking the first Monday after reaching $100$ cases as the starting date $t = 1$. However, we take the time series length $T$ to be the minimal number of days for which we have observations for all five countries. The data were downloaded on 6 October 2020, which resulted in $T = 212$ (as opposed to $T = 150$ in Section \ref{subsec:app}). The analysis was performed in a similar manner as in Section \ref{subsec:app}, and the results of the analysis are displayed in Figures \ref{fig:supp3:first} - \ref{fig:supp3:last}. The plots have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
+
+As is already obvious from the simple visual inspection, the data for Spain has very high volatility towards the end of the period. Presumably, the reason for that is repeated delays in reporting. This explains the number of cases being $0$ on multiple occasions with very sharp increase on the next day. Clearly, high day-to-day volatility of the data heavily influences the estimation error of $\sigma$ which results in rather conservative results of the overall testing procedure. Specifically, we get $\widehat{\sigma} = 35.23$ when estimating $\sigma$ with $T=212$ compared to $\widehat{\sigma} = 14.82$ with $T = 150$. Higher values of $\widehat{\sigma}$ result in lower values of the test statistics, which can lead to more conservative results of the test procedure. Hence, Figures \ref{fig:supp3:first} -- \ref{fig:supp3:last} differ drastically from Figures \ref{fig:Germany:Italy} -- \ref{fig:France:UK}. 
+
+
+Since both data for Spain provided by World Health Organization and by John Hopkins University also exhibit similar patterns to the data that are used in our study, we exclude Spain from our analysis and repeat the testing procedure for only four European countries: Germany, Italy, France and the United Kingdom. The results are presented in \ref{fig:supp4:first} - \ref{fig:supp4:last}. As can be seen, the test is much less conservative and the results of the test are much more consistent with the ones discussed in Section \ref{subsec:app}. Specifically, for each pair of countries $(i, j)$ the set $\intervals_{\text{reject}}(i, j)$ constructed for a longer time period ($T = 212$) contains almost all elements from the set $\intervals_{\text{reject}}(i, j)$ constructed for a shorter time period ($T = 150$). This shows that our test is robust with respect to the growing sample size.
+
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_ITA_long}
+\caption{Test results for the comparison of Germany and Italy on the longer time period.}\label{fig:supp3:first}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_ESP_long}
+\caption{Test results for the comparison of Germany and Spain on the longer time period.}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_FRA_long}
+\caption{Test results for the comparison of Germany and France on the longer time period.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_GBR_long}
+\caption{Test results for the comparison of Germany and the UK on the longer time period.}
+\end{minipage}
+\end{figure}
+
+
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/FRA_vs_ITA_long}
+\caption{Test results for the comparison of France and Italy on the longer time period.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/GBR_vs_ITA_long}
+\caption{Test results for the comparison of the UK and Italy on the longer time period.}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_ITA_long}
+\caption{Test results for the comparison of Spain and Italy on the longer time period.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_GBR_long}
+\caption{Test results for the comparison of Spain and the UK on the longer time period.}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_FRA_long}
+\caption{Test results for the comparison of Spain and France on the longer time period.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/FRA_vs_GBR_long}
+\caption{Test results for the comparison of France and the UK on the longer time period.}\label{fig:supp3:last}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_ITA_four_countries}
+\caption{Test results for the comparison of Germany and Italy on the longer time period excluding Spain.}\label{fig:supp4:first}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_FRA_four_countries}
+\caption{Test results for the comparison of Germany and France on the longer time period excluding Spain.}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_GBR_four_countries}
+\caption{Test results for the comparison of Germany and the UK on the longer time period excluding Spain.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/FRA_vs_ITA_four_countries}
+\caption{Test results for the comparison of France and Italy on the longer time period excluding Spain.}
+\end{minipage}
+\end{figure}
+
+
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/GBR_vs_ITA_four_countries}
+\caption{Test results for the comparison of the UK and Italy on the longer time period excluding Spain.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/FRA_vs_GBR_four_countries}
+\caption{Test results for the comparison of France and the UK on the longer time period excluding Spain.}\label{fig:supp4:last}
+\end{minipage}
+\end{figure}
+
+
+
+}
 
 \phantom{end}
 

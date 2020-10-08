@@ -20,7 +20,7 @@
 \usepackage{xspace}
 
 \title{Simultaneous statistical inference for epidemic trends: the case of COVID-19}
-\date{01/10/2020}
+\date{01/11/2020}
 \author{Marina Khismatullina \and Michael Vogt}
 \setbeamertemplate{frame footer}{Simultaneous statistical inference for epidemic trends: the case of COVID-19}
 \metroset{block=fill}
@@ -51,16 +51,43 @@
 \begin{frame}{Motivation}
 	\textbf{Research question:}	
 	How do outbreak patterns of COVID-19 compare across countries?
-	\begin{figure}
+	{\onslide<1>\begin{figure}
     		\centering
     		\includegraphics[height=0.45\textheight]{plots/Germany_and_Italy.pdf}
-    		%\caption{Observed new cases per day in Germany and Italy}
-    		\label{fig:DEUvsITA}
-  	\end{figure}\pause
-	\vspace{-3mm}
-	\begin{block}{Aim of the paper}
+  	\end{figure}}
+	{\onslide<2>
+	\vspace{-46,81mm}
+	\begin{figure}
+    		\centering
+    		\includegraphics[height=0.45\textheight]{plots/Germany_and_Italy_1.pdf}
+  	\end{figure}}	
+	{\onslide<3->
+	\vspace{-46,81mm}
+	\begin{figure}
+    		\centering
+    		\includegraphics[height=0.45\textheight]{plots/Germany_and_Italy_2.pdf}
+  	\end{figure}}	
+{\onslide<4> \begin{block}{Aim of the paper}
 	To develop new inference methods that allow to \textit{identify} and \textit{locate} differences between epidemic time trends.
-	\end{block}
+\end{block}}
+
+%\textbf{Aim:} to compare the underlying trends on different intervals simultaneously.}
+\end{frame}
+
+\begin{frame}{Research goal}
+
+Suppose we have a set of intervals of different lengths, and we want to be able to say if two underlying trend functions are equal on each of these intervals.\pause
+
+Then we would like a procedure that:
+\vspace{-1mm}
+\begin{itemize}
+	\item allows us to test multiple hypotheses simultaneously;\pause
+	\item taking the differences in lengths of the intervals into account;\pause
+	\item controls the family-wise error rate (probability of making even one type I error); \pause
+	\item while having an asymptotic power of $1$ against local alternatives;\pause
+	\item is easy to use and ideally already has an implementation as an R-package.
+\end{itemize}\pause
+
 \end{frame}
 
 \begin{frame}{Literature}
@@ -70,7 +97,6 @@
 	\end{itemize}\pause
 	Studies of COVID-19:
 	\begin{itemize}
-		\item SIR models: Yang et al. (2020), Wu et al. (2020), De Brouwer et al. (2020).
 		\item Time series analysis: Gu et al. (2020), Li and Linton (2020).
 	\end{itemize}
 \end{frame}
@@ -86,7 +112,9 @@ Since $\lambda_i(t/T) = \E[X_{it}] = \Var(X_{it})$, we can rewrite $X_{it}$ as
 \vspace{-2mm}
 \begin{equation*}
 X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + u_{it} \quad \text{with} \quad u_{it} = \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}
-\end{equation*}\pause
+\end{equation*}
+where $\eta_{it}$ has zero mean and unit variance.\pause
+
 In applications the variance can be larger than the mean $\Rightarrow$ quasi-Poisson models.
 \end{frame}
 
@@ -104,7 +132,7 @@ where
 \end{itemize}
 \end{frame}
 
-\section{Testing}
+\section{Testing procedure}
 \begin{frame}{Testing problem}
 
 Let $\mathcal{F} :=\{ \mathcal{I}_k \subseteq [0, 1]: 1 \le k \le K\}$ be a family of rescaled time intervals on $[0, 1]$, and let $H_0^{(ijk)}$ be the hypothesis that the functions $\lambda_i$ and $\lambda_j$ are equal on an interval $\mathcal{I}_k$, \pause i.e.
@@ -120,18 +148,33 @@ Let $\mathcal{M}_0$ be the set of triplets $(i, j, k)$ for which $H_0^{(ijk)}$ h
 \end{frame} 
 
 
-\begin{frame}[label = frame_teststatistic]{Test statistic}
+\begin{frame}{Test statistic}
 For the given interval $\mathcal{I}_k$ and a pair of time series $i$ and $j$ we calculate
 \begin{equation*}
-\hat{s}_{ijk,T} = \frac{1}{T h_k} \sum\limits_{t=1}^T \ind (X_{it} -X_{jt}), 
+\hat{s}_{ijk} = \frac{1}{T h_k} \sum\limits_{t=1}^T \ind (X_{it} -X_{jt}), 
 \end{equation*}
 %\vspace{-3mm}
-where $h_k$ is the length of $\mathcal{I}_k$. \pause $\hat{s}_{ijk,T}$ estimates the average distance between $\lambda_i$ and $\lambda_j$ on $\mathcal{I}_k$. \pause Under certain assumptions, 
+where $h_k$ is the length of $\mathcal{I}_k$. \pause $\hat{s}_{ijk}$ estimates the average distance between $\lambda_i$ and $\lambda_j$ on $\mathcal{I}_k$: \pause 
 \begin{align*}
-\Var(\hat{s}_{ijk,T})  & = \frac{\sigma^2}{T^2 h_k^2} \sum\limits_{t=1}^T \ind \Big\{ \lambda_i\Big(\frac{t}{T}\Big) + \lambda_j\Big(\frac{t}{T}\Big) \Big\}
+\hat{s}_{ijk} = &\frac{1}{Th_k} \sum\limits_{t=1}^T \ind \bigg( \lambda_i \Big(\frac{t}{T}\Big)  - \lambda_j \Big(\frac{t}{T}\Big)\bigg) \\
+&+  \frac{\sigma}{Th_k} \sum\limits_{t=1}^T \ind \Big(\sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} -  \sqrt{ \lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt} \Big)
 \end{align*}\pause
-In order to normalize the variance of the statistic $\hat{s}_{ijk,T}$, we scale it by an estimator of its variance:
-\[ \widehat{\Var(\hat{s}_{ijk,T})} = \frac{\hat{\sigma}^2}{T^2 h_k^2} \sum\limits_{t=1}^T \ind (X_{it} + X_{jt} ), \]
+Applying a law of large numbers, we get that
+\begin{align*}
+\hat{s}_{ijk} = &\frac{1}{Th_k} \sum\limits_{t=1}^T \ind \bigg( \lambda_i \Big(\frac{t}{T}\Big)  - \lambda_j \Big(\frac{t}{T}\Big)\bigg) + o_P(1)
+\end{align*}
+\end{frame}
+
+
+
+
+\begin{frame}[label = frame_teststatistic]{Test statistic, part 2}
+Under certain assumptions, 
+\begin{align*}
+\Var(\hat{s}_{ijk})  & = \frac{\sigma^2}{T^2 h_k^2} \sum\limits_{t=1}^T \ind \Big\{ \lambda_i\Big(\frac{t}{T}\Big) + \lambda_j\Big(\frac{t}{T}\Big) \Big\}
+\end{align*}\pause
+In order to normalize the variance of the statistic $\hat{s}_{ijk}$, we scale it by an estimator of its variance:
+\[ \widehat{\Var(\hat{s}_{ijk})} = \frac{\hat{\sigma}^2}{T^2 h_k^2} \sum\limits_{t=1}^T \ind (X_{it} + X_{jt} ), \]
 with $\hat{\sigma}^2$ being an appropriate estimator of $\sigma^2$. \hyperlink{frame_sigma}{\beamerbutton{Details}}
 \end{frame}
 
@@ -139,52 +182,51 @@ with $\hat{\sigma}^2$ being an appropriate estimator of $\sigma^2$. \hyperlink{f
 \begin{frame}{Test statistic, part 2}
 Test statistic for the hypothesis $H_0^{(ijk)}$ is defined as
 \begin{equation*}
-\widehat{\psi}_{ijk, T} = \frac{\sum\nolimits_{t=1}^T \indsmall (X_{it} -X_{jt})}{\hat{\sigma} \big\{ \sum\nolimits_{t=1}^T \indsmall  (X_{it} + X_{jt} )\big\}^{1/2}}
+\widehat{\psi}_{ijk} = \frac{\sum\nolimits_{t=1}^T \indsmall (X_{it} -X_{jt})}{\hat{\sigma} \big\{ \sum\nolimits_{t=1}^T \indsmall  (X_{it} + X_{jt} )\big\}^{1/2}}
 \end{equation*} \pause
-Under certain conditions and under the null, $\widehat{\psi}_{ijk, T}$ can be approximated by a Gaussian version of the test statistic:
+Under certain conditions and under the null, $\widehat{\psi}_{ijk}$ can be approximated by a Gaussian version of the test statistic:
 \begin{align*}
-\phi_{ijk,T} = \frac{1}{\sqrt{2 T h_k}} \sum\limits_{t=1}^T \ind (Z_{it} - Z_{jt}), 
+\phi_{ijk} = \frac{1}{\sqrt{2 T h_k}} \sum\limits_{t=1}^T \ind (Z_{it} - Z_{jt}), 
 \end{align*}
 where $Z_{it}$ are independent standard normal random variables.
 \end{frame}
 
-\begin{frame}{Critical values}
-How to construct critical values $c_{ijk,T}(\alpha)$?\pause
+\begin{frame}[label = frame_critval]{Critical values}
+How to construct critical values $c_{ijk}(\alpha)$?\pause
 \begin{itemize} 
-\item Traditional approach: $c_{ijk,T}(\alpha) = c_T(\alpha)$ for all $(i,j,k)$. \pause
-\item More modern approach: $c_{ijk,T}(\alpha)$ depend on the length $h_k$ of the time interval (D{\"u}mbgen and Spokoiny (2001)).
-\end{itemize}\pause
-In our context: 
-\vspace{-2mm}
-\[c_{ijk,T}(\alpha) = c_T(\alpha,h_k) := b_k + q_T(\alpha)/a_k,\] where $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$ are scale-dependent constants and $q_T(\alpha)$ is chosen such that we control FWER.
+\item Traditional approach: $c_{ijk}(\alpha) = c(\alpha)$ for all $(i,j,k)$. \pause
+\item More modern approach: $c_{ijk}(\alpha)$ depend on the length $h_k$ of the time interval (D{\"u}mbgen and Spokoiny (2001))\pause:
+\[c_{ijk}(\alpha) = c(\alpha,h_k) := b_k + q(\alpha)/a_k,\] where $a_k$ and $b_k$ are scale-dependent constants and $q(\alpha)$ is chosen such that we control FWER.
+\hyperlink{frame_scaleconstants}{\beamerbutton{Details}}
+\end{itemize}
 \end{frame}
 
 
 \begin{frame}{Critical values, part 2}
 We want to control FWER:
 \begin{align*}
-\text{FWER}(\alpha) &= \Prob \Big( \exists (i,j,k) \in\mathcal{M}_0: |\widehat{\psi}_{ijk, T} | > c_{ijk, T}(\alpha) \Big) \\
-&= 1 - \Prob \Big( \forall (i,j,k) \in\mathcal{M}_0: |\widehat{\psi}_{ijk, T} | \le c_{ijk, T}(\alpha) \Big)\\
- & =  1 - \Prob \Big( \forall (i,j,k) \in \mathcal{M}_0: a_k \big(|\hat{\psi}_{ijk,T}| - b_k\big) \le q_T(\alpha) \Big)\\
- & = 1 - \Prob\Big( \max_{(i,j,k) \in \mathcal{M}_0} a_k \big( |\hat{\psi}_{ijk,T}| - b_k \big) \le q_T(\alpha) \Big)\\
+\text{FWER}(\alpha) &= \Prob \Big( \exists (i,j,k) \in\mathcal{M}_0: |\widehat{\psi}_{ijk} | > c_{ijk}(\alpha) \Big) \\
+&= 1 - \Prob \Big( \forall (i,j,k) \in\mathcal{M}_0: |\widehat{\psi}_{ijk} | \le c_{ijk}(\alpha) \Big)\\
+ & =  1 - \Prob \Big( \forall (i,j,k) \in \mathcal{M}_0: a_k \big(|\hat{\psi}_{ijk}| - b_k\big) \le q(\alpha) \Big)\\
+ & = 1 - \Prob\Big( \max_{(i,j,k) \in \mathcal{M}_0} a_k \big( |\hat{\psi}_{ijk}| - b_k \big) \le q(\alpha) \Big)\\
  & \le \alpha
 \end{align*}\pause
-Hence, we choose $q_T(\alpha)$ as the $(1-\alpha)$-quantile of the statistic 
-\[ \hat{\Psi}_T = \max_{(i,j,k)} a_k \big( |\hat{\psi}_{ijk,T}^0| - b_k \big), \]
-where $\hat{\psi}_{ijk,T}^0$ is equal to $\hat{\psi}_{ijk,T}$ under the null.
+Hence, we choose $q(\alpha)$ as the $(1-\alpha)$-quantile of the statistic 
+\[ \hat{\Psi} = \max_{(i,j,k)} a_k \big( |\hat{\psi}_{ijk}^0| - b_k \big), \]
+where $\hat{\psi}_{ijk}^0$ is equal to $\hat{\psi}_{ijk}$ under the null.
 \end{frame}
 
 \begin{frame}[label = frame_test]{Test procedure}
 
 \begin{enumerate}
 	\item Consider the Gaussian test statistic 
-	\vspace{-2mm} \[ \Phi_T = \max_{(i,j,k)} a_k \big( |\phi_{ijk,T}| - b_k \big), \] where $a_k$ and $b_k$ are scale-dependent constants and $\phi_{ijk, T}$ are weighted averages of the differences of standard normal random variables.\pause
-	\item Compute a $(1-\alpha)$-quantile $q_{T, \text{Gauss}} (\alpha)$ of $\Phi_T$ by Monte Carlo simulations.\pause
-	\item Adjust $q_{T, \text{Gauss}} (\alpha)$ by the scale-dependent constants \vspace{-2mm}  \[c_{T,\text{Gauss}}(\alpha,h_k) = b_k + q_{T,\text{Gauss}}(\alpha)/a_k\] \pause
+	\vspace{-2mm} \[ \Phi = \max_{(i,j,k)} a_k \big( |\phi_{ijk}| - b_k \big), \] where $a_k$ and $b_k$ are scale-dependent constants and $\phi_{ijk}$ are weighted averages of the differences of standard normal random variables.\pause
+	\item Compute a $(1-\alpha)$-quantile $q_{\text{Gauss}} (\alpha)$ of $\Phi$ by Monte Carlo simulations.\pause
+	\item Adjust $q_{ \text{Gauss}} (\alpha)$ by the scale-dependent constants \vspace{-2mm}  \[c_{\text{Gauss}}(\alpha,h_k) = b_k + q_{\text{Gauss}}(\alpha)/a_k\] \pause
 \end{enumerate}
 \vspace{-5mm}
 \begin{block}{Test procedure}
-For the given significance level $\alpha \in (0,1)$ and for each $(i,j,k)$, reject $H_0^{(ijk)}$ if $|\widehat{\psi}_{ijk,T}| > c_{T,\text{Gauss}}(\alpha,h_k)$.
+For the given significance level $\alpha \in (0,1)$ and for each $(i,j,k)$, reject $H_0^{(ijk)}$ if $|\widehat{\psi}_{ijk}| > c_{\text{Gauss}}(\alpha,h_k)$.
 
 \end{block}
 \end{frame}
@@ -207,17 +249,17 @@ For the given significance level $\alpha \in (0,1)$ and for each $(i,j,k)$, reje
 Let $\mathcal{M}_0$ be the set of triplets $(i, j, k)$ for which $H_0^{(ijk)}$ holds true. Then under $\mathcal{C}1 - \mathcal{C}6$, it holds that 
 \vspace{-2mm}
 \begin{align*}
- \Prob\Big( \forall (i,j,k) \in \mathcal{M}_0: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \ge 1 - \alpha + o(1)
+ \Prob\Big( \forall (i,j,k) \in \mathcal{M}_0: |\hat{\psi}_{ijk}| \le c_{\textnormal{Gauss}}(\alpha,h_k) \Big) \ge 1 - \alpha + o(1)
 \end{align*}
 \end{prop}\pause
 \begin{prop}\label{prop2}
 Consider a sequence of functions $\lambda_{i} = \lambda_{i,T}$, $\lambda_{j} = \lambda_{j, T}$ such that 
 \begin{equation}\label{eq:localt}
-\exists \, \mathcal{I}_{k}:  \lambda_{i, T}(w) - \lambda_{j, T}(w) \ge c_T \sqrt{\log T / (T h_{k})} \,\, \forall w \in \mathcal{I}_{k},
+\exists \, \mathcal{I}_{k}:  \lambda_{i}(w) - \lambda_{j}(w) \ge c_T \sqrt{\log T / (T h_{k})} \,\, \forall w \in \mathcal{I}_{k},
 \end{equation} and $c_T \rightarrow \infty$ faster than $\frac{\sqrt{\log T}\sqrt{\log \log T}}{\log \log \log T}$. \pause Let $\mathcal{M}_1$ be the set of triplets $(i, j, k)$ for which \eqref{eq:localt} holds true. Then under $\mathcal{C}1 - \mathcal{C}6$, it holds that
 \vspace{-2mm}
 \begin{equation*}
-\Prob\Big( \forall (i,j,k) \in \mathcal{M}_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1)
+\Prob\Big( \forall (i,j,k) \in \mathcal{M}_1: |\hat{\psi}_{ijk}| > c_{\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1)
 \end{equation*}
 \end{prop}
 \end{frame}
@@ -370,18 +412,23 @@ which in turn implies the desired statement.
 \end{frame}
 
 
+\begin{frame}[label = frame_scaleconstants]{Idea behind $a_k$ and $b_k$}
+A more modern approach of constructing the individual critical values $c_{ijk}(\alpha)$ (D{\"u}mbgen and Spokoiny (2001)): let them depend on the scale of the testing problem, i.e. the length $h_k$ of the time interval.\pause \,Specifically, 
+\[c_{ijk}(\alpha) = c(\alpha,h_k) := b_k + q(\alpha)/a_k,\] where $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$ are scale-dependent constants and $q_T(\alpha)$ is chosen such that we control FWER.
+\hyperlink{frame_critval<4>}{\beamerbutton{Go back}}
+\end{frame}
 
 \begin{frame}{Idea behind the additive correction}
 Consider the uncorrected Gaussian statistic
 \begin{align*}
-\Phi_{T}^{\text{uncor}} = \max_{(i,j,k)} |\phi_{ijk, T}|
+\Phi^{\text{uncor}} = \max_{(i,j,k)} |\phi_{ijk}|
 \end{align*}\pause
 and let the family of intervals be \[\mathcal{F} = \big\{[(m-1) h_l, m h_l] \text{ for } 1\le m \le 1/h_l, 1 \le l \le L\big\}\]\pause
 Then we can rewrite the uncorrected test statistic as
 \begin{align*}
-\Phi_{T}^{\text{uncor}} = \max_{i, j} \max_{\substack{1 \le l \le L, \\ 1\le m \le 1/h_l}} \Big|\frac{1}{\sqrt{2 T h_l}} \sum\limits_{t=1}^T 1 \Big( \frac{t}{T} \in [(m-1) h_l, m h_l] \Big) (Z_{it} - Z_{jt})\Big|
+\Phi^{\text{uncor}} = \max_{i, j} \max_{\substack{1 \le l \le L, \\ 1\le m \le 1/h_l}} \Big|\frac{1}{\sqrt{2 T h_l}} \sum\limits_{t=1}^T 1 \Big( \frac{t}{T} \in [(m-1) h_l, m h_l] \Big) (Z_{it} - Z_{jt})\Big|
 \end{align*}\pause
-$\Rightarrow \quad \max_m \ldots =\sqrt{2\log(1/h_l)} + o_P(1) \to \infty$ as $h \to 0$ and the stochastic behavior of $\Phi_{T}^{\text{uncor}}$ is dominated by the elements with small bandwidths $h_l$. \hyperlink{frame_test<4>}{\beamerbutton{Go back}}
+$\Rightarrow \quad \max_m \ldots =\sqrt{2\log(1/h_l)} + o_P(1) \to \infty$ as $h \to 0$ and the stochastic behavior of $\Phi^{\text{uncor}}$ is dominated by the elements with small bandwidths $h_l$. \hyperlink{frame_test<4>}{\beamerbutton{Go back}}
 \end{frame}
 
 

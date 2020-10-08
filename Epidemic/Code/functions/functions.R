@@ -25,16 +25,17 @@ produce_plots <- function (results, l, data_i, data_j,
   layout(matrix(c(1, 2, 3, 4),ncol=1), widths=c(2.2, 2.2, 2.2, 2.2),
          heights=c(1.5, 1.5, 1.5, 1.8), TRUE)
 
-  
   #Setting the layout of the graphs
 
   par(cex = 1, tck = -0.025)
   par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
   par(oma = c(0.2, 1.5, 2, 0.2)) #Outer margins
 
+
   plot(data_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
       col="blue", ylab="", xlab="", mgp=c(1, 0.5, 0))
   lines(data_j, col="red")
+
   title(main = "(a) observed new cases per day", font.main = 1, line = 0.5)
   legend("topright", inset = 0.02, legend=c(country_i, country_j),
          col = c("blue", "red"), lty = 1, cex = 0.95, ncol = 1)
