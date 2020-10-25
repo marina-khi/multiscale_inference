@@ -31,10 +31,10 @@
 \heading{Simultaneous statistical inference}{for epidemic trends}
 %Simultaneous inference on many epidemic trends -- How does the Covid-19 virus spread in different countries? 
 
-\authors{Marina Khismatullina\renewcommand{\thefootnote}{1}\footnotemark[1]}{University of Bonn}{Michael Vogt\renewcommand{\thefootnote}{2}\footnotemark[2]}{University of Bonn} 
+\authors{Marina Khismatullina\renewcommand{\thefootnote}{1}\footnotemark[1]}{University of Bonn}{Michael Vogt\renewcommand{\thefootnote}{2}\footnotemark[2]}{University of Ulm} 
 \footnotetext[1]{Corresponding author. Address: Bonn Graduate School of Economics, University of Bonn, 53113 Bonn, Germany. Email: \texttt{marina.k@uni-bonn.de}.}
 \renewcommand{\thefootnote}{2}
-\footnotetext[2]{Address: Department of Economics and Hausdorff Center for Mathematics, University of Bonn, 53113 Bonn, Germany. Email: \texttt{michael.vogt@uni-bonn.de}.}
+\footnotetext[2]{Address: Department of Mathematics, University of Ulm, 89081 Ulm, Germany. Email: \texttt{m.vogt@uni-ulm.de}.}
 \renewcommand{\thefootnote}{\arabic{footnote}}
 \setcounter{footnote}{2}
 
@@ -61,7 +61,7 @@
 There are many questions surrounding the current COVID-19 pandemic that are not well understood yet. A question which is particularly important for governments and policy makers is the following: How do the outbreak patterns of COVID-19 compare across countries? Are the time trends of daily new infections more or less the same across countries, or is the virus spreading differently in different regions of the world? Identifying differences between countries may help, for instance, to better understand which government policies have been more effective in containing the virus than others. The main aim of this paper is to develop new inference methods that allow to detect differences between time trends of COVID-19 infections in a statistically rigorous way.  
 
 
-Let $\X_{it}$ be the number of new infections on day $t$ in country $i$ and suppose we observe a sample of data $\mathcal{\X}_i = \{ \X_{it}: 1 \le 1 \le T \}$ for $n$ different countries $i$. {\color{red} In order to make the data comparable across countries, we take the starting date $t=1$ to be the the first Monday after reaching $100$ confirmed case in each country. Considering only the dates after reaching a certain level is a common practice of ``normalizing'' the data \citep[cp.\ e.g.][]{Cohen2020}. Moreover, aligning the data by starting on Monday takes into account the possible differences in reporting the data on a weekly level.} A simple way to model the count data $\X_{it}$ is to use a Poisson distribution. Specifically, we may assume that the random variables $\X_{it}$ are Poisson distributed with time-varying intensity parameter $\lambda_i(t/T)$, that is, $\X_{it} \sim P_{\lambda_i(t/T)}$. Since $\lambda_i(t/T) = \ex[\X_{it}] = \var(\X_{it})$, we can model the observations $\X_{it}$ by the nonparametric regression equation 
+Let $\X_{it}$ be the number of new infections on day $t$ in country $i$ and suppose we observe a sample of data $\mathcal{\X}_i = \{ \X_{it}: 1 \le 1 \le T \}$ for $n$ different countries $i$. In order to make the data comparable across countries, we take the starting date $t=1$ to be the first Monday after reaching $100$ confirmed case in each country. Considering only the dates after reaching a certain level is a common practice of ``normalizing'' the data \citep[cp.\ e.g.][]{Cohen2020}. Moreover, aligning the data by starting on Monday takes into account possible differences in reporting the data on a weekly level. A simple way to model the count data $\X_{it}$ is to use a Poisson distribution. Specifically, we may assume that the random variables $\X_{it}$ are Poisson distributed with time-varying intensity parameter $\lambda_i(t/T)$, that is, $\X_{it} \sim P_{\lambda_i(t/T)}$. Since $\lambda_i(t/T) = \ex[\X_{it}] = \var(\X_{it})$, we can model the observations $\X_{it}$ by the nonparametric regression equation 
 \begin{equation}\label{eq:model-intro}
 \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + u_{it} 
 \end{equation}
@@ -73,61 +73,48 @@ In model \eqref{eq:model-intro}, the time trend of new COVID-19 infections in co
 We design a method to test the hypothesis $H_0^{(ijk)}$ \textit{simultaneously} for all pairs of countries $i$ and $j$ under consideration and for all intervals $\mathcal{I}_k$ in the family $\intervals$. The main theoretical result of the paper shows that the method controls the familywise error rate, that is, the probability of wrongly rejecting at least one null hypothesis $H_0^{(ijk)}$. As we will see, this allows us to make simultaneous confidence statements of the following form for a given significance level $\alpha \in (0,1)$: 
 \begin{center}
 \begin{minipage}[c][1.25cm][c]{13cm}
-\textit{With probability at least $1-\alpha$, the functions $\lambda_i$ and $\lambda_j$ differ on the interval $\mathcal{I}_k$ for every $(i,j,k)$ for which the test rejects $H_0^{(ijk)}$.} 
+\textit{We can claim with probability at least $1-\alpha$ that the functions $\lambda_i$ and $\lambda_j$ differ on the interval $\mathcal{I}_k$ for every $(i,j,k)$ for which the test rejects $H_0^{(ijk)}$.} 
 \end{minipage}
 \end{center}
 Hence, the method allows us to make simultaneous confidence statements (a) about which time trend functions differ from each other and (b) about where, that is, in which time intervals $\mathcal{I}_{k}$ they differ. 
 
 
-Even though our multiscale test is motivated by the current COVID-19 crisis, its applicability is by no means restricted to this specific event. It is a general method to compare nonparametric trends in epidemiological (count) data. It thus contributes to the literature on statistical tests for equality of nonparametric regression and trend curves. Examples of such tests can be found in \cite{HaerdleMarron1990}, \cite{Hall1990}, \cite{King1991}, \cite{Delgado1993}, \cite{Kulasekera1995}, \cite{YoungBowman1995}, \cite{MunkDette1998}, \cite{Lavergne2001}, \cite{NeumeyerDette2003} and \cite{Pardo-Fernandez2007}. More recent approaches were developed in \cite{DegrasWu2012}, \cite{Zhang2012}, \cite{Hidalgo2014} and \cite{ChenWu2018}. Compared to existing methods, our test has the following crucial advantage: it is much more informative. Most existing procedures allow to test \textit{whether} the regression or trend curves under consideration are all the same or not. However, they do not allow to infer \textit{which} curves are different and \textit{where} (that is, in which parts of the support) they differ. Our multiscale approach, in contrast, conveys this information. Indeed, it even allows to make rigorous confidence statements about which curves $\lambda_i$ are different and where they differ. To the best of our knowledge, there is no other method available in the literature which allows to make such simultaneous confidence statements. As far as we know, the only other multiscale test for comparing trend curves has been developed in \cite{Park2009}. However, their analysis is mainly methodological and not backed up by a general theory. In particular, theory is only available for the special case $n = 2$. Moreover, the theoretical results are only valid under very severe restrictions on the family of time intervals $\mathcal{F}$. 
+Currently, the number of papers on COVID-19 is growing almost at an exponential rate. However, there is a profound lack of literature that compares the dynamics of the epidemic spread across countries from the statistical perspective. To the best of our knowledge, at the moment there are no statistical methods that allow the researchers to compare the epidemiological trends in different countries while being able to pinpoint the time periods where the differences occur. The results of such comparison may be further used to understand, for example, which non-pharmaceutical interventions (NPIs) affect the number of daily new cases and which mostly do not. Presently, the majority of the papers that analyse the country-specific dynamic of the epidemic can be split into two groups. Studies from the first group model the spread of the virus by means of deterministic compartmental models such as SIR model and its extensions (\cite{Atkeson2020}, \cite{Anastassopoulou2020}, \cite{Buckman2020}, \cite{Yang2020}, \cite{Wu2020}, \cite{Lin2020}, \cite{Read2020}, \cite{Fang2020}, \cite{Liu2020}, \cite{Gu2020}, \cite{Radulescu2020}), whereas studies from the second group analyse the country-specific effect (or lack thereof) of government interventions using multiple linear regression models (\cite{Kazemi2020}, \cite{Hsiang2020}), panel models (\cite{Abouk2020}, \cite{Alfano2020}, \cite{Bjornskov2020}, \cite{Jamison2020}, \cite{Siedner2020}, \cite{DebFurceri2020}, \cite{Jinjarak2020}), time series analysis (\cite{Gu2020}, \cite{LiLinton2020}, \cite{DongLinton2020}, \cite{Deb2020}), and different Bayesian models (\cite{Banholzer2020}, \cite{Flaxman2020}, \cite{Ferguson2020}). However, the conclusions of most of these studies are ambiguous and the models that are used in these papers often have severe limitations. In contrast, the model that we use in our paper is a very general non-parametric stochastic model without strong distributional assumptions that allow us to overcome most of the limitations and to perform the rigorous cross-country comparison of the spread of the virus.
 
+In terms of the research question, the present paper is closest in spirit to \cite*{DongLinton2020}, who study the country-specific trending behaviour of the COVID-19 data while taking into account very pronounced deterministic trends exhibited in most countries and the time series nature of the data at the same time. However, they are interested in the comparison of the overall efforts of different countries to "flatten the curve". We, in contrast, while also taking into account the very pronounced deterministic trends, are able to do much more. Specifically, we can identify the regions where "flattening the curve" was more effective in some country relative to the others. These more precise results can help the researchers identify possible factors which (directly or indirectly) force the changes in the growth patterns of COVID-19, for better or for worse.
+
+Even though our multiscale test is motivated by the current COVID-19 crisis, its applicability is by no means restricted to this specific event. It is a general method to compare nonparametric trends in epidemiological (count) data. It thus contributes to the literature on statistical tests for equality of nonparametric regression and trend curves. Examples of such tests can be found in \cite{HaerdleMarron1990}, \cite{Hall1990}, \cite{King1991}, \cite{Delgado1993}, \cite{Kulasekera1995}, \cite{YoungBowman1995}, \cite{MunkDette1998}, \cite{Lavergne2001}, \cite{NeumeyerDette2003} and \cite{Pardo-Fernandez2007}. More recent approaches were developed in \cite{DegrasWu2012}, \cite{Zhang2012}, \cite{Hidalgo2014} and \cite{ChenWu2018}. Compared to existing methods, our test has the following crucial advantage: it is much more informative. Most existing procedures allow to test \textit{whether} the regression or trend curves under consideration are all the same or not. However, they do not allow to infer \textit{which} curves are different and \textit{where} (that is, in which parts of the support) they differ. Our multiscale approach, in contrast, conveys this information. Indeed, it even allows to make rigorous confidence statements about which curves $\lambda_i$ are different and where they differ. To the best of our knowledge, there is no other method available in the literature which allows to make such simultaneous confidence statements. As far as we know, the only other multiscale test for comparing trend curves has been developed in \cite{Park2009}. However, their analysis is mainly methodological and not backed up by a general theory. In particular, theory is only available for the special case $n = 2$. Moreover, the theoretical results are only valid under very severe restrictions on the family of time intervals $\mathcal{F}$. 
 
 The paper is structured as follows. As already mentioned above, Section \ref{sec:model} details the model setting which underlies our analysis. The multiscale test is developed step by step in Section \ref{sec:test}. To keep the presentation as clear as possible, the technical details are deferred to the Appendix and the Supplementary Material. Section \ref{sec:empirics} contains the empirical part of the paper. There, we run some simulation experiments to demonstrate that the multiscale test has the formal properties predicted by the theory. Moreover, we use the test to compare the outbreak patterns of the COVID-19 epidemic in a number of European countries. 
 %In Section ??, we show that it is even useful beyond this epidemiological context, for example, in the context of financial volatility modelling. We briefly discuss this as well as some further extensions of our methods in Section ??.
 
-{\color{red}
-\section{Literature review on COVID-19}
+%{\color{red}
+%\section{Literature review on COVID-19}
+%
+%What can be done further? \cite{Han2020} present a comparative health policy analysis with a detailed description of the non-pharmaceutical interventions that influence the spread of the virus. However, the focus of this paper is relatively broad (almost $6$ months) and it would greatly benefit from narrowing down the  possible regions of interest.
 
-Even though the number of papers on COVID-19 is currently growing at an enormous rate, there is a profound lack of literature that study the dynamics of the spread from the statistical perspective.
-
-This study contributes to the literature in at least two important ways. First, it fills the gap in modelling the pandemic by providing a rigorous statistical method that can be used to study the spread of the virus. Second, it expands the theory on curve comparison: we provide a general method to compare nonparametric trends that can be used beyond the context of COVID-19 pandemic.
-
-There are many papers on comparing case-fatality rates across countries: \cite{Khafaie2020}... However, most of these papers report only basic descriptive analysis of the data without any statistical analysis how these statistics develop over time.
-
-\cite{Alfano2020} analyse the effect (or lack thereof) of lockdown measures on the number of daily new cases across countries. Specifically, they consider a panel model where one of the covariates is a dummy-variable that indicates whether the country has a lockdown policy for a specific number of days or not. They find out that this dummy variable has a negative and statistically significant coefficient for the whole range of days considered, suggesting that countries that implemented the lockdown have fewer new cases per day than countries that did not. However, when considering the European subsample the coefficient is positive and statistically significant up to day 13, statistically insignificant between days 13 and 17, and negative and statistically significant from day 17 on. These results suggest that the relationship between the number of new cases per day and the governmental response policies might be much more complicated than just linear.
+%\cite{Alfano2020} analyse the effect (or lack thereof) of lockdown measures on the number of daily new cases across countries. Specifically, they consider a panel model where one of the covariates is a dummy-variable that indicates whether the country has a lockdown policy for a specific number of days or not. They find out that this dummy variable has a negative and statistically significant coefficient for the whole range of days considered, suggesting that countries that implemented the lockdown have fewer new cases per day than countries that did not. However, when considering the European subsample the coefficient is positive and statistically significant up to day 13, statistically insignificant between days 13 and 17, and negative and statistically significant from day 17 on. These results suggest that the relationship between the number of new cases per day and the governmental response policies might be much more complicated than just linear.
 
 
-\cite{Banholzer2020} - Bayesian hierarchical model, how lockdown affected number of cases in 20 countries. 
-
-SIR (Susceptible, Infected, Removed) model or its extensions such as SEIR (Susceptible, Exposed, Infected, Removed) or SIRD (Susceptible, Infected, Removed, Deceased) are one of the most widely used models in the study of the spread of COVID-19: \cite{Anastassopoulou2020}, \cite{Yang2020}, \cite{Wu2020}, \cite{Lin2020}, \cite{Read2020}.
-
-A brief introduction to the baseline SIR model is as follows. The fixed population is broke down into $3$ or more compartments, which can change over time. Changes of each compartment can be described using ordinary differential equations that depends on the transmission rate. Knowing the initial conditions, the model can be easily solved.
-
-However, this model has significant disadvantages. First, traditional SIR model assumes a closed system (no individuals move in or out), which is a reasonable assumptions under the restrictions on travel. However, several countries either introduced these restrictions very late, or lifted them quite early. Hence, the closed system assumption may not be plausible for substantial periods of time. Second, SIR framework only takes into account human-to-human transmission of the infection, whereas the indirect transmission pathway from the environment to human hosts is also a highly possible route to spread the infection. Then, one of the main parameters of SIR model, mainly transmission rate, is considered to be constant over the whole period of the pandemic or is assumed to change in a discrete, instantaneous way (\cite{deBrower2020}). This assumption most probably is violated since a lot of countries implemented the lockdown measures gradually, from cancelling big events to full lockdown, which led to reducing the transmissibillity of the virus step by step.
-
-There are different ways to address these issues: \cite{Chudik2020} integrate social distancing in the SIR model, 
-Most of these papers focus on forecasting the results mainly for one specific country. Moreover, SIR models are not suited for rigorous statistical comparison across different countries and are very succeptible to the poor data quality. And as we know, the number of recovered individuals is rarely reported and even more rarely reliable, this introduces sever limitations to the SIR models.
-
-Our paper addresses most of these issues. First of all, our approach is practically nonparametric, without major restrictions on the distribtuion of the data. Then, there is no need to estimate additional parameters such as the incubation period of the virus or the transmission rate
-
- approach does not have this limitation.
-
-\cite{LiLinton2020}
- \cite{Alfano2020} and \cite{Courtemanche2020}.
-
-A lot of assumptions underneath. For example, `` is reported to be between $2$ and $14$ days, we chose the midpoint of $7$ days''. Plus there are no data on the number of people exposed to infection under different social distancing measures, because this kind of lockdown does not have any precedent.
-	
-Kucharski et al. fitted a stochastic transmission dynamic model to multiple publicly available datasets on cases in Wuhan and internationally exported cases from Wuhan (4). Chinazzi et al. used a Global Epidemic and Mobility Model (GLEAM), an individual-based, stochastic, and spatial epidemic model, to model the international spread of the COVID-19 out-break by emulating the flow of travelers among over 3,200 sub-populations using real transportation data (5).
-
-Pan et al. described the distinct patterns of the effective reproduction numbers at the different stages, characterized by different degrees of interventions, of the epidemic in Wuhan (6). Yang et al. also included an additional parameter r(t) (not the effective regeneration number), which denotes the number of contacts for each individual per day. The authors used r(t)=15, 3, and 10, for the days before January 23rd (no intervention), between January 23 and March 1st (fully controls) and after March 1st (mild controls). The inclusion of r(t) made it possible to introduce the effect of interventional and control policies, including travelling and public gathering restrictions. Wei et al. further proposed a SEIR+CAQ model which integrated information on the mechanisms of transmission, profiles of infections and quarantine policies (7).''
-
-The value of dynamic models, however, lies in the early warning of infectious disease outbreaks, the decision supporting before the implementation of prevention and control measures, and the evaluation of the effects of public health intervention after the outbreak. Yang et al. estimated that the effect of initiating the interventions five days after the actual time would increase the number of cases exponentially to 173,372 cases on March 4, 2020. Our estimation based on SEIR showed that the policies constraining public transportations reduced 85\% of infections (8).
-
-However, we propose that it is important to notice that when declaring some intervention is the “cause” of the reduction of COVID-19 cases, it should be stated in a “causal” language. That is, what would have been if this intervention had not been performed? A common framework of policy evaluation is the “counter factual”, in which the causal intervention effect is defined as the difference between the epidemics in the real world, compared to the epidemics had no interventions been performed, maybe contrary to the fact. Of course, it is impossible as in the real world the interventions are either performed or not. Thus when making policies evaluation, the scientists should bear in mind that whether conditions are “exchangeable” for the epidemics with or without the intervention. It is recommended that the sensitivity analysis should be applied to assess the robustness of the evaluation. Scientists should also carefully evaluate whether the data collected is sufficient to make a causal policy evaluation.
-
-With the rapid improvement on computational capacity, machine learning methods have been widely used in medical research. The authors used long short term memory (LSTM) model, an improvement of recurrent neural network (RNN), to predict the number of new cases. The RNN and LSTM models had been widely used in the natural language processing to predict the future elements in a word or a sentence given the previous elements. As most of the machine learning methods are data-driven, it is important use an independent sample to validate the present model. The authors used the 2003 SARS data as the training set, and COVID-19 as the testing set. Their results showed a remarkable agreement between the actual number of cases and the results. Hu et al. developed the modified auto-encoder (MAE), an artificial intelligence (AI) based method, for real time forecasting the number of the new and cumulative confirmed cases and deaths of COVID-19 under various intervention scenarios in more than 100 countries (11). While we believe that there will be more and more AI ML based methods applied in the analysis of COVID-19, it should be noted that the ML base methods only relax the assumptions for the form of traditional dynamic models. In agreement with Zhong’s opinions, we believe that the integration of deep learning, web scraping, and other big data technologies will hopefully improve the precision of COVID-19 predictions (12). However, policy evaluation based on ML analysis still need the scientists to understand what the estimand is and whether the data can answer a causal question.
-
-}
+%SIR (Susceptible, Infected, Removed) model or its extensions such as SEIR (Susceptible, Exposed, Infected, Removed) or SIRD (Susceptible, Infected, Removed, Deceased) are one of the most widely used models in the study of the spread of COVID-19. A brief introduction to the baseline SIR model is as follows. The fixed population is broke down into $3$ or more compartments, which can change over time. Changes of each compartment can be described using ordinary differential equations that depends on the transmission rate. Knowing the initial conditions, the model can be easily solved.
+%
+%However, this model has significant disadvantages. First, traditional SIR model assumes a closed system (no individuals move in or out), which is a reasonable assumptions under the restrictions on travel. However, several countries either introduced these restrictions very late, or lifted them quite early. Hence, the closed system assumption may not be plausible for substantial periods of time. Second, SIR framework only takes into account human-to-human transmission of the infection, whereas the indirect transmission pathway from the environment to human hosts is also a highly possible route to spread the infection. Then, one of the main parameters of SIR model, mainly transmission rate, is considered to be constant over the whole period of the pandemic or is assumed to change in a discrete, instantaneous way (\cite{deBrower2020}). This assumption most probably is violated since a lot of countries implemented the lockdown measures gradually, from cancelling big events to full lockdown, which led to reducing the transmissibillity of the virus step by step.
+%
+%There are different ways to address these issues: \cite{Chudik2020} integrate social distancing in the SIR model, 
+%Most of these papers focus on forecasting the results mainly for one specific country. Moreover, SIR models are not suited for rigorous statistical comparison across different countries and are very succeptible to the poor data quality. And as we know, the number of recovered individuals is rarely reported and even more rarely reliable, this introduces sever limitations to the SIR models.
+% \cite{Courtemanche2020}.
+%	
+%Kucharski et al. fitted a stochastic transmission dynamic model to multiple publicly available datasets on cases in Wuhan and internationally exported cases from Wuhan (4). Chinazzi et al. used a Global Epidemic and Mobility Model (GLEAM), an individual-based, stochastic, and spatial epidemic model, to model the international spread of the COVID-19 out-break by emulating the flow of travelers among over 3,200 sub-populations using real transportation data (5).
+%
+%Pan et al. described the distinct patterns of the effective reproduction numbers at the different stages, characterized by different degrees of interventions, of the epidemic in Wuhan (6). 
+%
+%The value of dynamic models, however, lies in the early warning of infectious disease outbreaks, the decision supporting before the implementation of prevention and control measures, and the evaluation of the effects of public health intervention after the outbreak. 
+%
+%However, we propose that it is important to notice that when declaring some intervention is the “cause” of the reduction of COVID-19 cases, it should be stated in a “causal” language. That is, what would have been if this intervention had not been performed? It is recommended that the sensitivity analysis should be applied to assess the robustness of the evaluation. Scientists should also carefully evaluate whether the data collected is sufficient to make a causal policy evaluation.
+%
+%With the rapid improvement on computational capacity, machine learning methods have been widely used in medical research. The authors used long short term memory (LSTM) model, an improvement of recurrent neural network (RNN), to predict the number of new cases. The RNN and LSTM models had been widely used in the natural language processing to predict the future elements in a word or a sentence given the previous elements. As most of the machine learning methods are data-driven, it is important use an independent sample to validate the present model. The authors used the 2003 SARS data as the training set, and COVID-19 as the testing set. Their results showed a remarkable agreement between the actual number of cases and the results. Hu et al. developed the modified auto-encoder (MAE), an artificial intelligence (AI) based method, for real time forecasting the number of the new and cumulative confirmed cases and deaths of COVID-19 under various intervention scenarios in more than 100 countries (11). While we believe that there will be more and more AI ML based methods applied in the analysis of COVID-19, it should be noted that the ML base methods only relax the assumptions for the form of traditional dynamic models. In agreement with Zhong’s opinions, we believe that the integration of deep learning, web scraping, and other big data technologies will hopefully improve the precision of COVID-19 predictions (12). However, policy evaluation based on ML analysis still need the scientists to understand what the estimand is and whether the data can answer a causal question.
+%
+%}
 \section{Model setting}\label{sec:model}
 
 
@@ -142,7 +129,7 @@ where $\eta_{it}$ has zero mean and unit variance. In this model, both the mean 
 where $\sigma$ is a scaling factor that allows the variance to be a multiple of the mean function $\lambda_i$. In what follows, we assume that the observed data $\X_{it}$ are produced by model \eqref{eq:model}, where the noise residuals $\eta_{it}$ have zero mean and unit variance but we do not impose any further distributional assumptions on them.
 
 
-Poisson and quasi-Poisson models are often used in the literature on epidemic modelling. \cite{De2020}, for example, assume that the observed COVID-19 case count in country $i$ follows a Poisson distribution with parameter $\lambda_i$ being a linear function of some covariate $Z_i$, that is, $\lambda_i = \beta Z_i$. \cite{Pellis2020} consider a quasi-Poisson model for the number of new COVID-19 cases. They in particular examine (a) a version of the model where the mean function is parametrically restricted to be exponentially growing with a constant growth rate and (b) a version where the mean function is modelled nonparametrically by splines. \cite{Tobias2020} analyze data on the accumulated number of cases using quasi-Poisson regression, where the mean function is modelled parametrically as a piecewise linear curve with known change points.
+Poisson and quasi-Poisson models are often used in the literature on epidemic modelling. \cite{De2020}, for example, assume that the observed COVID-19 case count in country $i$ follows a Poisson distribution with parameter $\lambda_i$ being a linear function of some covariate $Z_i$, that is, $\lambda_i = \beta Z_i$. Furthermore, \cite{Banholzer2020} model the number of new cases using a negative binomial distribution with an unknown overdispersion parameter that is the same across countries. \cite{Pellis2020} consider a quasi-Poisson model for the number of new COVID-19 cases. They in particular examine (a) a version of the model where the mean function is parametrically restricted to be exponentially growing with a constant growth rate and (b) a version where the mean function is modelled nonparametrically by splines. \cite{Tobias2020} analyze data on the accumulated number of cases using quasi-Poisson regression, where the mean function is modelled parametrically as a piecewise linear curve with known change points.
 %Even though these papers consider Poisson and quasi-Poisson models similar to ours, these models are used to analyze different aspects of the COVID-19 pandemic than in our paper.  
  
 
@@ -261,19 +248,16 @@ In Theorem \ref{theo1} of the Appendix, we prove that under appropriate regulari
 \end{align}
 where $\indexset_0$ is the set of triples $(i,j,k) \in \indexset$ for which $H_0^{(ijk)}$ holds true. Verbally, \eqref{eq:simconfstat} can be expressed as follows:  
 \begin{equation}\label{eq:confidencestatement1}
-\begin{minipage}[c][1cm][c]{13cm}
-\textit{With (asymptotic) probability at least $1-\alpha$, the null hypothesis $H_0^{(ijk)}$ is violated for all $(i,j,k) \in \indexset$ for which the test rejects $H_0^{(ijk)}$.} 
+\begin{minipage}[c][1.5cm][c]{13cm}
+\textit{We can claim with (asymptotic) probability at least $1-\alpha$ that the null hypothesis $H_0^{(ijk)}$ is violated for all $(i,j,k) \in \indexset$ for which the test rejects $H_0^{(ijk)}$.} 
 \end{minipage}
 \end{equation}
 In other words:
-
-{\color{red}
 \begin{equation}\label{eq:confidencestatement2}
-\begin{minipage}[c][1cm][c]{13cm}
+\begin{minipage}[c][1.5cm][c]{13cm}
 \textit{With (asymptotic) probability at least $1-\alpha$, the set of the intervals where the functions $\lambda_i$ and $\lambda_j$ differ contains the set of the intervals for which the test rejects $H_0^{(ijk)}$.} 
 \end{minipage}
 \end{equation}
-}
 %\begin{equation}\label{eq:confidencestatement2}
 %\begin{minipage}[c][1cm][c]{13cm}
 %\textit{With (asymptotic) probability at least $1-\alpha$, the functions $\lambda_i$ and $\lambda_j$ differ on the interval $\mathcal{I}_k$ for all $(i,j,k) \in \indexset$ for which the test rejects $H_0^{(ijk)}$.} 
@@ -285,7 +269,7 @@ The second result characterizes the power of the multiscale test against local a
 \begin{equation}\label{loc-alt}
 \lambda_{i, T}(w) - \lambda_{j, T}(w) \ge c_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k}, 
 \end{equation}
-where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$ faster than $\frac{\sqrt{\log T}\sqrt{\log \log T}}{\log \log \log T}$ We denote the set of triplets $(i, j, k) \in \indexset$ for which \eqref{loc-alt} holds true as $\indexset_1$. Clearly $\indexset_0 \cap \indexset_1 = \emptyset$. According to Corollary \ref{corollary2} in the Appendix, we can make the following statement about the asymptotic power of the test:
+where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$ faster than $\frac{\sqrt{\log T}\sqrt{\log \log T}}{\log \log \log T}$. We denote the set of triplets $(i, j, k) \in \indexset$ for which \eqref{loc-alt} holds true as $\indexset_1$. Clearly $\indexset_0 \cap \indexset_1 = \emptyset$. According to Corollary \ref{corollary2} in the Appendix, we can make the following statement about the asymptotic power of the test:
 \begin{equation}\label{eq:power}
 \pr\Big( \forall (i,j,k) \in \indexset_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1).
 \end{equation}
@@ -306,12 +290,11 @@ To graphically present the test results, we produce a plot for each pair of coun
 
 
 According to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals in $\intervals_{\text{reject}}(i,j)$ for $(i,j) \in \pairs$: 
-{\color{red}
 \begin{equation}\label{eq:confidencestatement3}
 \begin{minipage}[c][1.75cm][c]{13cm}
-\textit{We can claim with (asymptotic) probability at least $1-\alpha$, that for every pair of countries $(i,j) \in \pairs$, the functions $\lambda_i$ and $\lambda_j$ differ on each interval in $\intervals_{\text{reject}}(i,j)$.} 
+\textit{We can claim with (asymptotic) probability at least $1-\alpha$ that for every pair of countries $(i,j) \in \pairs$, the functions $\lambda_i$ and $\lambda_j$ differ on each interval in $\intervals_{\text{reject}}(i,j)$.} 
 \end{minipage}
-\end{equation}}
+\end{equation}
 Hence, we can claim with statistical confidence at least $1-\alpha$ that the functions $\lambda_i$ and $\lambda_j$ differ on each time interval which is depicted in the plots of our graphical device. Since $\intervals_{\text{reject}}^{\text{min}}(i,j) \subseteq \intervals_{\text{reject}}(i,j)$ for any $(i,j) \in \pairs$, the confidence statement \eqref{eq:confidencestatement3} trivially remains to hold true when the sets $\intervals_{\text{reject}}(i,j)$ are replaced by $\intervals_{\text{reject}}^{\text{min}}(i,j)$.
 
 \section{Empirical application to COVID-19 data}\label{sec:empirics} 
@@ -451,7 +434,7 @@ There are many open questions surrounding the current COVID-19 pandemic. A quest
 \subsubsection{Data}
 
 
-We analyze data from five European countries: Germany, Italy, France, Spain and the United Kingdom. For each country $i$, we observe a time series $\mathcal{X}_i = \{ X_{it}: 1 \le t \le T \}$, where $X_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available on the homepage of the European Center for Disease Prevention and Control (\texttt{https://www.ecdc.europa.eu}) and were downloaded on 5 October 2020. {\color{red} As already mentioned in the Introduction, we take the first Monday after reaching $100$ confirmed case in each country as the starting date $t=1$. Beginning the time series for every country on the day when that country reaches 100 confirmed cases is a common way of ``normalizing'' the data \citep[cp.][]{Cohen2020}. Moreover, aligning the data by Monday takes into account the discrepancies in reporting the cases during the weekends, making the data even more comparable across countries. In order to check robustness of such alignment of the data, we report the results of analysis of these five countries but without alignment by the days of the week in the Section \ref{s:subsec:app:2} in the Supplement.} The time series length $T$ is taken {\color{red} to be equal to $150$, which covers the first wave of the pandemic in all of the considered countries. We also repeat the analysis for longer period of time and report the results in Section \ref{s:subsec:app:3} in the Supplement. However, the poor quality of the data in Spain (which can already be seen by the end of the considered time perios) heavily influences the estimation error of $\sigma^2$ which clearly results in more conservative results of the testing procedure.} The resulting dataset consists of $n = 5$ time series, each with $T = 150$ observations. Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in $4$ replacements. Plots of the observed time series are presented in the upper panels (a) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
+We analyze data from five European countries: Germany, Italy, France, Spain and the United Kingdom. For each country $i$, we observe a time series $\mathcal{X}_i = \{ X_{it}: 1 \le t \le T \}$, where $X_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available on the homepage of the European Center for Disease Prevention and Control (\texttt{https://www.ecdc.europa.eu}) and were downloaded on 5 October 2020. As already mentioned in the Introduction, we take the first Monday after reaching $100$ confirmed case in each country as the starting date $t=1$. Beginning the time series for every country on the day when that country reaches 100 confirmed cases is a common way of ``normalizing'' the data \citep[cp.][]{Cohen2020}. Moreover, aligning the data by Monday takes into account the discrepancies in reporting the cases during the weekends, making the data even more comparable across countries. In order to check robustness of such alignment of the data, we report the results of analysis of these five countries but without alignment by the days of the week in Section \ref{s:subsec:app:2} in the Supplement. The time series length $T$ is taken to be equal to $150$, which covers the first wave of the pandemic in all of the considered countries. We also repeat the analysis for longer period of time and report the results in Section \ref{s:subsec:app:3} in the Supplement. However, the poor quality of the data in Spain (which can already be seen by the end of the considered time period) heavily influences the estimation error of $\sigma^2$ which clearly results in more conservative results of the testing procedure. The resulting dataset consists of $n = 5$ time series, each with $T = 150$ observations. Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in $4$ replacements. Plots of the observed time series are presented in the upper panels (a) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
 
 
 To interpret the results produced by our multiscale test, we consider the Government Response Index (GRI) from the Oxford COVID-19 Government Response Tracker (OxCGRT) \citep{Hale2020}. The GRI measures how severe the actions are that are taken by a country's government to contain the virus. It is calculated based on several common government policies such as school closures and travel restrictions. The GRI ranges from $0$ to $100$, with $0$ corresponding to no response from the government at all and $100$ corresponding to full lockdown, closure of schools and workplaces, ban on travelling, etc. Detailed information on the collection of the data for government responses and the methodology for calculating the GRI is provided in \cite{Hale2020paper}. Plots of the GRI time series are given in panels (c) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
@@ -502,12 +485,11 @@ We now have a closer look at the results in Figures \ref{fig:Germany:Italy}--\re
 %Moreover, our test allows us to localise these differences using the notion of minimal intervals. Specifically, we can say that significant differences between trend curves in Germany and Italy occur between days $46$ and $77$. 
 Taken together, our results provide evidence that the epidemic developed very similarly in Germany and Italy until a peak was reached around day $40$. Thereafter, however, the German time series exhibits a significantly stronger downward trend than the Italian one. 
 
+Comparison of Germany and Spain reveals the picture that is almost opposite to the one discussed above: the test detects significant differences approximately up to day $50$ and after day $120$, but not in between. This shows that in the beginning of the pandemic Spain experienced more substantial increase in the number of cases, but after the peak reached almost the same level as Germany. However, the situation seems to repeat during the second wave, and thus the trends in Germany and Spain evolve differently towards the end of the considered time period.
 
-{\color{red} Comparison of Germany and Spain reveals the picture that is almost opposite to the one discussed above: the test detects significant differences approximately up to day $50$ and after day $120$, but not in between. This shows that in the beginning of the pandemic Spain experienced more substantial increase in the number of cases, but after the peak reached almost the same level as Germany. However, the situation seems to repeat during the second wave, and thus the trends in Germany and Spain evolve differently towards the end of the considered time period.
+Inspecting Figure \ref{fig:Germany:France}, a quite different picture arises when comparing Germany with France. The test detects significant differences between the German and the French trends up to (approximately) day $40$ but not thereafter. Hence, we find that the time trends evolve differently during the outbreak of the crisis, but they appear to decrease in more or less the same fashion after a peak was reached. 
 
-Inspecting Figure \ref{fig:Germany:France}, a quite different picture arises when comparing Germany with France. The test detects significant differences between the German and the French trends up to (approximately) day $40$ but not thereafter. Hence, we find that the time trends evolve differently during the outbreak of the crisis, but they appear to decrease in more or less the same fashion after a peak was reached. Even the high volatility of the French data towards the end of the time period seems to come from the process of data collection and not from the differences in trend functions.
-
-Finally, the comparison of Germany with the UK in Figure \ref{fig:Germany:UK} reveals significant differences between the time trends after approximately day $35$. Inspecting the time series in panel (a), it is quite obvious that the UK trend evolves differently from the German one after day $40$. Moreover, our test does not detect significant differences between the trends during the onset of the crisis, which is not an obvious conclusion from the time series plot in panel (a).}
+Finally, the comparison of Germany with the UK in Figure \ref{fig:Germany:UK} reveals significant differences between the time trends after approximately day $35$. Inspecting the time series in panel (a), it is quite obvious that the UK trend evolves differently from the German one after day $40$. Moreover, our test does not detect significant differences between the trends during the onset of the crisis, which is not an obvious conclusion from the time series plot in panel (a).
 
 
 \subsubsection{Discussion}
@@ -516,7 +498,7 @@ Finally, the comparison of Germany with the UK in Figure \ref{fig:Germany:UK} re
 Having identified significant differences between the epidemic trends in the five countries under consideration, one may ask next what are the causes of these differences. As already mentioned at the beginning of this section, this question cannot be answered by our test. Rather, a further analysis which presumably goes beyond pure statistics is needed to shed some light on it. We here do not attempt to provide any answers. We merely discuss some observations which become apparent upon considering our test results in the light of the Government Response Index (GRI). For reasons of brevity, we focus on the comparison of Germany with Italy and Spain in Figures \ref{fig:Germany:Italy} and \ref{fig:Germany:Spain}. 
 
 
-According to our test results in Figure \ref{fig:Germany:Spain}, there are significant differences between the trends in Germany and Spain during the onset of the epidemic up to about day $50$, with Spain having more new cases of infections than Germany on most days. After day $50$, the trends become quite similar and start to decrease at approximately the same rate {\color{red} until approximately day $120$}. This may be due to the fact that Spain in general introduced more severe measures of lockdown than Germany (as can be seen upon inspecting the GRI in panel (c) of Figure \ref{fig:Germany:Spain}), which may have helped to battle the spread of infection. {\color{red} Furthermore, around days $110$-$120$ the measures in Spain were less strict than in Germany, which could have caused the detected differences in the evolution of the trends towards the end of the time period.} However, a much more thorough analysis is of course needed to find out whether this is indeed the case or whether other factors were mainly responsible. 
+According to our test results in Figure \ref{fig:Germany:Spain}, there are significant differences between the trends in Germany and Spain during the onset of the epidemic up to about day $50$, with Spain having more new cases of infections than Germany on most days. After day $50$, the trends become quite similar and start to decrease at approximately the same rate until approximately day $120$. This may be due to the fact that Spain in general introduced more severe measures of lockdown than Germany (as can be seen upon inspecting the GRI in panel (c) of Figure \ref{fig:Germany:Spain}), which may have helped to battle the spread of infection. Furthermore, around days $110$-$120$ the measures in Spain were less strict than in Germany, which could have caused the detected differences in the evolution of the trends towards the end of the time period. However, a much more thorough analysis is of course needed to find out whether this is indeed the case or whether other factors were mainly responsible. 
 
 
 Turning to the comparison of Germany and Italy, we found that the German trend drops down significantly faster than the Italian one after approximately day $40$. Interestingly, the GRI of Italy almost always lies above that of Germany. Hence, even though Italy has in general taken more severe and restrictive measures against the virus than Germany, it appears that the virus could be contained better in Germany (in the sense that the trend of daily new cases went down significantly faster in Germany than in Italy). This suggests that there are indeed important factors besides the level of government response to the pandemic which substantially influence the trend of new COVID-19 cases. 
@@ -529,144 +511,144 @@ Even though we can of course not fully exclude this possibility, our test result
 %(https://ourworldindata.org/covid-testing-us-uk-korea-italy)
 Nevertheless, visual inspection of the raw and smoothed data in panels (a) and (b) of Figure \ref{fig:Germany:Italy} suggests that the underlying time trends are very similar up to day $36$. This is confirmed by our multiscale test which does not find any significant differences before that day. Hence, the different test regimes in Germany and Italy towards the beginning of the pandemic do not appear to have an overly strong effect and to produce spurious differences between the time trends. This suggests that the differences detected by our multiscale test indeed reflect differences in the way the virus spread in Germany and Italy rather than being mere artefacts of different test regimes. 
 
-{\color{red}
-\section{Extensions}
-Now suppose that instead of \eqref{eq:model}, we consider the following nonparametric regression equation:
-\begin{equation*}
-\X_{it} = c_i \lambda_i\Big(\frac{t}{T}\Big) + \varepsilon_{it} \quad \text{with} \quad \varepsilon_{it} = \sigma \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, 
-\end{equation*}
-where $c_i$ is the country-specific scaling parameter that accounts for the size of the country or population density. We introduce this additional parameter in order to be able to compare countries that differ substantially in terms of the population, i.e. Luxembourg and Russia. In our application, we compare 5 European countries that are similar in many aspects, including size, but for further research we need to be able to account for the differences between the countries.
-
-Hence, we would like to test the hypothesis that the time trends of new COVID-19 cases in different countries are the same up to some scaling parameter. For the identification purposes, we will need to assume that for each $i \in \mathcal{C}$ we have $\int_0^1 \lambda_i(u)du = 1$. Only then we are able to estimate the scaling parameter $c_i$. Furthermore, we need to assume that $0 <c_{\min} \leq c_i \leq c_{\max}$ for all $i \in \mathcal{C}$. Thus, the testing procedure is as follows.
-
-\textit{Step 1}
-
-First, we estimate the scaling parameter:
-\begin{align*}
-\widehat{c_i} &= \frac{1}{T}\sum_{t = 1}^T X_{it} \\
-&= c_i \frac{1}{T}\sum_{t = 1}^T \lambda_i\Big(\frac{t}{T}\Big) + \sigma\frac{1}{T}\sum_{t = 1}^T \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}\\
-& = c_i \frac{1}{T}\sum_{t = 1}^T \lambda_i\Big(\frac{t}{T}\Big) + o_P(1)\\
-& \stackrel{(*)}{=} c_i + o_P(1),
-\end{align*}
-where in $(*)$ we used the normalization $\int_0^1 \lambda_i(u)du = 1$. Hence, $\widehat{c}_i$ is a consistent estimator of $c_i$.
-
-\textit{Step 2}
-
-Instead of working with $X_{it}$, we consider the following variables:
-\begin{align*}
-X^*_{it} &= \frac{X_{it}}{\frac{1}{T}\sum_{t = 1}^T X_{it}} \\
-&= \frac{c_i}{\widehat{c}_i} \lambda_i \Big(\frac{t}{T}\Big) + \frac{\sigma}{\widehat{c}_i} \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}.
-\end{align*}
-
-A statistic to test the hypothesis $H_0^{(ijk)}$ for a given triple $(i,j,k)$ is then constructed as follows. Instead of $\hat{s}_{ijk,T}$, we work with 
-\[ \hat{s}_{ijk,T}^* = \frac{1}{\sqrt{Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it}^* - \X_{jt}^*). \]
-Then
-\begin{align*}
-\frac{\hat{s}_{ijk,T}^*}{\sqrt{Th_k}} =& \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it}^* - \X_{jt}^*)\\
-=& \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \bigg( \lambda_i \Big(\frac{t}{T}\Big)  - \lambda_j \Big(\frac{t}{T}\Big)\bigg) + R_1 + R_2,
-\end{align*}
-where
-\begin{align*}
-R_1 &= \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \bigg( \Big(\frac{c_i}{\widehat{c}_i} - 1 \Big) \lambda_i \Big(\frac{t}{T}\Big)  - \Big(\frac{c_j}{\widehat{c}_j} - 1 \Big) \lambda_j \Big(\frac{t}{T}\Big)\bigg),\\
-R_2& =  \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big( \frac{\sigma}{\widehat{c}_i} \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} - \frac{\sigma}{\widehat{c}_j} \sqrt{c_j \lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt} \Big).
-\end{align*}
-Since $\widehat{c}_i = c_i + o_P(1)$ and $0 \leq  \sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) \lambda_i \big(\frac{t}{T}\big) \leq h_k \lambda_{max}$, we have
-\begin{align}\label{eq:aux1}
-|R_1| &\leq \Big|\frac{c_i}{\widehat{c}_i} - 1 \Big| \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \lambda_i \Big(\frac{t}{T}\Big)  + \Big|\frac{c_j}{\widehat{c}_j} - 1 \Big| \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \lambda_j \Big(\frac{t}{T}\Big),\nonumber \\
-&= o_P(1) \cdot \frac{\lambda_{max}}{T} + o_P(1) \cdot \frac{\lambda_{max}}{T} = o_P\Big(\frac{1}{T}\Big).
-\end{align}
-Furthermore, applying the law of large numbers, we get:
-\begin{align*}
- \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}  = o_P(1).
-\end{align*}
-Hence, if we uniformly bound the scaling parameters away from 0, i.e. $\exists \, c_{\min}$ such that for all $i \in \mathcal{C}$ we have $0 < c_{\min} \leq c_i$, we can use the fact that $\frac{\sigma}{\widehat{c}_i} = O_P(1)$ to get that
-\begin{align}\label{eq:aux2}
-R_2& =  \frac{\sigma}{\widehat{c}_i} \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} -\frac{\sigma}{\widehat{c}_j}\frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)  \sqrt{\lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt}\nonumber\\
-& = o_P(1).
-\end{align}
-Combining \eqref{eq:aux1} and \eqref{eq:aux2} together, we get $\hat{s}^*_{ijk,T}/\sqrt{Th_k} = (Th_k)^{-1} \sum_{t=1}^T \ind(t/T \in \mathcal{I}_k) \{\lambda_i(t/T) - \lambda_j(t/T)\} + o_p(1)$ for any fixed pair of countries $(i,j)$. Hence, the statistic $\hat{s}^*_{ijk,T}/\sqrt{Th_k}$ estimates the average distance between the functions $\lambda_i$ and $\lambda_j$ on the interval $\mathcal{I}_k$. The variance of $\hat{s}^*_{ijk,T}$ can not be easily calculated:
-\begin{align*}
- \var(\hat{s}^*_{ijk,T})  =&\frac{1}{Th_k} \var \Big( \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (X_{it}^* - X_{jt}^*) \Big)\\
-=&\frac{1}{Th_k} \var \Big( \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) X_{it}^*\Big) + \frac{1}{Th_k} \var \Big( \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) X_{jt}^*\Big)\\
- = &\frac{1}{Th_k} \var \bigg( \frac{\sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) X_{it}}{\frac{1}{T}\sum\nolimits_{t=1}^T X_{it}} \bigg) + \frac{1}{Th_k} \var \bigg( \frac{\sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) X_{jt}}{\frac{1}{T}\sum\nolimits_{t=1}^T X_{jt}} \bigg),
-\end{align*}
-but we can heuristically approximate it. Suppose that we actually know $c_i$ instead of estimating it. Then we have
-\begin{align*}
-& \var \bigg( \frac{\sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) X_{it}}{c_i} \bigg) \\
-&\quad= \var \bigg(\sum\nolimits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \lambda_i \big(\frac{t}{T}\big) + \sum\nolimits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)\frac{\sigma}{\sqrt{c_i}} \sqrt{\lambda_i \big(\frac{t}{T}\big)} \eta_{it} \bigg) \\
-&\quad = \frac{\sigma^2}{c_i}  \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)\lambda_i \big(\frac{t}{T}\big) \var (\eta_{it})\\
-&\quad = \frac{\sigma^2}{c_i}  \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)\lambda_i \big(\frac{t}{T}\big).
-\end{align*}
-Then (very heuristically) we have
-\begin{align*}
- \var(\hat{s}^*_{ijk,T})  \approx\frac{\sigma^2}{Th_k}  \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big\{ \frac{\lambda_i \big(\frac{t}{T}\big)}{c_i} + \frac{\lambda_j \big(\frac{t}{T}\big)}{c_j} \Big\} 
- \end{align*}
-hence, we 'normalize' $\hat{s}^*_{ijk,T}$ intuitively by dividing it by the following value:
-\[ (\hat{\nu}^*_{ijk,T})^2 = \frac{\hat{\sigma}^2}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big\{ \frac{\X^*_{it}}{\hat{c}_i} + \frac{\X^*_{jt}}{\hat{c}_j} \Big\}.\]
-As before,
-\begin{align*}
-\widehat{\sigma}^2 = |\countries|^{-1} \sum_{i \in \countries} \widehat{\sigma}_i^2\quad \text{ and } \quad\hat{\sigma}_i^2 = \frac{\sum_{t=2}^T (\X_{it}-\X_{it-1})^2}{2 \sum_{t=1}^T \X_{it}}.
-\end{align*}
-Normalizing the statistic $\hat{s}_{ijk,T}$ by the estimator $\hat{\nu}_{ijk,T}$ yields the expression 
-\begin{equation*}
-\hat{\psi}^*_{ijk,T} := \frac{\hat{s}^*_{ijk,T}}{\hat{\nu}^*_{ijk,T}} = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it} - \X^*_{jt})}{ \hat{\sigma}\{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it}/\hat{c}_i + \X^*_{jt}/\hat{c}_j )\}^{1/2}}, 
-\end{equation*}
-which serves as our test statistic of the hypothesis $H_0^{(ijk)}$. For later reference, we additionally introduce the statistic 
-\begin{equation*}
-\hat{\psi}_{ijk,T}^{*, 0} = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \Big(\big( \frac{c_i}{\hat{c}_i} - \frac{c_j}{\hat{c}_j} \big)\overline{\lambda}_{ij} +  \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\frac{\sigma}{\hat{c}_i} \sqrt{c_i} \eta_{it} - \frac{\sigma}{\hat{c}_j} \sqrt{c_j}\eta_{jt}) \Big)}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it}/\hat{c}_i + \X^*_{jt}/\hat{c}_j) \}^{1/2}}
-\end{equation*}
-with $\overline{\lambda}_{ij}(u) = \{ \lambda_i(u) + \lambda_j(u) \}/2$, which is identical to $\hat{\psi}_{ijk,T}$ under $H_0^{(ijk)}$. 
-}
-%and set $$. We have already shown that $\widehat{\sigma}_i^2 = \sigma^2 + o_p(1)$ and $\hat{c}_i = c_i + o_P(1)$ for any $i$ and thus $(\widehat{\sigma}_i^*)^2 = \frac{\sigma^2}{c_i} + o_p(1)$.
-%
-%
-%\subsection{Construction of the test} 
-%
-%
-%Our multiscale test is carried out as follows: For a given significance level $\alpha \in (0,1)$ and each $(i,j,k) \in \indexset$, we reject $H_0^{(ijk)}$ if 
-%\[ |\hat{\psi}_{ijk,T}| > c_{ijk,T}(\alpha), \]
-%where $c_{ijk,T}(\alpha)$ is the critical value for the $(i,j,k)$-th test problem. The critical values $c_{ijk,T}(\alpha)$ are chosen such that the familywise error rate (FWER) is controlled at level $\alpha$, which is defined as the probability of wrongly rejecting $H_0^{(ijk)}$ for at least one $(i,j,k)$. More formally speaking, for a given significance level $\alpha \in (0,1)$, the FWER is 
-%\begin{align*}
-%\text{FWER}(\alpha) 
-% & = \pr \Big( \exists (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| > c_{ijk,T}(\alpha) \Big) \\
-% & =  1 - \pr \Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{ijk,T}(\alpha) \Big) \\
-% & = 1 - \pr\Big( \max_{(i,j,k) \in \indexset_0} |\hat{\psi}_{ijk,T}| \le c_{ijk,T}(\alpha) \Big), 
-%\end{align*}
-%where $\indexset_0 \subseteq \indexset$ is the set of triples $(i,j,k)$ for which $H_0^{(ijk)}$ holds true. As before, the critical values are chosen as
+%{\color{red}
+%\section{Extensions}
+%Now suppose that instead of \eqref{eq:model}, we consider the following nonparametric regression equation:
 %\begin{equation*}
-%c_{ijk,T}(\alpha) = c_T(\alpha,h_k) := b_k + q_T(\alpha)/a_k, 
+%\X_{it} = c_i \lambda_i\Big(\frac{t}{T}\Big) + \varepsilon_{it} \quad \text{with} \quad \varepsilon_{it} = \sigma \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, 
 %\end{equation*}
-%where $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$ are scale-dependent constants and the quantity $q_T(\alpha)$ is determined by the following consideration: Since 
+%where $c_i$ is the country-specific scaling parameter that accounts for the size of the country or population density. We introduce this additional parameter in order to be able to compare countries that differ substantially in terms of the population, i.e. Luxembourg and Russia. In our application, we compare 5 European countries that are similar in many aspects, including size, but for further research we need to be able to account for the differences between the countries.
+%
+%Hence, we would like to test the hypothesis that the time trends of new COVID-19 cases in different countries are the same up to some scaling parameter. For the identification purposes, we will need to assume that for each $i \in \mathcal{C}$ we have $\int_0^1 \lambda_i(u)du = 1$. Only then we are able to estimate the scaling parameter $c_i$. Furthermore, we need to assume that $0 <c_{\min} \leq c_i \leq c_{\max}$ for all $i \in \mathcal{C}$. Thus, the testing procedure is as follows.
+%
+%\textit{Step 1}
+%
+%First, we estimate the scaling parameter:
 %\begin{align*}
-%\text{FWER}(\alpha)
-%  & = \pr \Big( \exists (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| > c_T(\alpha,h_k) \Big)  \\
-% & =  1 - \pr \Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_T(\alpha,h_k) \Big) \\
-% & =  1 - \pr \Big( \forall (i,j,k) \in \indexset_0: a_k \big(|\hat{\psi}_{ijk,T}| - b_k\big) \le q_T(\alpha) \Big) \\
-% & = 1 - \pr\Big( \max_{(i,j,k) \in \indexset_0} a_k \big( |\hat{\psi}_{ijk,T}| - b_k \big) \le q_T(\alpha) \Big),
+%\widehat{c_i} &= \frac{1}{T}\sum_{t = 1}^T X_{it} \\
+%&= c_i \frac{1}{T}\sum_{t = 1}^T \lambda_i\Big(\frac{t}{T}\Big) + \sigma\frac{1}{T}\sum_{t = 1}^T \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}\\
+%& = c_i \frac{1}{T}\sum_{t = 1}^T \lambda_i\Big(\frac{t}{T}\Big) + o_P(1)\\
+%& \stackrel{(*)}{=} c_i + o_P(1),
 %\end{align*}
-%we need to choose the quantity $q_T(\alpha)$ as the $(1-\alpha)$-quantile of the statistic 
-%\[ \hat{\Psi}_T = \max_{(i,j,k) \in \indexset} a_k \big( |\hat{\psi}_{ijk,T}^0| - b_k \big) \]
-%in order to ensure control of the FWER at level $\alpha$. As the quantiles $q_T(\alpha)$ are not known in practice, we cannot compute the critical values $c_T(\alpha,h_k)$ exactly in practice but need to approximate them. This can be achieved as follows: Under appropriate regularity conditions, it can be shown that 
+%where in $(*)$ we used the normalization $\int_0^1 \lambda_i(u)du = 1$. Hence, $\widehat{c}_i$ is a consistent estimator of $c_i$.
+%
+%\textit{Step 2}
+%
+%Instead of working with $X_{it}$, we consider the following variables:
 %\begin{align*}
-%\hat{\psi}_{ijk,T}^0 
-% & = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \, \sigma \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\eta_{it} - \eta_{jt})}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}} \\
-% & \approx \frac{1}{\sqrt{2Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \{ \eta_{it} - \eta_{jt} \}.
-%\end{align*} 
-%A Gaussian version of the statistic displayed in the final line above is given by 
+%X^*_{it} &= \frac{X_{it}}{\frac{1}{T}\sum_{t = 1}^T X_{it}} \\
+%&= \frac{c_i}{\widehat{c}_i} \lambda_i \Big(\frac{t}{T}\Big) + \frac{\sigma}{\widehat{c}_i} \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}.
+%\end{align*}
+%
+%A statistic to test the hypothesis $H_0^{(ijk)}$ for a given triple $(i,j,k)$ is then constructed as follows. Instead of $\hat{s}_{ijk,T}$, we work with 
+%\[ \hat{s}_{ijk,T}^* = \frac{1}{\sqrt{Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it}^* - \X_{jt}^*). \]
+%Then
+%\begin{align*}
+%\frac{\hat{s}_{ijk,T}^*}{\sqrt{Th_k}} =& \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it}^* - \X_{jt}^*)\\
+%=& \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \bigg( \lambda_i \Big(\frac{t}{T}\Big)  - \lambda_j \Big(\frac{t}{T}\Big)\bigg) + R_1 + R_2,
+%\end{align*}
+%where
+%\begin{align*}
+%R_1 &= \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \bigg( \Big(\frac{c_i}{\widehat{c}_i} - 1 \Big) \lambda_i \Big(\frac{t}{T}\Big)  - \Big(\frac{c_j}{\widehat{c}_j} - 1 \Big) \lambda_j \Big(\frac{t}{T}\Big)\bigg),\\
+%R_2& =  \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big( \frac{\sigma}{\widehat{c}_i} \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} - \frac{\sigma}{\widehat{c}_j} \sqrt{c_j \lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt} \Big).
+%\end{align*}
+%Since $\widehat{c}_i = c_i + o_P(1)$ and $0 \leq  \sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) \lambda_i \big(\frac{t}{T}\big) \leq h_k \lambda_{max}$, we have
+%\begin{align}\label{eq:aux1}
+%|R_1| &\leq \Big|\frac{c_i}{\widehat{c}_i} - 1 \Big| \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \lambda_i \Big(\frac{t}{T}\Big)  + \Big|\frac{c_j}{\widehat{c}_j} - 1 \Big| \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \lambda_j \Big(\frac{t}{T}\Big),\nonumber \\
+%&= o_P(1) \cdot \frac{\lambda_{max}}{T} + o_P(1) \cdot \frac{\lambda_{max}}{T} = o_P\Big(\frac{1}{T}\Big).
+%\end{align}
+%Furthermore, applying the law of large numbers, we get:
+%\begin{align*}
+% \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \sqrt{c_i \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}  = o_P(1).
+%\end{align*}
+%Hence, if we uniformly bound the scaling parameters away from 0, i.e. $\exists \, c_{\min}$ such that for all $i \in \mathcal{C}$ we have $0 < c_{\min} \leq c_i$, we can use the fact that $\frac{\sigma}{\widehat{c}_i} = O_P(1)$ to get that
+%\begin{align}\label{eq:aux2}
+%R_2& =  \frac{\sigma}{\widehat{c}_i} \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} -\frac{\sigma}{\widehat{c}_j}\frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)  \sqrt{\lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt}\nonumber\\
+%& = o_P(1).
+%\end{align}
+%Combining \eqref{eq:aux1} and \eqref{eq:aux2} together, we get $\hat{s}^*_{ijk,T}/\sqrt{Th_k} = (Th_k)^{-1} \sum_{t=1}^T \ind(t/T \in \mathcal{I}_k) \{\lambda_i(t/T) - \lambda_j(t/T)\} + o_p(1)$ for any fixed pair of countries $(i,j)$. Hence, the statistic $\hat{s}^*_{ijk,T}/\sqrt{Th_k}$ estimates the average distance between the functions $\lambda_i$ and $\lambda_j$ on the interval $\mathcal{I}_k$. The variance of $\hat{s}^*_{ijk,T}$ can not be easily calculated:
+%\begin{align*}
+% \var(\hat{s}^*_{ijk,T})  =&\frac{1}{Th_k} \var \Big( \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (X_{it}^* - X_{jt}^*) \Big)\\
+%=&\frac{1}{Th_k} \var \Big( \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) X_{it}^*\Big) + \frac{1}{Th_k} \var \Big( \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) X_{jt}^*\Big)\\
+% = &\frac{1}{Th_k} \var \bigg( \frac{\sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) X_{it}}{\frac{1}{T}\sum\nolimits_{t=1}^T X_{it}} \bigg) + \frac{1}{Th_k} \var \bigg( \frac{\sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) X_{jt}}{\frac{1}{T}\sum\nolimits_{t=1}^T X_{jt}} \bigg),
+%\end{align*}
+%but we can heuristically approximate it. Suppose that we actually know $c_i$ instead of estimating it. Then we have
+%\begin{align*}
+%& \var \bigg( \frac{\sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) X_{it}}{c_i} \bigg) \\
+%&\quad= \var \bigg(\sum\nolimits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \lambda_i \big(\frac{t}{T}\big) + \sum\nolimits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)\frac{\sigma}{\sqrt{c_i}} \sqrt{\lambda_i \big(\frac{t}{T}\big)} \eta_{it} \bigg) \\
+%&\quad = \frac{\sigma^2}{c_i}  \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)\lambda_i \big(\frac{t}{T}\big) \var (\eta_{it})\\
+%&\quad = \frac{\sigma^2}{c_i}  \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)\lambda_i \big(\frac{t}{T}\big).
+%\end{align*}
+%Then (very heuristically) we have
+%\begin{align*}
+% \var(\hat{s}^*_{ijk,T})  \approx\frac{\sigma^2}{Th_k}  \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big\{ \frac{\lambda_i \big(\frac{t}{T}\big)}{c_i} + \frac{\lambda_j \big(\frac{t}{T}\big)}{c_j} \Big\} 
+% \end{align*}
+%hence, we 'normalize' $\hat{s}^*_{ijk,T}$ intuitively by dividing it by the following value:
+%\[ (\hat{\nu}^*_{ijk,T})^2 = \frac{\hat{\sigma}^2}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big\{ \frac{\X^*_{it}}{\hat{c}_i} + \frac{\X^*_{jt}}{\hat{c}_j} \Big\}.\]
+%As before,
+%\begin{align*}
+%\widehat{\sigma}^2 = |\countries|^{-1} \sum_{i \in \countries} \widehat{\sigma}_i^2\quad \text{ and } \quad\hat{\sigma}_i^2 = \frac{\sum_{t=2}^T (\X_{it}-\X_{it-1})^2}{2 \sum_{t=1}^T \X_{it}}.
+%\end{align*}
+%Normalizing the statistic $\hat{s}_{ijk,T}$ by the estimator $\hat{\nu}_{ijk,T}$ yields the expression 
 %\begin{equation*}
-%\phi_{ijk,T} = \frac{1}{\sqrt{2Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \big\{ Z_{it} - Z_{jt} \big\},
+%\hat{\psi}^*_{ijk,T} := \frac{\hat{s}^*_{ijk,T}}{\hat{\nu}^*_{ijk,T}} = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it} - \X^*_{jt})}{ \hat{\sigma}\{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it}/\hat{c}_i + \X^*_{jt}/\hat{c}_j )\}^{1/2}}, 
 %\end{equation*}
-%where $Z_{it}$ are independent standard normal random variables for $1 \le t \le T$ and $1 \le i \le n$. Hence, the statistic 
-%\[ \Phi_T = \max_{(i,j,k) \in \indexset} a_k \big( |\phi_{ijk,T}| - b_k \big) \]
-%can be regarded as a Gaussian version of the statistic $\hat{\Psi}_T$. We approximate the unknown quantile $q_T(\alpha)$ by the $(1-\alpha)$-quantile $q_{T,\text{Gauss}}(\alpha)$ of $\Phi_T$, which can be computed (approximately) by Monte Carlo simulations and can thus be treated as known. 
+%which serves as our test statistic of the hypothesis $H_0^{(ijk)}$. For later reference, we additionally introduce the statistic 
+%\begin{equation*}
+%\hat{\psi}_{ijk,T}^{*, 0} = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \Big(\big( \frac{c_i}{\hat{c}_i} - \frac{c_j}{\hat{c}_j} \big)\overline{\lambda}_{ij} +  \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\frac{\sigma}{\hat{c}_i} \sqrt{c_i} \eta_{it} - \frac{\sigma}{\hat{c}_j} \sqrt{c_j}\eta_{jt}) \Big)}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it}/\hat{c}_i + \X^*_{jt}/\hat{c}_j) \}^{1/2}}
+%\end{equation*}
+%with $\overline{\lambda}_{ij}(u) = \{ \lambda_i(u) + \lambda_j(u) \}/2$, which is identical to $\hat{\psi}_{ijk,T}$ under $H_0^{(ijk)}$. 
+%}
+%%and set $$. We have already shown that $\widehat{\sigma}_i^2 = \sigma^2 + o_p(1)$ and $\hat{c}_i = c_i + o_P(1)$ for any $i$ and thus $(\widehat{\sigma}_i^*)^2 = \frac{\sigma^2}{c_i} + o_p(1)$.
+%%
+%%
+%%\subsection{Construction of the test} 
+%%
+%%
+%%Our multiscale test is carried out as follows: For a given significance level $\alpha \in (0,1)$ and each $(i,j,k) \in \indexset$, we reject $H_0^{(ijk)}$ if 
+%%\[ |\hat{\psi}_{ijk,T}| > c_{ijk,T}(\alpha), \]
+%%where $c_{ijk,T}(\alpha)$ is the critical value for the $(i,j,k)$-th test problem. The critical values $c_{ijk,T}(\alpha)$ are chosen such that the familywise error rate (FWER) is controlled at level $\alpha$, which is defined as the probability of wrongly rejecting $H_0^{(ijk)}$ for at least one $(i,j,k)$. More formally speaking, for a given significance level $\alpha \in (0,1)$, the FWER is 
+%%\begin{align*}
+%%\text{FWER}(\alpha) 
+%% & = \pr \Big( \exists (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| > c_{ijk,T}(\alpha) \Big) \\
+%% & =  1 - \pr \Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{ijk,T}(\alpha) \Big) \\
+%% & = 1 - \pr\Big( \max_{(i,j,k) \in \indexset_0} |\hat{\psi}_{ijk,T}| \le c_{ijk,T}(\alpha) \Big), 
+%%\end{align*}
+%%where $\indexset_0 \subseteq \indexset$ is the set of triples $(i,j,k)$ for which $H_0^{(ijk)}$ holds true. As before, the critical values are chosen as
+%%\begin{equation*}
+%%c_{ijk,T}(\alpha) = c_T(\alpha,h_k) := b_k + q_T(\alpha)/a_k, 
+%%\end{equation*}
+%%where $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$ are scale-dependent constants and the quantity $q_T(\alpha)$ is determined by the following consideration: Since 
+%%\begin{align*}
+%%\text{FWER}(\alpha)
+%%  & = \pr \Big( \exists (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| > c_T(\alpha,h_k) \Big)  \\
+%% & =  1 - \pr \Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_T(\alpha,h_k) \Big) \\
+%% & =  1 - \pr \Big( \forall (i,j,k) \in \indexset_0: a_k \big(|\hat{\psi}_{ijk,T}| - b_k\big) \le q_T(\alpha) \Big) \\
+%% & = 1 - \pr\Big( \max_{(i,j,k) \in \indexset_0} a_k \big( |\hat{\psi}_{ijk,T}| - b_k \big) \le q_T(\alpha) \Big),
+%%\end{align*}
+%%we need to choose the quantity $q_T(\alpha)$ as the $(1-\alpha)$-quantile of the statistic 
+%%\[ \hat{\Psi}_T = \max_{(i,j,k) \in \indexset} a_k \big( |\hat{\psi}_{ijk,T}^0| - b_k \big) \]
+%%in order to ensure control of the FWER at level $\alpha$. As the quantiles $q_T(\alpha)$ are not known in practice, we cannot compute the critical values $c_T(\alpha,h_k)$ exactly in practice but need to approximate them. This can be achieved as follows: Under appropriate regularity conditions, it can be shown that 
+%%\begin{align*}
+%%\hat{\psi}_{ijk,T}^0 
+%% & = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \, \sigma \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\eta_{it} - \eta_{jt})}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}} \\
+%% & \approx \frac{1}{\sqrt{2Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \{ \eta_{it} - \eta_{jt} \}.
+%%\end{align*} 
+%%A Gaussian version of the statistic displayed in the final line above is given by 
+%%\begin{equation*}
+%%\phi_{ijk,T} = \frac{1}{\sqrt{2Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \big\{ Z_{it} - Z_{jt} \big\},
+%%\end{equation*}
+%%where $Z_{it}$ are independent standard normal random variables for $1 \le t \le T$ and $1 \le i \le n$. Hence, the statistic 
+%%\[ \Phi_T = \max_{(i,j,k) \in \indexset} a_k \big( |\phi_{ijk,T}| - b_k \big) \]
+%%can be regarded as a Gaussian version of the statistic $\hat{\Psi}_T$. We approximate the unknown quantile $q_T(\alpha)$ by the $(1-\alpha)$-quantile $q_{T,\text{Gauss}}(\alpha)$ of $\Phi_T$, which can be computed (approximately) by Monte Carlo simulations and can thus be treated as known. 
+%%
+%%
+%%To summarize, we propose the following procedure to simultaneously test the hypothesis $H_0^{(ijk)}$ for all $(i,j,k) \in \indexset$ at the significance level $\alpha \in (0,1)$: 
+%%\begin{equation}\label{eq:test}
+%%\text{For each } (i,j,k) \in \indexset, \text{ reject } H_0^{(ijk)} \text{ if } |\hat{\psi}_{ijk,T}| > c_{T,\text{Gauss}}(\alpha,h_k),
+%%\end{equation}
+%%where $c_{T,\text{Gauss}}(\alpha,h_k) = b_k + q_{T,\text{Gauss}}(\alpha)/a_k$ with $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$. 
 %
-%
-%To summarize, we propose the following procedure to simultaneously test the hypothesis $H_0^{(ijk)}$ for all $(i,j,k) \in \indexset$ at the significance level $\alpha \in (0,1)$: 
-%\begin{equation}\label{eq:test}
-%\text{For each } (i,j,k) \in \indexset, \text{ reject } H_0^{(ijk)} \text{ if } |\hat{\psi}_{ijk,T}| > c_{T,\text{Gauss}}(\alpha,h_k),
-%\end{equation}
-%where $c_{T,\text{Gauss}}(\alpha,h_k) = b_k + q_{T,\text{Gauss}}(\alpha)/a_k$ with $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$. 
-
 
 
 \newpage
@@ -1214,10 +1196,9 @@ Here, we provide the pairwise comparisons between Italy, France, Spain and the U
 
 
 \clearpage
-{\color{red}
 \subsection{Robustness checks for Section \ref{subsec:app}}\label{s:subsec:app:2}
 
-In this section, we provide the robustness check of the pairwise comparisons between Germany, Italy, France, Spain and the UK. Specifically, we provide the results of our test method applied to the time series of these five countries that were aligned only by the date of reaching $100$th case. We do not align the data by the days of the week. The plots have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
+In this section, we provide the robustness check of the pairwise comparisons between Germany, Italy, France, Spain and the United Kingdom. Specifically, we provide the results of our test method applied to the time series of these five countries that were aligned only by the date of reaching $100$th case. We do not align the data by the days of the week. The plots have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
 \begin{figure}[h!]
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/DEU_vs_ITA}
@@ -1286,14 +1267,16 @@ As you can see, the results are essentially the same except for comparisons betw
 \end{figure}
 
 \clearpage
-\subsection{Additional analysis for Section \ref{subsec:app}}\label{s:subsec:app:3}
+\subsection{Additional analysis for Section \ref{subsec:app}}
+\subsubsection{Longer time period}\label{s:subsec:app:3}
 
-Here, we provide the results of the multiscale comparison of the time trends between five European countries performed on a longer time period. Specifically, we align the time series as before, taking the first Monday after reaching $100$ cases as the starting date $t = 1$. However, we take the time series length $T$ to be the minimal number of days for which we have observations for all five countries. The data were downloaded on 6 October 2020, which resulted in $T = 212$ (as opposed to $T = 150$ in Section \ref{subsec:app}). The analysis was performed in a similar manner as in Section \ref{subsec:app}, and the results of the analysis are displayed in Figures \ref{fig:supp3:first} - \ref{fig:supp3:last}. The plots have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
+
+Here, we provide the results of the multiscale comparison of the time trends between the same five European countries (Germany, Italy, France, Spain and the United Kingdom) performed on a longer time period. Specifically, we align the time series as before, taking the first Monday after reaching $100$ cases as the starting date $t = 1$. However, we take the time series length $T$ to be the minimal number of days for which we have observations for all five countries. The data were downloaded on 6 October 2020, which resulted in $T = 212$ (as opposed to $T = 150$ in Section \ref{subsec:app}). The analysis was performed in a similar manner as in Section \ref{subsec:app}, and the results of the analysis are displayed in Figures \ref{fig:supp3:first} - \ref{fig:supp3:last}. The plots have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
 
 As is already obvious from the simple visual inspection, the data for Spain has very high volatility towards the end of the period. Presumably, the reason for that is repeated delays in reporting. This explains the number of cases being $0$ on multiple occasions with very sharp increase on the next day. Clearly, high day-to-day volatility of the data heavily influences the estimation error of $\sigma$ which results in rather conservative results of the overall testing procedure. Specifically, we get $\widehat{\sigma} = 35.23$ when estimating $\sigma$ with $T=212$ compared to $\widehat{\sigma} = 14.82$ with $T = 150$. Higher values of $\widehat{\sigma}$ result in lower values of the test statistics, which can lead to more conservative results of the test procedure. Hence, Figures \ref{fig:supp3:first} -- \ref{fig:supp3:last} differ drastically from Figures \ref{fig:Germany:Italy} -- \ref{fig:France:UK}. 
 
 
-Since both data for Spain provided by World Health Organization and by John Hopkins University also exhibit similar patterns to the data that are used in our study, we exclude Spain from our analysis and repeat the testing procedure for only four European countries: Germany, Italy, France and the United Kingdom. The results are presented in \ref{fig:supp4:first} - \ref{fig:supp4:last}. As can be seen, the test is much less conservative and the results of the test are much more consistent with the ones discussed in Section \ref{subsec:app}. Specifically, for each pair of countries $(i, j)$ the set $\intervals_{\text{reject}}(i, j)$ constructed for a longer time period ($T = 212$) contains almost all elements from the set $\intervals_{\text{reject}}(i, j)$ constructed for a shorter time period ($T = 150$). This shows that our test is robust with respect to the growing sample size.
+Since both data for Spain provided by World Health Organization and by John Hopkins University also exhibit similar patterns to the data that are used in our study, we exclude Spain from our analysis and repeat the testing procedure for only four European countries: Germany, Italy, France and the United Kingdom. The results are presented in \ref{fig:supp3:first2} - \ref{fig:supp3:last2}. As can be seen, the test is much less conservative and the results of the test are much more consistent with the ones discussed in Section \ref{subsec:app}. Specifically, for each pair of countries $(i, j)$ the set $\intervals_{\text{reject}}(i, j)$ constructed for a longer time period ($T = 212$) contains almost all elements from the set $\intervals_{\text{reject}}(i, j)$ constructed for a shorter time period ($T = 150$). This shows that our test is robust with respect to the growing sample size.
 
 
 \begin{figure}[h!]
@@ -1365,7 +1348,7 @@ Since both data for Spain provided by World Health Organization and by John Hopk
 \begin{figure}[h!]
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/DEU_vs_ITA_four_countries}
-\caption{Test results for the comparison of Germany and Italy on the longer time period excluding Spain.}\label{fig:supp4:first}
+\caption{Test results for the comparison of Germany and Italy on the longer time period excluding Spain.}\label{fig:supp3:first2}
 \end{minipage}
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
@@ -1397,13 +1380,88 @@ Since both data for Spain provided by World Health Organization and by John Hopk
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/FRA_vs_GBR_four_countries}
-\caption{Test results for the comparison of France and the UK on the longer time period excluding Spain.}\label{fig:supp4:last}
+\caption{Test results for the comparison of France and the UK on the longer time period excluding Spain.}\label{fig:supp3:last2}
+\end{minipage}
+\end{figure}
+
+
+\clearpage
+\subsubsection{Different testing regimes}\label{s:subsec:app:4}
+
+
+Here, we provide the results of the multiscale comparison of the time trends between the same five European countries (Germany, Italy, France, Spain and the United Kingdom) taking into account their testing strategies. Specifically, for each of the five countries $i$, we observe a time series $\mathcal{X}_i = \{ X_{it}: 1 \le t \le T \}$, where $X_{it}$ is the percentage of positively tested individuals with respect to the total number of tests performed on day $t$. Hence, in addition to the data sources listed in Section \ref{subsec:app}, we analyze the data on the total number of tests per week performed by each country. These data are also freely available on the homepage of the European Center for Disease Prevention and Control (\texttt{https://www.ecdc.europa.eu}) and were downloaded on 14 October 2020. Since the number of performed tests is only available on a weekly basis, we obtain the corresponding daily estimates by evenly distributing the number of tests over the week. 
+
+As in Section \ref{subsec:app}, the time series length $T$ is taken to be equal to $150$. The testing data is not available on the whole time period for all of the countries. In particular, there is no knowledge about the number of test that Germany and United Kingdom performed in the first week and first three weeks of the analysed time period respectively. Hence, we set the number of tests as well as the percentage of positively tested individuals to $0$ for these countries during these specified time intervals. The analysis was performed in a similar manner as in Section \ref{subsec:app}, and the results of the analysis are displayed in Figures \ref{fig:supp4:first} - \ref{fig:supp4:last}. The plots have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK} except the panels (c): these panels in Figures \ref{fig:supp4:first} - \ref{fig:supp4:last} show the number of performed tests per day instead of the GRI. If the panel (d) is empty, this means that our test did not detect any significance differences between the trends.
+
+In order to illustrate our argument that different testing strategies are not the main driving force of the differences in the corresponding epidemic trends, we consider the comparison between Germany and Italy. The results of this comparison are presented in Figure \ref{fig:supp4:first}. As was already mentioned in Section \ref{subsec:app} and is obvious from panel (c) of Figure \ref{fig:supp4:first}, Germany performed much more tests than Italy in the first fifty days, and our test detects significance differences from the very beginning up to approximately day 80. If the test regimes were the only driving force of the development of the pandemic in these countries, we would also find these differences (up to approximately day $80$) when comparing raw data. On the contrary, the minimal intervals from the results in Section \ref{subsec:app} only span the time interval from day 46 up to day 84. This suggests that the epidemic trends of the number of daily cases have been driven by
+something else than the testing regimes.
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_ITA_normalised}
+\caption{Test results for the comparison of percentage of people who tested positive in Germany and Italy .}\label{fig:supp4:first}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_ESP_normalised}
+\caption{Test results for the comparison of percentage of people who tested positive in Germany and Spain.}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_FRA_normalised}
+\caption{Test results for the comparison of percentage of people who tested positive in Germany and France.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_GBR_normalised}
+\caption{Test results for the comparison of percentage of people who tested positive in Germany and the UK.}
 \end{minipage}
 \end{figure}
 
 
 
-}
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/FRA_vs_ITA_normalised}
+\caption{Test results for the comparison of percentage of people who tested positive in France and Italy.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/GBR_vs_ITA_normalised}
+\caption{Test results for the comparison of percentage of people who tested positive in the UK and Italy.}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_ITA_normalised}
+\caption{Test results for the comparison of percentage of people who tested positive in Spain and Italy.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_GBR_normalised}
+\caption{Test results for the comparison of percentage of people who tested positive in Spain and the UK.}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_FRA_normalised}
+\caption{Test results for the comparison of Spain and France on the longer time period.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/FRA_vs_GBR_normalised}
+\caption{Test results for the comparison of France and the UK on the longer time period.}\label{fig:supp4:last}
+\end{minipage}
+\end{figure}
+
+
 
 \phantom{end}
 
