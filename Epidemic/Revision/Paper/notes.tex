@@ -419,13 +419,7 @@ There are many open questions surrounding the current COVID-19 pandemic. A quest
 
 \subsubsection{Data}
 
-{\color{red}
-
-\textit{How many days of the pandemic are we using?}
-
-\textit{The plots are not updated with respect to alignment by Monday!}}
-
-We analyze data from five European countries: Germany, Italy, Spain, France and the United Kingdom. For each country $i$, we observe a time series $\mathcal{X}_i = \{ X_{it}: 1 \le t \le T \}$, where $X_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available on the homepage of the European Center for Disease Prevention and Control (\texttt{https://www.ecdc.europa.eu}) and were downloaded on 22 July 2020. {\color{red} As already mentioned in the Introduction, we take the first Monday after reaching $100$ confirmed case in each country as the starting date $t=1$. Beginning the time series for every country on the day when that country reaches 100 confirmed cases is a common way of ``normalizing'' the data \citep[e.g.][]{Cohen2020}. Moreover, aligning the data by Monday takes into account the discrepancies in reporting the cases during the weekends, making the data even more comparable across countries. In order to check robustness of such alignment of the data, we report the results of analysis of these five countries but without alignment by the days of the week in Section \ref{s:subsec:app:2} in the Supplement.} The time series length $T$ is taken to be the minimal number of days for which we have observations for all five countries. The resulting dataset consists of $n = 5$ time series, each with $T = 139$ observations (as of July 22). Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in $6$ replacements. Plots of the observed time series are presented in the upper panels (a) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
+We analyze data from five European countries: Germany, Italy, Spain, France and the United Kingdom. For each country $i$, we observe a time series $\mathcal{X}_i = \{ X_{it}: 1 \le t \le T \}$, where $X_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available on the homepage of the European Center for Disease Prevention and Control (\texttt{https://www.ecdc.europa.eu}) and were downloaded on 22 July 2020. {\color{red} As already mentioned in the Introduction, we take the first Monday after reaching $100$ confirmed case in each country as the starting date $t=1$. Beginning the time series for every country on the day when that country reaches 100 confirmed cases is a common way of ``normalizing'' the data \citep[e.g.][]{Cohen2020}. Moreover, aligning the data by Monday takes into account the discrepancies in reporting the cases during the weekends, making the data even more comparable across countries. In order to check robustness of such alignment of the data, we report the results of analysis of these five countries but without alignment by the days of the week in Section \ref{s:subsec:app:2} in the Supplement. The time series length $T$ is taken to be equal to $150$, which covers the first wave of the pandemic in all of the considered countries. We also repeat the analysis for longer period of time and report the results in Section \ref{s:subsec:app:3} in the Supplement. The resulting dataset consists of $n = 5$ time series, each with $T = 150$ observations.} Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in {\color{red}$4$} replacements. Plots of the observed time series are presented in the upper panels (a) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
 
 
 To interpret the results produced by our multiscale test, we consider the Government Response Index (GRI) from the Oxford COVID-19 Government Response Tracker (OxCGRT) \citep{Hale2020}. The GRI measures how severe the actions are that are taken by a country's government to contain the virus. It is calculated based on several common government policies such as school closures and travel restrictions. The GRI ranges from $0$ to $100$, with $0$ corresponding to no response from the government at all and $100$ corresponding to full lockdown, closure of schools and workplaces, ban on travelling, etc. Detailed information on the collection of the data for government responses and the methodology for calculating the GRI is provided in \cite{Hale2020paper}. Plots of the GRI time series are given in panels (c) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
@@ -436,7 +430,7 @@ To interpret the results produced by our multiscale test, we consider the Govern
 
 We assume that the data $X_{it}$ of each country $i$ in our sample follow the nonparametric trend model 
 \[ \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, \]
-which was introduced in equation \eqref{eq:model}. The overdispersion parameter $\sigma$ is estimated by the procedure described in Section \ref{subsec:test:test}, which yields the estimate $\hat{\sigma} = 14.44$. Throughout the section, we set the significance level to $\alpha=0.05$ and implement the multiscale test in exactly the same way as in the simulation study of Section \ref{subsec:sim}. In particular, we let $\pairs = \{ (i,j): 1 \le i < j \le 5\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$, and we choose $\intervals$ to be the family of time intervals plotted in Figure \ref{fig:intervals}. Hence, all intervals in $\intervals$ have length either 7, 14, 21 or 28 days. 
+which was introduced in equation \eqref{eq:model}. The overdispersion parameter $\sigma$ is estimated by the procedure described in Section \ref{subsec:test:test}, which yields the estimate {\color{red}$\hat{\sigma} = 14.82$}. Throughout the section, we set the significance level to $\alpha=0.05$ and implement the multiscale test in exactly the same way as in the simulation study of Section \ref{subsec:sim}. In particular, we let $\pairs = \{ (i,j): 1 \le i < j \le 5\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$, and we choose $\intervals$ to be the family of time intervals plotted in Figure \ref{fig:intervals}. Hence, all intervals in $\intervals$ have length either 7, 14, 21 or 28 days. 
 
 
 With the help of our multiscale method, we simultaneously test the null hypo\-thesis $H_0^{(ijk)}$ that $\lambda_i = \lambda_j$ on the interval $\mathcal{I}_k$ for each $(i, j, k) \in \indexset$. The results are presented in Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}, each figure comparing a specific pair of countries $(i,j)$ from our sample. For the sake of brevity, we only show the results for the pairwise comparisons of Germany with each of the four other countries. The remaining figures can be found in Section \ref{s:subsec:app} of the Supplementary Material. Each figure splits into four panels (a)--(d).  Panel (a) shows the observed time series for the two countries $i$ and $j$ that are compared. Panel (b) presents smoothed versions of the time series from (a), that is, it shows nonparametric kernel estimates (specifically, Nadaraya-Watson estimates) of the two trend functions $\lambda_i$ and $\lambda_j$, where the bandwidth is set to $7$ days and a rectangular kernel is used. Panel (c) displays the Government Response Index (GRI) of the two countries. Finally, panel (d) presents the results produced by our test: it depicts in grey the set $\intervals_{\text{reject}}(i,j)$ of all the intervals $\mathcal{I}_k$ for which the test rejects the null $H_0^{(ijk)}$. The minimal intervals in the subset $\intervals_{\text{reject}}^{\text{min}}(i, j)$ are highlighted by a black frame. Note that according to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals plotted in panels (d) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}: we can claim, with confidence of about $95\%$, that there is a difference between the functions $\lambda_i$ and $\lambda_j$ on each of these intervals.
@@ -476,8 +470,13 @@ We now have a closer look at the results in Figures \ref{fig:Germany:Italy}--\re
 %Moreover, our test allows us to localise these differences using the notion of minimal intervals. Specifically, we can say that significant differences between trend curves in Germany and Italy occur between days $46$ and $77$. 
 Taken together, our results provide evidence that the epidemic developed very similarly in Germany and Italy until a peak was reached around day $40$. Thereafter, however, the German time series exhibits a significantly stronger downward trend than the Italian one. 
 
+%Inspecting Figures \ref{fig:Germany:Spain} and  \ref{fig:Germany:France}, a quite different picture arises when comparing Germany with France and Spain. The test detects significant differences between the German trend and the trends in France and Spain up to (approximately) day $50$ but not thereafter. Hence, we find that the time trends evolve differently during the outbreak of the crisis, but they appear to decrease in more or less the same fashion after a peak was reached. 
 
-Inspecting Figures \ref{fig:Germany:Spain} and  \ref{fig:Germany:France}, a quite different picture arises when comparing Germany with France and Spain. The test detects significant differences between the German trend and the trends in France and Spain up to (approximately) day $50$ but not thereafter. Hence, we find that the time trends evolve differently during the outbreak of the crisis, but they appear to decrease in more or less the same fashion after a peak was reached. Finally, the comparison of Germany with the UK in Figure \ref{fig:Germany:UK} reveals significant differences between the time trends over essentially the whole observation window. Inspecting the time series in panel (a), it is quite obvious that the UK trend evolves differently from the German one after day $40$. However, our test also detects differences between the trends during the onset of the crisis, which is not obvious from the time series plot in panel (a). 
+{\color{red}Comparison of Germany and Spain, that is presented in Figure \ref{fig:Germany:Spain}, reveals the picture that is almost opposite to the one discussed above: the test detects significant differences approximately up to day $50$ and after day $120$, but not in between. This shows that in the beginning of the pandemic Spain experienced more substantial increase in the number of cases, but after the peak reached almost the same level as Germany. However, the situation seems to repeat during the second wave, and thus the trends in Germany and Spain evolve differently towards the end of the considered time period.
+
+Inspecting Figure \ref{fig:Germany:France}, a quite different picture arises when comparing Germany with France. The test detects significant differences between the German and the French trends up to (approximately) day $40$ but not thereafter. Hence, we find that the time trends evolve differently during the outbreak of the crisis, but they appear to decrease in more or less the same fashion after a peak was reached.}
+
+Finally, the comparison of Germany with the UK in Figure \ref{fig:Germany:UK} reveals significant differences between the time trends over essentially the whole observation window. Inspecting the time series in panel (a), it is quite obvious that the UK trend evolves differently from the German one after day $40$. However, our test also detects differences between the trends during the onset of the crisis, which is not obvious from the time series plot in panel (a). 
 
 
 \subsubsection{Discussion}
@@ -486,8 +485,7 @@ Inspecting Figures \ref{fig:Germany:Spain} and  \ref{fig:Germany:France}, a quit
 Having identified significant differences between the epidemic trends in the five countries under consideration, one may ask next what are the causes of these differences. As already mentioned at the beginning of this section, this question cannot be answered by our test. Rather, a further analysis which presumably goes beyond pure statistics is needed to shed some light on it. We here do not attempt to provide any answers. We merely discuss some observations which become apparent upon considering our test results in the light of the Government Response Index (GRI). For reasons of brevity, we focus on the comparison of Germany with Italy and Spain in Figures \ref{fig:Germany:Italy} and \ref{fig:Germany:Spain}. 
 
 
-According to our test results in Figure \ref{fig:Germany:Spain}, there are significant differences between the trends in Germany and Spain during the onset of the epidemic up to about day $50$, with Spain having more new cases of infections than Germany on most days. After day $50$, the trends become quite similar and start to decrease at approximately the same rate. This may be due to the fact that Spain in general introduced more severe measures of lockdown than Germany (as can be seen upon inspecting the GRI in panel (c) of Figure \ref{fig:Germany:Spain}), which may have helped to battle the spread of infection. However, a much more thorough analysis is of course needed to find out whether this is indeed the case or whether other factors were mainly responsible. 
-
+According to our test results in Figure \ref{fig:Germany:Spain}, there are significant differences between the trends in Germany and Spain during the onset of the epidemic up to about day $50$, with Spain having more new cases of infections than Germany on most days. After day $50$, the trends become quite similar and start to decrease at approximately the same rate {\color{red}until approximately day $120$}. This may be due to the fact that Spain in general introduced more severe measures of lockdown than Germany (as can be seen upon inspecting the GRI in panel (c) of Figure \ref{fig:Germany:Spain}), which may have helped to battle the spread of infection. {\color{red} Furthermore, around days $110-120$ the measures in Spain were less strict than in Germany, which could have caused the detected differences in the evolution of the trends towards the end of the time period.} However, a much more thorough analysis is of course needed to find out whether this is indeed the case or whether other factors were mainly responsible. 
 
 Turning to the comparison of Germany and Italy, we found that the German trend drops down significantly faster than the Italian one after approximately day $40$. Interestingly, the GRI of Italy almost always lies above that of Germany. Hence, even though Italy has in general taken more severe and restrictive measures against the virus than Germany, it appears that the virus could be contained better in Germany (in the sense that the trend of daily new cases went down significantly faster in Germany than in Italy). This suggests that there are indeed important factors besides the level of government response to the pandemic which substantially influence the trend of new COVID-19 cases. 
 
@@ -911,13 +909,203 @@ Here, we provide the pairwise comparisons between Italy, France, Spain and the U
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/FRA_vs_GBR}
-\caption{Test results for the comparison of France and the UK.}
+\caption{Test results for the comparison of France and the UK.}\label{fig:France:UK}
+\end{minipage}
+\end{figure}
+
+
+\clearpage
+{\color{red}
+\subsection{Robustness checks for Section \ref{subsec:app}}\label{s:subsec:app:2}
+
+In this section, we provide the robustness check of the pairwise comparisons between Germany, Italy, France, Spain and the United Kingdom. Specifically, we provide the results of our test method applied to the time series of these five countries that were aligned only by the date of reaching $100$th case. We do not align the data by the days of the week. The plots have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_ITA_wa}
+\caption{Test results for the comparison of Germany and Italy without alignment by the days of the week.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_ESP_wa}
+\caption{Test results for the comparison of Germany and Spain without alignment by the days of the week.}
+\end{minipage}
+\end{figure}
+
+As you can see, the results are essentially the same except for comparisons between Germany and the United Kingdom and between Italy and the United Kingdom. Hence, we can assume that the reporting procedures in the UK were heavily influenced by the days of the week, especially in the beginning of the pandemic.
+
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_FRA_wa}
+\caption{Test results for the comparison of Germany and France without alignment by the days of the week.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_GBR_wa}
+\caption{Test results for the comparison of Germany and the UK without alignment by the days of the week.}
 \end{minipage}
 \end{figure}
 
 
 
-\newpage
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/FRA_vs_ITA_wa}
+\caption{Test results for the comparison of France and Italy without alignment by the days of the week.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/GBR_vs_ITA_wa}
+\caption{Test results for the comparison of the UK and Italy without alignment by the days of the week.}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_ITA_wa}
+\caption{Test results for the comparison of Spain and Italy without alignment by the days of the week.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_GBR_wa}
+\caption{Test results for the comparison of Spain and the UK without alignment by the days of the week.}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_FRA_wa}
+\caption{Test results for the comparison of Spain and France without alignment by the days of the week.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/FRA_vs_GBR_wa}
+\caption{Test results for the comparison of France and the UK without alignment by the days of the week.}
+\end{minipage}
+\end{figure}
+
+\clearpage
+\subsection{Additional analysis for Section \ref{subsec:app}}
+\subsubsection{Longer time period}\label{s:subsec:app:3}
+
+
+Here, we provide the results of the multiscale comparison of the time trends between the same five European countries (Germany, Italy, France, Spain and the United Kingdom) performed on a longer time period. Specifically, we align the time series as before, taking the first Monday after reaching $100$ cases as the starting date $t = 1$. However, we take the time series length $T$ to be equal to $200$ (as opposed to $T = 150$ in Section \ref{subsec:app}). The analysis was performed in a similar manner as in Section \ref{subsec:app}, and the results of the analysis are displayed in Figures \ref{fig:supp3:first} - \ref{fig:supp3:last}. The plots have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
+
+As is already obvious from the simple visual inspection, the data for Spain has very high volatility towards the end of the period. Presumably, the reason for that is repeated delays in reporting. This explains the number of cases being $0$ on multiple occasions with very sharp increase on the next day. Clearly, high day-to-day volatility of the data heavily influences the estimation error of $\sigma$ which results in rather conservative results of the overall testing procedure. Specifically, we get $\widehat{\sigma} = ???$ when estimating $\sigma$ with $T=200$ compared to $\widehat{\sigma} = 14.82$ with $T = 150$. Higher values of $\widehat{\sigma}$ result in lower values of the test statistics, which can lead to more conservative results of the test procedure. Hence, Figures \ref{fig:supp3:first} -- \ref{fig:supp3:last} differ drastically from Figures \ref{fig:Germany:Italy} -- \ref{fig:France:UK}. 
+
+
+Since both data for Spain provided by World Health Organization and by John Hopkins University also exhibit similar patterns to the data that are used in our study, we exclude Spain from our analysis and repeat the testing procedure for only four European countries: Germany, Italy, France and the United Kingdom. The results are presented in \ref{fig:supp3:first2} - \ref{fig:supp3:last2}. As can be seen, the test is much less conservative and the results of the test are much more consistent with the ones discussed in Section \ref{subsec:app}. Specifically, for each pair of countries $(i, j)$ the set $\intervals_{\text{reject}}(i, j)$ constructed for a longer time period ($T = 200$) contains almost all elements from the set $\intervals_{\text{reject}}(i, j)$ constructed for a shorter time period ($T = 150$). This shows that our test is robust with respect to the growing sample size.
+
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_ITA_long}
+\caption{Test results for the comparison of Germany and Italy on the longer time period.}\label{fig:supp3:first}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_ESP_long}
+\caption{Test results for the comparison of Germany and Spain on the longer time period.}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_FRA_long}
+\caption{Test results for the comparison of Germany and France on the longer time period.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_GBR_long}
+\caption{Test results for the comparison of Germany and the UK on the longer time period.}
+\end{minipage}
+\end{figure}
+
+
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/FRA_vs_ITA_long}
+\caption{Test results for the comparison of France and Italy on the longer time period.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/GBR_vs_ITA_long}
+\caption{Test results for the comparison of the UK and Italy on the longer time period.}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_ITA_long}
+\caption{Test results for the comparison of Spain and Italy on the longer time period.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_GBR_long}
+\caption{Test results for the comparison of Spain and the UK on the longer time period.}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/ESP_vs_FRA_long}
+\caption{Test results for the comparison of Spain and France on the longer time period.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/FRA_vs_GBR_long}
+\caption{Test results for the comparison of France and the UK on the longer time period.}\label{fig:supp3:last}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_ITA_four_countries}
+\caption{Test results for the comparison of Germany and Italy on the longer time period excluding Spain.}\label{fig:supp3:first2}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_FRA_four_countries}
+\caption{Test results for the comparison of Germany and France on the longer time period excluding Spain.}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_GBR_four_countries}
+\caption{Test results for the comparison of Germany and the UK on the longer time period excluding Spain.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/FRA_vs_ITA_four_countries}
+\caption{Test results for the comparison of France and Italy on the longer time period excluding Spain.}
+\end{minipage}
+\end{figure}
+
+
+
+\begin{figure}[h!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/GBR_vs_ITA_four_countries}
+\caption{Test results for the comparison of the UK and Italy on the longer time period excluding Spain.}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/FRA_vs_GBR_four_countries}
+\caption{Test results for the comparison of France and the UK on the longer time period excluding Spain.}\label{fig:supp3:last2}
+\end{minipage}
+\end{figure}
+
+
+\clearpage
 \subsection{Robustness checks for Section \ref{subsec:sim}}\label{s:subsec:robustness}
 
 
