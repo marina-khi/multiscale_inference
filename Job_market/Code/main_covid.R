@@ -31,21 +31,21 @@ library(readxl)
 library(mefa)
 library(aweek)
 
-testing_tmp <- read_xlsx("data/weekly_testing_data.xlsx")
+#testing_tmp <- read_xlsx("data/weekly_testing_data.xlsx")
 
-testing         <- rep(testing_tmp, each = 7)
-testing$aux_day <- rep_len(0:6, length.out = nrow(testing))
-testing$date    <- week2date(testing$year_week)
-testing$dateRep    <- testing$date + testing$aux_day
-testing$tests_done <- testing$tests_done / 7
+#testing         <- rep(testing_tmp, each = 7)
+#testing$aux_day <- rep_len(0:6, length.out = nrow(testing))
+#testing$date    <- week2date(testing$year_week)
+#testing$dateRep    <- testing$date + testing$aux_day
+#testing$tests_done <- testing$tests_done / 7
 
-test_df <- testing[, c("country_code", "tests_done", "dateRep")]
+#test_df <- testing[, c("country_code", "tests_done", "dateRep")]
 
-rm(testing_tmp, testing)
+#rm(testing_tmp, testing)
 
-names(test_df)[names(test_df) == 'country_code'] <- 'geoId'
-covid_tmp <- merge(covid_tmp, test_df, by = c('geoId', "dateRep"), all.x = TRUE)
-covid_tmp$tests_done[is.na(covid_tmp$tests_done)] <- Inf
+#names(test_df)[names(test_df) == 'country_code'] <- 'geoId'
+#covid_tmp <- merge(covid_tmp, test_df, by = c('geoId', "dateRep"), all.x = TRUE)
+#covid_tmp$tests_done[is.na(covid_tmp$tests_done)] <- Inf
 
 #We load government response index as well
 gov_responces      <- read.csv("data/OxCGRT_latest.csv", sep = ",", dec = ".",
@@ -76,7 +76,7 @@ for (country in unique(covid$countryterritoryCode)){
   if (tmp >= 1000){
     tmp_df <- covid[(covid$countryterritoryCode == country & covid$cumcases >= 100),
                     c("dateRep", "cases", "deaths", "cumcases", "cumdeaths", "weekday",
-                      "GovernmentResponseIndex", "tests_done")]
+                      "GovernmentResponseIndex")]#, "tests_done")]
     tmp_index <- match("Monday", tmp_df[, "weekday"])
     #tmp_index = 1 #If we do not want to normalize by Mondays
     covid_list[[country]] <- tmp_df[tmp_index:nrow(tmp_df), ]
@@ -106,21 +106,21 @@ colnames(covid_mat) <- countries
 gov_resp            <- matrix(NA, ncol = n_ts, nrow = t_len)
 colnames(gov_resp)  <- countries
 
-n_of_tests           <- matrix(NA, ncol = n_ts, nrow = t_len)
-colnames(n_of_tests) <- countries
+#n_of_tests           <- matrix(NA, ncol = n_ts, nrow = t_len)
+#colnames(n_of_tests) <- countries
 
 i = 1
 for (country in countries) {
   #covid_mat[, i]        <- covid_list[[country]]$cases[22:(t_len + 21)] /
   #                          covid_list[[country]]$tests_done[22:(t_len + 21)] * 100
   #gov_resp[, i]         <- covid_list[[country]]$GovernmentResponseIndex[22:(t_len + 21)]
-  covid_mat[, i]        <- covid_list[[country]]$cases[1:t_len] / covid_list[[country]]$tests_done[1:t_len] * 100
-  n_of_tests[, i]       <- covid_list[[country]]$tests_done[1:t_len]
+  covid_mat[, i]        <- covid_list[[country]]$cases[1:t_len] #/ covid_list[[country]]$tests_done[1:t_len] * 100
+  #n_of_tests[, i]       <- covid_list[[country]]$tests_done[1:t_len]
   gov_resp[, i]         <- covid_list[[country]]$GovernmentResponseIndex[1:t_len]
   i = i + 1
 }
 
-n_of_tests[is.infinite(n_of_tests)] <- 0
+#n_of_tests[is.infinite(n_of_tests)] <- 0
 
 #Cleaning the data: there are weird cases in the dataset when the number of new cases is negative! 
 sum(covid_mat < 0)
@@ -164,10 +164,10 @@ countries_names <- c("Germany", "Spain", "France", "United Kingdom", "Italy")
 for (l in seq_len(nrow(result$ijset))){
   i <- result$ijset[l, 1]
   j <- result$ijset[l, 2]
-  filename = paste0("plots/", countries[i], "_vs_", countries[j], "_normalised.pdf")
-  produce_plots(results = result, l = l, data_i = covid_mat[, i], data_j = covid_mat[, j],
+  filename = paste0("plots_new/", countries[i], "_vs_", countries[j], "_presentation.pdf")
+  produce_plots_talk(results = result, l = l, data_i = covid_mat[, i], data_j = covid_mat[, j],
 #                gov_resp_i = gov_resp[, i], gov_resp_j = gov_resp[, j],
-                gov_resp_i = n_of_tests[, i], gov_resp_j = n_of_tests[, j],
+#                gov_resp_i = n_of_tests[, i], gov_resp_j = n_of_tests[, j],
                 country_i = countries_names[i], country_j = countries_names[j],
                 filename = filename)
 }

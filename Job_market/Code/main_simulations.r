@@ -21,10 +21,10 @@ seed <- sample(1:100000, 1)
 
 n_sim     <- 5000               # number of simulation runs for power and size
 sim_runs  <- 5000               # number of simulation runs to produce critical values
-alpha_vec <- c(0.01, 0.05, 0.1) # different significance levels
-n_ts_vec  <- c(5, 10, 50)       # different number of time series
-t_len_vec <- c(100, 250, 500)   # different time series lengths
-sigma_vec <- c(15, 10, 20)      # different overdispersion parameter
+alpha_vec <- c(0.05) # different significance levels
+n_ts_vec  <- c(5)       # different number of time series
+t_len_vec <- c(100, 250, 500, 1000, 2000, 5000)   # different time series lengths
+sigma_vec <- c(15)      # different overdispersion parameter
 
 number_of_cols <- length(n_ts_vec) * length(alpha_vec) #Needed for the output
 
@@ -34,13 +34,13 @@ number_of_cols <- length(n_ts_vec) * length(alpha_vec) #Needed for the output
 
 lambda_vec <- lambda_fct((1:100) / 100)
 
-pdf(paste0("plots/lambda_fct.pdf"), width=5, height=5, paper="special")
-par(mar = c(3, 2, 2, 0)) #Margins for each plot
-par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
-plot((1:100) / 100, lambda_vec,  ylim = c(0, max(lambda_vec) + 100), xlab="u",
-     ylab = "", mgp=c(2,0.5,0), type = "l")
-title(main = expression(Plot ~ of ~ the ~ "function" ~ lambda), line = 1)
-dev.off()
+# pdf(paste0("plots/lambda_fct.pdf"), width=5, height=5, paper="special")
+# par(mar = c(3, 2, 2, 0)) #Margins for each plot
+# par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
+# plot((1:100) / 100, lambda_vec,  ylim = c(0, max(lambda_vec) + 100), xlab="u",
+#      ylab = "", mgp=c(2,0.5,0), type = "l")
+# title(main = expression(Plot ~ of ~ the ~ "function" ~ lambda), line = 1)
+# dev.off()
 
 #However, you can change this function to whatever you like.
 #In order to do this, change the definition of lambda_vec further in the code.
@@ -49,8 +49,10 @@ dev.off()
 
 for (sigma in sigma_vec){
   size_matrix            <- matrix(NA, nrow = length(t_len_vec), ncol = number_of_cols)
+  size_matrix_2          <- matrix(NA, nrow = length(t_len_vec), ncol = number_of_cols)
   rownames(size_matrix)  <- paste0("$T = ", t_len_vec, "$")
-
+  rownames(size_matrix_2)<- paste0("$T = ", t_len_vec, "$")
+  
   k <- 1
   for (n_ts in n_ts_vec){
     i <- 1
@@ -61,16 +63,50 @@ for (sigma in sigma_vec){
       set.seed(321)
       size <- calculate_size(t_len = t_len, n_ts = n_ts, alpha_vec = alpha_vec,
                              lambda_vec = lambda_vec, sigma = sigma,
-                             n_sim = n_sim, sim_runs = sim_runs)
+                             n_sim = n_sim, sim_runs = sim_runs, 
+                             correction = TRUE)
       size_matrix[i, (k * length(alpha_vec) - (length(alpha_vec) - 1)):(k * length(alpha_vec))] <- size
+      set.seed(321)
+      size <- calculate_size(t_len = t_len, n_ts = n_ts, alpha_vec = alpha_vec,
+                             lambda_vec = lambda_vec, sigma = sigma,
+                             n_sim = n_sim, sim_runs = sim_runs, 
+                             correction = FALSE)
+      size_matrix_2[i, (k * length(alpha_vec) - (length(alpha_vec) - 1)):(k * length(alpha_vec))] <- size
       i <- i + 1
     }
     k <- k + 1
   }
-  print.xtable(xtable(size_matrix, digits = c(3),
-                      align = paste(replicate(number_of_cols + 1, "c"), collapse = "")),
-               type="latex", file=paste0("plots/size_overdispersion_", sigma, ".tex"),
-               include.colnames = FALSE, sanitize.text.function = function(x) {x})
+  
+  pdf("plots_new/size_with_correction.pdf", width = 5, height = 6.5, paper="special")
+  layout(matrix(c(1, 2), ncol=1), widths=c(2.4, 2.4),
+         heights=c(1.5, 1.8), TRUE)
+  
+  #Setting the layout of the graphs
+  par(cex = 1, tck = -0.025)
+  par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
+  par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
+  
+  plot(size_matrix[, 1], ylim=c(0, 0.1), type="l",
+       col = "#EB811B", ylab="", xlab="", mgp=c(1, 0.5, 0))
+  lines(size_matrix_2[, 1], col="#604c38")
+  title(main = "(a) size comparison", font.main = 1, line = 0.5)
+  legend("topright", inset = 0.02, legend=c("with correction", "without correction"),
+         col = c("#EB811B", "#604c38"), lty = 1, cex = 0.95, ncol = 1)
+  
+  par(mar = c(2.7, 0.5, 3, 0)) #Margins for each plot
+  
+  plot(size_matrix[, 1], ylim=c(0, 0.1), type="l",
+       col = "#EB811B", ylab="", xlab="", mgp=c(1, 0.5, 0))
+  lines(size_matrix_2[, 1], col="#604c38")
+  title(main = "(b) size comparison", font.main = 1, line = 0.5)
+  legend("topright", inset = 0.02, legend=c("with correction", "without correction"),
+         col = c("#EB811B", "#604c38"), lty = 1, cex = 0.95, ncol = 1)
+  
+  dev.off()
+#  print.xtable(xtable(size_matrix, digits = c(3),
+#                      align = paste(replicate(number_of_cols + 1, "c"), collapse = "")),
+#               type="latex", file=paste0("plots_new/size_overdispersion_", sigma, ".tex"),
+#               include.colnames = FALSE, sanitize.text.function = function(x) {x})
 }
 
 #Now the results of size simulations are stored as the tex tables in the folder ./plots/
