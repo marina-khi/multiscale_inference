@@ -33,7 +33,8 @@ produce_plots <- function (results, l, data_i, data_j,
   plot(data_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
       col="blue", ylab="", xlab="", mgp=c(1, 0.5, 0))
   lines(data_j, col="red")
-  title(main = "(a) observed new cases per day", font.main = 1, line = 0.5)
+#  title(main = "(a) observed new cases per day", font.main = 1, line = 0.5)
+  title(main = "(a) percentage of daily new cases", font.main = 1, line = 0.5)
   legend("topright", inset = 0.02, legend=c(country_i, country_j),
          col = c("blue", "red"), lty = 1, cex = 0.95, ncol = 1)
  
@@ -51,9 +52,12 @@ produce_plots <- function (results, l, data_i, data_j,
   title(main = "(b) smoothed curves from (a)", font.main = 1, line = 0.5)
   lines(smoothed_j, col="red")
 
-  plot(gov_resp_i, ylim=c(0, 100), type="l",
-       col="blue", ylab="", xlab = "", mgp=c(1, 0.5, 0))
-  title(main = "(c) government response index", font.main = 1, line = 0.5)
+  plot(gov_resp_i, ylim=c(min(gov_resp_i, gov_resp_j), max(gov_resp_i, gov_resp_j)),
+       type="l", col="blue", ylab="", xlab = "", mgp=c(1, 0.5, 0))
+  title(main = "(c) number of tests performed per day", font.main = 1, line = 0.5)
+  # plot(gov_resp_i, ylim=c(0, 100), type="l",
+  #      col="blue", ylab="", xlab = "", mgp=c(1, 0.5, 0))
+  # title(main = "(c) government response index", font.main = 1, line = 0.5)
   lines(gov_resp_j, col="red")
 
   par(mar = c(2.7, 0.5, 3, 0)) #Margins for each plot
@@ -155,7 +159,8 @@ simulate_data <- function(n_ts, t_len, lambda_vec, sigma) {
 
 calculate_size <- function(t_len, n_ts, alpha_vec, lambda_vec = lambda_vec,
                            sigma = sigma,
-                           n_sim = 1000, sim_runs = 1000){
+                           n_sim = 1000, sim_runs = 1000, 
+                           correction = TRUE){
   
   #Constructing the set of intervals
   grid  <- construct_weekly_grid(t_len)
@@ -167,7 +172,8 @@ calculate_size <- function(t_len, n_ts, alpha_vec, lambda_vec = lambda_vec,
   # compute critical value
   quantiles <- compute_quantiles(t_len = t_len, n_ts = n_ts, 
                                  grid = grid, ijset = ijset,
-                                 sim_runs = sim_runs)
+                                 sim_runs = sim_runs, 
+                                 correction = correction)
   
   probs <- as.vector(quantiles$quant[1, ])
   quant <- as.vector(quantiles$quant[2, ])
@@ -198,8 +204,19 @@ calculate_size <- function(t_len, n_ts, alpha_vec, lambda_vec = lambda_vec,
     result <- compute_statistics(data = Y, sigma = sigmahat, n_ts = n_ts,
                                  grid = grid, ijset = ijset)
     
-    test_stat       <- max(result$stat, na.rm = TRUE)
+    if (correction) {
+      test_stat       <- max(result$stat, na.rm = TRUE)
+    } else {
+      test_stat_vec <- c()
+      for (i in seq_len(nrow(ijset))) {
+        gset_with_values <- result$gset_with_values[[i]]
+        test_stat_vec <- c(test_stat_vec, max(gset_with_values$vals, na.rm = TRUE))
+      }
+      test_stat <- max(test_stat_vec, na.rm = TRUE)
+    }
+      
     test_res[sim, ] <- as.numeric(test_stat > crit_val)
+    
   }
   print(paste("Empirical size: ",  colSums(test_res) / n_sim, sep=""))
   return(colSums(test_res) / n_sim)
@@ -209,7 +226,8 @@ calculate_size <- function(t_len, n_ts, alpha_vec, lambda_vec = lambda_vec,
 calculate_power <- function(t_len, n_ts, alpha_vec, lambda_vec_1 = lambda_vec_1,
                             lambda_vec_2 = lambda_vec_2,
                             sigma = sigma,
-                            n_sim = 1000, sim_runs = 1000){
+                            n_sim = 1000, sim_runs = 1000,
+                            correction = TRUE){
   
   #Constructing the set of intervals
   grid  <- construct_weekly_grid(t_len)
@@ -221,7 +239,8 @@ calculate_power <- function(t_len, n_ts, alpha_vec, lambda_vec_1 = lambda_vec_1,
   # compute critical value
   quantiles <- compute_quantiles(t_len = t_len, n_ts = n_ts, 
                                  grid = grid, ijset = ijset,
-                                 sim_runs = sim_runs)
+                                 sim_runs = sim_runs,
+                                 correction = correction)
   
   probs <- as.vector(quantiles$quant[1, ])
   quant <- as.vector(quantiles$quant[2, ])

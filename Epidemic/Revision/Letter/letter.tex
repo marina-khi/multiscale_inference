@@ -1,0 +1,147 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb,amsthm,graphicx}
+\usepackage{titlesec}
+\usepackage{textcomp}
+\usepackage{enumitem}
+\usepackage{color}
+\usepackage{epsfig}
+\usepackage{graphics}
+\usepackage{pdfpages}
+\usepackage{subcaption}
+\usepackage[font=small]{caption}
+\usepackage[hang,flushmargin]{footmisc} 
+\usepackage{float}
+\usepackage{rotating,tabularx}
+\usepackage{booktabs}
+\usepackage[mathscr]{euscript}
+\usepackage{natbib}
+\usepackage{setspace}
+\usepackage{mathrsfs}
+\usepackage[official]{eurosym}
+\usepackage[left=2.8cm,right=2.8cm,bottom=2.8cm,top=2.8cm]{geometry}
+
+\setcounter{secnumdepth}{4}
+\renewcommand{\baselinestretch}{1.2}
+\parindent0pt
+
+\input{macros}
+
+
+
+\begin{document}
+
+
+
+\begin{center} 
+{\large \bf Revision of the paper} \\[0.1cm]
+{\large \bf ``Nonparametric comparison:} \\[0.1cm]
+{\large \bf of epidemic time trends:} \\[0.1cm]
+{\large \bf the case of COVID-19"} 
+\end{center}
+\vspace{7pt}
+
+
+
+First of all, we would like to thank the editor, the associate editor and the reviewers for their many comments and suggestions which were very helpful in improving the paper. In the revision, we have addressed all comments and have rewritten the paper accordingly. Please find our point-by-point responses below. %Since the revised paper includes additional material as requested by the referees (additional simulations, a second application example, \dots), it is a bit longer than the original submission. In particular, it has grown from 29 (including Appendix) to ... pages in our layout. However, we are of course happy and willing to reduce the length of the paper if this is needed. Before we reply to the specific comments of the referees, we summarize the major changes in the revision.
+
+\vspace{10pt}
+
+
+\textbf{Generalization of the theoretical results.} We have extended the theoretical results as suggested by Referee 1:
+\begin{enumerate}[label=(\roman*), leftmargin=0.8cm]
+
+\item We have derived the following result for the asymptotic power of our test:
+
+Let the conditions of Theorem A.1 be satisfied and consider two sequences of functions $\lambda_{i, T}$ and $\lambda_{j, T}$ with the property \eqref{loc-alt} for $c_T$ going to infinity faster than $\frac{\sqrt{\log T}\sqrt{\log \log T}}{\log \log \log T}$. Then 
+\[ \pr\Big( \forall (i,j,k) \in \mathcal{M}_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1) \]
+for any given $\alpha \in (0, 1)$. 
+
+
+This result is stated as Corollary A.2 on p.??  of the revised paper. 
+
+%consistency result in addition to Proposition 3.3: Let the significance level $\alpha = \alpha_T \in (0,1)$ depend on the sample size $T$. If $\alpha_T \rightarrow 0$, then $\mathbb{P}({E}_T^{\ell}) \rightarrow 1$ for $\ell \in \{ \pm,+,- \}$. 
+%We provide a generalization of Proposition 3.3 which shows that $\mathbb{P}({E}_T^{\ell}) = (1 - \alpha_T) + o(1)$ for any sequence $\{\alpha_T\}$ of significance levels $\alpha_T \in (0,1)$. In particular, for $\alpha_T \rightarrow 0$, we get the consistency result that $\mathbb{P}({E}_T^{\ell}) \rightarrow 1$. 
+
+\item %We have generalized our estimator of the long-run error variance. The estimation procedure is shown to be valid not only for AR($p$) processes of known finite order $p$ but for any stationary error process $\{\varepsilon_t\}$ with an AR($\infty$) representation. %This greatly extends the applicability of the estimator. 
+\end{enumerate}
+\vspace{3pt}
+
+
+\textbf{Application.} 
+\begin{enumerate}[label=(\roman*), leftmargin=0.8cm]
+
+\item Alignment by Monday, robustness check without this alignment in Section S.3 in the Supplement.
+\item $T = 150$ with the robustness check for longer time series $T = 200$ in Section S.4 in the Supplement.
+\end{enumerate}
+ 
+\newpage
+\begin{center}
+{\large \bf Reply to Referee 1} 
+\end{center}
+
+
+Thank you very much for the constructive and helpful comments. In our revision, we have addressed all of them. Please see our replies to your comments below.
+
+
+\begin{enumerate}[label=(\arabic*),leftmargin=0.7cm]
+
+\item \textit{Since the difference could be canceled out, why should one consider} $\sum\nolimits_t (X_{it} - X_{jt})\mathbf{1}_{t/T \in I_k}$\textit{? Isn't it more appropriate to use} $|X_{it} - X_{jt}|$ \textit{ or } $|X_{it} - X_{jt}|^2$ \textit{to capture the distance?}
+
+
+\item \textit{Now the conclusion will be largely interfered by the choice of interval sets. I am wondering whether we can reach some unified result without the influence of such selection. That is whether we can aggregate the rejected intervals Ik and draw some meaningful conclusion?}
+
+\item \textit{The author mentioned this method can be used to identify locations of changes in the trends. But the detail is not very clear to me. For example consider a very simple case: if the two series $i, j$ differ from time $t_1$ to $t_2$ and are the same before and after this interval, where $t_1, t_2, t_2 - t_1$ are all unknown. Can we somehow able to identify this interval $[t_1, t_2]$ using our method and how well can we estimate $t_1$ and $t_2$? If one takes difference of each pair $(i, j)$, and then the trends are zero except some unknown intervals. Then the task is to detect those unknown intervals. Such problem can be possibly solved by for example MOSUM. Can author comments about this?}
+
+\item \textit{Some theory question}
+
+\begin{enumerate}[label=(\roman*)]
+\item \textit{Since the result in Chenozukov et al's Gaussian approximation(GA) does not require the series to be independent cross sectionally, I wonder does that mean the current result can be extended to data with cross-sectional dependence?}
+\item \textit{It would be better if the author can derive power under certain alternatives, so that one can get a better idea as how different the trends needs to be in order to be detected.}
+
+It can indeed be proven that our multiscale test has asymptotic power $1$ against local alternatives. We have added this result as Corollary A.2 in the Appendix to the paper. The proof is provided in the Supplementary Material.
+
+\item \textit{The argument about no need for time dependent data is reasonable, just a short comment: there already exists result extending chenozukov et al's GA to time dependent case, maybe this paper can be further extended to time dependent data as well.}
+\end{enumerate}
+
+\item \textit{The specific allowance of $p = |W|$, which is essential in high dimensional analysis, is not mentioned until appendix. Please put them forward in the main context to provide some guidance in application. Also since the convergence speed of Gaussian approximation depends on $T, p$, it would be better to keep the bound in terms of those parameters, so that we know how large the sample size we need in order to obtain the desired accuracy.}
+
+\end{enumerate}
+
+
+
+\newpage
+\begin{center}
+{\large \bf Reply to Referee 2} 
+\end{center}
+
+
+Thank you very much for the constructive and useful suggestions. In our revision, we have addressed all of them. Here are our point-by-point responses to your comments. 
+
+
+\begin{enumerate}[label=(\arabic*),leftmargin=0.7cm]
+
+\item \textit{The assumption of independence across countries may be debatable, but it seems that in the context of the model, this could be tested, so this may be worth mentioning.}
+
+\item \textit{Some arguments may be worth further details in the text. For instance, the equation involving} $\widehat{s}_{ijk,T} / \sqrt{T h_k}$ \textit{on Page 2 Line 7, or the bound for} $|r_{it}|$ \textit{on Page 2 Line -5.}
+
+\item \textit{I am unsure why the statistic in (3.2) is introduced, I feel the discussion in Pages 8-9 could be done without referring to it.}
+
+\item \textit{The "cp." abbreviation is uncommon, I feel it should be replaced by "see" or "e.g."}
+
+We have replaced the "cp." abbreviation by "e.g." and in some cases by "see" throughout the paper.
+ 
+
+\end{enumerate}
+
+
+
+\newpage
+\bibliographystyle{ims}
+{\small
+\setlength{\bibsep}{0.45em}
+\bibliography{bibliography}}
+
+
+
+\end{document}

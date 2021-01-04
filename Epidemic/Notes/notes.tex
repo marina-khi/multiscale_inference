@@ -235,6 +235,18 @@ In other words:
 \end{equation}
 Hence, the test allows us to make simultaneous confidence statements (a) about which pairs of countries $(i,j)$ have different trend functions and (b) about where, that is, in which time intervals $\mathcal{I}_k$ the functions differ.
 
+{\color{red}
+The second result characterizes the power of the multiscale test against local alternatives. To formulate it, consider a sequence of the functions $\lambda_{i}= \lambda_{i, T}$ and $\lambda_j =\lambda_{j, T}$ with the following property: There exists $\mathcal{I}_{k} \in \intervals$ such that 
+\begin{equation}\label{loc-alt}
+\lambda_{i, T}(w) - \lambda_{j, T}(w) \ge c_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k}, 
+\end{equation}
+where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$ faster than $\frac{\sqrt{\log T}\sqrt{\log \log T}}{\log \log \log T}$. We denote the set of triplets $(i, j, k) \in \indexset$ for which \eqref{loc-alt} holds true as $\indexset_1$. Clearly $\indexset_0 \cap \indexset_1 = \emptyset$. According to Corollary \ref{corollary2} in the Appendix, we can make the following statement about the asymptotic power of the test:
+\begin{equation}\label{eq:power}
+\pr\Big( \forall (i,j,k) \in \indexset_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1).
+\end{equation}
+Hence, our test has asymptotic power $1$ against local alternatives of the form \eqref{loc-alt}. The proof can be found in the Supplementary Material.
+}
+
 
 \subsection{Implementation of the test in practice}
 

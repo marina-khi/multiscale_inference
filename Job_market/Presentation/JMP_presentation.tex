@@ -19,10 +19,10 @@
 %\setbeamercolor{progress bar}{fg=UniBlue, bg= UniYellow}
 \usepackage{xspace}
 
-\title{Simultaneous statistical inference for epidemic trends: the case of COVID-19}
-\date{01/11/2020}
+\title{Nonparametric comparison of epidemic time trends: the case of COVID-19}
+\date{7 January, 2020}
 \author{Marina Khismatullina \and Michael Vogt}
-\setbeamertemplate{frame footer}{Simultaneous statistical inference for epidemic trends: the case of COVID-19}
+\setbeamertemplate{frame footer}{Nonparametric comparison of epidemic time trends: the case of COVID-19}
 \metroset{block=fill}
 % \titlegraphic{\hfill\includegraphics[height=1.5cm]{logo.pdf}}
 
@@ -49,55 +49,72 @@
 
 
 \begin{frame}{Motivation}
-	\textbf{Research question:}	
-	How do outbreak patterns of COVID-19 compare across countries?
-	{\onslide<1>\begin{figure}
+
+{\onslide<1-> \begin{block}{Aim of the paper}
+	To develop new inference methods that allow to \textit{identify} and \textit{locate} differences between epidemic time trends.
+\end{block}}
+	{\onslide<2>\begin{figure}
     		\centering
     		\includegraphics[height=0.45\textheight]{plots/Germany_and_Italy.pdf}
   	\end{figure}}
-	{\onslide<2>
+	{\onslide<3>
 	\vspace{-46,81mm}
 	\begin{figure}
     		\centering
     		\includegraphics[height=0.45\textheight]{plots/Germany_and_Italy_1.pdf}
   	\end{figure}}	
-	{\onslide<3->
+	{\onslide<4->
 	\vspace{-46,81mm}
 	\begin{figure}
     		\centering
     		\includegraphics[height=0.45\textheight]{plots/Germany_and_Italy_2.pdf}
   	\end{figure}}	
-{\onslide<4> \begin{block}{Aim of the paper}
-	To develop new inference methods that allow to \textit{identify} and \textit{locate} differences between epidemic time trends.
-\end{block}}
+\vspace{-3mm}
+{\onslide<5->\textbf{Research question:}
+	Out of many given intervals, how to find those where the trends are significantly different?}
+
 
 %\textbf{Aim:} to compare the underlying trends on different intervals simultaneously.}
 \end{frame}
 
-\begin{frame}{Research goal}
+\begin{frame}{Motivation}
+\vspace{-4mm}
+\textbf{Why is it relevant?}
 
-Suppose we have a set of intervals of different lengths, and we want to be able to say if two underlying trend functions are equal on each of these intervals.\pause
+Finding systematic differences between trends = basis for further research
 
-Then we would like a procedure that:
-\vspace{-1mm}
-\begin{itemize}
-	\item allows us to test multiple hypotheses simultaneously;\pause
-	\item taking the differences in lengths of the intervals into account;\pause
-	\item controls the family-wise error rate (probability of making even one type I error); \pause
-	\item while having an asymptotic power of $1$ against local alternatives;\pause
-	\item is easy to use and ideally already has an implementation as an R-package.
-\end{itemize}\pause
+$\quad \quad \Rightarrow$ understanding which government policies are more effective.\pause
 
+\vspace{3mm}
+
+\textbf{Why is it difficult?}	
+
+Testing many hypotheses at the same time = multiple testing problem
+
+$\quad \quad \Rightarrow$ large probability of one true null hypothesis being rejected.\pause
+
+\vspace{3mm}
+
+\textbf{Is it limited to COVID-19?}
+
+No! Our method = general method for comparing nonparametric trends
+
+$\quad \quad \Rightarrow$ new statistical test for equality of nonparametric trend curves.
+ 
 \end{frame}
 
 \begin{frame}{Literature}
 	Comparison of deterministic trends:
 	\begin{itemize}
-		\item Park et al. (2009), Degras et al. (2012), Zhang et al. (2012), Hidalgo and Lee (2014), Chen and Wu (2019).
-	\end{itemize}\pause
+		\item {\color<2>{mLightBrown}Park et al. (2009)}, Degras et al. (2012), Zhang et al. (2012), Hidalgo and Lee (2014), Chen and Wu (2019).
+	\end{itemize}\pause\pause
+	Multiscale tests:
+	\begin{itemize}
+		\item Chaudhuri and Marron (1999, 2000), Hall and Heckman (2000), D{\"u}mbgen and Spokoiny (2001), {\color<4>{mLightBrown}Park et al. (2009)}.
+	\end{itemize}\pause\pause
 	Studies of COVID-19:
 	\begin{itemize}
-		\item Time series analysis: Gu et al. (2020), Li and Linton (2020).
+		\item {\color<6>{mLightBrown}Dong et al. (2020)}, Gu et al. (2020), Li and Linton (2020), Jiang et al. (2020).
 	\end{itemize}
 \end{frame}
 
@@ -106,14 +123,19 @@ Then we would like a procedure that:
 \begin{frame}{Motivation for the model}
 We observe $n$ time series $\mathcal{X}_i = \{X_{it}: 1 \le t \le T \}$ of length $T$.\pause
 
+\vspace{3mm}
+
 $X_{it}$ are non-negative integers $\Rightarrow$ can be modelled by a Poisson distribution with time-varying parameter $\lambda_i(t/T)$: $X_{it} \sim P_{\lambda_i(t/T)}$.\pause
+\vspace{3mm}
 
 Since $\lambda_i(t/T) = \E[X_{it}] = \Var(X_{it})$, we can rewrite $X_{it}$ as
 \vspace{-2mm}
 \begin{equation*}
-X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + u_{it} \quad \text{with} \quad u_{it} = \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}
+X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + %u_{it} %\quad \text{with} \quad u_{it} 
+\sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it},
 \end{equation*}
 where $\eta_{it}$ has zero mean and unit variance.\pause
+\vspace{3mm}
 
 In applications the variance can be larger than the mean $\Rightarrow$ quasi-Poisson models.
 \end{frame}
@@ -135,21 +157,22 @@ where
 \section{Testing procedure}
 \begin{frame}{Testing problem}
 
-Let $\mathcal{F} :=\{ \mathcal{I}_k \subseteq [0, 1]: 1 \le k \le K\}$ be a family of rescaled time intervals on $[0, 1]$, and let $H_0^{(ijk)}$ be the hypothesis that the functions $\lambda_i$ and $\lambda_j$ are equal on an interval $\mathcal{I}_k$, \pause i.e.
+Let $\mathcal{F} :=\{ \mathcal{I}_k \subseteq [0, 1]: 1 \le k \le K\}$ be a family of rescaled time intervals on $[0, 1]$, and for each triplet $(i, j, k)$ consider the null hypothesis that the functions $\lambda_i$ and $\lambda_j$ are equal on an interval $\mathcal{I}_k$\pause, i.e.
 \begin{align*}
 H_0^{(ijk)}:\quad  \lambda_i(w) = \lambda_j(w) \text{ for all } w\in \mathcal{I}_k
 \end{align*}\pause
-We want to test $H_0^{(ijk)}$ simultaneously for all pairs of countries $i$ and $j$ and all intervals $\mathcal{I}_k$ in the family $\mathcal{F}$ and we want to control the familywise error rate (FWER) at level $\alpha$.\pause
+\vspace{-2mm}
 
-Let $\mathcal{M}_0$ be the set of triplets $(i, j, k)$ for which $H_0^{(ijk)}$ holds true. Then, FWER is
+We want to test $H_0^{(ijk)}$ simultaneously for all pairs of countries $i$ and $j$ and all intervals $\mathcal{I}_k$ in the family $\mathcal{F}$ and we want to control the familywise error rate (FWER) at level $\alpha$\pause:
 \begin{align*}
-\text{FWER}(\alpha) = \Prob \Big( \exists (i,j,k) \in \mathcal{M}_0: \text{we reject } H_0^{(ijk)} \Big)
+\text{FWER}(\alpha) = \Prob \Big( \exists (i,j,k): \text{we wrongly reject } H_0^{(ijk)} \Big)
 \end{align*}
+%where $\mathcal{M}_0$ is the set of triplets $(i, j, k)$ for which $H_0^{(ijk)}$ holds true.
 \end{frame} 
 
 
 \begin{frame}{Test statistic}
-For the given interval $\mathcal{I}_k$ and a pair of time series $i$ and $j$ we calculate
+For a given interval $\mathcal{I}_k$ and a pair of time series $i$ and $j$ we calculate
 \begin{equation*}
 \hat{s}_{ijk} = \frac{1}{T h_k} \sum\limits_{t=1}^T \ind (X_{it} -X_{jt}), 
 \end{equation*}
@@ -157,11 +180,12 @@ For the given interval $\mathcal{I}_k$ and a pair of time series $i$ and $j$ we 
 where $h_k$ is the length of $\mathcal{I}_k$. \pause $\hat{s}_{ijk}$ estimates the average distance between $\lambda_i$ and $\lambda_j$ on $\mathcal{I}_k$: \pause 
 \begin{align*}
 \hat{s}_{ijk} = &\frac{1}{Th_k} \sum\limits_{t=1}^T \ind \bigg( \lambda_i \Big(\frac{t}{T}\Big)  - \lambda_j \Big(\frac{t}{T}\Big)\bigg) \\
-&+  \frac{\sigma}{Th_k} \sum\limits_{t=1}^T \ind \Big(\sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} -  \sqrt{ \lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt} \Big)
-\end{align*}\pause
-Applying a law of large numbers, we get that
-\begin{align*}
-\hat{s}_{ijk} = &\frac{1}{Th_k} \sum\limits_{t=1}^T \ind \bigg( \lambda_i \Big(\frac{t}{T}\Big)  - \lambda_j \Big(\frac{t}{T}\Big)\bigg) + o_P(1)
+&+  {\color<4-5>{mLightBrown} \frac{\sigma}{Th_k} \sum\limits_{t=1}^T \ind \Big(\sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} -  \sqrt{ \lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt} \Big)}\\
+%\end{align*}
+%Applying a law of large numbers, we get that
+%\begin{align*}
+%\hat{s}_{ijk} 
+\onslide<5-6>{= &\frac{1}{Th_k} \sum\limits_{t=1}^T \ind \bigg( \lambda_i \Big(\frac{t}{T}\Big)  - \lambda_j \Big(\frac{t}{T}\Big)\bigg) + {\color<5>{mLightBrown}o_P(1)}}
 \end{align*}
 \end{frame}
 
@@ -179,10 +203,10 @@ with $\hat{\sigma}^2$ being an appropriate estimator of $\sigma^2$. \hyperlink{f
 \end{frame}
 
 
-\begin{frame}{Test statistic, part 2}
+\begin{frame}{Test statistic, part 3}
 Test statistic for the hypothesis $H_0^{(ijk)}$ is defined as
 \begin{equation*}
-\widehat{\psi}_{ijk} = \frac{\sum\nolimits_{t=1}^T \indsmall (X_{it} -X_{jt})}{\hat{\sigma} \big\{ \sum\nolimits_{t=1}^T \indsmall  (X_{it} + X_{jt} )\big\}^{1/2}}
+\widehat{\psi}_{ijk} : = \frac{\hat{s}_{ijk}}{\sqrt{\widehat{\Var(\hat{s}_{ijk})} }}= \frac{\sum\nolimits_{t=1}^T \indsmall (X_{it} -X_{jt})}{\hat{\sigma} \big\{ \sum\nolimits_{t=1}^T \indsmall  (X_{it} + X_{jt} )\big\}^{1/2}}
 \end{equation*} \pause
 Under certain conditions and under the null, $\widehat{\psi}_{ijk}$ can be approximated by a Gaussian version of the test statistic:
 \begin{align*}
@@ -203,17 +227,17 @@ How to construct critical values $c_{ijk}(\alpha)$?\pause
 
 
 \begin{frame}{Critical values, part 2}
-We want to control FWER:
+We want to control FWER. \pause Let $\mathcal{M}_0: = \big\{(i, j, k) | H_0^{(ijk)} \text{ is true} \big\}$, then
 \begin{align*}
-\text{FWER}(\alpha) &= \Prob \Big( \exists (i,j,k) \in\mathcal{M}_0: |\widehat{\psi}_{ijk} | > c_{ijk}(\alpha) \Big) \\
-&= 1 - \Prob \Big( \forall (i,j,k) \in\mathcal{M}_0: |\widehat{\psi}_{ijk} | \le c_{ijk}(\alpha) \Big)\\
- & =  1 - \Prob \Big( \forall (i,j,k) \in \mathcal{M}_0: a_k \big(|\hat{\psi}_{ijk}| - b_k\big) \le q(\alpha) \Big)\\
- & = 1 - \Prob\Big( \max_{(i,j,k) \in \mathcal{M}_0} a_k \big( |\hat{\psi}_{ijk}| - b_k \big) \le q(\alpha) \Big)\\
- & \le \alpha
-\end{align*}\pause
-Hence, we choose $q(\alpha)$ as the $(1-\alpha)$-quantile of the statistic 
+\text{FWER}(\alpha) &= \Prob \Big( \exists (i,j,k) \in \mathcal{M}_0:  |\widehat{\psi}_{ijk} | > c_{ijk}(\alpha) \Big) \\
+\onslide<3->{&= 1 - \Prob \Big( \forall (i,j,k) \in \mathcal{M}_0: |\widehat{\psi}_{ijk} | \le c_{ijk}(\alpha) \Big)}\\
+\onslide<4->{& =  1 - \Prob \Big( \forall (i,j,k) \in \mathcal{M}_0: a_k \big(|\hat{\psi}_{ijk}| - b_k\big) \le q(\alpha) \Big)}\\
+\onslide<5->{& = 1 - \Prob\Big( \max_{(i,j,k) \in \mathcal{M}_0} a_k \big( |\hat{\psi}_{ijk}| - b_k \big) \le q(\alpha) \Big)}\\
+\onslide<6->{ & \leq 1 - \Prob\Big( \max_{(i,j,k)} a_k \big( |{\color<7>{mLightBrown}\hat{\psi}_{ijk}^0}| - b_k \big) \le q(\alpha) \Big)}
+\end{align*}
+\onslide<8->{Hence, we choose $q(\alpha)$ as the $(1-\alpha)$-quantile of the statistic 
 \[ \hat{\Psi} = \max_{(i,j,k)} a_k \big( |\hat{\psi}_{ijk}^0| - b_k \big), \]
-where $\hat{\psi}_{ijk}^0$ is equal to $\hat{\psi}_{ijk}$ under the null.
+where $\hat{\psi}_{ijk}^0$ is equal to $\hat{\psi}_{ijk}$ under the null.}
 \end{frame}
 
 \begin{frame}[label = frame_test]{Test procedure}
@@ -267,11 +291,20 @@ Consider a sequence of functions $\lambda_{i} = \lambda_{i,T}$, $\lambda_{j} = \
 \section{Application}
 
 \begin{frame}{Graphical representation}
-How to represent the results of the test? Plot the results of pairwise comparison $\mathcal{F}_{\text{reject}}(i, j)$.\pause
+How to represent the results of the test? \pause
+
+Plot the results of pairwise comparison $\mathcal{F}_{\text{reject}}(i, j)$ \pause:
+\begin{align*}
+ \Prob\Big( \forall (i,j,k) \in \mathcal{M}_0: \mathcal{I}_k \notin \mathcal{F}_{\text{reject}}(i, j) \Big) \ge 1 - \alpha + o(1)
+\end{align*}
+
+\pause
 \begin{block}{Minimal intervals}
-An interval $\mathcal{I}_k \in \mathcal{F}_{\text{reject}}(i, j)$ is called \textbf{minimal} if there is no other interval $\mathcal{I}_{k^\prime} \in \mathcal{F}_{\text{reject}}(i, j)$ with $\mathcal{I}_{k^\prime} \subset \mathcal{I}_k$. The set of minimal intervals is denoted $\mathcal{F}_{\text{reject}}^{\min} (i, j)$.
+An interval $\mathcal{I}_k \in \mathcal{F}_{\text{reject}}(i, j)$ is called \textbf{minimal} if there is no other interval $\mathcal{I}_{k^\prime} \in \mathcal{F}_{\text{reject}}(i, j)$ with $\mathcal{I}_{k^\prime} \subset \mathcal{I}_k$.
+
+The set of minimal intervals is denoted $\mathcal{F}_{\text{reject}}^{\min} (i, j)$.
 \end{block}\pause
-We can make very similar confidence statement about the set of minimal intervals as well:
+We can make similar confidence statements about minimal intervals:
 \begin{align*}
  \Prob\Big( \forall (i,j,k) \in \mathcal{M}_0: \mathcal{I}_k \notin \mathcal{F}_{\text{reject}}^{\min} (i, j) \Big) \ge 1 - \alpha + o(1)
 \end{align*}
@@ -279,14 +312,13 @@ We can make very similar confidence statement about the set of minimal intervals
 
 \begin{frame}{Application setting}
 \begin{itemize}
-\item Five countries: Germany, Italy, Spain, France and UK; $T = 120$. \pause
+\item Five countries: Germany, Italy, Spain, France and the UK.\pause
+\item $T = 150$ days. \pause
+\item The data is aligned by weekdays: first Monday after reaching $100$ cases as $t=1$.\pause
+\item Lengths of time intervals $7, 14, 21, 28$ days. The intervals start at days $1, 8, 15, \ldots$ and $4, 11, 19, \ldots$\pause
 \item $\alpha = 0.05$.\pause
-\item Lengths of the time intervals $7, 14, 21, 28$ days. The intervals start at days $1, 8, 15, \ldots$ and $4, 11, 19, \ldots$ \pause
-\vspace{-2mm}
+\item $5000$ Monte Carlo simulation runs to produce critical values.
 \end{itemize}
-	\begin{figure}
-		\includegraphics[width = 0.85\textwidth]{plots/all_intervals}
-	\end{figure}
 \end{frame}
 
 \begin{frame}{Application results}
@@ -316,7 +348,7 @@ However, we can not say anything about the causes of such differences. This ques
 Further possible extensions:
 \vspace{-1mm}
 \begin{itemize}
-	\item introduce scaling factor in the trend function, that allow for adjusting for the size of the country (population, density, testing regimes, etc.);\pause
+	\item introduce scaling factor in the trend function, that will allow to adjust for the size of the country (population, density, testing regimes, etc.);\pause
 	\item connect with data-driven techniques such as machine learning;\pause
 	\item cluster the countries based on the trends they exhibit.
 \end{itemize}
@@ -328,6 +360,12 @@ Further possible extensions:
 
 
 \appendix
+
+\begin{frame}{Family of time intervals}
+	\begin{figure}
+		\includegraphics[width=0.95\textwidth]{plots/all_intervals}
+	\end{figure}
+\end{frame}
 
 \begin{frame}{Simulation results for the size of the test}
 \begin{figure}[t!]
