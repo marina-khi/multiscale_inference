@@ -320,10 +320,10 @@ We now use our test to analyze the outbreak patterns of the COVID-19 epidemic. W
 
 We simulate count data $\mathcal{\X} = \{ X_{it}: 1 \le i \le n, 1 \le t \le T \}$ by drawing the observations $X_{it}$ independently from a negative binomial distribution with mean $\lambda_i(t/T)$ and variance $\sigma^2 \lambda_i(t/T)$. By definition, $X_{it}$ has a negative binomial distribution with para\-meters $q$ and $r$ if $\pr(X_{it} = m) = \Gamma(m+r) / (\Gamma(r) m!) q^r (1-q)^m$ for each $m \in \naturals \cup \{0\}$. Since $\ex[X_{it}] = r (1-q)/q$ and $\var(X_{it}) = r(1-q)/q^2$, we can use the parametrization $q = 1/\sigma^2$ and $r = \lambda_i(t/T) / (\sigma^2 - 1)$ to obtain that $\ex[X_{it}] = \lambda_i(t/T)$ and $\var(X_{it}) = \sigma^2 \lambda_i(t/T)$. With this parametrization, the simulated data follow a nonparametric regression model of the form 
 \[ \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}, \]
-where the noise variables $\eta_{it}$ have zero mean and unit variance. The functions $\lambda_i$ are specified below. The overdispersion parameter is set to $\sigma = 15$, which is similar to the estimate $\hat{\sigma} = 14.44$ obtained in the empirical application of Section \ref{subsec:app}. Robustness checks with $\sigma=10$ and $\sigma=20$ are provided in the Supplementary Material.
+where the noise variables $\eta_{it}$ have zero mean and unit variance. The functions $\lambda_i$ are specified below. The overdispersion parameter is set to $\sigma = 15$, which is similar to the estimate {\color{red}$\hat{\sigma} = 14.82$} obtained in the empirical application of Section \ref{subsec:app}. Robustness checks with $\sigma=10$ and $\sigma=20$ are provided in the Supplementary Material.
 
 
-We consider different values for $T$ and $n$, in particular, $T \in \{100,250, 500\}$ and $n \in \{5,10,50\}$. Note that in the application, we have $T=139$ and $n=5$. We let $\pairs = \{ (i,j): 1 \le i < j \le n\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$. Moreover, we choose $\intervals$ to be a family of time intervals $\mathcal{I}_k$ with length $h_k \in \{ 7/T,14/T,21/T,28/T \}$. Hence, the intervals in $\intervals$ have length either $7$, $14$, $21$ or $28$ days (i.e., $1$, $2$, $3$ or $4$ weeks). For each length $h_k$, we include all intervals that start at days $t = 1 + 7(j-1)$ and $t = 4 + 7(j-1)$ for $j=1,2,\ldots$ A graphical presentation of the family $\intervals$ for $T = 139$ (as in the application) is given in Figure \ref{fig:intervals}. All our simulation experiments are based on $R=5000$ simulation runs. 
+We consider different values for $T$ and $n$, in particular, $T \in \{100,250, 500\}$ and $n \in \{5,10,50\}$. Note that in the application, we have {\color{red}$T=150$} and $n=5$. We let $\pairs = \{ (i,j): 1 \le i < j \le n\}$, that is, we compare all pairs of countries $(i,j)$ with $i < j$. Moreover, we choose $\intervals$ to be a family of time intervals $\mathcal{I}_k$ with length $h_k \in \{ 7/T,14/T,21/T,28/T \}$. Hence, the intervals in $\intervals$ have length either $7$, $14$, $21$ or $28$ days (i.e., $1$, $2$, $3$ or $4$ weeks). For each length $h_k$, we include all intervals that start at days $t = 1 + 7(j-1)$ and $t = 4 + 7(j-1)$ for $j=1,2,\ldots$ A graphical presentation of the family $\intervals$ for {\color{red} $T = 150$} (as in the application) is given in Figure \ref{fig:intervals}. All our simulation experiments are based on $R=5000$ simulation runs. 
 
 
 \begin{figure}[t!]
@@ -849,13 +849,13 @@ Now consider any $(i, j, k) \in \indexset_1$. By \eqref{loc-alt}, we know that $
 \begin{align*}
 0 \le\sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{i t} + \X_{j t}) \le 4 \lambda_{\max} T h_k
 \end{align*}
-uniformlly over all $(i, j, k) \in \indexset$ with probability tending to $1$ as $T \to \infty$. Together with the facts that the indicator function is non-negative and $\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) = T h_k$ we have
+uniformly over all $(i, j, k) \in \indexset$ with probability tending to $1$ as $T \to \infty$. Together with the facts that the indicator function is non-negative and $\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) = T h_k$ we have
 \begin{align}\label{eq:psiB}
 \widehat{\psi}_{i j k, T}^B &\ge \frac{c_T T h_{k} \sqrt{\log T / (T h_k)}}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_{k}) (\X_{i t} + \X_{j t}) \}^{1/2}} \nonumber \\
 & \ge  \frac{c_T\sqrt{T h_{k} \log T}}{2 \widehat{\sigma} \sqrt{ \lambda_{\max}T h_{k}}}\nonumber \\
 & =\frac{ c_T}{2\widehat{\sigma} \sqrt{\lambda_{\max}}} \sqrt{\log T}
 \end{align}
-uniformlly over all $(i, j, k) \in \indexset_1$ with probability tending to $1$ as $T \to \infty$. Moreover, by the arguments completely analogous to those for the proof of \eqref{eq:approxerror:claim2} in the Supplementary Material, we have
+uniformly over all $(i, j, k) \in \indexset_1$ with probability tending to $1$ as $T \to \infty$. Moreover, by the arguments completely analogous to those for the proof of \eqref{eq:approxerror:claim2} in the Supplementary Material, we have
 \begin{align}\label{eq:psiA}
 \max_{(i,j,k) \in \indexset} \big|\widehat\psi_{ijk,T}^A\big|  = O_p\big(\sqrt{\log p}\big) = O_p\big(\sqrt{\log T}\big),
 \end{align}

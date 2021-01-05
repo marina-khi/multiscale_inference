@@ -207,12 +207,12 @@ with $\hat{\sigma}^2$ being an appropriate estimator of $\sigma^2$. \hyperlink{f
 Test statistic for the hypothesis $H_0^{(ijk)}$ is defined as
 \begin{equation*}
 \widehat{\psi}_{ijk} : = \frac{\hat{s}_{ijk}}{\sqrt{\widehat{\Var(\hat{s}_{ijk})} }}= \frac{\sum\nolimits_{t=1}^T \indsmall (X_{it} -X_{jt})}{\hat{\sigma} \big\{ \sum\nolimits_{t=1}^T \indsmall  (X_{it} + X_{jt} )\big\}^{1/2}}
-\end{equation*} \pause
-Under certain conditions and under the null, $\widehat{\psi}_{ijk}$ can be approximated by a Gaussian version of the test statistic:
-\begin{align*}
-\phi_{ijk} = \frac{1}{\sqrt{2 T h_k}} \sum\limits_{t=1}^T \ind (Z_{it} - Z_{jt}), 
-\end{align*}
-where $Z_{it}$ are independent standard normal random variables.
+\end{equation*}
+%Under certain conditions and under the null, $\widehat{\psi}_{ijk}$ can be approximated by a Gaussian version of the test statistic:
+%\begin{align*}
+%\phi_{ijk} = \frac{1}{\sqrt{2 T h_k}} \sum\limits_{t=1}^T \ind (Z_{it} - Z_{jt}), 
+%\end{align*}
+%where $Z_{it}$ are independent standard normal random variables.
 \end{frame}
 
 \begin{frame}[label = frame_critval]{Critical values}
@@ -236,16 +236,35 @@ We want to control FWER. \pause Let $\mathcal{M}_0: = \big\{(i, j, k) | H_0^{(ij
 \onslide<6->{ & \leq 1 - \Prob\Big( \max_{(i,j,k)} a_k \big( |{\color<7>{mLightBrown}\hat{\psi}_{ijk}^0}| - b_k \big) \le q(\alpha) \Big)}
 \end{align*}
 \onslide<8->{Hence, we choose $q(\alpha)$ as the $(1-\alpha)$-quantile of the statistic 
-\[ \hat{\Psi} = \max_{(i,j,k)} a_k \big( |\hat{\psi}_{ijk}^0| - b_k \big), \]
+\[ \hat{\Psi}_T = \max_{(i,j,k)} a_k \big( |\hat{\psi}_{ijk}^0| - b_k \big), \]
 where $\hat{\psi}_{ijk}^0$ is equal to $\hat{\psi}_{ijk}$ under the null.}
 \end{frame}
+
+\begin{frame}{Critical values, part 3}
+
+But we do not know the distribution of $\hat{\Psi}_T$ in practice!\pause
+
+$\Rightarrow$ the quantiles $q(\alpha)$ are also not known. How to approximate them?\pause
+
+Under our assumptions, 
+\[ \hat{\psi}_{ijk}^0 \approx \frac{1}{\sqrt{2 T h_k}} \sum\limits_{t=1}^T \ind  (\eta_{it} - \eta_{jt} ), \] \pause
+which can be approximated by a Gaussian version of the test statistic:
+\begin{align*}
+\phi_{ijk} = \frac{1}{\sqrt{2 T h_k}} \sum\limits_{t=1}^T \ind (Z_{it} - Z_{jt}), 
+\end{align*}
+where $Z_{it}$ are independent standard normal random variables.
+
+
+\end{frame}
+
+
 
 \begin{frame}[label = frame_test]{Test procedure}
 
 \begin{enumerate}
 	\item Consider the Gaussian test statistic 
-	\vspace{-2mm} \[ \Phi = \max_{(i,j,k)} a_k \big( |\phi_{ijk}| - b_k \big), \] where $a_k$ and $b_k$ are scale-dependent constants and $\phi_{ijk}$ are weighted averages of the differences of standard normal random variables.\pause
-	\item Compute a $(1-\alpha)$-quantile $q_{\text{Gauss}} (\alpha)$ of $\Phi$ by Monte Carlo simulations.\pause
+	\vspace{-2mm} \[ \Phi_T = \max_{(i,j,k)} a_k \big( |\phi_{ijk}| - b_k \big), \] where $a_k$ and $b_k$ are scale-dependent constants and $\phi_{ijk}$ are weighted averages of the differences of standard normal random variables.\pause
+	\item Compute a $(1-\alpha)$-quantile $q_{\text{Gauss}} (\alpha)$ of $\Phi_T$ by Monte Carlo simulations.\pause
 	\item Adjust $q_{ \text{Gauss}} (\alpha)$ by the scale-dependent constants \vspace{-2mm}  \[c_{\text{Gauss}}(\alpha,h_k) = b_k + q_{\text{Gauss}}(\alpha)/a_k\] \pause
 \end{enumerate}
 \vspace{-5mm}
@@ -254,6 +273,8 @@ For the given significance level $\alpha \in (0,1)$ and for each $(i,j,k)$, reje
 
 \end{block}
 \end{frame}
+
+
 
 \section{Theoretical properties}
 \begin{frame}{Assumptions}
@@ -421,7 +442,7 @@ In order to proceed with the proof, we will need the following notation:
 \end{center}
 \vspace{-2mm}
 \begin{align*}
-\widehat{\psi}_{ijk, T} &= \frac{\sum\nolimits_{t=1}^T \indsmall (X_{it} -X_{jt})}{\hat{\sigma} \big\{ \sum\nolimits_{t=1}^T \indsmall  (X_{it} + X_{jt} )\big\}^{1/2}} &&\\
+\hat{\psi}_{ijk, T} &= \frac{\sum\nolimits_{t=1}^T \indsmall (X_{it} -X_{jt})}{\hat{\sigma} \big\{ \sum\nolimits_{t=1}^T \indsmall  (X_{it} + X_{jt} )\big\}^{1/2}} &&\\
 \hat{\psi}_{ijk,T}^0 &= \frac{\sum\nolimits_{t=1}^T \indsmall \, \sigma \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\eta_{it} - \eta_{jt})}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \indsmall (X_{it} + X_{jt}) \}^{1/2}} &&\hat{\Psi}_T^0 = \max_{(i,j,k)} a_k (|\hat{\psi}_{ijk,T}^0| - b_k)\\
 \psi_{ijk,T}^0 &= \frac{1}{\sqrt{2Th_k}} \sum\limits_{t=1}^T \ind (\eta_{it} - \eta_{jt}) &&\Psi_T = \max_{(i,j,k)} a_k (|\psi_{ijk,T}^0| - b_k)\\
 \phi_{ijk,T} &= \frac{1}{\sqrt{2 T h_k}} \sum\limits_{t=1}^T \ind (Z_{it} - Z_{jt}) &&\Phi_T = \max_{(i,j,k)} a_k (|\phi_{ijk,T}| - b_k)
@@ -441,9 +462,9 @@ In order to proceed with the proof, we will need the following notation:
 \sup_{q \in \mathbb{R}} \Big| \Prob\big( \hat{\Psi}_T^0 \le q \big) - \Prob\big( \Phi_T \le q \big) \Big| = o(1)
 \end{equation}\pause
 \vspace{-2mm}
-\item It can be shown that $\Prob (\Phi_T \le q_{T,\text{Gauss}}(\alpha)) = 1-\alpha$. From this and \eqref{eq:kolmogorov-distance-hat}, it immediately follows that  
+\item It can be shown that $\Prob (\Phi_T \le q_{\text{Gauss}}(\alpha)) = 1-\alpha$. From this and \eqref{eq:kolmogorov-distance-hat}, it immediately follows that  
 \begin{equation*}
-\Prob\big( \hat{\Psi}_T^0 \le q_{T,\text{Gauss}}(\alpha) \big) = 1 - \alpha + o(1), 
+\Prob\big( \hat{\Psi}_T^0 \le q_{\text{Gauss}}(\alpha) \big) = 1 - \alpha + o(1), 
 \end{equation*}
 which in turn implies the desired statement. 
 \end{enumerate}
@@ -451,10 +472,26 @@ which in turn implies the desired statement.
 
 
 \begin{frame}[label = frame_scaleconstants]{Idea behind $a_k$ and $b_k$}
-A more modern approach of constructing the individual critical values $c_{ijk}(\alpha)$ (D{\"u}mbgen and Spokoiny (2001)): let them depend on the scale of the testing problem, i.e. the length $h_k$ of the time interval.\pause \,Specifically, 
-\[c_{ijk}(\alpha) = c(\alpha,h_k) := b_k + q(\alpha)/a_k,\] where $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$ are scale-dependent constants and $q_T(\alpha)$ is chosen such that we control FWER.
+
+D{\"u}mbgen and Spokoiny (2001): the critical values $c_{ijk}(\alpha)$ depend on the scale of the testing problem, i.e. the length $h_k$ of the time interval.\pause 
+
+Specifically, 
+\[c_{ijk}(\alpha) = c(\alpha,h_k) := b_k + q(\alpha)/a_k,\] where $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$ are scale-dependent constants and $q(\alpha)$ is chosen such that we control FWER.
+\end{frame}
+
+\begin{frame}{Idea behind $a_k$ and $b_k$, part 2}
+
+This choice of scale-dependent constants helps us balance the significance of hypotheses between the time intervals of different lengths $h_k$:
+
+%\begin{figure}
+%	\includegraphics[width=0.95\textwidth]{plots/size_with_correction}
+%\end{figure}
+
+
 \hyperlink{frame_critval<4>}{\beamerbutton{Go back}}
 \end{frame}
+
+
 
 \begin{frame}{Idea behind the additive correction}
 Consider the uncorrected Gaussian statistic
