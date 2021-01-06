@@ -23,7 +23,7 @@ n_sim     <- 5000               # number of simulation runs for power and size
 sim_runs  <- 5000               # number of simulation runs to produce critical values
 alpha_vec <- c(0.05) # different significance levels
 n_ts_vec  <- c(5)       # different number of time series
-t_len_vec <- c(100, 250, 500)   # different time series lengths
+t_len_vec <- c(100, 250, 500, 1000, 1500, 2000)   # different time series lengths
 sigma_vec <- c(15)      # different overdispersion parameter
 
 number_of_cols <- length(n_ts_vec) * length(alpha_vec) #Needed for the output
@@ -81,16 +81,16 @@ for (sigma in sigma_vec){
 
   #Setting the layout of the graphs
   par(cex = 1, tck = -0.025)
-  par(mar = c(3, 3, 0.5, 0)) #Margins for each plot
+  par(mar = c(2.5, 2.5, 2, 0)) #Margins for each plot
   par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
   
 
   plot(t_len_vec, size_matrix[, 1], ylim=c(0, 0.1), type="l",
-       col = "#EB811B", ylab="Empriical size", xlab="Sample size", mgp=c(1, 0.5, 0))
+       col = "#EB811B", ylab="Empirical size", xlab="Sample size, T", mgp=c(1.6, 0.5, 0))
   lines(t_len_vec, size_matrix_2[, 1], col="#604c38")
-  title(main = "(a) size comparison", font.main = 1, line = 0.5)
-  legend("topright", inset = 0.02, legend=c("with correction", "without correction"),
-         col = c("#EB811B", "#604c38"), lty = 1, cex = 0.95, ncol = 1)
+  title(main = "Size comparison", font.main = 1, line = 0.7)
+  legend("topright", inset = 0.01, legend=c("with correction", "without correction"),
+         col = c("#EB811B", "#604c38"), lty = 1, cex = 0.8, ncol = 1)
   
   dev.off()
 #  print.xtable(xtable(size_matrix, digits = c(3),
