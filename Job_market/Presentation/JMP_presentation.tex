@@ -301,7 +301,7 @@ Let $\mathcal{M}_0$ be the set of triplets $(i, j, k)$ for which $H_0^{(ijk)}$ h
 Consider a sequence of functions $\lambda_{i} = \lambda_{i,T}$, $\lambda_{j} = \lambda_{j, T}$ such that 
 \begin{equation}\label{eq:localt}
 \exists \, \mathcal{I}_{k}:  \lambda_{i}(w) - \lambda_{j}(w) \ge c_T \sqrt{\log T / (T h_{k})} \,\, \forall w \in \mathcal{I}_{k},
-\end{equation} and $c_T \rightarrow \infty$ faster than $\frac{\sqrt{\log T}\sqrt{\log \log T}}{\log \log \log T}$. \pause Let $\mathcal{M}_1$ be the set of triplets $(i, j, k)$ for which \eqref{eq:localt} holds true. Then under $\mathcal{C}1 - \mathcal{C}6$, it holds that
+\end{equation} and $c_T \rightarrow \infty$ faster than $\frac{\sqrt{\log T}\sqrt{\log \log T}}{\log \log \log T}$.  Let $\mathcal{M}_1$ be the set of triplets $(i, j, k)$ for which \eqref{eq:localt} holds true. Then under $\mathcal{C}1 - \mathcal{C}6$, it holds that
 \vspace{-2mm}
 \begin{equation*}
 \Prob\Big( \forall (i,j,k) \in \mathcal{M}_1: |\hat{\psi}_{ijk}| > c_{\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1)
@@ -314,7 +314,7 @@ Consider a sequence of functions $\lambda_{i} = \lambda_{i,T}$, $\lambda_{j} = \
 \begin{frame}{Graphical representation}
 How to represent the results of the test? \pause
 
-Plot the results of pairwise comparison $\mathcal{F}_{\text{reject}}(i, j)$ \pause:
+Plot the results of pairwise comparison $\mathcal{F}_{\text{reject}}(i, j)$:
 \begin{align*}
  \Prob\Big( \forall (i,j,k) \in \mathcal{M}_0: \mathcal{I}_k \notin \mathcal{F}_{\text{reject}}(i, j) \Big) \ge 1 - \alpha + o(1)
 \end{align*}
@@ -333,11 +333,11 @@ We can make similar confidence statements about minimal intervals:
 
 \begin{frame}{Application setting}
 \begin{itemize}
-\item Five countries: Germany, Italy, Spain, France and the UK.\pause
-\item $T = 150$ days. \pause
-\item The data is aligned by weekdays: first Monday after reaching $100$ cases as $t=1$.\pause
-\item Lengths of time intervals $7, 14, 21, 28$ days. The intervals start at days $1, 8, 15, \ldots$ and $4, 11, 19, \ldots$\pause
-\item $\alpha = 0.05$.\pause
+\item Five countries: Germany, Italy, Spain, France and the UK.
+\item $T = 150$ days. 
+\item The data is aligned by weekdays: first Monday after reaching $100$ cases as $t=1$.
+\item Lengths of time intervals $7, 14, 21, 28$ days. The intervals start at days $1, 8, 15, \ldots$ and $4, 11, 19, \ldots$
+\item $\alpha = 0.05$.
 \item $5000$ Monte Carlo simulation runs to produce critical values.
 \end{itemize}
 \end{frame}
@@ -370,7 +370,7 @@ Further possible extensions:
 \vspace{-1mm}
 \begin{itemize}
 	\item introduce scaling factor in the trend function, that will allow to adjust for the size of the country (population, density, testing regimes, etc.);\pause
-	\item connect with data-driven techniques such as machine learning;\pause
+	\item include dependence in the error terms;\pause
 	\item cluster the countries based on the trends they exhibit.
 \end{itemize}
 \end{frame}

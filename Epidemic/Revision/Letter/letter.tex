@@ -53,7 +53,11 @@ First of all, we would like to thank the editor, the associate editor and the re
 
 \item We have derived the following result for the asymptotic power of our test:
 
-Let the conditions of Theorem A.1 be satisfied and consider two sequences of functions $\lambda_{i, T}$ and $\lambda_{j, T}$ with the property \eqref{loc-alt} for $c_T$ going to infinity faster than $\frac{\sqrt{\log T}\sqrt{\log \log T}}{\log \log \log T}$. Then 
+Let the conditions of Theorem A.1 be satisfied and consider two sequences of functions $\lambda_{i, T}$ and $\lambda_{j, T}$ with the following property: There exists $\mathcal{I}_{k} \in \mathcal{F}$ such that 
+\begin{equation}\label{loc-alt}
+\lambda_{i, T}(w) - \lambda_{j, T}(w) \ge c_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k}, 
+\end{equation}
+where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$ faster than \linebreak $\frac{\sqrt{\log T}\sqrt{\log \log T}}{\log \log \log T}$. We denote the set of triplets $(i, j, k) \in \indexset$ for which \eqref{loc-alt} holds true as $\indexset_1$. Then 
 \[ \pr\Big( \forall (i,j,k) \in \mathcal{M}_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1) \]
 for any given $\alpha \in (0, 1)$. 
 
@@ -68,11 +72,11 @@ This result is stated as Corollary A.2 on p.??  of the revised paper.
 \vspace{3pt}
 
 
-\textbf{Application.} 
+\textbf{Application.} We have improved the application section in the following way:
 \begin{enumerate}[label=(\roman*), leftmargin=0.8cm]
 
-\item Alignment by Monday, robustness check without this alignment in Section S.3 in the Supplement.
-\item $T = 150$ with the robustness check for longer time series $T = 200$ in Section S.4 in the Supplement.
+\item In order to make the data even more comparable across countries, we take the starting date $t = 1$ to be the first Monday after reaching 100 confirmed case in each country. Such alignment of the data by starting on Monday takes into account possible differences in reporting the numbers on a weekly level. As a robustness check, we perform our analysis on the time series without the alignment, where we take the starting date $t = 1$ to be the first day after reaching 100 confirmed case in each country, and we report the results of the robustness check in Section S.3 in the Supplement.
+\item We have extended the considered time period from $T = 139$ to $T = 150$ and since now the data are available for longer time period, we perform the robustness check for longer time series with $T = 200$ days and report the results in Section S.4 in the Supplement.
 \end{enumerate}
  
 \newpage
@@ -96,12 +100,12 @@ Thank you very much for the constructive and helpful comments. In our revision, 
 \item \textit{Some theory question}
 
 \begin{enumerate}[label=(\roman*)]
-\item \textit{Since the result in Chenozukov et al's Gaussian approximation(GA) does not require the series to be independent cross sectionally, I wonder does that mean the current result can be extended to data with cross-sectional dependence?}
+\item \textit{Since the result in Chernozukov et al's Gaussian approximation(GA) does not require the series to be independent cross sectionally, I wonder does that mean the current result can be extended to data with cross-sectional dependence?}
 \item \textit{It would be better if the author can derive power under certain alternatives, so that one can get a better idea as how different the trends needs to be in order to be detected.}
 
 It can indeed be proven that our multiscale test has asymptotic power $1$ against local alternatives. We have added this result as Corollary A.2 in the Appendix to the paper. The proof is provided in the Supplementary Material.
 
-\item \textit{The argument about no need for time dependent data is reasonable, just a short comment: there already exists result extending chenozukov et al's GA to time dependent case, maybe this paper can be further extended to time dependent data as well.}
+\item \textit{The argument about no need for time dependent data is reasonable, just a short comment: there already exists result extending Chernozukov et al's GA to time dependent case, maybe this paper can be further extended to time dependent data as well.}
 \end{enumerate}
 
 \item \textit{The specific allowance of $p = |W|$, which is essential in high dimensional analysis, is not mentioned until appendix. Please put them forward in the main context to provide some guidance in application. Also since the convergence speed of Gaussian approximation depends on $T, p$, it would be better to keep the bound in terms of those parameters, so that we know how large the sample size we need in order to obtain the desired accuracy.}
@@ -126,6 +130,8 @@ Thank you very much for the constructive and useful suggestions. In our revision
 \item \textit{Some arguments may be worth further details in the text. For instance, the equation involving} $\widehat{s}_{ijk,T} / \sqrt{T h_k}$ \textit{on Page 2 Line 7, or the bound for} $|r_{it}|$ \textit{on Page 2 Line -5.}
 
 \item \textit{I am unsure why the statistic in (3.2) is introduced, I feel the discussion in Pages 8-9 could be done without referring to it.}
+
+We have deferred the introduction of this test statistics to the Appendix.
 
 \item \textit{The "cp." abbreviation is uncommon, I feel it should be replaced by "see" or "e.g."}
 

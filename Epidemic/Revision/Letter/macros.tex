@@ -16,11 +16,14 @@
 \newcommand{\argmax}{\textnormal{argmax}}
 \newcommand{\argmin}{\textnormal{argmin}}
 
-\newcommand{\ind}{1} % indicator function
-\newcommand{\kernel}{K} % kernel function
-\newcommand{\wght}{W} % kernel weight
-\newcommand{\thres}{\pi} % threshold parameter
+\newcommand{\ind}{\boldsymbol{1}} % indicator function
+\renewcommand{\ker}{W} % kernel function
 
+\newcommand{\X}{X}
+\newcommand{\pairs}{\mathcal{S}}
+\newcommand{\countries}{\mathcal{C}}
+\newcommand{\intervals}{\mathcal{F}}
+\newcommand{\indexset}{\mathcal{M}}
 
 % Convergence
 
@@ -36,15 +39,21 @@
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{prop}{Proposition}[section]
-\newtheorem{lemma}{Lemma}[section]
 \newtheorem{corollary}{Corollary}[section]
+\newtheorem{lemma}{Lemma}[section]
 \newtheorem{definition}{Definition}[section]
 \newtheorem{remark}{Remark}[section]
-\newtheorem*{theo}{Theorem}
-\newtheorem{propA}{Proposition}
-\newtheorem{lemmaA}{Lemma}
-\renewcommand{\thelemmaA}{S.\arabic{lemmaA}}
-\renewcommand{\thepropA}{S.\arabic{propA}}
+\newtheorem{algo}{Algorithm}
+\newtheorem{theoremA}{Theorem}[section]
+\newtheorem{propA}{Proposition}[section]
+\newtheorem{corollaryA}{Corollary}[section]
+\newtheorem{lemmaA}{Lemma}[section]
+\renewcommand{\thetheoremA}{A.\arabic{theoremA}}
+\renewcommand{\thepropA}{A.\arabic{propA}}
+\renewcommand{\thecorollaryA}{A.\arabic{corollaryA}}
+\renewcommand{\thelemmaA}{A.\arabic{lemmaA}}
+\newtheorem{lemmaS}{Lemma}[section]
+\renewcommand{\thelemmaS}{S.\arabic{lemmaS}}
 
 
 % Theorem numbering to the left
@@ -56,32 +65,20 @@
 
 % Heading
 
-\newcommand{\heading}[4]
-{  \setcounter{page}{1}
-   \begin{center}
-
-   \phantom{Distance to upper boundary}
-   %\vspace{0.5cm}
-
-   {\LARGE \textbf{#1}}\\[0.45cm]
-   {\LARGE \textbf{#2}}\\[0.3cm]
-   {\LARGE \textbf{#3}}\\[0.3cm]
-   {\LARGE \textbf{#4}}
-   \end{center}
-}
-
-\newcommand{\headingSupplement}[5]
+\newcommand{\heading}[3]
 {  \setcounter{page}{1}
    \begin{center}
 
    %\phantom{Distance to upper boundary}
    %\vspace{0.5cm}
 
-   {\LARGE \textbf{#1}}\\[0.3cm]
-   {\LARGE \textbf{#2}}\\[0.45cm]
-   {\LARGE \textbf{#3}}\\[0.3cm]
-   {\LARGE \textbf{#4}}\\[0.3cm]
-   {\LARGE \textbf{#5}}
+   {\LARGE \textbf{#1}}
+   \vspace{0.25cm}
+
+   {\LARGE \textbf{#2}}
+   \vspace{0.25cm}
+
+   {\LARGE \textbf{#3}}
    \end{center}
 }
 
@@ -89,36 +86,26 @@
 % Authors
 
 \newcommand{\authors}[4]
-{  \parindent0pt
+{  %\parindent0pt
    \begin{center}
-      \begin{minipage}[c][2cm][c]{5.25cm}
+      \begin{minipage}[c][1.5cm][c]{5.5cm}
       \begin{center} 
       {\large #1} 
-      \vspace{0.125cm}
+      \vspace{0.1cm}
       
       #2 
       \end{center}
       \end{minipage}
-      \begin{minipage}[c][2cm][c]{5.25cm}
+      \begin{minipage}[c][1.5cm][c]{5.5cm}
       \begin{center} 
       {\large #3}
-      \vspace{0.125cm}
-
+      \vspace{0.1cm}
+      
       #4 
       \end{center}
       \end{minipage}
    \end{center}
 }
-
-%\newcommand{\authors}[2]
-%{  \parindent0pt
-%   \begin{center}
-%   {\large #1} 
-%   \vspace{0.1cm}
-%      
-%   #2 
-%   \end{center}  
-%}
 
 
 % Version
@@ -126,8 +113,7 @@
 \newcommand{\version}[1]
 {  \begin{center}
    {\large #1}
-   \end{center}
-   \vspace{3pt}
+   \end{center}   
 } 
 
 
