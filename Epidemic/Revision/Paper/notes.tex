@@ -61,11 +61,13 @@
 There are many questions surrounding the current COVID-19 pandemic that are not well understood yet. A question which is particularly important for governments and policy makers is the following: How do the outbreak patterns of COVID-19 compare across countries? Are the time trends of daily new infections more or less the same across countries, or is the virus spreading differently in different regions of the world? Identifying differences between countries may help, for instance, to better understand which government policies have been more effective in containing the virus than others. The main aim of this paper is to develop new inference methods that allow to detect differences between time trends of COVID-19 infections in a statistically rigorous way.  
 
 
-Let $\X_{it}$ be the number of new infections on day $t$ in country $i$ and suppose we observe a sample of data $\mathcal{\X}_i = \{ \X_{it}: 1 \le 1 \le T \}$ for $n$ different countries $i$. In order to make the data comparable across countries, we take the starting date $t=1$ to be the {\color{red} first Monday after reaching $100$} confirmed case in each country. {\color{red} Considering the dates after reaching a certain level is a common practice of ''normalizing'' the data \citep[e.g.][]{Cohen2020}. Moreover, aligning the data by starting on Monday takes into account possible differences in reporting the numbers on a weekly level.} A simple way to model the count data $\X_{it}$ is to use a Poisson distribution. Specifically, we may assume that the random variables $\X_{it}$ are Poisson distributed with time-varying intensity parameter $\lambda_i(t/T)$, that is, $\X_{it} \sim P_{\lambda_i(t/T)}$. Since $\lambda_i(t/T) = \ex[\X_{it}] = \var(\X_{it})$, we can model the observations $\X_{it}$ by the nonparametric regression equation 
+Let $\X_{it}$ be the number of new infections on day $t$ in country $i$ and suppose we observe a sample of data $\mathcal{\X}_i = \{ \X_{it}: 1 \le 1 \le T \}$ for $n$ different countries $i$. In order to make the data comparable across countries, we take the starting date $t=1$ to be the {\color{red} first Monday after reaching $100$} confirmed case in each country. {\color{red} Considering the dates after reaching a certain level of confirmed cases is a common practice of ``normalizing'' the data \citep[see e.g.][]{Cohen2020}. Starting on a Monday additionally aligns the data across countries by the day of the week. This allows us to take care of possible weekly cycles in the data which are produced by delays in reporting new cases over the weekend.} 
+%Considering the dates after reaching a certain level is a common practice of ''normalizing'' the data \citep[see e.g.][]{Cohen2020}. Moreover, aligning the data by starting on Monday takes into account possible differences in reporting the numbers on a weekly level.} 
+A simple way to model the count data $\X_{it}$ is to use a Poisson distribution. Specifically, we may assume that the random variables $\X_{it}$ are Poisson distributed with time-varying intensity parameter $\lambda_i(t/T)$, that is, $\X_{it} \sim P_{\lambda_i(t/T)}$. Since $\lambda_i(t/T) = \ex[\X_{it}] = \var(\X_{it})$, we can model the observations $\X_{it}$ by the nonparametric regression equation 
 \begin{equation}\label{eq:model-intro}
 \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + u_{it} 
 \end{equation}
-for $1 \le t \le T$, where $u_{it} = \X_{it} - \ex[\X_{it}]$ with $\ex[u_{it}] = 0$ and $\var(u_{it}) = \lambda_i(t/T)$. As usual in nonparametric regression {\color{red}\citep[e.g.][]{Robinson1989}}, we let the regression function $\lambda_i$ in model \eqref{eq:model-intro} depend on rescaled time $t/T$ rather than on real time $t$. Hence, $\lambda_i: [0,1] \rightarrow \reals$ can be regarded as a function on the unit interval, which allows us to estimate it by standard techniques from nonparametric regression. Since $\lambda_i$ is a function of rescaled time $t/T$, the variables $\X_{it}$ in model \eqref{eq:model-intro} depend on the time series length $T$ in general, that is, $\X_{it} = \X_{it,T}$. To keep the notation simple, we however suppress this dependence throughout the paper. In Section \ref{sec:model}, we introduce the model setting in detail which underlies our analysis. As we will see there, it is a generalized version of the Poisson model \eqref{eq:model-intro}.
+for $1 \le t \le T$, where $u_{it} = \X_{it} - \ex[\X_{it}]$ with $\ex[u_{it}] = 0$ and $\var(u_{it}) = \lambda_i(t/T)$. As usual in nonparametric regression {\color{red}\citep[see e.g.][]{Robinson1989}}, we let the regression function $\lambda_i$ in model \eqref{eq:model-intro} depend on rescaled time $t/T$ rather than on real time $t$. Hence, $\lambda_i: [0,1] \rightarrow \reals$ can be regarded as a function on the unit interval, which allows us to estimate it by standard techniques from nonparametric regression. Since $\lambda_i$ is a function of rescaled time $t/T$, the variables $\X_{it}$ in model \eqref{eq:model-intro} depend on the time series length $T$ in general, that is, $\X_{it} = \X_{it,T}$. To keep the notation simple, we however suppress this dependence throughout the paper. In Section \ref{sec:model}, we introduce the model setting in detail which underlies our analysis. As we will see there, it is a generalized version of the Poisson model \eqref{eq:model-intro}.
 
 
 In model \eqref{eq:model-intro}, the time trend of new COVID-19 infections in country $i$ is described by the intensity function $\lambda_i$ of the underlying Poisson distribution. Hence, the question whether the time trends are comparable across countries amounts to the question whether the intensity functions $\lambda_i$ have the same shape across countries $i$. In this paper, we construct a multiscale test which allows to \textit{identify} and \textit{locate} the differences between the functions $\lambda_i$. More specifically, let $\intervals = \{ \mathcal{I}_k \subseteq[0,1] : 1 \le k \le K \}$ be a family of (rescaled) time intervals $\mathcal{I}_k$ and let $H_0^{(ijk)}$ be the hypothesis that the functions $\lambda_i$ and $\lambda_j$ are the same on the interval $\mathcal{I}_k$, that is, 
@@ -111,7 +113,7 @@ In order to derive our theoretical results, we impose the following regularity c
 \item \label{C2} The functions $\lambda_i$ are uniformly Lipschitz continuous, that is, $|\lambda_i(u) - \lambda_i(v)| \le L |u-v|$ for all $u, v \in [0,1]$, where the constant $L$ does not depend on $i$. Moreover, they are uniformly bounded away from zero and infinity, that is, there exist constants $\lambda_{\min}$ and $\lambda_{\max}$ with $0 \le \lambda_{\min} \le \min_{w \in [0,1]} \lambda_i(w) \le \max_{w \in [0,1]} \lambda_i(w) \le \lambda_{\max} < \infty$ for all $i$. 
 \item \label{C1} The random variables $\eta_{it}$ are independent both across $i$ and $t$. Moreover, for any $i$ and $t$, it holds that $\ex[\eta_{it}] = 0$, $\ex[\eta_{it}^2] = 1$ and $\ex[|\eta_{it}|^\theta] \le C_\theta < \infty$ for some $\theta > 4$. 
 \end{enumerate}
-\ref{C2} imposes some standard-type regularity conditions on the functions $\lambda_i$. In particular, the functions are assumed to be smooth, bounded from above and bounded away from zero. The latter restriction is required because the noise variance in model \eqref{eq:model} equals zero if $\lambda_i$ is equal to zero. Since we normalize our test statistics by an estimate of the noise variance as detailed in Section \ref{sec:test}, we need this variance and thus the functions $\lambda_i$ to be bounded away from zero. \ref{C1} assumes the noise terms $\eta_{it}$ to fulfill some mild moment conditions and to be independent both across countries $i$ and time $t$. In the current COVID-19 crisis, independence across countries $i$ seems to be a fairly reasonable assumption due to severe travel restrictions, the closure of borders, etc. Independence across time $t$ is more debatable, but it is by no means unreasonable in our model framework: The time series process $\mathcal{\X}_i = \{X_{it}: 1 \le t \le T\}$ produced by model \eqref{eq:model} is nonstationary for each $i$. Specifically, both the mean $\ex[X_{it}] = \lambda_i(t/T)$ and the variance $\var(X_{it}) = \sigma^2 \lambda_i(t/T)$ are time-varying. A well-known fact in the time series literature is that nonstationarities such as a time-varying mean may produce spurious sample autocorrelations {\color{red}\citep[see e.g.][]{MikoschStarica2004, Fryzlewicz2008}}. Hence, the observed persistence of a time series (captured by the sample autocorrelation function) may be due to nonstationarities rather than real autocorrelations. This insight has led researchers to prefer simple nonstationary models over intricate stationary time series models in some application areas such as finance {\color{red}\citep[e.g.][]{MikoschStarica2000, MikoschStarica2004, Fryzlewicz2006, HafnerLinton2010}}. In a similar vein, our model accounts for the persistence in the observed time series $\mathcal{\X}_i$ via nonstationarities rather than autocorrelations in the error terms. 
+\ref{C2} imposes some standard-type regularity conditions on the functions $\lambda_i$. In particular, the functions are assumed to be smooth, bounded from above and bounded away from zero. The latter restriction is required because the noise variance in model \eqref{eq:model} equals zero if $\lambda_i$ is equal to zero. Since we normalize our test statistics by an estimate of the noise variance as detailed in Section \ref{sec:test}, we need this variance and thus the functions $\lambda_i$ to be bounded away from zero. \ref{C1} assumes the noise terms $\eta_{it}$ to fulfill some mild moment conditions and to be independent both across countries $i$ and time $t$. In the current COVID-19 crisis, independence across countries $i$ seems to be a fairly reasonable assumption due to severe travel restrictions, the closure of borders, etc. Independence across time $t$ is more debatable, but it is by no means unreasonable in our model framework: The time series process $\mathcal{\X}_i = \{X_{it}: 1 \le t \le T\}$ produced by model \eqref{eq:model} is nonstationary for each $i$. Specifically, both the mean $\ex[X_{it}] = \lambda_i(t/T)$ and the variance $\var(X_{it}) = \sigma^2 \lambda_i(t/T)$ are time-varying. A well-known fact in the time series literature is that nonstationarities such as a time-varying mean may produce spurious sample autocorrelations {\color{red}\citep[see e.g.][]{MikoschStarica2004, Fryzlewicz2008}}. Hence, the observed persistence of a time series (captured by the sample autocorrelation function) may be due to nonstationarities rather than real autocorrelations. This insight has led researchers to prefer simple nonstationary models over intricate stationary time series models in some application areas such as finance {\color{red}\citep[see e.g.][]{MikoschStarica2000, MikoschStarica2004, Fryzlewicz2006, HafnerLinton2010}}. In a similar vein, our model accounts for the persistence in the observed time series $\mathcal{\X}_i$ via nonstationarities rather than autocorrelations in the error terms. 
 
  
 
@@ -121,59 +123,59 @@ In order to derive our theoretical results, we impose the following regularity c
 Let $\pairs \subseteq \{ (i,j): 1 \le i < j \le n \}$ be the set of all pairs of countries $(i,j)$ whose trend functions $\lambda_i$ and $\lambda_j$ we want to compare. Moreover, as already introduced above, let $\intervals = \{ \mathcal{I}_k: 1 \le k \le K \}$ be the family of (rescaled) time intervals under consideration. Finally, write $\indexset := \pairs \times \{1,\ldots,K\}$ and let $p := |\indexset|$ be the cardinality of $\indexset$. In this section, we devise a method to test the null hypothesis $H_0^{(ijk)}$ simultaneously for all pairs of countries $(i,j) \in \pairs$ and all time intervals $\mathcal{I}_k \in \intervals$, that is, for all $(i,j,k) \in \indexset$. The value $p = |\indexset|$ is the dimensionality of the simultaneous test problem we are dealing with. It amounts to the number of tests that we carry out simultaneously. As shown by our theoretical results in the Appendix, $p$ may be much larger than the time series length $T$, which means that the simultaneous test problem under consideration can be very high-dimensional. 
 
 
+{\color{red}
 \subsection{Construction of the test statistics}\label{subsec:test:test}
 
 
 A statistic to test the hypothesis $H_0^{(ijk)}$ for a given triple $(i,j,k)$ can be constructed as follows. To start with, we introduce the expression 
-\[ \hat{s}_{ijk,T} = \frac{1}{\sqrt{Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it} - \X_{jt}), \]
-where $h_k$ is the length of the time interval $\mathcal{I}_k$, $\ind(\cdot)$ denotes the indicator function and $\ind(t/T \in \mathcal{I}_k)$ can be regarded as a rectangular kernel weight. {\color{red} Then
+\[ \hat{s}_{ijk,T} = \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it} - \X_{jt}), \]
+where $h_k$ is the length of the time interval $\mathcal{I}_k$, $\ind(\cdot)$ denotes the indicator function and $\ind(t/T \in \mathcal{I}_k)$ can be regarded as a rectangular kernel weight. Inserting the model equation \eqref{eq:model} into the definition of $\hat{s}_{ijk,T}$ yields that $\hat{s}_{ijk,T} = \Delta_{ijk,T} + R_{ijk,T}$, where 
 \begin{align*}
-\frac{\hat{s}_{ijk,T}}{\sqrt{Th_k}} =& \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \bigg( \lambda_i \Big(\frac{t}{T}\Big)  - \lambda_j \Big(\frac{t}{T}\Big)\bigg) \\
-&+  \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \sigma \Big( \sqrt{ \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} - \sqrt{ \lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt} \Big).
+\Delta_{ijk,T} & = \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \bigg( \lambda_i \Big(\frac{t}{T}\Big)  - \lambda_j \Big(\frac{t}{T}\Big)\bigg) \\
+R_{ijk,T} & = \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \sigma \Big( \sqrt{ \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} - \sqrt{ \lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt} \Big). 
 \end{align*}
-A simple application of the law of large numbers for a fixed $i$ yields 
-\begin{align*}
- \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it}  = o_P(1).
-\end{align*}
-Hence, for fixed $i$ and $j$ we have
-\begin{align*}
- \frac{1}{Th_k} \sum\limits_{t=1}^T &\ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \sigma \Big( \sqrt{ \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} - \sqrt{ \lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt} \Big) = o_P(1),
-\end{align*}
-which means that $\hat{s}_{ijk,T}/\sqrt{Th_k} = (Th_k)^{-1} \sum_{t=1}^T \ind(t/T \in \mathcal{I}_k) \{\lambda_i(t/T) - \lambda_j(t/T)\} + o_p(1)$ for any fixed pair of countries $(i,j)$.}  Hence, the statistic $\hat{s}_{ijk,T}/\sqrt{Th_k}$ estimates the average distance between the functions $\lambda_i$ and $\lambda_j$ on the interval $\mathcal{I}_k$. Under \ref{C1}, it holds that
+Moreover, a simple application of the law of large numbers for a fixed $i$ gives that $(Th_k)^{-1} \sum_{t=1}^T \ind(t/T \in \mathcal{I}_k) \sqrt{\lambda_i(t/T)} \eta_{it} = o_p(1)$, which in turn implies that $R_{ijk,T} = o_p(1)$. Hence, for any fixed triple $(i,j,k)$, we obtain that 
+\[ \hat{s}_{ijk,T} = \Delta_{ijk,T} + o_p(1), \]
+which means that the statistic $\hat{s}_{ijk,T}$ estimates the average distance $\Delta_{ijk,T}$ between the functions $\lambda_i$ and $\lambda_j$ on the interval $\mathcal{I}_k$. 
+
+
+We next have a closer look at the variance of the statistic $\hat{s}_{ijk,T}$. Under \ref{C1}, the variance of $\hat{s}_{ijk,T}$ is 
 \begin{align*}
 \nu_{ijk,T}^2 := \var(\hat{s}_{ijk,T}) 
- & = \frac{\sigma^2}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big\{ \lambda_i\Big(\frac{t}{T}\Big) + \lambda_j\Big(\frac{t}{T}\Big) \Big\}. 
+ & = \frac{\sigma^2}{(Th_k)^2} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big\{ \lambda_i\Big(\frac{t}{T}\Big) + \lambda_j\Big(\frac{t}{T}\Big) \Big\} 
 \end{align*}
-In order to normalize the variance of the statistic $\hat{s}_{ijk,T}$, we scale it by an estimator of $\nu_{ijk,T}$. In particular, we estimate $\nu_{ijk,T}^2$ by 
-\[ \hat{\nu}_{ijk,T}^2 = \frac{\hat{\sigma}^2}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \{ \X_{it} + \X_{jt} \}, \]
-where $\hat{\sigma}^2$ is defined as follows: For each country $i$, let 
+and can be estimated by 
+\[ \hat{\nu}_{ijk,T}^2 = \frac{\hat{\sigma}^2}{(Th_k)^2} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \{ \X_{it} + \X_{jt} \}, \]
+where $\hat{\sigma}^2$ is defined as follows: For each country $i$, we let 
 \begin{align*}
 \hat{\sigma}_i^2 = \frac{\sum_{t=2}^T (\X_{it}-\X_{it-1})^2}{2 \sum_{t=1}^T \X_{it}}
 \end{align*}
-and set $\hat{\sigma}^2 = |\countries|^{-1} \sum_{i \in \countries} \hat{\sigma}_i^2$ with $\countries = \{ \ell: \ell = i$ or $\ell = j$ for some $(i,j) \in \pairs \}$ denoting the set of countries that are taken into account by our test. The idea behind the estimator $\hat{\sigma}_i^2$ is as follows: we can write 
-\[ \X_{it} - \X_{it-1} = \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} (\eta_{it} - \eta_{it-1}) + r_{it}, \]
-where
-{\color{red}
+and set $\hat{\sigma}^2 = |\countries|^{-1} \sum_{i \in \countries} \hat{\sigma}_i^2$ with $\countries = \{ \ell: \ell = i$ or $\ell = j$ for some $(i,j) \in \pairs \}$ denoting the set of countries that are taken into account by our test. The idea behind the estimator $\hat{\sigma}_i^2$ is as follows: We can write 
+\[ \X_{it} - \X_{it-1} = \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} (\eta_{it} - \eta_{it-1}) + r_{it} \]
+with
 \begin{align*}
-r_{it} =  \lambda_i\Big(\frac{t}{T}\Big) -  \lambda_i\Big(\frac{t-1}{T}\Big) +  \sigma \bigg( \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} - \sqrt{\lambda_i\Big(\frac{t-1}{T}\Big)} \bigg)\eta_{it-1}.
+r_{it} = \lambda_i\Big(\frac{t}{T}\Big) - \lambda_i\Big(\frac{t-1}{T}\Big) + \sigma \bigg( \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} - \sqrt{\lambda_i\Big(\frac{t-1}{T}\Big)} \bigg)\eta_{it-1}.
 \end{align*}
-
-By the triangle inequality and since $\lambda_i$ is Lipschitz continuous, we have
+By the triangle inequality and since $\lambda_i$ is Lipschitz continuous, we have that
 \begin{align*}
-|r_{it}| &=  \bigg| \lambda_i\Big(\frac{t}{T}\Big) -  \lambda_i\Big(\frac{t-1}{T}\Big)\bigg| +  \sigma \bigg| \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} - \sqrt{\lambda_i\Big(\frac{t-1}{T}\Big)} \bigg| |\eta_{it-1}| \\
-&\leq \frac{L}{T}  + \sigma \frac{???}{T} |\eta_{it-1}|
+|r_{it}| & \le \bigg| \lambda_i\Big(\frac{t}{T}\Big) - \lambda_i\Big(\frac{t-1}{T}\Big)\bigg| +  \sigma \bigg| \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} - \sqrt{\lambda_i\Big(\frac{t-1}{T}\Big)} \bigg| |\eta_{it-1}| \\
+& \le \frac{L}{T}  + \frac{L}{2 \sigma \sqrt{\lambda_{\min}} T} |\eta_{it-1}| \le \frac{C (1 + |\eta_{it-1}|)}{T},
 \end{align*}
+where $C = \max\{L, L / (2 \sigma \sqrt{\lambda_{\min}})\}$ with $L$ and $\lambda_{\min}$ defined in \ref{C1}. From this, we can infer that 
+\[ \frac{1}{T} \sum_{t=2}^T (\X_{it} - \X_{it-1})^2 = 2 \sigma^2 \bigg\{ \frac{1}{T} \sum_{t=2}^T \lambda_i\Big(\frac{t}{T}\Big) \bigg\} + o_p(1). \]
+Moreover, since $T^{-1} \sum_{t=1}^T \X_{it} = T^{-1} \sum_{t=1}^T \lambda_i(t/T) + o_p(1)$, we expect that $\hat{\sigma}_i^2 = \sigma^2 + o_p(1)$ for any $i$ and thus $\hat{\sigma}^2 = \sigma^2 + o_p(1)$. In Lemma \ref{lemmaS1} of the Supplementary Material, we formally show that $\hat{\sigma}^2$ is a consistent estimator of $\sigma^2$ under our regularity conditions. 
 
-}
-where $|r_{it}| \le C(1+|\eta_{it-1}|)/T$ with a sufficiently large constant $C$. This suggests that $T^{-1} \sum_{t=2}^T (\X_{it} - \X_{it-1})^2 = 2 \sigma^2 \{ T^{-1} \sum_{t=2}^T \lambda_i(t/T) \} + o_p(1)$. Moreover, since $T^{-1} \sum_{t=1}^T \X_{it} = T^{-1} \sum_{t=1}^T \lambda_i(t/T) + o_p(1)$, we expect that $\hat{\sigma}_i^2 = \sigma^2 + o_p(1)$ for any $i$ and thus $\hat{\sigma}^2 = \sigma^2 + o_p(1)$. In Lemma \ref{lemmaS1} of the Supplementary Material, we formally show that $\hat{\sigma}^2$ is a consistent estimator of $\sigma^2$ under our regularity conditions. Normalizing the statistic $\hat{s}_{ijk,T}$ by the estimator $\hat{\nu}_{ijk,T}$ yields the expression 
+
+We now replace the statistic $\hat{s}_{ijk,T}$ by a normalized version whose variance is approximately equal to $1$. To achieve this, we simply divide $\hat{s}_{ijk,T}$ by its estimated standard deviation $\hat{\nu}_{ijk,T}$. This results in the expression 
 \begin{equation}\label{eq:stat}
 \hat{\psi}_{ijk,T} := \frac{\hat{s}_{ijk,T}}{\hat{\nu}_{ijk,T}} = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} - \X_{jt})}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}}, 
 \end{equation}
-which serves as our test statistic of the hypothesis $H_0^{(ijk)}$. %For later reference, we additionally introduce the statistic 
-%\begin{equation}\label{eq:stat0}
-%\hat{\psi}_{ijk,T}^0 = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \, \sigma \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\eta_{it} - \eta_{jt})}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}}
-%\end{equation}
-%with $\overline{\lambda}_{ij}(u) = \{ \lambda_i(u) + \lambda_j(u) \}/2$, which is identical to $\hat{\psi}_{ijk,T}$ under $H_0^{(ijk)}$. 
+which serves as our test statistic of the hypothesis $H_0^{(ijk)}$. In addition to $\hat{\psi}_{ijk,T}$, we introduce the auxiliary statistic 
+\begin{equation}\label{eq:stat0}
+\hat{\psi}_{ijk,T}^0 = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \, \sigma \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\eta_{it} - \eta_{jt})}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}}
+\end{equation}
+with $\overline{\lambda}_{ij}(u) = \{ \lambda_i(u) + \lambda_j(u) \}/2$, which by construction is identical to $\hat{\psi}_{ijk,T}$ under $H_0^{(ijk)}$. This statistic is needed to define the critical values of our multiscale test in what follows.
+}
 
 
 \subsection{Construction of the test} 
@@ -197,11 +199,11 @@ There are different ways to construct critical values $c_{ijk,T}(\alpha)$ that e
 \end{equation}
 This can be achieved by choosing $c_T(\alpha)$ as the $(1-\alpha)$-quantile of the statistic 
 \[ \tilde{\Psi}_T = \max_{(i,j,k) \in \indexset} |\hat{\psi}_{ijk,T}^0|, \]
-where $\hat{\psi}_{ijk,T}^0$ {\color{red}is an auxiliary test statistics that is equal to  $\hat{\psi}_{ijk,T}$ under the null $H_0^{(ijk)}$.} %was introduced in \eqref{eq:stat0}.
+where {\color{red} the auxiliary statistic $\hat{\psi}_{ijk,T}^0$ was introduced in \eqref{eq:stat0} and is equal to $\hat{\psi}_{ijk,T}$ under the null $H_0^{(ijk)}$ by construction.} 
 (Note that both the statistic $\tilde{\Psi}_T$ and the quantile $c_T(\alpha)$ depend on the dimensionality $p$ of the test problem in general. To keep the notation simple, we however suppress this dependence throughout the paper. We use the same convention for all other quantities that are defined in the sequel.) 
 
 
-A more modern approach assigns different critical values $c_{ijk,T}(\alpha)$ to the test problems $(i,j,k)$. In particular, the critical value for the hypothesis $H_0^{(ijk)}$ is allowed to depend on the length $h_k$ of the time interval $\mathcal{I}_k$, that is, on the scale of the test problem. A general approach to construct scale-dependent critical values was pioneered by \cite{DuembgenSpokoiny2001} and has been used in many other studies since then; {\color{red}see, for example,} \cite{Rohde2008}, \cite{DuembgenWalther2008}, \cite{RufibachWalther2010}, \cite{SchmidtHieber2013}, \cite{EckleBissantzDette2017} and \cite{Dunker2019}. In our context, the approach of \cite{DuembgenSpokoiny2001} leads to the critical values 
+A more modern approach assigns different critical values $c_{ijk,T}(\alpha)$ to the test problems $(i,j,k)$. In particular, the critical value for the hypothesis $H_0^{(ijk)}$ is allowed to depend on the length $h_k$ of the time interval $\mathcal{I}_k$, that is, on the scale of the test problem. A general approach to construct scale-dependent critical values was pioneered by \cite{DuembgenSpokoiny2001} and has been used in many other studies since then; {\color{red}see e.g.} \cite{Rohde2008}, \cite{DuembgenWalther2008}, \cite{RufibachWalther2010}, \cite{SchmidtHieber2013}, \cite{EckleBissantzDette2017} and \cite{Dunker2019}. In our context, the approach of \cite{DuembgenSpokoiny2001} leads to the critical values 
 \begin{equation*}
 c_{ijk,T}(\alpha) = c_T(\alpha,h_k) := b_k + q_T(\alpha)/a_k, 
 \end{equation*}
@@ -218,9 +220,9 @@ we need to choose the quantity $q_T(\alpha)$ as the $(1-\alpha)$-quantile of the
 in order to ensure control of the FWER at level $\alpha$. Comparing \eqref{eq:FWER-hat} with \eqref{eq:FWER-tilde}, the current approach can be seen to differ from the traditional one in the following respect: the maximum statistic $\tilde{\Psi}_T$ is replaced by the rescaled version $\hat{\Psi}_T$ which re-weights the individual statistics $\hat{\psi}_{ijk,T}^0$ by the scale-dependent constants $a_k$ and $b_k$. As demonstrated above, this translates into scale-dependent critical values $c_{ijk,T}(\alpha) = c_T(\alpha,h_k)$. 
 
 
-Our theory allows us to work with both the traditional choice $c_{ijk,T}(\alpha) = c_T(\alpha)$ and the more modern, scale-dependent choice $c_{ijk,T}(\alpha) = c_T(\alpha,h_k)$. Since the latter choice produces a test approach with better theoretical properties in general {\color{red}\citep[see][]{DuembgenSpokoiny2001}}, we restrict attention to the critical values $c_T(\alpha,h_k)$ in the sequel. There is, however, one complication we need to deal with: As the quantiles $q_T(\alpha)$ are not known in practice, we cannot compute the critical values $c_T(\alpha,h_k)$ exactly in practice but need to approximate them. This can be achieved as follows: Under appropriate regularity conditions, it can be shown that {\color{red} under the null
+Our theory allows us to work with both the traditional choice $c_{ijk,T}(\alpha) = c_T(\alpha)$ and the more modern, scale-dependent choice $c_{ijk,T}(\alpha) = c_T(\alpha,h_k)$. Since the latter choice produces a test approach with better theoretical properties in general {\color{red}\citep[see][]{DuembgenSpokoiny2001}}, we restrict attention to the critical values $c_T(\alpha,h_k)$ in the sequel. There is, however, one complication we need to deal with: As the quantiles $q_T(\alpha)$ are not known in practice, we cannot compute the critical values $c_T(\alpha,h_k)$ exactly in practice but need to approximate them. This can be achieved as follows: Under appropriate regularity conditions, it can be shown that {\color{red} 
 \begin{align*}
-\hat{\psi}_{ijk,T}^0 (:= \hat{\psi}_{ijk,T} ) 
+\hat{\psi}_{ijk,T}^0 
 % & = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \, \sigma \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\eta_{it} - \eta_{jt})}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}} \\
   \approx \frac{1}{\sqrt{2Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \{ \eta_{it} - \eta_{jt} \}.
 \end{align*} 
@@ -244,9 +246,10 @@ where $c_{T,\text{Gauss}}(\alpha,h_k) = b_k + q_{T,\text{Gauss}}(\alpha)/a_k$ wi
 \subsection{Formal properties of the test}\label{subsec:test:properties}
 
 
+{\color{red}
 In Theorem \ref{theo1} of the Appendix, we prove that under appropriate regularity conditions, the test defined in \eqref{eq:test} (asymptotically) controls the familywise error rate $\text{FWER}(\alpha)$ for each pre-specified significance level $\alpha$. As shown in Corollary \ref{corollary1}, this has the following implication: 
 \begin{align}
-\pr\Big( \forall (i,j,k) \in \indexset: \text{ If } |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k), \text{ then } & (i,j,k) \notin \indexset_0 \Big) \nonumber \\ & \ge 1 - \alpha + o(1), \label{eq:simconfstat}
+\pr\Big( \forall (i,j,k) \in \indexset \text{ with } |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) : \ & (i,j,k) \notin \indexset_0 \Big) \nonumber \\ & \ge 1 - \alpha + o(1), \label{eq:simconfstat}
 \end{align} 
 where $\indexset_0$ is the set of triples $(i,j,k) \in \indexset$ for which $H_0^{(ijk)}$ holds true. Verbally, \eqref{eq:simconfstat} can be expressed as follows:  
 \begin{equation}\label{eq:confidencestatement1}
@@ -262,18 +265,24 @@ In other words:
 \end{equation}
 Hence, the test allows us to make simultaneous confidence statements (a) about which pairs of countries $(i,j)$ have different trend functions and (b) about where, that is, in which time intervals $\mathcal{I}_k$ the functions differ.
 
-{\color{red}
-The second result characterizes the power of the multiscale test against local alternatives. To formulate it, consider a sequence of the functions $\lambda_{i}= \lambda_{i, T}$ and $\lambda_j =\lambda_{j, T}$ with the following property: There exists $\mathcal{I}_{k} \in \intervals$ such that 
-\begin{equation}\label{loc-alt}
-\lambda_{i, T}(w) - \lambda_{j, T}(w) \ge c_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k}, 
+
+The above result \eqref{eq:simconfstat} ensures that the following holds true with high probability: If our test detects a deviation from the null $H_0^{(ijk)}$, then $H_0^{(ijk)}$ is indeed violated. In addition, we would like the following to hold true with high probability: If $H_0^{(ijk)}$ is violated, then our test detects this deviation from the null. Put differently, we would like our test to be as powerful as possible. In Corollary \ref{corollary2} in the Appendix, we derive the power properties of the test against a certain class of local alternatives. To summarize, we can show the following: Let $\lambda_{i}= \lambda_{i, T}$ and $\lambda_j =\lambda_{j, T}$ be functions whose difference $\lambda_{i,T} - \lambda_{j,T}$ converges to zero as $T \to \infty$. Moreover, let $\mathcal{M}_1$ be the set of triples $(i,j,k)$ such that either
+\begin{equation}\label{loc-alt-1}
+\lambda_{i, T}(w) - \lambda_{j, T}(w) \ge c_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k} 
 \end{equation}
-where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$ faster than $\frac{\sqrt{\log T}\sqrt{\log \log T}}{\log \log \log T}$. We denote the set of triplets $(i, j, k) \in \indexset$ for which \eqref{loc-alt} holds true as $\indexset_1$. Clearly $\indexset_0 \cap \indexset_1 = \emptyset$. According to Corollary \ref{corollary2} in the Appendix, we can make the following statement about the asymptotic power of the test:
+or 
+\begin{equation}\label{loc-alt-2}
+\lambda_{i, T}(w) - \lambda_{j, T}(w) \le c_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k}, 
+\end{equation}
+where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$ faster than $\sqrt{\log T} \linebreak \sqrt{\log \log T} / \log \log \log T$. According to Corollary \ref{corollary2}, we can make the following statement about the asymptotic power of the test:
 \begin{equation}\label{eq:power}
 \pr\Big( \forall (i,j,k) \in \indexset_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1).
 \end{equation}
-Hence, our test has asymptotic power $1$ against local alternatives of the form \eqref{loc-alt}. The proof can be found in the Supplementary Material.
+Hence, the test detects any deviation of the form \eqref{loc-alt-1} or \eqref{loc-alt-2} with probability tending to $1$. 
 }
 
+
+\newpage
 \subsection{Implementation of the test in practice}
 
 
@@ -294,7 +303,7 @@ According to \eqref{eq:simconfstat}, we can make the following simultaneous conf
 \textit{With (asymptotic) probability at least $1-\alpha$, it holds that for every pair of countries $(i,j) \in \pairs$, the functions $\lambda_i$ and $\lambda_j$ differ on each interval in $\intervals_{\text{reject}}(i,j)$.} 
 \end{minipage}
 \end{equation}
-Hence, we can claim with statistical confidence at least $1-\alpha$ that the functions $\lambda_i$ and $\lambda_j$ differ on each time interval which is depicted in the plots of our graphical device. Since $\intervals_{\text{reject}}^{\text{min}}(i,j) \subseteq \intervals_{\text{reject}}(i,j)$ for any $(i,j) \in \pairs$, the confidence statement \eqref{eq:confidencestatement3} trivially remains to hold true when the sets $\intervals_{\text{reject}}(i,j)$ are replaced by $\intervals_{\text{reject}}^{\text{min}}(i,j)$.
+Hence, we can claim with statistical confidence at least $1-\alpha$ that the functions $\lambda_i$ and $\lambda_j$ differ on each time interval which is depicted in the plots of our graphical device. Since $\intervals_{\text{reject}}^{\text{min}}(i,j) \subseteq \intervals_{\text{reject}}(i,j)$ for any $(i,j) \in \pairs$, the confidence statement \eqref{eq:confidencestatement3} trivially remains to hold true when {\color{red} $\intervals_{\text{reject}}(i,j)$ is replaced by $\intervals_{\text{reject}}^{\text{min}}(i,j)$}.
 
 
 %To graphically present the test results, we produce a plot for each pair of countries $(i,j) \in \pairs$ which shows the intervals $\mathcal{I}_k$ in the set $\intervals_{\text{reject}}(i,j) = \{ \mathcal{I}_k \in \intervals: r_{ijk,T} = 1 \}$, that is, the intervals $\mathcal{I}_k$ for which the test rejects the null $H_0^{(ijk)}$. We in particular use this graphical device to present the test results of our empirical application in Section \ref{sec:empirics}. According to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals in $\intervals_{\text{reject}}(i,j)$: 
@@ -308,6 +317,15 @@ Hence, we can claim with statistical confidence at least $1-\alpha$ that the fun
 %As the sample size grows, the number of intervals in the $\intervals_{\text{reject}}(i, j)$ can also increase rapidly, making graphical depiction of the results of the test not particularly readable. To obtain better visual representation, we propose working with the subset of $\intervals_{\text{reject}}(i, j)$, namely, the subset of minimal intervals which is constructed as follows: As in \cite{Duembgen2002}, we call an interval $\mathcal{I}_{k} \in \intervals_{\text{reject}}(i, j)$ minimal if there is no other interval $\mathcal{I}_{k^\prime} \in \intervals_{\text{reject}}(i, j)$ with $\mathcal{I}_{k^\prime} \subset \mathcal{I}_{k}$. We denote the set of minimal intervals by $\intervals_{\text{reject}}^{\min}(i, j)$. 
 %
 %It is easily seen that as in \eqref{eq:confidencestatement3}, we can claim with statistical confidence at least $1-\alpha$ that the functions $\lambda_i$ and $\lambda_j$ differ on each time interval $\mathcal{I}_k \in \intervals_{\text{reject}}^{\min}(i, j)$. Thus, the simultaneous confidence statement about the set of minimal intervals still remains true while the graphical representation of the results becomes much more understandable. In particular, we use this way of presenting the test results in our application in Section \ref{subsec:app}.
+
+
+{\color{red}
+The graphical device described above is of course not the only possibility to present the test results. Another object which is helpful in summarizing the test results for a pair of countries $(i,j)$ is the union of minimal intervals $\hat{U}_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$. Let $U_{ij} = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}$ be the set of time points where the two functions $\lambda_i$ and $\lambda_j$ differ from each other. The two sets $\hat{U}_{ij}$ and $U_{ij}$ are related as follows to each other: Let the conditions of Theorem \ref{theo1} be satisfied and let $\intervals = \{\mathcal{I}_k: 1 \le k \le K\}$ be a large family of intervals, which in particular is so rich that the intervals in $\intervals$ with minimal length $h_{\min}$ cover the unit interval $[0,1]$. Then  
+\begin{equation}\label{eq:union-min-ints}
+\pr \Big( \max_{1 \le i < j \le n}\Delta(U_{ij}, \hat{U}_{ij}) \le 2 h_{\min} \Big) \ge 1-\alpha + o(1), 
+\end{equation}
+where $\Delta(U_{ij},\hat{U}_{ij}) = (U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})$ is the symmetric difference between the two sets $U_{ij}$ and $\hat{U}_{ij}$. As $h_{\min} = o(1)$, \eqref{eq:union-min-ints} says that for each pair $(i,j)$, the difference between $U_{ij}$ and $\hat{U}_{ij}$ is small ($o(1)$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $\hat{U}_{ij}$ can be regarded as an approximation of $U_{ij}$. We provide a proof of \eqref{eq:union-min-ints} in the Supplementary Material.  
+}
 
 
 
