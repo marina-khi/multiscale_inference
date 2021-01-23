@@ -92,66 +92,142 @@ Thank you very much for the constructive and helpful comments. In our revision, 
 
 \item \textit{Since the difference could be canceled out, why should one consider} $\sum\nolimits_t (X_{it} - X_{jt})\mathbf{1}_{t/T \in I_k}$\textit{? Isn't it more appropriate to use} $|X_{it} - X_{jt}|$ \textit{ or } $|X_{it} - X_{jt}|^2$ \textit{to capture the distance?}
 
-Our test statistics $\hat{s}_{ijk,T}$ measure (local) mean distances between the functions $\lambda_i$ and $\lambda_j$. More specifically, for each pair of countries $(i,j)$ and each interval $\mathcal{I}_k$, the statistic
+As you point out, our test statistics $\hat{s}_{ijk,T}$ measure (local) mean distances between the functions $\lambda_i$ and $\lambda_j$. More specifically, for each pair of countries $(i,j)$ and each interval $\mathcal{I}_k$, the statistic
 \begin{align*} 
 \hat{s}_{ijk,T} 
  & = \frac{1}{\sqrt{Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it} - \X_{jt}) \\
  & = \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \bigg( \lambda_i \Big(\frac{t}{T}\Big)  - \lambda_j \Big(\frac{t}{T}\Big)\bigg) + o_p(1) \\
  & = \sqrt{Th_k} \Big\{ \frac{1}{h_k} \int_{\mathcal{I}_k} (\lambda_i(u) - \lambda_j(u)) du \Big\} + o_p(1) 
 \end{align*}
-estimates the mean distance between $\lambda_i$ and $\lambda_j$ on the interval $\mathcal{I}_k$, which is given by the term 
+estimates the mean distance 
 \[ \Delta_{\text{mean}}(\mathcal{I}_k) := \frac{1}{h_k} \int_{\mathcal{I}_k} (\lambda_i(u) - \lambda_j(u)) du \]
-with $h_k$ being the length of the interval $\mathcal{I}_k$. 
+between $\lambda_i$ and $\lambda_j$ on the interval $\mathcal{I}_k$, where $h_k$ is the length of the interval $\mathcal{I}_k$. 
+%
+%If we only considered one interval $\mathcal{I} \subseteq [0,1]$ (or only a small number of intervals), it would of course not make much sense to use $\Delta_{\text{mean}}$ as a distance measure. Suppose, for example, that we only consider the interval $\mathcal{I} = [0,1]$. In this case, the mean distance 
+%\[ \Delta_{\text{mean}}(\mathcal{I}) = \frac{1}{|\mathcal{I}|} \int_{\mathcal{I}} (\lambda_i(u) - \lambda_j(u)) du  = \int_0^1 (\lambda_i(u) - \lambda_j(u)) du \]
+%does not give much information on whether the two functions $\lambda_i$ and $\lambda_j$ are different or not: it only allows to say whether they have the same mean. Hence, other distance measures such as the $L_q$ distance  
+%\[ \Delta_q(\mathcal{I}) = \frac{1}{|\mathcal{I}|} \int_{\mathcal{I}} |\lambda_i(u) - \lambda_j(u)|^q du \]
+%(with, e.g., $q = 1$ or $q=2$) would be more appropriate.
+%
+%Importantly, however, we do not only consider one interval but a large family of intervals $\{ \mathcal{I}_k: 1 \le k \le K \}$. The local mean differences $\Delta_{\text{mean}}(\mathcal{I}_k)$ are an appropriate distance measure in this situation for the following reason: 
+The local mean differences $\Delta_{\text{mean}}(\mathcal{I}_k)$ can be used as a distance measure for the following reason: Suppose the two functions $\lambda_i$ and $\lambda_j$ are continuous (as assumed in the paper). Then $\lambda_i$ and $\lambda_j$ differ from each other on their support $[0,1]$ if and only if there exists a subinterval $\mathcal{I} \subseteq [0,1]$ with $\Delta_{\text{mean}}(\mathcal{I}) \ne 0$. 
+%Consequently, we can detect the differences between the functions $\lambda_i$ and $\lambda_j$ by running our test procedure which checks whether $\Delta_{\text{mean}}(\mathcal{I}_k) \ne 0$ for a large number of intervals $\mathcal{I}_k$. This is exactly what our test is doing.  
+Consequently, our test procedure, which checks whether $\Delta_{\text{mean}}(\mathcal{I}_k) \ne 0$ for a large number of intervals $\mathcal{I}_k$ simultaneously, should be able to detect the differences between the functions $\lambda_i$ and $\lambda_i$. 
+%Consequently, if the family of intervals ?? is rich enough, then we are able to detect the differences between the functions $\lambda_i$ and $\lambda_j$. 
+This is reflected in the good power properties of the test which are stated in the new Proposition ??. 
 
-If we only considered one interval $\mathcal{I} \subseteq [0,1]$ (or only a small number of intervals), it would of course not make much sense to use $\Delta_{\text{mean}}$ as a distance measure. Suppose, for example, that we only consider the interval $\mathcal{I} = [0,1]$. In this case, the mean distance 
-\[ \Delta_{\text{mean}}(\mathcal{I}) = \frac{1}{|\mathcal{I}|} \int_{\mathcal{I}} (\lambda_i(u) - \lambda_j(u)) du  = \int_0^1 (\lambda_i(u) - \lambda_j(u)) du \]
-does not give much information on whether the two functions $\lambda_i$ and $\lambda_j$ are different or not: it only allows to say whether they have the same mean. Hence, other distance measures such as the $L_q$ distance  
-\[ \Delta_q(\mathcal{I}) = \frac{1}{|\mathcal{I}|} \int_{\mathcal{I}} |\lambda_i(u) - \lambda_j(u)|^q du \]
-(with, e.g., $q = 1$ or $q=2$) would be more appropriate.
+As you point out completely correctly, one may replace the statistics $\hat{s}_{ijk,T}$ that measure the local mean distances $\Delta_{\text{mean}}(\mathcal{I}_k)$ by statistics that measure local $L_q$ distances $\Delta_q(\mathcal{I}_k)$ of the form 
+\[ \Delta_q(\mathcal{I}_k) = \frac{1}{h_k} \int_{\mathcal{I}_k} |\lambda_i(u) - \lambda_j(u)|^q du. \]
+Even though this is possible in principle, we follow most other multiscale approaches in the literature (see e.g.\ ??, ??, ?? and many others) which work with local mean distances rather than local $L_q$ distances. The reason is mainly technical: The theory in our paper would be very different if we worked with local $L_q$ distances. 
+%To be honest, we do not really know how to conduct the proofs with local $L_q$ distances. 
+%The main issue is that we could not make use of the Gaussian approximation results from Chernozhukov ?? as far as we can see. 
+In particular, we could not make use of the Gaussian approximation results from Chernozhukov ?? as far as we can see. 
 
-Importantly, however, we do not only consider one interval but a large family of intervals $\{ \mathcal{I}_k: 1 \le k \le K \}$. The local mean differences $\Delta_{\text{mean}}(\mathcal{I}_k)$ are an appropriate distance measure in this situation for the following reason: Suppose the two functions $\lambda_i$ and $\lambda_j$ are continuous (which is assumed in the paper). Then $\lambda_i$ and $\lambda_j$ differ from each other on their support $[0,1]$ if and only if there exists a subinterval $\mathcal{I} \subseteq [0,1]$ with $\Delta_{\text{mean}}(\mathcal{I}) \ne 0$. Consequently, if the family $\{ \mathcal{I}_k: 1 \le k \le K\}$ of intervals is rich enough, then we are able to detect the differences between the functions $\lambda_i$ and $\lambda_j$. This is reflected in the good power properties of the test which are stated in the new Proposition ??. 
-
-You are of course right that we could replace the local mean distances $\Delta_{\text{mean}}(\mathcal{I}_k)$ by local $L_q$ distances $\Delta_q(\mathcal{I}_k)$ as defined above. However, the theory would be markedly different if we worked with local $L_q$ distances. In particular, we could not base our proofs on the Gaussian approximation results from Chernozhukov ??. Hence, we stick to the local mean distances $\Delta_{\text{mean}}(\mathcal{I}_k)$. \textcolor{red}{On p.??, we have added some sentences which summarize the discussion from the last few paragraphs.}   
+\textcolor{red}{We have added some sentences to p.?? of the revision which summarize the discussion above.}   
 
 
 \item \textit{Now the conclusion will be largely interfered by the choice of interval sets. I am wondering whether we can reach some unified result without the influence of such selection. That is whether we can aggregate the rejected intervals $I_k$ and draw some meaningful conclusion?}
 
-Consider a specific pair of countries $(i,j)$ and let $\mathcal{F} = \{ \mathcal{I}_k: 1 \le k \le K \}$ be a large family of intervals. 
-% which in particular covers the whole support $[0,1]$, that is, $\cup_{k=1}^K \mathcal{I}_k = [0,1]$. 
-Moreover, for a given significance level $\alpha \in (0,1)$, let $\mathcal{F}_{\text{reject}}^{\min}(i,j) \subseteq \mathcal{F}$ be the set of minimal intervals as defined in Section ?? of the paper. We could consider the union of intervals in $\mathcal{F}_{\text{reject}}^{\min}(i,j)$, 
-\[ \hat{\mathcal{I}} = \bigcup_{\mathcal{I} \in \mathcal{F}_{\text{reject}}^{\min}(i,j)} \mathcal{I}, \]
-which is a subset of $[0,1]$. According to our theory, we can make the following confidence claim: 
-\begin{itemize}
-\item[($*$)] \textit{With (asymptotic) probability $\ge 1-\alpha$, the functions $\lambda_i$ and $\lambda_j$ differ on the interval $\hat{\mathcal{I}}$.} 
-\end{itemize}
-This confidence statement gives a simpler summary of the test results than the statement (3.7) in the paper according to which the following holds:  
-\begin{itemize}
-\item[($**$)] \textit{With (asymptotic) probability $\ge 1-\alpha$, the functions $\lambda_i$ and $\lambda_j$ differ on any interval $\mathcal{I} \in \mathcal{F}_{\text{reject}}^{\min}(i,j)$.}
-\end{itemize}
-On the other hand, the statement $(**)$ is much more informative than $(*)$. In particular, it allows to pin down more precisely where the differences in the functions are. \textcolor{red}{We have added some discussion on the quantity ${\mathcal{I}}$ and the corresponding confidence statement $(*)$ on p.?? in the revision.} 
+One way to aggregate the rejected intervals $I_k$ is to consider their union. More specifically, one may consider the following quantity: Using the notation from the paper, we let $\mathcal{F}_{\text{reject}}(i,j)$ be the set of rejected intervals for a given pair of countries $(i,j)$ and additionally define 
+\[ \mathcal{F}_{\text{reject}}^{\text{min}}(i,j) = \{ \mathcal{I}_k \in \mathcal{F}_{\text{reject}}(i,j): \text{ there exists no } \mathcal{I}_{k^\prime} \in \intervals_{\text{reject}}(i,j) \text{ with } \mathcal{I}_{k^\prime} \subset \mathcal{I}_k \}. \]
+The elements of $\mathcal{F}_{\text{reject}}^{\text{min}}(i,j)$ are called minimal intervals. By definition, there is no other interval $\mathcal{I}_{k^\prime}$ in $\intervals_{\text{reject}}(i,j)$ which is a proper subset of a minimal interval $\mathcal{I}_k$. We now consider the union of minimal intervals
+\[ \hat{U}_{ij} = \bigcup_{I \in \mathcal{F}_{\text{reject}}^{\text{min}}(i,j)} I. \]
+As shown in the new Corollary ?? in the Supplementary Material, $\hat{U}_{ij}$ is closely related to the set 
+\[ U_{ij} = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}, \] 
+that is, to the set of time points where $\lambda_i$ and $\lambda_j$ differ from each other. Under appropriate regularity conditions (as detailed in Corollary ??), one can in particular prove that \begin{equation}\label{eq:Uij}
+\pr \Big( \Delta(U_{ij}, \hat{U}_{ij}) \le \nu_T \Big) \ge 1-\alpha + o(1), \tag{$*$}
+\end{equation}
+where $\Delta(U_{ij},\hat{U}_{ij}) = (U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})$ is the symmetric difference between the two sets $U_{ij}$ and $\hat{U}_{ij}$ and $\nu_T \to 0$ as $T \to \infty$. This says that the difference between $U_{ij}$ and $\hat{U}_{ij}$ is small ($\le \nu_T \to 0$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $\hat{U}_{ij}$ can be regarded as an approximation of $U_{ij}$. 
+
+{\color{red}
+We have added a summary of the above discussion to Section ?? of the paper. The new Corollary ?? and its proof can be found in the Supplementary Material.
+}
+
+%Consider a specific pair of countries $(i,j)$ and let $\mathcal{F} = \{ \mathcal{I}_k: 1 \le k \le K \}$ be a large family of intervals. 
+%% which in particular covers the whole support $[0,1]$, that is, $\cup_{k=1}^K \mathcal{I}_k = [0,1]$. 
+%Moreover, for a given significance level $\alpha \in (0,1)$, let $\mathcal{F}_{\text{reject}}^{\min}(i,j) \subseteq \mathcal{F}$ be the set of minimal intervals as defined in Section ?? of the paper. We could consider the union of intervals in $\mathcal{F}_{\text{reject}}^{\min}(i,j)$, 
+%\[ \hat{\mathcal{I}} = \bigcup_{\mathcal{I} \in \mathcal{F}_{\text{reject}}^{\min}(i,j)} \mathcal{I}, \]
+%which is a subset of $[0,1]$. According to our theory, we can make the following confidence claim: 
+%\begin{itemize}
+%\item[($*$)] \textit{With (asymptotic) probability $\ge 1-\alpha$, the functions $\lambda_i$ and $\lambda_j$ differ on the interval $\hat{\mathcal{I}}$.} 
+%\end{itemize}
+%This confidence statement gives a simpler summary of the test results than the statement (3.7) in the paper according to which the following holds:  
+%\begin{itemize}
+%\item[($**$)] \textit{With (asymptotic) probability $\ge 1-\alpha$, the functions $\lambda_i$ and $\lambda_j$ differ on any interval $\mathcal{I} \in \mathcal{F}_{\text{reject}}^{\min}(i,j)$.}
+%\end{itemize}
+%On the other hand, the statement $(**)$ is much more informative than $(*)$. In particular, it allows to pin down more precisely where the differences in the functions are. \textcolor{red}{We have added some discussion on the quantity ${\mathcal{I}}$ and the corresponding confidence statement $(*)$ on p.?? in the revision.} 
 
 
 \item \textit{The author mentioned this method can be used to identify locations of changes in the trends. But the detail is not very clear to me. For example consider a very simple case: if the two series $i, j$ differ from time $t_1$ to $t_2$ and are the same before and after this interval, where $t_1, t_2, t_2 - t_1$ are all unknown. Can we somehow able to identify this interval $[t_1, t_2]$ using our method and how well can we estimate $t_1$ and $t_2$? If one takes difference of each pair $(i, j)$, and then the trends are zero except some unknown intervals. Then the task is to detect those unknown intervals. Such problem can be possibly solved by for example MOSUM. Can author comments about this?}
 
-As suggested by you, we discuss the following simple case: we consider a specific pair of countries $(i,j)$ and suppose that the functions $\lambda_i$ and $\lambda_j$ differ at any time point $t \in [t_1,t_2]$ but are identical at any other time point $t$. Moreover, to simplify the discussion, we assume the following: the interval $[t_1,t_2]$ is fixed (that is, does not change with the sample size $n$), the functions $\lambda_i$ and $\lambda_j$ do not depend on $n$ (that is, we consider a fixed rather than a local alternative), they are continuous and $\lambda_i(t) > \lambda_j(t)$ for all $t \in [t_1,t_2]$.
-
-Let $\mathcal{L}(S)$ denote the Lebesgue measure of a set $S \subset \reals$ and let $\mathcal{F} = \{\mathcal{I}_k: 1 \le k \le K\}$ be a large family of intervals, which in particular is so rich that the following holds: the intervals in $\mathcal{F}$ with minimal length $h_{\min}$ cover the unit interval $[0,1]$, that is, 
-\[ \bigcup_{\mathcal{I} \in \mathcal{F}_0} \mathcal{I} = [0,1] \quad \text{with} \quad \mathcal{F}_0 = \{ \mathcal{I} \in \mathcal{F}: \mathcal{L}(\mathcal{I}) = h_{\min} \}. \] 
-Under the technical conditions of the paper, we can prove the following: 
-\begin{enumerate}[label=(\roman*)]
-\item With (asymptotic) probability $\ge 1-\alpha$, the test does not reject the null for any interval with $\mathcal{I}_k \cap [t_1,t_2] = \emptyset$. 
-%(i) With (asymptotic) probability $\ge 1-\alpha$, the functions $\lambda_i$ and $\lambda_j$ differ on any interval $\mathcal{I}_k$ for which the test rejects the null. 
-\item With probability tending to $1$, the test rejects the null for any interval $\mathcal{I}_k$ for which $\mathcal{L}(\mathcal{I}_k \cap [t_1,t_2]) \ge h_{\min}/2$.
-\end{enumerate}
-Now let $\mathcal{F}_{\text{reject}}^{\text{min}}(i,j)$ be the set of minimal intervals and let $\hat{\mathcal{I}}$ be their union, that is, $\hat{\mathcal{I}} = \cup_{\mathcal{I} \in \mathcal{F}_{\text{reject}}^{\min}(i,j)} \mathcal{I}$. Then
-\[ \pr \big( [t_1,t_2] \subseteq \hat{I} \big) \ge 1 - \alpha + o(1) \]
-and 
-\[ \pr \big( \mathcal{L} (([t_1,t_2] \setminus \hat{I}) \cap (\hat{I} \cap [t_1,t_2])) \le h_{\min} \big) \ge 1 - \alpha + o(1) \]
-Hence, with (asymptotic) probability $\ge 1-\alpha$, $\mathcal{I}$ covers $[t_1,t_2]$ and it is not much larger that $[t_1,t_2]$ in the sense that the symmetric difference $[t_1,t_2] \setminus \hat{I}) \cap (\hat{I} \cap [t_1,t_2])$ is smaller than the smallest interval length $h_{\min}$.
-
-The set $\mathcal{I}$ is of course not a consistent estimator of $[t_1,t_2]$. It can rather be interpreted as some sort of confidence set: We know with probability $\ge 1-\alpha$ that $[t_1,t_2]$ is contained in $\mathcal{I}$ and that the set $\mathcal{I}$ is not much larger than $[t_1,t_2]$.  
+Our method allows to identify differences between the trends $\lambda_i$ and $\lambda_j$ in the sense that we can make confidence statements about where (that is, in which time intervals $I_k$ under consideration) the differences are. In particular, in the simple case where $\lambda_i$ and $\lambda_j$ differ at any time point $t \in (t_1,t_2)$ but are identical at any other time point $t$, we can make the following confidence statement: 
+\begin{center}
+\begin{minipage}{0.85\textwidth}
+With (asymptotic) probability at least $1-\alpha$, the trends $\lambda_i$ and $\lambda_j$ are different on each interval $\mathcal{I}_k$ for which our test rejects the null $H_0^{(ijk)}$.
+\end{minipage}
+\end{center}
+Put differently:
+\begin{center}
+\begin{minipage}{0.85\textwidth}
+With (asymptotic) probability at least $1-\alpha$, each interval $\mathcal{I}_k$ for which our test rejects the null $H_0^{(ijk)}$ has some overlap with $(t_1,t_2)$.
+\end{minipage}
+\end{center}
+Hence, the intervals for which we reject the null give information about where $\lambda_i$ and $\lambda_j$ differ from each other. To summarize the test results, we thus propose to plot the family of intervals $\mathcal{F}_{\text{reject}}(i,j)$ for which our test rejects the null. 
 
 
+Our approach being an inference procedure, it allows to make confidence statements about where $\lambda_i$ and $\lambda_j$ differ, but it does not produce a point estimate of the time interval $[t_1,t_2]$. However, we conjecture that it is possible to construct a point estimate of $[t_1,t_2]$ based on our approach. More specifically, it should be possible to extend the result \eqref{eq:Uij} discussed in our reply to your previous comment to the case where $\alpha = \alpha_T \to 0$ sufficiently slowly. Hence, we should be able to show that 
+\begin{equation}\label{eq:Uij-conjecture}
+\pr \Big( \Delta(U_{ij}, \hat{U}_{ij}) \le \nu_T \Big) \ge \underbrace{1-\alpha_T - o(1)}_{= 1 - o(1)}.
+\end{equation}
+This says that $\hat{U}_{ij}$ is a consistent estimator of $U_{ij} = [t_1,t_2]$ in the sense that the difference $\Delta(U_{ij}, \hat{U}_{ij})$ goes to zero (as $\rho_T \to 0$) with probability tending to $1$. 
+
+Since we are primarily interested in inference rather than point estimation in our paper and since the statement \eqref{eq:Uij-conjecture} is merely a conjecture not covered by our theory, we have decided not to discuss this extension in the paper. However, we are happy to do so if you think this is needed. 
+ 
+
+%As suggested by you, we discuss the following simple setting: we consider a specific pair of countries $(i,j)$ and suppose that the functions $\lambda_i$ and $\lambda_j$ differ at any time point $t \in (t_1,t_2)$ but are identical at any other time point $t$. 
+
+%ur methods do not allow us to identify the interval $[t_1,t_2]$ in the sense that it gives a point estimate of it. However, 
+
+%According to Theorem A.1 in the Appendix, our method allows us to make the following confidence statements in this setting: 
+
+%With (asymptotic) probability at least $1-\alpha$, the functions $\lambda_i$ and $\lambda_j$ are different on each interval $\mathcal{I}_k$ for which our test rejects the null $H_0^{(ijk)}$.
+
+%Put differently:
+
+%With (asymptotic) probability at least $1-\alpha$, each interval $\mathcal{I}_k$ for which our test rejects the null $H_0^{(ijk)}$ has some overlap with $(t_1,t_2)$.
+
+%Hence, the collection of intervals for which we reject the null gives information about where the functions $\lambda_i$ and $\lambda_j$ differ. This is why we propose to summarize the test results by plotting the family of intervals $\mathcal{F}_{\text{reject}}(i,j)$ for which our test rejects the null.
+
+%As discussed in our reply to your previous comment, one may alternatively summarize the information contained in the set $\mathcal{F}_{\text{reject}}(i,j)$ by considering the union of minimal intervals $hat{U}_{ij}$. In particular, as argued above, $\hat{U}_{ij}$ is closely related to the interval $U_{ij} = (t_1,t_2)$ in the sense of \eqref{eq:Uij}. 
+
+%Even though we are interested in confidence statements in our paper, it should be possible to construct a point estimate of the interval $[t_1,t_2]$ based on our procedures. We in particular conjecture that the following is possible: We have derived our theory for fixed $\alpha \in (0,1)$. However, it should be possible to extend it to $\alpha = \alpha_T$ with $\alpha_T \to 0$ slowly enough. Moreover, it should be possible to extend the result \eqref{eq:Uij} discussed above to the case with $\alpha_T \to 0$. Hence, we should be able to show that 
+%\begin{equation}
+%\pr \Big( \Delta(U_{ij}, \hat{U}_{ij}) \le \nu_T \Big) \ge \underbrace{1-\alpha_T - o(1)}_{= 1 - o(1)}.
+%\end{equation}
+%This says that $\hat{U}_{ij}$ is a consistent estimator of $U_{ij} = [t_1,t_2]$. The precision of the estimator $\hat{U}_{ij}$ is given by $\rho_T$ which is specified in the new Corollary ?? in the SUpplementary Material.  
+
+%As the focus of the paper is inference rather than point estimation, we have decided not to add this discussion to the paper.  
+
+%As suggested by you, we discuss the following simple case: we consider a specific pair of countries $(i,j)$ and suppose that the functions $\lambda_i$ and $\lambda_j$ differ at any time point $t \in [t_1,t_2]$ but are identical at any other time point $t$. Moreover, to simplify the discussion, we assume the following: the interval $[t_1,t_2]$ is fixed (that is, does not change with the sample size $n$), the functions $\lambda_i$ and $\lambda_j$ do not depend on $n$ (that is, we consider a fixed rather than a local alternative), they are continuous and $\lambda_i(t) > \lambda_j(t)$ for all $t \in [t_1,t_2]$.
+
+%Let $\mathcal{L}(S)$ denote the Lebesgue measure of a set $S \subset \reals$ and let $\mathcal{F} = \{\mathcal{I}_k: 1 \le k \le K\}$ be a large family of intervals, which in particular is so rich that the following holds: the intervals in $\mathcal{F}$ with minimal length $h_{\min}$ cover the unit interval $[0,1]$, that is, 
+%\[ \bigcup_{\mathcal{I} \in \mathcal{F}_0} \mathcal{I} = [0,1] \quad \text{with} \quad \mathcal{F}_0 = \{ \mathcal{I} \in \mathcal{F}: \mathcal{L}(\mathcal{I}) = h_{\min} \}. \] 
+%Under the technical conditions of the paper, we can prove the following: 
+%\begin{enumerate}[label=(\roman*)]
+%\item With (asymptotic) probability $\ge 1-\alpha$, the test does not reject the null for any interval with $\mathcal{I}_k \cap [t_1,t_2] = \emptyset$. 
+%%(i) With (asymptotic) probability $\ge 1-\alpha$, the functions $\lambda_i$ and $\lambda_j$ differ on any interval $\mathcal{I}_k$ for which the test rejects the null. 
+%\item With probability tending to $1$, the test rejects the null for any interval $\mathcal{I}_k$ for which $\mathcal{L}(\mathcal{I}_k \cap [t_1,t_2]) \ge h_{\min}/2$.
+%\end{enumerate}
+%Now let $\mathcal{F}_{\text{reject}}^{\text{min}}(i,j)$ be the set of minimal intervals and let $\hat{\mathcal{I}}$ be their union, that is, $\hat{\mathcal{I}} = \cup_{\mathcal{I} \in \mathcal{F}_{\text{reject}}^{\min}(i,j)} \mathcal{I}$. Then
+%\[ \pr \big( [t_1,t_2] \subseteq \hat{I} \big) \ge 1 - \alpha + o(1) \]
+%and 
+%\[ \pr \big( \mathcal{L} (([t_1,t_2] \setminus \hat{I}) \cap (\hat{I} \cap [t_1,t_2])) \le h_{\min} \big) \ge 1 - \alpha + o(1) \]
+%Hence, with (asymptotic) probability $\ge 1-\alpha$, $\mathcal{I}$ covers $[t_1,t_2]$ and it is not much larger that $[t_1,t_2]$ in the sense that the symmetric difference $[t_1,t_2] \setminus \hat{I}) \cap (\hat{I} \cap [t_1,t_2])$ is smaller than the smallest interval length $h_{\min}$.
+
+%The set $\mathcal{I}$ is of course not a consistent estimator of $[t_1,t_2]$. It can rather be interpreted as some sort of confidence set: We know with probability $\ge 1-\alpha$ that $[t_1,t_2]$ is contained in $\mathcal{I}$ and that the set $\mathcal{I}$ is not much larger than $[t_1,t_2]$.
+
+
+  
 %Let us consider the following setting (which is a more detailed version of the simple case that you describe above):
 %\begin{itemize}
 %\item Consider a specific pair of countries $(i,j)$ and suppose that the functions $\lambda_i$ and $\lambda_j$ differ at any time point $t \in [t_1,t_2]$ but are identical at any other time point $t$. Moreover, suppose the functions $\lambda_i$ and $\lambda_j$ are fixed (that is, we consider a fixed rather than a local alternative), continuous and $\lambda_i(t) > \lambda_j(t)$ for all $t \in [t_1,t_2]$. 
@@ -172,7 +248,7 @@ The set $\mathcal{I}$ is of course not a consistent estimator of $[t_1,t_2]$. It
 \item \textit{Since the result in Chernozukov et al's Gaussian approximation(GA) does not require the series to be independent cross sectionally, I wonder does that mean the current result can be extended to data with cross-sectional dependence?}
 \item \textit{It would be better if the author can derive power under certain alternatives, so that one can get a better idea as how different the trends needs to be in order to be detected.}
 
-It can indeed be proven that our multiscale test has asymptotic power $1$ against local alternatives. We have added this result as Corollary A.2 in the Appendix to the paper. The proof is provided in the Supplementary Material.
+As suggested, we have derived the power properties of the test against a certain class of local alternatives. Please see the new Corollary ?? in the Appendix of the paper. The proof is provided in the Supplementary Material.
 
 \item \textit{The argument about no need for time dependent data is reasonable, just a short comment: there already exists result extending Chernozukov et al's GA to time dependent case, maybe this paper can be further extended to time dependent data as well.}
 \end{enumerate}
@@ -196,15 +272,19 @@ Thank you very much for the constructive and useful suggestions. In our revision
 
 \item \textit{The assumption of independence across countries may be debatable, but it seems that in the context of the model, this could be tested, so this may be worth mentioning.}
 
-\item \textit{Some arguments may be worth further details in the text. For instance, the equation involving} $\widehat{s}_{ijk,T} / \sqrt{T h_k}$ \textit{on Page 2 Line 7, or the bound for} $|r_{it}|$ \textit{on Page 2 Line -5.}
+\item \textit{Some arguments may be worth further details in the text. For instance, the equation involving} $\hat{s}_{ijk,T} / \sqrt{T h_k}$ \textit{on Page 2 Line 7, or the bound for} $|r_{it}|$ \textit{on Page 2 Line -5.}
+
+As suggested, we have added further details on the statistic $\hat{s}_{ijk,T}$ and the bound for $|r_{it}|$ to the text. Please see the revised Section ?? for the details. We hope you find the changes appropriate.  
 
 \item \textit{I am unsure why the statistic in (3.2) is introduced, I feel the discussion in Pages 8-9 could be done without referring to it.}
 
-We have deferred the introduction of this test statistics to the Appendix.
+The statistic $\hat{\psi}_{ijk,T}^0$ introduced in (3.2) is a modification of the test statistic $\hat{\psi}_{ijk,T}$. It is needed to define the critical values $c_T(\alpha,h_k) = b_k + q_T(\alpha) / a_k$ of the multiscale test in Section ??. Specifically, $\hat{\psi}_{ijk,T}^0$ is required to define the $(1-\alpha)$-quantile $q_T(\alpha)$ of 
+\[ \hat{\Psi}_T = \max_{(i,j,k) \in \indexset} a_k \big( |\hat{\psi}_{ijk,T}^0| - b_k \big). \]
+For this reason, we have decided not to defer its definition to the Appendix but to introduce it in (3.2) as in the old version of the paper. Otherwise, an important detail of the test would be missing in the main text / would be hidden in the Appendix. We hope you are fine with this. To emphasize that the statistic $\hat{\psi}_{ijk,T}^0$ is required for the definition of the critical values of the multiscale test, we have added the following sentence after its introduction in equation (3.2): ``This statistic is needed to define the critical values of our multiscale test in what follows''.
 
 \item \textit{The "cp." abbreviation is uncommon, I feel it should be replaced by "see" or "e.g."}
 
-We have replaced the "cp." abbreviation by "e.g." and in some cases by "see" throughout the paper.
+As suggested, we have replaced the "cp." abbreviation by "e.g." or "see".
  
 
 \end{enumerate}

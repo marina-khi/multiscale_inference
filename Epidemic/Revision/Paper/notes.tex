@@ -247,11 +247,11 @@ where $c_{T,\text{Gauss}}(\alpha,h_k) = b_k + q_{T,\text{Gauss}}(\alpha)/a_k$ wi
 
 
 {\color{red}
-In Theorem \ref{theo1} of the Appendix, we prove that under appropriate regularity conditions, the test defined in \eqref{eq:test} (asymptotically) controls the familywise error rate $\text{FWER}(\alpha)$ for each pre-specified significance level $\alpha$. As shown in Corollary \ref{corollary1}, this has the following implication: 
+In Theorem \ref{theo1} of the Appendix, we prove that under appropriate regularity conditions, the test defined in \eqref{eq:test} (asymptotically) controls the familywise error rate $\text{FWER}(\alpha)$ for each pre-specified significance level $\alpha$. As shown in Corollary \ref{corollary1}, this has the following implication:   
 \begin{align}
-\pr\Big( \forall (i,j,k) \in \indexset \text{ with } |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) : \ & (i,j,k) \notin \indexset_0 \Big) \nonumber \\ & \ge 1 - \alpha + o(1), \label{eq:simconfstat}
+\pr\Big( \forall (i,j,k) \in \mathcal{R}: \ (i,j,k) \notin \indexset_0 \Big) \ge 1 - \alpha + o(1), \label{eq:simconfstat}
 \end{align} 
-where $\indexset_0$ is the set of triples $(i,j,k) \in \indexset$ for which $H_0^{(ijk)}$ holds true. Verbally, \eqref{eq:simconfstat} can be expressed as follows:  
+where $\mathcal{R} = \{ (i,j,k) \in \indexset$ with $|\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \}$ is the set of triples $(i,j,k)$ for which our test rejects the null $H_0^{(ijk)}$ and $\indexset_0$ is the set of triples $(i,j,k)$ for which $H_0^{(ijk)}$ holds true. Verbally, \eqref{eq:simconfstat} can be expressed as follows:  
 \begin{equation}\label{eq:confidencestatement1}
 \begin{minipage}[c][1cm][c]{13cm}
 \textit{With (asymptotic) probability at least $1-\alpha$, the null hypothesis $H_0^{(ijk)}$ is violated for all $(i,j,k) \in \indexset$ for which the test rejects $H_0^{(ijk)}$.} 
@@ -266,7 +266,9 @@ In other words:
 Hence, the test allows us to make simultaneous confidence statements (a) about which pairs of countries $(i,j)$ have different trend functions and (b) about where, that is, in which time intervals $\mathcal{I}_k$ the functions differ.
 
 
-The above result \eqref{eq:simconfstat} ensures that the following holds true with high probability: If our test detects a deviation from the null $H_0^{(ijk)}$, then $H_0^{(ijk)}$ is indeed violated. In addition, we would like the following to hold true with high probability: If $H_0^{(ijk)}$ is violated, then our test detects this deviation from the null. Put differently, we would like our test to be as powerful as possible. In Corollary \ref{corollary2} in the Appendix, we derive the power properties of the test against a certain class of local alternatives. To summarize, we can show the following: Let $\lambda_{i}= \lambda_{i, T}$ and $\lambda_j =\lambda_{j, T}$ be functions whose difference $\lambda_{i,T} - \lambda_{j,T}$ converges to zero as $T \to \infty$. Moreover, let $\mathcal{M}_1$ be the set of triples $(i,j,k)$ such that either
+According to \eqref{eq:simconfstat}, our test does not produce any false positives with high probability. In addition, we would like the test not to produce any false negatives with high probability either. Put differently, we would like the test to have power against the deviations from the null that are present in the data. 
+%According to \eqref{eq:simconfstat}, the following holds true with high probability: If our test detects a deviation from the null $H_0^{(ijk)}$, then $H_0^{(ijk)}$ is indeed violated. In addition, we would like the following to hold true with high probability: If $H_0^{(ijk)}$ is violated, then our test detects this deviation from the null. Put differently, we would like our test to be as powerful as possible. 
+In Corollary \ref{corollary2} in the Appendix, we derive the power properties of the test against a certain class of local alternatives. To summarize, we can show the following: Let $\lambda_{i}= \lambda_{i, T}$ and $\lambda_j =\lambda_{j, T}$ be functions whose difference $\lambda_{i,T} - \lambda_{j,T}$ converges to zero as $T \to \infty$. Moreover, let $\mathcal{M}_1$ be the set of triples $(i,j,k)$ such that either
 \begin{equation}\label{loc-alt-1}
 \lambda_{i, T}(w) - \lambda_{j, T}(w) \ge c_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k} 
 \end{equation}
@@ -320,12 +322,25 @@ Hence, we can claim with statistical confidence at least $1-\alpha$ that the fun
 
 
 {\color{red}
-The graphical device described above is of course not the only possibility to present the test results. Another object which is helpful in summarizing the test results for a pair of countries $(i,j)$ is the union of minimal intervals $\hat{U}_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$. Let $U_{ij} = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}$ be the set of time points where the two functions $\lambda_i$ and $\lambda_j$ differ from each other. The two sets $\hat{U}_{ij}$ and $U_{ij}$ are related as follows to each other: Let the conditions of Theorem \ref{theo1} be satisfied and let $\intervals = \{\mathcal{I}_k: 1 \le k \le K\}$ be a large family of intervals, which in particular is so rich that the intervals in $\intervals$ with minimal length $h_{\min}$ cover the unit interval $[0,1]$. Then  
+The graphical device described above is of course not the only way to present the test results. Another object which is helpful in summarizing the test results for a given pair of countries $(i,j)$ is the union of minimal intervals $\hat{U}_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$. Let $U_{ij} = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}$ be the set of time points where the two functions $\lambda_i$ and $\lambda_j$ differ from each other. According to Corollary ?? in the Supplementary Material, the two sets $\hat{U}_{ij}$ and $U_{ij}$ are related as follows to each other (under certain regularity conditions spelled out in detail in the corollary):
 \begin{equation}\label{eq:union-min-ints}
-\pr \Big( \max_{1 \le i < j \le n}\Delta(U_{ij}, \hat{U}_{ij}) \le 2 h_{\min} \Big) \ge 1-\alpha + o(1), 
+\pr \Big( \Delta(U_{ij}, \hat{U}_{ij}) \le \nu_T \Big) \ge 1-\alpha + o(1), 
 \end{equation}
-where $\Delta(U_{ij},\hat{U}_{ij}) = (U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})$ is the symmetric difference between the two sets $U_{ij}$ and $\hat{U}_{ij}$. As $h_{\min} = o(1)$, \eqref{eq:union-min-ints} says that for each pair $(i,j)$, the difference between $U_{ij}$ and $\hat{U}_{ij}$ is small ($o(1)$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $\hat{U}_{ij}$ can be regarded as an approximation of $U_{ij}$. We provide a proof of \eqref{eq:union-min-ints} in the Supplementary Material.  
+where $\Delta(U_{ij},\hat{U}_{ij}) = (U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})$ is the symmetric difference between the two sets $U_{ij}$ and $\hat{U}_{ij}$ and $\nu_T \to 0$ as $T \to \infty$. According to \eqref{eq:union-min-ints}, the difference between $U_{ij}$ and $\hat{U}_{ij}$ is small ($\le \nu_T \to 0$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $\hat{U}_{ij}$ can be regarded as an approximation of $U_{ij}$. 
 }
+
+Corollary ??: Let the conditions of Theorem \ref{theo1} be satisfied and let $\intervals = \{\mathcal{I}_k: 1 \le k \le K\}$ be a large family of intervals with the following two properties: 
+\begin{enumerate}[label=(\alph*)]
+\item The intervals $\mathcal{I}_k \in \intervals$ with minimal length $h_{\min}$ cover the unit interval $[0,1]$.
+\item Each interval $\mathcal{I}_k \in \intervals$ with larger length than $h_{\min}$ contains at least one interval of minimal length $h_{\min}$. 
+\end{enumerate}
+Consider a specific pair $(i,j)$ and let the two functions $\lambda_i$ and $\lambda_j$ be independent of $n$. Moreover, let $U_{ij} = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}$ be the set of time points where $\lambda_i$ and $\lambda_j$ differ from each other and let $\hat{U}_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$ be the union of minimal intervals. It holds that 
+%define $r$ to be the number of time points $u$ in the closure of $U_{ij}$ where $\lambda_i(u) - \lambda_j(u) = 0$. The union of minimal intervals $\hat{U}_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$ is related as follows to the set $U_{ij}$: 
+\begin{equation*}
+\pr \Big( \Delta(U_{ij}, \hat{U}_{ij}) \le \nu_T \Big) \ge 1-\alpha + o(1), 
+\end{equation*}
+where $\Delta(U_{ij},\hat{U}_{ij}) = (U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})$ is the symmetric difference between $U_{ij}$ and $\hat{U}_{ij}$, and $\{\nu_T\}$ is a null sequence specified in ??. ($\nu_T = 2 r c_T \sqrt{\log T/Th_{\min}}$ with $r$ the number of time points $u$ in the closure of $U_{ij}$ with $\lambda_i(u) - \lambda_j(u) = 0$) 
+
 
 
 
