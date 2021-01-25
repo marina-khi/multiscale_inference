@@ -113,7 +113,7 @@ In order to derive our theoretical results, we impose the following regularity c
 \item \label{C2} The functions $\lambda_i$ are uniformly Lipschitz continuous, that is, $|\lambda_i(u) - \lambda_i(v)| \le L |u-v|$ for all $u, v \in [0,1]$, where the constant $L$ does not depend on $i$. Moreover, they are uniformly bounded away from zero and infinity, that is, there exist constants $\lambda_{\min}$ and $\lambda_{\max}$ with $0 \le \lambda_{\min} \le \min_{w \in [0,1]} \lambda_i(w) \le \max_{w \in [0,1]} \lambda_i(w) \le \lambda_{\max} < \infty$ for all $i$. 
 \item \label{C1} The random variables $\eta_{it}$ are independent both across $i$ and $t$. Moreover, for any $i$ and $t$, it holds that $\ex[\eta_{it}] = 0$, $\ex[\eta_{it}^2] = 1$ and $\ex[|\eta_{it}|^\theta] \le C_\theta < \infty$ for some $\theta > 4$. 
 \end{enumerate}
-\ref{C2} imposes some standard-type regularity conditions on the functions $\lambda_i$. In particular, the functions are assumed to be smooth, bounded from above and bounded away from zero. The latter restriction is required because the noise variance in model \eqref{eq:model} equals zero if $\lambda_i$ is equal to zero. Since we normalize our test statistics by an estimate of the noise variance as detailed in Section \ref{sec:test}, we need this variance and thus the functions $\lambda_i$ to be bounded away from zero. \ref{C1} assumes the noise terms $\eta_{it}$ to fulfill some mild moment conditions and to be independent both across countries $i$ and time $t$. In the current COVID-19 crisis, independence across countries $i$ seems to be a fairly reasonable assumption due to severe travel restrictions, the closure of borders, etc. Independence across time $t$ is more debatable, but it is by no means unreasonable in our model framework: The time series process $\mathcal{\X}_i = \{X_{it}: 1 \le t \le T\}$ produced by model \eqref{eq:model} is nonstationary for each $i$. Specifically, both the mean $\ex[X_{it}] = \lambda_i(t/T)$ and the variance $\var(X_{it}) = \sigma^2 \lambda_i(t/T)$ are time-varying. A well-known fact in the time series literature is that nonstationarities such as a time-varying mean may produce spurious sample autocorrelations {\color{red}\citep[see e.g.][]{MikoschStarica2004, Fryzlewicz2008}}. Hence, the observed persistence of a time series (captured by the sample autocorrelation function) may be due to nonstationarities rather than real autocorrelations. This insight has led researchers to prefer simple nonstationary models over intricate stationary time series models in some application areas such as finance {\color{red}\citep[see e.g.][]{MikoschStarica2000, MikoschStarica2004, Fryzlewicz2006, HafnerLinton2010}}. In a similar vein, our model accounts for the persistence in the observed time series $\mathcal{\X}_i$ via nonstationarities rather than autocorrelations in the error terms. 
+\ref{C2} imposes some standard-type regularity conditions on the functions $\lambda_i$. In particular, the functions are assumed to be smooth, bounded from above and bounded away from zero. The latter restriction is required because the noise variance in model \eqref{eq:model} equals zero if $\lambda_i$ is equal to zero. Since we normalize our test statistics by an estimate of the noise variance as detailed in Section \ref{sec:test}, we need this variance and thus the functions $\lambda_i$ to be bounded away from zero. \ref{C1} assumes the noise terms $\eta_{it}$ to fulfill some mild moment conditions and to be independent both across countries $i$ and time $t$. In the current COVID-19 crisis, independence across countries $i$ seems to be a fairly reasonable assumption due to severe travel restrictions, the closure of borders, etc. Independence across time $t$ is more debatable, but it is by no means unreasonable in our model framework: The time series process $\mathcal{\X}_i = \{X_{it}: 1 \le t \le T\}$ produced by model \eqref{eq:model} is nonstationary for each $i$. Specifically, both the mean $\ex[X_{it}] = \lambda_i(t/T)$ and the variance $\var(X_{it}) = \sigma^2 \lambda_i(t/T)$ are time-varying. A well-known fact in the time series literature is that nonstationarities such as a time-varying mean may produce spurious sample autocorrelations {\color{red}\citep[see e.g.][]{MikoschStarica2004, Fryzlewicz2008}}. Hence, the observed persistence of a time series (captured by the sample autocorrelation function) may be due to nonstationarities rather than real autocorrelations. This insight has led researchers to prefer simple nonstationary models over intricate stationary time series models in some application areas such as finance {\color{red}\citep[see e.g.][]{MikoschStarica2000, MikoschStarica2004, Fryzlewicz2006, HafnerLinton2010}}. In a similar vein, our model accounts for the persistence in the observed time series $\mathcal{\X}_i$ via nonstationarities rather than autocorrelations in the error terms.\footnote{{\color{red} From a technical point of view, we impose the independence assumptions in \ref{C1} to be able to use the Gaussian approximation results for hyperrectangles from \cite{Chernozhukov2017} in our proofs. To apply these results, we in particular need independence across $t$. However, it would in principle be possible to allow for certain forms of dependence across $i$ at the cost of a more complicated test procedure.}}
 
  
 
@@ -127,43 +127,57 @@ Let $\pairs \subseteq \{ (i,j): 1 \le i < j \le n \}$ be the set of all pairs of
 \subsection{Construction of the test statistics}\label{subsec:test:test}
 
 
-A statistic to test the hypothesis $H_0^{(ijk)}$ for a given triple $(i,j,k)$ can be constructed as follows. To start with, we introduce the expression 
+A statistic to test the hypothesis $H_0^{(ijk)}$ for a given triple $(i,j,k)$ can be constructed as follows. To start with, we consider the expression 
 \[ \hat{s}_{ijk,T} = \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it} - \X_{jt}), \]
 where $h_k$ is the length of the time interval $\mathcal{I}_k$, $\ind(\cdot)$ denotes the indicator function and $\ind(t/T \in \mathcal{I}_k)$ can be regarded as a rectangular kernel weight. Inserting the model equation \eqref{eq:model} into the definition of $\hat{s}_{ijk,T}$ yields that $\hat{s}_{ijk,T} = \Delta_{ijk,T} + R_{ijk,T}$, where 
-\begin{align*}
-\Delta_{ijk,T} & = \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \bigg( \lambda_i \Big(\frac{t}{T}\Big)  - \lambda_j \Big(\frac{t}{T}\Big)\bigg) \\
-R_{ijk,T} & = \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \sigma \Big( \sqrt{ \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} - \sqrt{ \lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt} \Big). 
-\end{align*}
-Moreover, a simple application of the law of large numbers for a fixed $i$ gives that $(Th_k)^{-1} \sum_{t=1}^T \ind(t/T \in \mathcal{I}_k) \sqrt{\lambda_i(t/T)} \eta_{it} = o_p(1)$, which in turn implies that $R_{ijk,T} = o_p(1)$. Hence, for any fixed triple $(i,j,k)$, we obtain that 
+\begin{equation*}
+\Delta_{ijk,T} = \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \bigg( \lambda_i \Big(\frac{t}{T}\Big)  - \lambda_j \Big(\frac{t}{T}\Big)\bigg) 
+%R_{ijk,T} & = \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \sigma \Big( \sqrt{ \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} - \sqrt{ \lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt} \Big). 
+\end{equation*}
+is the average distance between the functions $\lambda_i$ and $\lambda_j$ on the interval $\mathcal{I}_k$ and 
+\begin{equation*}
+R_{ijk,T} = \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \sigma \Big( \sqrt{ \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} - \sqrt{ \lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt} \Big) 
+\end{equation*}
+is a remainder term that is asymptotically negligible in the following sense: A simple application of the law of large numbers for a fixed $i$ gives that $(Th_k)^{-1} \sum_{t=1}^T \ind(t/T \in \mathcal{I}_k) \sqrt{\lambda_i(t/T)} \eta_{it} = o_p(1)$, which in turn implies that $R_{ijk,T} = o_p(1)$.
+%\begin{align*}
+%\Delta_{ijk,T} & = \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \bigg( \lambda_i \Big(\frac{t}{T}\Big)  - \lambda_j \Big(\frac{t}{T}\Big)\bigg) \\
+%R_{ijk,T} & = \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \sigma \Big( \sqrt{ \lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} - \sqrt{ \lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt} \Big). 
+%\end{align*}
+%Moreover, a simple application of the law of large numbers for a fixed $i$ gives that $(Th_k)^{-1} \sum_{t=1}^T \ind(t/T \in \mathcal{I}_k) \sqrt{\lambda_i(t/T)} \eta_{it} = o_p(1)$, which in turn implies that $R_{ijk,T} = o_p(1)$. 
+Hence, for any fixed triple $(i,j,k)$, we obtain that 
 \[ \hat{s}_{ijk,T} = \Delta_{ijk,T} + o_p(1), \]
 which means that the statistic $\hat{s}_{ijk,T}$ estimates the average distance $\Delta_{ijk,T}$ between the functions $\lambda_i$ and $\lambda_j$ on the interval $\mathcal{I}_k$. 
 
 
-We next have a closer look at the variance of the statistic $\hat{s}_{ijk,T}$. Under \ref{C1}, the variance of $\hat{s}_{ijk,T}$ is 
+We next have a closer look at the variance of the statistic $\hat{s}_{ijk,T}$. Under \ref{C1}, the variance of $\hat{s}_{ijk,T}$ is given by
 \begin{align*}
 \nu_{ijk,T}^2 := \var(\hat{s}_{ijk,T}) 
  & = \frac{\sigma^2}{(Th_k)^2} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big\{ \lambda_i\Big(\frac{t}{T}\Big) + \lambda_j\Big(\frac{t}{T}\Big) \Big\} 
 \end{align*}
 and can be estimated by 
-\[ \hat{\nu}_{ijk,T}^2 = \frac{\hat{\sigma}^2}{(Th_k)^2} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \{ \X_{it} + \X_{jt} \}, \]
-where $\hat{\sigma}^2$ is defined as follows: For each country $i$, we let 
+\[ \hat{\nu}_{ijk,T}^2 = \frac{\hat{\sigma}^2}{(Th_k)^2} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \{ \X_{it} + \X_{jt} \}. \]
+Here, $\hat{\sigma}^2$ is an estimator of $\sigma^2$ which is defined as $\hat{\sigma}^2 = |\countries|^{-1} \sum_{i \in \countries} \hat{\sigma}_i^2$, where $\countries = \{ \ell: \ell = i$ or $\ell = j$ for some $(i,j) \in \pairs \}$ denotes the set of countries that are taken into account by our test and 
 \begin{align*}
 \hat{\sigma}_i^2 = \frac{\sum_{t=2}^T (\X_{it}-\X_{it-1})^2}{2 \sum_{t=1}^T \X_{it}}
 \end{align*}
-and set $\hat{\sigma}^2 = |\countries|^{-1} \sum_{i \in \countries} \hat{\sigma}_i^2$ with $\countries = \{ \ell: \ell = i$ or $\ell = j$ for some $(i,j) \in \pairs \}$ denoting the set of countries that are taken into account by our test. The idea behind the estimator $\hat{\sigma}_i^2$ is as follows: We can write 
-\[ \X_{it} - \X_{it-1} = \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} (\eta_{it} - \eta_{it-1}) + r_{it} \]
+for each country $i$. 
+%and set $\hat{\sigma}^2 = |\countries|^{-1} \sum_{i \in \countries} \hat{\sigma}_i^2$ with $\countries = \{ \ell: \ell = i$ or $\ell = j$ for some $(i,j) \in \pairs \}$ denoting the set of countries that are taken into account by our test. 
+The idea behind the estimator $\hat{\sigma}_i^2$ is as follows: We can write 
+\begin{equation}\label{eq:idea-sigmahat-1}
+\X_{it} - \X_{it-1} = \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} (\eta_{it} - \eta_{it-1}) + r_{it} 
+\end{equation}
 with
 \begin{align*}
 r_{it} = \lambda_i\Big(\frac{t}{T}\Big) - \lambda_i\Big(\frac{t-1}{T}\Big) + \sigma \bigg( \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} - \sqrt{\lambda_i\Big(\frac{t-1}{T}\Big)} \bigg)\eta_{it-1}.
 \end{align*}
 By the triangle inequality and since $\lambda_i$ is Lipschitz continuous, we have that
-\begin{align*}
-|r_{it}| & \le \bigg| \lambda_i\Big(\frac{t}{T}\Big) - \lambda_i\Big(\frac{t-1}{T}\Big)\bigg| +  \sigma \bigg| \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} - \sqrt{\lambda_i\Big(\frac{t-1}{T}\Big)} \bigg| |\eta_{it-1}| \\
-& \le \frac{L}{T}  + \frac{L}{2 \sigma \sqrt{\lambda_{\min}} T} |\eta_{it-1}| \le \frac{C (1 + |\eta_{it-1}|)}{T},
-\end{align*}
-where $C = \max\{L, L / (2 \sigma \sqrt{\lambda_{\min}})\}$ with $L$ and $\lambda_{\min}$ defined in \ref{C1}. From this, we can infer that 
+\begin{align}
+|r_{it}| & \le \bigg| \lambda_i\Big(\frac{t}{T}\Big) - \lambda_i\Big(\frac{t-1}{T}\Big)\bigg| +  \sigma \bigg| \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} - \sqrt{\lambda_i\Big(\frac{t-1}{T}\Big)} \bigg| |\eta_{it-1}| \nonumber \\
+& \le \frac{L}{T}  + \frac{L}{2 \sigma \sqrt{\lambda_{\min}} T} |\eta_{it-1}| \le \frac{C (1 + |\eta_{it-1}|)}{T}, \label{eq:idea-sigmahat-2}
+\end{align}
+where $C = \max\{L, L / (2 \sigma \sqrt{\lambda_{\min}})\}$ with $L$ and $\lambda_{\min}$ defined in \ref{C1}. From \eqref{eq:idea-sigmahat-1} and \eqref{eq:idea-sigmahat-2}, we can infer that 
 \[ \frac{1}{T} \sum_{t=2}^T (\X_{it} - \X_{it-1})^2 = 2 \sigma^2 \bigg\{ \frac{1}{T} \sum_{t=2}^T \lambda_i\Big(\frac{t}{T}\Big) \bigg\} + o_p(1). \]
-Moreover, since $T^{-1} \sum_{t=1}^T \X_{it} = T^{-1} \sum_{t=1}^T \lambda_i(t/T) + o_p(1)$, we expect that $\hat{\sigma}_i^2 = \sigma^2 + o_p(1)$ for any $i$ and thus $\hat{\sigma}^2 = \sigma^2 + o_p(1)$. In Lemma \ref{lemmaS1} of the Supplementary Material, we formally show that $\hat{\sigma}^2$ is a consistent estimator of $\sigma^2$ under our regularity conditions. 
+Moreover, since $T^{-1} \sum_{t=1}^T \X_{it} = T^{-1} \sum_{t=1}^T \lambda_i(t/T) + o_p(1)$, we get that $\hat{\sigma}_i^2 = \sigma^2 + o_p(1)$ for any $i$, which suggests that $\hat{\sigma}^2 = \sigma^2 + o_p(1)$ as well. In Lemma \ref{lemmaS1} of the Supplementary Material, we formally show that $\hat{\sigma}^2$ is a consistent estimator of $\sigma^2$ under our regularity conditions. 
 
 
 We now replace the statistic $\hat{s}_{ijk,T}$ by a normalized version whose variance is approximately equal to $1$. To achieve this, we simply divide $\hat{s}_{ijk,T}$ by its estimated standard deviation $\hat{\nu}_{ijk,T}$. This results in the expression 
@@ -266,7 +280,7 @@ In other words:
 Hence, the test allows us to make simultaneous confidence statements (a) about which pairs of countries $(i,j)$ have different trend functions and (b) about where, that is, in which time intervals $\mathcal{I}_k$ the functions differ.
 
 
-According to \eqref{eq:simconfstat}, our test does not produce any false positives with high probability. In addition, we would like the test not to produce any false negatives with high probability either. Put differently, we would like the test to have power against the deviations from the null that are present in the data. 
+According to \eqref{eq:simconfstat}, our test does not produce any false positives with high probability. In addition, we would like the test not to produce any false negatives either. Put differently, we would like the test to have high power against deviations from the null. 
 %According to \eqref{eq:simconfstat}, the following holds true with high probability: If our test detects a deviation from the null $H_0^{(ijk)}$, then $H_0^{(ijk)}$ is indeed violated. In addition, we would like the following to hold true with high probability: If $H_0^{(ijk)}$ is violated, then our test detects this deviation from the null. Put differently, we would like our test to be as powerful as possible. 
 In Corollary \ref{corollary2} in the Appendix, we derive the power properties of the test against a certain class of local alternatives. To summarize, we can show the following: Let $\lambda_{i}= \lambda_{i, T}$ and $\lambda_j =\lambda_{j, T}$ be functions whose difference $\lambda_{i,T} - \lambda_{j,T}$ converges to zero as $T \to \infty$. Moreover, let $\mathcal{M}_1$ be the set of triples $(i,j,k)$ such that either
 \begin{equation}\label{loc-alt-1}
@@ -274,17 +288,17 @@ In Corollary \ref{corollary2} in the Appendix, we derive the power properties of
 \end{equation}
 or 
 \begin{equation}\label{loc-alt-2}
-\lambda_{i, T}(w) - \lambda_{j, T}(w) \le c_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k}, 
+\lambda_{j, T}(w) - \lambda_{i, T}(w) \ge c_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k}, 
 \end{equation}
 where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$ faster than $\sqrt{\log T} \linebreak \sqrt{\log \log T} / \log \log \log T$. According to Corollary \ref{corollary2}, we can make the following statement about the asymptotic power of the test:
 \begin{equation}\label{eq:power}
 \pr\Big( \forall (i,j,k) \in \indexset_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1).
 \end{equation}
-Hence, the test detects any deviation of the form \eqref{loc-alt-1} or \eqref{loc-alt-2} with probability tending to $1$. 
+Hence, the test detects any local deviation from the null of the form \eqref{loc-alt-1} or \eqref{loc-alt-2} with probability tending to $1$. 
 }
 
 
-\newpage
+%\newpage
 \subsection{Implementation of the test in practice}
 
 
@@ -329,17 +343,18 @@ The graphical device described above is of course not the only way to present th
 where $\Delta(U_{ij},\hat{U}_{ij}) = (U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})$ is the symmetric difference between the two sets $U_{ij}$ and $\hat{U}_{ij}$ and $\nu_T \to 0$ as $T \to \infty$. According to \eqref{eq:union-min-ints}, the difference between $U_{ij}$ and $\hat{U}_{ij}$ is small ($\le \nu_T \to 0$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $\hat{U}_{ij}$ can be regarded as an approximation of $U_{ij}$. 
 }
 
-Corollary ??: Let the conditions of Theorem \ref{theo1} be satisfied and let $\intervals = \{\mathcal{I}_k: 1 \le k \le K\}$ be a large family of intervals with the following two properties: 
-\begin{enumerate}[label=(\alph*)]
-\item The intervals $\mathcal{I}_k \in \intervals$ with minimal length $h_{\min}$ cover the unit interval $[0,1]$.
-\item Each interval $\mathcal{I}_k \in \intervals$ with larger length than $h_{\min}$ contains at least one interval of minimal length $h_{\min}$. 
-\end{enumerate}
-Consider a specific pair $(i,j)$ and let the two functions $\lambda_i$ and $\lambda_j$ be independent of $n$. Moreover, let $U_{ij} = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}$ be the set of time points where $\lambda_i$ and $\lambda_j$ differ from each other and let $\hat{U}_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$ be the union of minimal intervals. It holds that 
-%define $r$ to be the number of time points $u$ in the closure of $U_{ij}$ where $\lambda_i(u) - \lambda_j(u) = 0$. The union of minimal intervals $\hat{U}_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$ is related as follows to the set $U_{ij}$: 
-\begin{equation*}
-\pr \Big( \Delta(U_{ij}, \hat{U}_{ij}) \le \nu_T \Big) \ge 1-\alpha + o(1), 
-\end{equation*}
-where $\Delta(U_{ij},\hat{U}_{ij}) = (U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})$ is the symmetric difference between $U_{ij}$ and $\hat{U}_{ij}$, and $\{\nu_T\}$ is a null sequence specified in ??. ($\nu_T = 2 r c_T \sqrt{\log T/Th_{\min}}$ with $r$ the number of time points $u$ in the closure of $U_{ij}$ with $\lambda_i(u) - \lambda_j(u) = 0$) 
+
+%Corollary ??: Let the conditions of Theorem \ref{theo1} be satisfied and let $\intervals = \{\mathcal{I}_k: 1 \le k \le K\}$ be a large family of intervals with the following two properties: 
+%\begin{enumerate}[label=(\alph*)]
+%\item The intervals $\mathcal{I}_k \in \intervals$ with minimal length $h_{\min}$ cover the unit interval $[0,1]$.
+%\item Each interval $\mathcal{I}_k \in \intervals$ with larger length than $h_{\min}$ contains at least one interval of minimal length $h_{\min}$. 
+%\end{enumerate}
+%Consider a specific pair $(i,j)$ and let the two functions $\lambda_i$ and $\lambda_j$ be independent of $n$. Moreover, let $U_{ij} = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}$ be the set of time points where $\lambda_i$ and $\lambda_j$ differ from each other and let $\hat{U}_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$ be the union of minimal intervals. It holds that 
+%%define $r$ to be the number of time points $u$ in the closure of $U_{ij}$ where $\lambda_i(u) - \lambda_j(u) = 0$. The union of minimal intervals $\hat{U}_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$ is related as follows to the set $U_{ij}$: 
+%\begin{equation*}
+%\pr \Big( \Delta(U_{ij}, \hat{U}_{ij}) \le \nu_T \Big) \ge 1-\alpha + o(1), 
+%\end{equation*}
+%where $\Delta(U_{ij},\hat{U}_{ij}) = (U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})$ is the symmetric difference between $U_{ij}$ and $\hat{U}_{ij}$, and $\{\nu_T\}$ is a null sequence specified in ??. ($\nu_T = 2 r c_T \sqrt{\log T/Th_{\min}}$ with $r$ the number of time points $u$ in the closure of $U_{ij}$ with $\lambda_i(u) - \lambda_j(u) = 0$) 
 
 
 
@@ -706,50 +721,63 @@ Nevertheless, visual inspection of the raw and smoothed data in panels (a) and (
 \enlargethispage{0.1cm}
 
 
-In what follows, we state and prove the main theoretical results on the multiscale test developed in Section \ref{sec:test}. Throughout the Appendix, we let $C$ be a generic positive constant that may take a different value on each occurrence. Unless stated differently, $C$ depends neither on the time series length $T$ nor on the dimension $p$ of the test problem. We further use the symbols $h_{\min}:= \min_{1 \le k \le K} h_k$ and $h_{\max} := \max_{1 \le k \le K} h_k$ to denote the smallest and largest interval length in the family $\intervals$. 
+In what follows, we state and prove the main theoretical results on the multiscale test developed in Section \ref{sec:test}. Throughout the Appendix, we let $C$ be a generic positive constant that may take a different value on each occurrence. Unless stated differently, $C$ depends neither on the time series length $T$ nor on the dimension $p$ of the test problem. We further use the symbols $h_{\min}:= \min_{1 \le k \le K} h_k$ and $h_{\max} := \max_{1 \le k \le K} h_k$ to denote the smallest and largest interval length in the family $\intervals$, {\color{red} respectively.} 
 
 
+{\color{red} The first result shows that the multiscale test asymptotically controls the FWER at level $\alpha$.}
 \begin{theoremA}\label{theo1}
 Let \ref{C2} and \ref{C1} be satisfied. Moreover, assume that (i) $h_{\max} = o(1/\log T)$, (ii) $h_{\min} \ge CT^{-b}$ for some $b \in (0,1)$, and (iii) $p = O(T^{(\theta/2)(1-b)-(1+\delta)})$ for some small $\delta > 0$. Then for any given $\alpha \in (0,1)$,
 \[ \textnormal{FWER}(\alpha) := \pr \Big( \exists (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \le \alpha + o(1), \]
 where $\indexset_0 \subseteq \indexset$ is the set of all $(i,j,k) \in \indexset$ for which $H_0^{(ijk)}$ holds true. 
 %Hence, the simultaneous test defined in \eqref{eq:test} asymptotically controls the FWER at level $\alpha$ for any given significance level $\alpha \in (0,1)$.
 \end{theoremA}
-
-
-\noindent According to Theorem \ref{theo1}, the multiscale test asymptotically controls the FWER at level $\alpha$ under conditions \ref{C2}--\ref{C1} and the restrictions (i)--(iii) on $h_{\min}$, $h_{\max}$ and $p$. %We briefly comment on the latter restrictions. 
+\noindent {\color{red} We briefly discuss the conditions (i)--(iii) on $h_{\min}$, $h_{\max}$ and $p$.} %We briefly comment on the latter restrictions. 
+%\noindent According to Theorem \ref{theo1}, the multiscale test asymptotically controls the FWER at level $\alpha$ under conditions \ref{C2}--\ref{C1} and the restrictions (i)--(iii) on $h_{\min}$, $h_{\max}$ and $p$. %We briefly comment on the latter restrictions. 
 Restriction (i) allows the maximal interval length $h_{\max}$ to converge to zero very slowly, which means that $h_{\max}$ can be picked very large in practice. According to restriction (ii), the minimal interval length $h_{\min}$ can be chosen to go to zero as any polynomial $T^{-b}$ with some $b \in (0,1)$. Restriction (iii) allows the dimension $p$ of the test problem to grow polynomially in $T$. Specifically, $p$ may grow at most as the polynomial $T^{\gamma}$ with $\gamma = (\theta/2)(1-b)-(1+\delta)$. As one can see, the exponent $\gamma$ depends on the number of error moments $\theta$ defined in \ref{C1} and the parameter $b$ that specifies the minimal interval length $h_{\min}$. In particular, for any given $b \in (0,1)$, the exponent $\gamma$ gets larger as $\theta$ increases. Hence, the larger the number of error moments $\theta$, the faster $p$ may grow in comparison to $T$. In the extreme case where all error moments exist, that is, where $\theta$ can be made as large as desired, $p$ may grow as any polynomial of $T$, no matter how we pick $b \in (0,1)$. Thus, if the error terms have sufficiently many moments, the dimension $p$ can be extremely large in comparison to $T$ and the minimal interval length $h_{\min}$ can be chosen very small. 
 %Restriction (i) allows the maximal interval length $h_{\max}$ to converge to zero very slowly, which means that $h_{\max}$ can be picked very large in practice. According to restrictions (ii) and (iii), the minimal interval length $h_{\min}$ is intertwined with the dimension $p$ of the test problem, which in turn depends on the number of error moments $\theta$ specified in \ref{C2}. As an example, if $\theta > 8$ and $h_{\min} = CT^{-b}$ with $b=1/4$, then we require that $p \le T^2$. More generally speaking, the larger the number of moments $\theta$, the larger $p$ can be compared to $T$ for a given exponent $b$. In the extreme case where all error moments exist, that is, where $\theta$ can be made as large as desired, $p$ may grow as any polynomial of $T$ with arbitrarily large exponent and $b$ can be chosen as any fixed constant in the interval $(0,1)$. Hence, if the error terms have sufficiently many moments, the overall dimension $p$ of the test problem can be extremely large compared to $T$ and the minimal interval length $h_{\min}$ can be extremely small. 
 
 
-The following corollary is an immediate consequence of Theorem \ref{theo1}. It provides the theoretical justification needed to make simultaneous confidence statements of the form \eqref{eq:confidencestatement1}--\eqref{eq:confidencestatement3}.
-
-
+The following corollary is an immediate consequence of Theorem \ref{theo1}. It provides the theoretical justification needed to make simultaneous confidence statements of {\color{red} the form \eqref{eq:confidencestatement1}, \eqref{eq:confidencestatement2} and \eqref{eq:confidencestatement3}.}
 {\color{red}
 \begin{corollaryA}\label{corollary1}
 Under the conditions of Theorem \ref{theo1}, 
-%\[ \pr\Big( \forall (i,j,k) \in \indexset: \text{ If } |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k), \text{ then } (i,j,k) \notin \indexset_0 \Big) \ge 1 - \alpha + o(1) \]
-$$ \pr\Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \ge 1 - \alpha + o(1) $$
-for any given $\alpha \in (0,1)$.   
+\begin{align}
+\pr\Big( \forall (i,j,k) \in \mathcal{R}: \ (i,j,k) \notin \indexset_0 \Big) \ge 1 - \alpha + o(1), \label{eq:simconfstat}
+\end{align} 
+where $\mathcal{R} = \{ (i,j,k) \in \indexset$ with $|\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \}$ is the set of triples $(i,j,k)$ for which the test rejects the null $H_0^{(ijk)}$.
+%$$ \pr\Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \ge 1 - \alpha + o(1) $$ for any given $\alpha \in (0,1)$.   
 %Hence, with asymptotic probability at least $1-\alpha$, the two intensity functions $\lambda_i$ and $\lambda_j$ differ on the interval $\mathcal{I}_k$ for all $(i,j,k) \in \indexset$ for which the test rejects $H_0^{(ijk)}$. 
 \end{corollaryA} 
-\begin{corollaryA}\label{corollary2}
-Let the conditions of Theorem \ref{theo1} be satisfied and consider two sequences of functions $\lambda_{i, T}$ and $\lambda_{j, T}$ with the property \eqref{loc-alt} for $c_T$ going to infinity faster than $\frac{\sqrt{\log T}\sqrt{\log \log T}}{\log \log \log T}$. Then 
+
+
+The next result specifies the power of the multiscale test against a certain class of local alternatives. To formulate it, we allow the functions $\lambda_{i, T}$ and $\lambda_{j, T}$ to depend on $T$, that is, we consider sequences of functions $\{\lambda_{i, T}\}$ and $\{\lambda_{j, T}\}$ rather than fixed functions $\lambda_i$ and $\lambda_j$. 
+\begin{propA}\label{prop1}
+Let the conditions of Theorem \ref{theo1} be satisfied and let $\mathcal{M}_1$ be the set of triples $(i,j,k)$ such that either
+\begin{equation}\label{loc-alternative-1}
+\lambda_{i, T}(w) - \lambda_{j, T}(w) \ge c_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k} 
+\end{equation}
+or 
+\begin{equation}\label{loc-alternative-2}
+\lambda_{j, T}(w) - \lambda_{i, T}(w) \ge c_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k}, 
+\end{equation}
+where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$ faster than $\sqrt{\log T} \linebreak \sqrt{\log \log T} / \log \log \log T$. Then 
 \[ \pr\Big( \forall (i,j,k) \in \indexset_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1) \]
 for any given $\alpha \in (0, 1)$. 
-\end{corollaryA}}
+\end{propA}}
 
 
 \begin{proof}[\textnormal{\textbf{Proof of Theorem \ref{theo1}.}}] The proof proceeds in several steps. 
 \begin{enumerate}[label=\textit{Step \arabic*.}, leftmargin=0cm, itemindent=1.45cm]
 
 
-\item {\color{red}
-For each $(i, j, k) \in \indexset$ we introduce auxiliary test statistics 
-\begin{equation*}%\label{eq:stat0}
-\hat{\psi}_{ijk,T}^0 = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \, \sigma \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\eta_{it} - \eta_{jt})}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}}
-\end{equation*}
-with $\overline{\lambda}_{ij}(u) = \{ \lambda_i(u) + \lambda_j(u) \}/2$, which is identical to $\hat{\psi}_{ijk,T}$ under $H_0^{(ijk)}$.} Let $\hat{\Psi}_T = \max_{(i,j,k) \in \indexset} a_k (|\hat{\psi}_{ijk,T}^0| - b_k)$ %with $\hat{\psi}_{ijk,T}^0$ introduced in \eqref{eq:stat0}
+\item %{\color{red}
+%For each $(i, j, k) \in \indexset$, 
+% we introduce auxiliary test statistics 
+%\begin{equation*}%\label{eq:stat0}
+%\hat{\psi}_{ijk,T}^0 = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \, \sigma \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\eta_{it} - \eta_{jt})}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}}
+%\end{equation*}
+%with $\overline{\lambda}_{ij}(u) = \{ \lambda_i(u) + \lambda_j(u) \}/2$, which is identical to $\hat{\psi}_{ijk,T}$ under $H_0^{(ijk)}$.} 
+Let $\hat{\Psi}_T = \max_{(i,j,k) \in \indexset} a_k (|\hat{\psi}_{ijk,T}^0| - b_k)$ with $\hat{\psi}_{ijk,T}^0$ introduced in \eqref{eq:stat0}
 and define $\Psi_T = \max_{(i,j,k) \in \indexset} a_k (|\psi_{ijk,T}^0| - b_k)$ with 
 \[ \psi_{ijk,T}^0 = \frac{1}{\sqrt{2Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\eta_{it} - \eta_{jt}). \]
 To start with, we prove that  
@@ -878,10 +906,7 @@ By Theorem \ref{theo1},
 which gives the statement of Corollary \ref{corollary1}.
 \end{proof}
 
-\begin{proof}[\textnormal{\textbf{Proof of Corollary \ref{corollary2}.}}]
-
-
-
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{prop1}.}}]
 To start with, we introduce the notation $\widehat{\psi}_{ijk, T} = \widehat{\psi}_{ijk, T}^A + \widehat{\psi}_{ijk, T}^B$ with
 \[ \widehat{\psi}_{ijk, T}^A = \frac{\sigma \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \Big(\sqrt{\lambda_{i}\big(\frac{t}{T}\big)} \eta_{it} - \sqrt{\lambda_{j}\big(\frac{t}{T}\big)}\eta_{jt}\Big)}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}} \]
 and
@@ -1070,6 +1095,25 @@ for any $\eta > 0$ with $C$ depending only on the parameter $\delta$ specified i
 \end{align*}
 for $\eta > 0$ sufficiently small. This contradicts the definition of the quantile $q_{T,\text{Gauss}}(\alpha)$ according to which $q_{T,\text{Gauss}}(\alpha) = \inf_{q \in \reals} \{ \pr(\Phi_T \le q) \ge 1-\alpha \}$. 
 \end{proof}
+
+{\color{red}
+We finally prove that the statement \eqref{eq:union-min-ints} holds true under cedrtain regularity conditions. More specifically, we prove the following lemma:
+\begin{lemma}\label{lemma:union-min-ints}
+Let the conditions of Theorem \ref{theo1} be satisfied and let $\intervals = \{\mathcal{I}_k: 1 \le k \le K\}$ be a large family of intervals with the following two properties: 
+\begin{enumerate}[label=(\alph*),leftmargin=0.75cm]
+\item The intervals $\mathcal{I}_k \in \intervals$ with minimal length $h_{\min}$ cover the unit interval $[0,1]$.
+\item Each interval $\mathcal{I}_k \in \intervals$ with larger length than $h_{\min}$ contains at least one interval of minimal length $h_{\min}$. 
+\end{enumerate}
+Consider a fixed pair $(i,j)$ and let the two functions $\lambda_i$ and $\lambda_j$ be independent of $n$. Moreover, let $U_{ij} = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}$ be the set of time points where $\lambda_i$ and $\lambda_j$ differ from each other and let $\hat{U}_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$ be the union of minimal intervals. It holds that 
+%define $r$ to be the number of time points $u$ in the closure of $U_{ij}$ where $\lambda_i(u) - \lambda_j(u) = 0$. The union of minimal intervals $\hat{U}_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$ is related as follows to the set $U_{ij}$: 
+\begin{equation*}
+\pr \Big( \Delta(U_{ij}, \hat{U}_{ij}) \le \nu_T \Big) \ge 1-\alpha + o(1), 
+\end{equation*}
+where $\Delta(U_{ij},\hat{U}_{ij}) = (U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})$ is the symmetric difference between $U_{ij}$ and $\hat{U}_{ij}$, and $\{\nu_T\}$ is a null sequence specified in ??. ($\nu_T = 2 r c_T \sqrt{\log T/Th_{\min}}$ with $r$ the number of time points $u$ in the closure of $U_{ij}$ with $\lambda_i(u) - \lambda_j(u) = 0$) 
+\end{lemma}
+\begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{lemma:union-min-ints}.}}]
+\end{proof}
+}
 
 
 
