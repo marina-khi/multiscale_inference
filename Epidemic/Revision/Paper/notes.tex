@@ -282,15 +282,15 @@ Hence, the test allows us to make simultaneous confidence statements (a) about w
 
 According to \eqref{eq:simconfstat}, our test does not produce any false positives with high probability. In addition, we would like the test not to produce any false negatives either. Put differently, we would like the test to have high power against deviations from the null. 
 %According to \eqref{eq:simconfstat}, the following holds true with high probability: If our test detects a deviation from the null $H_0^{(ijk)}$, then $H_0^{(ijk)}$ is indeed violated. In addition, we would like the following to hold true with high probability: If $H_0^{(ijk)}$ is violated, then our test detects this deviation from the null. Put differently, we would like our test to be as powerful as possible. 
-In Corollary \ref{corollary2} in the Appendix, we derive the power properties of the test against a certain class of local alternatives. To summarize, we can show the following: Let $\lambda_{i}= \lambda_{i, T}$ and $\lambda_j =\lambda_{j, T}$ be functions whose difference $\lambda_{i,T} - \lambda_{j,T}$ converges to zero as $T \to \infty$. Moreover, let $\mathcal{M}_1$ be the set of triples $(i,j,k)$ such that either
+In Proposition \ref{prop1} in the Appendix, we derive the power properties of the test against a certain class of local alternatives. To summarize, we can show the following: Let $\lambda_{i}= \lambda_{i, T}$ and $\lambda_j =\lambda_{j, T}$ be functions whose difference $\lambda_{i,T} - \lambda_{j,T}$ converges to zero as $T \to \infty$. Moreover, let $\mathcal{M}_1$ be the set of triples $(i,j,k)$ such that either
 \begin{equation}\label{loc-alt-1}
-\lambda_{i, T}(w) - \lambda_{j, T}(w) \ge c_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k} 
+\lambda_{i, T}(w) - \lambda_{j, T}(w) \ge \kappa_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k} 
 \end{equation}
 or 
 \begin{equation}\label{loc-alt-2}
-\lambda_{j, T}(w) - \lambda_{i, T}(w) \ge c_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k}, 
+\lambda_{j, T}(w) - \lambda_{i, T}(w) \ge \kappa_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k}, 
 \end{equation}
-where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$ faster than $\sqrt{\log T} \linebreak \sqrt{\log \log T} / \log \log \log T$. According to Corollary \ref{corollary2}, we can make the following statement about the asymptotic power of the test:
+where $\{\kappa_T\}$ is any sequence of positive numbers which diverges at a faster rate than $\{ \sqrt{\log T} \sqrt{\log \log T} / \log \log \log T \}$. According to Proposition \ref{prop1}, we can make the following statement about the asymptotic power of the test:
 \begin{equation}\label{eq:power}
 \pr\Big( \forall (i,j,k) \in \indexset_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1).
 \end{equation}
@@ -336,11 +336,12 @@ Hence, we can claim with statistical confidence at least $1-\alpha$ that the fun
 
 
 {\color{red}
-The graphical device described above is of course not the only way to present the test results. Another object which is helpful in summarizing the test results for a given pair of countries $(i,j)$ is the union of minimal intervals $\hat{U}_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$. Let $U_{ij} = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}$ be the set of time points where the two functions $\lambda_i$ and $\lambda_j$ differ from each other. According to Corollary ?? in the Supplementary Material, the two sets $\hat{U}_{ij}$ and $U_{ij}$ are related as follows to each other (under certain regularity conditions spelled out in detail in the corollary):
-\begin{equation}\label{eq:union-min-ints}
-\pr \Big( \Delta(U_{ij}, \hat{U}_{ij}) \le \nu_T \Big) \ge 1-\alpha + o(1), 
-\end{equation}
-where $\Delta(U_{ij},\hat{U}_{ij}) = (U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})$ is the symmetric difference between the two sets $U_{ij}$ and $\hat{U}_{ij}$ and $\nu_T \to 0$ as $T \to \infty$. According to \eqref{eq:union-min-ints}, the difference between $U_{ij}$ and $\hat{U}_{ij}$ is small ($\le \nu_T \to 0$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $\hat{U}_{ij}$ can be regarded as an approximation of $U_{ij}$. 
+The graphical device described above is of course not the only way to present the test results. Another object which is helpful in summarizing the test results for a given pair of countries $(i,j)$ is the union of minimal intervals $U_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$. One can formally show that the union $U_{ij}$ is closely related to the set $U_{ij}^* = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}$ of time points where the two functions $\lambda_i$ and $\lambda_j$ differ from each other. For a precise mathematical statement and the technical details, we refer to Lemma ?? in the Supplementary Material. 
+%The graphical device described above is of course not the only way to present the test results. Another object which is helpful in summarizing the test results for a given pair of countries $(i,j)$ is the union of minimal intervals $U_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$. Let $U_{ij}^* = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}$ be the set of time points where the two functions $\lambda_i$ and $\lambda_j$ differ from each other. According to Lemma ?? in the Supplementary Material, the two sets $\hat{U}_{ij}$ and $U_{ij}$ are related as follows to each other (under certain regularity conditions spelled out in detail in the lemma):
+%\begin{equation}\label{eq:union-min-ints}
+%\pr  \Big( \Delta(U_{ij}, U_{ij}^*) \le C \bar{h} \Big) \ge 1-\alpha + o(1), \tag{$*$}
+%\end{equation}
+%where $\Delta(U_{ij},\hat{U}_{ij}) = \mathcal{L} \{(U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})\}$ is the Lebesgue measure of the symmetric difference between the two sets $U_{ij}$ and $U_{ij}^*$ and $\bar{h}$ is the largest interval length in the set $\mathcal{F}_{\text{reject}}^{\text{min}}(i,j)$ (which converges to $0$ as $T \to \infty$. According to \eqref{eq:union-min-ints}, the difference between $U_{ij}$ and $U_{ij}^*$ is small ($\le C\bar{h} = o(1)$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $U_{ij}$ can be regarded as an approximation of $U_{ij}^*$. 
 }
 
 
@@ -754,13 +755,13 @@ The next result specifies the power of the multiscale test against a certain cla
 \begin{propA}\label{prop1}
 Let the conditions of Theorem \ref{theo1} be satisfied and let $\mathcal{M}_1$ be the set of triples $(i,j,k)$ such that either
 \begin{equation}\label{loc-alternative-1}
-\lambda_{i, T}(w) - \lambda_{j, T}(w) \ge c_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k} 
+\lambda_{i, T}(w) - \lambda_{j, T}(w) \ge \kappa_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k} 
 \end{equation}
 or 
 \begin{equation}\label{loc-alternative-2}
-\lambda_{j, T}(w) - \lambda_{i, T}(w) \ge c_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k}, 
+\lambda_{j, T}(w) - \lambda_{i, T}(w) \ge \kappa_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k}, 
 \end{equation}
-where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$ faster than $\sqrt{\log T} \linebreak \sqrt{\log \log T} / \log \log \log T$. Then 
+where $\{\kappa_T\}$ is any sequence of positive numbers with $\kappa_T / \ell_T \to \infty$ with $\ell_T = \sqrt{\log T} \linebreak \sqrt{\log \log T} / \log \log \log T$. Then 
 \[ \pr\Big( \forall (i,j,k) \in \indexset_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1) \]
 for any given $\alpha \in (0, 1)$. 
 \end{propA}}
@@ -906,58 +907,71 @@ By Theorem \ref{theo1},
 which gives the statement of Corollary \ref{corollary1}.
 \end{proof}
 
+
 \begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{prop1}.}}]
-To start with, we introduce the notation $\widehat{\psi}_{ijk, T} = \widehat{\psi}_{ijk, T}^A + \widehat{\psi}_{ijk, T}^B$ with
-\[ \widehat{\psi}_{ijk, T}^A = \frac{\sigma \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \Big(\sqrt{\lambda_{i}\big(\frac{t}{T}\big)} \eta_{it} - \sqrt{\lambda_{j}\big(\frac{t}{T}\big)}\eta_{jt}\Big)}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}} \]
-and
-\[ \widehat{\psi}_{ijk, T}^B = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \big(\lambda_{i}\big(\frac{t}{T}\big) - \lambda_{j}\big(\frac{t}{T}\big)\big)}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}}. \]
-Now consider any $(i, j, k) \in \indexset_1$. By \eqref{loc-alt}, we know that $\lambda_{i, T}(w) - \lambda_{j, T}(w) \ge c_T \sqrt{\log T / (Th_{k})}$ for all $w \in \mathcal{I}_{k}$. Furthermore, by \eqref{eq:approxerror:claim1:infer1} in the Supplementary Material,
-\begin{align*}
-0 \le\sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{i t} + \X_{j t}) \le 4 \lambda_{\max} T h_k
+To start with, note that 
+\begin{equation}\label{eq:bounds-ak-bk}
+c\frac{1}{\sqrt{\log \log T}}  \le a_k \le C\frac{\sqrt{\log T}}{\log \log \log T} \quad \text{and} \quad b_k \le C \sqrt{\log T}
+\end{equation}
+with appropriately chosen constants $c$ and $C$. We decompose the statistics $\hat{\psi}_{ijk, T}$ into two parts. In particular, we write $\hat{\psi}_{ijk, T} = \hat{\psi}_{ijk, T}^A + \hat{\psi}_{ijk, T}^B$ with
+\begin{align*} 
+\hat{\psi}_{ijk, T}^A & = \frac{\sigma \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \Big(\sqrt{\lambda_{i}\big(\frac{t}{T}\big)} \eta_{it} - \sqrt{\lambda_{j}\big(\frac{t}{T}\big)}\eta_{jt}\Big)}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}} \\
+\hat{\psi}_{ijk, T}^B & = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \big(\lambda_{i}\big(\frac{t}{T}\big) - \lambda_{j}\big(\frac{t}{T}\big)\big)}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}}.
 \end{align*}
-uniformly over all $(i, j, k) \in \indexset$ with probability tending to $1$ as $T \to \infty$. Together with the facts that the indicator function is non-negative and $\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) = T h_k$ we have
-\begin{align}\label{eq:psiB}
-\widehat{\psi}_{i j k, T}^B &\ge \frac{c_T T h_{k} \sqrt{\log T / (T h_k)}}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_{k}) (\X_{i t} + \X_{j t}) \}^{1/2}} \nonumber \\
-& \ge  \frac{c_T\sqrt{T h_{k} \log T}}{2 \widehat{\sigma} \sqrt{ \lambda_{\max}T h_{k}}}\nonumber \\
-& =\frac{ c_T}{2\widehat{\sigma} \sqrt{\lambda_{\max}}} \sqrt{\log T}
-\end{align}
-uniformly over all $(i, j, k) \in \indexset_1$ with probability tending to $1$ as $T \to \infty$. Moreover, by the arguments completely analogous to those for the proof of \eqref{eq:approxerror:claim2} in the Supplementary Material, we have
-\begin{align}\label{eq:psiA}
-\max_{(i,j,k) \in \indexset} \big|\widehat\psi_{ijk,T}^A\big|  = O_p\big(\sqrt{\log p}\big) = O_p\big(\sqrt{\log T}\big),
-\end{align}
-because $p = T^{\gamma}$ for a fixed $\gamma$. With the help of \eqref{eq:psiB}, \eqref{eq:psiA}, and the fact that 
-\begin{align*}
-b_k &= \sqrt{2 \log(1/h_k)} \le \sqrt{2 \log(1/h_{\min})} \le C \sqrt{\log T}, \\
-a_k &= \frac{\{\log(e/h_k)\}^{1/2}}{ \log \log(e^e / h_k) }\le \frac{\{\log(e/h_{\min})\}^{1/2} }{\log \log(e^e / h_{\max})} \le C\frac{\sqrt{\log T}}{\log \log \log T} \text{ and}\\
-a_k & \ge \frac{\{\log(e/h_{\max})\}^{1/2} }{\log \log(e^e / h_{\min})} \ge C\frac{\sqrt{\log \log T}}{\log \log T} = C \frac{1}{\sqrt{\log \log T}}
-\end{align*}
-for large enough $T$, we can infer that
+As we will prove below, it holds that 
+\begin{equation}\label{eq:bound-psiB}
+\min_{(i,j,k) \in \indexset_1} |\hat{\psi}_{ijk, T}^B| \ge C \kappa_T \sqrt{\log T} \quad \text{with prob.\ approaching } 1
+\end{equation}
+for some sufficiently small constant $C > 0$ and 
+\begin{equation}\label{eq:bound-psiA}
+\max_{(i,j,k) \in \indexset} |\hat{\psi}_{ijk, T}^A| = O_p(\sqrt{\log T}). 
+\end{equation}
+From \eqref{eq:bound-psiB} and \eqref{eq:bound-psiA}, it follows that  
 \begin{align}
-\min_{(i,j,k) \in \indexset_1} a_k (|\hat{\psi}_{ijk,T}| - b_k) & \ge \min_{(i, j, k) \in \indexset_1} a_k |\widehat{\psi}_{ijk, T}^B| - \max_{(i, j, k) \in \indexset} a_k (|\widehat{\psi}_{ijk, T}^A| + b_k) \nonumber \\
- & = \min_{(i, j, k) \in \indexset_1} a_k |\widehat{\psi}_{ijk, T}^B| + O_p\bigg(\frac{\sqrt{\log T}}{\log \log \log T} \sqrt{\log T}\bigg) \nonumber \\
- & \ge \min_{(i, j, k) \in \indexset_1} a_k  \min_{(i, j, k) \in \indexset_1} |\widehat{\psi}_{ijk, T}^B| + O_p\bigg(\frac{\log T}{\log \log \log T} \bigg) \nonumber \\
- & = O_P\Big( \frac{c_T \sqrt{\log T}}{\sqrt{\log \log T}}\Big) + O_p\Big(\frac{\log T}{\log \log \log T}\Big). \label{eq-proof-prop-test-2-conclusion}
+\min_{(i,j,k) \in \indexset_1} a_k (|\hat{\psi}_{ijk,T}| - b_k) 
+ & \ge \min_{(i, j, k) \in \indexset_1} a_k |\hat{\psi}_{ijk, T}^B| \nonumber \\ & \qquad - \max_{(i, j, k) \in \indexset} a_k (|\hat{\psi}_{ijk, T}^A| + b_k) 
+   \ge C \frac{\kappa_T \sqrt{\log T}}{\sqrt{\log \log T}} \label{eq:bound-psi}
 \end{align}
-Now we want to show that $q_{T, \text{Gauss}} (\alpha) \leq C \frac{\log T}{\log \log \log T}$. Indeed,
+with probability tending to $1$, where we have used the bounds on $a_k$ and $b_k$ from \eqref{eq:bounds-ak-bk} and the assumption that $\kappa_T/\ell_T \to \infty$ with $\ell_T$ defined in Proposition \ref{prop1}. It further holds that 
+\begin{equation}\label{eq:bound-q}
+q_{T, \text{Gauss}}(\alpha) \leq C \frac{\log T}{\log \log \log T}
+\end{equation}
+with a sufficiently large constant $C$, since
 \begin{align*}
 &\pr \bigg(\max_{(i,j,k) \in \indexset} a_k \big( |\phi_{ijk,T}| - b_k \big) \le C \frac{\log T}{\log \log \log T}\bigg)\\
 &\ge \pr \bigg(\max_{(i,j,k) \in \indexset} a_k  \max_{(i,j,k) \in \indexset} \big( |\phi_{ijk,T}| - b_k \big) \le C \frac{\log T}{\log \log \log T}\bigg)\\
 &\ge \pr \bigg(\frac{\sqrt{\log T}}{\log \log \log T}  \max_{(i,j,k) \in \indexset} |\phi_{ijk,T}|  \le C \frac{\log T}{\log \log \log T}\bigg)\\
-&= \pr \bigg(\max_{(i,j,k) \in \indexset} |\phi_{ijk,T}| \le C \sqrt{\log T}\bigg)\\
-& \ge 1 - \alpha,
+&= \pr \bigg(\max_{(i,j,k) \in \indexset} |\phi_{ijk,T}| \le C \sqrt{\log T}\bigg) \ge 1 - \alpha,
 \end{align*}
-since $|\phi_{ijk, T}|$ are normally distributed random variables. Hence,
-\begin{align}\label{eq:gaussianquant}
-q_{T, \text{Gauss}} (\alpha) = O \bigg(\frac{\log T}{\log \log \log T}\bigg).
-\end{align}
-Noting that 
+where the last inequality is a consequence of the fact that the terms $\phi_{ijk, T}$ are normally distributed random variables and $|\mathcal{M}| = p \le C T^\gamma$. From \eqref{eq:bound-psi}, \eqref{eq:bound-q} and the assumption that $\kappa_T/\ell_T \to \infty$, we can finally conclude that
 \begin{align*}
-&\pr\Big( \forall (i,j,k) \in \indexset_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = \\
-& \quad = \pr\Big( \min_{(i,j,k) \in \indexset_1} \big\{a_k (|\hat{\psi}_{ijk,T}| - b_k \big\} > q_{T,\textnormal{Gauss}}(\alpha) \Big)
+\pr\Big( & \forall (i,j,k) \in \indexset_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \\
+& = \pr\Big( \min_{(i,j,k) \in \indexset_1} \big\{a_k (|\hat{\psi}_{ijk,T}| - b_k \big\} > q_{T,\textnormal{Gauss}}(\alpha) \Big) = 1 - o(1), 
 \end{align*}
-and taking the sequence $c_T$ that goes to $\infty$ faster than $\frac{\sqrt{\log T}\sqrt{\log \log T}}{\log \log \log T}$, \eqref{eq-proof-prop-test-2-conclusion} together with \eqref{eq:gaussianquant} yields the statement of Corollary \ref{corollary2}.
+which is the statement of Proposition \ref{prop1}.  
+
+
+It remains to prove \eqref{eq:bound-psiB} and \eqref{eq:bound-psiA}. From \eqref{eq:approxerror:claim1:infer1} in the Supplementary Material together with some straightforward arguments, it follows that for any fixed $\delta > 0$,
+\begin{align}
+\min_{(i,j,k) \in \indexset_1} \Big\{ \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it} + \X_{jt}) \Big\} & \ge (2 + \delta) \lambda_{\min} \label{eq:bounds-psi-1} \\
+\max_{(i,j,k) \in \indexset} \Big\{ \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it} + \X_{jt}) \Big\} & \le (2 + \delta) \lambda_{\max} \label{eq:bounds-psi-2}
+\end{align}
+with probability tending to $1$. Since $\hat{\sigma}^2 = \sigma^2 + O_p(\sqrt{\log p/T})$ by Lemma \ref{lemmaS1}, it further holds that with probability tending to $1$, 
+\begin{equation}\label{eq:bounds-psi-3}
+(1-\delta) \sigma \le \hat{\sigma} \le (1+\delta) \sigma 
+\end{equation}
+for any fixed $\delta > 0$. Taking into account that for any $(i,j,k) \in \indexset_1$, either $\lambda_{i, T}(w) - \lambda_{j, T}(w) \ge \kappa_T \sqrt{\log T / (T h_{k})}$ or $\lambda_{j, T}(w) - \lambda_{i, T}(w) \ge \kappa_T \sqrt{\log T / (T h_{k})}$ for all $w \in \mathcal{I}_{k}$, we can use \eqref{eq:bounds-psi-2} and \eqref{eq:bounds-psi-3} to obtain that 
+\begin{equation*}
+\hat{\psi}_{ijk,T}^B \ge \frac{\kappa_T\sqrt{\log T}}{(1+\delta) \sigma \sqrt{ (2+\delta) \lambda_{\max}}} = C\kappa_T\sqrt{\log T}
+\end{equation*}
+with probability tending to $1$. Moreover, with the help of \eqref{eq:bounds-psi-1}, \eqref{eq:bounds-psi-3} and analogous arguments as for the proof of \eqref{eq:approxerror:claim2} in the Supplementary Material, we can show that
+\begin{equation*}
+\max_{(i,j,k) \in \indexset} \big|\hat\psi_{ijk,T}^A\big| = O_p\big(\sqrt{\log p}\big) = O_p\big(\sqrt{\log T}\big),
+\end{equation*}
+where the last equation is due to the fact that $p = O(T^{\gamma})$ for a fixed $\gamma > 0$. 
 \end{proof}
 }
+
 
 
 \bibliographystyle{ims}
@@ -1242,7 +1256,7 @@ As you can see, the results are essentially the same except for comparisons betw
 
 Here, we provide the results of the multiscale comparison of the time trends between the same five European countries (Germany, Italy, France, Spain and the United Kingdom) performed on a longer time period. Specifically, we align the time series as before, taking the first Monday after reaching $100$ cases as the starting date $t = 1$. However, we take the time series length $T$ to be equal to $200$ (as opposed to $T = 150$ in Section \ref{subsec:app}). The analysis was performed in a similar manner as in Section \ref{subsec:app}, and the results of the analysis are displayed in Figures \ref{fig:supp3:first} - \ref{fig:supp3:last}. The plots have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
 
-As is already obvious from the simple visual inspection, the data for Spain has very high volatility towards the end of the period. Presumably, the reason for that is repeated delays in reporting. This explains the number of cases being $0$ on multiple occasions with very sharp increase on the next day. Clearly, high day-to-day volatility of the data heavily influences the estimation error of $\sigma$ which results in rather conservative results of the overall testing procedure. Specifically, we get $\widehat{\sigma} = ???$ when estimating $\sigma$ with $T=200$ compared to $\widehat{\sigma} = 14.82$ with $T = 150$. Higher values of $\widehat{\sigma}$ result in lower values of the test statistics, which can lead to more conservative results of the test procedure. Hence, Figures \ref{fig:supp3:first} -- \ref{fig:supp3:last} differ drastically from Figures \ref{fig:Germany:Italy} -- \ref{fig:France:UK}. 
+As is already obvious from the simple visual inspection, the data for Spain has very high volatility towards the end of the period. Presumably, the reason for that is repeated delays in reporting. This explains the number of cases being $0$ on multiple occasions with very sharp increase on the next day. Clearly, high day-to-day volatility of the data heavily influences the estimation error of $\sigma$ which results in rather conservative results of the overall testing procedure. Specifically, we get $\hat{\sigma} = ???$ when estimating $\sigma$ with $T=200$ compared to $\hat{\sigma} = 14.82$ with $T = 150$. Higher values of $\hat{\sigma}$ result in lower values of the test statistics, which can lead to more conservative results of the test procedure. Hence, Figures \ref{fig:supp3:first} -- \ref{fig:supp3:last} differ drastically from Figures \ref{fig:Germany:Italy} -- \ref{fig:France:UK}. 
 
 
 Since both data for Spain provided by World Health Organization and by John Hopkins University also exhibit similar patterns to the data that are used in our study, we exclude Spain from our analysis and repeat the testing procedure for only four European countries: Germany, Italy, France and the United Kingdom. The results are presented in \ref{fig:supp3:first2} - \ref{fig:supp3:last2}. As can be seen, the test is much less conservative and the results of the test are much more consistent with the ones discussed in Section \ref{subsec:app}. Specifically, for each pair of countries $(i, j)$ the set $\intervals_{\text{reject}}(i, j)$ constructed for a longer time period ($T = 200$) contains almost all elements from the set $\intervals_{\text{reject}}(i, j)$ constructed for a shorter time period ($T = 150$). This shows that our test is robust with respect to the growing sample size.

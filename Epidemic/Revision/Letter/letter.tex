@@ -144,22 +144,78 @@ In particular, we could not make use of the Gaussian approximation results from 
 
 \item \textit{Now the conclusion will be largely interfered by the choice of interval sets. I am wondering whether we can reach some unified result without the influence of such selection. That is whether we can aggregate the rejected intervals $I_k$ and draw some meaningful conclusion?}
 
-One way to aggregate the rejected intervals $I_k$ is to consider their union. More specifically, one may consider the following quantity: Using the notation from the paper, we let $\mathcal{F}_{\text{reject}}(i,j)$ be the set of rejected intervals for a given pair of countries $(i,j)$ and define the set of minimal intervals by
-\[ \mathcal{F}_{\text{reject}}^{\text{min}}(i,j) = \{ \mathcal{I}_k \in \mathcal{F}_{\text{reject}}(i,j): \text{ there exists no } \mathcal{I}_{k^\prime} \in \intervals_{\text{reject}}(i,j) \text{ with } \mathcal{I}_{k^\prime} \subset \mathcal{I}_k \}. \]
+A simple way to aggregate the rejected intervals $I_k$ for a given pair of countries $(i,j)$ is to consider their union
+\[ U_{ij} = \bigcup_{\mathcal{I} \in \mathcal{F}_{\text{reject}}(i,j)} \mathcal{I}, \]
+where, as in the paper, we let $\mathcal{F}_{\text{reject}}(i,j)$ denote the set of rejected intervals for $(i,j)$. 
+%The union $U_{ij}$ gives a first rough idea about where the trends $\lambda_i$ and $\lambda_j$ differ from each other. In particular, 
+The union $U_{ij}$ is the region where our test finds differences between the functions $\lambda_i$ and $\lambda_j$. It thus gives a first rough idea about where the trends $\lambda_i$ and $\lambda_j$ presumably differ from each other. There is however one issue with the union $U_{ij}$: If the family $\mathcal{F}$ contains very long intervals and the test finds a deviation from the null on such a long interval, the union $U_{ij}$ will be a very large interval itself and will thus not give much information about where $\lambda_i$ and $\lambda_j$ differ. Hence, to get a first impression of the test results, it may be better to consider the union 
+\[ U_{ij}^{\min} = \bigcup_{\mathcal{I} \in \mathcal{F}_{\text{reject}}^{\min}(i,j)} \mathcal{I} \]
+of minimal intervals, where $\mathcal{F}_{\text{reject}}^{\text{min}}(i,j) = \{ \mathcal{I}_k \in \mathcal{F}_{\text{reject}}(i,j):$  there exists no $\mathcal{I}_{k^\prime} \in \intervals_{\text{reject}}(i,j)$ with $\mathcal{I}_{k^\prime} \subset \mathcal{I}_k \}$ denotes the set of minimal intervals. %We have added some discussion of the quantities $U_{ij}$ and $U_{ij}^{\min}$ to Section ?? of the revised paper. 
+
+
+As shown in the new Lemma S.?? in the Supplementary Material, one can formally relate $U_{ij}^{\min}$ to the set of time points 
+\[ U_{ij}^* = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}, \]
+where $\lambda_i$ and $\lambda_j$ in fact differ from each other. In particular, the following holds for a given pair of functions $\lambda_i$ and $\lambda_j$ according to Lemma S.??: 
+\begin{equation}\label{eq:Uij}
+\pr  \Big( \Delta(U_{ij}, U_{ij}^*) \le C \bar{h} \Big) \ge 1-\alpha + o(1), \tag{$*$}
+\end{equation}
+where $\Delta(U_{ij},\hat{U}_{ij}) = \mathcal{L} \{(U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})\}$ is the Lebesgue measure of the symmetric difference between the two sets $U_{ij}$ and $U_{ij}^*$ and $\bar{h}$ is the largest interval length in the set $\mathcal{F}_{\text{reject}}^{\text{min}}(i,j)$ (which converges to $0$ as $T \to \infty$). According to \eqref{eq:Uij}, the difference between $U_{ij}$ and $U_{ij}^*$ is small ($\le C\bar{h} = o(1)$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $U_{ij}$ can be regarded as an approximation of $U_{ij}^*$. 
+
+
+We have added a summary of the above discussion to Section ?? of the paper. The new Lemma S.?? and its proof can be found in the Supplementary Material.
+
+
+
+%It would of course be nice to formally relate $U_{ij}^{\min}$ to the set of time points 
+%\[ U_{ij}^* = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}, \]
+%where $\lambda_i$ and $\lambda_j$ in fact differ from each other. In particular, it would be nice to show that the difference between the two sets $U_{ij}$ and $U_{ij}^*$ is small with high probability in some sense. In simple special cases, this is indeed possible. Here is an example: Suppose that $U_{ij}^*$ is an interval of the form $U_{ij}^* = (t_1,t_2)$ with $t_1,t_2 \in [0,1]$ and consider  a very simple family of intervals $\mathcal{F} = \{ \mathcal{I}_k:1 \le k \le K \}$. In particular, suppose that all intervals $\mathcal{I}_k \in \mathcal{F}$ have the same length $h$ (with $h \to 0$ more slowly than $T^{-1/3}$). In this case, Theorem A.1 and the new Proposition A.1 (which gives the power properties of the test) immediately imply the following: 
+%\begin{equation}\label{Uij}
+%\pr  \Big( \Delta(U_{ij}, U_{ij}^*) \le C h \Big) \ge 1-\alpha + o(1), \tag{$*$}
+%\end{equation}
+%where $\Delta(U_{ij},\hat{U}_{ij}) = \mathcal{L} \{(U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})\}$ is the Lebesgue measure of the symmetric difference between the two sets $U_{ij}$ and $U_{ij}^*$. According to \eqref{Uij}, the difference between $U_{ij}$ and $U_{ij}^*$ is small ($\le Ch = o(1)$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $U_{ij}$ can be regarded as an approximation of $U_{ij}^*$. 
+
+
+%Under more general conditions (in particular those from the paper), it is possible to prove the following extension of $\eqref{Uij}$:  
+%\begin{equation}\label{Uij-general}
+%\pr  \Big( \Delta(U_{ij}, U_{ij}^*) \le C h_{\max} \Big) \ge 1-\alpha + o(1), \tag{$**$}
+%\end{equation}
+%where $h_{\max}$ is the largest interval length in $\mathcal{F}$. The problem here is of course that this result is not very precise. In particular, if $h_{\max}$ converges very slowly to zero, then we only have a very rough bound on the difference $\Delta(U_{ij}, U_{ij}^*)$.  
+
+
+%\newpage
+
+%It turns out, however, that it is extremely difficult (and overly technical) to formulate such confidence statements in a rigorous way. In simple special cases, this is possible though. Here is a very simple example: Suppose that $U_{ij}^* = (t_1,t_2)$ with $t_1,t_2 \in [0,1]$. Moreover suppose we work with a very simple family of intervals $\mathcal{F} = \{ \mathcal{I}_k:1 \le k \le K \}$. In particular, suppose that all intervals $\mathcal{I}_k \in \mathcal{F}$ have the same length $h$ (with $h \to 0$ as $T \to \infty$). In this case, it follows immediately from Theorem A.1 and the new Proposition A.1 which gives the power properties of the test that the following holds: 
+%\begin{equation}\label{Uij}
+%\pr  \Big( \Delta(U_{ij}, U_{ij}^*) \le C h \Big) \ge 1-\alpha + o(1), \tag{$*$}
+%\end{equation}
+%where $\Delta(U_{ij},\hat{U}_{ij}) = \mathcal{L} \{(U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})\}$ is the Lebesgue measure of the symmetric difference between the two sets $U_{ij}$ and $U_{ij}^*$. Acocrding to \eqref{Uij}, the difference between $U_{ij}$ and $U_{ij}^*$ is small ($\le Ch = o(1)$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $U_{ij}$ can be regarded as an approximation of $U_{ij}^*$. 
+
+%\newpage
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%One way to aggregate the rejected intervals $I_k$ is to consider their union. More specifically, one may consider the following quantity: Using the notation from the paper, we let $\mathcal{F}_{\text{reject}}(i,j)$ be the set of rejected intervals for a given pair of countries $(i,j)$ and define the set of minimal intervals by
+%\[ \mathcal{F}_{\text{reject}}^{\text{min}}(i,j) = \{ \mathcal{I}_k \in \mathcal{F}_{\text{reject}}(i,j): \text{ there exists no } \mathcal{I}_{k^\prime} \in \intervals_{\text{reject}}(i,j) \text{ with } \mathcal{I}_{k^\prime} \subset \mathcal{I}_k \}. \]
 %The elements of $\mathcal{F}_{\text{reject}}^{\text{min}}(i,j)$ are called minimal intervals. 
 %By definition, there is no other interval $\mathcal{I}_{k^\prime}$ in $\intervals_{\text{reject}}(i,j)$ which is a proper subset of a minimal interval $\mathcal{I}_k$. 
-As shown in the new Lemma ?? in the Supplementary Material, the union of minimal intervals
-\[ \hat{U}_{ij} = \bigcup_{I \in \mathcal{F}_{\text{reject}}^{\text{min}}(i,j)} I \]
-is closely related to the set 
-\[ U_{ij} = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}, \] 
-that is, to the set of time points where $\lambda_i$ and $\lambda_j$ differ from each other. Under appropriate regularity conditions (as detailed in Corollary ??), one can in particular prove that \begin{equation}\label{eq:Uij}
-\pr \Big( \Delta(U_{ij}, \hat{U}_{ij}) \le \nu_T \Big) \ge 1-\alpha + o(1), \tag{$*$}
-\end{equation}
-where $\Delta(U_{ij},\hat{U}_{ij}) = (U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})$ is the symmetric difference between the two sets $U_{ij}$ and $\hat{U}_{ij}$ and $\nu_T \to 0$ as $T \to \infty$. This says that the difference between $U_{ij}$ and $\hat{U}_{ij}$ is small ($\le \nu_T \to 0$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $\hat{U}_{ij}$ can be regarded as an approximation of $U_{ij}$. 
+%As shown in the new Lemma ?? in the Supplementary Material, the union of minimal intervals
+%\[ \hat{U}_{ij} = \bigcup_{I \in \mathcal{F}_{\text{reject}}^{\text{min}}(i,j)} I \]
+%is closely related to the set 
+%\[ U_{ij} = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}, \] 
+%that is, to the set of time points where $\lambda_i$ and $\lambda_j$ differ from each other. Under appropriate regularity conditions (as detailed in Corollary ??), one can in particular prove that \begin{equation}\label{eq:Uij}
+%\pr \Big( \Delta(U_{ij}, \hat{U}_{ij}) \le \nu_T \Big) \ge 1-\alpha + o(1), \tag{$*$}
+%\end{equation}
+%where $\Delta(U_{ij},\hat{U}_{ij}) = (U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})$ is the symmetric difference between the two sets $U_{ij}$ and $\hat{U}_{ij}$ and $\nu_T \to 0$ as $T \to \infty$. This says that the difference between $U_{ij}$ and $\hat{U}_{ij}$ is small ($\le \nu_T \to 0$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $\hat{U}_{ij}$ can be regarded as an approximation of $U_{ij}$. 
 
-{\color{red}
-We have added a summary of the above discussion to Section ?? of the paper. The new Lemma ?? and its proof can be found in the Supplementary Material.
-}
+%{\color{red}
+%We have added a summary of the above discussion to Section ?? of the paper. The new Lemma ?? and its proof can be found in the Supplementary Material.
+%}
+
+
+%%%%%%%%%%%%%%%55
+
+
 
 %Consider a specific pair of countries $(i,j)$ and let $\mathcal{F} = \{ \mathcal{I}_k: 1 \le k \le K \}$ be a large family of intervals. 
 %% which in particular covers the whole support $[0,1]$, that is, $\cup_{k=1}^K \mathcal{I}_k = [0,1]$. 
@@ -205,9 +261,9 @@ Hence, the intervals in $\mathcal{F}_{\text{reject}}(i,j)$ for which our test re
 
 \item Our approach does not identify differences between $\lambda_i$ and $\lambda_j$ in the sense that it produces a consistent point estimate of the interval $(t_1,t_2)$. Nevertheless, we conjecture that it is possible to construct a point estimate of $(t_1,t_2)$ based on our approach. More specifically, it should be possible to extend the result \eqref{eq:Uij} discussed in our reply to your previous comment to the case where $\alpha = \alpha_T \to 0$ sufficiently slowly. Hence, we should be able to show that 
 \begin{equation}\label{eq:Uij-conjecture}
-\pr \Big( \Delta(U_{ij}, \hat{U}_{ij}) \le \nu_T \Big) \ge \underbrace{1-\alpha_T - o(1)}_{= 1 - o(1)}. \tag{$**$}
+\pr \Big( \Delta(U_{ij}, U_{ij}^*) \le C \bar{h} \Big) \ge \underbrace{1-\alpha_T - o(1)}_{= 1 - o(1)}. \tag{$**$}
 \end{equation}
-This says that $\hat{U}_{ij}$ is a consistent estimator of $U_{ij} = (t_1,t_2)$ in the sense that the difference $\Delta(U_{ij}, \hat{U}_{ij})$ goes to zero (note that $\nu_T \to 0$) with probability tending to $1$. 
+This says that $\hat{U}_{ij}$ is a consistent estimator of $U_{ij} = (t_1,t_2)$ in the sense that the difference $\Delta(U_{ij}, U_{ij}^*)$ goes to zero (note that $\bar{h} \to 0$) with probability tending to $1$. 
 \end{enumerate}
 
 Since we are primarily interested in inference rather than point estimation in the paper and since the statement \eqref{eq:Uij-conjecture} is merely a conjecture not covered by our theory, we have decided not to discuss this extension of in the paper. However, we are happy to do so if you think this is needed. 
