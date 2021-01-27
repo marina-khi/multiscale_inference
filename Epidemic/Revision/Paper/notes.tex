@@ -299,7 +299,7 @@ Hence, the test detects any local deviation from the null of the form \eqref{loc
 
 
 %\newpage
-\subsection{Implementation of the test in practice}
+\subsection{Implementation of the test in practice}\label{subsec:test:implementation}
 
 
 For a given significance level $\alpha \in (0,1)$, the test procedure defined in \eqref{eq:test} is implemented as follows in practice: 
@@ -322,41 +322,14 @@ According to \eqref{eq:simconfstat}, we can make the following simultaneous conf
 Hence, we can claim with statistical confidence at least $1-\alpha$ that the functions $\lambda_i$ and $\lambda_j$ differ on each time interval which is depicted in the plots of our graphical device. Since $\intervals_{\text{reject}}^{\text{min}}(i,j) \subseteq \intervals_{\text{reject}}(i,j)$ for any $(i,j) \in \pairs$, the confidence statement \eqref{eq:confidencestatement3} trivially remains to hold true when {\color{red} $\intervals_{\text{reject}}(i,j)$ is replaced by $\intervals_{\text{reject}}^{\text{min}}(i,j)$}.
 
 
-%To graphically present the test results, we produce a plot for each pair of countries $(i,j) \in \pairs$ which shows the intervals $\mathcal{I}_k$ in the set $\intervals_{\text{reject}}(i,j) = \{ \mathcal{I}_k \in \intervals: r_{ijk,T} = 1 \}$, that is, the intervals $\mathcal{I}_k$ for which the test rejects the null $H_0^{(ijk)}$. We in particular use this graphical device to present the test results of our empirical application in Section \ref{sec:empirics}. According to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals in $\intervals_{\text{reject}}(i,j)$: 
-%\begin{equation}\label{eq:confidencestatement3}
-%\begin{minipage}[c][1.75cm][c]{13cm}
-%\textit{With (asymptotic) probability at least $1-\alpha$, it holds that for every pair of countries $(i,j) \in \pairs$, the functions $\lambda_i$ and $\lambda_j$ differ on each interval in $\intervals_{\text{reject}}(i,j)$.} 
-%\end{minipage}
-%\end{equation}
-%Hence, we can claim with statistical confidence at least $1-\alpha$ that the functions $\lambda_i$ and $\lambda_j$ differ on each time interval $\mathcal{I}_k$ which is shown in the plots of our graphical device.
-%
-%As the sample size grows, the number of intervals in the $\intervals_{\text{reject}}(i, j)$ can also increase rapidly, making graphical depiction of the results of the test not particularly readable. To obtain better visual representation, we propose working with the subset of $\intervals_{\text{reject}}(i, j)$, namely, the subset of minimal intervals which is constructed as follows: As in \cite{Duembgen2002}, we call an interval $\mathcal{I}_{k} \in \intervals_{\text{reject}}(i, j)$ minimal if there is no other interval $\mathcal{I}_{k^\prime} \in \intervals_{\text{reject}}(i, j)$ with $\mathcal{I}_{k^\prime} \subset \mathcal{I}_{k}$. We denote the set of minimal intervals by $\intervals_{\text{reject}}^{\min}(i, j)$. 
-%
-%It is easily seen that as in \eqref{eq:confidencestatement3}, we can claim with statistical confidence at least $1-\alpha$ that the functions $\lambda_i$ and $\lambda_j$ differ on each time interval $\mathcal{I}_k \in \intervals_{\text{reject}}^{\min}(i, j)$. Thus, the simultaneous confidence statement about the set of minimal intervals still remains true while the graphical representation of the results becomes much more understandable. In particular, we use this way of presenting the test results in our application in Section \ref{subsec:app}.
-
-
 {\color{red}
-The graphical device described above is of course not the only way to present the test results. Another object which is helpful in summarizing the test results for a given pair of countries $(i,j)$ is the union of minimal intervals $U_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$. One can formally show that the union $U_{ij}$ is closely related to the set $U_{ij}^* = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}$ of time points where the two functions $\lambda_i$ and $\lambda_j$ differ from each other. For a precise mathematical statement and the technical details, we refer to Lemma ?? in the Supplementary Material. 
+The graphical device described above is of course not the only way to present the test results. Another object which is helpful in summarizing the test results for a given pair of countries $(i,j)$ is the union of minimal intervals $U_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$. One can formally show that the union $U_{ij}$ is closely related to the set $U_{ij}^* = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}$ of time points where the two functions $\lambda_i$ and $\lambda_j$ differ from each other. For a precise mathematical statement and the technical details, we refer to Lemma \ref{lemma:union-min-ints} in the Supplementary Material. 
 %The graphical device described above is of course not the only way to present the test results. Another object which is helpful in summarizing the test results for a given pair of countries $(i,j)$ is the union of minimal intervals $U_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$. Let $U_{ij}^* = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}$ be the set of time points where the two functions $\lambda_i$ and $\lambda_j$ differ from each other. According to Lemma ?? in the Supplementary Material, the two sets $\hat{U}_{ij}$ and $U_{ij}$ are related as follows to each other (under certain regularity conditions spelled out in detail in the lemma):
 %\begin{equation}\label{eq:union-min-ints}
 %\pr  \Big( \Delta(U_{ij}, U_{ij}^*) \le C \bar{h} \Big) \ge 1-\alpha + o(1), \tag{$*$}
 %\end{equation}
 %where $\Delta(U_{ij},\hat{U}_{ij}) = \mathcal{L} \{(U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})\}$ is the Lebesgue measure of the symmetric difference between the two sets $U_{ij}$ and $U_{ij}^*$ and $\bar{h}$ is the largest interval length in the set $\mathcal{F}_{\text{reject}}^{\text{min}}(i,j)$ (which converges to $0$ as $T \to \infty$. According to \eqref{eq:union-min-ints}, the difference between $U_{ij}$ and $U_{ij}^*$ is small ($\le C\bar{h} = o(1)$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $U_{ij}$ can be regarded as an approximation of $U_{ij}^*$. 
 }
-
-
-%Corollary ??: Let the conditions of Theorem \ref{theo1} be satisfied and let $\intervals = \{\mathcal{I}_k: 1 \le k \le K\}$ be a large family of intervals with the following two properties: 
-%\begin{enumerate}[label=(\alph*)]
-%\item The intervals $\mathcal{I}_k \in \intervals$ with minimal length $h_{\min}$ cover the unit interval $[0,1]$.
-%\item Each interval $\mathcal{I}_k \in \intervals$ with larger length than $h_{\min}$ contains at least one interval of minimal length $h_{\min}$. 
-%\end{enumerate}
-%Consider a specific pair $(i,j)$ and let the two functions $\lambda_i$ and $\lambda_j$ be independent of $n$. Moreover, let $U_{ij} = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}$ be the set of time points where $\lambda_i$ and $\lambda_j$ differ from each other and let $\hat{U}_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$ be the union of minimal intervals. It holds that 
-%%define $r$ to be the number of time points $u$ in the closure of $U_{ij}$ where $\lambda_i(u) - \lambda_j(u) = 0$. The union of minimal intervals $\hat{U}_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$ is related as follows to the set $U_{ij}$: 
-%\begin{equation*}
-%\pr \Big( \Delta(U_{ij}, \hat{U}_{ij}) \le \nu_T \Big) \ge 1-\alpha + o(1), 
-%\end{equation*}
-%where $\Delta(U_{ij},\hat{U}_{ij}) = (U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})$ is the symmetric difference between $U_{ij}$ and $\hat{U}_{ij}$, and $\{\nu_T\}$ is a null sequence specified in ??. ($\nu_T = 2 r c_T \sqrt{\log T/Th_{\min}}$ with $r$ the number of time points $u$ in the closure of $U_{ij}$ with $\lambda_i(u) - \lambda_j(u) = 0$) 
-
 
 
 
@@ -761,7 +734,7 @@ or
 \begin{equation}\label{loc-alternative-2}
 \lambda_{j, T}(w) - \lambda_{i, T}(w) \ge \kappa_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k}, 
 \end{equation}
-where $\{\kappa_T\}$ is any sequence of positive numbers with $\kappa_T / \ell_T \to \infty$ with $\ell_T = \sqrt{\log T} \linebreak \sqrt{\log \log T} / \log \log \log T$. Then 
+where $\{\kappa_T\}$ is any sequence of positive numbers for which $\kappa_T / \ell_T \to \infty$ with $\ell_T = \sqrt{\log T} \sqrt{\log \log T} / \log \log \log T$. Then 
 \[ \pr\Big( \forall (i,j,k) \in \indexset_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1) \]
 for any given $\alpha \in (0, 1)$. 
 \end{propA}}
@@ -1110,22 +1083,53 @@ for any $\eta > 0$ with $C$ depending only on the parameter $\delta$ specified i
 for $\eta > 0$ sufficiently small. This contradicts the definition of the quantile $q_{T,\text{Gauss}}(\alpha)$ according to which $q_{T,\text{Gauss}}(\alpha) = \inf_{q \in \reals} \{ \pr(\Phi_T \le q) \ge 1-\alpha \}$. 
 \end{proof}
 
+
 {\color{red}
-We finally prove that the statement \eqref{eq:union-min-ints} holds true under cedrtain regularity conditions. More specifically, we prove the following lemma:
-\begin{lemma}\label{lemma:union-min-ints}
-Let the conditions of Theorem \ref{theo1} be satisfied and let $\intervals = \{\mathcal{I}_k: 1 \le k \le K\}$ be a large family of intervals with the following two properties: 
+Finally, as announced in Section \ref{subsec:test:implementation}, we formally show that the union of minimal intervals $U_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$ is closely related to the set of time points $U_{ij}^* = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}$ where $\lambda_i$ and $\lambda_j$ differ. We consider the following scenario: 
 \begin{enumerate}[label=(\alph*),leftmargin=0.75cm]
-\item The intervals $\mathcal{I}_k \in \intervals$ with minimal length $h_{\min}$ cover the unit interval $[0,1]$.
-\item Each interval $\mathcal{I}_k \in \intervals$ with larger length than $h_{\min}$ contains at least one interval of minimal length $h_{\min}$. 
+\item We let $(i,j)$ be a fixed pair of countries whose trend functions $\lambda_i$ and $\lambda_j$ do not depend on $T$. Hence, unlike in Proposition \ref{prop1}, we consider a fixed rather than a local alternative. 
+\item We suppose that the family of intervals $\mathcal{F}$ has the structure
+\begin{align} 
+\mathcal{F} = \big\{ [u, u + h] \subseteq [0,1]: \ & u = k h_{\min} \text{ for some } k=0,\ldots,h_{\min}^{-1} \text{ and } \nonumber \\
+ & h = 2^\ell h_{\min} \text{ for some } \ell = 1,\ldots,L \big\}, \label{eq:F-specific}
+\end{align}
+where $h_{\min}$ is chosen such that $h_{\min}^{-1}$ is an even natural number. The family $\mathcal{F}$ consists of the intervals $[0,h_{\min}]$, $[h_{\min}, 2h_{\min}]$, $[2h_{\min}, 3h_{\min}], \ldots$ and unions thereof. Note that we could allow for more general families $\mathcal{F}$. Nevertheless, we work with the specific structure \eqref{eq:F-specific} to keep the technical arguments as simple as possible. 
 \end{enumerate}
-Consider a fixed pair $(i,j)$ and let the two functions $\lambda_i$ and $\lambda_j$ be independent of $n$. Moreover, let $U_{ij} = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}$ be the set of time points where $\lambda_i$ and $\lambda_j$ differ from each other and let $\hat{U}_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$ be the union of minimal intervals. It holds that 
-%define $r$ to be the number of time points $u$ in the closure of $U_{ij}$ where $\lambda_i(u) - \lambda_j(u) = 0$. The union of minimal intervals $\hat{U}_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$ is related as follows to the set $U_{ij}$: 
+We can now prove the following lemma in this scenario.
+\begin{lemmaS}\label{lemma:union-min-ints}
+Under the conditions of Theorem \ref{theo1}, it holds that 
 \begin{equation*}
-\pr \Big( \Delta(U_{ij}, \hat{U}_{ij}) \le \nu_T \Big) \ge 1-\alpha + o(1), 
+\pr \big( \Delta(U_{ij}, U_{ij}^*) \le C \rho_T \big) \ge 1-\alpha + o(1), 
 \end{equation*}
-where $\Delta(U_{ij},\hat{U}_{ij}) = (U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})$ is the symmetric difference between $U_{ij}$ and $\hat{U}_{ij}$, and $\{\nu_T\}$ is a null sequence specified in ??. ($\nu_T = 2 r c_T \sqrt{\log T/Th_{\min}}$ with $r$ the number of time points $u$ in the closure of $U_{ij}$ with $\lambda_i(u) - \lambda_j(u) = 0$) 
-\end{lemma}
+where $\Delta(U_{ij},U_{ij}^*) = \mathcal{L} \{(U_{ij} \setminus U_{ij}^*) \cup (U_{ij} \setminus U_{ij}^*)\}$ is the Lebesgue measure $\mathcal{L}$ of the symmetric difference between the two sets $U_{ij}$ and $U_{ij}^*$. Moreover, $\rho_T = \max \{ \bar{h}, \kappa_T \linebreak \sqrt{\log T / (T h_{\min})} \}$, where $\bar{h}$ is the largest interval length in the set $\mathcal{F}_{\text{reject}}^{\text{min}}(i,j)$ and $\{\kappa_T\}$ is any sequence of positive numbers such that $\kappa_T / \ell_T \to \infty$ with $\ell_T = \sqrt{\log T} \linebreak \sqrt{\log \log T} / \log \log \log T$. 
+\end{lemmaS}
+\noindent Since $\rho_T$ converges to $0$ as $T \to \infty$ under the conditions of Theorem \ref{theo1}, Lemma \ref{lemma:union-min-ints} essentially says that the difference between $U_{ij}$ and $U_{ij}^*$ is small ($\le C\rho_T = o(1)$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $U_{ij}$ can be regarded as an approximation of $U_{ij}^*$. 
+
+
 \begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{lemma:union-min-ints}.}}]
+Let
+\[ U_{ij}^{*,\text{int}} = \Big\{ u \in U_{ij}^*: |\lambda_i(u) - \lambda_j(u)| \ge \kappa_T \sqrt{\log T / (T h_{\min})} \Big\} \]  
+and define the two collections of intervals 
+\begin{align*}
+\mathcal{C}^< & = \big\{ \mathcal{I} \in \mathcal{F}: \ell(\mathcal{I}) = h_{\min} \text{ and } \mathcal{I} \subseteq U_{ij}^{*,\text{int}} \big\} \\
+\mathcal{C}^> & = \big\{ \mathcal{I} \in \mathcal{F}: \ell(\mathcal{I}) = \bar{h} \text{ and } \mathcal{J} \subseteq \mathcal{I} \text{ for some } \mathcal{J} \in \mathcal{F}_{\text{reject}}(i,j) \big\},
+\end{align*}
+where $\ell(\mathcal{I})$ denotes the length of the interval $\mathcal{I} \subseteq [0,1]$. In what follows, we examine the two sets of time points 
+\[ U_{ij}^< = \bigcup_{\mathcal{I} \in \mathcal{C}^<} \mathcal{I} \quad \text{and} \quad U_{ij}^> = \bigcup_{\mathcal{I} \in \mathcal{C}^>} \mathcal{I}. \]
+\begin{enumerate}[label=(\roman*),leftmargin=0.75cm]
+\item By Proposition \ref{prop1}, it holds that $\pr(\mathcal{C}^< \subseteq \mathcal{F}_{\text{reject}}(i,j)) \to 1$, which implies that $U_{ij}^< \subseteq U_{ij}$  with probability tending to $1$. Moreover, straightforward arguments yield that $\Delta(U_{ij}^<,U_{ij}^*) \le C \kappa_T \sqrt{\log T / (T h_{\min})}$ with some sufficiently large constant $C$. 
+\item By construction, it holds that $U_{ij} \subseteq U_{ij}^>$. By Theorem \ref{theo1}, we further have that $\mathcal{F}_{\text{reject}}(i,j) \cap \{ \mathcal{I} \in \intervals: \mathcal{I} \cap U_{ij}^* = \emptyset \} = \emptyset$ with probability at least $1-\alpha +o(1)$. From this, it follows that $\Delta(U_{ij}^>,U_{ij}^*) \le C \bar{h}$ with probability at least $1-\alpha + o(1)$.
+\end{enumerate}
+To summarize, we have found that 
+\begin{equation*}
+\pr \big( U_{ij}^< \subseteq U_{ij} \subseteq U_{ij}^> \big) = 1 - o(1)
+\end{equation*}
+and 
+\begin{equation*}
+\pr \Big( \max \big\{ \Delta(U_{ij}^<,U_{ij}^*), \Delta(U_{ij}^>,U_{ij}^*) \big\}  \le C \rho_T \Big) \ge 1-\alpha + o(1).
+\end{equation*}
+Taken together, these two statements imply that 
+\[ \pr \big( \Delta(U_{ij},U_{ij}^*) \le C \rho_T \big) \ge 1-\alpha + o(1). \qedhere \]
 \end{proof}
 }
 
