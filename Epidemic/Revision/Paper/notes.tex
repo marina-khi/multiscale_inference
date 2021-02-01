@@ -205,7 +205,7 @@ There are different ways to construct critical values $c_{ijk,T}(\alpha)$ that e
 \end{equation}
 This can be achieved by choosing $c_T(\alpha)$ as the $(1-\alpha)$-quantile of the statistic 
 \[ \tilde{\Psi}_T = \max_{(i,j,k) \in \indexset} |\hat{\psi}_{ijk,T}^0|, \]
-where {\color{red} the auxiliary statistic $\hat{\psi}_{ijk,T}^0$ was introduced in \eqref{eq:stat0} and is equal to $\hat{\psi}_{ijk,T}$ under the null $H_0^{(ijk)}$ by construction.\footnote{Note that both the statistic $\tilde{\Psi}_T$ and the quantile $c_T(\alpha)$ depend on the dimensionality $p$ of the test problem in general. To keep the notation simple, we however suppress this dependence throughout the paper. We use the same convention for all other quantities that are defined in the sequel.}} 
+where {\color{red} the auxiliary statistic $\hat{\psi}_{ijk,T}^0$ was introduced in \eqref{eq:stat0} and is equal to $\hat{\psi}_{ijk,T}$ under the null $H_0^{(ijk)}$ by construction.\footnote{{\color{red} Note that both the statistic $\tilde{\Psi}_T$ and the quantile $c_T(\alpha)$ depend on the dimensionality $p$ of the test problem in general. To keep the notation simple, we however suppress this dependence throughout the paper. We use the same convention for all other quantities that are defined in the sequel.}}} 
 
 
 A more modern approach assigns different critical values $c_{ijk,T}(\alpha)$ to the test problems $(i,j,k)$. In particular, the critical value for the hypothesis $H_0^{(ijk)}$ is allowed to depend on the length $h_k$ of the time interval $\mathcal{I}_k$, that is, on the scale of the test problem. A general approach to construct scale-dependent critical values was pioneered by \cite{DuembgenSpokoiny2001} and has been used in many other studies since then; {\color{red}see e.g.\ } \cite{Rohde2008}, \cite{DuembgenWalther2008}, \cite{RufibachWalther2010}, \cite{SchmidtHieber2013}, \cite{EckleBissantzDette2017} and \cite{Dunker2019}. In our context, the approach of \cite{DuembgenSpokoiny2001} leads to the critical values 
@@ -459,7 +459,8 @@ There are many open questions surrounding the current COVID-19 pandemic. A quest
 
 \subsubsection{Data}
 
-We analyze data from five European countries: Germany, Italy, Spain, France and the United Kingdom. For each country $i$, we observe a time series $\mathcal{X}_i = \{ X_{it}: 1 \le t \le T \}$, where $X_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available on the homepage of the European Center for Disease Prevention and Control (\texttt{https://www.ecdc.europa.eu}) and were downloaded on 22 July 2020 {\color{blue}[IS THIS THE CORRECT DATE?]}. {\color{red} As already mentioned in the Introduction, we take the first Monday after reaching $100$ confirmed cases in each country as the starting date $t=1$. Beginning the time series of each country on the day when that country reached $100$ confirmed cases is a common way of ``normalizing'' the data \citep[e.g.][]{Cohen2020}. Additionally aligning the data by Monday allows to take care of possible weekly cycles in the data which are produced by delays in reporting new cases over the weekend. \sout{In order to check robustness of such alignment of the data, we report the results of analysis of these five countries but without alignment by the days of the week in Section \ref{s:subsec:app:2} in the Supplement.} The time series length $T$ is taken to be equal to $150$, which covers the first wave of the pandemic in all of the considered countries. The resulting dataset thus consists of $n = 5$ time series, each with $T = 150$ observations. Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in {\color{red}$4$} replacements. Plots of the observed time series are presented in the upper panels (a) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}. As a robustness check, we have repeated the analysis for the longer time span $T=200$. The results are reported in Section \ref{s:subsec:app:3} of the Supplement.}
+
+We analyze data from five European countries: Germany, Italy, Spain, France and the United Kingdom. For each country $i$, we observe a time series $\mathcal{X}_i = \{ X_{it}: 1 \le t \le T \}$, where $X_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available on the homepage of the European Center for Disease Prevention and Control (\texttt{https://www.ecdc.europa.eu}) and were downloaded on 22 July 2020 {\color{blue}[IS THIS THE CORRECT DATE?]}. {\color{red} As already mentioned in the Introduction, we take the first Monday after reaching $100$ confirmed cases in each country as the starting date $t=1$. Beginning the time series of each country on the day when that country reached $100$ confirmed cases is a common way of ``normalizing'' the data \citep[e.g.][]{Cohen2020}. Additionally aligning the data by Monday allows to take care of possible weekly cycles in the data which are produced by delays in reporting new cases over the weekend. \sout{In order to check robustness of such alignment of the data, we report the results of analysis of these five countries but without alignment by the days of the week in Section ?? in the Supplement.} The time series length $T$ is taken to be equal to $150$, which covers the first wave of the pandemic in all of the considered countries. The resulting dataset thus consists of $n = 5$ time series, each with $T = 150$ observations. Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in {\color{red}$4$} replacements. Plots of the observed time series are presented in the upper panels (a) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}. As a robustness check, we have repeated the analysis for the longer time span $T=200$. The results are reported in Section \ref{s:subsec:app:3} of the Supplement.}
 
 
 To interpret the results produced by our multiscale test, we consider the Government Response Index (GRI) from the Oxford COVID-19 Government Response Tracker (OxCGRT) \citep{Hale2020}. The GRI measures how severe the actions are that are taken by a country's government to contain the virus. It is calculated based on several common government policies such as school closures and travel restrictions. The GRI ranges from $0$ to $100$, with $0$ corresponding to no response from the government at all and $100$ corresponding to full lockdown, closure of schools and workplaces, ban on travelling, etc. Detailed information on the collection of the data for government responses and the methodology for calculating the GRI is provided in \cite{Hale2020paper}. Plots of the GRI time series are given in panels (c) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
@@ -510,13 +511,19 @@ We now have a closer look at the results in Figures \ref{fig:Germany:Italy}--\re
 %Moreover, our test allows us to localise these differences using the notion of minimal intervals. Specifically, we can say that significant differences between trend curves in Germany and Italy occur between days $46$ and $77$. 
 Taken together, our results provide evidence that the epidemic developed very similarly in Germany and Italy until a peak was reached around day $40$. Thereafter, however, the German time series exhibits a significantly stronger downward trend than the Italian one. 
 
-%Inspecting Figures \ref{fig:Germany:Spain} and  \ref{fig:Germany:France}, a quite different picture arises when comparing Germany with France and Spain. The test detects significant differences between the German trend and the trends in France and Spain up to (approximately) day $50$ but not thereafter. Hence, we find that the time trends evolve differently during the outbreak of the crisis, but they appear to decrease in more or less the same fashion after a peak was reached. 
 
-{\color{red}Comparison of Germany and Spain, that is presented in Figure \ref{fig:Germany:Spain}, reveals the picture that is almost opposite to the one discussed above: the test detects significant differences approximately up to day $50$ and after day $120$, but not in between. This shows that in the beginning of the pandemic Spain experienced more substantial increase in the number of cases, but after the peak reached almost the same level as Germany. However, the situation seems to repeat during the second wave, and thus the trends in Germany and Spain evolve differently towards the end of the considered time period.
+{\color{red}
+A quite different picture arises when Germany is compared with Spain and France. As can be seen in Figures \ref{fig:Germany:Spain} and \ref{fig:Germany:France}, the test detects significant differences between the German trend and the trends in Spain and France up to (approximately) day $50$. This indicates that the time trends evolved differently during the outbreak of the crisis. However, the test does not find any differences in the time period between (approximately) days $50$ and $120$. The trends thus appear to decrease in more or less the same fashion after the first peak was reached. As can be seen in Figure \ref{fig:Germany:Spain}, the test detects additional differences between the German and Spanish trends after day $120$. This reflects the fact that the number of daily new cases in Spain picked up again after day $120$, foreshadowing the second wave, whereas the numbers in Germany were still quite stable. 
 
-Inspecting Figure \ref{fig:Germany:France}, a quite different picture arises when comparing Germany with France. The test detects significant differences between the German and the French trends up to (approximately) day $40$ but not thereafter. Hence, we find that the time trends evolve differently during the outbreak of the crisis, but they appear to decrease in more or less the same fashion after a peak was reached.}
 
-Finally, the comparison of Germany with the UK in Figure \ref{fig:Germany:UK} reveals significant differences between the time trends over essentially the whole observation window. Inspecting the time series in panel (a), it is quite obvious that the UK trend evolves differently from the German one after day $40$. However, our test also detects differences between the trends during the onset of the crisis, which is not obvious from the time series plot in panel (a). 
+Finally, the comparison of Germany with the UK in Figure \ref{fig:Germany:UK} reveals significant differences between the time trends in the period from (approximately) day $40$ to $120$. Similar to the comparison with Italy in Figure \ref{fig:Germany:Italy}, this indicates that the trend decays in a different fashion in Germany than in the UK after a first peak was reached. However, we do not find any significant differences between the trends during the onset of the pandemic.}
+
+
+%{\color{red}Comparison of Germany and Spain, that is presented in Figure \ref{fig:Germany:Spain}, reveals the picture that is almost opposite to the one discussed above: the test detects significant differences approximately up to day $50$ and after day $120$, but not in between. This shows that in the beginning of the pandemic Spain experienced more substantial increase in the number of cases, but after the peak reached almost the same level as Germany. However, the situation seems to repeat during the second wave, and thus the trends in Germany and Spain evolve differently towards the end of the considered time period.
+
+%Inspecting Figure \ref{fig:Germany:France}, a quite different picture arises when comparing Germany with France. The test detects significant differences between the German and the French trends up to (approximately) day $40$ but not thereafter. Hence, we find that the time trends evolve differently during the outbreak of the crisis, but they appear to decrease in more or less the same fashion after a peak was reached.}
+
+%Finally, the comparison of Germany with the UK in Figure \ref{fig:Germany:UK} reveals significant differences between the time trends over essentially the whole observation window. Inspecting the time series in panel (a), it is quite obvious that the UK trend evolves differently from the German one after day $40$. However, our test also detects differences between the trends during the onset of the crisis, which is not obvious from the time series plot in panel (a). 
 
 
 \subsubsection{Discussion}
@@ -525,7 +532,7 @@ Finally, the comparison of Germany with the UK in Figure \ref{fig:Germany:UK} re
 Having identified significant differences between the epidemic trends in the five countries under consideration, one may ask next what are the causes of these differences. As already mentioned at the beginning of this section, this question cannot be answered by our test. Rather, a further analysis which presumably goes beyond pure statistics is needed to shed some light on it. We here do not attempt to provide any answers. We merely discuss some observations which become apparent upon considering our test results in the light of the Government Response Index (GRI). For reasons of brevity, we focus on the comparison of Germany with Italy and Spain in Figures \ref{fig:Germany:Italy} and \ref{fig:Germany:Spain}. 
 
 
-According to our test results in Figure \ref{fig:Germany:Spain}, there are significant differences between the trends in Germany and Spain during the onset of the epidemic up to about day $50$, with Spain having more new cases of infections than Germany on most days. After day $50$, the trends become quite similar and start to decrease at approximately the same rate {\color{red}until approximately day $120$}. This may be due to the fact that Spain in general introduced more severe measures of lockdown than Germany (as can be seen upon inspecting the GRI in panel (c) of Figure \ref{fig:Germany:Spain}), which may have helped to battle the spread of infection. {\color{red} Furthermore, around days $110-120$ the measures in Spain were less strict than in Germany, which could have caused the detected differences in the evolution of the trends towards the end of the time period.} However, a much more thorough analysis is of course needed to find out whether this is indeed the case or whether other factors were mainly responsible. 
+According to our test results in Figure \ref{fig:Germany:Spain}, there are significant differences between the trends in Germany and Spain during the onset of the epidemic up to about day $50$, with Spain having more new cases of infections than Germany on most days. After day $50$, the trends become quite similar and start to decrease at approximately the same rate {\color{red}until around day $120$}. This may be due to the fact that Spain in general introduced more severe measures of lockdown than Germany (as can be seen upon inspecting the GRI in panel (c) of Figure \ref{fig:Germany:Spain}), which may have helped to battle the spread of infection. {\color{red} Furthermore, around days $110$--$120$, the measures in Spain were less strict than in Germany, which could be a reason for the detected differences between the trends towards the end of the sample.} However, a much more thorough analysis is of course needed to find out whether this is indeed the case or whether other factors were mainly responsible. 
 
 Turning to the comparison of Germany and Italy, we found that the German trend drops down significantly faster than the Italian one after approximately day $40$. Interestingly, the GRI of Italy almost always lies above that of Germany. Hence, even though Italy has in general taken more severe and restrictive measures against the virus than Germany, it appears that the virus could be contained better in Germany (in the sense that the trend of daily new cases went down significantly faster in Germany than in Italy). This suggests that there are indeed important factors besides the level of government response to the pandemic which substantially influence the trend of new COVID-19 cases. 
 
@@ -533,7 +540,7 @@ Turning to the comparison of Germany and Italy, we found that the German trend d
 This brief discussion already indicates that it is extremely difficult to determine the exact causes of the differences in epidemic trends across countries. Since even similar countries such as those in our sample differ in a variety of aspects that are relevant for the spread of the virus, it is very challenging to pin down these causes. One issue that is often discussed in the context of cross-country comparisons are country-specific strategies to test for the coronavirus. The argument is that differences between epidemic trends may be spuriously produced by country-specific test procedures.
 
 
-Even though we can of course not fully exclude this possibility, our test results are presumably not driven by different test regimes in the countries under consideration. To see this, we consider again the comparison of Germany and Italy: The test regimes in these two countries are arguably quite different. Germany is often cited as the country that employed early, widespread testing with more than $100\,000$ tests per week even in the beginning of the pandemic \citep{Cohen2020}, while testing in Italy became widespread only in the late stages of the pandemic. 
+Even though we can of course not fully exclude this possibility, our test results are presumably not driven by different test regimes in the countries under consideration. To see this, we consider again the comparison of Germany and Italy: The test regimes in these two countries are arguably quite different. Germany is often cited as the country that employed early, widespread testing with more than $100\,000$ tests per week even in the beginning of the pandemic \citep{Cohen2020}, while testing in Italy became widespread only in the {\color{red} later} stages of the pandemic. 
 %(https://ourworldindata.org/covid-testing-us-uk-korea-italy)
 Nevertheless, visual inspection of the raw and smoothed data in panels (a) and (b) of Figure \ref{fig:Germany:Italy} suggest that the underlying time trends are very similar up to day $36$. This is confirmed by our multiscale test which does not find any significant differences before that day. Hence, the different test regimes in Germany and Italy towards the beginning of the pandemic do not appear to have an overly strong effect and to produce spurious differences between the time trends. This suggests that the differences detected by our multiscale test indeed reflect differences in the way the virus spread in Germany and Italy rather than being mere artefacts of different test regimes. 
 
@@ -943,14 +950,22 @@ where the last equation is due to the fact that $p = O(T^{\gamma})$ for a fixed 
 
 
 \newpage
-\def\thesection{\Alph{section}}
-\setcounter{section}{18}
-\section{Supplementary Material}
+\headingsupplement{Supplement to}{``Nonparametric comparison}{of epidemic time trends:}{the case of COVID-19''}
+\vspace{-0.25cm}
+
+\authorssupplement{Marina Khismatullina}{University of Bonn}{Michael Vogt}{University of Bonn} 
+\vspace{-0.25cm}
+
+%\def\thesection{\Alph{section}}
+%\setcounter{section}{18}
+%\section{Supplementary Material}
 
 %\renewcommand{\baselinestretch}{1.0}\normalsize
 %\headingsupplement{Supplement to}{``Simultaneous statistical inference}{for epidemic trends''}
 %\authors{Marina Khismatullina}{University of Bonn}{Michael Vogt}{University of Bonn} 
 
+\def\thesection{S.\arabic{section}}
+\setcounter{section}{0}
 \def\theequation{S.\arabic{equation}}
 \setcounter{equation}{0}
 \def\thefigure{S.\arabic{figure}}
@@ -961,7 +976,7 @@ where the last equation is due to the fact that $p = O(T^{\gamma})$ for a fixed 
 
 
 
-\subsection{Technical details}
+\section{Technical details}
 
 
 In what follows, we provide the technical details omitted in the Appendix. To start with, we prove the following auxiliary lemma.
@@ -1123,8 +1138,134 @@ Taken together, these two statements imply that
 
 
 
-\newpage
-\subsection{Additional graphs for Section \ref{subsec:app}}\label{s:subsec:app}
+\section{Robustness checks for Section \ref{subsec:sim}}\label{s:subsec:robustness}
+
+
+{\color{red} In this section,} we supplement the simulation experiments of Section \ref{subsec:sim} by some robustness checks. Specifically, we repeat the experiments with different values of the overdispersion parameter $\sigma$. The larger we choose $\sigma$, the more noise we put on top of the time trend, that is, on top of the underlying signal. Hence, by varying $\sigma$, we can assess how sensitive our test is to changes in the noise-to-signal ratio. We first repeat the size simulations for $\sigma = 10$ and $\sigma = 20$. The results are presented in Tables \ref{s:tab:sim:size:1} and \ref{s:tab:sim:size:2}, respectively. As can be seen, the empirical size numbers are very similar to those for $\sigma=15$ in Table \ref{tab:sim:size}. We next rerun the power simulations for $\sigma = 10$ and $\sigma = 20$, where we consider the two Scenarios A and B as in Section \ref{subsec:sim}. The results can be found {\color{red} in Tables \ref{s:tab:sim:power:1}, \ref{s:tab:sim:power:3}, \ref{s:tab:sim:power:2} and \ref{s:tab:sim:power:4}}. They show that the test is much more powerful for $\sigma=10$ than for $\sigma=20$. This is what one would expect, since a higher value of $\sigma$ corresponds to a higher noise-to-signal ratio. In particular, the higher $\sigma$, the more noisy the data, and thus the more difficult it is to identify differences between the trend curves. Nevertheless, even in the very noisy case with $\sigma = 20$, our test has quite some power, which tends to increase swiftly as $T$ gets larger. 
+
+
+\begin{table}[p!]
+\footnotesize{
+\caption{Empirical size of the test for $\sigma = 10$.}\label{s:tab:sim:size:1}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+ $T = 100$ & 0.009 & 0.043 & 0.085 & 0.008 & 0.039 & 0.075 & 0.005 & 0.023 & 0.055 \\ 
+  $T = 250$ & 0.011 & 0.047 & 0.095 & 0.010 & 0.050 & 0.094 & 0.009 & 0.039 & 0.079 \\ 
+  $T = 500$ & 0.009 & 0.052 & 0.101 & 0.013 & 0.049 & 0.101 & 0.010 & 0.039 & 0.084 \\ 
+\bottomrule
+\end{tabularx}}
+\vspace{0.5cm}
+
+\footnotesize{
+\caption{Power of the test in Scenario A for $\sigma = 10$.}\label{s:tab:sim:power:1}
+\vspace{0.25cm}
+
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.836 & 0.915 & 0.911 & 0.833 & 0.903 & 0.898 & 0.777 & 0.874 & 0.882 \\ 
+  $T = 250$ & 0.986 & 0.971 & 0.938 & 0.984 & 0.956 & 0.918 & 0.980 & 0.961 & 0.924 \\ 
+  $T = 500$ & 0.996 & 0.975 & 0.946 & 0.994 & 0.965 & 0.927 & 0.992 & 0.963 & 0.918 \\ 
+\bottomrule
+\end{tabularx}}
+\vspace{0.5cm}
+
+\footnotesize{
+\caption{Power of the test in Scenario B for $\sigma = 10$.}\label{s:tab:sim:power:3}
+\vspace{0.25cm}
+
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.991 & 0.973 & 0.946 & 0.994 & 0.970 & 0.935 & 0.994 & 0.971 & 0.940 \\ 
+  $T = 250$ & 0.993 & 0.969 & 0.941 & 0.993 & 0.959 & 0.919 & 0.991 & 0.960 & 0.925 \\ 
+  $T = 500$ & 0.996 & 0.976 & 0.948 & 0.993 & 0.966 & 0.928 & 0.993 & 0.962 & 0.917 \\ 
+\bottomrule
+\end{tabularx}}
+\vspace{0.5cm}
+\end{table}
+
+\begin{table}[p!]
+\footnotesize{
+\caption{Empirical size of the test for $\sigma = 20$.}\label{s:tab:sim:size:2}
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.011 & 0.050 & 0.094 & 0.010 & 0.047 & 0.092 & 0.009 & 0.034 & 0.070 \\ 
+  $T = 250$ & 0.009 & 0.047 & 0.088 & 0.008 & 0.044 & 0.085 & 0.006 & 0.032 & 0.062 \\ 
+  $T = 500$ & 0.008 & 0.038 & 0.081 & 0.006 & 0.039 & 0.079 & 0.006 & 0.025 & 0.060 \\ 
+\bottomrule
+\end{tabularx}}
+\vspace{0.5cm}
+
+\footnotesize{
+\caption{Power of the test in Scenario A for $\sigma = 20$.}\label{s:tab:sim:power:2}
+\vspace{0.25cm}
+
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.144 & 0.275 & 0.352 & 0.115 & 0.231 & 0.304 & 0.048 & 0.120 & 0.163 \\ 
+  $T = 250$ & 0.244 & 0.434 & 0.538 & 0.204 & 0.403 & 0.486 & 0.133 & 0.247 & 0.305 \\ 
+  $T = 500$ & 0.296 & 0.563 & 0.662 & 0.273 & 0.511 & 0.603 & 0.175 & 0.338 & 0.433 \\ 
+\bottomrule
+\end{tabularx}}
+\vspace{0.5cm}
+
+\footnotesize{
+\caption{Power of the test in Scenario B for $\sigma = 20$.}\label{s:tab:sim:power:4}
+\vspace{0.25cm}
+
+\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
+\toprule
+ & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
+\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
+ & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
+ & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
+\cmidrule[0.4pt]{1-10}
+$T = 100$ & 0.438 & 0.636 & 0.704 & 0.404 & 0.598 & 0.669 & 0.277 & 0.449 & 0.526 \\ 
+  $T = 250$ & 0.864 & 0.934 & 0.927 & 0.850 & 0.923 & 0.915 & 0.811 & 0.891 & 0.898 \\ 
+  $T = 500$ & 0.960 & 0.968 & 0.949 & 0.961 & 0.964 & 0.935 & 0.945 & 0.961 & 0.941 \\ 
+\bottomrule
+\end{tabularx}}
+\end{table}
+
+
+
+\section{Additional graphs for Section \ref{subsec:app}}\label{s:subsec:app}
 
 
 Here, we provide the pairwise comparisons between Italy, France, Spain and the UK that were omitted in Section \ref{subsec:app}. The plots have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}. 
@@ -1133,7 +1274,7 @@ Here, we provide the pairwise comparisons between Italy, France, Spain and the U
 \begin{figure}[h!]
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/FRA_vs_ITA}
-\caption{Test results for the comparison of France and Italy.}
+\caption{Test results for the comparison of France and Italy.}\label{fig:France:Italy}
 \end{minipage}
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
@@ -1169,89 +1310,105 @@ Here, we provide the pairwise comparisons between Italy, France, Spain and the U
 \end{figure}
 
 
+%\clearpage
+%{\color{red}
+%\section{Robustness checks for Section \ref{subsec:app}}\label{s:subsec:app:2}
+
+%In this section, we provide the robustness check of the pairwise comparisons between Germany, Italy, France, Spain and the United Kingdom. Specifically, we provide the results of our test method applied to the time series of these five countries that were aligned only by the date of reaching $100$th case. We do not align the data by the days of the week. The plots have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
+%\begin{figure}[h!]
+%\begin{minipage}[t]{0.49\textwidth}
+%\includegraphics[width=\textwidth]{plots/DEU_vs_ITA_wa}
+%\caption{Test results for the comparison of Germany and Italy without alignment by the days of the week.}
+%\end{minipage}
+%\hspace{0.25cm}
+%\begin{minipage}[t]{0.49\textwidth}
+%\includegraphics[width=\textwidth]{plots/DEU_vs_ESP_wa}
+%\caption{Test results for the comparison of Germany and Spain without alignment by the days of the week.}
+%\end{minipage}
+%\end{figure}
+
+%As you can see, the results are essentially the same except for comparisons between Germany and the United Kingdom and between Italy and the United Kingdom. Hence, we can assume that the reporting procedures in the UK were heavily influenced by the days of the week, especially in the beginning of the pandemic.
+
+
+%\begin{figure}[h!]
+%\begin{minipage}[t]{0.49\textwidth}
+%\includegraphics[width=\textwidth]{plots/DEU_vs_FRA_wa}
+%\caption{Test results for the comparison of Germany and France without alignment by the days of the week.}
+%\end{minipage}
+%\hspace{0.25cm}
+%\begin{minipage}[t]{0.49\textwidth}
+%\includegraphics[width=\textwidth]{plots/DEU_vs_GBR_wa}
+%\caption{Test results for the comparison of Germany and the UK without alignment by the days of the week.}
+%\end{minipage}
+%\end{figure}
+
+
+
+%\begin{figure}[h!]
+%\begin{minipage}[t]{0.49\textwidth}
+%\includegraphics[width=\textwidth]{plots/FRA_vs_ITA_wa}
+%\caption{Test results for the comparison of France and Italy without alignment by the days of the week.}
+%\end{minipage}
+%\hspace{0.25cm}
+%\begin{minipage}[t]{0.49\textwidth}
+%\includegraphics[width=\textwidth]{plots/GBR_vs_ITA_wa}
+%\caption{Test results for the comparison of the UK and Italy without alignment by the days of the week.}
+%\end{minipage}
+%\end{figure}
+
+
+%\begin{figure}[p!]
+%\begin{minipage}[t]{0.49\textwidth}
+%\includegraphics[width=\textwidth]{plots/ESP_vs_ITA_wa}
+%\caption{Test results for the comparison of Spain and Italy without alignment by the days of the week.}
+%\end{minipage}
+%\hspace{0.25cm}
+%\begin{minipage}[t]{0.49\textwidth}
+%\includegraphics[width=\textwidth]{plots/ESP_vs_GBR_wa}
+%\caption{Test results for the comparison of Spain and the UK without alignment by the days of the week.}
+%\end{minipage}
+%\end{figure}
+
+
+%\begin{figure}[p!]
+%\begin{minipage}[t]{0.49\textwidth}
+%\includegraphics[width=\textwidth]{plots/ESP_vs_FRA_wa}
+%\caption{Test results for the comparison of Spain and France without alignment by the days of the week.}
+%\end{minipage}
+%\hspace{0.25cm}
+%\begin{minipage}[t]{0.49\textwidth}
+%\includegraphics[width=\textwidth]{plots/FRA_vs_GBR_wa}
+%\caption{Test results for the comparison of France and the UK without alignment by the days of the week.}
+%\end{minipage}
+%\end{figure}
+
+
 \clearpage
 {\color{red}
-\subsection{Robustness checks for Section \ref{subsec:app}}\label{s:subsec:app:2}
-
-In this section, we provide the robustness check of the pairwise comparisons between Germany, Italy, France, Spain and the United Kingdom. Specifically, we provide the results of our test method applied to the time series of these five countries that were aligned only by the date of reaching $100$th case. We do not align the data by the days of the week. The plots have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
-\begin{figure}[h!]
-\begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/DEU_vs_ITA_wa}
-\caption{Test results for the comparison of Germany and Italy without alignment by the days of the week.}
-\end{minipage}
-\hspace{0.25cm}
-\begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/DEU_vs_ESP_wa}
-\caption{Test results for the comparison of Germany and Spain without alignment by the days of the week.}
-\end{minipage}
-\end{figure}
-
-As you can see, the results are essentially the same except for comparisons between Germany and the United Kingdom and between Italy and the United Kingdom. Hence, we can assume that the reporting procedures in the UK were heavily influenced by the days of the week, especially in the beginning of the pandemic.
+\section{Robustness checks for Section \ref{subsec:app}}
+\label{s:subsec:app:3}
 
 
-\begin{figure}[h!]
-\begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/DEU_vs_FRA_wa}
-\caption{Test results for the comparison of Germany and France without alignment by the days of the week.}
-\end{minipage}
-\hspace{0.25cm}
-\begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/DEU_vs_GBR_wa}
-\caption{Test results for the comparison of Germany and the UK without alignment by the days of the week.}
-\end{minipage}
-\end{figure}
+To check the robustness of the empirical results from Section \ref{subsec:app}, we compare the time trends of the same five European countries (Germany, Italy, France, Spain and the UK) over a longer time span. Specifically, we take $T=200$ as opposed to $T = 150$ in Section \ref{subsec:app}. The analysis is performed in the same way as in Section \ref{subsec:app}. The results are displayed in Figures \ref{fig:supp3:first} - \ref{fig:supp3:last},  which have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}. 
+
+As is clearly visible in the figures, the data for Spain have extremely high volatility towards the end of the observation period between days $150$ and $200$. At least partly, this is presumably due to repeated delays in reporting. Such delays explain why the number of daily new cases is $0$ on multiple occasions followed by a sharp increase of the numbers on the next day. This spuriously high day-to-day volatility of the data heavily influences the precision of the estimator $\hat{\sigma}$. Specifically, we can expect $\hat{\sigma}$ to strongly overestimate $\sigma$. Indeed, we get $\hat{\sigma} = ???$ {\color{blue} [ADD VALUE]} when estimating $\sigma$ with $T=200$ compared to $\hat{\sigma} = 14.82$ with $T = 150$. Higher values of $\hat{\sigma}$ result in lower values of the test statistics, which leads to more conservative results of the test procedure. As a consequence, Figures \ref{fig:supp3:first} -- \ref{fig:supp3:last} differ drastically from Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK} and \ref{fig:France:Italy}--\ref{fig:France:UK}. 
+
+Since the Spanish data between days $150$ and $200$ are most probably inaccurate and can thus not be taken at face value\footnote{Note that the high day-to-day volatility is present not only in the data set of the European Center for Disease Prevention and Control, which underlies our analysis, but also in the data sets provided by the World Health Organization and by John Hopkins University.}, we exclude Spain from our analysis and repeat the multiscale test for only four European countries: Germany, Italy, France and the UK. The results are presented in Figures \ref{fig:supp3:first2}--\ref{fig:supp3:last2}. As can be seen, the test is much less conservative and the results are much more consistent with those in Section \ref{subsec:app}. Specifically, for each pair of countries $(i, j)$, the set $\intervals_{\text{reject}}(i, j)$ constructed for the longer time period $T = 200$ contains almost all elements from the set $\intervals_{\text{reject}}(i, j)$ constructed for the shorter time period $T = 150$. Hence, the test finds devations from the null hypothesis up to day $T=150$ on virtually the same intervals, no matter whether the overall time series length is $T=150$ or $T=200$. This shows that the test produces robust results that are barely influenced by the overall length of the time series. 
+
+%produces almost the same results for the time period up to $T=150$, no matter whether the time series lenfgth 
+%is robust with respect to the growing sample size.
+
+
+%both data for Spain provided by World Health Organization and by John Hopkins University also exhibit similar patterns to the data that are used in our study, we exclude Spain from our analysis and repeat the testing procedure for only four European countries: Germany, Italy, France and the United Kingdom. The results are presented in \ref{fig:supp3:first2} - \ref{fig:supp3:last2}. As can be seen, the test is much less conservative and the results of the test are much more consistent with the ones discussed in Section \ref{subsec:app}. Specifically, for each pair of countries $(i, j)$ the set $\intervals_{\text{reject}}(i, j)$ constructed for a longer time period ($T = 200$) contains almost all elements from the set $\intervals_{\text{reject}}(i, j)$ constructed for a shorter time period ($T = 150$). This shows that our test is robust with respect to the growing sample size.
 
 
 
-\begin{figure}[h!]
-\begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/FRA_vs_ITA_wa}
-\caption{Test results for the comparison of France and Italy without alignment by the days of the week.}
-\end{minipage}
-\hspace{0.25cm}
-\begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/GBR_vs_ITA_wa}
-\caption{Test results for the comparison of the UK and Italy without alignment by the days of the week.}
-\end{minipage}
-\end{figure}
+%We here provide the results of the multiscale comparison of the time trends between the same five European countries (Germany, Italy, France, Spain and the United Kingdom) performed on a longer time period. Specifically, we align the time series as before, taking the first Monday after reaching $100$ cases as the starting date $t = 1$. However, we take the time series length $T$ to be equal to $200$ (as opposed to $T = 150$ in Section \ref{subsec:app}). The analysis was performed in a similar manner as in Section \ref{subsec:app}, and the results of the analysis are displayed in Figures \ref{fig:supp3:first} - \ref{fig:supp3:last}. The plots have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
 
+%As is already obvious from the simple visual inspection, the data for Spain has very high volatility towards the end of the period. Presumably, the reason for that is repeated delays in reporting. This explains the number of cases being $0$ on multiple occasions with very sharp increase on the next day. Clearly, high day-to-day volatility of the data heavily influences the estimation error of $\sigma$ which results in rather conservative results of the overall testing procedure. Specifically, we get $\hat{\sigma} = ???$ when estimating $\sigma$ with $T=200$ compared to $\hat{\sigma} = 14.82$ with $T = 150$. Higher values of $\hat{\sigma}$ result in lower values of the test statistics, which can lead to more conservative results of the test procedure. Hence, Figures \ref{fig:supp3:first} -- \ref{fig:supp3:last} differ drastically from Figures \ref{fig:Germany:Italy} -- \ref{fig:France:UK}. 
 
-\begin{figure}[p!]
-\begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/ESP_vs_ITA_wa}
-\caption{Test results for the comparison of Spain and Italy without alignment by the days of the week.}
-\end{minipage}
-\hspace{0.25cm}
-\begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/ESP_vs_GBR_wa}
-\caption{Test results for the comparison of Spain and the UK without alignment by the days of the week.}
-\end{minipage}
-\end{figure}
-
-
-\begin{figure}[p!]
-\begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/ESP_vs_FRA_wa}
-\caption{Test results for the comparison of Spain and France without alignment by the days of the week.}
-\end{minipage}
-\hspace{0.25cm}
-\begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{plots/FRA_vs_GBR_wa}
-\caption{Test results for the comparison of France and the UK without alignment by the days of the week.}
-\end{minipage}
-\end{figure}
-
-\clearpage
-\subsection{Additional analysis for Section \ref{subsec:app}}
-\subsubsection{Longer time period}\label{s:subsec:app:3}
-
-
-Here, we provide the results of the multiscale comparison of the time trends between the same five European countries (Germany, Italy, France, Spain and the United Kingdom) performed on a longer time period. Specifically, we align the time series as before, taking the first Monday after reaching $100$ cases as the starting date $t = 1$. However, we take the time series length $T$ to be equal to $200$ (as opposed to $T = 150$ in Section \ref{subsec:app}). The analysis was performed in a similar manner as in Section \ref{subsec:app}, and the results of the analysis are displayed in Figures \ref{fig:supp3:first} - \ref{fig:supp3:last}. The plots have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
-
-As is already obvious from the simple visual inspection, the data for Spain has very high volatility towards the end of the period. Presumably, the reason for that is repeated delays in reporting. This explains the number of cases being $0$ on multiple occasions with very sharp increase on the next day. Clearly, high day-to-day volatility of the data heavily influences the estimation error of $\sigma$ which results in rather conservative results of the overall testing procedure. Specifically, we get $\hat{\sigma} = ???$ when estimating $\sigma$ with $T=200$ compared to $\hat{\sigma} = 14.82$ with $T = 150$. Higher values of $\hat{\sigma}$ result in lower values of the test statistics, which can lead to more conservative results of the test procedure. Hence, Figures \ref{fig:supp3:first} -- \ref{fig:supp3:last} differ drastically from Figures \ref{fig:Germany:Italy} -- \ref{fig:France:UK}. 
-
-
-Since both data for Spain provided by World Health Organization and by John Hopkins University also exhibit similar patterns to the data that are used in our study, we exclude Spain from our analysis and repeat the testing procedure for only four European countries: Germany, Italy, France and the United Kingdom. The results are presented in \ref{fig:supp3:first2} - \ref{fig:supp3:last2}. As can be seen, the test is much less conservative and the results of the test are much more consistent with the ones discussed in Section \ref{subsec:app}. Specifically, for each pair of countries $(i, j)$ the set $\intervals_{\text{reject}}(i, j)$ constructed for a longer time period ($T = 200$) contains almost all elements from the set $\intervals_{\text{reject}}(i, j)$ constructed for a shorter time period ($T = 150$). This shows that our test is robust with respect to the growing sample size.
+%Since both data for Spain provided by World Health Organization and by John Hopkins University also exhibit similar patterns to the data that are used in our study, we exclude Spain from our analysis and repeat the testing procedure for only four European countries: Germany, Italy, France and the United Kingdom. The results are presented in \ref{fig:supp3:first2} - \ref{fig:supp3:last2}. As can be seen, the test is much less conservative and the results of the test are much more consistent with the ones discussed in Section \ref{subsec:app}. Specifically, for each pair of countries $(i, j)$ the set $\intervals_{\text{reject}}(i, j)$ constructed for a longer time period ($T = 200$) contains almost all elements from the set $\intervals_{\text{reject}}(i, j)$ constructed for a shorter time period ($T = 150$). This shows that our test is robust with respect to the growing sample size.
+}
 
 
 \begin{figure}[h!]
@@ -1361,141 +1518,6 @@ Since both data for Spain provided by World Health Organization and by John Hopk
 
 
 \clearpage
-\subsection{Robustness checks for Section \ref{subsec:sim}}\label{s:subsec:robustness}
-
-
-In what follows, we supplement the simulation experiments of Section \ref{subsec:sim} by some robustness checks. Specifically, we repeat the experiments with different values of the overdispersion parameter $\sigma$. The larger we choose $\sigma$, the more noise we put on top of the time trend, that is, on top of the underlying signal. Hence, by varying $\sigma$, we can assess how sensitive our test is to changes in the noise-to-signal ratio. We first repeat the size simulations for $\sigma = 10$ and $\sigma = 20$. The results are presented in Tables \ref{s:tab:sim:size:1} and \ref{s:tab:sim:size:2}, respectively. As can be seen, the empirical size numbers are very similar to those for $\sigma=15$ in Table \ref{tab:sim:size}. We next rerun the power simulations for $\sigma = 10$ and $\sigma = 20$, where we consider the two Scenarios A and B as in Section \ref{subsec:sim}. The results can be found in Tables \ref{s:tab:sim:power:1}--\ref{s:tab:sim:power:4}. They show that the test is much more powerful for $\sigma=10$ than for $\sigma=20$. This is what one would expect, since a higher value of $\sigma$ corresponds to a higher noise-to-signal ratio. In particular, the higher $\sigma$, the more noisy the data, and thus the more difficult it is to identify differences between the trend curves. Nevertheless, even in the very noisy case with $\sigma = 20$, our test has quite some power, which tends to increase swiftly as $T$ gets larger. 
-\vspace{0.4cm}
-
-
-\begin{table}[h!]
-\footnotesize{
-\caption{Empirical size of the test for $\sigma = 10$.}\label{s:tab:sim:size:1}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-\toprule
- & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
- & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-\cmidrule[0.4pt]{1-10}
- $T = 100$ & 0.009 & 0.043 & 0.085 & 0.008 & 0.039 & 0.075 & 0.005 & 0.023 & 0.055 \\ 
-  $T = 250$ & 0.011 & 0.047 & 0.095 & 0.010 & 0.050 & 0.094 & 0.009 & 0.039 & 0.079 \\ 
-  $T = 500$ & 0.009 & 0.052 & 0.101 & 0.013 & 0.049 & 0.101 & 0.010 & 0.039 & 0.084 \\ 
-\bottomrule
-\end{tabularx}}
-\end{table}
-
-
-\begin{table}[h!]
-\footnotesize{
-\caption{Empirical size of the test for $\sigma = 20$.}\label{s:tab:sim:size:2}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-\toprule
- & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
- & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-\cmidrule[0.4pt]{1-10}
-$T = 100$ & 0.011 & 0.050 & 0.094 & 0.010 & 0.047 & 0.092 & 0.009 & 0.034 & 0.070 \\ 
-  $T = 250$ & 0.009 & 0.047 & 0.088 & 0.008 & 0.044 & 0.085 & 0.006 & 0.032 & 0.062 \\ 
-  $T = 500$ & 0.008 & 0.038 & 0.081 & 0.006 & 0.039 & 0.079 & 0.006 & 0.025 & 0.060 \\ 
-\bottomrule
-\end{tabularx}}
-\end{table}
-
-
-\pagebreak
-
-
-\begin{table}[t!]
-\footnotesize{
-\caption{Power of the test in Scenario A for $\sigma = 10$.}\label{s:tab:sim:power:1}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-\toprule
- & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
- & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-\cmidrule[0.4pt]{1-10}
-$T = 100$ & 0.836 & 0.915 & 0.911 & 0.833 & 0.903 & 0.898 & 0.777 & 0.874 & 0.882 \\ 
-  $T = 250$ & 0.986 & 0.971 & 0.938 & 0.984 & 0.956 & 0.918 & 0.980 & 0.961 & 0.924 \\ 
-  $T = 500$ & 0.996 & 0.975 & 0.946 & 0.994 & 0.965 & 0.927 & 0.992 & 0.963 & 0.918 \\ 
-\bottomrule
-\end{tabularx}}
-\vspace{0.5cm}
-\end{table}
-
-
-\begin{table}[t!]
-\footnotesize{
-\caption{Power of the test in Scenario A for $\sigma = 20$.}\label{s:tab:sim:power:2}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-\toprule
- & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
- & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-\cmidrule[0.4pt]{1-10}
-$T = 100$ & 0.144 & 0.275 & 0.352 & 0.115 & 0.231 & 0.304 & 0.048 & 0.120 & 0.163 \\ 
-  $T = 250$ & 0.244 & 0.434 & 0.538 & 0.204 & 0.403 & 0.486 & 0.133 & 0.247 & 0.305 \\ 
-  $T = 500$ & 0.296 & 0.563 & 0.662 & 0.273 & 0.511 & 0.603 & 0.175 & 0.338 & 0.433 \\ 
-\bottomrule
-\end{tabularx}}
-\vspace{0.5cm}
-\end{table}
-
-
-\begin{table}[t!]
-\footnotesize{
-\caption{Power of the test in Scenario B for $\sigma = 10$.}\label{s:tab:sim:power:3}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-\toprule
- & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
- & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-\cmidrule[0.4pt]{1-10}
-$T = 100$ & 0.991 & 0.973 & 0.946 & 0.994 & 0.970 & 0.935 & 0.994 & 0.971 & 0.940 \\ 
-  $T = 250$ & 0.993 & 0.969 & 0.941 & 0.993 & 0.959 & 0.919 & 0.991 & 0.960 & 0.925 \\ 
-  $T = 500$ & 0.996 & 0.976 & 0.948 & 0.993 & 0.966 & 0.928 & 0.993 & 0.962 & 0.917 \\ 
-\bottomrule
-\end{tabularx}}
-\vspace{0.5cm}
-\end{table}
-
-
-\begin{table}[t!]
-\footnotesize{
-\caption{Power of the test in Scenario B for $\sigma = 20$.}\label{s:tab:sim:power:4}
-\newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
-\newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z Z@{\hskip 6pt}Z@{\hskip 6pt}Z} 
-\toprule
- & \multicolumn{3}{c}{$n = 5$} & \multicolumn{3}{c}{$n = 10$} & \multicolumn{3}{c}{$n = 50$} \\
-\cmidrule[0.4pt]{2-4} \cmidrule[0.4pt]{5-7} \cmidrule[0.4pt]{8-10}
- & \multicolumn{3}{c}{significance level $\alpha$} &\multicolumn{3}{c}{significance level $\alpha$} & \multicolumn{3}{c}{significance level $\alpha$} \\
- & 0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1  &  0.01 & 0.05 & 0.1 \\
-\cmidrule[0.4pt]{1-10}
-$T = 100$ & 0.438 & 0.636 & 0.704 & 0.404 & 0.598 & 0.669 & 0.277 & 0.449 & 0.526 \\ 
-  $T = 250$ & 0.864 & 0.934 & 0.927 & 0.850 & 0.923 & 0.915 & 0.811 & 0.891 & 0.898 \\ 
-  $T = 500$ & 0.960 & 0.968 & 0.949 & 0.961 & 0.964 & 0.935 & 0.945 & 0.961 & 0.941 \\ 
-\bottomrule
-\end{tabularx}}
-\end{table}
-
-
-\phantom{end}
-
 
 %We next repeat the simulation exercises of Section \ref{subsec:sim} with the different mean function. Specifically, we take the following function:
 %\[ \lambda(u) = 5000 \exp\Big(-\frac{(10 u-3)^2}{2}\Big) + 500. \]
