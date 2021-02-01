@@ -53,7 +53,7 @@ In addition to the improvements proposed by the referees, we have updated the ap
 
 If one compares the old and new data analysis in Section 4.2, one can see that the results are virtually the same for most countries. Only the pairwise comparisons including the UK are somewhat different. Consider e.g.\ Figures S.2 in the old and the revised supplement: Without the new Monday alignment (old version of Fig.\ S.2), the raw data in the UK and Italy up to approx.\ day $40$ appear to have a somewhat different trending behaviour, which is picked up by our test. With the Monday alignment (new version of Fig.\ S.2), the raw data look much more similar over the first $40$ days and our test does not find any deviation from the null up to day $40$. This suggests that not aligning the data by the day of the week may produce some spurious differences across countries. Setting the starting date to be a Monday in each country should take care of this issue. 
 
-We hope you agree with us that this additional alignment makes a lot of sense. However, if you disagree, we are of course happy to switch back to the previous version of the data analysis without this alignment. 
+We hope you agree with us that this additional alignment makes a lot of sense. However, if not, we are of course happy to switch back to the previous version of the data analysis without this alignment. 
 
 \end{enumerate}
 
@@ -107,26 +107,26 @@ Our test statistics $\hat{s}_{ijk,T}$ measure (local) mean distances between the
 \end{align*}
 estimates the mean distance 
 \[ \Delta_{\text{mean}}(\mathcal{I}_k) := \frac{1}{h_k} \int_{\mathcal{I}_k} (\lambda_i(u) - \lambda_j(u)) du \]
-between $\lambda_i$ and $\lambda_j$ on the interval $\mathcal{I}_k$, where $h_k$ is the length of the interval $\mathcal{I}_k$. The local mean differences $\Delta_{\text{mean}}(\mathcal{I}_k)$ can be used as a distance measure for the following reason: Suppose the two functions $\lambda_i$ and $\lambda_j$ are continuous (as assumed in the paper). Then $\lambda_i$ and $\lambda_j$ differ from each other on their support $[0,1]$ if and only if there exists a subinterval $\mathcal{I} \subseteq [0,1]$ with $\Delta_{\text{mean}}(\mathcal{I}) \ne 0$. Consequently, our test procedure, which checks whether $\Delta_{\text{mean}}(\mathcal{I}_k) \ne 0$ for a large number of intervals $\mathcal{I}_k$ simultaneously, should be able to detect the differences between the functions $\lambda_i$ and $\lambda_j$. This is reflected in the power of our test against a large class of local alternatives. Please have a look at the new Proposition A.1 in the Appendix and its discussion in Section 3.3 for the details.
+between $\lambda_i$ and $\lambda_j$ on the interval $\mathcal{I}_k$, where $h_k$ is the length of the interval $\mathcal{I}_k$. The local mean differences $\Delta_{\text{mean}}(\mathcal{I}_k)$ can be used as a distance measure for the following reason: Suppose the two functions $\lambda_i$ and $\lambda_j$ are continuous (as assumed in the paper). Then $\lambda_i$ and $\lambda_j$ differ from each other on their support $[0,1]$ if and only if there exists a subinterval $\mathcal{I} \subseteq [0,1]$ with $\Delta_{\text{mean}}(\mathcal{I}) \ne 0$. Consequently, our test procedure, which checks whether $\Delta_{\text{mean}}(\mathcal{I}_k) \ne 0$ for a large number of intervals $\mathcal{I}_k$ simultaneously, should be able to detect the differences between the functions $\lambda_i$ and $\lambda_j$. This is reflected by the fact that our test has power against a large class of local alternatives. Please have a look at the new Proposition A.1 in the Appendix and its discussion in Section 3.3 for the details.
 
 As you point out completely correctly, one may replace the statistics $\hat{s}_{ijk,T}$ that measure the local mean distances $\Delta_{\text{mean}}(\mathcal{I}_k)$ by statistics that measure local $L_q$ distances $\Delta_q(\mathcal{I}_k)$ of the form 
 \[ \Delta_q(\mathcal{I}_k) = \frac{1}{h_k} \int_{\mathcal{I}_k} |\lambda_i(u) - \lambda_j(u)|^q du. \]
 Even though this is possible in principle, we follow most other multiscale approaches in the literature which work with local (weighted) mean distances rather than local $L_q$ distances. The reason is mainly technical: The theory in our paper would be quite different if we worked with local $L_q$ distances. In particular, we could not make use of the Gaussian approximation results from \cite{Chernozhukov2017} as far as we can see. 
 
-We would finally like to note that local mean distances are commonly used not only in the context of multiscale tests. There are also more classical test procdures which are based on local mean distances. As a simple example, suppose we want to test whether the regression function $m$ in the model $Y_t = m(t/T) + \varepsilon_t$ is equal to zero. This can be achieved by a partial sum statistic which estimates the average regression function $m$ on a number of subintervals of the support of $m$; see e.g.\ \cite{Stute1997} for the details. 
+We would finally like to note that local mean distances are used not only in the context of multiscale tests. There are also more classic test procedures which are based on local mean distances. As a simple example, suppose we want to test whether the regression function $m$ in the model $Y_t = m(t/T) + \varepsilon_t$ is equal to zero. This can be achieved by a partial sum statistic which estimates the average regression function $m$ on a number of subintervals of the support of $m$; see e.g.\ \cite{Stute1997} for the details. 
 
 
 \item \textit{Now the conclusion will be largely interfered by the choice of interval sets. I am wondering whether we can reach some unified result without the influence of such selection. That is whether we can aggregate the rejected intervals $I_k$ and draw some meaningful conclusion?}
 
 A simple way to aggregate the rejected intervals $I_k$ for a given pair of countries $(i,j)$ is to consider their union
 \[ V_{ij} = \bigcup_{\mathcal{I} \in \mathcal{F}_{\text{reject}}(i,j)} \mathcal{I}, \]
-where, as in the paper, we let $\mathcal{F}_{\text{reject}}(i,j)$ denote the set of rejected intervals for $(i,j)$. The union $V_{ij}$ is the region where our test finds differences between the functions $\lambda_i$ and $\lambda_j$. It thus gives a first rough idea about where the trends $\lambda_i$ and $\lambda_j$ differ from each other. There is however one issue with the union $V_{ij}$: If the family $\mathcal{F}$ contains very long intervals and the test finds a deviation from the null on such a long interval, the union $V_{ij}$ will be a very large interval itself and will thus not be very informative about where $\lambda_i$ and $\lambda_j$ differ. Hence, to get a first impression of the test results, it may be better to consider the union 
+where, as in the paper, we let $\mathcal{F}_{\text{reject}}(i,j)$ denote the set of rejected intervals for $(i,j)$. The union $V_{ij}$ is the time span where our test finds differences between the functions $\lambda_i$ and $\lambda_j$. It thus gives a first rough idea about where the trends $\lambda_i$ and $\lambda_j$ differ from each other. There is however one issue with the union $V_{ij}$: If the family $\mathcal{F}$ contains very long intervals and the test finds a deviation from the null on such a long interval, the union $V_{ij}$ will be a very large interval itself and will thus not be very informative about where $\lambda_i$ and $\lambda_j$ differ. Hence, to get a first impression of the test results, it may be better to consider the union 
 \[ U_{ij} = \bigcup_{\mathcal{I} \in \mathcal{F}_{\text{reject}}^{\min}(i,j)} \mathcal{I} \]
 of minimal intervals, where $\mathcal{F}_{\text{reject}}^{\text{min}}(i,j) = \{ \mathcal{I}_k \in \mathcal{F}_{\text{reject}}(i,j):$  there exists no $\mathcal{I}_{k^\prime} \in \intervals_{\text{reject}}(i,j)$ with $\mathcal{I}_{k^\prime} \subset \mathcal{I}_k \}$ denotes the set of minimal intervals. 
 
 As shown in the new Lemma S.2 in the Supplementary Material, one can formally relate $U_{ij}$ to the set of time points 
 \[ U_{ij}^* = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \} \]
-where $\lambda_i$ and $\lambda_j$ differ from each other. In particular, under certain regularity conditions, we can prove the following for a given pair of functions $\lambda_i$ and $\lambda_j$: 
+where $\lambda_i$ and $\lambda_j$ differ from each other. In particular, under certain regularity conditions, we can prove the following result for a given pair of functions $\lambda_i$ and $\lambda_j$: 
 \begin{equation}\label{eq:Uij}
 \pr  \Big( \Delta(U_{ij}, U_{ij}^*) \le C \rho_T \Big) \ge 1-\alpha + o(1), \tag{$*$}
 \end{equation}
@@ -137,7 +137,7 @@ We have added a brief summary of the above discussion at the end of Section 3.4 
 
 \item \textit{The author mentioned this method can be used to identify locations of changes in the trends. But the detail is not very clear to me. For example consider a very simple case: if the two series $i, j$ differ from time $t_1$ to $t_2$ and are the same before and after this interval, where $t_1, t_2, t_2 - t_1$ are all unknown. Can we somehow able to identify this interval $[t_1, t_2]$ using our method and how well can we estimate $t_1$ and $t_2$? If one takes difference of each pair $(i, j)$, and then the trends are zero except some unknown intervals. Then the task is to detect those unknown intervals. Such problem can be possibly solved by for example MOSUM. Can author comments about this?}
 
-As you suggest, we discuss the simple setting where $\lambda_i$ and $\lambda_j$ differ at any time point $t \in (t_1,t_2)$ but are identical at any other time point.
+In our reply, we consider the simple case discussed in your comment where $\lambda_i$ and $\lambda_j$ differ at any time point $t \in (t_1,t_2)$ but are identical at any other time point.
 \begin{enumerate}[label=(\roman*),leftmargin=0.75cm]
 
 \item Our method allows to identify differences between the trends $\lambda_i$ and $\lambda_j$ in the sense that we can make confidence statements about where (that is, in which time intervals $\mathcal{I}_k$ under consideration) the differences are. In particular, we can make the following confidence statement: 
@@ -160,7 +160,7 @@ With (asymptotic) probability at least $1-\alpha$, each interval $\mathcal{I}_k$
 \end{center}
 \vspace{0.1cm}
 
-Hence, the intervals in $\mathcal{F}_{\text{reject}}(i,j)$ for which our test rejects the null give information about where $\lambda_i$ and $\lambda_j$ differ from each other. To summarize the test results, we thus propose to plot the family of intervals $\mathcal{F}_{\text{reject}}(i,j)$. 
+Hence, the intervals in $\mathcal{F}_{\text{reject}}(i,j)$ for which our test rejects the null give information about the interval $(t_1,t_2)$ where $\lambda_i$ and $\lambda_j$ differ from each other. To summarize the test results, we thus propose to plot the family of intervals $\mathcal{F}_{\text{reject}}(i,j)$. 
 
 \item Our approach does not identify differences between $\lambda_i$ and $\lambda_j$ in the sense that it produces a consistent point estimate of the interval $(t_1,t_2)$. Nevertheless, we conjecture that it is possible to construct a point estimate of $(t_1,t_2)$ based on our approach. More specifically, it should be possible to extend the result \eqref{eq:Uij} discussed in our reply to your previous comment to the case where $\alpha = \alpha_T \to 0$ sufficiently slowly. Hence, we should be able to show that 
 \begin{equation}\label{eq:Uij-conjecture}
@@ -170,14 +170,14 @@ This says that $U_{ij}$ is a consistent estimator of $U_{ij}^* = (t_1,t_2)$ in t
 
 \end{enumerate}
 
-Since we are primarily interested in inference rather than point estimation in the paper and since the statement \eqref{eq:Uij-conjecture} is merely a conjecture not covered by our theory, we have decided not to discuss this extension of in the paper. However, we are happy to do so if you think this is needed. 
+Since we are primarily interested in inference rather than point estimation in the paper and since the statement \eqref{eq:Uij-conjecture} is merely a conjecture not covered by our theory, we have decided not to discuss this extension in the paper. However, we are happy to do so if you think this is needed. 
  
 
 \item \textit{Some theory question}
 
 \begin{enumerate}[label=(\alph*),leftmargin=0.7cm]
 
-\item \textit{Since the result in Chernozukov et al's Gaussian approximation(GA) does not require the series to be independent cross sectionally, I wonder does that mean the current result can be extended to data with cross-sectional dependence?}
+\item \textit{Since the result in Chernozukov et al's Gaussian approximation (GA) does not require the series to be independent cross sectionally, I wonder does that mean the current result can be extended to data with cross-sectional dependence?}
 
 In principle, it should be possible to extend our theory to the case of cross-sectional dependence. As far as we can see, our proof strategy should still go through in this case (even though the technical arguments would of course become more complicated and would need some tweaks here and there). In particular, as you point out, we could still use the Gaussian approximation results of Chernozhukov and coauthors since these do not require cross-sectional dependence. 
 
@@ -235,7 +235,7 @@ Thank you very much for the constructive and useful suggestions. In our revision
 
 \item \textit{The assumption of independence across countries may be debatable, but it seems that in the context of the model, this could be tested, so this may be worth mentioning.}
 
-{\color{red} Check Chapter 12.4.1 on ``Testing Independence between Two Random Variables'' in Li \& Racine, Nonparametric Econometrics for tests on independence. Marina, can you add the references for the tests discussed there? I don't have the book ...} 
+{\color{red} Check Chapter 12.4.1 on ``Testing Independence between Two Random Variables'' in Li \& Racine, Nonparametric Econometrics for tests on independence. Marina, can you give me the references for the tests discussed there? I don't have the book ...} 
 
 
 \item \textit{Some arguments may be worth further details in the text. For instance, the equation involving} $\hat{s}_{ijk,T} / \sqrt{T h_k}$ \textit{on Page 2 Line 7, or the bound for} $|r_{it}|$ \textit{on Page 2 Line -5.}
