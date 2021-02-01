@@ -130,14 +130,16 @@ $X_{it}$ are non-negative integers $\Rightarrow$ can be modelled by a Poisson di
 
 Since $\lambda_i(t/T) = \E[X_{it}] = \Var(X_{it})$, we can rewrite $X_{it}$ as
 \vspace{-2mm}
-\begin{equation*}
-X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + %u_{it} %\quad \text{with} \quad u_{it} 
-\sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it},
-\end{equation*}
-where $\eta_{it}$ has zero mean and unit variance.\pause
+%\begin{overlayarea}{\textwidth}{2cm}
+\begin{align*}
+X_{it} &= \lambda_i\Big(\frac{t}{T}\Big) + \onslide<3>{u_{it} }\onslide<4->{\sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it},}
+\end{align*}
+%\end{overlayarea}
+\onslide<4->where $\eta_{it}$ has zero mean and unit variance.
+
 \vspace{3mm}
 
-In applications the variance can be larger than the mean $\Rightarrow$ quasi-Poisson models.
+\onslide<5->In applications the variance can be larger than the mean $\Rightarrow$ quasi-Poisson models.
 \end{frame}
 
 \begin{frame}{Model}
