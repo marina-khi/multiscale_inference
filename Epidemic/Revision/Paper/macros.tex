@@ -82,6 +82,26 @@
    \end{center}
 }
 
+\newcommand{\headingsupplement}[4]
+{  \setcounter{page}{1}
+   \begin{center}
+
+   %\phantom{Distance to upper boundary}
+   %\vspace{0.5cm}
+
+   {\LARGE \textbf{#1}}
+   \vspace{0.25cm}
+
+   {\LARGE \textbf{#2}}
+   \vspace{0.25cm}
+
+   {\LARGE \textbf{#3}}
+   \vspace{0.25cm}
+
+   {\LARGE \textbf{#4}}
+   \end{center}
+}
+
 
 % Authors
 
@@ -100,6 +120,28 @@
       \begin{center} 
       {\large #3}
       \vspace{0.1cm}
+      
+      #4 
+      \end{center}
+      \end{minipage}
+   \end{center}
+}
+
+\newcommand{\authorssupplement}[4]
+{  %\parindent0pt
+   \begin{center}
+      \begin{minipage}[c][1.5cm][c]{5.5cm}
+      \begin{center} 
+      {\large #1} 
+      \vspace{0.01cm}
+      
+      #2 
+      \end{center}
+      \end{minipage}
+      \begin{minipage}[c][1.5cm][c]{5.5cm}
+      \begin{center} 
+      {\large #3}
+      \vspace{0.01cm}
       
       #4 
       \end{center}

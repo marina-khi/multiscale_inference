@@ -35,50 +35,55 @@
 
 \begin{center} 
 {\large \bf Revision of the paper} \\[0.1cm]
-{\large \bf ``Nonparametric comparison:} \\[0.1cm]
-{\large \bf of epidemic time trends:} \\[0.1cm]
+{\large \bf ``Nonparametric comparison of epidemic time trends:} \\[0.1cm]
 {\large \bf the case of COVID-19"} 
 \end{center}
 \vspace{7pt}
 
 
 
-First of all, we would like to thank the editor, the associate editor and the reviewers for their many comments and suggestions which were very helpful in improving the paper. In the revision, we have addressed all comments and have rewritten the paper accordingly. Please find our point-by-point responses below. %Since the revised paper includes additional material as requested by the referees (additional simulations, a second application example, \dots), it is a bit longer than the original submission. In particular, it has grown from 29 (including Appendix) to ... pages in our layout. However, we are of course happy and willing to reduce the length of the paper if this is needed. Before we reply to the specific comments of the referees, we summarize the major changes in the revision.
-
-\vspace{10pt}
-
-
-\textbf{Generalization of the theoretical results.} We have extended the theoretical results as suggested by Referee 1:
+First of all, we would like to thank the editor, the associate editor and the reviewers for their comments and suggestions which were very helpful in improving the paper. In the revision, we have addressed all comments and have rewritten the paper accordingly. Please find our point-by-point responses below. 
+%Before we reply to the specific comments of the referees, we summarize the major changes in the revision.
+In addition to the improvements proposed by the referees, we have updated the application section in two ways: 
 \begin{enumerate}[label=(\roman*), leftmargin=0.8cm]
 
-\item We have derived the following result for the asymptotic power of our test:
+\item As more data on the corona pandemic have become available since the initial submission of the paper, we have slightly increased the time series length from $T=139$ to the round number $T=150$, which covers the first wave of the pandemic in all of the considered countries. As a robustness check, we have additionally run the test on longer time series of $T=200$ days. The results of this robustness check are reported in Section S.4 of the Supplementary Material. 
 
-Let the conditions of Theorem A.1 be satisfied and consider two sequences of functions $\lambda_{i, T}$ and $\lambda_{j, T}$ with the following property: There exists $\mathcal{I}_{k} \in \mathcal{F}$ such that 
-\begin{equation}\label{loc-alt}
-\lambda_{i, T}(w) - \lambda_{j, T}(w) \ge c_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k}, 
-\end{equation}
-where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$ faster than \linebreak $\frac{\sqrt{\log T}\sqrt{\log \log T}}{\log \log \log T}$. We denote the set of triplets $(i, j, k) \in \indexset$ for which \eqref{loc-alt} holds true as $\indexset_1$. Then 
-\[ \pr\Big( \forall (i,j,k) \in \mathcal{M}_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1) \]
-for any given $\alpha \in (0, 1)$. 
+\item In the previous version of the paper, we took the starting date $t=1$ to be the day of the $100$th confirmed case in each country. In the revision, we have slightly changed the definition of the starting date $t=1$ to be the first Monday after reaching $100$ confirmed cases in each country. We have made this change (which was suggested to us by a seminar participant) since there is a strong weekly cycle in the data (presumably due to many unreported cases over the weekend which are reported with delay on Monday). To eliminate possible effects of this weekly cycle, we have aligned the days of the week across countries by starting each time series on a Monday. 
 
+If one compares the old and new data analysis in Section 4.2, one can see that the results are virtually the same for most countries. Only the pairwise comparisons including the UK are somewhat different. Consider e.g.\ Figures S.2 in the old and the revised supplement: Without the new Monday alignment (old version of Fig.\ S.2), the raw data in the UK and Italy up to approx.\ day $40$ appear to have a somewhat different trending behaviour, which is picked up by our test. With the Monday alignment (new version of Fig.\ S.2), the raw data look much more similar over the first $40$ days and our test does not find any deviation from the null up to day $40$. This suggests that not aligning the data by the day of the week may produce some spurious differences across countries. Setting the starting date to be a Monday in each country should take care of this issue. 
 
-This result is stated as Corollary A.2 on p.??  of the revised paper. 
+We hope you agree with us that this additional alignment makes a lot of sense. However, if not, we are of course happy to switch back to the previous version of the data analysis without this alignment. 
 
-%consistency result in addition to Proposition 3.3: Let the significance level $\alpha = \alpha_T \in (0,1)$ depend on the sample size $T$. If $\alpha_T \rightarrow 0$, then $\mathbb{P}({E}_T^{\ell}) \rightarrow 1$ for $\ell \in \{ \pm,+,- \}$. 
-%We provide a generalization of Proposition 3.3 which shows that $\mathbb{P}({E}_T^{\ell}) = (1 - \alpha_T) + o(1)$ for any sequence $\{\alpha_T\}$ of significance levels $\alpha_T \in (0,1)$. In particular, for $\alpha_T \rightarrow 0$, we get the consistency result that $\mathbb{P}({E}_T^{\ell}) \rightarrow 1$. 
-
-\item %We have generalized our estimator of the long-run error variance. The estimation procedure is shown to be valid not only for AR($p$) processes of known finite order $p$ but for any stationary error process $\{\varepsilon_t\}$ with an AR($\infty$) representation. %This greatly extends the applicability of the estimator. 
 \end{enumerate}
-\vspace{3pt}
 
+%\textbf{Generalization of the theoretical results.} We have extended the theoretical results as suggested by Referee 1:
+%\begin{enumerate}[label=(\roman*), leftmargin=0.8cm]
 
-\textbf{Application.} We have improved the application section in the following way:
-\begin{enumerate}[label=(\roman*), leftmargin=0.8cm]
+%\item We have derived the following result for the asymptotic power of our test:
 
-\item In order to make the data even more comparable across countries, we take the starting date $t = 1$ to be the first Monday after reaching 100 confirmed case in each country. Such alignment of the data by starting on Monday takes into account possible differences in reporting the numbers on a weekly level. As a robustness check, we perform our analysis on the time series without the alignment, where we take the starting date $t = 1$ to be the first day after reaching 100 confirmed case in each country, and we report the results of the robustness check in Section S.3 in the Supplement.
-\item We have extended the considered time period from $T = 139$ to $T = 150$ and since now the data are available for longer time period, we perform the robustness check for longer time series with $T = 200$ days and report the results in Section S.4 in the Supplement.
-\end{enumerate}
+%Let the conditions of Theorem A.1 be satisfied and consider two sequences of functions $\lambda_{i, T}$ and $\lambda_{j, T}$ with the following property: There exists $\mathcal{I}_{k} \in \mathcal{F}$ such that 
+%\begin{equation}\label{loc-alt}
+%\lambda_{i, T}(w) - \lambda_{j, T}(w) \ge c_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k}, 
+%\end{equation}
+%where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$ faster than \linebreak $\frac{\sqrt{\log T}\sqrt{\log \log T}}{\log \log \log T}$. We denote the set of triplets $(i, j, k) \in \indexset$ for which \eqref{loc-alt} holds true as $\indexset_1$. Then 
+%\[ \pr\Big( \forall (i,j,k) \in \mathcal{M}_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1) \]
+%for any given $\alpha \in (0, 1)$. 
+
+%This result is stated as Corollary A.2 on p.??  of the revised paper. 
+
+%\end{enumerate}
+%\vspace{3pt}
+
+%\textbf{Application.} We have improved the application section in the following way:
+%\begin{enumerate}[label=(\roman*), leftmargin=0.8cm]
+
+%\item In order to make the data even more comparable across countries, we take the starting date $t = 1$ to be the first Monday after reaching 100 confirmed case in each country. Such alignment of the data by starting on Monday takes into account possible differences in reporting the numbers on a weekly level. As a robustness check, we perform our analysis on the time series without the alignment, where we take the starting date $t = 1$ to be the first day after reaching 100 confirmed case in each country, and we report the results of the robustness check in Section S.3 in the Supplement.
+%\item We have extended the considered time period from $T = 139$ to $T = 150$ and since now the data are available for longer time period, we perform the robustness check for longer time series with $T = 200$ days and report the results in Section S.4 in the Supplement.
+%\end{enumerate}
  
+
+
 \newpage
 \begin{center}
 {\large \bf Reply to Referee 1} 
@@ -90,25 +95,127 @@ Thank you very much for the constructive and helpful comments. In our revision, 
 
 \begin{enumerate}[label=(\arabic*),leftmargin=0.7cm]
 
+
 \item \textit{Since the difference could be canceled out, why should one consider} $\sum\nolimits_t (X_{it} - X_{jt})\mathbf{1}_{t/T \in I_k}$\textit{? Isn't it more appropriate to use} $|X_{it} - X_{jt}|$ \textit{ or } $|X_{it} - X_{jt}|^2$ \textit{to capture the distance?}
 
+Our test statistics $\hat{s}_{ijk,T}$ measure (local) mean distances between the trends $\lambda_i$ and $\lambda_j$. More specifically, for each pair of countries $(i,j)$ and each interval $\mathcal{I}_k$, the statistic
+\begin{align*} 
+\hat{s}_{ijk,T} 
+ & = \frac{1}{\sqrt{Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it} - \X_{jt}) \\
+ & = \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \bigg( \lambda_i \Big(\frac{t}{T}\Big)  - \lambda_j \Big(\frac{t}{T}\Big)\bigg) + o_p(1) \\
+ & = \sqrt{Th_k} \Big\{ \frac{1}{h_k} \int_{\mathcal{I}_k} (\lambda_i(u) - \lambda_j(u)) du \Big\} + o_p(1) 
+\end{align*}
+estimates the mean distance 
+\[ \Delta_{\text{mean}}(\mathcal{I}_k) := \frac{1}{h_k} \int_{\mathcal{I}_k} (\lambda_i(u) - \lambda_j(u)) du \]
+between $\lambda_i$ and $\lambda_j$ on the interval $\mathcal{I}_k$, where $h_k$ is the length of the interval $\mathcal{I}_k$. The local mean differences $\Delta_{\text{mean}}(\mathcal{I}_k)$ can be used as a distance measure for the following reason: Suppose the two functions $\lambda_i$ and $\lambda_j$ are continuous (as assumed in the paper). Then $\lambda_i$ and $\lambda_j$ differ from each other on their support $[0,1]$ if and only if there exists a subinterval $\mathcal{I} \subseteq [0,1]$ with $\Delta_{\text{mean}}(\mathcal{I}) \ne 0$. Consequently, our test procedure, which checks whether $\Delta_{\text{mean}}(\mathcal{I}_k) \ne 0$ for a large number of intervals $\mathcal{I}_k$ simultaneously, should be able to detect the differences between the functions $\lambda_i$ and $\lambda_j$. This is reflected by the fact that our test has power against a large class of local alternatives. Please have a look at the new Proposition A.1 in the Appendix and its discussion in Section 3.3 for the details.
 
-\item \textit{Now the conclusion will be largely interfered by the choice of interval sets. I am wondering whether we can reach some unified result without the influence of such selection. That is whether we can aggregate the rejected intervals Ik and draw some meaningful conclusion?}
+As you point out completely correctly, one may replace the statistics $\hat{s}_{ijk,T}$ that measure the local mean distances $\Delta_{\text{mean}}(\mathcal{I}_k)$ by statistics that measure local $L_q$ distances $\Delta_q(\mathcal{I}_k)$ of the form 
+\[ \Delta_q(\mathcal{I}_k) = \frac{1}{h_k} \int_{\mathcal{I}_k} |\lambda_i(u) - \lambda_j(u)|^q du. \]
+Even though this is possible in principle, we follow most other multiscale approaches in the literature which work with local (weighted) mean distances rather than local $L_q$ distances. The reason is mainly technical: The theory in our paper would be quite different if we worked with local $L_q$ distances. In particular, we could not make use of the Gaussian approximation results from \cite{Chernozhukov2017} as far as we can see. 
+
+We would finally like to note that local mean distances are used not only in the context of multiscale tests. There are also more classic test procedures which are based on local mean distances. As a simple example, suppose we want to test whether the regression function $m$ in the model $Y_t = m(t/T) + \varepsilon_t$ is equal to zero. This can be achieved by a partial sum statistic which estimates the average regression function $m$ on a number of subintervals of the support of $m$; see e.g.\ \cite{Stute1997} for the details. 
+
+
+\item \textit{Now the conclusion will be largely interfered by the choice of interval sets. I am wondering whether we can reach some unified result without the influence of such selection. That is whether we can aggregate the rejected intervals $I_k$ and draw some meaningful conclusion?}
+
+A simple way to aggregate the rejected intervals $I_k$ for a given pair of countries $(i,j)$ is to consider their union
+\[ V_{ij} = \bigcup_{\mathcal{I} \in \mathcal{F}_{\text{reject}}(i,j)} \mathcal{I}, \]
+where, as in the paper, we let $\mathcal{F}_{\text{reject}}(i,j)$ denote the set of rejected intervals for $(i,j)$. The union $V_{ij}$ is the time span where our test finds differences between the functions $\lambda_i$ and $\lambda_j$. It thus gives a first rough idea about where the trends $\lambda_i$ and $\lambda_j$ differ from each other. There is however one issue with the union $V_{ij}$: If the family $\mathcal{F}$ contains very long intervals and the test finds a deviation from the null on such a long interval, the union $V_{ij}$ will be a very large interval itself and will thus not be very informative about where $\lambda_i$ and $\lambda_j$ differ. Hence, to get a first impression of the test results, it may be better to consider the union 
+\[ U_{ij} = \bigcup_{\mathcal{I} \in \mathcal{F}_{\text{reject}}^{\min}(i,j)} \mathcal{I} \]
+of minimal intervals, where $\mathcal{F}_{\text{reject}}^{\text{min}}(i,j) = \{ \mathcal{I}_k \in \mathcal{F}_{\text{reject}}(i,j):$  there exists no $\mathcal{I}_{k^\prime} \in \intervals_{\text{reject}}(i,j)$ with $\mathcal{I}_{k^\prime} \subset \mathcal{I}_k \}$ denotes the set of minimal intervals. 
+
+As shown in the new Lemma S.2 in the Supplementary Material, one can formally relate $U_{ij}$ to the set of time points 
+\[ U_{ij}^* = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \} \]
+where $\lambda_i$ and $\lambda_j$ differ from each other. In particular, under certain regularity conditions, we can prove the following result for a given pair of functions $\lambda_i$ and $\lambda_j$: 
+\begin{equation}\label{eq:Uij}
+\pr  \Big( \Delta(U_{ij}, U_{ij}^*) \le C \rho_T \Big) \ge 1-\alpha + o(1), \tag{$*$}
+\end{equation}
+where $\Delta(U_{ij},\hat{U}_{ij}) = \mathcal{L} \{(U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})\}$ is the Lebesgue measure of the symmetric difference between the two sets $U_{ij}$ and $U_{ij}^*$ and $\rho_T$ converges to $0$ as $T \to \infty$. According to \eqref{eq:Uij}, the difference between $U_{ij}$ and $U_{ij}^*$ is small ($\le C\rho_T = o(1)$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $U_{ij}$ can be regarded as an approximation of $U_{ij}^*$. 
+
+We have added a brief summary of the above discussion at the end of Section 3.4 of the paper. The new Lemma S.2 and its proof can be found in the Supplementary Material.
+
 
 \item \textit{The author mentioned this method can be used to identify locations of changes in the trends. But the detail is not very clear to me. For example consider a very simple case: if the two series $i, j$ differ from time $t_1$ to $t_2$ and are the same before and after this interval, where $t_1, t_2, t_2 - t_1$ are all unknown. Can we somehow able to identify this interval $[t_1, t_2]$ using our method and how well can we estimate $t_1$ and $t_2$? If one takes difference of each pair $(i, j)$, and then the trends are zero except some unknown intervals. Then the task is to detect those unknown intervals. Such problem can be possibly solved by for example MOSUM. Can author comments about this?}
 
-\item \textit{Some theory question}
+In our reply, we consider the simple case discussed in your comment where $\lambda_i$ and $\lambda_j$ differ at any time point $t \in (t_1,t_2)$ but are identical at any other time point.
+\begin{enumerate}[label=(\roman*),leftmargin=0.75cm]
 
-\begin{enumerate}[label=(\roman*)]
-\item \textit{Since the result in Chernozukov et al's Gaussian approximation(GA) does not require the series to be independent cross sectionally, I wonder does that mean the current result can be extended to data with cross-sectional dependence?}
-\item \textit{It would be better if the author can derive power under certain alternatives, so that one can get a better idea as how different the trends needs to be in order to be detected.}
+\item Our method allows to identify differences between the trends $\lambda_i$ and $\lambda_j$ in the sense that we can make confidence statements about where (that is, in which time intervals $\mathcal{I}_k$ under consideration) the differences are. In particular, we can make the following confidence statement: 
+\vspace{0.1cm}
 
-It can indeed be proven that our multiscale test has asymptotic power $1$ against local alternatives. We have added this result as Corollary A.2 in the Appendix to the paper. The proof is provided in the Supplementary Material.
+\begin{center}
+\begin{minipage}{0.8\textwidth}
+With (asymptotic) probability at least $1-\alpha$, the trends $\lambda_i$ and $\lambda_j$ are different on each interval $\mathcal{I}_k$ for which our test rejects the null $H_0^{(ijk)}$.
+\end{minipage}
+\end{center} 
+\vspace{0.1cm}
 
-\item \textit{The argument about no need for time dependent data is reasonable, just a short comment: there already exists result extending Chernozukov et al's GA to time dependent case, maybe this paper can be further extended to time dependent data as well.}
+Put differently:
+\vspace{0.1cm}
+
+\begin{center}
+\begin{minipage}{0.8\textwidth}
+With (asymptotic) probability at least $1-\alpha$, each interval $\mathcal{I}_k$ for which our test rejects the null $H_0^{(ijk)}$ has some overlap with $(t_1,t_2)$.
+\end{minipage}
+\end{center}
+\vspace{0.1cm}
+
+Hence, the intervals in $\mathcal{F}_{\text{reject}}(i,j)$ for which our test rejects the null give information about the interval $(t_1,t_2)$ where $\lambda_i$ and $\lambda_j$ differ from each other. To summarize the test results, we thus propose to plot the family of intervals $\mathcal{F}_{\text{reject}}(i,j)$. 
+
+\item Our approach does not identify differences between $\lambda_i$ and $\lambda_j$ in the sense that it produces a consistent point estimate of the interval $(t_1,t_2)$. Nevertheless, we conjecture that it is possible to construct a point estimate of $(t_1,t_2)$ based on our approach. More specifically, it should be possible to extend the result \eqref{eq:Uij} discussed in our reply to your previous comment to the case where $\alpha = \alpha_T \to 0$ sufficiently slowly. Hence, we should be able to show that 
+\begin{equation}\label{eq:Uij-conjecture}
+\pr \Big( \Delta(U_{ij}, U_{ij}^*) \le C \rho_T \Big) \ge \underbrace{1-\alpha_T - o(1)}_{= 1 - o(1)}. \tag{$**$}
+\end{equation}
+This says that $U_{ij}$ is a consistent estimator of $U_{ij}^* = (t_1,t_2)$ in the sense that the difference $\Delta(U_{ij}, U_{ij}^*)$ goes to zero (note that $\rho_T \to 0$) with probability tending to $1$. 
+
 \end{enumerate}
 
+Since we are primarily interested in inference rather than point estimation in the paper and since the statement \eqref{eq:Uij-conjecture} is merely a conjecture not covered by our theory, we have decided not to discuss this extension in the paper. However, we are happy to do so if you think this is needed. 
+ 
+
+\item \textit{Some theory question}
+
+\begin{enumerate}[label=(\alph*),leftmargin=0.7cm]
+
+\item \textit{Since the result in Chernozukov et al's Gaussian approximation (GA) does not require the series to be independent cross sectionally, I wonder does that mean the current result can be extended to data with cross-sectional dependence?}
+
+In principle, it should be possible to extend our theory to the case of cross-sectional dependence. As far as we can see, our proof strategy should still go through in this case (even though the technical arguments would of course become more complicated and would need some tweaks here and there). In particular, as you point out, we could still use the Gaussian approximation results of Chernozhukov and coauthors since these do not require cross-sectional dependence. 
+
+It is important to note that we would not only have to adapt the theory to deal with cross-sectional dependence. We would also have to adjust the test procedure itself: Assume that the error terms $\eta_{it}$ in our model are dependent across $i$ (i.e.\ cross-sectionally dependent) but independent across $t$. In this case, the variance of the statistic $\hat{s}_{ijk,T}$ is given by
+\begin{align*}
+\text{Var}(\hat{s}_{ijk,T}) = \frac{1}{Th_k} \sum_{t=1}^T \boldsymbol{1}\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \bigg\{ \sigma^2 \Big( \lambda_i\Big(\frac{t}{T}\Big) + \lambda_j\Big(\frac{t}{T}\Big) \Big) - C_{ij,T} \bigg\},    
+\end{align*}
+where the term 
+\[ C_{ij,T} = 2 \sigma^2 \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \sqrt{\lambda_j\Big(\frac{t}{T}\Big)} \mathbb{E}[\eta_{it} \eta_{jt}] \]
+reflects the cross-sectional dependence in the data. (In the case of no cross-sectional dependence, $C_{ij,T} = 0$.) To construct the test statistic $\hat{\psi}_{ijk,T}$ of the null hypothesis $H_0^{(ijk)}$, we require an estimator of $\text{Var}(\hat{s}_{ijk,T})$. In order to obtain such an estimator in the case of cross-sectional dependence, we need to estimate the additional term $C_{ij,T}$, which requires us to come up with an estimator of the covariance $\mathbb{E}[\eta_{it} \eta_{jt}] = \text{Cov}(\eta_{it},\eta_{jt})$. 
+
+We have added a footnote to p.?? of the paper which briefly mentions that it is in principle possible to allow for cross-sectional dependencies in the data.
+
+\item \textit{It would be better if the author can derive power under certain alternatives, so that one can get a better idea as how different the trends needs to be in order to be detected.}
+
+As suggested, we have derived the power of the test against a large class of local alternatives. Please see the new Proposition A.1 and its proof in the Appendix as well as the discussion of Proposition A.1 in Section 3.3.
+
+\item \textit{The argument about no need for time dependent data is reasonable, just a short comment: there already exists result extending Chernozukov et al's GA to time dependent case, maybe this paper can be further extended to time dependent data as well.}
+
+We are aware of extensions of the Gaussian approximation results in \cite{Chernozhukov2013} to the time dependent case. However, we are not aware of any such extensions of the more general Gaussian approximation results in \cite{Chernozhukov2017}, on which our theory is based. 
+
+Specifically, let $x_t = (x_{t,1},\ldots,x_{t,p})^\top$ be $p$-dimensional random vectors for $t=1,\ldots,T$ with $\mathbb{E}[x_t] = 0$ and covariance matrix $\Sigma = \mathbb{E}[x_t x_t^\top]$ and consider the statistics $X_t = (X_{t,1},\ldots,X_{t,p})^\top$ with
+\[ X_{t,k} = \frac{1}{\sqrt{T}} \sum_{t=1}^T x_{t,k}. \]
+Moreover, let $y_t = (y_{t,1},\ldots,y_{t,p})^\top$ be Gaussian versions of $x_t$ in the sense that $y_t \sim N(0,\Sigma)$ and define $Y_t = (Y_{t,1},\ldots,Y_{t,p})^\top$ with
+\[ Y_{t,k} = \frac{1}{\sqrt{T}} \sum_{t=1}^T y_{t,k}. \]
+The results in \cite{Chernozhukov2013} allow to bound the distance
+\[ \sup_{u \in \mathbb{R}} \Big| \mathbb{P} \big( \max_{1 \le k \le p} X_{t,k} \le u \big) - \mathbb{P} \big( \max_{1 \le k \le p} Y_{t,k} \le u \big) \Big| \]
+under the assumption that the variables $X_t$ are independent across $t$. Generalizations to the case of dependent $X_t$'s can be found e.g.\ in \cite{ZhangWu2017} and \cite{ZhangCheng2018}. The more general results in \cite{Chernozhukov2017} allow to bound the distance 
+\[ \sup_{A \in \mathcal{A}} \Big| \mathbb{P} \big( \max_{1 \le k \le p} X_{t,k} \in A \big) - \mathbb{P} \big( \max_{1 \le k \le p} Y_{t,k} \in A \big) \Big| \]
+under the assumption that the variables $X_t$ are independent across $t$, where $\mathcal{A}$ is the class of hyperrectangles in $\mathbb{R}^p$. This is the type of approximation result on which our proofs are based. As already mentioned above, we are not aware of any extension of this type of result to the time dependent case. (If you know of any such extension, we'd be very grateful for the exact reference. With such an extension, we could most probably generalize our results to the time dependent case.) 
+
+\end{enumerate}
+
+
 \item \textit{The specific allowance of $p = |W|$, which is essential in high dimensional analysis, is not mentioned until appendix. Please put them forward in the main context to provide some guidance in application. Also since the convergence speed of Gaussian approximation depends on $T, p$, it would be better to keep the bound in terms of those parameters, so that we know how large the sample size we need in order to obtain the desired accuracy.}
+
+{\color{red} No idea what's meant here. Do you have any idea?} 
+
 
 \end{enumerate}
 
@@ -125,17 +232,27 @@ Thank you very much for the constructive and useful suggestions. In our revision
 
 \begin{enumerate}[label=(\arabic*),leftmargin=0.7cm]
 
+
 \item \textit{The assumption of independence across countries may be debatable, but it seems that in the context of the model, this could be tested, so this may be worth mentioning.}
 
-\item \textit{Some arguments may be worth further details in the text. For instance, the equation involving} $\widehat{s}_{ijk,T} / \sqrt{T h_k}$ \textit{on Page 2 Line 7, or the bound for} $|r_{it}|$ \textit{on Page 2 Line -5.}
+{\color{red} Check Chapter 12.4.1 on ``Testing Independence between Two Random Variables'' in Li \& Racine, Nonparametric Econometrics for tests on independence. Marina, can you give me the references for the tests discussed there? I don't have the book ...} 
+
+
+\item \textit{Some arguments may be worth further details in the text. For instance, the equation involving} $\hat{s}_{ijk,T} / \sqrt{T h_k}$ \textit{on Page 2 Line 7, or the bound for} $|r_{it}|$ \textit{on Page 2 Line -5.}
+
+As suggested, we have added further details on the statistic $\hat{s}_{ijk,T}$ and the bound for $|r_{it}|$ to the text. Please see the revised Section 3.1 for the details. We hope you find the changes appropriate.  
+
 
 \item \textit{I am unsure why the statistic in (3.2) is introduced, I feel the discussion in Pages 8-9 could be done without referring to it.}
 
-We have deferred the introduction of this test statistics to the Appendix.
+The statistic $\hat{\psi}_{ijk,T}^0$ introduced in (3.2) is a modification of the test statistic $\hat{\psi}_{ijk,T}$. It is needed to define the critical values $c_T(\alpha,h_k) = b_k + q_T(\alpha) / a_k$ of the multiscale test in Section 3.2. Specifically, $\hat{\psi}_{ijk,T}^0$ is required to define the $(1-\alpha)$-quantile $q_T(\alpha)$ of 
+\[ \hat{\Psi}_T = \max_{(i,j,k) \in \indexset} a_k \big( |\hat{\psi}_{ijk,T}^0| - b_k \big). \]
+For this reason, we have decided not to defer its definition to the Appendix but to introduce it in (3.2) as in the old version of the paper. Otherwise, an important detail of the test would be missing in the main text / would be hidden in the Appendix. We hope you are fine with this. To emphasize that the statistic $\hat{\psi}_{ijk,T}^0$ is required for the definition of the critical values of the multiscale test, we have added the following sentence after its introduction in equation (3.2): ``This statistic is needed to define the critical values of our multiscale test in what follows''.
+
 
 \item \textit{The "cp." abbreviation is uncommon, I feel it should be replaced by "see" or "e.g."}
 
-We have replaced the "cp." abbreviation by "e.g." and in some cases by "see" throughout the paper.
+As suggested, we have replaced the "cp." abbreviation by "e.g." / "see".
  
 
 \end{enumerate}
