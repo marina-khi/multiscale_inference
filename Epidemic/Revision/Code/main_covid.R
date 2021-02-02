@@ -66,8 +66,8 @@ covid_list <- covid_list[names(covid_list) %in% c("DEU", "FRA", "GBR", "ESP", "I
 #Calculate the number of days that we have data for all fivecountries.
 #We are not considering CHN = China as it has too long dataset.
 #t_len     <- min(sapply(covid_list[names(covid_list) != "CHN"], NROW))
-t_len     <- 150 #We consider the first five months of the pandemic
-#t_len     <- 200
+#t_len     <- 150 #We consider the first five months of the pandemic
+t_len     <- 200
 countries <- names(covid_list)
 dates     <- unique(covid$dateRep)
 n_ts      <- length(covid_list) #Number of time series
@@ -125,8 +125,8 @@ result <- multiscale_test(data = covid_mat, sigma = sigmahat,
                           sim_runs = sim_runs)
 
 #Rename the countries for the plot
-#countries_names <- c("Germany", "Spain", "France", "United Kingdom", "Italy")
-countries_names <- c("Germany", "France", "United Kingdom", "Italy")
+countries_names <- c("Germany", "Spain", "France", "United Kingdom", "Italy")
+#countries_names <- c("Germany", "France", "United Kingdom", "Italy")
 
 
 #Plotting pairwise comparison 
