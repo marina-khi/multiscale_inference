@@ -19,7 +19,7 @@
 \usepackage{setspace}
 \usepackage{mathrsfs}
 \usepackage[official]{eurosym}
-\usepackage[left=2.8cm,right=2.8cm,bottom=2.8cm,top=2.8cm]{geometry}
+\usepackage[left=2.7cm,right=2.7cm,bottom=2.7cm,top=2.7cm]{geometry}
 
 \setcounter{secnumdepth}{4}
 \renewcommand{\baselinestretch}{1.2}
@@ -132,13 +132,13 @@ where $\lambda_i$ and $\lambda_j$ differ from each other. In particular, under c
 \end{equation}
 where $\Delta(U_{ij},\hat{U}_{ij}) = \mathcal{L} \{(U_{ij} \setminus \hat{U}_{ij}) \cup (\hat{U}_{ij} \setminus U_{ij})\}$ is the Lebesgue measure of the symmetric difference between the two sets $U_{ij}$ and $U_{ij}^*$ and $\rho_T$ converges to $0$ as $T \to \infty$. According to \eqref{eq:Uij}, the difference between $U_{ij}$ and $U_{ij}^*$ is small ($\le C\rho_T = o(1)$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $U_{ij}$ can be regarded as an approximation of $U_{ij}^*$. 
 
-We have added a brief summary of the above discussion at the end of Section 3.4 of the paper. The new Lemma S.2 and its proof can be found in the Supplementary Material.
+We have added a brief summary of the above discussion to the end of Section 3.4 of the paper. The new Lemma S.2 and its proof can be found in the Supplement.
 
 
 \item \textit{The author mentioned this method can be used to identify locations of changes in the trends. But the detail is not very clear to me. For example consider a very simple case: if the two series $i, j$ differ from time $t_1$ to $t_2$ and are the same before and after this interval, where $t_1, t_2, t_2 - t_1$ are all unknown. Can we somehow able to identify this interval $[t_1, t_2]$ using our method and how well can we estimate $t_1$ and $t_2$? If one takes difference of each pair $(i, j)$, and then the trends are zero except some unknown intervals. Then the task is to detect those unknown intervals. Such problem can be possibly solved by for example MOSUM. Can author comments about this?}
 
 In our reply, we consider the simple case discussed in your comment where $\lambda_i$ and $\lambda_j$ differ at any time point $t \in (t_1,t_2)$ but are identical at any other time point.
-\begin{enumerate}[label=(\roman*),leftmargin=0.75cm]
+\begin{itemize}[leftmargin=0.4cm]
 
 \item Our method allows to identify differences between the trends $\lambda_i$ and $\lambda_j$ in the sense that we can make confidence statements about where (that is, in which time intervals $\mathcal{I}_k$ under consideration) the differences are. In particular, we can make the following confidence statement: 
 \vspace{0.1cm}
@@ -166,17 +166,15 @@ Hence, the intervals in $\mathcal{F}_{\text{reject}}(i,j)$ for which our test re
 \begin{equation}\label{eq:Uij-conjecture}
 \pr \Big( \Delta(U_{ij}, U_{ij}^*) \le C \rho_T \Big) \ge \underbrace{1-\alpha_T - o(1)}_{= 1 - o(1)}. \tag{$**$}
 \end{equation}
-This says that $U_{ij}$ is a consistent estimator of $U_{ij}^* = (t_1,t_2)$ in the sense that the difference $\Delta(U_{ij}, U_{ij}^*)$ goes to zero (note that $\rho_T \to 0$) with probability tending to $1$. 
+This says that $U_{ij}$ is a consistent estimator of $U_{ij}^* = (t_1,t_2)$ in the sense that the difference $\Delta(U_{ij}, U_{ij}^*)$ goes to $0$ (note that $\rho_T \to 0$) with prob.\ tending to $1$. 
 
-\end{enumerate}
-
+\end{itemize}
 Since we are primarily interested in inference rather than point estimation in the paper and since the statement \eqref{eq:Uij-conjecture} is merely a conjecture not covered by our theory, we have decided not to discuss this extension in the paper. However, we are happy to do so if you think this is needed. 
  
 
 \item \textit{Some theory question}
 
 \begin{enumerate}[label=(\alph*),leftmargin=0.7cm]
-
 \item \textit{Since the result in Chernozukov et al's Gaussian approximation (GA) does not require the series to be independent cross sectionally, I wonder does that mean the current result can be extended to data with cross-sectional dependence?}
 
 In principle, it should be possible to extend our theory to the case of cross-sectional dependence. As far as we can see, our proof strategy should still go through in this case (even though the technical arguments would of course become more complicated and would need some tweaks here and there). In particular, as you point out, we could still use the Gaussian approximation results of Chernozhukov and coauthors since these do not require cross-sectional dependence. 
@@ -189,11 +187,13 @@ where the term
 \[ C_{ij,T} = 2 \sigma^2 \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \sqrt{\lambda_j\Big(\frac{t}{T}\Big)} \mathbb{E}[\eta_{it} \eta_{jt}] \]
 reflects the cross-sectional dependence in the data. (In the case of no cross-sectional dependence, $C_{ij,T} = 0$.) To construct the test statistic $\hat{\psi}_{ijk,T}$ of the null hypothesis $H_0^{(ijk)}$, we require an estimator of $\text{Var}(\hat{s}_{ijk,T})$. In order to obtain such an estimator in the case of cross-sectional dependence, we need to estimate the additional term $C_{ij,T}$, which requires us to come up with an estimator of the covariance $\mathbb{E}[\eta_{it} \eta_{jt}] = \text{Cov}(\eta_{it},\eta_{jt})$. 
 
-We have added a footnote to p.?? of the paper which briefly mentions that it is in principle possible to allow for cross-sectional dependencies in the data.
+We have added a remark to Section 2 of the paper (see the second bullet point on p.5) which states that it is in principle possible to allow for cross-sectional dependencies in the data.
+
 
 \item \textit{It would be better if the author can derive power under certain alternatives, so that one can get a better idea as how different the trends needs to be in order to be detected.}
 
 As suggested, we have derived the power of the test against a large class of local alternatives. Please see the new Proposition A.1 and its proof in the Appendix as well as the discussion of Proposition A.1 in Section 3.3.
+
 
 \item \textit{The argument about no need for time dependent data is reasonable, just a short comment: there already exists result extending Chernozukov et al's GA to time dependent case, maybe this paper can be further extended to time dependent data as well.}
 
@@ -207,24 +207,29 @@ The results in \cite{Chernozhukov2013} allow to bound the distance
 \[ \sup_{u \in \mathbb{R}} \Big| \mathbb{P} \big( \max_{1 \le k \le p} X_{t,k} \le u \big) - \mathbb{P} \big( \max_{1 \le k \le p} Y_{t,k} \le u \big) \Big| \]
 under the assumption that the variables $X_t$ are independent across $t$. Generalizations to the case of dependent $X_t$'s can be found e.g.\ in \cite{ZhangWu2017} and \cite{ZhangCheng2018}. The more general results in \cite{Chernozhukov2017} allow to bound the distance 
 \[ \sup_{A \in \mathcal{A}} \Big| \mathbb{P} \big( \max_{1 \le k \le p} X_{t,k} \in A \big) - \mathbb{P} \big( \max_{1 \le k \le p} Y_{t,k} \in A \big) \Big| \]
-under the assumption that the variables $X_t$ are independent across $t$, where $\mathcal{A}$ is the class of hyperrectangles in $\mathbb{R}^p$. This is the type of approximation result on which our proofs are based. As already mentioned above, we are not aware of any extension of this type of result to the time dependent case. (If you know of any such extension, we'd be very grateful for the exact reference. With such an extension, we could most probably generalize our results to the time dependent case.) 
-
+under the assumption that the variables $X_t$ are independent across $t$, where $\mathcal{A}$ is the class of hyperrectangles in $\mathbb{R}^p$. This is the type of approximation result on which our proofs are based. As already mentioned above, we are not aware of any extension of this type of result to the time dependent case. (If you know of any such extension, we'd be grateful for the exact reference. With such an extension, we could probably generalize our results to the time dependent case.) 
 \end{enumerate}
 
 
-\item \textit{The specific allowance of $p = |W|$, which is essential in high dimensional analysis, is not mentioned until appendix. Please put them forward in the main context to provide some guidance in application. Also since the convergence speed of Gaussian approximation depends on $T, p$, it would be better to keep the bound in terms of those parameters, so that we know how large the sample size we need in order to obtain the desired accuracy.}
+\item \begin{enumerate}[label=(\alph*),leftmargin=0.7cm]
+\item \textit{The specific allowance of $p = |W|$, which is essential in high dimensional analysis, is not mentioned until appendix. Please put them forward in the main context to provide some guidance in application.}
 
-{\color{red} As proposed, we have added a discussion of the dimensionality of the simultaneous test problem $p$ in the beginning of Section 3. However, since the precise conditions on the growth rate of $p$ depend heavily on the assumptions that are not stated in the main body of the paper, we deferred the mathematical formula of the growth rate of $p$ in terms of the sample size $T$ to the Appendix.
-
-...
-
-I think that he means that we should get rid of $h_{\min}$ in some of our technical results and rewrite everything in terms of $T$ and $p$. I do not think that this is a good idea:
-
-...
+As you propose, we have added more details on the dimension $p$ to the beginning of Section 3 (see the last few sentences before Subsection 3.1). In particular, we briefly outline the conditions on the growth of $p$ in terms of the time series length $T$. 
+%As noted there, $p$ may grow as a polynomial of $T$ whose degree depends on the number of error moments $\theta$ and the minimal interval length $h_{\min}$. 
+However, since the precise conditions on the growth of $p$ cannot be stated without reference to the technical assumptions in the Appendix, we have deferred the mathematically exact formulation of the conditions on $p$ to the Appendix (see p.??). 
 
 
-The test that we propose together with the critical values and the rate of convergence of the Gaussian approximation heavily depends on the family of (rescaled) time intervals $\mathcal{F}$ which can vary a lot in different applications. Even though the minimal and the maximal lengths of the intervals in this family are bounded in terms of the sample size, the exact choice of those length can influence the results. For this reason, we have decided not to rewrite the bounds in terms of only $T$ and $p$, but to keep $h_{\min}$ there as well.
-} 
+\item \textit{Also since the convergence speed of Gaussian approximation depends on $T, p$, it would be better to keep the bound in terms of those parameters, so that we know how large the sample size we need in order to obtain the desired accuracy.}
+
+We are not completely sure whether we fully understand your comment. Do you suggest formulating the bounds in the Appendix in terms of $p$ and $T$ only? That is, do you suggest replacing the quantities $h_{\min}$ and $h_{\max}$ in some of the bounds by $p$ and $T$? Even though this is of course possible, we are a bit reluctant to do so: The bounds are formulated such that they explicitly give the interplay between the time series length $T$, the number of test problems $p$, the minimal interval length $h_{\min}$ and the maximal interval length $h_{\max}$. By imposing restrictions on $h_{\min}$ and $h_{\max}$ in terms of $T$ (in particular, the restrictions from Theorem A.1 that $h_{\max} = o(1/\log T)$ and $h_{\min} = C T^{-b}$ for some $b \in (0,1)$), we ensure that the bounds converge to $0$ sufficiently fast. We could of course plug the restrictions on $h_{\min}$ and $h_{\max}$ directly into the bounds. However, this would make them less informative in our opinion. For this reason, we have decided not to rewrite the bounds. We hope you are fine with this decision. 
+\end{enumerate}
+
+%{\color{red} As proposed, we have added a discussion of the dimensionality of the simultaneous test problem $p$ in the beginning of Section 3. However, since the precise conditions on the growth rate of $p$ depend heavily on the assumptions that are not stated in the main body of the paper, we deferred the mathematical formula of the growth rate of $p$ in terms of the sample size $T$ to the Appendix.
+%...
+%I think that he means that we should get rid of $h_{\min}$ in some of our technical results and rewrite everything in terms of $T$ and $p$. I do not think that this is a good idea:
+%...
+%The test that we propose together with the critical values and the rate of convergence of the Gaussian approximation heavily depends on the family of (rescaled) time intervals $\mathcal{F}$ which can vary a lot in different applications. Even though the minimal and the maximal lengths of the intervals in this family are bounded in terms of the sample size, the exact choice of those length can influence the results. For this reason, we have decided not to rewrite the bounds in terms of only $T$ and $p$, but to keep $h_{\min}$ there as well.
+%} 
 
 
 \end{enumerate}
@@ -245,7 +250,11 @@ Thank you very much for the constructive and useful suggestions. In our revision
 
 \item \textit{The assumption of independence across countries may be debatable, but it seems that in the context of the model, this could be tested, so this may be worth mentioning.}
 
+We briefly mention that it is in principle possible to test this assumption and give some references to tests for independence in the third bullet point on p.5 (Section 2).
+
 {\color{red} There is a test based on the integrated square difference between the joint PDF and the marginal PDFs. The result is proven in Ahmad and Li 'Testing symmetry of an unknown density function by kernel method' (1997). Do you want me to add this test to the discussion in the paper?} 
+
+{\color{blue} Is this a test for independence? Looks like they are testing for symmetry properties rather than independence ... Could you add some references on tests for independence? There is some discussion on this in Li \& Racine, Nonparametric Econometrics, Chapter 12.4.1. Moreover, I have found this overview article: Herwartz \& Maxand, Nonparametric Tests for Independence -- A Review and Comparative Simulation Study with an Application to Malnutrition Data in India. (Don't know though whether it's useful ...)}
 
 
 \item \textit{Some arguments may be worth further details in the text. For instance, the equation involving} $\hat{s}_{ijk,T} / \sqrt{T h_k}$ \textit{on Page 2 Line 7, or the bound for} $|r_{it}|$ \textit{on Page 2 Line -5.}
@@ -269,7 +278,7 @@ As suggested, we have replaced the "cp." abbreviation by "e.g." / "see".
 
 
 
-\newpage
+%\newpage
 \bibliographystyle{ims}
 {\small
 \setlength{\bibsep}{0.45em}
