@@ -61,7 +61,7 @@
 There are many questions surrounding the current COVID-19 pandemic that are not well understood yet. A question which is particularly important for governments and policy makers is the following: How do the outbreak patterns of COVID-19 compare across countries? Are the time trends of daily new infections more or less the same across countries, or is the virus spreading differently in different regions of the world? Identifying differences between countries may help, for instance, to better understand which government policies have been more effective in containing the virus than others. The main aim of this paper is to develop new inference methods that allow to detect differences between time trends of COVID-19 infections in a statistically rigorous way.  
 
 
-Let $\X_{it}$ be the number of new infections on day $t$ in country $i$ and suppose we observe a sample of data $\mathcal{\X}_i = \{ \X_{it}: 1 \le 1 \le T \}$ for $n$ different countries $i$. In order to make the data comparable across countries, we take the starting date $t=1$ to be the first Monday after reaching $100$ confirmed case in each country. Considering the dates after reaching a certain level of confirmed cases is a common practice of ``normalizing'' the data \citep[see e.g.][]{Cohen2020}. Starting on a Monday additionally aligns the data across countries by the day of the week. This allows us to take care of possible weekly cycles in the data which are produced by delays in reporting new cases over the weekend. A simple way to model the count data $\X_{it}$ is to use a Poisson distribution. Specifically, we may assume that the random variables $\X_{it}$ are Poisson distributed with time-varying intensity parameter $\lambda_i(t/T)$, that is, $\X_{it} \sim P_{\lambda_i(t/T)}$. Since $\lambda_i(t/T) = \ex[\X_{it}] = \var(\X_{it})$, we can model the observations $\X_{it}$ by the nonparametric regression equation 
+Let $\X_{it}$ be the number of new infections on day $t$ in country $i$ and suppose we observe a sample of data $\mathcal{\X}_i = \{ \X_{it}: 1 \le t \le T \}$ for $n$ different countries $i$. In order to make the data comparable across countries, we take the starting date $t=1$ to be the first Monday after reaching $100$ confirmed cases in each country. Considering the dates after reaching a certain level of confirmed cases is a common practice of ``normalizing'' the data \citep[see e.g.][]{Cohen2020}. Starting on a Monday additionally aligns the data across countries by the day of the week. This allows us to take care of possible weekly cycles in the data which are produced by delays in reporting new cases over the weekend. A simple way to model the count data $\X_{it}$ is to use a Poisson distribution. Specifically, we may assume that the random variables $\X_{it}$ are Poisson distributed with time-varying intensity parameter $\lambda_i(t/T)$, that is, $\X_{it} \sim P_{\lambda_i(t/T)}$. Since $\lambda_i(t/T) = \ex[\X_{it}] = \var(\X_{it})$, we can model the observations $\X_{it}$ by the nonparametric regression equation 
 \begin{equation}\label{eq:model-intro}
 \X_{it} = \lambda_i\Big(\frac{t}{T}\Big) + u_{it} 
 \end{equation}
@@ -106,7 +106,7 @@ Poisson and quasi-Poisson models are often used in the literature on epidemic mo
 
 In order to derive our theoretical results, we impose the following regularity conditions on model \eqref{eq:model}:
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.0cm]
-\item \label{C2} The functions $\lambda_i$ are uniformly Lipschitz continuous, that is, $|\lambda_i(u) - \lambda_i(v)| \le L |u-v|$ for all $u, v \in [0,1]$, where the constant $L$ does not depend on $i$. Moreover, they are uniformly bounded away from zero and infinity, that is, there exist constants $\lambda_{\min}$ and $\lambda_{\max}$ with $0 \le \lambda_{\min} \le \min_{w \in [0,1]} \lambda_i(w) \le \max_{w \in [0,1]} \lambda_i(w) \le \lambda_{\max} < \infty$ for all $i$. 
+\item \label{C2} The functions $\lambda_i$ are uniformly Lipschitz continuous, that is, $|\lambda_i(u) - \lambda_i(v)| \le L |u-v|$ for all $u, v \in [0,1]$, where the constant $L$ does not depend on $i$. Moreover, they are uniformly bounded away from zero and infinity, that is, there exist constants $\lambda_{\min}$ and $\lambda_{\max}$ with $0 < \lambda_{\min} \le \min_{w \in [0,1]} \lambda_i(w) \le \max_{w \in [0,1]} \lambda_i(w) \le \lambda_{\max} < \infty$ for all $i$. 
 \item \label{C1} The random variables $\eta_{it}$ are independent both across $i$ and $t$. Moreover, for any $i$ and $t$, it holds that $\ex[\eta_{it}] = 0$, $\ex[\eta_{it}^2] = 1$ and $\ex[|\eta_{it}|^\theta] \le C_\theta < \infty$ for some $\theta > 4$. 
 \end{enumerate}
 We briefly comment on the above conditions. 
@@ -125,7 +125,7 @@ We briefly comment on the above conditions.
 \section{The multiscale test}\label{sec:test}
 
 
-Let $\pairs \subseteq \{ (i,j): 1 \le i < j \le n \}$ be the set of all pairs of countries $(i,j)$ whose trend functions $\lambda_i$ and $\lambda_j$ we want to compare. Moreover, as already introduced above, let $\intervals = \{ \mathcal{I}_k: 1 \le k \le K \}$ be the family of (rescaled) time intervals under consideration. Finally, write $\indexset := \pairs \times \{1,\ldots,K\}$ and let $p := |\indexset|$ be the cardinality of $\indexset$. In this section, we devise a method to test the null hypothesis $H_0^{(ijk)}$ simultaneously for all pairs of countries $(i,j) \in \pairs$ and all time intervals $\mathcal{I}_k \in \intervals$, that is, for all $(i,j,k) \in \indexset$. The value $p = |\indexset|$ is the dimensionality of the simultaneous test problem we are dealing with. It amounts to the number of tests that we carry out simultaneously. As shown by our theoretical results in the Appendix, $p$ may grow as a polynomial $T^{\gamma}$ of the time series length $T$, where the exponent $\gamma$ depends on the number of error moments $\theta$ defined in \ref{C1} and on the minimal length of the rescaled time intervals in the family $\intervals$. Precise conditions on the exponent $\gamma$ are given in the statement of Theorem \ref{theo1}. These conditions in particular show that $\gamma$ can be very large provided that the error terms have sufficiently many moments $\theta$. Consequently, $p$ may be much larger than the time series length $T$, which means that the simultaneous test problem under consideration can be very high-dimensional. 
+Let $\pairs \subseteq \{ (i,j): 1 \le i < j \le n \}$ be the set of all pairs of countries $(i,j)$ whose trend functions $\lambda_i$ and $\lambda_j$ we want to compare. Moreover, as already introduced above, let $\intervals = \{ \mathcal{I}_k: 1 \le k \le K \}$ be the family of (rescaled) time intervals under consideration. Finally, write $\indexset := \pairs \times \{1,\ldots,K\}$ and let $p := |\indexset|$ be the cardinality of $\indexset$. In this section, we devise a method to test the null hypothesis $H_0^{(ijk)}$ simultaneously for all pairs of countries $(i,j) \in \pairs$ and all time intervals $\mathcal{I}_k \in \intervals$, that is, for all $(i,j,k) \in \indexset$. The value $p = |\indexset|$ is the dimensionality of the simultaneous test problem we are dealing with. It amounts to the number of tests that we carry out simultaneously. As shown by our theoretical results in the Appendix, $p$ may grow as a polynomial $T^{\gamma}$ of the time series length $T$, where the exponent $\gamma$ depends on the number of error moments $\theta$ defined in \ref{C1} and on the minimal length of the rescaled time intervals in the family $\intervals$. Precise conditions on the exponent $\gamma$ are given in the statement of Theorem \ref{theo1}. These conditions show that $\gamma$ can be very large provided that the error terms have sufficiently many moments $\theta$. Consequently, $p$ may be much larger than the time series length $T$, which means that the simultaneous test problem under consideration can be very high-dimensional. 
 
 
 \subsection{Construction of the test statistics}\label{subsec:test:test}
@@ -168,11 +168,11 @@ r_{it} = \lambda_i\Big(\frac{t}{T}\Big) - \lambda_i\Big(\frac{t-1}{T}\Big) + \si
 By the triangle inequality and since $\lambda_i$ is Lipschitz continuous, we have that
 \begin{align}
 |r_{it}| & \le \Big| \lambda_i\Big(\frac{t}{T}\Big) - \lambda_i\Big(\frac{t-1}{T}\Big)\Big| +  \sigma \bigg| \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} - \sqrt{\lambda_i\Big(\frac{t-1}{T}\Big)} \bigg| |\eta_{it-1}| \nonumber \\
-& \le \frac{L}{T}  + \frac{L}{2 \sigma \sqrt{\lambda_{\min}} T} |\eta_{it-1}| \le \frac{C (1 + |\eta_{it-1}|)}{T}, \label{eq:idea-sigmahat-2}
+& \le \frac{L}{T}  + \frac{\sigma L}{2 \sqrt{\lambda_{\min}} T} |\eta_{it-1}| \le \frac{C (1 + |\eta_{it-1}|)}{T}, \label{eq:idea-sigmahat-2}
 \end{align}
-where $C = \max\{L, L / (2 \sigma \sqrt{\lambda_{\min}})\}$ with $L$ and $\lambda_{\min}$ defined in \ref{C1}. From \eqref{eq:idea-sigmahat-1} and \eqref{eq:idea-sigmahat-2}, we can infer that 
+where $C = \max\{L, \sigma L / (2 \sqrt{\lambda_{\min}})\}$ with $L$ and $\lambda_{\min}$ defined in \ref{C2}. From \eqref{eq:idea-sigmahat-1} and \eqref{eq:idea-sigmahat-2}, we can infer that 
 \[ \frac{1}{T} \sum_{t=2}^T (\X_{it} - \X_{it-1})^2 = 2 \sigma^2 \bigg\{ \frac{1}{T} \sum_{t=2}^T \lambda_i\Big(\frac{t}{T}\Big) \bigg\} + o_p(1). \]
-Moreover, since $T^{-1} \sum_{t=1}^T \X_{it} = T^{-1} \sum_{t=1}^T \lambda_i(t/T) + o_p(1)$, we get that $\hat{\sigma}_i^2 = \sigma^2 + o_p(1)$ for any $i$, which suggests that $\hat{\sigma}^2 = \sigma^2 + o_p(1)$ as well. In Lemma \ref{lemmaS1} of the Supplementary Material, we formally show that $\hat{\sigma}^2$ is a consistent estimator of $\sigma^2$ under our regularity conditions. 
+Moreover, since $T^{-1} \sum_{t=1}^T \X_{it} = T^{-1} \sum_{t=1}^T \lambda_i(t/T) + o_p(1)$, we get that $\hat{\sigma}_i^2 = \sigma^2 + o_p(1)$ for any fixed $i$. In Lemma \ref{lemmaS1} of the Supplement, we further show that $\hat{\sigma}^2 = \sigma^2 + o_p(1)$ under our regularity conditions. Hence, $\hat{\sigma}^2$ is a consistent estimator of $\sigma^2$. 
 
 
 We now replace the statistic $\hat{s}_{ijk,T}$ by a normalized version whose variance is approximately equal to $1$. To achieve this, we simply divide $\hat{s}_{ijk,T}$ by its estimated standard deviation $\hat{\nu}_{ijk,T}$. This results in the expression 
@@ -183,7 +183,7 @@ which serves as our test statistic of the hypothesis $H_0^{(ijk)}$. In addition 
 \begin{equation}\label{eq:stat0}
 \hat{\psi}_{ijk,T}^0 = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \, \sigma \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\eta_{it} - \eta_{jt})}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} + \X_{jt}) \}^{1/2}}
 \end{equation}
-with $\overline{\lambda}_{ij}(u) = \{ \lambda_i(u) + \lambda_j(u) \}/2$, which by construction is identical to $\hat{\psi}_{ijk,T}$ under $H_0^{(ijk)}$. This statistic is needed to define the critical values of our multiscale test in what follows.
+with $\overline{\lambda}_{ij}(u) = \{ \lambda_i(u) + \lambda_j(u) \}/2$, which by construction is identical to $\hat{\psi}_{ijk,T}$ under $H_0^{(ijk)}$. This auxiliary statistic is needed to define the critical values of our multiscale test in what follows.
 
 
 
@@ -196,16 +196,17 @@ where $c_{ijk,T}(\alpha)$ is the critical value for the $(i,j,k)$-th test proble
 \begin{align*}
 \text{FWER}(\alpha) 
  & = \pr \Big( \exists (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| > c_{ijk,T}(\alpha) \Big) \\
- & =  1 - \pr \Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{ijk,T}(\alpha) \Big) \\
- & = 1 - \pr\Big( \max_{(i,j,k) \in \indexset_0} |\hat{\psi}_{ijk,T}| \le c_{ijk,T}(\alpha) \Big), 
+ & =  1 - \pr \Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{ijk,T}(\alpha) \Big),
 \end{align*}
 where $\indexset_0 \subseteq \indexset$ is the set of triples $(i,j,k)$ for which $H_0^{(ijk)}$ holds true.  
 
 
 There are different ways to construct critical values $c_{ijk,T}(\alpha)$ that ensure control of the FWER at level $\alpha$. In the traditional approach, the same critical value $c_T(\alpha) = c_{ijk,T}(\alpha)$ is used for all $(i,j,k)$. In this case, controlling the FWER at the level $\alpha$ requires to determine the critical value $c_T(\alpha)$ such that
-\begin{equation}\label{eq:FWER-tilde}
-\text{FWER}(\alpha) = 1 - \pr\Big( \max_{(i,j,k) \in \indexset_0} |\hat{\psi}_{ijk,T}| \le c_T(\alpha) \Big) \le \alpha. 
-\end{equation}
+\begin{align}
+\text{FWER}(\alpha) 
+ & =  1 - \pr \Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_T(\alpha) \Big) \nonumber \\
+ & = 1 - \pr\Big( \max_{(i,j,k) \in \indexset_0} |\hat{\psi}_{ijk,T}| \le c_T(\alpha) \Big) \le \alpha. \label{eq:FWER-tilde}
+\end{align}
 This can be achieved by choosing $c_T(\alpha)$ as the $(1-\alpha)$-quantile of the statistic 
 \[ \tilde{\Psi}_T = \max_{(i,j,k) \in \indexset} |\hat{\psi}_{ijk,T}^0|, \]
 where the auxiliary statistic $\hat{\psi}_{ijk,T}^0$ was introduced in \eqref{eq:stat0} and is equal to $\hat{\psi}_{ijk,T}$ under the null $H_0^{(ijk)}$ by construction.\footnote{Note that both the statistic $\tilde{\Psi}_T$ and the quantile $c_T(\alpha)$ depend on the dimensionality $p$ of the test problem in general. To keep the notation simple, we however suppress this dependence throughout the paper. We use the same convention for all other quantities that are defined in the sequel.} 
@@ -243,7 +244,6 @@ where $Z_{it}$ are independent standard normal random variables for $1 \le t \le
 can be regarded as a Gaussian version of the statistic $\hat{\Psi}_T$. We approximate the unknown quantile $q_T(\alpha)$ by the $(1-\alpha)$-quantile $q_{T,\text{Gauss}}(\alpha)$ of $\Phi_T$, which can be computed (approximately) by Monte Carlo simulations and can thus be treated as known. 
 
 
-\pagebreak[4]
 To summarize, we propose the following procedure to simultaneously test the hypothesis $H_0^{(ijk)}$ for all $(i,j,k) \in \indexset$ at the significance level $\alpha \in (0,1)$: 
 \begin{equation}\label{eq:test}
 \text{For each } (i,j,k) \in \indexset, \text{ reject } H_0^{(ijk)} \text{ if } |\hat{\psi}_{ijk,T}| > c_{T,\text{Gauss}}(\alpha,h_k),
@@ -275,7 +275,7 @@ Hence, the test allows us to make simultaneous confidence statements (a) about w
 
 According to \eqref{eq:simconfstat}, our test does not produce any false positives with high probability. In addition, we would like the test not to produce any false negatives either. Put differently, we would like the test to have high power against deviations from the null. 
 %According to \eqref{eq:simconfstat}, the following holds true with high probability: If our test detects a deviation from the null $H_0^{(ijk)}$, then $H_0^{(ijk)}$ is indeed violated. In addition, we would like the following to hold true with high probability: If $H_0^{(ijk)}$ is violated, then our test detects this deviation from the null. Put differently, we would like our test to be as powerful as possible. 
-In Proposition \ref{prop1} in the Appendix, we derive the power properties of the test against a certain class of local alternatives. To summarize, we can show the following: Let $\lambda_{i}= \lambda_{i, T}$ and $\lambda_j =\lambda_{j, T}$ be functions whose difference $\lambda_{i,T} - \lambda_{j,T}$ converges to zero as $T \to \infty$. Moreover, let $\mathcal{M}_1$ be the set of triples $(i,j,k)$ such that either
+In Proposition \ref{prop1} in the Appendix, we derive the power properties of the test against a certain class of local alternatives. To summarize, we show the following: Let $\lambda_{i}= \lambda_{i, T}$ and $\lambda_j =\lambda_{j, T}$ be functions whose difference $\lambda_{i,T} - \lambda_{j,T}$ converges to zero as $T \to \infty$. Moreover, let $\mathcal{M}_1$ be the set of triples $(i,j,k)$ such that either
 \begin{equation}\label{loc-alt-1}
 \lambda_{i, T}(w) - \lambda_{j, T}(w) \ge \kappa_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k} 
 \end{equation}
@@ -290,13 +290,12 @@ where $\{\kappa_T\}$ is any sequence of positive numbers which diverges at a fas
 Hence, the test detects any local deviation from the null of the form \eqref{loc-alt-1} or \eqref{loc-alt-2} with probability tending to $1$. 
 
 
-
 \subsection{Implementation of the test in practice}\label{subsec:test:implementation}
 
 
 For a given significance level $\alpha \in (0,1)$, the test procedure defined in \eqref{eq:test} is implemented as follows in practice: 
 \begin{enumerate}[label=\textit{Step \arabic*.}, leftmargin=1.45cm]
-\item Compute the quantile $q_{T,\text{Gauss}}(\alpha)$ by Monte Carlo simulations. Specifically, draw a large number $N$ (say $N=5000$) samples of independent standard normal random variables $\{Z_{it}^{(\ell)} : 1 \le t \le T, \, 1 \le i \le n \}$ for $1 \le \ell \le N$. Compute the value $\Phi_T^{(\ell)}$ of the Gaussian statistic $\Phi_T$ for each sample $\ell$ and calculate the empirical $(1-\alpha)$-quantile $\hat{q}_{T,\text{Gauss}}(\alpha)$ from the values $\{ \Phi_T^{(\ell)}: 1 \le \ell \le N \}$. Use $\hat{q}_{T,\text{Gauss}}(\alpha)$ as an approximation of the quantile $q_{T,\text{Gauss}}(\alpha)$. 
+\item Compute the quantile $q_{T,\text{Gauss}}(\alpha)$ by Monte Carlo simulations. Specifically, draw a large number $N$ (say $N=5000$) of samples of independent standard normal random variables $\{Z_{it}^{(\ell)} : 1 \le t \le T, \, 1 \le i \le n \}$ for $1 \le \ell \le N$. Compute the value $\Phi_T^{(\ell)}$ of the Gaussian statistic $\Phi_T$ for each sample $\ell$ and calculate the empirical $(1-\alpha)$-quantile $\hat{q}_{T,\text{Gauss}}(\alpha)$ from the values $\{ \Phi_T^{(\ell)}: 1 \le \ell \le N \}$. Use $\hat{q}_{T,\text{Gauss}}(\alpha)$ as an approximation of the quantile $q_{T,\text{Gauss}}(\alpha)$. 
 \item Compute the critical values $c_{T,\text{Gauss}}(\alpha,h_k)$ for $1 \le k \le K$ based on the approximation $\hat{q}_{T,\text{Gauss}}(\alpha)$.
 \item Carry out the test for each $(i,j,k) \in \indexset$ and store the test results in the variable $r_{ijk,T} = \ind( |\hat{\psi}_{ijk,T}| > c_{T,\text{Gauss}}(\alpha,h_k))$ for each $(i,j,k) \in \indexset$, that is, let $r_{ijk,T} = 1$ if the hypothesis $H_0^{(ijk)}$ is rejected and $r_{ijk,T} = 0$ otherwise. 
 \end{enumerate}
@@ -306,6 +305,11 @@ To graphically present the test results, we produce a plot for each pair of coun
 
 
 According to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals in $\intervals_{\text{reject}}(i,j)$ for $(i,j) \in \pairs$: 
+\pagebreak[4]
+
+\phantom{Upper margin}
+\vspace{-1.5cm}
+
 \begin{equation}\label{eq:confidencestatement3}
 \begin{minipage}[c][1.75cm][c]{13cm}
 \textit{With (asymptotic) probability at least $1-\alpha$, it holds that for every pair of countries $(i,j) \in \pairs$, the functions $\lambda_i$ and $\lambda_j$ differ on each interval in $\intervals_{\text{reject}}(i,j)$.} 
@@ -361,7 +365,7 @@ In the first part of the simulation study, we examine whether our test controls 
 which is similar in shape to some of the estimated trend curves in the application of Section \ref{subsec:app}. A plot of the function $\lambda$ is provided in Figure \ref{fig:lambda}. To evaluate whether the test controls the FWER at level $\alpha$, we compare the empirical size of the test with the target $\alpha$. The empirical size is computed as the precentage of simulation runs in which the test falsely rejects at least one null hypothesis $H_0^{(ijk)}$.
 
 
-The simulation results are reported in Table \ref{tab:sim:size}. As can be seen, the empirical size gives a reasonable approximation to the target $\alpha$ in all scenarios under investigation, even though the size numbers have a slight downward bias. This bias gets larger as the number of time series $n$ increases, which reflects the fact that the test problem becomes more difficult for larger $n$. Already for $n=5$, the number $p$ of hypotheses to be tested is quite high, in particular, $p = 960, 2\,680, 5\,560$ for $T=100,250,500$. This number increases to $p=117\,600, 328\,300, 681\,100$ when $n=50$. Hence, the dimensionality and thus the complexity of the test problem increases considerably as $n$ gets larger. On first sight, it may seem astonishing that the downward bias does not diminish notably as the time series length $T$ increases. This, however, has a simple explanation: The interval lengths $h_k$ remain the same ($7$, $14$, $21$ or $28$ days) as $T$ increases, which implies that the effective sample size for computing the test statistics $\hat{\psi}_{ijk,T}$ does not change as well. To summarize, even though slightly conservative, the test controls the FWER quite accurately in the simulation setting at hand. 
+The simulation results are reported in Table \ref{tab:sim:size}. As can be seen, the empirical size gives a reasonable approximation to the target $\alpha$ in all scenarios under investigation, even though the size numbers have a slight downward bias. This bias gets larger as the number of time series $n$ increases, which reflects the fact that the test problem becomes more difficult for larger $n$. Already for $n=5$, the number $p$ of hypotheses to be tested is quite high, in particular, $p = 960, 2\,680, 5\,560$ for $T=100,250,500$. This number increases to $p=117\,600, 328\,300, 681\,100$ when $n=50$. Hence, the dimensionality and thus the complexity of the test problem increases considerably as $n$ gets larger. On first sight, it may seem astonishing that the downward bias does not diminish notably as the time series length $T$ increases. This, however, has a simple explanation: The interval lengths $h_k$ remain the same ($7$, $14$, $21$ or $28$ days) as $T$ increases, which implies that the effective sample size for computing the test statistics $\hat{\psi}_{ijk,T}$ does not change. To summarize, even though slightly conservative, the test controls the FWER quite accurately in the simulation setting at hand. 
 
 
 \begin{table}[t!]
@@ -460,7 +464,7 @@ There are many open questions surrounding the current COVID-19 pandemic. A quest
 \subsubsection{Data}
 
 
-We analyze data from five European countries: Germany, Italy, Spain, France and the United Kingdom. For each country $i$, we observe a time series $\mathcal{X}_i = \{ X_{it}: 1 \le t \le T \}$, where $X_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available on the homepage of the European Center for Disease Prevention and Control (\texttt{https://www.ecdc.europa.eu}) and were downloaded on 2 February 2021.\footnote{ECDC switched to a weekly reporting schedule for the COVID-19 situation on 17 December 2020. Hence, all daily updates have been discontinued from 14 December. The downloaded daily data set presents historical data until 14 December 2020.} As already mentioned in the Introduction, we take the first Monday after reaching $100$ confirmed cases in each country as the starting date $t=1$. Beginning the time series of each country on the day when that country reached $100$ confirmed cases is a common way of ``normalizing'' the data \citep[e.g.][]{Cohen2020}. Additionally aligning the data by Monday allows to take care of possible weekly cycles in the data which are produced by delays in reporting new cases over the weekend. The time series length $T$ is taken to be equal to $150$, which covers the first wave of the pandemic in all of the considered countries. The resulting dataset thus consists of $n = 5$ time series, each with $T = 150$ observations. Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in $4$ replacements. Plots of the observed time series are presented in the upper panels (a) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}. As a robustness check, we have repeated the analysis for the longer time span $T=200$. The results are reported in Section \ref{s:subsec:app:3} of the Supplement.
+We analyze data from five European countries: Germany, Italy, Spain, France and the United Kingdom. For each country $i$, we observe a time series $\mathcal{X}_i = \{ X_{it}: 1 \le t \le T \}$, where $X_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available on the homepage of the European Center for Disease Prevention and Control (\texttt{https://www.ecdc.europa.eu}) and were downloaded on 2 February 2021.\footnote{ECDC switched to a weekly reporting schedule for the COVID-19 situation on 17 December 2020. Hence, all daily updates have been discontinued from 14 December. The downloaded daily data set presents historical data until 14 December 2020.} As already mentioned in the Introduction, we take the first Monday after reaching $100$ confirmed cases in each country as the starting date $t=1$. Beginning the time series of each country on the day when that country reached $100$ confirmed cases is a common way of ``normalizing'' the data \citep[see e.g.][]{Cohen2020}. Additionally aligning the data by Monday allows to take care of possible weekly cycles in the data which are produced by delays in reporting new cases over the weekend. The time series length $T$ is taken to be equal to $150$, which covers the first wave of the pandemic in all of the considered countries. The resulting dataset thus consists of $n = 5$ time series, each with $T = 150$ observations. Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in $4$ replacements. Plots of the observed time series are presented in the upper panels (a) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}. As a robustness check, we have repeated the data analysis for the longer time span $T=200$. The results are reported in Section \ref{s:subsec:app:3} of the Supplement.
 
 
 To interpret the results produced by our multiscale test, we consider the Government Response Index (GRI) from the Oxford COVID-19 Government Response Tracker (OxCGRT) \citep{Hale2020}. The GRI measures how severe the actions are that are taken by a country's government to contain the virus. It is calculated based on several common government policies such as school closures and travel restrictions. The GRI ranges from $0$ to $100$, with $0$ corresponding to no response from the government at all and $100$ corresponding to full lockdown, closure of schools and workplaces, ban on travelling, etc. Detailed information on the collection of the data for government responses and the methodology for calculating the GRI is provided in \cite{Hale2020paper}. Plots of the GRI time series are given in panels (c) of Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}.
@@ -515,7 +519,7 @@ Taken together, our results provide evidence that the epidemic developed very si
 A quite different picture arises when Germany is compared with Spain and France. As can be seen in Figures \ref{fig:Germany:Spain} and \ref{fig:Germany:France}, the test detects significant differences between the German trend and the trends in Spain and France up to (approximately) day $50$. This indicates that the time trends evolved differently during the outbreak of the crisis. However, the test does not find any differences in the time period between (approximately) days $50$ and $120$. The trends thus appear to decrease in more or less the same fashion after the first peak was reached. As can be seen in Figure \ref{fig:Germany:Spain}, the test detects additional differences between the German and Spanish trends after day $120$. This reflects the fact that the number of daily new cases in Spain picked up again after day $120$, foreshadowing the second wave, whereas the numbers in Germany were still quite stable. 
 
 
-Finally, the comparison of Germany with the UK in Figure \ref{fig:Germany:UK} reveals significant differences between the time trends in the period from (approximately) day $40$ to $120$. Similar to the comparison with Italy in Figure \ref{fig:Germany:Italy}, this indicates that the trend decays in a different fashion in Germany than in the UK after a first peak was reached. However, we do not find any significant differences between the trends during the onset of the pandemic.
+Finally, the comparison of Germany with the UK in Figure \ref{fig:Germany:UK} reveals significant differences between the time trends in the period from (approximately) day $40$ to $120$. Similar to the comparison with Italy in Figure \ref{fig:Germany:Italy}, this indicates that the trend decayed in a different fashion in Germany than in the UK after a first peak was reached. However, we do not find any significant differences between the trends during the onset of the pandemic.
 
 
 \subsubsection{Discussion}
@@ -550,7 +554,7 @@ In what follows, we state and prove the main theoretical results on the multisca
 
 The first result shows that the multiscale test asymptotically controls the FWER at level $\alpha$.
 \begin{theoremA}\label{theo1}
-Let \ref{C2} and \ref{C1} be satisfied. Moreover, assume that (i) $h_{\max} = o(1/\log T)$, (ii) $h_{\min} \ge CT^{-b}$ for some $b \in (0,1)$, and (iii) $p = O(T^{(\theta/2)(1-b)-(1+\delta)})$ for some small $\delta > 0$. Then for any given $\alpha \in (0,1)$,
+Let \ref{C2} and \ref{C1} be satisfied. Moreover, assume that (i) $h_{\max} = o(1/\{\log T\}^2)$, (ii) $h_{\min} \ge CT^{-b}$ for some $b \in (0,1)$, and (iii) $p = O(T^{(\theta/2)(1-b)-(1+\delta)})$ for some small $\delta > 0$. Then for any given $\alpha \in (0,1)$,
 \[ \textnormal{FWER}(\alpha) := \pr \Big( \exists (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \le \alpha + o(1), \]
 where $\indexset_0 \subseteq \indexset$ is the set of all $(i,j,k) \in \indexset$ for which $H_0^{(ijk)}$ holds true. 
 \end{theoremA}
@@ -569,7 +573,7 @@ where $\mathcal{R} = \{ (i,j,k) \in \indexset$ with $|\hat{\psi}_{ijk,T}| > c_{T
 
 The next result specifies the power of the multiscale test against a certain class of local alternatives. To formulate it, we allow the functions $\lambda_{i, T}$ and $\lambda_{j, T}$ to depend on $T$, that is, we consider sequences of functions $\{\lambda_{i, T}\}$ and $\{\lambda_{j, T}\}$ rather than fixed functions $\lambda_i$ and $\lambda_j$. 
 \begin{propA}\label{prop1}
-Let the conditions of Theorem \ref{theo1} be satisfied and let $\mathcal{M}_1$ be the set of triples $(i,j,k)$ such that either
+Let the conditions of Theorem \ref{theo1} be satisfied and let $\mathcal{M}_1$ be the set of triples $(i,j,k) \in \indexset$ such that either
 \begin{equation}\label{loc-alternative-1}
 \lambda_{i, T}(w) - \lambda_{j, T}(w) \ge \kappa_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k} 
 \end{equation}
@@ -579,7 +583,7 @@ or
 \end{equation}
 where $\{\kappa_T\}$ is any sequence of positive numbers for which $\kappa_T / \ell_T \to \infty$ with $\ell_T = \sqrt{\log T} \sqrt{\log \log T} / \log \log \log T$. Then 
 \[ \pr\Big( \forall (i,j,k) \in \indexset_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1) \]
-for any given $\alpha \in (0, 1)$. 
+for any given $\alpha \in (0, 1)$.
 \end{propA}
 
 
@@ -675,9 +679,9 @@ the last line following from \eqref{eq:kolmogorov-distance}. Finally, by Nazarov
 \begin{align} 
  & \sup_{q \in \reals} \Big| \pr \Big( \Phi_T \le q + (-1)^\ell r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| \nonumber \\
  & = \sup_{q \in \reals} \Big| \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{c}(q + (-1)^\ell r_T) \Big) - \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{c}(q) \Big) \Big| \nonumber \\
- & \le C r_T \sqrt{\log(2 p)}, \label{eq:step3:c}
+ & \le C \frac{r_T \sqrt{\log(2 p)}}{\min_{1 \le k \le K} a_k} \le C r_T \sqrt{\log \log T} \sqrt{\log (2p)}, \label{eq:step3:c}
 \end{align}
-where $C$ is a constant that depends only on the parameter $\delta$ defined in condition (a) of Proposition \ref{prop:Chernozhukov}. Inserting \eqref{eq:step3:b} and \eqref{eq:step3:c} into equation \eqref{eq:step3:a} completes the proof of \eqref{eq:kolmogorov-distance-hat}.
+where $C$ is a constant that depends only on the parameter $\delta$ defined in condition (a) of Proposition \ref{prop:Chernozhukov} and we have used the fact that $\min_k a_k \ge c / \sqrt{\log \log T}$ for some $c > 0$. Inserting \eqref{eq:step3:b} and \eqref{eq:step3:c} into equation \eqref{eq:step3:a} completes the proof of \eqref{eq:kolmogorov-distance-hat}.
 
 
 \item By definition of the quantile $q_{T,\text{Gauss}}(\alpha)$, it holds that $\pr(\Phi_T \le q_{T,\text{Gauss}}(\alpha)) \ge 1-\alpha$. As shown in the Supplementary Material, we even have that  
@@ -705,15 +709,14 @@ This completes the proof of Theorem \ref{theo1}. \qedhere
 
 
 \begin{proof}[\textnormal{\textbf{Proof of Corollary \ref{corollary1}.}}]
-By Theorem \ref{theo1}, 
+With the help of Theorem \ref{theo1}, we obtain that 
 \begin{align*}
 1 - \alpha + o(1) 
  & \le 1 - \textnormal{FWER}(\alpha) \\
- & = \pr \Big( \nexists (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \\
-& = \pr\Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big),
-% & = \pr\Big( \forall (i,j,k) \in \indexset: \text{ If } |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k), \text{ then } (i,j,k) \notin \indexset_0 \Big),
+ & = \pr\Big( \forall (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| \le c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \\
+ & \le \pr\Big( \forall (i,j,k) \in \mathcal{R}: (i,j,k) \notin \mathcal{M}_0 \Big),
 \end{align*}
-which gives the statement of Corollary \ref{corollary1}.
+which is the statement of Corollary \ref{corollary1}.
 \end{proof}
 
 
@@ -755,14 +758,14 @@ with a sufficiently large constant $C$, since
 where the last inequality is a consequence of the fact that the terms $\phi_{ijk, T}$ are normally distributed random variables and $|\mathcal{M}| = p \le C T^\gamma$. From \eqref{eq:bound-psi}, \eqref{eq:bound-q} and the assumption that $\kappa_T/\ell_T \to \infty$, we can finally conclude that
 \begin{align*}
 \pr\Big( & \forall (i,j,k) \in \indexset_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) \\
-& = \pr\Big( \min_{(i,j,k) \in \indexset_1} \big\{a_k (|\hat{\psi}_{ijk,T}| - b_k \big\} > q_{T,\textnormal{Gauss}}(\alpha) \Big) = 1 - o(1), 
+& = \pr\Big( \min_{(i,j,k) \in \indexset_1} a_k \big(|\hat{\psi}_{ijk,T}| - b_k\big) > q_{T,\textnormal{Gauss}}(\alpha) \Big) = 1 - o(1), 
 \end{align*}
 which is the statement of Proposition \ref{prop1}.  
 
 
 It remains to prove \eqref{eq:bound-psiB} and \eqref{eq:bound-psiA}. From \eqref{eq:approxerror:claim1:infer1} in the Supplementary Material together with some straightforward arguments, it follows that for any fixed $\delta > 0$,
 \begin{align}
-\min_{(i,j,k) \in \indexset_1} \Big\{ \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it} + \X_{jt}) \Big\} & \ge (2 + \delta) \lambda_{\min} \label{eq:bounds-psi-1} \\
+\min_{(i,j,k) \in \indexset} \Big\{ \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it} + \X_{jt}) \Big\} & \ge (2 - \delta) \lambda_{\min} \label{eq:bounds-psi-1} \\
 \max_{(i,j,k) \in \indexset} \Big\{ \frac{1}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (\X_{it} + \X_{jt}) \Big\} & \le (2 + \delta) \lambda_{\max} \label{eq:bounds-psi-2}
 \end{align}
 with probability tending to $1$. Since $\hat{\sigma}^2 = \sigma^2 + O_p(\sqrt{\log p/T})$ by Lemma \ref{lemmaS1}, it further holds that with probability tending to $1$, 
@@ -771,7 +774,7 @@ with probability tending to $1$. Since $\hat{\sigma}^2 = \sigma^2 + O_p(\sqrt{\l
 \end{equation}
 for any fixed $\delta > 0$. Taking into account that for any $(i,j,k) \in \indexset_1$, either $\lambda_{i, T}(w) - \lambda_{j, T}(w) \ge \kappa_T \sqrt{\log T / (T h_{k})}$ or $\lambda_{j, T}(w) - \lambda_{i, T}(w) \ge \kappa_T \sqrt{\log T / (T h_{k})}$ for all $w \in \mathcal{I}_{k}$, we can use \eqref{eq:bounds-psi-2} and \eqref{eq:bounds-psi-3} to obtain that 
 \begin{equation*}
-\hat{\psi}_{ijk,T}^B \ge \frac{\kappa_T\sqrt{\log T}}{(1+\delta) \sigma \sqrt{ (2+\delta) \lambda_{\max}}} = C\kappa_T\sqrt{\log T}
+\min_{(i,j,k) \in \indexset_1} \big| \hat{\psi}_{ijk,T}^B \big| \ge \frac{\kappa_T\sqrt{\log T}}{(1+\delta) \sigma \sqrt{ (2+\delta) \lambda_{\max}}} = C\kappa_T\sqrt{\log T}
 \end{equation*}
 with probability tending to $1$. Moreover, with the help of \eqref{eq:bounds-psi-1}, \eqref{eq:bounds-psi-3} and analogous arguments as for the proof of \eqref{eq:approxerror:claim2} in the Supplementary Material, we can show that
 \begin{equation*}
@@ -915,14 +918,14 @@ The claim \eqref{eq:approxerror:claim1} follows from \eqref{eq:approxerror:claim
 
 \begin{proof}[\textnormal{\textbf{Proof of (\ref{eq:quant-exact}).}}]
 The proof is by contradiction. Suppose that \eqref{eq:quant-exact} does not hold true, that is, $\pr(\Phi_T \le q_{T,\text{Gauss}}(\alpha)) = 1-\alpha + \xi$ for some $\xi > 0$. By Nazarov's inequality, 
-\begin{equation*}
-\pr \big(\Phi_T \le q_{T,\text{Gauss}}(\alpha)\big) - \pr\big(\Phi_T \le q_{T,\text{Gauss}}(\alpha) - \eta\big) \le C \eta \sqrt{\log (2p)} 
-\end{equation*}
-for any $\eta > 0$ with $C$ depending only on the parameter $\delta$ specified in condition (a) of Proposition \ref{prop:Chernozhukov}. Hence, 
+\begin{align*}
+\pr \big(\Phi_T \le q_{T,\text{Gauss}}(\alpha)\big) - \pr\big(\Phi_T \le q_{T,\text{Gauss}}(\alpha) - \eta\big) & \le C \frac{\eta \sqrt{\log (2p)}}{\min_{1 \le k \le K} a_k} \\ & \le C \eta \sqrt{\log \log T} \sqrt{\log(2p)} 
+\end{align*}
+for any $\eta > 0$, where the last inequality uses the fact that $\min_k a_k \ge c / \sqrt{\log \log T}$ for some $c > 0$. Hence, 
 \begin{align*}
 \pr \big(\Phi_T \le q_{T,\text{Gauss}}(\alpha) - \eta\big) 
- & \ge \pr\big(\Phi_T \le q_{T,\text{Gauss}}(\alpha) \big) - C \eta \sqrt{\log(2p)} \\
- & = 1-\alpha + \xi - C \eta \sqrt{\log(2p)} > 1-\alpha
+ & \ge \pr\big(\Phi_T \le q_{T,\text{Gauss}}(\alpha) \big) - C \eta \sqrt{\log \log T} \sqrt{\log(2p)} \\
+ & = 1-\alpha + \xi - C \eta \sqrt{\log \log T} \sqrt{\log(2p)} > 1-\alpha
 \end{align*}
 for $\eta > 0$ sufficiently small. This contradicts the definition of the quantile $q_{T,\text{Gauss}}(\alpha)$ according to which $q_{T,\text{Gauss}}(\alpha) = \inf_{q \in \reals} \{ \pr(\Phi_T \le q) \ge 1-\alpha \}$. 
 \end{proof}
@@ -930,23 +933,23 @@ for $\eta > 0$ sufficiently small. This contradicts the definition of the quanti
 
 Finally, as announced in Section \ref{subsec:test:implementation}, we formally show that the union of minimal intervals $U_{ij} = \cup_{\mathcal{I} \in \intervals_{\text{reject}}^{\text{min}}(i,j)} \mathcal{I}$ is closely related to the set of time points $U_{ij}^* = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \}$ where $\lambda_i$ and $\lambda_j$ differ. We consider the following scenario: 
 \begin{enumerate}[label=(\alph*),leftmargin=0.75cm]
-\item We let $(i,j)$ be a fixed pair of countries whose trend functions $\lambda_i$ and $\lambda_j$ do not depend on $T$. Hence, unlike in Proposition \ref{prop1}, we consider a fixed rather than a local alternative. 
+\item We let $(i,j)$ be a fixed pair of countries whose trend functions $\lambda_i$ and $\lambda_j$ do not depend on $T$. Hence, unlike in Proposition \ref{prop1}, we consider fixed rather than local alternatives. 
 \item We suppose that the family of intervals $\mathcal{F}$ has the structure
 \begin{align} 
-\mathcal{F} = \big\{ [u, u + h] \subseteq [0,1]: \ & u = k h_{\min} \text{ for some } k=0,\ldots,h_{\min}^{-1} \text{ and } \nonumber \\
+\mathcal{F} = \big\{ [u, u + h] \subseteq [0,1]: \ & u = k h_{\min} \text{ for some } k=0,\ldots,h_{\min}^{-1}-1 \text{ and } \nonumber \\
  & h = 2^\ell h_{\min} \text{ for some } \ell = 1,\ldots,L \big\}, \label{eq:F-specific}
 \end{align}
-where $h_{\min}$ is chosen such that $h_{\min}^{-1}$ is an even natural number. The family $\mathcal{F}$ consists of the intervals $[0,h_{\min}]$, $[h_{\min}, 2h_{\min}]$, $[2h_{\min}, 3h_{\min}], \ldots$ and unions thereof. Note that we could allow for more general families $\mathcal{F}$. Nevertheless, we work with the specific structure \eqref{eq:F-specific} to keep the technical arguments as simple as possible. 
+where $h_{\min}$ is chosen such that $h_{\min}^{-1}$ is a natural number. The family $\mathcal{F}$ consists of the intervals $[0,h_{\min}]$, $[h_{\min}, 2h_{\min}]$, $[2h_{\min}, 3h_{\min}], \ldots$ and unions thereof. Note that we could allow for more general families $\mathcal{F}$. We nevertheless work with the specific structure \eqref{eq:F-specific} to keep the technical arguments as simple as possible. 
 \end{enumerate}
-We can now prove the following lemma in this scenario.
+We can prove the following lemma in this scenario.
 \begin{lemmaS}\label{lemma:union-min-ints}
-Under the conditions of Theorem \ref{theo1}, it holds that 
+Let the conditions of Theorem \ref{theo1} be satisfied and let $\alpha \in (0,1)$ be given. Then 
 \begin{equation*}
 \pr \big( \Delta(U_{ij}, U_{ij}^*) \le C \rho_T \big) \ge 1-\alpha + o(1), 
 \end{equation*}
-where $\Delta(U_{ij},U_{ij}^*) = \mathcal{L} \{(U_{ij} \setminus U_{ij}^*) \cup (U_{ij} \setminus U_{ij}^*)\}$ is the Lebesgue measure $\mathcal{L}$ of the symmetric difference between the two sets $U_{ij}$ and $U_{ij}^*$. Moreover, $\rho_T = \max \{ \bar{h}, \kappa_T \linebreak \sqrt{\log T / (T h_{\min})} \}$, where $\bar{h}$ is the largest interval length in the set $\mathcal{F}_{\text{reject}}^{\text{min}}(i,j)$ and $\{\kappa_T\}$ is any sequence of positive numbers such that $\kappa_T / \ell_T \to \infty$ with $\ell_T = \sqrt{\log T} \linebreak \sqrt{\log \log T} / \log \log \log T$. 
+where $\Delta(U_{ij},U_{ij}^*) = \mathcal{L} \{(U_{ij} \setminus U_{ij}^*) \cup (U_{ij}^* \setminus U_{ij})\}$ is the Lebesgue measure $\mathcal{L}$ of the symmetric difference between the two sets $U_{ij}$ and $U_{ij}^*$ and $\{\rho_T\}$ is a null sequence of positive numbers. 
 \end{lemmaS}
-\noindent Since $\rho_T$ converges to $0$ as $T \to \infty$ under the conditions of Theorem \ref{theo1}, Lemma \ref{lemma:union-min-ints} essentially says that the difference between $U_{ij}$ and $U_{ij}^*$ is small ($\le C\rho_T = o(1)$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $U_{ij}$ can be regarded as an approximation of $U_{ij}^*$. 
+\noindent Since $\rho_T$ converges to $0$ as $T \to \infty$, Lemma \ref{lemma:union-min-ints} essentially says that the difference between $U_{ij}$ and $U_{ij}^*$ is small ($\le C\rho_T = o(1)$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $U_{ij}$ can be regarded as an approximation of $U_{ij}^*$. 
 
 
 \begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{lemma:union-min-ints}.}}]
@@ -955,13 +958,16 @@ Let
 and define the two collections of intervals 
 \begin{align*}
 \mathcal{C}^< & = \big\{ \mathcal{I} \in \mathcal{F}: \ell(\mathcal{I}) = h_{\min} \text{ and } \mathcal{I} \subseteq U_{ij}^{*,\text{int}} \big\} \\
-\mathcal{C}^> & = \big\{ \mathcal{I} \in \mathcal{F}: \ell(\mathcal{I}) = \bar{h} \text{ and } \mathcal{J} \subseteq \mathcal{I} \text{ for some } \mathcal{J} \in \mathcal{F}_{\text{reject}}(i,j) \big\},
+\mathcal{C}^> & = \big\{ \mathcal{I} \in \mathcal{F}: \ell(\mathcal{I}) = \bar{h} \text{ and } \mathcal{J} \subseteq \mathcal{I} \text{ for some } \mathcal{J} \in \mathcal{F}_{\text{reject}}^{\min}(i,j) \big\},
 \end{align*}
 where $\ell(\mathcal{I})$ denotes the length of the interval $\mathcal{I} \subseteq [0,1]$. In what follows, we examine the two sets of time points 
 \[ U_{ij}^< = \bigcup_{\mathcal{I} \in \mathcal{C}^<} \mathcal{I} \quad \text{and} \quad U_{ij}^> = \bigcup_{\mathcal{I} \in \mathcal{C}^>} \mathcal{I}. \]
 \begin{enumerate}[label=(\roman*),leftmargin=0.75cm]
-\item By Proposition \ref{prop1}, it holds that $\pr(\mathcal{C}^< \subseteq \mathcal{F}_{\text{reject}}(i,j)) \to 1$, which implies that $U_{ij}^< \subseteq U_{ij}$  with probability tending to $1$. Moreover, straightforward arguments yield that $\Delta(U_{ij}^<,U_{ij}^*) \le C \kappa_T \sqrt{\log T / (T h_{\min})}$ with some sufficiently large constant $C$. 
-\item By construction, it holds that $U_{ij} \subseteq U_{ij}^>$. By Theorem \ref{theo1}, we further have that $\mathcal{F}_{\text{reject}}(i,j) \cap \{ \mathcal{I} \in \intervals: \mathcal{I} \cap U_{ij}^* = \emptyset \} = \emptyset$ with probability at least $1-\alpha +o(1)$. From this, it follows that $\Delta(U_{ij}^>,U_{ij}^*) \le C \bar{h}$ with probability at least $1-\alpha + o(1)$.
+\item By Proposition \ref{prop1}, it holds that $\pr(\mathcal{C}^< \subseteq \mathcal{F}_{\text{reject}}^{\min}(i,j)) \to 1$, which implies that $U_{ij}^< \subseteq U_{ij}$  with probability tending to $1$. Moreover, straightforward arguments yield that $\Delta(U_{ij}^<,U_{ij}^*) \le C \xi_T$ with some null sequence $\{\xi_T\}$ and some sufficiently large constant $C$. 
+\item By construction, it holds that $U_{ij} \subseteq U_{ij}^>$. 
+Moreover, $\mathcal{L}(U_{ij}^> \setminus U_{ij}^*) \le C \bar{h}$ with probability at least $1-\alpha+o(1)$, since $\mathcal{F}_{\text{reject}}^{\min}(i,j) \cap \{ \mathcal{I} \in \intervals: \mathcal{I} \cap U_{ij}^* = \emptyset \} = \emptyset$ with probability at least $1-\alpha +o(1)$ by Theorem \ref{theo1}.
+In addition, $\mathcal{L}(U_{ij}^* \setminus U_{ij}^>) \le \mathcal{L}(U_{ij}^* \setminus U_{ij}^<) \le \Delta(U_{ij}^<, U_{ij}^*) \le C \xi_T$ with probability tending to $1$ by (i). 
+As a consequence, $\Delta(U_{ij}^>, U_{ij}^*) \le C \max\{ \xi_T, \bar{h} \}$ with probability at least $1-\alpha+o(1)$. 
 \end{enumerate}
 To summarize, we have found that 
 \begin{equation*}
@@ -969,9 +975,9 @@ To summarize, we have found that
 \end{equation*}
 and 
 \begin{equation*}
-\pr \Big( \max \big\{ \Delta(U_{ij}^<,U_{ij}^*), \Delta(U_{ij}^>,U_{ij}^*) \big\}  \le C \rho_T \Big) \ge 1-\alpha + o(1).
+\pr \Big( \max \big\{ \Delta(U_{ij}^<,U_{ij}^*), \Delta(U_{ij}^>,U_{ij}^*) \big\}  \le C \rho_T \Big) \ge 1-\alpha + o(1),
 \end{equation*}
-Taken together, these two statements imply that 
+where we set $\rho_T = \max \{ \xi_T, \bar{h} \} = o(1)$. Taken together, these two statements imply that 
 \[ \pr \big( \Delta(U_{ij},U_{ij}^*) \le C \rho_T \big) \ge 1-\alpha + o(1). \qedhere \]
 \end{proof}
 
@@ -1104,6 +1110,7 @@ $T = 100$ & 0.438 & 0.636 & 0.704 & 0.404 & 0.598 & 0.669 & 0.277 & 0.449 & 0.52
 
 
 
+\FloatBarrier
 \section{Additional graphs for Section \ref{subsec:app}}\label{s:subsec:app}
 
 
@@ -1155,24 +1162,24 @@ Here, we provide the pairwise comparisons between Italy, France, Spain and the U
 \label{s:subsec:app:3}
 
 
-To check the robustness of the empirical results from Section \ref{subsec:app}, we compare the time trends of the same five European countries (Germany, Italy, France, Spain and the UK) over a longer time span. Specifically, we take $T=200$ as opposed to $T = 150$ in Section \ref{subsec:app}. The analysis is performed in the same way as in Section \ref{subsec:app}. The results are displayed in Figures \ref{fig:supp3:first} - \ref{fig:supp3:last},  which have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}. 
+To check the robustness of the empirical results from Section \ref{subsec:app}, we compare the time trends of the same five European countries (Germany, Italy, France, Spain and the UK) over a longer time span. Specifically, we take $T=200$ as opposed to $T = 150$ in Section \ref{subsec:app}. The analysis is performed in the same way as in Section \ref{subsec:app}. The results are displayed in Figures \ref{fig:supp3:first}--\ref{fig:supp3:last},  which have the same format as Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK}. 
 
 
-As is clearly visible in the figures, the data for Spain have extremely high volatility towards the end of the observation period between days $150$ and $200$. At least partly, this is presumably due to repeated delays in reporting. Such delays explain why the number of daily new cases is $0$ on multiple occasions followed by a sharp increase of the numbers on the next day. This spuriously high day-to-day volatility of the data heavily influences the precision of the estimator $\hat{\sigma}$. Specifically, we can expect $\hat{\sigma}$ to strongly overestimate $\sigma$. Indeed, we get $\hat{\sigma} = 29.7$ when estimating $\sigma$ with $T=200$ compared to $\hat{\sigma} = 14.82$ with $T = 150$. Higher values of $\hat{\sigma}$ result in lower values of the test statistics, which leads to more conservative results of the test procedure. As a consequence, Figures \ref{fig:supp3:first} -- \ref{fig:supp3:last} differ drastically from Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK} and \ref{fig:France:Italy}--\ref{fig:France:UK}. 
+As is clearly visible in the figures, the data for Spain have extremely high volatility towards the end of the observation period between days $150$ and $200$. At least partly, this is presumably due to repeated delays in reporting. Such delays explain why the number of daily new cases is $0$ on multiple occasions followed by a sharp increase of the numbers on the next day. This spuriously high day-to-day volatility of the data heavily influences the precision of the estimator $\hat{\sigma}$. Specifically, we can expect $\hat{\sigma}$ to strongly overestimate the true underlying $\sigma$. Indeed, we get $\hat{\sigma} = 29.7$ when estimating $\sigma$ with $T=200$ compared to $\hat{\sigma} = 14.82$ with $T = 150$. Higher values of $\hat{\sigma}$ result in lower values of the test statistics, which leads to more conservative results of the test procedure. As a consequence, Figures \ref{fig:supp3:first}--\ref{fig:supp3:last} differ drastically from Figures \ref{fig:Germany:Italy}--\ref{fig:Germany:UK} and \ref{fig:France:Italy}--\ref{fig:France:UK}. 
 
 
-Since the Spanish data between days $150$ and $200$ are most probably inaccurate and can thus not be taken at face value\footnote{Note that the high day-to-day volatility is present not only in the data set of the European Center for Disease Prevention and Control, which underlies our analysis, but also in the data sets provided by the World Health Organization and by John Hopkins University.}, we exclude Spain from our analysis and repeat the multiscale test for only four European countries: Germany, Italy, France and the UK. The results are presented in Figures \ref{fig:supp3:first2}--\ref{fig:supp3:last2}. As can be seen, the test is much less conservative and the results are much more consistent with those in Section \ref{subsec:app}. Specifically, for each pair of countries $(i, j)$, the set $\intervals_{\text{reject}}(i, j)$ constructed for the longer time period $T = 200$ contains almost all elements from the set $\intervals_{\text{reject}}(i, j)$ constructed for the shorter time period $T = 150$. Hence, the test finds devations from the null hypothesis up to day $T=150$ on virtually the same intervals, no matter whether the overall time series length is $T=150$ or $T=200$. This shows that the test produces robust results that are barely influenced by the overall length of the time series. 
+Since the Spanish data between days $150$ and $200$ are most probably inaccurate and can thus not be taken at face value\footnote{Note that the high day-to-day volatility is present not only in the data set of the European Center for Disease Prevention and Control, which underlies our analysis, but also in the data sets provided by the World Health Organization and by John Hopkins University.}, we exclude Spain from our analysis and repeat the multiscale test with $T=200$ for only four European countries: Germany, Italy, France and the UK. The results are presented in Figures \ref{fig:supp3:first2}--\ref{fig:supp3:last2}. As can be seen, the test is much less conservative and the results are much more consistent with those in Section \ref{subsec:app}. Specifically, for each pair of countries $(i, j)$, the set $\intervals_{\text{reject}}(i, j)$ constructed for the longer time period $T = 200$ contains very similar intervals as the set $\intervals_{\text{reject}}(i, j)$ constructed for the shorter time period $T = 150$. Hence, the test finds devations from the null hypothesis up to day $T=150$ on essentially the same intervals, no matter whether the overall time series length is $T=150$ or $T=200$. This shows that the test produces robust results that are barely influenced by the overall length of the time series. 
 
 
 \begin{figure}[h!]
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/DEU_vs_ITA_long}
-\caption{Test results for the comparison of Germany and Italy on the longer time period.}\label{fig:supp3:first}
+\caption{Test results for the comparison of Germany and Italy ($T=200$).}\label{fig:supp3:first}
 \end{minipage}
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/DEU_vs_ESP_long}
-\caption{Test results for the comparison of Germany and Spain on the longer time period.}
+\caption{Test results for the comparison of Germany and Spain ($T=200$).}
 \end{minipage}
 \end{figure}
 
@@ -1180,26 +1187,25 @@ Since the Spanish data between days $150$ and $200$ are most probably inaccurate
 \begin{figure}[h!]
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/DEU_vs_FRA_long}
-\caption{Test results for the comparison of Germany and France on the longer time period.}
+\caption{Test results for the comparison of Germany and France ($T=200$).}
 \end{minipage}
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/DEU_vs_GBR_long}
-\caption{Test results for the comparison of Germany and the UK on the longer time period.}
+\caption{Test results for the comparison of Germany and the UK ($T=200$).}
 \end{minipage}
 \end{figure}
-
 
 
 \begin{figure}[h!]
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/FRA_vs_ITA_long}
-\caption{Test results for the comparison of France and Italy on the longer time period.}
+\caption{Test results for the comparison of France and Italy ($T=200$).}
 \end{minipage}
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/GBR_vs_ITA_long}
-\caption{Test results for the comparison of the UK and Italy on the longer time period.}
+\caption{Test results for the comparison of the UK and Italy ($T=200$).}
 \end{minipage}
 \end{figure}
 
@@ -1207,12 +1213,12 @@ Since the Spanish data between days $150$ and $200$ are most probably inaccurate
 \begin{figure}[p!]
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/ESP_vs_ITA_long}
-\caption{Test results for the comparison of Spain and Italy on the longer time period.}
+\caption{Test results for the comparison of Spain and Italy ($T=200$).}
 \end{minipage}
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/ESP_vs_GBR_long}
-\caption{Test results for the comparison of Spain and the UK on the longer time period.}
+\caption{Test results for the comparison of Spain and the UK ($T=200$).}
 \end{minipage}
 \end{figure}
 
@@ -1220,12 +1226,12 @@ Since the Spanish data between days $150$ and $200$ are most probably inaccurate
 \begin{figure}[p!]
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/ESP_vs_FRA_long}
-\caption{Test results for the comparison of Spain and France on the longer time period.}
+\caption{Test results for the comparison of Spain and France ($T=200$).}
 \end{minipage}
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/FRA_vs_GBR_long}
-\caption{Test results for the comparison of France and the UK on the longer time period.}\label{fig:supp3:last}
+\caption{Test results for the comparison of France and the UK ($T=200$).}\label{fig:supp3:last}
 \end{minipage}
 \end{figure}
 
@@ -1233,12 +1239,12 @@ Since the Spanish data between days $150$ and $200$ are most probably inaccurate
 \begin{figure}[h!]
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/DEU_vs_ITA_four_countries}
-\caption{Test results for the comparison of Germany and Italy on the longer time period excluding Spain.}\label{fig:supp3:first2}
+\caption{Test results for the comparison of Germany and Italy excluding Spain ($T=200$).}\label{fig:supp3:first2}
 \end{minipage}
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/DEU_vs_FRA_four_countries}
-\caption{Test results for the comparison of Germany and France on the longer time period excluding Spain.}
+\caption{Test results for the comparison of Germany and France excluding Spain ($T=200$).}
 \end{minipage}
 \end{figure}
 
@@ -1246,26 +1252,25 @@ Since the Spanish data between days $150$ and $200$ are most probably inaccurate
 \begin{figure}[h!]
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/DEU_vs_GBR_four_countries}
-\caption{Test results for the comparison of Germany and the UK on the longer time period excluding Spain.}
+\caption{Test results for the comparison of Germany and the UK excluding Spain ($T=200$).}
 \end{minipage}
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/FRA_vs_ITA_four_countries}
-\caption{Test results for the comparison of France and Italy on the longer time period excluding Spain.}
+\caption{Test results for the comparison of France and Italy excluding Spain ($T=200$).}
 \end{minipage}
 \end{figure}
-
 
 
 \begin{figure}[h!]
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/GBR_vs_ITA_four_countries}
-\caption{Test results for the comparison of the UK and Italy on the longer time period excluding Spain.}
+\caption{Test results for the comparison of the UK and Italy excluding Spain ($T=200$).}
 \end{minipage}
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{plots/FRA_vs_GBR_four_countries}
-\caption{Test results for the comparison of France and the UK on the longer time period excluding Spain.}\label{fig:supp3:last2}
+\caption{Test results for the comparison of France and the UK excluding Spain ($T=200$).}\label{fig:supp3:last2}
 \end{minipage}
 \end{figure}
 
