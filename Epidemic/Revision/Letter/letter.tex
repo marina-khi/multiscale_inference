@@ -49,13 +49,18 @@ In addition to the improvements proposed by the referees, we have updated the ap
 
 \item As more data on the corona pandemic have become available since the initial submission of the paper, we have slightly increased the time series length from $T=139$ to the round number $T=150$, which covers the first wave of the pandemic in all of the considered countries. As a robustness check, we have additionally run the test on longer time series of $T=200$ days. The results of this robustness check are reported in Section S.4 of the Supplementary Material. 
 
-\item In the previous version of the paper, we took the starting date $t=1$ to be the day of the $100$th confirmed case in each country. In the revision, we have slightly changed the definition of the starting date $t=1$ to be the first Monday after reaching $100$ confirmed cases in each country. We have made this change (which was suggested to us by a seminar participant) since there is a strong weekly cycle in the data (presumably due to many unreported cases over the weekend which are reported with delay on Monday). To eliminate possible effects of this weekly cycle, we have aligned the days of the week across countries by starting each time series on a Monday. 
+\item In the previous version of the paper, we took the starting date $t=1$ to be the day of the $100$th confirmed case in each country. In the revision, we have slightly changed the definition of the starting date $t=1$ to be the first Monday after reaching $100$ confirmed cases in each country. We have made this change (which was suggested to us by a seminar participant) since there is a weekly cycle in the data (presumably due to many unreported cases over the weekend which are reported with delay during the week). To eliminate possible effects of this weekly cycle on our test results, we have aligned the days of the week across countries by starting each time series on a Monday. 
 
-Comparing the old and new data analysis in Section 4.2, one can see that the results are virtually the same for most countries. Only the pairwise comparisons including the UK are somewhat different. Consider e.g.\ Figures S.2 in the previous and the revised version of the supplement: Without the new Monday alignment (old version of Fig.\ S.2), the raw data in the UK and Italy up to approx.\ day $40$ appear to have a somewhat different trending behaviour, which is picked up by our test. With the Monday alignment (new version of Fig.\ S.2), the raw data look much more similar over the first $40$ days and our test does not find any deviation from the null up to day $40$. This suggests that not aligning the data by the day of the week may produce some spurious differences across countries. Setting the starting date to be a Monday in each country should take care of this issue. 
+Comparing the old and the new data analysis in Section 4.2, one can see that the results are virtually the same for most countries. Only the pairwise comparisons including the UK are somewhat different. Consider e.g.\ Figure 6 in the previous and the revised version of the paper: Without the new Monday alignment (old version of Fig.\ 6), the test finds differences between the trends in Germany and the UK before day $40$, whereas the test does not find any differences before that day with the new Monday alignment (new version of Fig.\ 6). 
+%aw data in the UK and Italy up to approx.\ day $40$ appear to have a somewhat different trending behaviour, which is picked up by our test. With the Monday alignment (new version of Fig.\ S.2), the raw data look much more similar over the first $40$ days and our test does not find any deviation from the null up to day $40$. 
+This suggests that not aligning the data by the day of the week may produce some spurious differences across countries. Setting the starting date to be a Monday in each country should take care of this issue.
+
+%Comparing the old and new data analysis in Section 4.2, one can see that the results are virtually the same for most countries. Only the pairwise comparisons including the UK are somewhat different. Consider e.g.\ Figures S.2 in the previous and the revised version of the supplement: Without the new Monday alignment (old version of Fig.\ S.2), the raw data in the UK and Italy up to approx.\ day $40$ appear to have a somewhat different trending behaviour, which is picked up by our test. With the Monday alignment (new version of Fig.\ S.2), the raw data look much more similar over the first $40$ days and our test does not find any deviation from the null up to day $40$. This suggests that not aligning the data by the day of the week may produce some spurious differences across countries. Setting the starting date to be a Monday in each country should take care of this issue. 
 
 We hope you agree with us that this additional alignment makes a lot of sense. However, if you want us to, we are of course happy to go back to the previous version of the data analysis without this alignment. 
 
 \end{enumerate}
+Finally, we would like to mention that we have corrected the following minor mistake in the Appendix: we have replaced the technical condition $h_{\max} = o(1/\log T)$ in Theorem A.1 by the corrected version $h_{\max} = o(1/\{\log T\}^2)$. We now come to our point-by-point responses to the referees. 
 
 %\textbf{Generalization of the theoretical results.} We have extended the theoretical results as suggested by Referee 1:
 %\begin{enumerate}[label=(\roman*), leftmargin=0.8cm]
@@ -84,7 +89,9 @@ We hope you agree with us that this additional alignment makes a lot of sense. H
  
 
 
-\newpage
+%\newpage
+\vspace{15pt}
+
 \begin{center}
 {\large \bf Reply to Referee 1} 
 \end{center}
@@ -120,18 +127,19 @@ We would finally like to note that local mean distances are used not only in the
 
 A simple way to aggregate the rejected intervals $\mathcal{I}_k$ for a given pair of countries $(i,j)$ is to consider their union
 \[ V_{ij} = \bigcup_{\mathcal{I} \in \mathcal{F}_{\text{reject}}(i,j)} \mathcal{I}, \]
-where, as in the paper, we let $\mathcal{F}_{\text{reject}}(i,j)$ denote the set of rejected intervals for $(i,j)$. The union $V_{ij}$ is the time span where our test finds differences between the functions $\lambda_i$ and $\lambda_j$. It thus gives a first rough idea about where the trends $\lambda_i$ and $\lambda_j$ differ from each other. There is however one issue with the union $V_{ij}$: If the family $\mathcal{F}$ contains very long intervals and the test finds a deviation from the null on such a long interval, the union $V_{ij}$ will be a very large interval itself and will thus not be very informative about where exactly $\lambda_i$ and $\lambda_j$ differ. Hence, to get a first impression of the test results, it may be better to consider the union 
+where, as in the paper, we let $\mathcal{F}_{\text{reject}}(i,j)$ denote the set of rejected intervals for $(i,j)$. The union $V_{ij}$ is the time span where our test finds differences between the functions $\lambda_i$ and $\lambda_j$. It thus gives a first rough idea about where the trends $\lambda_i$ and $\lambda_j$ differ from each other. There is however one issue with the union $V_{ij}$: If the family $\mathcal{F}$ contains very long intervals and the test finds a deviation from the null on such a long interval, the union $V_{ij}$ will be a very large interval itself and will thus not be very informative about where exactly $\lambda_i$ and $\lambda_j$ differ. Hence, %to get a first impression of the test results, 
+it may be better to consider the union 
 \[ U_{ij} = \bigcup_{\mathcal{I} \in \mathcal{F}_{\text{reject}}^{\min}(i,j)} \mathcal{I} \]
 of minimal intervals, where $\mathcal{F}_{\text{reject}}^{\text{min}}(i,j) = \{ \mathcal{I}_k \in \mathcal{F}_{\text{reject}}(i,j):$  there exists no $\mathcal{I}_{k^\prime} \in \intervals_{\text{reject}}(i,j)$ with $\mathcal{I}_{k^\prime} \subset \mathcal{I}_k \}$ denotes the set of minimal intervals. 
 
-\newpage
+%\newpage
 As shown in the new Lemma S.2 in the Supplementary Material, one can formally relate $U_{ij}$ to the set of time points 
 \[ U_{ij}^* = \{ u \in [0,1]: \lambda_i(u) \ne \lambda_j(u) \} \]
 where $\lambda_i$ and $\lambda_j$ differ from each other. In particular, under certain regularity conditions, we can prove the following result for a given pair of functions $\lambda_i$ and $\lambda_j$: 
 \begin{equation}\label{eq:Uij}
 \pr  \Big( \Delta(U_{ij}, U_{ij}^*) \le C \rho_T \Big) \ge 1-\alpha + o(1), \tag{$*$}
 \end{equation}
-where $\Delta(U_{ij},U_{ij}^*) = \mathcal{L} \{(U_{ij} \setminus U_{ij}^*) \cup (U_{ij}^* \setminus U_{ij})\}$ is the Lebesgue measure of the symmetric difference between the two sets $U_{ij}$ and $U_{ij}^*$ and $\rho_T$ converges to $0$ as $T \to \infty$. According to \eqref{eq:Uij}, the difference between $U_{ij}$ and $U_{ij}^*$ is small ($\le C\rho_T = o(1)$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $U_{ij}$ can be regarded as an approximation of $U_{ij}^*$. 
+where $\Delta(U_{ij},U_{ij}^*) = \mathcal{L} \{(U_{ij} \setminus U_{ij}^*) \cup (U_{ij}^* \setminus U_{ij})\}$ is the Lebesgue measure $\mathcal{L}$ of the symmetric difference between the two sets $U_{ij}$ and $U_{ij}^*$ and $\rho_T$ converges to $0$ as $T \to \infty$. According to \eqref{eq:Uij}, the difference between $U_{ij}$ and $U_{ij}^*$ is small ($\le C\rho_T = o(1)$) with high probability ($\ge 1 -\alpha + o(1)$). In this sense, $U_{ij}$ can be regarded as an approximation of $U_{ij}^*$. 
 
 We have added a brief summary of the above discussion to the end of Section 3.4 of the paper. The new Lemma S.2 and its proof can be found in the Supplement.
 
@@ -198,11 +206,11 @@ As suggested, we have derived the power of the test against a large class of loc
 
 \item \textit{The argument about no need for time dependent data is reasonable, just a short comment: there already exists result extending Chernozhukov et al's GA to time dependent case, maybe this paper can be further extended to time dependent data as well.}
 
-We are aware of extensions of the Gaussian approximation results in \cite{Chernozhukov2013} to the time dependent case. However, we are not aware of any such extensions of the more general Gaussian approximation results in \cite{Chernozhukov2017}, on which our theory is based. 
+We are aware of extensions of the Gaussian approximation results in \cite{Chernozhukov2013} to the time-dependent case. However, we are not aware of any such extensions of the more general Gaussian approximation results in \cite{Chernozhukov2017}, on which our theory is based. 
 
-More specifically, let $x_t = (x_{t,1},\ldots,x_{t,p})^\top$ be $p$-dimensional random vectors for $t=1,\ldots,T$ with $\mathbb{E}[x_t] = 0$ and covariance matrix $\Sigma = \mathbb{E}[x_t x_t^\top]$ and consider the statistics $X = (X_1,\ldots,X_p)^\top$ with
+More specifically, let $x_t = (x_{t,1},\ldots,x_{t,p})^\top$ be $p$-dimensional random vectors for $t=1,\ldots,T$ with $\mathbb{E}[x_t] = 0$ and covariance matrix $\mathbb{E}[x_t x_t^\top]$ and consider the statistics $X = (X_1,\ldots,X_p)^\top$ with
 \[ X_k = \frac{1}{\sqrt{T}} \sum_{t=1}^T x_{t,k}. \]
-Moreover, let $y_t = (y_{t,1},\ldots,y_{t,p})^\top$ be Gaussian versions of $x_t$ in the sense that $y_t \sim N(0,\Sigma)$ and define $Y = (Y_1,\ldots,Y_p)^\top$ with
+Moreover, let $y_t = (y_{t,1},\ldots,y_{t,p})^\top$ be Gaussian versions of $x_t$ in the sense that $y_t \sim N(0,\mathbb{E}[x_t x_t^\top])$ and define $Y = (Y_1,\ldots,Y_p)^\top$ with
 \[ Y_k = \frac{1}{\sqrt{T}} \sum_{t=1}^T y_{t,k}. \]
 The results in \cite{Chernozhukov2013} allow to bound the distance
 \[ \sup_{u \in \mathbb{R}} \Big| \mathbb{P} \Big( \max_{1 \le k \le p} X_k \le u \Big) - \mathbb{P} \Big( \max_{1 \le k \le p} Y_k \le u \Big) \Big| \]
@@ -220,9 +228,10 @@ As you propose, we have added more details on the dimension $p$ to the beginning
 However, since the precise conditions on the growth of $p$ cannot be stated without reference to the technical assumptions in the Appendix, we have deferred the mathematically exact formulation of the conditions on $p$ to the Appendix (see Theorem A.1 and the discussion thereafter on p.24/5). 
 
 
+\newpage
 \item \textit{Also since the convergence speed of Gaussian approximation depends on $T, p$, it would be better to keep the bound in terms of those parameters, so that we know how large the sample size we need in order to obtain the desired accuracy.}
 
-We are not completely sure whether we fully understand your comment. Do you suggest formulating the bounds in the Appendix in terms of $p$ and $T$ only? That is, do you suggest replacing the quantities $h_{\min}$ and $h_{\max}$ in some of the bounds by $p$ and $T$? Even though this is of course possible, we are a bit reluctant to do so: The bounds are formulated such that they explicitly give the interplay between the time series length $T$, the number of test problems $p$, the minimal interval length $h_{\min}$ and the maximal interval length $h_{\max}$. By imposing restrictions on $h_{\min}$ and $h_{\max}$ in terms of $T$ (in particular, the restrictions from Theorem A.1 that $h_{\max} = o(1/\{\log T\}^2)$ and $h_{\min} = C T^{-b}$ for some $b \in (0,1)$), we ensure that the bounds converge to $0$ sufficiently fast. We could of course plug the restrictions on $h_{\min}$ and $h_{\max}$ directly into the bounds. However, this would make them less informative in our opinion. For this reason, we have decided not to rewrite the bounds. We hope you are fine with this decision. 
+We are not completely sure whether we fully understand your comment. Do you suggest formulating the bounds in the Appendix in terms of $p$ and $T$ only? That is, do you suggest replacing the quantities $h_{\min}$ and $h_{\max}$ in some of the bounds by $p$ and $T$? Even though this is of course possible, we are a bit reluctant to do so: The bounds are formulated such that they explicitly give the interplay between the time series length $T$, the number of test problems $p$, the minimal interval length $h_{\min}$ and the maximal interval length $h_{\max}$. By imposing restrictions on $h_{\min}$ and $h_{\max}$ in terms of $T$ (in particular, the restrictions from Theorem A.1 that $h_{\max} = o(1/\{\log T\}^2)$ and $h_{\min} \ge C T^{-b}$ for some $b \in (0,1)$), we ensure that the bounds converge to $0$ sufficiently fast. We could of course plug the restrictions on $h_{\min}$ and $h_{\max}$ directly into the bounds. However, this would make them less informative in our opinion. For this reason, we have decided not to rewrite the bounds. We hope you are fine with this decision. 
 \end{enumerate}
 
 %{\color{red} As proposed, we have added a discussion of the dimensionality of the simultaneous test problem $p$ in the beginning of Section 3. However, since the precise conditions on the growth rate of $p$ depend heavily on the assumptions that are not stated in the main body of the paper, we deferred the mathematical formula of the growth rate of $p$ in terms of the sample size $T$ to the Appendix.
@@ -237,13 +246,15 @@ We are not completely sure whether we fully understand your comment. Do you sugg
 
 
 
-\newpage
+%\newpage
+\vspace{10pt}
+
 \begin{center}
 {\large \bf Reply to Referee 2} 
 \end{center}
 
 
-Thank you very much for the constructive and useful suggestions. In our revision, we have addressed all of them. Here are our point-by-point responses to your comments. 
+Thank you very much for the constructive and useful comments. In our revision, we have addressed all of them. Here are our point-by-point responses to your comments. 
 
 
 \begin{enumerate}[label=(\arabic*),leftmargin=0.7cm]
@@ -261,26 +272,27 @@ As you propose, we briefly mention that it is in principle possible to test this
 
 \item \textit{Some arguments may be worth further details in the text. For instance, the equation involving} $\hat{s}_{ijk,T} / \sqrt{T h_k}$ \textit{on Page 2 Line 7, or the bound for} $|r_{it}|$ \textit{on Page 2 Line -5.}
 
-As suggested, we have added further details on the statistic $\hat{s}_{ijk,T}$ and the bound for $|r_{it}|$ to the text. Please see the revised Section 3.1 for the details. We hope you find the changes appropriate.  
+As suggested, we have added further details on the statistic $\hat{s}_{ijk,T}$ and the bound for $|r_{it}|$ to the text. Please see the revised Section 3.1. We hope you find the changes appropriate.  
 
 
 \item \textit{I am unsure why the statistic in (3.2) is introduced, I feel the discussion in Pages 8-9 could be done without referring to it.}
 
 The statistic $\hat{\psi}_{ijk,T}^0$ introduced in (3.2) is a modification of the test statistic $\hat{\psi}_{ijk,T}$. It is needed to define the critical values $c_T(\alpha,h_k) = b_k + q_T(\alpha) / a_k$ of the multiscale test in Section 3.2. Specifically, $\hat{\psi}_{ijk,T}^0$ is required to define the $(1-\alpha)$-quantile $q_T(\alpha)$ of 
 \[ \hat{\Psi}_T = \max_{(i,j,k) \in \indexset} a_k \big( |\hat{\psi}_{ijk,T}^0| - b_k \big). \]
-For this reason, we have decided not to defer its definition to the Appendix but to introduce it in (3.2) as in the old version of the paper. Otherwise, an important detail of the test would be missing in the main text. We hope you are fine with this. To emphasize that the statistic $\hat{\psi}_{ijk,T}^0$ is required for the definition of the critical values of the multiscale test, we have added the following sentence after its introduction in equation (3.2) (which is equation (3.4) in the revised paper): ``This auxiliary statistic is needed to define the critical values of our multiscale test in what follows''.
+For this reason, we have decided not to defer its definition to the Appendix but to introduce it in Section 3 as in the old version of the paper. Otherwise, an important detail of the test would be missing in the main text. We hope you are fine with this. To emphasize that the statistic $\hat{\psi}_{ijk,T}^0$ is required for the definition of the critical values of the multiscale test, we have added the following sentence after its introduction in equation (3.2) (which is equation (3.4) in the revised paper): ``This auxiliary statistic is needed to define the critical values of our multiscale test in what follows''.
 
 
 \item \textit{The "cp." abbreviation is uncommon, I feel it should be replaced by "see" or "e.g."}
 
-We have replaced the "cp." abbreviation by "e.g." / "see".
+As suggested, we have replaced the "cp." abbreviation by "e.g." / "see".
  
 
 \end{enumerate}
 
 
 
-\newpage
+%\newpage
+\renewcommand\refname{\large References}
 \bibliographystyle{ims}
 {\small
 \setlength{\bibsep}{0.45em}
