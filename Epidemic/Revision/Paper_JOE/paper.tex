@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper,11pt]{article}
 \usepackage{amsmath, bm}
 \usepackage{amssymb,amsthm,graphicx}
 \usepackage{enumitem}
@@ -40,18 +40,20 @@
 
 \vspace{-0.85cm}
 
+\renewcommand{\baselinestretch}{1.2}\normalsize
+
 \renewcommand{\abstractname}{}
 \begin{abstract}
 \noindent The COVID-19 pandemic is one of the most pressing issues at present. A question which is particularly important for governments and policy makers is the following: Does the virus spread in the same way in different countries? Or are there significant differences in the development of the epidemic? In this paper, we devise new inference methods that allow to detect differences in the development of the COVID-19 epidemic across countries in a statistically rigorous way. In our empirical study, we use the methods to compare the outbreak patterns of the epidemic in a number of European countries.
 \end{abstract}
-
-\renewcommand{\baselinestretch}{1.2}\normalsize
 
 \noindent \textbf{Key words:} simultaneous hypothesis testing; multiscale test; time trend; panel data; COVID-19.
 
 \noindent \textbf{JEL classifications:} C12; C23; C54.
 
 %\noindent \textbf{AMS 2010 subject classifications:} 62E20; 62G10; 62G15; 62G20.
+
+\renewcommand{\baselinestretch}{1.5}\normalsize
 
 
 
@@ -305,13 +307,11 @@ To graphically present the test results, we produce a plot for each pair of coun
 
 
 According to \eqref{eq:simconfstat}, we can make the following simultaneous confidence statement about the intervals in $\intervals_{\text{reject}}(i,j)$ for $(i,j) \in \pairs$: 
-\pagebreak[4]
-
-\phantom{Upper margin}
-\vspace{-1.5cm}
-
+%\pagebreak[4]
+%\phantom{Upper margin}
+%\vspace{-1.5cm}
 \begin{equation}\label{eq:confidencestatement3}
-\begin{minipage}[c][1.75cm][c]{13cm}
+\begin{minipage}[c][1cm][c]{13cm}
 \textit{With (asymptotic) probability at least $1-\alpha$, it holds that for every pair of countries $(i,j) \in \pairs$, the functions $\lambda_i$ and $\lambda_j$ differ on each interval in $\intervals_{\text{reject}}(i,j)$.} 
 \end{minipage}
 \end{equation}
@@ -528,7 +528,7 @@ Finally, the comparison of Germany with the UK in Figure \ref{fig:Germany:UK} re
 Having identified significant differences between the epidemic trends in the five countries under consideration, one may ask next what are the causes of these differences. As already mentioned at the beginning of this section, this question cannot be answered by our test. Rather, a further analysis which presumably goes beyond pure statistics is needed to shed some light on it. We here do not attempt to provide any answers. We merely discuss some observations which become apparent upon considering our test results in the light of the Government Response Index (GRI). For reasons of brevity, we focus on the comparison of Germany with Italy and Spain in Figures \ref{fig:Germany:Italy} and \ref{fig:Germany:Spain}. 
 
 
-\pagebreak[4]
+%\pagebreak[4]
 According to our test results in Figure \ref{fig:Germany:Spain}, there are significant differences between the trends in Germany and Spain during the onset of the epidemic up to about day $50$, with Spain having more new cases of infections than Germany on most days. After day $50$, the trends become quite similar and start to decrease at approximately the same rate until around day $120$. This may be due to the fact that Spain in general introduced more severe measures of lockdown than Germany (as can be seen upon inspecting the GRI in panel (c) of Figure \ref{fig:Germany:Spain}), which may have helped to battle the spread of infection. Furthermore, around days $110$--$120$, the measures in Spain were less strict than in Germany, which could be a reason for the detected differences between the trends towards the end of the sample. However, a much more thorough analysis is of course needed to find out whether this is indeed the case or whether other factors were mainly responsible. 
 
 
@@ -581,7 +581,7 @@ or
 \begin{equation}\label{loc-alternative-2}
 \lambda_{j, T}(w) - \lambda_{i, T}(w) \ge \kappa_T \sqrt{\log T / (T h_{k})} \quad \text{for all } w \in \mathcal{I}_{k}, 
 \end{equation}
-where $\{\kappa_T\}$ is any sequence of positive numbers for which $\kappa_T / \ell_T \to \infty$ with $\ell_T = \sqrt{\log T} \sqrt{\log \log T} / \log \log \log T$. Then 
+where $\{\kappa_T\}$ is any sequence of positive numbers for which $\kappa_T / \ell_T \to \infty$ with $\ell_T = \sqrt{\log T} \linebreak \sqrt{\log \log T} / \log \log \log T$. Then 
 \[ \pr\Big( \forall (i,j,k) \in \indexset_1: |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1) \]
 for any given $\alpha \in (0, 1)$.
 \end{propA}
@@ -598,7 +598,7 @@ To start with, we prove that
 \begin{equation}\label{eq:approxerror1}
 \big| \hat{\Psi}_T - \Psi_T \big| = o_p(r_T),
 \end{equation}
-where $\{r_T\}$ is any null sequence that converges more slowly to zero than $\rho_T = \sqrt{\log T} \{ \log p/\sqrt{Th_{\min}} + h_{\max} \sqrt{\log p} \}$, that is, $\rho_T/r_T \rightarrow 0$ as $T \rightarrow \infty$. Since the proof of \eqref{eq:approxerror1} is rather technical and lengthy, the details are provided in the Supplementary Material. 
+where $\{r_T\}$ is any null sequence that converges more slowly to zero than $\rho_T = \sqrt{\log T} \linebreak \{ \log p/\sqrt{Th_{\min}} + h_{\max} \sqrt{\log p} \}$, that is, $\rho_T/r_T \rightarrow 0$ as $T \rightarrow \infty$. Since the proof of \eqref{eq:approxerror1} is rather technical and lengthy, the details are provided in the Supplementary Material. 
 
 
 \item We next prove that 
@@ -612,7 +612,7 @@ V^{(ijk)}_t = V^{(ijk)}_{t,T} := \sqrt{\frac{T}{2Th_k}} \ind\Big(\frac{t}{T} \in
 for $(i,j,k) \in \indexset$ and let $\boldsymbol{V}_t = (V_t^{(ijk)}: (i,j,k) \in \indexset)$ be the $p$-dimensional random vector with the entries $V_t^{(ijk)}$. With this notation, we get that $\psi_{ijk,T}^0 = T^{-1/2} \sum_{t=1}^T V^{(ijk)}_t$ and thus 
 \begin{align*}
 \Psi_T 
- & = \max_{(i,j,k) \in \indexset}  a_k \big( |\psi_{ijk,T}^0| - b_k \big) \\
+ & = \max_{(i,j,k) \in \indexset}  a_k \big( |\psi_{ijk,T}^0| - b_k \big) \\*
  & = \max_{(i,j,k) \in \indexset} a_k \Big\{ \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T V^{(ijk)}_t\Big| - b_k \Big\}.
 \end{align*} 
 Analogously, we define 
@@ -798,6 +798,8 @@ We thank the Editor, the Associate Editor and two referees for their constructiv
 
 
 \newpage
+\renewcommand{\baselinestretch}{1.2}\normalsize
+
 \headingsupplement{Supplement to}{``Nonparametric comparison}{of epidemic time trends:}{the case of COVID-19''}
 \vspace{-0.25cm}
 
@@ -820,7 +822,7 @@ We thank the Editor, the Associate Editor and two referees for their constructiv
 \setcounter{figure}{0}
 \def\thetable{S.\arabic{table}}
 \setcounter{table}{0}
-\renewcommand{\baselinestretch}{1.2}\normalsize
+\renewcommand{\baselinestretch}{1.5}\normalsize
 
 
 
@@ -835,7 +837,7 @@ Under the conditions of Theorem \ref{theo1}, it holds that
 
 
 \begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{lemmaS1}.}}]
-By definition, $\hat{\sigma}^2 = |\countries|^{-1} \sum_{i \in \countries} \hat{\sigma}_i^2$ and $\hat{\sigma}_i^2 = \{\sum_{t=2}^T (\X_{it}-\X_{it-1})^2\}\{2 \sum_{t=1}^T \X_{it}\}^{-1}$. It holds that 
+By definition, $\hat{\sigma}^2 = |\countries|^{-1} \sum_{i \in \countries} \hat{\sigma}_i^2$ and $\hat{\sigma}_i^2 = \{\sum_{t=2}^T (\X_{it}-\X_{it-1})^2\} \linebreak \{2 \sum_{t=1}^T \X_{it}\}^{-1}$. It holds that 
 \begin{equation}\label{eq:approxerror:claim3:expansion}
 \frac{1}{T} \sum\limits_{t=2}^T (X_{it} - X_{it-1})^2 = \frac{\sigma^2}{T} \sum\limits_{t=2}^T \lambda_i\Big(\frac{t}{T}\Big) (\eta_{it} - \eta_{it-1})^2 + \big\{R_{i,T}^{(1)} + \ldots + R_{i,T}^{(5)}\big\},
 \end{equation}
@@ -993,7 +995,10 @@ where we set $\rho_T = \max \{ \xi_T, \bar{h} \} = o(1)$. Taken together, these 
 In this section, we supplement the simulation experiments of Section \ref{subsec:sim} by some robustness checks. Specifically, we repeat the experiments with different values of the overdispersion parameter $\sigma$. The larger we choose $\sigma$, the more noise we put on top of the time trend, that is, on top of the underlying signal. Hence, by varying $\sigma$, we can assess how sensitive our test is to changes in the noise-to-signal ratio. We first repeat the size simulations for $\sigma = 10$ and $\sigma = 20$. The results are presented in Tables \ref{s:tab:sim:size:1} and \ref{s:tab:sim:size:2}, respectively. As can be seen, the empirical size numbers are very similar to those for $\sigma=15$ in Table \ref{tab:sim:size}. We next rerun the power simulations for $\sigma = 10$ and $\sigma = 20$, where we consider the two Scenarios A and B as in Section \ref{subsec:sim}. The results can be found in Tables \ref{s:tab:sim:power:1}, \ref{s:tab:sim:power:3}, \ref{s:tab:sim:power:2} and \ref{s:tab:sim:power:4}. They show that the test is much more powerful for $\sigma=10$ than for $\sigma=20$. This is what one would expect, since a higher value of $\sigma$ corresponds to a higher noise-to-signal ratio. In particular, the higher $\sigma$, the more noisy the data, and thus the more difficult it is to identify differences between the trend curves. Nevertheless, even in the very noisy case with $\sigma = 20$, our test has quite some power, which tends to increase swiftly as $T$ gets larger. 
 
 
-\begin{table}[p!]
+\vspace{0.25cm}
+
+
+\begin{table}[h!]
 \footnotesize{
 \caption{Empirical size of the test for $\sigma = 10$.}\label{s:tab:sim:size:1}
 \newcolumntype{C}[1]{>{\hsize=#1\hsize\centering\arraybackslash}X}
