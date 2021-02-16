@@ -1,0 +1,80 @@
+%2multibyte Version: 5.50.0.2960 CodePage: 936
+
+\documentclass[12pt,a4paper]{article}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+%\usepackage{sw20elba}
+
+\setcounter{MaxMatrixCols}{10}
+%TCIDATA{OutputFilter=LATEX.DLL}
+%TCIDATA{Version=5.50.0.2960}
+%TCIDATA{Codepage=936}
+%TCIDATA{<META NAME="SaveForMode" CONTENT="1">}
+%TCIDATA{BibliographyScheme=Manual}
+%TCIDATA{Created=Thursday, February 24, 2005 10:49:32}
+%TCIDATA{LastRevised=Wednesday, August 05, 2020 10:05:27}
+%TCIDATA{<META NAME="GraphicsSave" CONTENT="32">}
+%TCIDATA{<META NAME="DocumentShell" CONTENT="Articles\SW\Elbert Walker's Article">}
+%TCIDATA{Language=American English}
+%TCIDATA{CSTFile=LaTeX article (bright).cst}
+
+%\input tcilatex
+\renewcommand{\baselinestretch}{1.2}
+\setlength{\textwidth}{18cm}
+\setlength{\oddsidemargin}{-10mm}
+\setlength{\evensidemargin}{-20mm}
+
+\begin{document}
+
+
+\begin{quotation}
+As we know, There are known knowns. There are things we know we know. We
+also know There are known unknowns. That is to say, We know there are some
+things We do not know. But there are also unknown unknowns, The ones we
+don't know We don't know. Donald Rumsfeld, U.S. Secretary of Defence
+\end{quotation}
+
+Suppose that%
+\begin{equation*}
+y_{it}=m_{i}(t/T)+u_{it},
+\end{equation*}%
+where $i=1,\ldots ,n$ and $t=1,\ldots ,T;$ both $n$ and $T$ are large. We
+suppose that there exists $J$ classes of functions%
+\begin{equation*}
+\mathcal{G}_{j}=\left\{ f:f(u)=cg_{j}((u-a)/b),\text{ }a,b,c\in \mathbb{R}%
+_{+},\text{ }g_{j}\text{ a density}\right\} .
+\end{equation*}%
+We suppose that for any $i,$ $m_{i}(\cdot )\in \mathcal{G}_{j}$ for some $j,$
+that is, for some $j$ there exists $a_{i},b_{i},c_{i}$ with%
+\begin{equation*}
+m_{i}(u)=c_{i}g_{j}((u-a_{i})/b_{i})/b_{i}
+\end{equation*}%
+for all $u\in \lbrack 0,1].$ 
+
+Estimation. Suppose that there is only one group with unknown $g(.).$ Given
+unrestricted estimates $\widehat{m}_{i}(\cdot ),$ we can estimate $c_{i}$ by 
+$\int_{0}^{1}\widehat{m}_{i}(u)du$ and work with the ratio $\widehat{m}%
+_{i}^{\ast }(u)=\widehat{m}_{i}(u)/\int_{0}^{1}\widehat{m}_{i}(u)du.$ We may
+make different assumptions here about $a,b.$ For example, $a$ is the mean
+and $b$ is the standard deviation of the density $g.$ In that case we can
+estimate $a_{i}$ by $\int_{0}^{1}u\widehat{m}_{i}^{\ast }(u)du$ and $b_{i}$
+by the square root of $\int_{0}^{1}u^{2}\widehat{m}_{i}^{\ast
+}(u)du-(\int_{0}^{1}u\widehat{m}_{i}^{\ast }(u)du)^{2}.$ Alternatively,
+median and interquartile range work. Then one can estimate $g(u)$ by 
+\begin{equation*}
+\frac{1}{n}\sum_{i=1}^{n}\widehat{b}_{i}\widehat{m}_{i}^{\ast }\left( u%
+\widehat{b}_{i}+\frac{\widehat{a}_{i}}{\widehat{b}_{i}}\right) .
+\end{equation*}
+
+Now suppose that there are multiple $g^{\prime }s.$ The recovery of the
+constants $a,b,c$ only uses the individual regression function. But now the
+uncertainty is around which $i$ to average over. This can be addressed by
+the clustering algorithms. 
+
+The parameter estimates $\widehat{a}_{i},\widehat{b}_{i},\widehat{c}_{i}$
+are $\sqrt{T}$ consistent, whereas the estimates of $g_{j}$ will be $\sqrt{%
+nTh}$ consistent. 
+
+\end{document}
