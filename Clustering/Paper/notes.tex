@@ -120,19 +120,19 @@ Combining \eqref{eq:aux1} and \eqref{eq:aux2} together, we get $\hat{s}_{ijk,T}/
 =&\frac{1}{Th_k} \var \Big( \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) X_{it}^*\Big) + \frac{1}{Th_k} \var \Big( \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) X_{jt}^*\Big)\\
  = &\frac{1}{Th_k} \var \bigg( \frac{\sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) X_{it}}{\frac{1}{T}\sum\nolimits_{t=1}^T X_{it}} \bigg) + \frac{1}{Th_k} \var \bigg( \frac{\sum\nolimits_{t=1}^T \ind\big(\frac{t}{T} \in \mathcal{I}_k\big) X_{jt}}{\frac{1}{T}\sum\nolimits_{t=1}^T X_{jt}} \bigg),
 \end{align*}
-hence, we "normalize" $\hat{s}_{ijk,T}$ intuitively by dividing it by the following value:
+hence, we 'normalize' $\hat{s}_{ijk,T}$ intuitively by dividing it by the following value:
 \[ \hat{\nu}_{ijk,T}^2 = \frac{\hat{\sigma}^2}{Th_k} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \{ \X^*_{it} + \X^*_{jt} \}.\]
 
 {\color{red} Instead look at the bootstrap!}
 
 Normalizing the statistic $\hat{s}_{ijk,T}$ by the estimator $\hat{\nu}_{ijk,T}$ yields the expression 
 \begin{equation*}
-\hat{\psi}_{ijk,T} := \frac{\hat{s}_{ijk,T}}{\hat{\nu}_{ijk,T}} = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X_{it} - \X_{jt})}{ \hat{\sigma}\{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it} + \X^*_{jt}) \}^{1/2}}, 
+\hat{\psi}_{ijk,T} := \frac{\hat{s}_{ijk,T}}{\hat{\nu}_{ijk,T}} = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it} - \X^*_{jt})}{ \hat{\sigma}\{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it} + \X^*_{jt}) \}^{1/2}}, 
 \end{equation*}
 which serves as our test statistic of the hypothesis $H_0^{(ijk)}$. For later reference, we additionally introduce the statistic 
-\begin{equation*}
+\begin{equation}\label{eq:stat0}
 \hat{\psi}_{ijk,T}^{ 0} = \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \Big(\big( \frac{c_i}{\hat{c}_i} - \frac{c_j}{\hat{c}_j} \big)\overline{\lambda}_{ij} + \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\frac{\sigma}{\hat{c}_i} \eta_{it} - \frac{\sigma}{\hat{c}_j} \eta_{jt}) \Big)}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it} + \X^*_{jt}) \}^{1/2}}
-\end{equation*}
+\end{equation}
 with $\overline{\lambda}_{ij}(u) = \{ \lambda_i(u) + \lambda_j(u) \}/2$, which is identical to $\hat{\psi}_{ijk,T}$ under $H_0^{(ijk)}$. 
 
 
@@ -174,38 +174,59 @@ in order to ensure control of the FWER at level $\alpha$. As the quantiles $q_T(
 \hat{\psi}_{ijk,T}^{0} &= \frac{\sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) \Big(\big( \frac{c_i}{\hat{c}_i} - \frac{c_j}{\hat{c}_j} \big)\overline{\lambda}_{ij} + \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\frac{\sigma}{\hat{c}_i} \eta_{it} - \frac{\sigma}{\hat{c}_j} \eta_{jt}) \Big)}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \ind(\frac{t}{T} \in \mathcal{I}_k) (\X^*_{it} + \X^*_{jt}) \}^{1/2}}\\
  & \approx \frac{1}{\sqrt{2Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big\{ \frac{\eta_{it}}{\hat{c}_i} - \frac{\eta_{jt}}{\hat{c}_j} \Big\}.
 \end{align*} 
-A Gaussian version of the statistic displayed in the final line above is given by 
-\begin{equation*}
-\phi_{ijk,T} = \frac{1}{\sqrt{2Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big\{ \frac{Z_{it}}{c_i} - \frac{Z_{jt}}{c_j} \Big\},
-\end{equation*}
-where $Z_{it}$ are independent standard normal random variables for $1 \le t \le T$ and $1 \le i \le n$. Hence, the statistic 
+In what follows, we will be using the Gaussian version $\phi_{ijk,T}$ of the statistic displayed above:
+\begin{align*}
+\phi_{ijk,T} = \frac{1}{\sqrt{2Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) ( d_{i, T} Z_{it} - d_{j, T} Z_{jt} ),
+\end{align*} 
+where $Z_{it}$ are independent standard normal random variables for $1 \le t \le T$ and $1 \le i \le n$. However, since the variance of $\hat{\psi}_{ijk,T}^{0}$ is not easy to calculate and we need the variances of $\hat{\psi}_{ijk,T}^{0}$ and $\phi_{ijk,T}$ to be equal, we can not provide the exact formula for $d_{i,T}$. We regard $\phi_{ijk,T}$ as an auxiliary test statistic with unknown distribution, which will be then approximated by bootstrap. For now, the statistic
 \[ \Phi_T = \max_{(i,j,k) \in \indexset} a_k \big( |\phi_{ijk,T}| - b_k \big) \]
-can be regarded as a Gaussian version of the statistic $\hat{\Psi}_T$. 
-
+can be regarded as a Gaussian version of the statistic $\hat{\Psi}_T$. Further in this section, we will show how that the critical values of $\Phi_T$ and the unknown quantiles $q_T(\alpha)$ can be approximated using a multiplier bootstrap by the $\Psi_{\text{bootstrap}, T}$ and its respective $(1-\alpha)$-quantile $\widehat{q}_{T,\text{bootstrap}}(\alpha)$.
 
 To summarize, we propose the following procedure to simultaneously test the hypothesis $H_0^{(ijk)}$ for all $(i,j,k) \in \indexset$ at the significance level $\alpha \in (0,1)$: 
 \begin{equation}\label{eq:test}
-\text{For each } (i,j,k) \in \indexset, \text{ reject } H_0^{(ijk)} \text{ if } |\hat{\psi}_{ijk,T}| > c_{T,\text{Gauss}}(\alpha,h_k),
+\text{For each } (i,j,k) \in \indexset, \text{ reject } H_0^{(ijk)} \text{ if } |\hat{\psi}_{ijk,T}| > c_{T,\text{bootstrap}}(\alpha,h_k),
 \end{equation}
-where $c_{T,\text{Gauss}}(\alpha,h_k) = b_k + q_{T,\text{Gauss}}(\alpha)/a_k$ with $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$. 
+where $c_{T,\text{bootstrap}}(\alpha,h_k) = b_k + \widehat{q}_{T,\text{bootstrap}}(\alpha)/a_k$ with $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$. 
 
-{\color{red}
-All of the above can probably be proven using the same methods as before.
-}
 
-\subsection{Multiplier bootstrap}
+\subsection{Proof strategy}
 
-Now we have the problem that $c_i$ and $c_j$ are unknown in real life. This means that the quantile $q_T(\alpha)$ of $\Phi_T$ are not known and can not be approximated by usual Monte Carlo simulations. We need to find another way of approximating them, for example, multiplier bootstrap from \cite{Chernozhukov2017}.
+Here we outline the proof strategy, which can be divided into several major steps.
 
-%We next prove that 
-%\begin{equation}\label{eq:kolmogorov-distance}
-%\sup_{q \in \reals} \Big| \pr \big( \Psi_T \le q \big) - \pr \big( \Phi_T \le q \big) \Big| = o(1).
-%\end{equation}
-First, we rewrite the statistics $\Phi_T$ as follows. Define 
+\begin{enumerate}[label=\textit{Step \arabic*.}, leftmargin=0cm, itemindent=1.45cm]
+
+\item Let $\hat{\Psi}_T = \max_{(i,j,k) \in \indexset} a_k (|\hat{\psi}_{ijk,T}^0| - b_k)$ with $\hat{\psi}_{ijk,T}^0$ introduced in \eqref{eq:stat0}
+and define $\Psi_T = \max_{(i,j,k) \in \indexset} a_k (|\psi_{ijk,T}^0| - b_k)$ with 
+\[ \psi_{ijk,T}^0 = \frac{1}{\sqrt{2Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big(\frac{\eta_{it}}{\hat{c}_i} - \frac{\eta_{jt}}{\hat{c}_j}\Big). \]
+To start with, we prove that  
+\begin{equation}\label{eq:approxerror1}
+\big| \hat{\Psi}_T - \Psi_T \big| = o_p(r_T),
+\end{equation}
+where $\{r_T\}$ is any null sequence that converges more slowly to zero than {\color{red} ???
+
+Need to prove that. It is possible that the exact formula of $\Psi_T$ will change.}
+%$\rho_T = \sqrt{\log T} \{ \log p/\sqrt{Th_{\min}} + h_{\max} \sqrt{\log p} \}$, that is, $\rho_T/r_T \rightarrow 0$ as $T \rightarrow \infty$. Since the proof of \eqref{eq:approxerror1} is rather technical and lengthy, the details are provided in the Supplementary Material. 
+
+
+\item We next prove that 
+\begin{equation}\label{eq:kolmogorov-distance}
+\sup_{q \in \reals} \Big| \pr \big( \Psi_T \le q \big) - \pr \big( \Phi_T \le q \big) \Big| = o(1).
+\end{equation}
+To do so, we rewrite the statistics $\Psi_T$ and $\Phi_T$ as follows: Define 
 \begin{equation*}
-W^{(ijk)}_t = W^{(ijk)}_{t,T} := \sqrt{\frac{T}{2Th_k}} \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big\{ \frac{Z_{it}}{c_i} - \frac{Z_{jt}}{c_j} \Big\}
+V^{(ijk)}_t = V^{(ijk)}_{t,T} := \sqrt{\frac{T}{2Th_k}} \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big(\frac{\eta_{it}}{\hat{c}_i} - \frac{\eta_{jt}}{\hat{c}_j}\Big)
 \end{equation*}
-with $Z_{it}$ i.i.d.\ standard normal and let $\boldsymbol{W}_t = (W_t^{(ijk)}: (i,j,k) \in \indexset)$. The vector $\boldsymbol{W}_t$ is a Gaussian vector with zero mean $\ex[\boldsymbol{W}_t] = \boldsymbol{0}$. With this notation, we get that $\phi_{ijk,T} = T^{-1/2} \sum_{t=1}^T W^{(ijk)}_t$ and  
+for $(i,j,k) \in \indexset$ and let $\boldsymbol{V}_t = (V_t^{(ijk)}: (i,j,k) \in \indexset)$ be the $p$-dimensional random vector with the entries $V_t^{(ijk)}$. With this notation, we get that $\psi_{ijk,T}^0 = T^{-1/2} \sum_{t=1}^T V^{(ijk)}_t$ and thus 
+\begin{align*}
+\Psi_T 
+ & = \max_{(i,j,k) \in \indexset}  a_k \big( |\psi_{ijk,T}^0| - b_k \big) \\
+ & = \max_{(i,j,k) \in \indexset} a_k \Big\{ \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T V^{(ijk)}_t\Big| - b_k \Big\}.
+\end{align*} 
+Analogously, we define 
+\begin{equation*}
+W^{(ijk)}_t = W^{(ijk)}_{t,T} := \sqrt{\frac{T}{2Th_k}} \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) (d_{i, T}Z_{it} - d_{j, T}Z_{jt})
+\end{equation*}
+with $Z_{it}$ i.i.d.\ standard normal and let $\boldsymbol{W}_t = (W_t^{(ijk)}: (i,j,k) \in \indexset)$. The vector $\boldsymbol{W}_t$ is a Gaussian version of $\boldsymbol{V}_t$ with the same mean and variance. In particular, $\ex[\boldsymbol{W}_t] = \ex[\boldsymbol{V}_t] = 0$ and $\ex[\boldsymbol{W}_t \boldsymbol{W}_t^\top] = \ex[\boldsymbol{V}_t \boldsymbol{V}_t^\top]$ {\color{red}(this we achieve by introducing $d_{i, T}$)}. Similarly as before, we can write $\phi_{ijk,T} = T^{-1/2} \sum_{t=1}^T W^{(ijk)}_t$ and  
 \begin{align*}
 \Phi_T 
  & = \max_{(i,j,k) \in \indexset} a_k \big( |\phi_{ijk,T}| - b_k \big) \\
@@ -213,30 +234,88 @@ with $Z_{it}$ i.i.d.\ standard normal and let $\boldsymbol{W}_t = (W_t^{(ijk)}: 
 \end{align*} 
 For any $q \in \reals$, it holds that
 \begin{align*}
-\pr \big( \Phi_T \le q \big) 
- & = \pr \Big( \max_{(i,j,k) \in \indexset} a_k \Big\{ \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T W^{(ijk)}_t\Big| - b_k \Big\} \le q \Big) \\
- & = \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T W^{(ijk)}_t\Big| \le c_{ijk}(q) \text{ for all } (i,j,k) \in \indexset \Big) \\
- & = \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{c}(q) \Big),
+\pr \big( \Psi_T \le q \big) 
+ & = \pr \Big( \max_{(i,j,k) \in \indexset} a_k \Big\{ \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T V^{(ijk)}_t\Big| - b_k \Big\} \le q \Big) \\
+ & = \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T V^{(ijk)}_t\Big| \le c_{ijk}(q) \text{ for all } (i,j,k) \in \indexset \Big) \\
+ & = \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{V}_t\Big| \le \boldsymbol{c}(q) \Big),
 \end{align*} 
-where $\boldsymbol{c}(q) = (c_{ijk}(q): (i,j,k) \in \indexset)$ is the $\reals^p$-vector with the entries $c_{ijk}(q) = q/a_k + b_k$, we use the notation $|v| = (|v_1|,\ldots,|v_p|)^\top$ for vectors $v \in \reals^p$ and the inequality $v \le w$ is to be understood componentwise for $v,w \in \reals^p$. 
+where $\boldsymbol{c}(q) = (c_{ijk}(q): (i,j,k) \in \indexset)$ is the $\reals^p$-vector with the entries $c_{ijk}(q) = q/a_k + b_k$, we use the notation $|v| = (|v_1|,\ldots,|v_p|)^\top$ for vectors $v \in \reals^p$ and the inequality $v \le w$ is to be understood componentwise for $v,w \in \reals^p$. Analogously, we have  
+\[ \pr \big( \Phi_T \le q \big) = \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{c}(q) \Big). \]
+With this notation at hand, we can make use of Proposition 2.1 from \cite{Chernozhukov2017}. In our context, this proposition can be stated as follows: 
+\begin{propA}\label{prop:Chernozhukov}
+Assume that 
+\begin{enumerate}[label=(\alph*),leftmargin=0.7cm]
+\item $T^{-1} \sum_{t=1}^T \ex (V^{(ijk)}_t)^2 \ge \delta > 0$ for all $(i,j,k) \in \indexset$.
+\item $T^{-1} \sum_{t=1}^T \ex[ |V^{(ijk)}_t|^{2+r} ] \le B_T^r$ for all $(i,j,k) \in \indexset$ and $r=1,2$, where $B_T \ge 1$ are constants that may tend to infinity as $T \rightarrow \infty$.  
+\item $\ex[ \{ \max_{(i,j,k) \in \indexset} |V^{(ijk)}_t| / B_T \}^\theta ] \le 2$ for all $t$ and some $\theta > 4$.  
+\end{enumerate}
+Then  
+\begin{align}
+\sup_{\boldsymbol{c} \in \reals^p} \Big| \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{V}_t\Big| \le \boldsymbol{c} \Big) & - \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{c} \Big) \Big| \nonumber \\ & \le C \Big\{ \Big( \frac{B_T^2 \log^7(pT)}{T} \Big)^{1/6} + \Big( \frac{B_T^2 \log^3(pT)}{T^{1-2/\theta}} \Big)^{1/3} \Big\}, \label{eq:Chernozhukov}
+\end{align}
+where $C$ depends only on $\delta$ and $\theta$. 
+\end{propA}
+{\color{red} We need to check that with our choice of the test statstics, the assumptions (a)--(c) are satisfied. For which $B_T$?}
+% under the conditions of Theorem \ref{theo1} for sufficiently large $T$, where $B_T$ can be chosen as $B_T = C p^{1/\theta} h_{\min}^{-1/2}$ with $C$ sufficiently large. Moreover, it can be shown that the right-hand side of \eqref{eq:Chernozhukov} is $o(1)$ for this choice of $B_T$.
 
-Then, consider a sequence of i.i.d.\, standard normal random variables $e_1, \ldots, e_T$, that are independent of $\eta_{it}$ and $Z_{it}$ for all $i$ and $t$. Define 
+Hence, Proposition \ref{prop:Chernozhukov} yields that 
+\[ \sup_{\boldsymbol{c} \in \reals^p} \Big| \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{V}_t\Big| \le \boldsymbol{c} \Big) - \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{c} \Big) \Big| = o(1), \]
+which in turn implies \eqref{eq:kolmogorov-distance}. 
+
+\item Now we have the problem that $d_{i, T}$ are unknown. This means that the quantile $q_T(\alpha)$ of $\Phi_T$ are not known and can not be approximated by usual Monte Carlo simulations. We need to find another way of approximating them, for example, multiplier bootstrap from \cite{Chernozhukov2017}.
+
+We next prove that for $\alpha \in (0, e^{-1})$ we can claim with probability $1- \alpha$ that
+\begin{equation}\label{eq:kolmogorov-distance:2}
+\sup_{q \in \reals} \Big| \pr \big( \tilde{\Psi}_T \le q \big| X_{it}) - \pr \big( \Phi_T \le q \big) \Big| = o(1),
+\end{equation}
+
+where $\tilde{\Psi}_T$ will be defined further.
+
+
+%\[ \sup_{\boldsymbol{c} \in \reals^p} \Big| \pr \Big( \Big| \frac{1}{\sqrt{T}} \sum_{t=1}^T e_t (\boldsymbol{V}_t - \bar{\boldsymbol{V}_t}) \Big| \leq \boldsymbol{c}(q) \Big| \big\{V_t^{(ijk)}\big\} \Big) - \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{c} \Big) \Big| = o(1), \]
+
+
+
+We have already rewritten the statistics $\Phi_T$ as follows: 
+\begin{align*}
+\Phi_T 
+ & = \max_{(i,j,k) \in \indexset} a_k \big( |\phi_{ijk,T}| - b_k \big) \\
+ & = \max_{(i,j,k) \in \indexset} a_k \Big\{ \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T W^{(ijk)}_t\Big| - b_k \Big\}
+\end{align*} 
+and for any $q \in \reals$, it holds that
+\begin{align*}
+\pr \big( \Phi_T \le q \big)  = \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{c}(q) \Big),
+\end{align*} 
+where $\boldsymbol{c}(q) = (c_{ijk}(q): (i,j,k) \in \indexset)$ is the $\reals^p$-vector with the entries $c_{ijk}(q) = q/a_k + b_k$. 
+
+In order to approximate the unknown distribution of $\Phi_T$ by the multiplier bootstrap, we introduce auxiliary test statistics
+\begin{align*}
+\tilde{\Psi}_T  & = \max_{(i,j,k) \in \indexset} a_k \big( |\tilde{\psi}_{ijk,T}| - b_k \big) %\\
+% & = \max_{(i,j,k) \in \indexset} a_k \Big\{ \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T W^{(ijk)}_t\Big| - b_k \Big\}.
+\end{align*} 
+and 
+\[ \tilde{\psi}_{ijk,T} = \frac{1}{\sqrt{2Th_k}} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) e_t \Bigg( \Big(\frac{\eta_{it}}{\hat{c}_i} - \frac{\eta_{jt}}{\hat{c}_j}\Big) - \frac{1}{T} \sum\limits_{t=1}^T \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big) \Big(\frac{\eta_{it}}{\hat{c}_i} - \frac{\eta_{jt}}{\hat{c}_j}\Big) \Bigg). \]
+with $e_1, \ldots, e_T$ being i.i.d. standard normal random variables independent of $\{Z_{it}| i, t\}$ and $\{X_{it} | i, t\}$. We will use the conditional distribution of $\tilde{\Psi}_T$ given the data as approximation of the distribution of $\Phi_T$.
+
+We proceed as follows. As before, 
 \begin{equation*}
 V^{(ijk)}_t = V^{(ijk)}_{t,T} := \sqrt{\frac{T}{2Th_k}} \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)\Big\{ \frac{\eta_{it}}{\hat{c}_i} - \frac{\eta_{jt}}{\hat{c}_j} \Big\}
 \end{equation*}
 for $(i,j,k) \in \indexset$ and let $\boldsymbol{V}_t = (V_t^{(ijk)}: (i,j,k) \in \indexset)$ be the $p$-dimensional random vector with the entries $V_t^{(ijk)}$. Additionally, define 
 \begin{equation*}
-\bar{V}^{(ijk)}_t = \bar{V}^{(ijk)}_{t,T} := \frac{1}{T} \sum_{t=1}^T \sqrt{\frac{T}{2Th_k}} \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)\Big\{ \frac{\eta_{it}}{\hat{c}_i} - \frac{\eta_{jt}}{\hat{c}_j} \Big\}
+\bar{V}^{(ijk)} = \bar{V}^{(ijk)}_{T} := \frac{1}{T} \sum_{t=1}^T \sqrt{\frac{T}{2Th_k}} \ind\Big(\frac{t}{T} \in \mathcal{I}_k\Big)\Big\{ \frac{\eta_{it}}{\hat{c}_i} - \frac{\eta_{jt}}{\hat{c}_j} \Big\}
 \end{equation*}
-and let $\bar{\boldsymbol{V}}_t = (\bar{V}_t^{(ijk)}: (i,j,k) \in \indexset)$ be the $p$-dimensional random vector with the entries $\bar{V}_t^{(ijk)}$. We consider the following conditional probability:
+and let $\bar{\boldsymbol{V}} = (\bar{V}^{(ijk)}: (i,j,k) \in \indexset)$ be the $p$-dimensional random vector with the entries $\bar{V}^{(ijk)}$. We consider the following conditional probability:
 \begin{align*}
-\pr &\Big( \Big| \frac{1}{\sqrt{T}} \sum_{t=1}^T e_t (\boldsymbol{V}_t - \bar{\boldsymbol{V}_t}) \Big| \leq \boldsymbol{c}(q) \Big| \big\{V_t^{(ijk)}\big\} \Big) = \\
- & = \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T e_t(V^{(ijk)}_t - \bar{V}^{(ijk)}_t )\Big| \le c_{ijk}(q) \text{ for all } (i,j,k) \in \indexset \Big| \big\{V_t^{(ijk)}\big\}\Big) \\
- & = \pr \Big( \max_{(i,j,k) \in \indexset} a_k \Big\{ \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^Te_t(V^{(ijk)}_t - \bar{V}^{(ijk)}_t )\Big| - b_k \Big\} \le q\Big| \big\{V_t^{(ijk)}\big\} \Big) 
+\pr &\Big( \Big| \frac{1}{\sqrt{T}} \sum_{t=1}^T e_t (\boldsymbol{V}_t - \bar{\boldsymbol{V}}) \Big| \leq \boldsymbol{c}(q) \Big| \big\{V_t^{(ijk)}\big\} \Big) = \\
+ & = \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T e_t(V^{(ijk)}_t - \bar{V}^{(ijk)} )\Big| \le c_{ijk}(q) \text{ for all } (i,j,k) \in \indexset \Big| \big\{V_t^{(ijk)}\big\}\Big) \\
+ & = \pr \Big( \max_{(i,j,k) \in \indexset} a_k \Big\{ \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^Te_t(V^{(ijk)}_t - \bar{V}^{(ijk)} )\Big| - b_k \Big\} \le q\Big| \big\{V_t^{(ijk)}\big\} \Big)\\
+ & = \pr \Big( \max_{(i,j,k) \in \indexset} a_k \Big( \big|\tilde{\psi}_{ijk, T} \big| - b_k \Big) \le q\Big| \big\{X_{it}\big\} \Big) \\
+  & = \pr \Big( \tilde{\Psi}_T \le q\Big| \big\{X_{it}\big\} \Big) 
 \end{align*}
 
 
-{\color{red} Need to check the same mean and variance! In particular, $\ex[\boldsymbol{W}_t] = \ex[\boldsymbol{V}_t] = 0$ and $\ex[\boldsymbol{W}_t \boldsymbol{W}_t^\top] = \ex[\boldsymbol{V}_t \boldsymbol{V}_t^\top]$.}
+{\color{red} We have already checked in the previous step that  $\ex[\boldsymbol{W}_t] = \ex[\boldsymbol{V}_t] = 0$ and $\ex[\boldsymbol{W}_t \boldsymbol{W}_t^\top] = \ex[\boldsymbol{V}_t \boldsymbol{V}_t^\top]$.}
 
 With this notation at hand, we can make use of Corollary 4.2 from \cite{Chernozhukov2017}. In our context, this proposition can be stated as follows: 
 \begin{propA}\label{prop:Chernozhukov}
@@ -253,10 +332,66 @@ Then  we have with probability at least $1 - \alpha$,
 where $C$ depends only on $\delta$ and $\theta$. 
 \end{propA}
 {\color{red}
-Need to verify that assumptions (a)--(c) are satisfied for sufficiently large $T$! where $B_T$ can be chosen as $B_T = C p^{1/\theta} h_{\min}^{-1/2}$ with $C$ sufficiently large. Moreover, it can be shown that the right-hand side of \eqref{eq:Chernozhukov} is $o(1)$ for this choice of $B_T$. Hence, Proposition \ref{prop:Chernozhukov} yields that 
+Again, assumptions (a)--(c) are satisfied if we checked that in the previous step. We just need to determine the rate of $B_T$ such that the RHS is $o(1)$. Hence, Proposition \ref{prop:Chernozhukov} yields that with probability at least $1- \alpha$
 \[ \sup_{\boldsymbol{c} \in \reals^p} \Big| \pr \Big( \Big| \frac{1}{\sqrt{T}} \sum_{t=1}^T e_t (\boldsymbol{V}_t - \bar{\boldsymbol{V}_t}) \Big| \leq \boldsymbol{c}(q) \Big| \big\{V_t^{(ijk)}\big\} \Big) - \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{c} \Big) \Big| = o(1), \]
-which in turn implies \eqref{eq:kolmogorov-distance}. 
+which in turn implies \eqref{eq:kolmogorov-distance:2}. 
 }
+
+
+\item {\color{red} Need to rewrite that.
+
+With the help of \eqref{eq:approxerror1} and \eqref{eq:kolmogorov-distance}, we now show that 
+\begin{equation}\label{eq:kolmogorov-distance-hat}
+\sup_{q \in \reals} \Big| \pr \big( \hat{\Psi}_T \le q \big) - \pr \big( \Phi_T \le q \big) \Big| = o(1).
+\end{equation}
+To start with, the above supremum can be bounded by 
+\begin{align}
+ & \sup_{q \in \reals} \Big| \pr \big( \hat{\Psi}_T \le q \big) - \pr \big( \Phi_T \le q \big) \Big| \nonumber \\
+ & = \sup_{q \in \reals} \Big| \pr \Big( \Psi_T \le q + \big\{ \Psi_T - \hat{\Psi}_T \big\} \Big) - \pr \big( \Phi_T \le q \big) \Big| \nonumber \\
+ & \le \sup_{q \in \reals} \max \Big\{ \Big| \pr \Big( \Psi_T \le q + \big| \Psi_T - \hat{\Psi}_T \big| \Big) - \pr \big( \Phi_T \le q \big) \Big|, \nonumber \\
+ & \phantom{\le \sup_{q \in \reals} \max \Big\{ \ } \Big| \pr \Big( \Psi_T \le q - \big| \Psi_T - \hat{\Psi}_T \big| \Big) - \pr \big( \Phi_T \le q \big) \Big| \Big\} \nonumber \\
+ & \le \sup_{q \in \reals} \max \Big\{ \Big| \pr \Big( \Psi_T \le q + r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| + \pr \Big( \big| \Psi_T - \hat{\Psi}_T \big| > r_T \Big), \nonumber \\
+ & \phantom{\le \sup_{q \in \reals} \max \Big\{ \ } \Big| \pr \Big( \Psi_T \le q - r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| + \pr \Big( \big| \Psi_T - \hat{\Psi}_T \big| > r_T \Big) \Big\} \nonumber \\
+ & \le \max_{\ell=0,1} \, \sup_{q \in \reals} \Big| \pr \Big( \Psi_T \le q + (-1)^\ell r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| + \pr \Big( \big| \Psi_T - \hat{\Psi}_T \big| > r_T \Big) \nonumber \\
+ & = \max_{\ell=0,1} \, \sup_{q \in \reals} \Big| \pr \Big( \Psi_T \le q + (-1)^\ell r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| + o(1), \label{eq:step3:a}
+\end{align}
+where the last line is by \eqref{eq:approxerror1}. Moreover, for $\ell=0,1$, 
+\begin{align}
+ & \sup_{q \in \reals} \Big| \pr \Big( \Psi_T \le q + (-1)^\ell r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| \nonumber \\
+ & \le \sup_{q \in \reals} \Big| \pr \Big( \Psi_T \le q + (-1)^\ell r_T \Big) - \pr \Big( \Phi_T \le q + (-1)^\ell r_T \Big) \Big| \nonumber \\
+ & \quad + \sup_{q \in \reals} \Big| \pr \Big( \Phi_T \le q + (-1)^\ell r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| \nonumber \\
+ & = \sup_{q \in \reals} \Big| \pr \Big( \Phi_T \le q + (-1)^\ell r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| + o(1), \label{eq:step3:b}
+\end{align}
+the last line following from \eqref{eq:kolmogorov-distance}. Finally, by Nazarov's inequality (\citeauthor{Nazarov2003}, \citeyear{Nazarov2003} and Lemma A.1 in \citeauthor{Chernozhukov2017}, \citeyear{Chernozhukov2017}), we have that for $\ell = 0,1$,   
+\begin{align} 
+ & \sup_{q \in \reals} \Big| \pr \Big( \Phi_T \le q + (-1)^\ell r_T \Big) - \pr \big( \Phi_T \le q \big) \Big| \nonumber \\
+ & = \sup_{q \in \reals} \Big| \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{c}(q + (-1)^\ell r_T) \Big) - \pr \Big( \Big|\frac{1}{\sqrt{T}} \sum_{t=1}^T \boldsymbol{W}_t\Big| \le \boldsymbol{c}(q) \Big) \Big| \nonumber \\
+ & \le C \frac{r_T \sqrt{\log(2 p)}}{\min_{1 \le k \le K} a_k} \le C r_T \sqrt{\log \log T} \sqrt{\log (2p)}, \label{eq:step3:c}
+\end{align}
+where $C$ is a constant that depends only on the parameter $\delta$ defined in condition (a) of Proposition \ref{prop:Chernozhukov} and we have used the fact that $\min_k a_k \ge c / \sqrt{\log \log T}$ for some $c > 0$. Inserting \eqref{eq:step3:b} and \eqref{eq:step3:c} into equation \eqref{eq:step3:a} completes the proof of \eqref{eq:kolmogorov-distance-hat}.
+
+
+\item By definition of the quantile $q_{T,\text{Gauss}}(\alpha)$, it holds that $\pr(\Phi_T \le q_{T,\text{Gauss}}(\alpha)) \ge 1-\alpha$. As shown in the Supplementary Material, we even have that  
+\begin{equation}\label{eq:quant-exact}
+\pr(\Phi_T \le q_{T,\text{Gauss}}(\alpha)) = 1-\alpha
+\end {equation} 
+for any $\alpha \in (0,1)$. From this and \eqref{eq:kolmogorov-distance-hat}, it immediately follows that  
+\begin{equation}\label{eq:probbound-Psihat}
+\pr \big( \hat{\Psi}_T \le q_{T,\text{Gauss}}(\alpha) \big) = 1 - \alpha + o(1), 
+\end{equation}
+which in turn implies that 
+\begin{align*}
+\text{FWER}(\alpha)
+ & = \pr \Big( \exists (i,j,k) \in \indexset_0: |\hat{\psi}_{ijk,T}| > c_{T,\text{Gauss}}(\alpha,h_k) \Big) \\
+ & = \pr \Big( \max_{(i,j,k) \in \indexset_0} a_k \big( |\hat{\psi}_{ijk,T}| - b_k \big) > q_{T,\text{Gauss}}(\alpha) \Big) \\
+ & = \pr \Big( \max_{(i,j,k) \in \indexset_0} a_k \big( |\hat{\psi}_{ijk,T}^0| - b_k \big) > q_{T,\text{Gauss}}(\alpha) \Big) \\
+ & \le \pr \Big( \max_{(i,j,k) \in \indexset} a_k \big( |\hat{\psi}_{ijk,T}^0| - b_k \big) > q_{T,\text{Gauss}}(\alpha) \Big) \\
+ & = \pr \big( \hat{\Psi}_T > q_{T,\text{Gauss}}(\alpha) \big) = \alpha + o(1).
+\end{align*}
+This completes the proof of Theorem \ref{theo1}. \qedhere}
+\end{enumerate}
+
+
 \bibliographystyle{ims}
 {\small
 \setlength{\bibsep}{0.35em}
