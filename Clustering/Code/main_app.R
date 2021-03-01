@@ -70,10 +70,8 @@ for (country in countries) {
 sum(covid_mat < 0)
 covid_mat[covid_mat < 0] <- 0
 
-b_grid <- seq(1, b_bar, by = 0.1)
+b_grid <- seq(1, b_bar, by = 0.01)
 
-i <- 1
-j <- 2
 
 
 m_hat <- function(vect_u, b, data_p, grid_p, bw){
@@ -87,19 +85,19 @@ m_hat <- function(vect_u, b, data_p, grid_p, bw){
 }
 
 grid_points <- seq(1/t_len, 1, by = 1/t_len)
-integral_points <- seq(1/t_len, 1, by = 0.01/t_len)
-
-m_hat_vec <- m_hat(integral_points, b = 1, covid_mat[, 1], grid_points, bw = bw_abs/t_len)
-plot(grid_points, covid_mat[, 1], type = "l")
-lines(integral_points, m_hat_vec, col = "red")
-
-m_hat_vec <- m_hat(integral_points, b = 1, covid_mat[, 2], grid_points, bw = bw_abs/t_len)
-plot(grid_points, covid_mat[, 2], type = "l")
-lines(integral_points, m_hat_vec, col = "blue")
-
-m_hat_vec <- m_hat(integral_points, b = 1, covid_mat[, 3], grid_points, bw = bw_abs/t_len)
-plot(grid_points, covid_mat[, 3], type = "l")
-lines(integral_points, m_hat_vec, col = "green")
+# integral_points <- seq(1/t_len, 1, by = 0.01/t_len)
+# 
+# m_hat_vec <- m_hat(integral_points, b = 1, covid_mat[, 1], grid_points, bw = bw_abs/t_len)
+# plot(grid_points, covid_mat[, 1], type = "l")
+# lines(integral_points, m_hat_vec, col = "red")
+# 
+# m_hat_vec <- m_hat(integral_points, b = 1, covid_mat[, 2], grid_points, bw = bw_abs/t_len)
+# plot(grid_points, covid_mat[, 2], type = "l")
+# lines(integral_points, m_hat_vec, col = "blue")
+# 
+# m_hat_vec <- m_hat(integral_points, b = 1, covid_mat[, 3], grid_points, bw = bw_abs/t_len)
+# plot(grid_points, covid_mat[, 3], type = "l")
+# lines(integral_points, m_hat_vec, col = "green")
 
 
 integrand <- function(vect_u, b, data_points_i, data_points_j, 
@@ -107,8 +105,6 @@ integrand <- function(vect_u, b, data_points_i, data_points_j,
   tmp <- m_hat(vect_u, b, data_points_i, grid_points, bw)/(norm_b * 1/b) - m_hat(vect_u, b = 1, data_points_j, grid_points, bw) / (norm * 1/b)
   return(tmp^2)
 }
-
-n_ts = 4
 
 Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
 
@@ -145,11 +141,14 @@ for (b in b_grid){
         }
       }
       Delta_hat[j, i] <- Delta_hat[i, j]
-      cat("b = ", b, ", Delta_hat = ", Delta_hat[i, j], "\n")
+      #cat("b = ", b, ", Delta_hat = ", Delta_hat[i, j], "\n")
       }
   }  
 }
 
+colnames(Delta_hat) <- countries
+rownames(Delta_hat) <- countries
+
 delta_dist <- as.dist(Delta_hat)
-res <- hclust(delta_dist)
+res        <- hclust(delta_dist)
 plot(res)
