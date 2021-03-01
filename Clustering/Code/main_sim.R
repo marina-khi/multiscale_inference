@@ -1,21 +1,23 @@
 ########################
 #Analysis of covid data#
 ########################
-rm(list=ls())
+#rm(list=ls())
 
 library(tidyr)
 library(multiscale)
 library(xtable)
 library(aweek)
+
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
 
 library(dendextend)
+library(tictoc)
 
 source("functions.R")
 
 #Defining necessary constants
-b_bar  <- 1.6
+b_bar  <- 1.02
 bw_abs <- 7
 t_len  <- 200
 n_ts   <- 6
@@ -85,10 +87,12 @@ Y <- cbind(Y1, Y2, Y3, Y4, Y5, Y6)
 b_grid <- seq(1, b_bar, by = 0.01)
 
 m_hat <- function(vect_u, b, data_p, grid_p, bw){
+  t_len <- length(data_p)
   m_hat_vec <- c()
   for (u in vect_u){
     result = sum((abs((grid_p - u * b) / bw) <= 1) * data_p)
-    norm = sum((abs((grid_p - u * b) / bw) <= 1))
+    #norm = sum((abs((grid_p - u * b) / bw) <= 1))
+    norm = min(floor((u * b + bw) * t_len), t_len) - max(ceiling((u * b - bw) * t_len), 1) + 1
     m_hat_vec <- c(m_hat_vec, result/norm)
   }
   return(m_hat_vec)
@@ -97,17 +101,17 @@ m_hat <- function(vect_u, b, data_p, grid_p, bw){
 grid_points <- seq(1/t_len, 1, by = 1/t_len)
 integral_points <- seq(1/t_len, 1, by = 0.01/t_len)
 
-m_hat_vec <- m_hat(integral_points, b = 1, Y[, 1], grid_points, bw = bw_abs/t_len)
+m_hat_vec <- m_hat(grid_points, b = 1, Y[, 1], grid_points, bw = bw_abs/t_len)
 plot(grid_points, Y[, 1], type = "l")
-lines(integral_points, m_hat_vec, col = "red")
+lines(grid_points, m_hat_vec, col = "red")
 
-m_hat_vec <- m_hat(integral_points, b = 1, Y[, 2], grid_points, bw = bw_abs/t_len)
-plot(grid_points, Y[, 2], type = "l")
-lines(integral_points, m_hat_vec, col = "blue")
-
-m_hat_vec <- m_hat(integral_points, b = 1, Y[, 3], grid_points, bw = bw_abs/t_len)
+m_hat_vec <- m_hat(grid_points, b = 1, Y[, 3], grid_points, bw = bw_abs/t_len)
 plot(grid_points, Y[, 3], type = "l")
-lines(integral_points, m_hat_vec, col = "green")
+lines(grid_points, m_hat_vec, col = "blue")
+
+m_hat_vec <- m_hat(grid_points, b = 1, Y[, 5], grid_points, bw = bw_abs/t_len)
+plot(grid_points, Y[, 5], type = "l")
+lines(grid_points, m_hat_vec, col = "green")
 
 
 integrand <- function(vect_u, b, data_points_i, data_points_j, 
@@ -118,6 +122,7 @@ integrand <- function(vect_u, b, data_points_i, data_points_j,
 
 Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
 
+tic("f-c version")
 for (b in b_grid){
   norm_b <- c()
   norm   <- c()
@@ -155,6 +160,8 @@ for (b in b_grid){
   }
   cat("b = ", b, ": done. \n")
 }
+
+toc()
 
 #colnames(Delta_hat) <- countries
 #rownames(Delta_hat) <- countries
