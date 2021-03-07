@@ -175,6 +175,9 @@ for (b in b_grid){
 colnames(Delta_hat) <- c("a", "b", "c", "d", "e", "f")
 rownames(Delta_hat) <- c("a", "b", "c", "d", "e", "f")
 
+colnames(b_res) <- c("a", "b", "c", "d", "e", "f")
+rownames(b_res) <- c("a", "b", "c", "d", "e", "f")
+
 delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
 plot(res)
@@ -184,25 +187,33 @@ subgroups <- cutree(res, 3)
 for (cl in 1:3){
   countries_cluster <- colnames(Delta_hat)[subgroups == cl]
   if (length(countries_cluster) == 1){
-    plot((1:t_len) / t_len, Y[, countries_cluster],
-         ylim = c(0, max(Y[, countries_cluster]) + 100), xlab="u",
-         ylab = "", mgp=c(2,0.5,0), type = "l")
-    m_hat_vec <- m_hat(grid_points, b = 1, Y[, countries_cluster], grid_points, bw = bw_abs/t_len)
-    lines((1:t_len) / t_len, m_hat_vec,  col = "red")
-    title(main = paste("The only one representative of cluster", cl), line = 1)
+    m_hat_vec <- m_hat(grid_points, b = 1, Y[, countries_cluster],
+                       grid_points, bw = bw_abs/t_len)
+    plot((1:t_len) / t_len, m_hat_vec,
+         ylim = c(0, max(m_hat_vec) + 100), xlab="u",
+         ylab = "", mgp = c(2,0.5,0), type = "l")
+    title(main = paste("Representative of cluster", cl), line = 1)
   } else {
     b_res_cl <- b_res[subgroups == cl, subgroups == cl]
     colnames(b_res_cl) <- countries_cluster
     rownames(b_res_cl) <- countries_cluster
-    #which(b_res_cl == min(b_res_cl, na.rm = TRUE), arr.ind = TRUE)
-    inds <- arrayInd(which.min(b_res_cl), dim(b_res_cl))
-    rnames = rownames(b_res_cl)[inds[,1]]
-    resp_b <- min(b_res_cl, na.rm = TRUE)
-    plot((1:t_len) / t_len, Y[, rnames],
-         ylim = c(0, max(Y[, rnames]) + 100), xlab="u",
-         ylab = "", mgp=c(2,0.5,0), type = "l")
-    m_hat_vec <- m_hat(grid_points, b = resp_b, Y[, rnames], grid_points, bw = bw_abs/t_len)
-    #lines((1:t_len) / t_len, m_hat_vec, col = "red")
-    title(main = paste("The longest representative of cluster", cl), line = 1)
+    inds               <- arrayInd(which.min(b_res_cl), dim(b_res_cl))
+    repr_country       <- rownames(b_res_cl)[inds[,1]]
+    repr_b             <- min(b_res_cl, na.rm = TRUE)
+    m_hat_vec <- m_hat(grid_points, b = repr_b, Y[, repr_country],
+                       grid_points, bw = bw_abs/t_len)
+    tmp <- rep(NA, 200 - length(m_hat_vec))
+    plot((1:t_len) / t_len, c(m_hat_vec, tmp),
+         ylim = c(0, max(m_hat_vec) + 100), xlab="u",
+         ylab = "m_hat(b * u)", mgp = c(2,0.5,0), type = "l")
+    countries_cluster <- countries_cluster[countries_cluster != repr_country]
+    for (country in countries_cluster){
+      repr_b <- min(b_res_cl[country, ], na.rm = TRUE)
+      m_hat_vec_1 <- m_hat(grid_points, b = repr_b, Y[, country],
+                           grid_points, bw = bw_abs/t_len)
+      tmp <- rep(NA, 200 - length(m_hat_vec_1))
+      lines((1:t_len) / t_len, c(m_hat_vec_1, tmp), col = "red")
+    }
+    title(main = paste("Representative of cluster", cl), line = 1)
   }
 }
