@@ -15,7 +15,7 @@ library(dendextend)
 source("functions.R")
 
 #Defining necessary constants
-b_bar <- 2
+b_bar <- 1.5
 bw_abs <- 7
 
 #Loading the world coronavirus data
@@ -70,7 +70,7 @@ for (country in countries) {
 sum(covid_mat < 0)
 covid_mat[covid_mat < 0] <- 0
 
-b_grid <- seq(1, b_bar, by = 0.01)
+b_grid <- seq(1, b_bar, by = 0.05)
 
 
 
@@ -78,7 +78,8 @@ m_hat <- function(vect_u, b, data_p, grid_p, bw){
   m_hat_vec <- c()
   for (u in vect_u){
     result = sum((abs((grid_p - u * b) / bw) <= 1) * data_p)
-    norm = sum((abs((grid_p - u * b) / bw) <= 1))
+    #norm = sum((abs((grid_p - u * b) / bw) <= 1))
+    norm = min(floor((u * b + bw) * t_len), t_len) - max(ceiling((u * b - bw) * t_len), 1) + 1
     m_hat_vec <- c(m_hat_vec, result/norm)
   }
   return(m_hat_vec)
@@ -107,7 +108,7 @@ integrand <- function(vect_u, b, data_points_i, data_points_j,
 }
 
 Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
-
+b_res <- rep(1, n_ts)
 for (b in b_grid){
   norm_b <- c()
   norm   <- c()
@@ -138,6 +139,11 @@ for (b in b_grid){
       } else {
         if (min(delta_ij, delta_ji) < Delta_hat[i, j]) {
           Delta_hat[i, j] <- min(delta_ij, delta_ji)
+          if (delta_ij <= delta_ji) {
+            b_res[i] <- b
+          } else {
+            b_res[j] <- b
+          }
         }
       }
       Delta_hat[j, i] <- Delta_hat[i, j]
@@ -152,3 +158,31 @@ rownames(Delta_hat) <- countries
 delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
 plot(res)
+
+subgroups <- cutree(res, 6)
+
+for (cl in 1:6){
+  countries_cluster <- colnames(Delta_hat)[subgroups == cl]
+  if (length(countries_cluster) == 1){
+    plot((1:t_len) / t_len, covid_mat[, countries_cluster],
+         ylim = c(0, max(covid_mat[, countries_cluster]) + 100), xlab="u",
+         ylab = "", mgp=c(2,0.5,0), type = "l")
+    m_hat_vec <- m_hat(grid_points, b = 1, covid_mat[, countries_cluster], grid_points, bw = bw_abs/t_len)
+    lines((1:t_len) / t_len, m_hat_vec,  col = "red")
+    title(main = paste("The only one representative of cluster", cl), line = 1)
+  } else {
+    b_res_cl <- b_res[subgroups == cl, subgroups == cl]
+    colnames(b_res_cl) <- countries_cluster
+    rownames(b_res_cl) <- countries_cluster
+    #which(b_res_cl == min(b_res_cl, na.rm = TRUE), arr.ind = TRUE)
+    inds <- arrayInd(which.min(b_res_cl), dim(b_res_cl))
+    rnames = rownames(b_res_cl)[inds[,1]]
+    resp_b <- min(b_res_cl, na.rm = TRUE)
+    plot((1:t_len) / t_len, covid_mat[, rnames],
+         ylim = c(0, max(covid_mat[, rnames]) + 100), xlab="u",
+         ylab = "", mgp=c(2,0.5,0), type = "l")
+    m_hat_vec <- m_hat(grid_points, b = resp_b, covid_mat[, rnames], grid_points, bw = bw_abs/t_len)
+    #lines((1:t_len) / t_len, m_hat_vec, col = "red")
+    title(main = paste("The longest representative of cluster", cl), line = 1)
+  }
+}
