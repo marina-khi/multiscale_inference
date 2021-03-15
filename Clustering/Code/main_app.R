@@ -15,7 +15,7 @@ library(dendextend)
 source("functions.R")
 
 #Defining necessary constants
-b_bar <- 1.5
+b_bar <- 2
 bw_abs <- 7
 
 #Loading the world coronavirus data
@@ -108,7 +108,8 @@ integrand <- function(vect_u, b, data_points_i, data_points_j,
 }
 
 Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
-b_res <- rep(1, n_ts)
+b_res     <- matrix(data = rep(NA, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
+
 for (b in b_grid){
   norm_b <- c()
   norm   <- c()
@@ -135,14 +136,18 @@ for (b in b_grid){
                                   grid_points = grid_points, bw = bw_abs/t_len,
                                   subdivisions=2000)$value
       if (b == 1) {
-        Delta_hat[i, j]   <- min(delta_ij, delta_ji)
+        Delta_hat[i, j] <- min(delta_ij, delta_ji)
+        b_res[i, j]     <- 1
+        b_res[j, i]     <- 1
       } else {
         if (min(delta_ij, delta_ji) < Delta_hat[i, j]) {
           Delta_hat[i, j] <- min(delta_ij, delta_ji)
           if (delta_ij <= delta_ji) {
-            b_res[i] <- b
+            b_res[i, j] <- b
+            b_res[j, i] <- 1
           } else {
-            b_res[j] <- b
+            b_res[j, i] <- b
+            b_res[i, j] <- 1
           }
         }
       }
@@ -155,6 +160,9 @@ for (b in b_grid){
 colnames(Delta_hat) <- countries
 rownames(Delta_hat) <- countries
 
+colnames(b_res) <- countries
+rownames(b_res) <- countries
+
 delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
 plot(res)
@@ -166,31 +174,40 @@ for (cl in 1:6){
   if (length(countries_cluster) == 1){
     m_hat_vec <- m_hat(grid_points, b = 1, covid_mat[, countries_cluster],
                        grid_points, bw = bw_abs/t_len)
+    norm <- integrate(m_hat, lower = 0, upper = 1, b = 1,
+                      data_p = covid_mat[, countries_cluster], grid_p = grid_points,
+                      bw = bw_abs/t_len, subdivisions=2000)$value
     plot((1:t_len) / t_len, m_hat_vec,
-         ylim = c(0, max(m_hat_vec) + 100), xlab="u",
-         ylab = "", mgp = c(2,0.5,0), type = "l")
+         ylim = c(0, max(m_hat_vec) + 10), xlab="u",
+         ylab = "", mgp = c(2, 0.5, 0), type = "l")
     title(main = paste("Representative of cluster", cl), line = 1)
   } else {
     b_res_cl <- b_res[subgroups == cl, subgroups == cl]
-    colnames(b_res_cl) <- countries_cluster
-    rownames(b_res_cl) <- countries_cluster
-    inds               <- arrayInd(which.min(b_res_cl), dim(b_res_cl))
-    repr_country       <- rownames(b_res_cl)[inds[,1]]
-    repr_b             <- min(b_res_cl, na.rm = TRUE)
-    m_hat_vec <- m_hat(grid_points, b = repr_b, covid_mat[, repr_country],
+    #colnames(b_res_cl) <- countries_cluster
+    #rownames(b_res_cl) <- countries_cluster
+    inds               <- which.min(rowSums(b_res_cl, na.rm = TRUE)) #dim(b_res_cl))
+    repr_country       <- rownames(b_res_cl)[inds]
+    m_hat_vec <- m_hat(grid_points, b = 1, covid_mat[, repr_country],
                        grid_points, bw = bw_abs/t_len)
-    tmp <- rep(NA, t_len - length(m_hat_vec))
-    plot((1:t_len) / t_len, c(m_hat_vec, tmp),
-         ylim = c(0, max(m_hat_vec) + 100), xlab="u",
-         ylab = "m_hat(b * u)", mgp = c(2,0.5,0), type = "l")
+    norm <- integrate(m_hat, lower = 0, upper = 1, b = 1,
+              data_p = covid_mat[, repr_country], grid_p = grid_points,
+              bw = bw_abs/t_len, subdivisions=2000)$value
+    #cat("Country", repr_country, " - success \n")
+    plot((1:t_len) / t_len, m_hat_vec/norm,
+         ylim = c(0, max(m_hat_vec/norm) + 10), xlab="u",
+         ylab = "m_hat(b * u)", mgp = c(2, 0.5, 0), type = "l")
     countries_cluster <- countries_cluster[countries_cluster != repr_country]
     for (country in countries_cluster){
-      repr_b <- min(b_res_cl[country, ], na.rm = TRUE)
-      m_hat_vec_1 <- m_hat(grid_points, b = repr_b, covid_mat[, country],
+      b <- b_res_cl[country, repr_country] / b_res_cl[repr_country, country]
+      m_hat_vec_1 <- m_hat(grid_points, b = b, covid_mat[, country],
                            grid_points, bw = bw_abs/t_len)
-      tmp <- rep(NA, t_len - length(m_hat_vec_1))
-      lines((1:t_len) / t_len, c(m_hat_vec_1, tmp), col = "red")
+      m_hat_vec_1[(m_hat_vec_1 == 0 | is.nan(m_hat_vec_1))] <- NA
+      norm_1 <- integrate(m_hat, lower = 0, upper = 1 / b, b = b,
+                          data_p = covid_mat[, country], grid_p = grid_points,
+                          bw = bw_abs/t_len, subdivisions=2000)$value
+      #cat("Country", country, " - success \n")
+      lines((1:length(m_hat_vec_1)) / t_len, m_hat_vec_1/norm_1, col = "red")
     }
-    title(main = paste("Representative of cluster", cl), line = 1)
+    title(main = paste("Representatives of cluster", cl), line = 1)
   }
 }
