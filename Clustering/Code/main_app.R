@@ -11,11 +11,13 @@ options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
 
 library(dendextend)
+library(tictoc)
+library(Rcpp)
 
-source("functions.R")
+Rcpp::sourceCpp("example.cpp")
 
 #Defining necessary constants
-b_bar <- 2
+b_bar <- 1.05
 bw_abs <- 7
 
 #Loading the world coronavirus data
@@ -70,9 +72,6 @@ for (country in countries) {
 sum(covid_mat < 0)
 covid_mat[covid_mat < 0] <- 0
 
-b_grid <- seq(1, b_bar, by = 0.05)
-
-
 
 m_hat <- function(vect_u, b, data_p, grid_p, bw){
   m_hat_vec <- c()
@@ -85,56 +84,38 @@ m_hat <- function(vect_u, b, data_p, grid_p, bw){
   return(m_hat_vec)
 }
 
+#Grid for b and for smoothing
+b_grid      <- seq(1, b_bar, by = 0.05)
 grid_points <- seq(1/t_len, 1, by = 1/t_len)
-# integral_points <- seq(1/t_len, 1, by = 0.01/t_len)
-# 
-# m_hat_vec <- m_hat(integral_points, b = 1, covid_mat[, 1], grid_points, bw = bw_abs/t_len)
-# plot(grid_points, covid_mat[, 1], type = "l")
-# lines(integral_points, m_hat_vec, col = "red")
-# 
-# m_hat_vec <- m_hat(integral_points, b = 1, covid_mat[, 2], grid_points, bw = bw_abs/t_len)
-# plot(grid_points, covid_mat[, 2], type = "l")
-# lines(integral_points, m_hat_vec, col = "blue")
-# 
-# m_hat_vec <- m_hat(integral_points, b = 1, covid_mat[, 3], grid_points, bw = bw_abs/t_len)
-# plot(grid_points, covid_mat[, 3], type = "l")
-# lines(integral_points, m_hat_vec, col = "green")
 
-
-integrand <- function(vect_u, b, data_points_i, data_points_j, 
-                      norm_b, norm, grid_points, bw) {
-  tmp <- m_hat(vect_u, b, data_points_i, grid_points, bw)/(norm_b * 1/b) - m_hat(vect_u, b = 1, data_points_j, grid_points, bw) / (norm * 1/b)
-  return(tmp^2)
-}
 
 Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
 b_res     <- matrix(data = rep(NA, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
 
+tic("Starting")
 for (b in b_grid){
   norm_b <- c()
   norm   <- c()
   for (k in 1:n_ts){
-    norm_b <- c(norm_b, integrate(m_hat, lower = 0, upper = 1/b, b = b,
-                                  data_p = covid_mat[, k], grid_p = grid_points,
-                                  bw = bw_abs/t_len, subdivisions=2000)$value)
-    norm <- c(norm, integrate(m_hat, lower = 0, upper = 1/b, b = 1,
-                              data_p = covid_mat[, k], grid_p = grid_points, 
-                              bw = bw_abs/t_len, subdivisions=2000)$value)
+    norm_b <- c(norm_b, integrate1_cpp(b = b, data_points = covid_mat[, k],
+                                       grid_points = grid_points,
+                                       bw = bw_abs/t_len, subdiv = 2000)$res)
+    norm <- c(norm_b, integrate1_cpp(b = 1.0, data_points = covid_mat[, k],
+                                     grid_points = grid_points,
+                                     bw = bw_abs/t_len, subdiv = 2000)$res)
   }
   for (i in 1:(n_ts - 1)){
     for (j in (i + 1):n_ts){
-      delta_ij <- 1/b * integrate(integrand, lower = 0, upper = 1/b, b = b,
-                                  data_points_i = covid_mat[, i],
-                                  data_points_j = covid_mat[, j],
-                                  norm_b = norm_b[i], norm = norm[j],
+      delta_ij <- 1/b * integrate2_cpp(b = b, data_points_1 = covid_mat[, i],
+                                  data_points_2 = covid_mat[, j],
+                                  norm_1 = norm_b[i], norm_2 = norm[j],
                                   grid_points = grid_points, bw = bw_abs/t_len,
-                                  subdivisions=2000)$value
-      delta_ji <- 1/b * integrate(integrand, lower = 0, upper = 1/b, b = b,
-                                  data_points_i = covid_mat[, j],
-                                  data_points_j = covid_mat[, i],
-                                  norm_b = norm_b[j], norm = norm[i],
+                                  subdiv=2000)$res
+      delta_ji <- 1/b * integrate2_cpp(b = b, data_points_1 = covid_mat[, j],
+                                  data_points_2 = covid_mat[, i],
+                                  norm_1 = norm_b[j], norm_2 = norm[i],
                                   grid_points = grid_points, bw = bw_abs/t_len,
-                                  subdivisions=2000)$value
+                                  subdiv=2000)$res
       if (b == 1) {
         Delta_hat[i, j] <- min(delta_ij, delta_ji)
         b_res[i, j]     <- 1
@@ -156,6 +137,7 @@ for (b in b_grid){
       }
   }  
 }
+toc()
 
 colnames(Delta_hat) <- countries
 rownames(Delta_hat) <- countries
