@@ -147,12 +147,22 @@ rownames(b_res) <- countries
 
 delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
-plot(res)
+pdf("plots/dendrogram.pdf", width=15, height=6, paper="special")
+plot(res, cex = 0.8)
+rect.hclust(res, k = 6, border = 2:7)
+dev.off()
 
 subgroups <- cutree(res, 6)
 
 for (cl in 1:6){
   countries_cluster <- colnames(Delta_hat)[subgroups == cl]
+  pdf(paste0("plots/results_cluster_", cl, ".pdf"), width=7, height=6, paper="special")
+
+  #Setting the layout of the graphs
+  par(cex = 1, tck = -0.025)
+  par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
+  par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
+  
   if (length(countries_cluster) == 1){
     m_hat_vec <- m_hat(grid_points, b = 1, covid_mat[, countries_cluster],
                        grid_points, bw = bw_abs/t_len)
@@ -163,6 +173,7 @@ for (cl in 1:6){
          ylim = c(0, max(m_hat_vec) + 10), xlab="u",
          ylab = "", mgp = c(2, 0.5, 0), type = "l")
     title(main = paste("Representative of cluster", cl), line = 1)
+    
   } else {
     b_res_cl <- b_res[subgroups == cl, subgroups == cl]
     #colnames(b_res_cl) <- countries_cluster
@@ -178,8 +189,8 @@ for (cl in 1:6){
     plot((1:t_len) / t_len, m_hat_vec/norm,
          ylim = c(0, max(m_hat_vec/norm) + 10), xlab="u",
          ylab = "m_hat(b * u)", mgp = c(2, 0.5, 0), type = "l")
-    countries_cluster <- countries_cluster[countries_cluster != repr_country]
-    for (country in countries_cluster){
+    countries_cluster_1 <- countries_cluster[countries_cluster != repr_country]
+    for (country in countries_cluster_1){
       b <- b_res_cl[country, repr_country] / b_res_cl[repr_country, country]
       m_hat_vec_1 <- m_hat(grid_points, b = b, covid_mat[, country],
                            grid_points, bw = bw_abs/t_len)
@@ -188,8 +199,11 @@ for (cl in 1:6){
                           data_p = covid_mat[, country], grid_p = grid_points,
                           bw = bw_abs/t_len, subdivisions=2000)$value
       #cat("Country", country, " - success \n")
-      lines((1:length(m_hat_vec_1)) / t_len, m_hat_vec_1/norm_1, col = "red")
+      lines((1:length(m_hat_vec_1)) / t_len, m_hat_vec_1/norm_1)
     }
     title(main = paste("Representatives of cluster", cl), line = 1)
   }
+  legend("topright", inset = 0.02, legend=countries_cluster,
+         lty = 1, cex = 0.7, ncol = 1)
+  dev.off()
 }
