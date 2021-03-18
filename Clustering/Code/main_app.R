@@ -16,7 +16,7 @@ library(Rcpp)
 Rcpp::sourceCpp("example.cpp")
 
 #Defining necessary constants
-b_bar <- 2
+b_bar <- 1.01
 bw_abs <- 6.5
 
 #Loading the world coronavirus data
@@ -84,7 +84,7 @@ m_hat <- function(vect_u, b, data_p, grid_p, bw){
 }
 
 #Grid for b and for smoothing
-b_grid      <- seq(1, b_bar, by = 0.01)
+b_grid      <- seq(1, b_bar, by = 0.05)
 grid_points <- seq(1/t_len, 1, by = 1/t_len)
 
 
@@ -154,6 +154,41 @@ rownames(b_res) <- countries
 
 delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
+
+#Plotting world map
+tmp_mat1 <- data.frame(countries)
+tmp_mat2 <- covid[, c("countryterritoryCode", "countriesAndTerritories")]
+tmp_mat2 <- tmp_mat2 %>%
+  drop_na() %>%
+  distinct() %>%
+  mutate(countriesAndTerritories = recode(countriesAndTerritories,
+                                          "Bosnia_and_Herzegovina"   = "Bosnia and Herzegovina",
+                                          "Costa_Rica"               = "Costa Rica",
+                                          "Dominican_Republic"       = "Dominican Republic",
+                                          "United_Kingdom"           = "United Kingdom",
+                                          "North_Macedonia"          = "North Macedonia",
+                                          "Puerto_Rico"              = "Puerto Rico",
+                                          "Saudi_Arabia"             = "Saudi Arabia",
+                                          "El_Salvador"              = "El Salvador",
+                                          "United_States_of_America" = "United States of America",
+                                          "South_Africa"             = "South Africa"))
+covid_map <- merge(tmp_mat1, tmp_mat2, all.x=TRUE,
+                   by.x = "countries", by.y = "countryterritoryCode")
+covid_map$cluster <- cutree(res, 6)
+
+library(rworldmap)
+covidMap <- joinCountryData2Map(covid_map, 
+                                nameJoinColumn="countriesAndTerritories", 
+                                joinCode="NAME" )
+
+mapDevice('x11') #create a world shaped window
+
+#plot the map
+mapCountryData(covidMap, 
+               nameColumnToPlot='cluster', 
+               catMethod='categorical', 
+               colourPalette = 2:7,
+               numCats=6)
 
 pdf("plots/dendrogram.pdf", width=15, height=6, paper="special")
 plot(res, cex = 0.8)
