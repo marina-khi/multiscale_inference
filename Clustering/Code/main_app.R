@@ -4,7 +4,6 @@
 rm(list=ls())
 
 library(tidyr)
-library(multiscale)
 library(xtable)
 library(aweek)
 options(xtable.floating = FALSE)
@@ -17,8 +16,8 @@ library(Rcpp)
 Rcpp::sourceCpp("example.cpp")
 
 #Defining necessary constants
-b_bar <- 1.05
-bw_abs <- 7
+b_bar <- 2
+bw_abs <- 6.5
 
 #Loading the world coronavirus data
 covid         <- read.csv("data/covid.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "")
@@ -64,7 +63,7 @@ colnames(covid_mat) <- countries
 
 i = 1
 for (country in countries) {
-  covid_mat[, i]        <- covid_list[[country]]$cases[1:t_len]
+  covid_mat[, i] <- covid_list[[country]]$cases[1:t_len]
   i = i + 1
 }
 
@@ -85,14 +84,13 @@ m_hat <- function(vect_u, b, data_p, grid_p, bw){
 }
 
 #Grid for b and for smoothing
-b_grid      <- seq(1, b_bar, by = 0.05)
+b_grid      <- seq(1, b_bar, by = 0.01)
 grid_points <- seq(1/t_len, 1, by = 1/t_len)
 
 
-Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
-b_res     <- matrix(data = rep(NA, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
+Delta_hat_tmp <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
+b_res         <- matrix(data = rep(NA, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
 
-tic("Starting")
 for (b in b_grid){
   norm_b <- c()
   norm   <- c()
@@ -100,9 +98,9 @@ for (b in b_grid){
     norm_b <- c(norm_b, integrate1_cpp(b = b, data_points = covid_mat[, k],
                                        grid_points = grid_points,
                                        bw = bw_abs/t_len, subdiv = 2000)$res)
-    norm <- c(norm_b, integrate1_cpp(b = 1.0, data_points = covid_mat[, k],
-                                     grid_points = grid_points,
-                                     bw = bw_abs/t_len, subdiv = 2000)$res)
+    norm <- c(norm, integrate1_cpp(b = 1.0, data_points = covid_mat[, k],
+                                   grid_points = grid_points,
+                                   bw = bw_abs/t_len, subdiv = 2000)$res)
   }
   for (i in 1:(n_ts - 1)){
     for (j in (i + 1):n_ts){
@@ -117,27 +115,36 @@ for (b in b_grid){
                                   grid_points = grid_points, bw = bw_abs/t_len,
                                   subdiv=2000)$res
       if (b == 1) {
-        Delta_hat[i, j] <- min(delta_ij, delta_ji)
-        b_res[i, j]     <- 1
-        b_res[j, i]     <- 1
+        Delta_hat_tmp[i, j] <- delta_ij
+        Delta_hat_tmp[j, i] <- delta_ji
+        b_res[i, j] <- 1
+        b_res[j, i] <- 1
       } else {
-        if (min(delta_ij, delta_ji) < Delta_hat[i, j]) {
-          Delta_hat[i, j] <- min(delta_ij, delta_ji)
-          if (delta_ij <= delta_ji) {
-            b_res[i, j] <- b
-            b_res[j, i] <- 1
-          } else {
-            b_res[j, i] <- b
-            b_res[i, j] <- 1
-          }
+        if (delta_ij < Delta_hat_tmp[i, j]) {
+          Delta_hat_tmp[i, j] <- delta_ij
+          b_res[i, j] <- b
+          b_res[j, i] <- 1
+        } 
+        if (delta_ji < Delta_hat_tmp[j, i]) {
+          Delta_hat_tmp[j, i] <- delta_ji
+          b_res[j, i] <- b
+          b_res[i, j] <- 1          
         }
       }
-      Delta_hat[j, i] <- Delta_hat[i, j]
       #cat("b = ", b, ", Delta_hat = ", Delta_hat[i, j], "\n")
       }
   }  
 }
-toc()
+
+#Delta_hat_tmp was a temporary non-symmetrical matrix,
+#for the distance matrix we need a symmetrical one
+Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
+for (i in 1:(n_ts - 1)){
+  for (j in (i + 1):n_ts){
+    Delta_hat[i, j] <- min(Delta_hat_tmp[i, j], Delta_hat_tmp[j, i])
+    Delta_hat[j, i] <- Delta_hat[i, j]
+  }
+}
 
 colnames(Delta_hat) <- countries
 rownames(Delta_hat) <- countries
@@ -147,6 +154,7 @@ rownames(b_res) <- countries
 
 delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
+
 pdf("plots/dendrogram.pdf", width=15, height=6, paper="special")
 plot(res, cex = 0.8)
 rect.hclust(res, k = 6, border = 2:7)
