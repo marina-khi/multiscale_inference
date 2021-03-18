@@ -1,0 +1,156 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{amsmath, bm}
+\usepackage{amssymb,amsthm,graphicx}
+\usepackage{enumitem}
+\usepackage{color}
+\usepackage{epsfig}
+\usepackage{graphics}
+\usepackage{pdfpages}
+\usepackage{subcaption}
+\usepackage[font=small]{caption}
+\usepackage[hang,flushmargin]{footmisc} 
+\usepackage{float}
+\usepackage{rotating,tabularx}
+\usepackage{booktabs}
+\usepackage[mathscr]{euscript}
+\usepackage{natbib}
+\usepackage{setspace}
+\usepackage{placeins}
+\usepackage{ulem}
+\usepackage[left=3cm,right=3cm,bottom=3cm,top=3cm]{geometry}
+\numberwithin{equation}{section}
+\allowdisplaybreaks[3]
+
+\input{macros}
+
+
+
+\begin{document}
+
+
+
+\heading{Clustering of the epidemic time trends:}{the case of COVID-19}
+
+%\authors{Marina Khismatullina\renewcommand{\thefootnote}{1}\footnotemark[1]}{University of Bonn}{Michael Vogt\renewcommand{\thefootnote}{2}\footnotemark[2]}{Ulm University} 
+%\footnotetext[1]{Corresponding author. Address: Bonn Graduate School of Economics, University of Bonn, 53113 Bonn, Germany. Email: \texttt{marina.k@uni-bonn.de}.}
+%\renewcommand{\thefootnote}{2}
+%\footnotetext[2]{Address: Institute of Statistics, Department of Mathematics and Economics, Ulm University, 89081 Ulm, Germany. Email: \texttt{m.vogt@uni-ulm.de}.}
+%\renewcommand{\thefootnote}{\arabic{footnote}}
+%\setcounter{footnote}{2}
+
+%\vspace{-0.85cm}
+
+%\renewcommand{\baselinestretch}{1.2}\normalsize
+
+%\renewcommand{\abstractname}{}
+%\begin{abstract}
+%\noindent The COVID-19 pandemic is one of the most pressing issues at present. A question which is particularly important for governments and policy makers is the following: Does the virus spread in the same way in different countries? Or are there significant differences in the development of the epidemic? In this paper, we devise new inference methods that allow to detect differences in the development of the COVID-19 epidemic across countries in a statistically rigorous way. In our empirical study, we use the methods to compare the outbreak patterns of the epidemic in a number of European countries.
+%\end{abstract}
+
+%\noindent \textbf{Key words:} simultaneous hypothesis testing; multiscale test; time trend; panel data; COVID-19.
+
+%\noindent \textbf{JEL classifications:} C12; C23; C54.
+
+%\noindent \textbf{AMS 2010 subject classifications:} 62E20; 62G10; 62G15; 62G20.
+
+\renewcommand{\baselinestretch}{1.5}\normalsize
+
+
+
+\section{Model}
+
+Suppose we observe a large number of time series $\mathcal{Y}_i = \{Y_{it}: 1 \leq t \leq T\}$ for $1 \leq i \leq n$ and each time series $\mathcal{Y}_i$ satisfies the following nonparametric regression equation
+\begin{equation*}
+Y_{it} = m_i\Big(\frac{t}{T}\Big) + u_{it}
+\end{equation*}
+for $t \in \{1, \ldots, T\}$ with $m_i(\cdot)$ being an unknown smooth function defined on $[0, 1]$. As usual in nonparametric regression \citep[see e.g.][]{Robinson1989}, we let the regression function $\lambda_i$ in model \eqref{eq:model-intro} depend on rescaled time $t/T$ rather than on real time $t$. The assumptions for the error term $u_{it}$ will be discussed later.
+
+Suppose that all of the unknown functions $m_i(\cdot)$ can be divided into $K$ classes in the following way:
+\begin{itemize}
+	\item Each of the $K$ classes of functions can be defined as follows:\\
+	 $\mathcal{F}_k := \{ f:[0, 1] \rightarrow R \,|\, f = c \cdot g_k(b \cdot u)$ with $c>0, b\in [1, \bar{b}]$ and $g_k$ a density function$\}$.\\
+	 We assume that the classes are distinct, i.e. $\class_k \cap \class_{k^\prime} = \empty$ for any $k \neq k^\prime$. 
+	 \item Suppose that $\{1, \ldots, n\} = \cup_{k=1}^k \mathcal{G}_k$ such that for any $k$ we have $$m_i \in \class_k \text{ for all } i \in \mathcal{G}_k.$$
+	In other words, for all $i \in \{1, \ldots, n\}$ we can write $m_i(u) = c \cdot g_k (b \cdot u)$ for some $k \in \{1, \ldots, K\}$, $c > 0 $ and $b \in [1, \ldots \bar{b}]$.
+\end{itemize} 
+
+We can regard $c$ as the country-specific scaling parameter that accounts for the size of the country or population density. We introduce this additional parameter in order to be able to compare countries that differ substantially in terms of the population, i.e. Luxembourg and Russia. We can regard $b$ as a time parameter that is responsible for the speed of the development of the pandemic. If we compare two countries $i$ and $j$ from the same class that have different time parameters, $b_i$ and $b_j$ respectively, and $b_i > b_j$, then we can say that country $i$ experiences a more rapid development of the pandemic relative to country $j$, even though the overall shapes of the regression functions are the same.
+
+In what follows, we present a method that allows researchers to discover the group structure of the time trends of new COVID-19 cases in different countries and to cluster the countries into the classes.
+
+%For the identification purposes, we need to assume that for each $i \in \mathcal{C}$ we have $\int_0^1 \lambda_i(u)du = 1$. Only then we are able to estimate the scaling parameter $c_i$. Thus, the testing procedure is as follows.
+
+\section{Clustering procedure}
+
+Let $i$ and $j$ be two time series from our sample. In this subsection we construct a dissimilarity measure $\hat{\Delta}_{ij}$ that approximately measures the differences between the functions $m_i(u)$ and $m_j(u)$. The dissimilarity measure $\hat{\Delta}_{ij}$ will serve as a distance measure between the functions $m_i$ and $m_j$ in our clustering algorithm later on.
+
+\textit{Step 1}
+
+First, for each $i$ we nonparametrically estimate $m_i(u)$ using Nadaraya-Watson estimation procedure with a rectangular kernel and a bandwidth window that covers $7$ data points, i.e. $7$ days. This choice of a bandwidth allows us to take care of possible weekly cycles in the data which are produced by delays in reporting new cases over the weekend. As a robustness check, we repeat our analysis for the multiples of $7$ days, i.e. for bandwidths covering $14$ and $21$ days.
+
+Formally, the estimator $\hat{m}_i$ is defined as
+
+$$\hat{m}_i(u) = \sum_{t=1}^T \frac{K_h(u - t/T) Y_{it}}{\sum_{s=1}^T K_h(u - s/T)}$$
+with $K_h(u - t/T)$ being a rectangular kernel: $K_h(x) = \frac{1}{2}$ for $|x| \leq h$ and $K_h(x) = 0$ otherwise.
+
+\textit{Step 2}
+
+Second, we define a dissimilarity measure as follows. For a given value of $b \in [1, \bar{b}]$ and for a given pair of countries $(i, j)$, consider the following statistic:
+\begin{align*}
+	\delta_{ij}(b) = \frac{1}{1/b} \int_0^{1/b} \bigg( \frac{\hat{m}_i (b\cdot u)}{\int_0^{1/b} \hat{m}_i(b\cdot v) dv /(1/b)}  - \frac{\hat{m}_j (u)}{\int_0^{1/b} \hat{m}_j(v) dv /(1/b)}  \bigg)^2 du.
+\end{align*}
+$\delta_{ij}(b)$ can be regarded as a measure of dissimilarity between $m_i(b \cdot u)$ and $m_j(u)$ on an interval $[0, 1/b]$. Note that generally speaking $\delta_{ij}(b) \neq \delta_{ji}(b)$ for $i \neq j$.
+
+\textit{Step 3}
+
+We now construct a dissimilarity measure between tow countries $i$ and $j$ that does not depend on a specific choice of a time parameter $b$. In order to do so, we we would like to aggregate $\delta{ij}(b)$ for different values of $b$. According to the reasons stated above, if the functions $m_i$ and $m_j$ belong to the same class, then for some $b_0\in [1, \bar{b}]$ we will have $\delta_{ij}(b_0)$ close to zero. Hence, we aggregate the measures $\delta_{ij} (b)$ by taking the infimum over all possible values of $b$:
+\begin{align*}
+	\Delta_ij = \min \{ \inf_{b\in [1, \bar{b}]} \delta_{ij}(b), \inf_{b\in [1, \bar{b}]} \delta_{ji}(b) \}
+\end{align*}
+
+\textit{Step 4}
+
+Based on $\Delta_{ij}$, we run a hierarchical agglomerative clustering (HAC) algorithm using complete linkage criterion. Detailed description of the algorithm and its properties are presented in Section \ref{sec:alg}.
+
+\section{Clustering algorithm}\label{sec:alg}
+
+Let $S \subseteq \{1, \ldots, n\}$ and $S^\prime \subseteq \{1, \ldots, n\}$ be two sets of time series from our sample. There are several ways to define a dissimilarity measure between $S$ and $S^\prime$. In our paper, we work with the complete linkage measure of dissimilarity defined as 
+\begin{align*}
+\Delta (S, S^\prime) = \max_{i \in S, j\in S^\prime} \Delta_ij.
+\end{align*}
+Alternatively, we may use single or average linkage measure 
+
+{\color{red} This description I copied from your paper.
+
+To partition the set of time series $\{1,\ldots, n\}$ into groups, we combine the dissimilarity measure $\Delta$ with a HAC algorithm which proceeds as follows:
+
+\textbf{Algorithm} (HAC Algorithm).
+\textit{Step 0 (Initialization):} Let $\hat{G}_i^{[0]} = \{i\}$ denote the $i$th singleton cluster for $1 \leq i \leq n$ and define $\{\hat{G}_1^{[0]}, \ldots, \hat{G}_n^{[0]}\}$ to be theinitial partition of time series into clusters.
+
+\textit{Step r (Iteration):} Let $\hat{G}^{[r-1]}_1, \ldots, \hat{G}^{[r-1]}_{n - (r-1)}\}$ be the $n-(r-1)$ clusters from the previous step. Determine the pair of clusters $\hat{G}^{[r-1]}_k$ and $\hat{G}^{[r-1]}_{k^\prime}$ for which 
+\begin{align*}
+\Delta(\hat{G}^{[r-1]}_{k}, \hat{G}^{[r-1]}_{k^\prime}) = \min_{1 \leq l < l^\prime \leq n- (r-1)} \Delta(\hat{G}^{[r-1]}_{l}, \hat{G}^{[r-1]}_{l^\prime})
+\end{align*}and merge them into a new cluster.
+
+Iterating this procedure for $r = 1, \ldots, n-1$ yields a tree of nested partitions \linebreak $\{\hat{G}^{[r]}_1, \ldots, \hat{G}^{[r]}_{n-r} \}$, which can be graphicallyrepresented by a dendrogram. Roughly speaking, the HAC algorithm merges the n singleton clusters $\hat{G}^{[0]}_i = \{i\}$ step by step until we end up with the cluster $\{1, \ldots, n\}$. In each step of the algorithm, the closest two clusters are merged, where the distance between clusters is measured in terms of the dissimilarity $\Delta$ We refer the reader to \cite{Ward1963} for an early reference on HAC clustering and to Section 14.3.12 in \cite{HastieTibshiraniFriedman2009} for an overview of hierarchical clustering methods.}
+
+\section{Application}\label{sec:app}
+
+We now use our clustering procedure to analyze the outbreak patterns of the COVID-19 epidemic. We proceed in two steps. In Section \ref{subsec:sim}, we assess the finite sample performance of our method by Monte-Carlo experiments. In Section \ref{subsec:app}, we apply the method to a sample of COVID-19 data for $80$ different countries.
+
+\subsection{Simulation}\label{subsec:sim}
+
+\subsection{Analysis of the COVID-19 data}\label{subsec:app}
+
+\subsubsection{Data}
+
+
+We analyze data from $80$ countries. We chose only those countries that have a total number of not less than $1000$ deaths during the observed time period. For each country $i$, we observe a time series $\mathcal{Y}_i = \{ Y_{it}: 1 \le t \le T \}$, where $Y_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available on the homepage of the European Center for Disease Prevention and Control (\texttt{https://www.ecdc.europa.eu}) and were downloaded on 25 February 2021.\footnote{ECDC switched to a weekly reporting schedule for the COVID-19 situation on 17 December 2020. Hence, all daily updates have been discontinued from 14 December. The downloaded daily data set presents historical data until 14 December 2020.} As already mentioned in the Introduction, we take the first Monday after reaching $100$ confirmed cases in each country as the starting date $t=1$. Beginning the time series of each country on the day when that country reached $100$ confirmed cases is a common way of ``normalizing'' the data \citep[see e.g.][]{Cohen2020}. Additionally aligning the data by Monday allows to take care of possible weekly cycles in the data which are produced by delays in reporting new cases over the weekend. The time series length $T$ is taken to be the longest interval for which we have observations for all $80$ countries. The resulting dataset thus consists of $n = 80$ time series, each with $T = 192$ observations. Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in $10$ replacements. 
+\bibliographystyle{ims}
+{\small
+\setlength{\bibsep}{0.35em}
+\bibliography{bibliography}}
+
+
+
+\end{document}
