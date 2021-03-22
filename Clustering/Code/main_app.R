@@ -4,19 +4,16 @@
 rm(list=ls())
 
 library(tidyr)
-library(xtable)
 library(aweek)
-options(xtable.floating = FALSE)
-options(xtable.timestamp = "")
-
 library(dendextend)
-library(tictoc)
 library(Rcpp)
+
+require(rworldmap)
 
 Rcpp::sourceCpp("example.cpp")
 
 #Defining necessary constants
-b_bar <- 1.01
+b_bar  <- 2
 bw_abs <- 6.5
 
 #Loading the world coronavirus data
@@ -84,7 +81,7 @@ m_hat <- function(vect_u, b, data_p, grid_p, bw){
 }
 
 #Grid for b and for smoothing
-b_grid      <- seq(1, b_bar, by = 0.05)
+b_grid      <- seq(1, b_bar, by = 0.01)
 grid_points <- seq(1/t_len, 1, by = 1/t_len)
 
 
@@ -156,30 +153,14 @@ delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
 
 #Plotting world map
-tmp_mat1 <- data.frame(countries)
-tmp_mat2 <- covid[, c("countryterritoryCode", "countriesAndTerritories")]
-tmp_mat2 <- tmp_mat2 %>%
-  drop_na() %>%
-  distinct() %>%
-  mutate(countriesAndTerritories = recode(countriesAndTerritories,
-                                          "Bosnia_and_Herzegovina"   = "Bosnia and Herzegovina",
-                                          "Costa_Rica"               = "Costa Rica",
-                                          "Dominican_Republic"       = "Dominican Republic",
-                                          "United_Kingdom"           = "United Kingdom",
-                                          "North_Macedonia"          = "North Macedonia",
-                                          "Puerto_Rico"              = "Puerto Rico",
-                                          "Saudi_Arabia"             = "Saudi Arabia",
-                                          "El_Salvador"              = "El Salvador",
-                                          "United_States_of_America" = "United States of America",
-                                          "South_Africa"             = "South Africa"))
-covid_map <- merge(tmp_mat1, tmp_mat2, all.x=TRUE,
-                   by.x = "countries", by.y = "countryterritoryCode")
+covid_map         <- data.frame(countries)
 covid_map$cluster <- cutree(res, 6)
+covid_map[covid_map$countries == 'XKX', "countries"] <- "KOS"
 
-library(rworldmap)
 covidMap <- joinCountryData2Map(covid_map, 
-                                nameJoinColumn="countriesAndTerritories", 
-                                joinCode="NAME" )
+                                nameJoinColumn="countries", 
+                                joinCode="ISO3",
+                                verbose = TRUE)
 
 mapDevice('x11') #create a world shaped window
 
@@ -209,27 +190,22 @@ for (cl in 1:6){
   if (length(countries_cluster) == 1){
     m_hat_vec <- m_hat(grid_points, b = 1, covid_mat[, countries_cluster],
                        grid_points, bw = bw_abs/t_len)
-    norm <- integrate(m_hat, lower = 0, upper = 1, b = 1,
-                      data_p = covid_mat[, countries_cluster], grid_p = grid_points,
-                      bw = bw_abs/t_len, subdivisions=2000)$value
     plot((1:t_len) / t_len, m_hat_vec,
          ylim = c(0, max(m_hat_vec) + 10), xlab="u",
          ylab = "", mgp = c(2, 0.5, 0), type = "l")
     title(main = paste("Representative of cluster", cl), line = 1)
-    
   } else {
-    b_res_cl <- b_res[subgroups == cl, subgroups == cl]
-    #colnames(b_res_cl) <- countries_cluster
-    #rownames(b_res_cl) <- countries_cluster
-    inds               <- which.min(rowSums(b_res_cl, na.rm = TRUE)) #dim(b_res_cl))
-    repr_country       <- rownames(b_res_cl)[inds]
-    m_hat_vec <- m_hat(grid_points, b = 1, covid_mat[, repr_country],
-                       grid_points, bw = bw_abs/t_len)
-    norm <- integrate(m_hat, lower = 0, upper = 1, b = 1,
-              data_p = covid_mat[, repr_country], grid_p = grid_points,
-              bw = bw_abs/t_len, subdivisions=2000)$value
+    b_res_cl     <- b_res[subgroups == cl, subgroups == cl]
+    inds         <- which.max(apply(b_res_cl, 1, function(x) sum(x == 1, na.rm = TRUE)))
+    #inds        <- which.min(rowSums(b_res_cl, na.rm = TRUE))
+    repr_country <- rownames(b_res_cl)[inds]
+    m_hat_vec    <- m_hat(grid_points, b = 1, covid_mat[, repr_country],
+                          grid_points, bw = bw_abs/t_len)
+    norm         <- integrate1_cpp(b = 1, data_points = covid_mat[, repr_country],
+                                   grid_points = grid_points,
+                                   bw = bw_abs/t_len, subdiv = 2000)$res
     #cat("Country", repr_country, " - success \n")
-    plot((1:t_len) / t_len, m_hat_vec/norm,
+    plot(grid_points, m_hat_vec/norm,
          ylim = c(0, max(m_hat_vec/norm) + 10), xlab="u",
          ylab = "m_hat(b * u)", mgp = c(2, 0.5, 0), type = "l")
     countries_cluster_1 <- countries_cluster[countries_cluster != repr_country]
@@ -238,9 +214,9 @@ for (cl in 1:6){
       m_hat_vec_1 <- m_hat(grid_points, b = b, covid_mat[, country],
                            grid_points, bw = bw_abs/t_len)
       m_hat_vec_1[(m_hat_vec_1 == 0 | is.nan(m_hat_vec_1))] <- NA
-      norm_1 <- integrate(m_hat, lower = 0, upper = 1 / b, b = b,
-                          data_p = covid_mat[, country], grid_p = grid_points,
-                          bw = bw_abs/t_len, subdivisions=2000)$value
+      norm_1         <- integrate1_cpp(b = b, data_points = covid_mat[, country],
+                                     grid_points = grid_points,
+                                     bw = bw_abs/t_len, subdiv = 2000)$res
       #cat("Country", country, " - success \n")
       lines((1:length(m_hat_vec_1)) / t_len, m_hat_vec_1/norm_1)
     }
