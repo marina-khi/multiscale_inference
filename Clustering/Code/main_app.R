@@ -14,7 +14,7 @@ Rcpp::sourceCpp("example.cpp")
 
 #Defining necessary constants
 b_bar  <- 2
-bw_abs <- 6.5
+bw_abs <- 3.5
 
 #Loading the world coronavirus data
 covid         <- read.csv("data/covid.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "")
@@ -27,16 +27,16 @@ covid         <- complete(covid, dateRep = seq.Date(min(dateRep), max(dateRep), 
 #and taking the day of 100th case as the starting point
 covid$weekday         <- weekdays(covid$dateRep)
 covid$cumcases        <- 0
-covid$cumdeaths       <- 0
+#covid$cumdeaths       <- 0
 
 covid_list <- list()
 for (country in unique(covid$countryterritoryCode)){
   covid[covid$countryterritoryCode == country, "cumcases"]  <- cumsum(covid[covid$countryterritoryCode == country, "cases"])
-  covid[covid$countryterritoryCode == country, "cumdeaths"] <- cumsum(covid[covid$countryterritoryCode == country, "deaths"])
-  tmp <- max(covid[covid$countryterritoryCode == country, "cumdeaths"])
-  if (tmp >= 1000){
+#  covid[covid$countryterritoryCode == country, "cumdeaths"] <- cumsum(covid[covid$countryterritoryCode == country, "deaths"])
+  tmp <- max(covid[covid$countryterritoryCode == country, "cumcases"])
+  if (tmp >= 20000){
     tmp_df <- covid[(covid$countryterritoryCode == country & covid$cumcases >= 100),
-                        c("dateRep", "cases", "deaths", "cumcases", "cumdeaths", "weekday")]
+                        c("dateRep", "cases", "cumcases", "weekday")]
     tmp_index <- match("Monday", tmp_df$weekday)
     #tmp_index = 1 #If we do not want to normalize by Mondays
     covid_list[[country]] <- tmp_df[tmp_index:nrow(tmp_df), ]
@@ -171,8 +171,11 @@ mapCountryData(covidMap,
                colourPalette = 2:7,
                numCats=6)
 
-pdf("plots/dendrogram.pdf", width=15, height=6, paper="special")
-plot(res, cex = 0.8)
+pdf("plots/dendrogram.pdf", width = 15, height = 6, paper = "special")
+par(cex = 1, tck = -0.025)
+par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
+par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
+plot(res, cex = 0.8, xlab = "", ylab = "")
 rect.hclust(res, k = 6, border = 2:7)
 dev.off()
 
