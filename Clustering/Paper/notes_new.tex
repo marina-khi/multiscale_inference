@@ -157,17 +157,90 @@ We assume that the data $Y_{it}$ of each country $i$ in our sample follow the no
 which was introduced in equation \eqref{eq:model}. As in the theoretical part of the paper, we assume that all of the countries $i$ can be partitioned into $K$ classes $\mathcal{G}_1, \ldots, \mathcal{G}_K$ such that for each $1 \leq k\leq K$ and for all $i \in \mathcal{G}_k$, $m_i(u) = c \cdot g_k(b \cdot u)$ for some $c>0$ and $b\in[1, \bar{b}]$. We thus suppose that the general shape of the time trends $m_i$ are the same (or at least very similar) in all countries $i$ in a given group $\mathcal{G}_k$, but the scale and time parameters may vary across countries from the same group. We take $\bar{b} = 2$ which is more than enough for our purposes. Note that $\bar{b}$ accounts for the largest value of the time parameter, and allowing for some countries to be twice as fast as some others is already a very generous assumption.
 
 Throughout the section, we set implement the clustering procedure in exactly the same way as in the simulation study of Section \ref{subsec:sim}. In particular, we use a rectangular kernel $K_h$ to compute the local linear smoothers $\hat{m}_{i}$ and consider the bandwidth $h = 3.5/T$, which corresponds to an effective sample size of $7$ days of data. Moreover, we assume that the number of classes $K$ is equal to $6$.
- 
-The results of our algorithm are presented in Figures \ref{fig:dend} - \ref{fig:3}. First, Figure \ref{fig:dend} presents the corresponding dendrogram of a HAC. Different colours of the countries correspond to the different classes they belong to (by our clustering algorithm).
 
-For comparability reasons, the estimates $\hat{m}_i$ are computed with the same bandwidth
+Furthermore, the values $\delta_{ij}(b)$ and $\delta_{ji}(b)$ are calculated not for all $b\in [1, \bar{b}]$, but on a grid that consists of the values $\{1, 1.01, 1.02, \ldots, \bar{b}\}$. Since this grid is finite, in what follows we will be working with $\min_{b \in [1, \bar{b}]} \delta_{ij}(b)$ and $\min_{b \in [1, \bar{b}]} \delta_{ji}(b)$ instead of $\inf_{b \in [1, \bar{b}]} \delta_{ij}(b)$ and $\inf_{b \in [1, \bar{b}]} \delta_{ji}(b)$.
+
+The results of our algorithm are presented in Figures \ref{fig:dend} - \ref{fig:map}. First, Figure \ref{fig:dend} presents the corresponding dendrogram of a HAC. Different colours of the countries correspond to the different classes they belong to (by our clustering algorithm). Then, Figures \ref{fig:cl1} - \ref{fig:cl6} present the trend functions of the countries that belong to the group $\mathcal{G}_1, \ldots, \mathcal{G}_6$ respectively. For comparability reasons, instead of plotting $\hat{m}_i(u)$, we opted for plotting $\hat{m}_i(\hat{b}_i \cdot u) / \hat{c}_i$ where $\hat{b}_i$ and $\hat{c}_i$ are computed according to \eqref{eq:b_hat} and \eqref{eq:c_hat} in the algorithm described below.
+
+\textit{Step 1}
+
+First, define the following quantities:
+\begin{align*}
+b_{ij} &= \begin{cases}
+\arg \min_{b \in [1, \bar{b}]} \delta_{ij}(b),  &\text{ if } \min_{b \in [1, \bar{b}]} \delta_{ij}(b) \leq \min_{b \in [1, \bar{b}]} \delta_{ji}(b), \\
+1, &\text{ otherwise};
+\end{cases}\\
+ \text{ and } b_{ji} &=\begin{cases}
+\arg \min_{b \in [1, \bar{b}]} \delta_{ji}(b),  &\text{ if } \min_{b \in [1, \bar{b}]} \delta_{ji}(b) < \min_{b \in [1, \bar{b}]} \delta_{ij}(b), \\
+1, &\text{ otherwise}.
+\end{cases}
+\end{align*}
+The idea behind these values is that our algorithm estimates the dissimilarity measure between countries $i$ and $j$ to be the smallest when their respective time parameters are equal to $b_{ij}$ and $b_{ji}$. These quantities are calculated for all pairs $i$ and $j$ irrespective of countries $i$ and $j$ being in the same class. However, if the countries $i$ and $j$ are indeed in the same class $k$, we have that $m_i(u) = c_i \cdot g_k (b_i \cdot u)$ and $m_j(u) = c_j \cdot g_k( b_j \cdot u)$. Hence,
+$$m_i \Big( \frac{u}{b_i} \Big) / c_i= g_k (u) = m_j \Big( \frac{u}{b_j} \Big) /c_j,$$
+and thus,
+$$m_i (u) / c_i = m_j \Big( \frac{b_i}{b_j} u \Big) /c_j,$$
+or, alternatively,
+$$m_i\Big( \frac{b_j}{b_i} u \Big) /c_i = m_j (u) / c_j$$
+If $b_i \geq b_j$, then $b_{ji}$ can be regarded as an approximation of $b_i / b_j$ (and $b_{ij}$ should be equal to $1$), and if $b_i < b_j$, then $b_{ij}$ can be regarded as an approximation of $b_j/b_i$ (and $b_{ji}$ should be equal to $1$). In any case, $m_i( b_{ij} u ) /c_i \approx m_j (b_{ji} u) / c_j$.
+
+\textit{Step 2}
+
+Using the quantities from Step 1, we pick a representative time series $i_k$ for each cluster $k$. If the cluster $k$ consists only of one element, than the representative time series should be the only member of the cluster. This is, for example, the case for clusters $4$ and $6$ (see Figures \ref{fig:cl4} and \ref{fig:cl6}). However, if the number of elements in a cluster is greater than $1$, the procedure of picking a representative country is slightly more compicated. The representative time series should be "the slowest" out of two countries in most of the the pairwise comparisons, or formally,
+$$i_k = \arg \max_{i \in \widehat{\mathcal{G}}_k} \# \{j \in \widehat{\mathcal{G}}_k, \, j\neq i: b_{ij} = 1\}.$$
+The representative time series $i_k$ will be plotted on the whole rescaled time interval $[0, 1]$, whereas all of the other time series $j \in \widehat{\mathcal{G}}_k,\, j \neq i_k$ due to the higher or equal time parameter (and thus faster speed of the development of the pandemic) will be plotted on the (possibly smaller) time interval $\big[ 0, 1/\hat{b}_j \big]$. The representative time series in Figures \ref{fig:cl1} - \ref{fig:cl6} are shown in red, all of the other representatives in the respective cluster are shown in black.
+
+The rule for determining the quantities $\hat{b}_j$ is as follows:
+\begin{align}\label{eq:b_hat}
+\hat{b}_{j} = \begin{cases}
+1, &\text{ if } j = i_k \text{ (representative country),}\\
+\min \Big\{1, \frac{b_{j i_{k}}}{b_{i_k j}}\Big\},  &\text{ otherwise.}
+\end{cases}
+\end{align}
+Note that by construction $\hat{b}_j \geq 1$, hence, $\big[ 0, 1/\hat{b}_j \big] \subseteq [0, 1]$ for all $j$.
+
+\textit{Step 3}
+
+Now we can calculate $\hat{c}_i$. As in the theoretical part of the paper, $\hat{c}_i$ can be regarded as a normalization parameter that accounts for the scale of the pandemic in country $i$:
+\begin{align}\label{eq:c_hat}
+\hat{c}_{i} = \frac{\int_0^{1/\hat{b}_i} \hat{m}_i(\hat{b}_i v) dv}{1/\hat{b}_i}.
+\end{align}
 
 
-\begin{figure}[p!]
+
+\begin{figure}[t!]
 \begin{minipage}[t]{0.98\textwidth}
 \includegraphics[width=\textwidth]{plots/dendrogram}
 \caption{Results of HAC.}\label{fig:dend}
 \end{minipage}
+\end{figure}
+
+\begin{figure}[t!]
+\centering
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{plots/results_cluster_1}
+\caption{}\label{fig:cl1}
+\end{subfigure}\hspace{0.25cm}
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{plots/results_cluster_2}
+\caption{}\label{fig:cl2}
+\end{subfigure}\\
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{plots/results_cluster_3}
+\caption{}\label{fig:cl3}
+\end{subfigure}\hspace{0.25cm}
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{plots/results_cluster_4}
+\caption{}\label{fig:cl4}
+\end{subfigure}\\
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{plots/results_cluster_5}
+\caption{}\label{fig:cl5}
+\end{subfigure}\hspace{0.25cm}
+\begin{subfigure}[b]{0.475\textwidth}
+\includegraphics[width=\textwidth]{plots/results_cluster_6}
+\caption{}\label{fig:cl6}
+\end{subfigure}
+\caption{Clusters produced by the algorithm. Each panel presents appropriately scaled curve estimates $\widehat{m}_i$ that belong to a particular cluster.}\label{fig:clusters}
 \end{figure}
 
 
