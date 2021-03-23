@@ -154,7 +154,7 @@ res        <- hclust(delta_dist)
 
 #Plotting world map
 covid_map         <- data.frame(countries)
-covid_map$cluster <- cutree(res, 6)
+covid_map$cluster <- cutree(res, 7)
 covid_map[covid_map$countries == 'XKX', "countries"] <- "KOS"
 
 covidMap <- joinCountryData2Map(covid_map, 
@@ -168,20 +168,20 @@ mapDevice('x11') #create a world shaped window
 mapCountryData(covidMap, 
                nameColumnToPlot='cluster', 
                catMethod='categorical', 
-               colourPalette = 2:7,
-               numCats=6)
+               colourPalette = 2:8,
+               numCats=7)
 
 pdf("plots/dendrogram.pdf", width = 15, height = 6, paper = "special")
 par(cex = 1, tck = -0.025)
 par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
 plot(res, cex = 0.8, xlab = "", ylab = "")
-rect.hclust(res, k = 6, border = 2:7)
+rect.hclust(res, k = 7, border = 2:8)
 dev.off()
 
-subgroups <- cutree(res, 6)
+subgroups <- cutree(res, 7)
 
-for (cl in 1:6){
+for (cl in 1:7){
   countries_cluster <- colnames(Delta_hat)[subgroups == cl]
   pdf(paste0("plots/results_cluster_", cl, ".pdf"), width=7, height=6, paper="special")
 
@@ -193,10 +193,13 @@ for (cl in 1:6){
   if (length(countries_cluster) == 1){
     m_hat_vec <- m_hat(grid_points, b = 1, covid_mat[, countries_cluster],
                        grid_points, bw = bw_abs/t_len)
-    plot((1:t_len) / t_len, m_hat_vec,
-         ylim = c(0, max(m_hat_vec) + 10), xlab="u",
-         ylab = "", mgp = c(2, 0.5, 0), type = "l")
-    title(main = paste("Representative of cluster", cl), line = 1)
+    norm      <- integrate1_cpp(b = 1, data_points = covid_mat[, countries_cluster],
+                                grid_points = grid_points,
+                                bw = bw_abs/t_len, subdiv = 2000)$res
+    plot((1:t_len) / t_len, m_hat_vec/norm,
+         ylim = c(0, max(m_hat_vec/norm) + 1), xlab="u",
+         ylab = "", mgp = c(2, 0.5, 0), type = "l", col = "red")
+    title(main = paste("Cluster", cl), line = 1)
   } else {
     b_res_cl     <- b_res[subgroups == cl, subgroups == cl]
     inds         <- which.max(apply(b_res_cl, 1, function(x) sum(x == 1, na.rm = TRUE)))
@@ -207,23 +210,23 @@ for (cl in 1:6){
     norm         <- integrate1_cpp(b = 1, data_points = covid_mat[, repr_country],
                                    grid_points = grid_points,
                                    bw = bw_abs/t_len, subdiv = 2000)$res
-    #cat("Country", repr_country, " - success \n")
+    cat("Country", repr_country, ", cluster", cl, " - success \n")
     plot(grid_points, m_hat_vec/norm,
-         ylim = c(0, max(m_hat_vec/norm) + 10), xlab="u",
-         ylab = "m_hat(b * u)", mgp = c(2, 0.5, 0), type = "l")
+         ylim = c(0, max(m_hat_vec/norm) + 1), xlab="u",
+         ylab = "m_hat(b * u)", mgp = c(2, 0.5, 0), type = "l", col = "red")
     countries_cluster_1 <- countries_cluster[countries_cluster != repr_country]
     for (country in countries_cluster_1){
-      b <- b_res_cl[country, repr_country] / b_res_cl[repr_country, country]
+      b           <- max(1, b_res_cl[country, repr_country] / b_res_cl[repr_country, country])
       m_hat_vec_1 <- m_hat(grid_points, b = b, covid_mat[, country],
                            grid_points, bw = bw_abs/t_len)
       m_hat_vec_1[(m_hat_vec_1 == 0 | is.nan(m_hat_vec_1))] <- NA
-      norm_1         <- integrate1_cpp(b = b, data_points = covid_mat[, country],
-                                     grid_points = grid_points,
-                                     bw = bw_abs/t_len, subdiv = 2000)$res
+      norm_1      <- integrate1_cpp(b = b, data_points = covid_mat[, country],
+                                    grid_points = grid_points,
+                                    bw = bw_abs/t_len, subdiv = 2000)$res
       #cat("Country", country, " - success \n")
-      lines((1:length(m_hat_vec_1)) / t_len, m_hat_vec_1/norm_1)
+      lines((1:length(m_hat_vec_1)) / t_len, m_hat_vec_1/(norm_1/(1/b)))
     }
-    title(main = paste("Representatives of cluster", cl), line = 1)
+    title(main = paste("Cluster", cl), line = 1)
   }
   legend("topright", inset = 0.02, legend=countries_cluster,
          lty = 1, cex = 0.7, ncol = 1)

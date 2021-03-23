@@ -20,9 +20,9 @@ integral_points <- seq(1/t_len, 1, by = 0.01/t_len)
 tmp_grid  <- seq(1 / (2 * t_len), 1, by = 2 / (2 * t_len))
 
 
-m_hat_vec <- m_hat(integral_points, b = 1, covid_mat[, 1], grid_points, bw = bw_abs/t_len)
-plot(grid_points, covid_mat[, 1], type = "l")
-lines(integral_points, m_hat_vec, col = "red")
+m_hat_vec <- m_hat(grid_points, b = 1, covid_mat[, 60], grid_points, bw = bw_abs/t_len)
+plot(grid_points, covid_mat[, 60], type = "l")
+lines(grid_points, m_hat_vec, col = "red")
 
 m_hat_vec <- m_hat(integral_points, b = 1, covid_mat[, 2], grid_points, bw = bw_abs/t_len)
 plot(grid_points, covid_mat[, 2], type = "l")
