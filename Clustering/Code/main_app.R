@@ -188,7 +188,7 @@ for (cl in 1:7){
   #Setting the layout of the graphs
   par(cex = 1, tck = -0.025)
   par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
-  par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
+  par(oma = c(1.5, 0.2, 0.2, 0.2)) #Outer margins
   
   if (length(countries_cluster) == 1){
     m_hat_vec <- m_hat(grid_points, b = 1, covid_mat[, countries_cluster],
@@ -196,10 +196,12 @@ for (cl in 1:7){
     norm      <- integrate1_cpp(b = 1, data_points = covid_mat[, countries_cluster],
                                 grid_points = grid_points,
                                 bw = bw_abs/t_len, subdiv = 2000)$res
-    plot((1:t_len) / t_len, m_hat_vec/norm,
+    plot((1:t_len) / t_len, m_hat_vec/norm, yaxt = "n",
          ylim = c(0, max(m_hat_vec/norm) + 1), xlab="u",
          ylab = "", mgp = c(2, 0.5, 0), type = "l", col = "red")
     title(main = paste("Cluster", cl), line = 1)
+    legend("topleft", inset = 0.02, legend=countries_cluster,
+           lty = 1, cex = 0.7, ncol = 1)
   } else {
     b_res_cl     <- b_res[subgroups == cl, subgroups == cl]
     inds         <- which.max(apply(b_res_cl, 1, function(x) sum(x == 1, na.rm = TRUE)))
@@ -211,8 +213,9 @@ for (cl in 1:7){
                                    grid_points = grid_points,
                                    bw = bw_abs/t_len, subdiv = 2000)$res
     cat("Country", repr_country, ", cluster", cl, " - success \n")
+    if (cl == 2) {height <- 13} else {height <- 3}
     plot(grid_points, m_hat_vec/norm,
-         ylim = c(0, max(m_hat_vec/norm) + 1), xlab="u",
+         ylim = c(0, max(m_hat_vec/norm) + height), xlab="u", yaxt = "n",
          ylab = "m_hat(b * u)", mgp = c(2, 0.5, 0), type = "l", col = "red")
     countries_cluster_1 <- countries_cluster[countries_cluster != repr_country]
     for (country in countries_cluster_1){
@@ -227,8 +230,8 @@ for (cl in 1:7){
       lines((1:length(m_hat_vec_1)) / t_len, m_hat_vec_1/(norm_1/(1/b)))
     }
     title(main = paste("Cluster", cl), line = 1)
+    legend("topleft", inset = 0.02, legend = countries_cluster,
+           lty = 1, cex = 0.7, ncol = 4)
   }
-  legend("topright", inset = 0.02, legend=countries_cluster,
-         lty = 1, cex = 0.7, ncol = 1)
   dev.off()
 }
