@@ -14,7 +14,8 @@ Rcpp::sourceCpp("example.cpp")
 
 #Defining necessary constants
 b_bar  <- 2
-bw_abs <- 3.5
+bw_abs <- 7
+n_cl   <- 7 #number of clusters
 
 #Loading the world coronavirus data
 covid         <- read.csv("data/covid.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "")
@@ -44,10 +45,9 @@ for (country in unique(covid$countryterritoryCode)){
 }
 
 
-#Calculate the number of days that we have data for all fivecountries.
+#Calculate the number of days that we have data for all countries.
 #We are not considering CHN = China as it has too long dataset.
 t_len     <- min(sapply(covid_list[names(covid_list) != "CHN"], NROW))
-#t_len     <- 150 #We consider the first five months of the pandemic
 countries <- names(covid_list)
 dates     <- unique(covid$dateRep)
 n_ts      <- length(covid_list) #Number of time series
@@ -128,9 +128,9 @@ for (b in b_grid){
           b_res[i, j] <- 1          
         }
       }
-      #cat("b = ", b, ", Delta_hat = ", Delta_hat[i, j], "\n")
-      }
-  }  
+    }
+  }
+  cat("b = ", b, " - success\n")
 }
 
 #Delta_hat_tmp was a temporary non-symmetrical matrix,
@@ -154,7 +154,7 @@ res        <- hclust(delta_dist)
 
 #Plotting world map
 covid_map         <- data.frame(countries)
-covid_map$cluster <- cutree(res, 7)
+covid_map$cluster <- cutree(res, n_cl)
 covid_map[covid_map$countries == 'XKX', "countries"] <- "KOS"
 
 covidMap <- joinCountryData2Map(covid_map, 
@@ -168,20 +168,20 @@ mapDevice('x11') #create a world shaped window
 mapCountryData(covidMap, 
                nameColumnToPlot='cluster', 
                catMethod='categorical', 
-               colourPalette = 2:8,
-               numCats=7)
+               colourPalette = 2:(n_cl + 1),
+               numCats = n_cl)
 
 pdf("plots/dendrogram.pdf", width = 15, height = 6, paper = "special")
 par(cex = 1, tck = -0.025)
 par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
 plot(res, cex = 0.8, xlab = "", ylab = "")
-rect.hclust(res, k = 7, border = 2:8)
+rect.hclust(res, k = n_cl, border = 2:(n_cl + 1))
 dev.off()
 
-subgroups <- cutree(res, 7)
+subgroups <- cutree(res, n_cl)
 
-for (cl in 1:7){
+for (cl in 1:n_cl){
   countries_cluster <- colnames(Delta_hat)[subgroups == cl]
   pdf(paste0("plots/results_cluster_", cl, ".pdf"), width=7, height=6, paper="special")
 
@@ -205,7 +205,6 @@ for (cl in 1:7){
   } else {
     b_res_cl     <- b_res[subgroups == cl, subgroups == cl]
     inds         <- which.max(apply(b_res_cl, 1, function(x) sum(x == 1, na.rm = TRUE)))
-    #inds        <- which.min(rowSums(b_res_cl, na.rm = TRUE))
     repr_country <- rownames(b_res_cl)[inds]
     m_hat_vec    <- m_hat(grid_points, b = 1, covid_mat[, repr_country],
                           grid_points, bw = bw_abs/t_len)
@@ -213,7 +212,7 @@ for (cl in 1:7){
                                    grid_points = grid_points,
                                    bw = bw_abs/t_len, subdiv = 2000)$res
     cat("Country", repr_country, ", cluster", cl, " - success \n")
-    if (cl == 2) {height <- 13} else {height <- 3}
+    if (cl == 2) {height <- 13} else {height <- 3} #This should be manually adjusted for nice plots
     plot(grid_points, m_hat_vec/norm,
          ylim = c(0, max(m_hat_vec/norm) + height), xlab="u", yaxt = "n",
          ylab = "m_hat(b * u)", mgp = c(2, 0.5, 0), type = "l", col = "red")
