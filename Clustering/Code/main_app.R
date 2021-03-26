@@ -69,16 +69,27 @@ sum(covid_mat < 0)
 covid_mat[covid_mat < 0] <- 0
 
 
+# m_hat <- function(vect_u, b, data_p, grid_p, bw){
+#   m_hat_vec <- c()
+#   for (u in vect_u){
+#     result = sum((abs((grid_p - u * b) / bw) <= 1) * data_p)
+#     #norm = sum((abs((grid_p - u * b) / bw) <= 1))
+#     norm = min(floor((u * b + bw) * t_len), t_len) - max(ceiling((u * b - bw) * t_len), 1) + 1
+#     m_hat_vec <- c(m_hat_vec, result/norm)
+#   }
+#   return(m_hat_vec)
+# }
+
 m_hat <- function(vect_u, b, data_p, grid_p, bw){
   m_hat_vec <- c()
   for (u in vect_u){
-    result = sum((abs((grid_p - u * b) / bw) <= 1) * data_p)
-    #norm = sum((abs((grid_p - u * b) / bw) <= 1))
-    norm = min(floor((u * b + bw) * t_len), t_len) - max(ceiling((u * b - bw) * t_len), 1) + 1
+    result = sum((((grid_p - u * b) / bw < 1) & ((grid_p - u * b) / bw >= -1)) * data_p)
+    norm = sum((((grid_p - u * b) / bw < 1) & ((grid_p - u * b) / bw >= -1)))
     m_hat_vec <- c(m_hat_vec, result/norm)
   }
   return(m_hat_vec)
 }
+
 
 #Grid for b and for smoothing
 b_grid      <- seq(1, b_bar, by = 0.01)
