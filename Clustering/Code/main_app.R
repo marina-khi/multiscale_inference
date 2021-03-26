@@ -169,7 +169,8 @@ mapCountryData(covidMap,
                nameColumnToPlot='cluster', 
                catMethod='categorical', 
                colourPalette = 2:(n_cl + 1),
-               numCats = n_cl)
+               numCats = n_cl,
+               mapTitle = "")
 
 pdf("plots/dendrogram.pdf", width = 15, height = 6, paper = "special")
 par(cex = 1, tck = -0.025)
