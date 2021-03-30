@@ -10,7 +10,8 @@
 \usepackage[font=small]{caption}
 \usepackage[hang,flushmargin]{footmisc} 
 \usepackage{float}
-\usepackage{rotating,tabularx}
+\usepackage[figuresleft]{rotating}
+\usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage[mathscr]{euscript}
 \usepackage{natbib}
@@ -201,7 +202,7 @@ In Section \ref{subsec:sim}, we assess the finite sample performance of our meth
 \subsection{Analysis of COVID-19 data}\label{subsec:app}
 
 
-\subsubsection{Data}
+%\subsubsection{Data}
 
 
 We analyze data from $104$ countries. We chose only those countries that have a total number of at least $20\,000$ cases of infection during the considered time period. For each country $i$, we observe a time series $\mathcal{Y}_i = \{ Y_{it}: 1 \le t \le T \}$, where $Y_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available on the homepage of the European Center for Disease Prevention and Control (\texttt{https://www.ecdc.europa.eu}) and were downloaded on 25 February 2021.\footnote{ECDC switched to a weekly reporting schedule for the COVID-19 situation on 17 December 2020. Hence, all daily updates have been discontinued from 14 December. The downloaded daily data set thus presents historical data until 14 December 2020.} As already mentioned in the Introduction, we take the first Monday after reaching $100$ confirmed cases in each country as the starting date $t=1$. 
@@ -217,13 +218,13 @@ To implement the HAC algorithm, we make the following choices:
 \begin{itemize}[leftmargin=0.6cm]
 \item We take $\bar{b} = 2$ in the definition of the classes $\mathcal{F}_k$, which is more than sufficient for our purposes: As discussed above, $b$ is some sort of effective time parameter. Suppose that $m_j(u) = m_i(b \cdot u)$ for some $b > 1$ and all $u \in [0,1/b]$. In this case, the trend $m_j$ evolves more quickly than $m_i$ by the factor $b$. By setting $\bar{b} = 2$, we allow the trend $m_j$ of country $j$ to evolve at most twice as quickly as the trend $m_i$ of country $i$.  
 %Throughout the section, we set implement the clustering procedure in exactly the same way as in the simulation study of Section \ref{subsec:sim}. In particular, 
-\item We use a rectangular kernel $K$ to compute the Nadaraya-Watson smoothers $\hat{m}_{i}$ and consider the bandwidth $h = 3.5/T$, which corresponds to an effective sample size of $7$ days of data. 
+\item We use a rectangular kernel $K$ to compute the Nadaraya-Watson smoothers $\hat{m}_{i}$ and consider the bandwidths $h = 3.5/T$ and $h = 7/T$, which corresponds to effective sample sizes of $7$ and $14$ days of data respectively. 
 \item We assume that the number of classes $K$ is equal to $7$. \textcolor{red}{(We haven't considered the problem of estimating $K$ yet. So far, $K$ is handpicked. @Oliver: Any ideas how to estimate $K$???)}
 \item The values $\delta_{ij}(b)$ and $\delta_{ji}(b)$ are calculated not for all $b\in [1, \bar{b}]$, but on a grid that consists of the values $\{1, 1.01, 1.02, \ldots, \bar{b}\}$. Since this grid is finite, we write $\min_{b \in [1, \bar{b}]} \delta_{ij}(b)$ and $\min_{b \in [1, \bar{b}]} \delta_{ji}(b)$ instead of $\inf_{b \in [1, \bar{b}]} \delta_{ij}(b)$ and $\inf_{b \in [1, \bar{b}]} \delta_{ji}(b)$ in what follows.
 \end{itemize}
 
 
-The estimation results are presented in Figures \ref{fig:dend}--\ref{fig:map}. Figure \ref{fig:dend} shows the dendrogram of the HAC algorithm. The different colours of the countries correspond to the different classes they belong to. Figures \ref{fig:cl1}--\ref{fig:cl7} depict the trend functions of the countries in the different classes. For comparability reasons, we plot $\hat{m}_i(\hat{b}_i \cdot u) / \hat{c}_i$ instead of $\hat{m}_i(u)$, where $\hat{b}_i$ and $\hat{c}_i$ are computed according to \eqref{eq:b_hat} and \eqref{eq:c_hat} in the following algorithm:
+The estimation results are presented in Figures \ref{fig:dend}--\ref{fig:map_14days}. Figure \ref{fig:dend} shows the dendrogram of the HAC algorithm for $h = 3.5/T$. The different colours of the countries correspond to the different classes they belong to. Figures \ref{fig:cl1}--\ref{fig:cl7} depict the trend functions of the countries in the different classes. Figure \ref{fig:map} shows the resulting clusters on a map. Again, the different colours of the countries correspond to the different classes they belong to. Figures \ref{fig:dend_14days}--\ref{fig:map_14days} present the corresponding results for $h=7/T$. For comparability reasons, we plot $\hat{m}_i(\hat{b}_i \cdot u) / \hat{c}_i$ instead of $\hat{m}_i(u)$, where $\hat{b}_i$ and $\hat{c}_i$ are computed according to \eqref{eq:b_hat} and \eqref{eq:c_hat} in the following algorithm:
 \begin{enumerate}[label=\textit{Step \arabic*.},leftmargin=1.45cm]
 
 
@@ -250,7 +251,7 @@ If $b_i \geq b_j$, then $b_{ji}$ can be regarded as an approximation of $b_i / b
 
 \item Using the quantities from Step 1, we pick a representative time series $i_k$ for each cluster $k$. If the cluster $k$ consists only of one element, then the representative time series is the only member of the cluster. If the number of elements is greater than $1$, the representative time series $i_k$ is the one with ``the slowest'' trend function, that is, 
 $$i_k = \arg \max_{i \in \hat{\mathcal{G}}_k} \# \{j \in \hat{\mathcal{G}}_k, \, j\neq i: b_{ij} = 1\}.$$
-The representative time series $i_k$ is plotted on the whole rescaled time interval $[0, 1]$, whereas all other time series $j \in \hat{\mathcal{G}}_k,\, j \neq i_k$ due to the higher or equal time parameter (and thus faster speed of the development of the epidemic) are plotted on the (possibly smaller) time interval $\big[ 0, 1/\hat{b}_j \big]$. The representative time series in Figures \ref{fig:cl1} - \ref{fig:cl7} are shown in red, all of the other time series in the respective cluster are shown in black.
+The representative time series $i_k$ is plotted on the whole rescaled time interval $[0, 1]$, whereas all other time series $j \in \hat{\mathcal{G}}_k,\, j \neq i_k$ due to the higher or equal time parameter (and thus faster speed of the development of the epidemic) are plotted on the (possibly smaller) time interval $\big[ 0, 1/\hat{b}_j \big]$. The representative time series in Figures \ref{fig:cl1}--\ref{fig:cl7} and \ref{fig:cl1_14days}--\ref{fig:cl7_14days} are shown in red, all of the other time series in the respective cluster are shown in black.
 
 
 \item The rule for determining the quantities $\hat{b}_j$ is as follows:
@@ -276,30 +277,30 @@ Note that by construction, $\hat{b}_j \geq 1$. Hence, $\big[ 0, 1/\hat{b}_j \big
 \FloatBarrier
 \begin{sidewaysfigure}[t!]
 %\begin{minipage}[t]{0.98\textwidth}
-\includegraphics[width=\textwidth]{plots/dendrogram}
-\caption{Results of HAC.}\label{fig:dend}
+\includegraphics[width=\textwidth]{plots/7days/dendrogram}
+\caption{Results of HAC for $h = 7/T$.}\label{fig:dend}
 %\end{minipage}
 \end{sidewaysfigure}
 
 \begin{figure}[t!]
 \centering
 \begin{subfigure}[b]{0.48\textwidth}
-\subfloat[][]{\includegraphics[width=\textwidth]{plots/results_cluster_1}\label{fig:cl1}}
+\subfloat[][]{\includegraphics[width=\textwidth]{plots/7days/results_cluster_1}\label{fig:cl1}}
 \end{subfigure}\hspace{0.25cm}
 \begin{subfigure}[b]{0.48\textwidth}
-\subfloat[][]{\includegraphics[width=\textwidth]{plots/results_cluster_2}\label{fig:cl2}}
+\subfloat[][]{\includegraphics[width=\textwidth]{plots/7days/results_cluster_2}\label{fig:cl2}}
 \end{subfigure}\\
 \begin{subfigure}[b]{0.48\textwidth}
-\subfloat[][]{\includegraphics[width=\textwidth]{plots/results_cluster_3}\label{fig:cl3}}
+\subfloat[][]{\includegraphics[width=\textwidth]{plots/7days/results_cluster_3}\label{fig:cl3}}
 \end{subfigure}\hspace{0.25cm}
 \begin{subfigure}[b]{0.48\textwidth}
-\subfloat[][]{\includegraphics[width=\textwidth]{plots/results_cluster_4}\label{fig:cl4}}
+\subfloat[][]{\includegraphics[width=\textwidth]{plots/7days/results_cluster_4}\label{fig:cl4}}
 \end{subfigure}\\
 \begin{subfigure}[b]{0.48\textwidth}
-\subfloat[][]{\includegraphics[width=\textwidth]{plots/results_cluster_5}\label{fig:cl5}}
+\subfloat[][]{\includegraphics[width=\textwidth]{plots/7days/results_cluster_5}\label{fig:cl5}}
 \end{subfigure}\hspace{0.25cm}
 \begin{subfigure}[b]{0.48\textwidth}
-\subfloat[][]{\includegraphics[width=\textwidth]{plots/results_cluster_6}\label{fig:cl6}}
+\subfloat[][]{\includegraphics[width=\textwidth]{plots/7days/results_cluster_6}\label{fig:cl6}}
 \end{subfigure}
 \end{figure}
 
@@ -307,17 +308,65 @@ Note that by construction, $\hat{b}_j \geq 1$. Hence, $\big[ 0, 1/\hat{b}_j \big
 \ContinuedFloat
 \centering
 \begin{subfigure}[b]{0.48\textwidth}
-\subfloat[][]{\includegraphics[width=\textwidth]{plots/results_cluster_7}\label{fig:cl7}}
+\subfloat[][]{\includegraphics[width=\textwidth]{plots/7days/results_cluster_7}\label{fig:cl7}}
 \end{subfigure}
-\caption{Clusters produced by the algorithm. Each panel presents appropriately scaled curve estimates $\hat{m}_i$ that belong to a particular cluster.}\label{fig:clusters}
+\caption{Clusters produced by the algorithm. Each panel presents appropriately scaled curve estimates $\hat{m}_i$ that belong to a particular cluster. The bandwidth $h$ is taken to be $7/T$.}\label{fig:clusters}
 \end{figure}
 
 \begin{figure}[t!]
 \begin{minipage}[t]{0.98\textwidth}
-\includegraphics[width=\textwidth]{plots/choropleth}
-\caption{Results of HAC on a map: each country is coloured according to the group it belongs to.}\label{fig:map}
+\includegraphics[width=\textwidth]{plots/7days/choropleth}
+\caption{Results of HAC for $h = 7/T$ on a map: each country is coloured according to the group it belongs to.}\label{fig:map}
 \end{minipage}
 \end{figure}
+
+\newpage 
+\FloatBarrier
+\begin{sidewaysfigure}[t!]
+%\begin{minipage}[t]{0.98\textwidth}
+\includegraphics[width=\textwidth]{plots/14days/dendrogram}
+\caption{Results of HAC for $h = 14/T$.}\label{fig:dend_14days}
+%\end{minipage}
+\end{sidewaysfigure}
+
+\begin{figure}[t!]
+\centering
+\begin{subfigure}[b]{0.48\textwidth}
+\subfloat[][]{\includegraphics[width=\textwidth]{plots/14days/results_cluster_1}\label{fig:cl1_14days}}
+\end{subfigure}\hspace{0.25cm}
+\begin{subfigure}[b]{0.48\textwidth}
+\subfloat[][]{\includegraphics[width=\textwidth]{plots/14days/results_cluster_2}\label{fig:cl2_14days}}
+\end{subfigure}\\
+\begin{subfigure}[b]{0.48\textwidth}
+\subfloat[][]{\includegraphics[width=\textwidth]{plots/14days/results_cluster_3}\label{fig:cl3_14days}}
+\end{subfigure}\hspace{0.25cm}
+\begin{subfigure}[b]{0.48\textwidth}
+\subfloat[][]{\includegraphics[width=\textwidth]{plots/14days/results_cluster_4}\label{fig:cl4_14days}}
+\end{subfigure}\\
+\begin{subfigure}[b]{0.48\textwidth}
+\subfloat[][]{\includegraphics[width=\textwidth]{plots/14days/results_cluster_5}\label{fig:cl5_14days}}
+\end{subfigure}\hspace{0.25cm}
+\begin{subfigure}[b]{0.48\textwidth}
+\subfloat[][]{\includegraphics[width=\textwidth]{plots/14days/results_cluster_6}\label{fig:cl6_14days}}
+\end{subfigure}
+\end{figure}
+
+\begin{figure}
+\ContinuedFloat
+\centering
+\begin{subfigure}[b]{0.48\textwidth}
+\subfloat[][]{\includegraphics[width=\textwidth]{plots/14days/results_cluster_7}\label{fig:cl7_14days}}
+\end{subfigure}
+\caption{Clusters produced by the algorithm. Each panel presents appropriately scaled curve estimates $\hat{m}_i$ that belong to a particular cluster. The bandwidth $h$ is taken to be $14/T$.}\label{fig:clusters}
+\end{figure}
+
+\begin{figure}[t!]
+\begin{minipage}[t]{0.98\textwidth}
+\includegraphics[width=\textwidth]{plots/14days/choropleth}
+\caption{Results of HAC for $h = 14/T$ on a map: each country is coloured according to the group it belongs to.}\label{fig:map_14days}
+\end{minipage}
+\end{figure}
+
 
 
 \clearpage
