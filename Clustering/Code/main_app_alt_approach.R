@@ -6,7 +6,7 @@ rm(list=ls())
 library(tidyr)
 library(aweek)
 library(dendextend)
-library(Rcpp)
+#library(Rcpp)
 
 require(rworldmap)
 
@@ -87,9 +87,11 @@ m_hat <- function(vect_u, data_p, grid_p, bw){
 grid_points <- (1:t_len)/sqrt(t_len)
 
 #Step 2
-norm  <- c()
-a_vec <- c()
-b_vec <- c()
+norm   <- c()
+a_vec  <- c()
+b_vec  <- c()
+c_vec  <- c()
+norm_p <- c()
 for (k in 1:n_ts) {
   norm <- c(norm, integrate(m_hat, lower = - Inf, upper = Inf,
                             data_p = covid_mat[, k], grid_p = grid_points,
@@ -107,8 +109,13 @@ for (k in 1:n_ts) {
   tmp        <- integrate(integrand2, lower = - Inf, upper = Inf,
                           subdivisions = 2000)$value
   b_vec      <- c(b_vec, sqrt(tmp - a_vec[k]^2))
+  c_vec      <- c(c_vec, norm[k] / b_vec[k])
+  integrand3 <- function(x) {m_hat(a_vec[k] + b_vec[k] * x,
+                                   data_p = covid_mat[, k], grid_p = grid_points,
+                                   bw = bw_abs/sqrt(t_len)) / c_vec[k]}
+  norm_p <- c(norm_p, integrate(integrand3, lower = - Inf, upper = Inf,
+                                subdivisions = 2000)$value)
 }
-c_vec <- norm/b_vec
 
 #Matrix with the distances: Step 3
 Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
@@ -117,21 +124,22 @@ for (i in 1:(n_ts - 1)){
   p_i <- function(x) {m_hat(a_vec[i] + b_vec[i] * x, data_p = covid_mat[, i],
                             grid_p = grid_points,
                             bw = bw_abs/sqrt(t_len)) / c_vec[i]}
-  norm_p_i <- integrate(p_i, lower = - Inf, upper = Inf,
-                        subdivisions = 2000)$value 
   for (j in (i + 1):n_ts){
     p_j <- function(x) {m_hat(a_vec[j] + b_vec[j] * x, data_p = covid_mat[, j],
                               grid_p = grid_points,
-                              bw = bw_abs/sqrt(t_len)) / c_vec[i]}
-    norm_p_j <- integrate(p_j, lower = - Inf, upper = Inf,
-                          subdivisions = 2000)$value 
-    integrand <- function(x) {sqrt(p_i(x)/norm_p_i) - sqrt(p_j(x)/norm_p_j)}
-    tmp <- integrate(integrand, lower = -Inf, upper = Inf,
-                     subdivisions=2000)$value
+                              bw = bw_abs/sqrt(t_len)) / c_vec[j]}
+    integrand <- function(x) {sqrt(p_i(x)/norm_p[i]) - sqrt(p_j(x)/norm_p[j])}
+    if (i == 2 & j == 28){
+      tmp <- integrate(integrand, lower = -Inf, upper = Inf,
+                       subdivisions=3000)$value
+    } else {
+      tmp <- integrate(integrand, lower = -Inf, upper = Inf,
+                       subdivisions=2000)$value
+    }
     Delta_hat[i, j] <- tmp
     Delta_hat[j, i] <- tmp
+    cat("i = ", i, ", j = ", j, " - success\n")
   }
-  cat("i = ", i, ", j = ", j, " - success\n")
 }
 
 #And now the clustering itself
