@@ -1,7 +1,4 @@
-########################
-#Analysis of covid data#
-########################
-#rm(list=ls())
+rm(list=ls())
 
 library(tidyr)
 library(aweek)
@@ -10,11 +7,10 @@ library(dendextend)
 #source("functions.R")
 
 #Defining necessary constants
-b_bar  <- 1.5
-bw_abs <- 7
+bw_abs <- 3.5
 t_len  <- 200
 n_ts   <- 6
-sigma  <- 15
+sigma  <- 10
 
 # functions for data simulations
 lambda_fct <- function(u, c = 1000, height = 5000, position = 10) {
@@ -76,100 +72,83 @@ lines((1:t_len) / t_len, lambda_vec_6, col = "blue", lty = "dashed")
 title(main = expression(Plot ~ of ~ the ~ time ~ series ~ 5  ~ and  ~ 6), line = 1)
 
 Y <- cbind(Y1, Y2, Y3, Y4, Y5, Y6)
-colnames(Y) <- c("a", "b", "c", "d", "e", "f")
+colnames(Y) <- c("1", "2", "3", "4", "5", "6")
 
-b_grid <- seq(1, b_bar, by = 0.1)
-
-m_hat <- function(vect_u, b, data_p, grid_p, bw){
-  t_len <- length(data_p)
+m_hat <- function(vect_u, data_p, grid_p, bw){
   m_hat_vec <- c()
   for (u in vect_u){
-    result = sum((abs((grid_p - u * b) / bw) <= 1) * data_p)
-    #norm = sum((abs((grid_p - u * b) / bw) <= 1))
-    norm = min(floor((u * b + bw) * t_len), t_len) - max(ceiling((u * b - bw) * t_len), 1) + 1
-    m_hat_vec <- c(m_hat_vec, result/norm)
+    result <- sum((((u - grid_p) / bw <= 1) & ((u - grid_p) / bw >= -1)) * data_p)
+    norm   <- sum((((u - grid_p) / bw <= 1) & ((u - grid_p) / bw >= -1)))
+    if (norm == 0){
+      m_hat_vec <- c(m_hat_vec, 0)
+    } else {
+      m_hat_vec <- c(m_hat_vec, result/norm)
+    }
   }
   return(m_hat_vec)
 }
 
-grid_points <- seq(1/t_len, 1, by = 1/t_len)
-integral_points <- seq(1/t_len, 1, by = 0.01/t_len)
+grid_points <- (1:t_len)/sqrt(t_len)
 
-m_hat_vec <- m_hat(grid_points, b = 1, Y[, 1], grid_points, bw = bw_abs/t_len)
-plot(grid_points, Y[, 1], type = "l")
-lines(grid_points, m_hat_vec, col = "red")
-
-m_hat_vec <- m_hat(grid_points, b = 1, Y[, 3], grid_points, bw = bw_abs/t_len)
-plot(grid_points, Y[, 3], type = "l")
-lines(grid_points, m_hat_vec, col = "blue")
-
-m_hat_vec <- m_hat(grid_points, b = 1, Y[, 5], grid_points, bw = bw_abs/t_len)
-plot(grid_points, Y[, 5], type = "l")
-lines(grid_points, m_hat_vec, col = "green")
-
-
-integrand <- function(vect_u, b, data_points_i, data_points_j, 
-                      norm_b, norm, grid_points, bw) {
-  tmp <- m_hat(vect_u, b, data_points_i, grid_points, bw)/(norm_b * 1/b) - m_hat(vect_u, b = 1, data_points_j, grid_points, bw) / (norm * 1/b)
-  return(tmp^2)
+#Step 2
+norm   <- c()
+a_vec  <- c()
+b_vec  <- c()
+c_vec  <- c()
+norm_p <- c()
+for (k in 1:n_ts) {
+  norm <- c(norm, integrate(m_hat, lower = - Inf, upper = Inf,
+                            data_p = Y[, k], grid_p = grid_points,
+                            bw = bw_abs/sqrt(t_len), subdivisions = 2000)$value)
+  
+  integrand1 <- function(x) {x * (m_hat(x, data_p = Y[, k],
+                                        grid_p = grid_points,
+                                        bw = bw_abs/sqrt(t_len)) / norm[k])}
+  a_vec      <- c(a_vec, integrate(integrand1, lower = - Inf, upper = Inf,
+                                   subdivisions = 2000)$value)
+  
+  integrand2 <- function(x) {x * x * (m_hat(x, data_p = Y[, k],
+                                            grid_p = grid_points,
+                                            bw = bw_abs/sqrt(t_len)) / norm[k])}
+  tmp        <- integrate(integrand2, lower = - Inf, upper = Inf,
+                          subdivisions = 2000)$value
+  b_vec      <- c(b_vec, sqrt(tmp - a_vec[k]^2))
+  c_vec      <- c(c_vec, norm[k] / b_vec[k])
+  integrand3 <- function(x) {m_hat(a_vec[k] + b_vec[k] * x,
+                                   data_p = Y[, k], grid_p = grid_points,
+                                   bw = bw_abs/sqrt(t_len)) / c_vec[k]}
+  norm_p     <- c(norm_p, integrate(integrand3, lower = - Inf, upper = Inf,
+                                    subdivisions = 2000)$value)
 }
 
+#Matrix with the distances: Step 3
 Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
-b_res     <- matrix(data = rep(NA, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
 
-#tic("f-c version")
-for (b in b_grid){
-  norm_b <- c()
-  norm   <- c()
-  for (k in 1:n_ts){
-    norm_b <- c(norm_b, integrate(m_hat, lower = 0, upper = 1/b, b = b,
-                                  data_p = Y[, k], grid_p = grid_points,
-                                  bw = bw_abs/t_len, subdivisions=2000)$value)
-    norm <- c(norm, integrate(m_hat, lower = 0, upper = 1/b, b = 1,
-                              data_p = Y[, k], grid_p = grid_points, 
-                              bw = bw_abs/t_len, subdivisions=2000)$value)
-  }
-  for (i in 1:(n_ts - 1)){
-    for (j in (i + 1):n_ts){
-      delta_ij <- 1/b * integrate(integrand, lower = 0, upper = 1/b, b = b,
-                                  data_points_i = Y[, i],
-                                  data_points_j = Y[, j],
-                                  norm_b = norm_b[i], norm = norm[j],
-                                  grid_points = grid_points, bw = bw_abs/t_len,
-                                  subdivisions=2000)$value
-      delta_ji <- 1/b * integrate(integrand, lower = 0, upper = 1/b, b = b,
-                                  data_points_i = Y[, j],
-                                  data_points_j = Y[, i],
-                                  norm_b = norm_b[j], norm = norm[i],
-                                  grid_points = grid_points, bw = bw_abs/t_len,
-                                  subdivisions=2000)$value
-      if (b == 1) {
-        Delta_hat[i, j]   <- min(delta_ij, delta_ji)
-      } else {
-        if (min(delta_ij, delta_ji) < Delta_hat[i, j]) {
-          Delta_hat[i, j] <- min(delta_ij, delta_ji)
-          if (delta_ij <= delta_ji) {
-            b_res[i, j] <- b
-            b_res[j, i] <- 1
-          } else {
-            b_res[j, i] <- b
-            b_res[i, j] <- 1
-          }
-        }
-      }
-      Delta_hat[j, i] <- Delta_hat[i, j]
+for (i in 1:(n_ts - 1)){
+  p_i_star <- function(x) {(m_hat(a_vec[i] + b_vec[i] * x, data_p = Y[, i],
+                                  grid_p = grid_points,
+                                  bw = bw_abs/sqrt(t_len)) / c_vec[i]) / norm_p[i]}
+  for (j in (i + 1):n_ts){
+    p_j_star <- function(x) {(m_hat(a_vec[j] + b_vec[j] * x, data_p = Y[, j],
+                                   grid_p = grid_points,
+                                   bw = bw_abs/sqrt(t_len)) / c_vec[j]) / norm_p[j]}
+    integrand <- function(x) {sqrt(p_i_star(x)) - sqrt(p_j_star(x))}
+    if (i == 1 & j == 4){
+      tmp <- integrate(integrand, lower = -Inf, upper = Inf,
+                       subdivisions=2000)$value
+    } else {
+      tmp <- integrate(integrand, lower = -Inf, upper = Inf,
+                       subdivisions=2000)$value
     }
+    Delta_hat[i, j] <- tmp
+    Delta_hat[j, i] <- tmp
+    cat("i = ", i, ", j = ", j, " - success\n")
   }
-  cat("b = ", b, ": done. \n")
 }
 
-#toc()
 
-colnames(Delta_hat) <- c("a", "b", "c", "d", "e", "f")
-rownames(Delta_hat) <- c("a", "b", "c", "d", "e", "f")
-
-colnames(b_res) <- c("a", "b", "c", "d", "e", "f")
-rownames(b_res) <- c("a", "b", "c", "d", "e", "f")
+colnames(Delta_hat) <- c("1", "2", "3", "4", "5", "6")
+rownames(Delta_hat) <- c("1", "2", "3", "4", "5", "6")
 
 delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)

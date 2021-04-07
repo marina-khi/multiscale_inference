@@ -6,11 +6,9 @@ rm(list=ls())
 library(tidyr)
 library(aweek)
 library(dendextend)
-library(Rcpp)
+#library(Rcpp)
 
 require(rworldmap)
-
-Rcpp::sourceCpp("example.cpp")
 
 #Defining necessary constants
 b_bar  <- 2
@@ -33,9 +31,9 @@ covid$cumcases        <- 0
 covid_list <- list()
 for (country in unique(covid$countryterritoryCode)){
   covid[covid$countryterritoryCode == country, "cumcases"]  <- cumsum(covid[covid$countryterritoryCode == country, "cases"])
-#  covid[covid$countryterritoryCode == country, "cumdeaths"] <- cumsum(covid[covid$countryterritoryCode == country, "deaths"])
+  #  covid[covid$countryterritoryCode == country, "cumdeaths"] <- cumsum(covid[covid$countryterritoryCode == country, "deaths"])
   tmp <- max(covid[covid$countryterritoryCode == country, "cumcases"])
-#  if (length(covid[covid$countryterritoryCode == country, "cumcases"]) >= 192){
+  #  if (length(covid[covid$countryterritoryCode == country, "cumcases"]) >= 192){
   if (tmp >= 100){
     tmp_df <- covid[(covid$countryterritoryCode == country & covid$cumcases >= 100),
                     c("dateRep", "cases", "cumcases", "weekday")]
@@ -72,98 +70,85 @@ sum(covid_mat < 0)
 covid_mat[covid_mat < 0] <- 0
 
 
-# m_hat <- function(vect_u, b, data_p, grid_p, bw){
-#   m_hat_vec <- c()
-#   for (u in vect_u){
-#     result = sum((abs((grid_p - u * b) / bw) <= 1) * data_p)
-#     #norm = sum((abs((grid_p - u * b) / bw) <= 1))
-#     norm = min(floor((u * b + bw) * t_len), t_len) - max(ceiling((u * b - bw) * t_len), 1) + 1
-#     m_hat_vec <- c(m_hat_vec, result/norm)
-#   }
-#   return(m_hat_vec)
-# }
-
-m_hat <- function(vect_u, b, data_p, grid_p, bw){
+m_hat <- function(vect_u, data_p, grid_p, bw){
   m_hat_vec <- c()
   for (u in vect_u){
-    result = sum((((grid_p - u * b) / bw <= 1) & ((grid_p - u * b) / bw >= -1)) * data_p)
-    norm = sum((((grid_p - u * b) / bw <= 1) & ((grid_p - u * b) / bw >= -1)))
-    m_hat_vec <- c(m_hat_vec, result/norm)
+    result = sum((((grid_p - u) / bw <= 1) & ((grid_p - u) / bw >= -1)) * data_p)
+    norm = sum((((grid_p - u) / bw <= 1) & ((grid_p - u) / bw >= -1)))
+    if (norm == 0){
+      m_hat_vec <- c(m_hat_vec, 0)
+    } else {
+      m_hat_vec <- c(m_hat_vec, result/norm)
+    }
   }
   return(m_hat_vec)
 }
 
+grid_points <- (1:t_len)/sqrt(t_len)
 
-#Grid for b and for smoothing
-b_grid      <- seq(1, b_bar, by = 0.01)
-grid_points <- seq(1/t_len, 1, by = 1/t_len)
-
-Delta_hat_tmp <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
-b_res         <- matrix(data = rep(NA, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
-
-for (b in b_grid){
-  norm_b <- c()
-  norm   <- c()
-  for (k in 1:n_ts){
-    norm_b <- c(norm_b, integrate1_cpp(b = b, data_points = covid_mat[, k],
-                                       grid_points = grid_points,
-                                       bw = bw_abs/t_len, subdiv = 2000)$res)
-    norm <- c(norm, integrate1_cpp(b = 1.0, data_points = covid_mat[, k],
-                                   grid_points = grid_points,
-                                   bw = bw_abs/t_len, subdiv = 2000)$res)
-  }
-  for (i in 1:(n_ts - 1)){
-    for (j in (i + 1):n_ts){
-      delta_ij <- 1/b * integrate2_cpp(b = b, data_points_1 = covid_mat[, i],
-                                  data_points_2 = covid_mat[, j],
-                                  norm_1 = norm_b[i], norm_2 = norm[j],
-                                  grid_points = grid_points, bw = bw_abs/t_len,
-                                  subdiv=2000)$res
-      delta_ji <- 1/b * integrate2_cpp(b = b, data_points_1 = covid_mat[, j],
-                                  data_points_2 = covid_mat[, i],
-                                  norm_1 = norm_b[j], norm_2 = norm[i],
-                                  grid_points = grid_points, bw = bw_abs/t_len,
-                                  subdiv=2000)$res
-      if (b == 1) {
-        Delta_hat_tmp[i, j] <- delta_ij
-        Delta_hat_tmp[j, i] <- delta_ji
-        b_res[i, j] <- 1
-        b_res[j, i] <- 1
-      } else {
-        if (delta_ij < Delta_hat_tmp[i, j]) {
-          Delta_hat_tmp[i, j] <- delta_ij
-          b_res[i, j] <- b
-          b_res[j, i] <- 1
-        } 
-        if (delta_ji < Delta_hat_tmp[j, i]) {
-          Delta_hat_tmp[j, i] <- delta_ji
-          b_res[j, i] <- b
-          b_res[i, j] <- 1          
-        }
-      }
-    }
-  }
-  cat("b = ", b, " - success\n")
+#Step 2
+norm   <- c()
+a_vec  <- c()
+b_vec  <- c()
+c_vec  <- c()
+norm_p <- c()
+for (k in 1:n_ts) {
+  norm <- c(norm, integrate(m_hat, lower = - Inf, upper = Inf,
+                            data_p = covid_mat[, k], grid_p = grid_points,
+                            bw = bw_abs/sqrt(t_len), subdivisions = 2000)$value)
+  
+  integrand1 <- function(x) {x * m_hat(x, data_p = covid_mat[, k],
+                                       grid_p = grid_points,
+                                       bw = bw_abs/sqrt(t_len)) / norm[k]}
+  a_vec      <- c(a_vec, integrate(integrand1, lower = - Inf, upper = Inf,
+                                   subdivisions = 2000)$value)
+  
+  integrand2 <- function(x) {x * x * m_hat(x, data_p = covid_mat[, k],
+                                           grid_p = grid_points,
+                                           bw = bw_abs/sqrt(t_len)) / norm[k]}
+  tmp        <- integrate(integrand2, lower = - Inf, upper = Inf,
+                          subdivisions = 2000)$value
+  b_vec      <- c(b_vec, sqrt(tmp - a_vec[k]^2))
+  c_vec      <- c(c_vec, norm[k] / b_vec[k])
+  integrand3 <- function(x) {m_hat(a_vec[k] + b_vec[k] * x,
+                                   data_p = covid_mat[, k], grid_p = grid_points,
+                                   bw = bw_abs/sqrt(t_len)) / c_vec[k]}
+  norm_p <- c(norm_p, integrate(integrand3, lower = - Inf, upper = Inf,
+                                subdivisions = 2000)$value)
 }
 
-#Delta_hat_tmp was a temporary non-symmetrical matrix,
-#for the distance matrix we need a symmetrical one
+#Matrix with the distances: Step 3
 Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
+
 for (i in 1:(n_ts - 1)){
+  p_i <- function(x) {m_hat(a_vec[i] + b_vec[i] * x, data_p = covid_mat[, i],
+                            grid_p = grid_points,
+                            bw = bw_abs/sqrt(t_len)) / c_vec[i]}
   for (j in (i + 1):n_ts){
-    Delta_hat[i, j] <- min(Delta_hat_tmp[i, j], Delta_hat_tmp[j, i])
-    Delta_hat[j, i] <- Delta_hat[i, j]
+    p_j <- function(x) {m_hat(a_vec[j] + b_vec[j] * x, data_p = covid_mat[, j],
+                              grid_p = grid_points,
+                              bw = bw_abs/sqrt(t_len)) / c_vec[j]}
+    integrand <- function(x) {sqrt(p_i(x)/norm_p[i]) - sqrt(p_j(x)/norm_p[j])}
+    if (i == 2 & j == 28){
+      tmp <- integrate(integrand, lower = -Inf, upper = Inf,
+                       subdivisions=3000)$value
+    } else {
+      tmp <- integrate(integrand, lower = -Inf, upper = Inf,
+                       subdivisions=2000)$value
+    }
+    Delta_hat[i, j] <- tmp
+    Delta_hat[j, i] <- tmp
+    cat("i = ", i, ", j = ", j, " - success\n")
   }
 }
 
+#And now the clustering itself
 colnames(Delta_hat) <- countries
 rownames(Delta_hat) <- countries
 
-colnames(b_res) <- countries
-rownames(b_res) <- countries
-
 delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
+
 
 #Plotting world map
 covid_map         <- data.frame(countries)
@@ -198,7 +183,7 @@ subgroups <- cutree(res, n_cl)
 for (cl in 1:n_cl){
   countries_cluster <- colnames(Delta_hat)[subgroups == cl]
   pdf(paste0("plots/results_cluster_", cl, ".pdf"), width=7, height=6, paper="special")
-
+  
   #Setting the layout of the graphs
   par(cex = 1, tck = -0.025)
   par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
