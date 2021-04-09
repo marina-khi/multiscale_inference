@@ -10,7 +10,7 @@ library(dendextend)
 bw_abs <- 3.5
 t_len  <- 200
 n_ts   <- 6
-sigma  <- 10
+sigma  <- 5
 
 # functions for data simulations
 lambda_fct <- function(u, c = 1000, height = 5000, position = 10) {
@@ -132,14 +132,9 @@ for (i in 1:(n_ts - 1)){
     p_j_star <- function(x) {(m_hat(a_vec[j] + b_vec[j] * x, data_p = Y[, j],
                                    grid_p = grid_points,
                                    bw = bw_abs/sqrt(t_len)) / c_vec[j]) / norm_p[j]}
-    integrand <- function(x) {sqrt(p_i_star(x)) - sqrt(p_j_star(x))}
-    if (i == 1 & j == 4){
-      tmp <- integrate(integrand, lower = -Inf, upper = Inf,
-                       subdivisions=2000)$value
-    } else {
-      tmp <- integrate(integrand, lower = -Inf, upper = Inf,
-                       subdivisions=2000)$value
-    }
+    integrand <- function(x) {(sqrt(p_i_star(x)) - sqrt(p_j_star(x)))^2}
+    tmp <- integrate(integrand, lower = -Inf, upper = Inf,
+                     subdivisions=2000)$value
     Delta_hat[i, j] <- tmp
     Delta_hat[j, i] <- tmp
     cat("i = ", i, ", j = ", j, " - success\n")
