@@ -9,12 +9,12 @@ library(dendextend)
 #Defining necessary constants
 bw_abs <- 3.5
 t_len  <- 200
-n_ts   <- 6
-sigma  <- 5
+n_ts   <- 8
+sigma  <- 15
 
 # functions for data simulations
-lambda_fct <- function(u, c = 1000, height = 5000, position = 10) {
-  return (height * exp(-(position * u - 3) ^ 2 / 2) + c)
+lambda_fct <- function(u, c = 1000, height = 5000, position = 10, a = 3) {
+  return (height * exp(-(position * u - a) ^ 2 / 2) + c)
 }
 
 r_doublepois <- function(n, mu, theta) {
@@ -29,13 +29,11 @@ simulate_data <- function(n_ts, t_len, lambda_vec, sigma) {
   return(data)
 }
 
-lambda_vec_1 <- lambda_fct((1:t_len) / t_len, c = 1000, height = 5000, position = 10)
-lambda_vec_2 <- lambda_fct((1:t_len) / t_len, c = 1000, height = 5000, position = 11)
+lambda_vec_1 <- lambda_fct((1:t_len) / t_len, c = 1000, height = 5000, position = 10, a = 2)
+lambda_vec_2 <- lambda_fct((1:t_len) / t_len, c = 1000, height = 5000, position = 11, a = 2)
 
 Y1 <- simulate_data(n_ts = 1, t_len = t_len, lambda_vec = lambda_vec_1, sigma = sigma)
 Y2 <- simulate_data(n_ts = 1, t_len = t_len, lambda_vec = lambda_vec_2, sigma = sigma)
-#Y2 <- simulate_data(n_ts = n_ts - 1, t_len = t_len, lambda_vec = lambda_vec, sigma = sigma)
-#Y  <- cbind(Y1, Y2)
 
 plot((1:t_len) / t_len, Y1,  ylim = c(0, max(Y1, Y2) + 100), xlab="u",
      ylab = "", mgp=c(2,0.5,0), type = "l")
@@ -44,8 +42,8 @@ lines((1:t_len) / t_len, Y2, type = "l", col = "blue")
 lines((1:t_len) / t_len, lambda_vec_2, col = "blue", lty = "dashed")
 title(main = expression(Plot ~ of ~ the ~ time ~ series ~ 1  ~ and  ~ 2), line = 1)
 
-lambda_vec_3 <- (1:t_len) * 20 + 1000
-lambda_vec_4 <- lambda_vec_3 * 1.3
+lambda_vec_3 <- lambda_fct((1:t_len) / t_len, c = 1000, height = 2000, position = 10, a = 8)
+lambda_vec_4 <- lambda_fct((1:t_len) / t_len, c = 1000, height = 2000, position = 11, a = 8)
 
 Y3 <- simulate_data(n_ts = 1, t_len = t_len, lambda_vec = lambda_vec_3, sigma = sigma)
 Y4 <- simulate_data(n_ts = 1, t_len = t_len, lambda_vec = lambda_vec_4, sigma = sigma)
@@ -57,9 +55,8 @@ lines((1:t_len) / t_len, Y4, type = "l", col = "blue")
 lines((1:t_len) / t_len, lambda_vec_4, col = "blue", lty = "dashed")
 title(main = expression(Plot ~ of ~ the ~ time ~ series ~ 3  ~ and  ~ 4), line = 1)
 
-lambda_vec_5 <- c(rep(1000, t_len/2), rep(4000, t_len/2))
-tmp <- rep(1000, t_len/3)
-lambda_vec_6 <- c(tmp, rep(4000, t_len - length(tmp)))
+lambda_vec_5 <- c(lambda_vec_1[1:(t_len / 2)], lambda_vec_3[(t_len / 2 + 1):t_len])
+lambda_vec_6 <- c(lambda_vec_2[1:(t_len / 2)], lambda_vec_4[(t_len / 2 + 1):t_len])
 
 Y5 <- simulate_data(n_ts = 1, t_len = t_len, lambda_vec = lambda_vec_5, sigma = sigma)
 Y6 <- simulate_data(n_ts = 1, t_len = t_len, lambda_vec = lambda_vec_6, sigma = sigma)
@@ -71,8 +68,26 @@ lines((1:t_len) / t_len, Y6, type = "l", col = "blue")
 lines((1:t_len) / t_len, lambda_vec_6, col = "blue", lty = "dashed")
 title(main = expression(Plot ~ of ~ the ~ time ~ series ~ 5  ~ and  ~ 6), line = 1)
 
-Y <- cbind(Y1, Y2, Y3, Y4, Y5, Y6)
-colnames(Y) <- c("1", "2", "3", "4", "5", "6")
+lambda_vec_1_tmp <- lambda_fct((1:t_len) / t_len, c = 1000, height = 2000, position = 10, a = 2)
+lambda_vec_2_tmp <- lambda_fct((1:t_len) / t_len, c = 1000, height = 2000, position = 11, a = 2)
+lambda_vec_3_tmp <- lambda_fct((1:t_len) / t_len, c = 1000, height = 5000, position = 10, a = 8)
+lambda_vec_4_tmp <- lambda_fct((1:t_len) / t_len, c = 1000, height = 5000, position = 11, a = 8)
+
+lambda_vec_7 <- c(lambda_vec_1_tmp[1:(t_len / 2)], lambda_vec_3_tmp[(t_len / 2 + 1):t_len])
+lambda_vec_8 <- c(lambda_vec_2_tmp[1:(t_len / 2)], lambda_vec_4_tmp[(t_len / 2 + 1):t_len])
+
+Y7 <- simulate_data(n_ts = 1, t_len = t_len, lambda_vec = lambda_vec_7, sigma = sigma)
+Y8 <- simulate_data(n_ts = 1, t_len = t_len, lambda_vec = lambda_vec_8, sigma = sigma)
+
+plot((1:t_len) / t_len, Y7,  ylim = c(0, max(Y7, Y8) + 100), xlab="u",
+     ylab = "", mgp=c(2,0.5,0), type = "l")
+lines((1:t_len) / t_len, lambda_vec_7,  lty = "dashed")
+lines((1:t_len) / t_len, Y8, type = "l", col = "blue")
+lines((1:t_len) / t_len, lambda_vec_8, col = "blue", lty = "dashed")
+title(main = expression(Plot ~ of ~ the ~ time ~ series ~ 7  ~ and  ~ 8), line = 1)
+
+Y <- cbind(Y1, Y2, Y3, Y4, Y5, Y6, Y7, Y8)
+colnames(Y) <- c("1", "2", "3", "4", "5", "6", "7", "8")
 
 m_hat <- function(vect_u, data_p, grid_p, bw){
   m_hat_vec <- c()
@@ -142,8 +157,8 @@ for (i in 1:(n_ts - 1)){
 }
 
 
-colnames(Delta_hat) <- c("1", "2", "3", "4", "5", "6")
-rownames(Delta_hat) <- c("1", "2", "3", "4", "5", "6")
+colnames(Delta_hat) <- c("1", "2", "3", "4", "5", "6", "7", "8")
+rownames(Delta_hat) <- c("1", "2", "3", "4", "5", "6", "7", "8")
 
 delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)

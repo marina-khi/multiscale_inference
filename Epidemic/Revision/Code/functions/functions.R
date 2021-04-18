@@ -33,12 +33,12 @@ produce_plots <- function (results, l, data_i, data_j,
 
 
   plot(data_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
-      col="blue", ylab="", xlab="", mgp=c(1, 0.5, 0))
+      col="black", ylab="", xlab="", mgp=c(1, 0.5, 0))
   lines(data_j, col="red")
 
   title(main = "(a) observed new cases per day", font.main = 1, line = 0.5)
   legend("topright", inset = 0.02, legend=c(country_i, country_j),
-         col = c("blue", "red"), lty = 1, cex = 0.95, ncol = 1)
+         col = c("black", "red"), lty = 1, cex = 0.95, ncol = 1, bg = 'white')
 
   par(mar = c(0.5, 0.5, 3, 0)) #Margins for each plot
 
@@ -50,12 +50,12 @@ produce_plots <- function (results, l, data_i, data_j,
                         MoreArgs = list(data_j, grid_points, bw = 3.5 / Tlen))
   
   plot(smoothed_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
-    col="blue", ylab="", xlab = "", mgp=c(1,0.5,0))
+    col="black", ylab="", xlab = "", mgp=c(1,0.5,0))
   title(main = "(b) smoothed curves from (a)", font.main = 1, line = 0.5)
   lines(smoothed_j, col="red")
    
   plot(gov_resp_i, ylim=c(0, 100), type="l",
-        col="blue", ylab="", xlab = "", mgp=c(1, 0.5, 0))
+        col="black", ylab="", xlab = "", mgp=c(1, 0.5, 0))
   title(main = "(c) government response index", font.main = 1, line = 0.5)
   lines(gov_resp_j, col="red")
 

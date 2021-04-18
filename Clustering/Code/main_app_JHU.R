@@ -7,6 +7,7 @@ library(tidyr)
 library(aweek)
 library(dendextend)
 library(Rcpp)
+library(viridis)
 
 require(rworldmap)
 
@@ -153,17 +154,21 @@ rownames(Delta_hat) <- countries
 colnames(b_res) <- countries
 rownames(b_res) <- countries
 
+load("results.RData")
+
+n_cl <- 15
 delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
 
 #Plotting world map
 covid_map         <- data.frame(countries)
 covid_map$cluster <- cutree(res, n_cl)
-covid_map[covid_map$countries == 'XKX', "countries"] <- "KOS"
+covid_map[covid_map$countries == 'Czechia', "countries"] <- "Czech Republic"
+covid_map[covid_map$countries == 'Taiwan*', "countries"] <- "Taiwan"
 
 covidMap <- joinCountryData2Map(covid_map, 
                                 nameJoinColumn="countries", 
-                                joinCode="ISO3",
+                                joinCode="NAME",
                                 verbose = TRUE)
 
 mapDevice('x11') #create a world shaped window
@@ -172,11 +177,13 @@ mapDevice('x11') #create a world shaped window
 mapCountryData(covidMap, 
                nameColumnToPlot='cluster', 
                catMethod='categorical', 
-               colourPalette = 2:(n_cl + 1),
+               colourPalette = rainbow(n_cl),
+                 #c("#999999", "#E69F00", "#56B4E9", "#009E73",
+                #               "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "red", "white"),
                numCats = n_cl,
                mapTitle = "")
 
-pdf("plots/dendrogram.pdf", width = 15, height = 6, paper = "special")
+pdf(paste0("plots/160_countries/dendrogram_", n_cl, ".pdf"), width = 15, height = 6, paper = "special")
 par(cex = 1, tck = -0.025)
 par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins

@@ -162,17 +162,21 @@ rownames(Delta_hat) <- countries
 colnames(b_res) <- countries
 rownames(b_res) <- countries
 
+#Saving the results to work with them later
+save(Delta_hat, b_res, file = "results.RData")
+load("results.RData")
+
 delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
 
 #Plotting world map
 covid_map         <- data.frame(countries)
 covid_map$cluster <- cutree(res, n_cl)
-covid_map[covid_map$countries == 'XKX', "countries"] <- "KOS"
+covid_map[covid_map$countries == 'Czechia', "countries"] <- "Czech Republic"
 
 covidMap <- joinCountryData2Map(covid_map, 
                                 nameJoinColumn="countries", 
-                                joinCode="ISO3",
+                                joinCode="NAME",
                                 verbose = TRUE)
 
 mapDevice('x11') #create a world shaped window
@@ -185,7 +189,7 @@ mapCountryData(covidMap,
                numCats = n_cl,
                mapTitle = "")
 
-pdf("plots/dendrogram.pdf", width = 15, height = 6, paper = "special")
+pdf("plots/160_countries/dendrogram.pdf", width = 15, height = 6, paper = "special")
 par(cex = 1, tck = -0.025)
 par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
@@ -197,7 +201,7 @@ subgroups <- cutree(res, n_cl)
 
 for (cl in 1:n_cl){
   countries_cluster <- colnames(Delta_hat)[subgroups == cl]
-  pdf(paste0("plots/results_cluster_", cl, ".pdf"), width=7, height=6, paper="special")
+  pdf(paste0("plots/160_countries/results_cluster_", cl, ".pdf"), width=7, height=6, paper="special")
 
   #Setting the layout of the graphs
   par(cex = 1, tck = -0.025)

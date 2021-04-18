@@ -14,41 +14,47 @@ bw_abs <- 3.5
 n_cl   <- 7 #number of clusters
 
 #Loading the world coronavirus data
-covid         <- read.csv("data/covid.csv", sep = ",", dec = ".",
-                          stringsAsFactors = FALSE, na.strings = "")
-covid         <- covid[!is.na(covid$countryterritoryCode), ]
-covid$dateRep <- as.Date(covid$dateRep, format = "%d/%m/%Y")
-covid         <- complete(covid, dateRep = seq.Date(min(dateRep), max(dateRep), by='day'),
-                          countryterritoryCode, fill = list(cases = 0, deaths = 0))
+covid_tmp          <- read.csv("data/time_series_covid19_confirmed_global.csv", sep = ",", 
+                               stringsAsFactors = FALSE, na.strings = "", check.names = FALSE)
+names(covid_tmp)[names(covid_tmp) == "Country/Region"] <- 'CountryName'
+covid_tmp          <- covid_tmp[, -c(1, 3, 4)]
 
-#Now we "normalize" the data counting only the countries with more than
-#100 cases overall and taking the day of 100th case as the starting point.
-#We store all the data in a list covid_list
-covid$weekday  <- weekdays(covid$dateRep)
-covid$cumcases <- 0
+new_covid          <- aggregate(. ~ CountryName, covid_tmp, sum)
+
+covid         <- gather(new_covid, key = "dateRep", value = "cumcases", 2:442)
+rm(covid_tmp, new_covid)
+
+covid$dateRep <- as.Date(covid$dateRep, format = "%m/%d/%y")
+covid$cases   <- 0
+covid$weekday <- weekdays(covid$dateRep)
 
 covid_list <- list()
-for (country in unique(covid$countryterritoryCode)){
-  covid[covid$countryterritoryCode == country, "cumcases"]  <- cumsum(covid[covid$countryterritoryCode == country, "cases"])
-  tmp <- max(covid[covid$countryterritoryCode == country, "cumcases"])
-  if (tmp >= 100){
-    tmp_df <- covid[(covid$countryterritoryCode == country & covid$cumcases >= 100),
+for (country in unique(covid$CountryName)){
+  cumcases_column <- covid[covid$CountryName == country, "cumcases"]
+  time_range      <- length(cumcases_column)
+  covid[covid$CountryName == country, "cases"] <- c(0, cumcases_column[2:time_range] - cumcases_column[1:(time_range - 1)])
+  tmp <- max(covid[covid$CountryName == country, "cumcases"])
+  if (tmp >= 1000){
+    #We restrict our attention only to the contries with more than 1000 cases and only starting from 100th case
+    tmp_df <- covid[(covid$CountryName == country & covid$cumcases >= 100),
                     c("dateRep", "cases", "cumcases", "weekday")]
-    if (nrow(tmp_df) >= 192){
-      tmp_index <- match("Monday", tmp_df$weekday)
+    tmp_index <- match("Monday", tmp_df$weekday)
+    if (nrow(tmp_df) > 300) {
       covid_list[[country]] <- tmp_df[tmp_index:nrow(tmp_df), ]
     }
   }
 }
 
-
 #Calculate the number of days that we have data for all countries.
+#We are not considering CHN = China as it has too long dataset.
 t_len     <- min(sapply(covid_list, NROW))
 countries <- names(covid_list)
+dates     <- unique(covid$dateRep)
 n_ts      <- length(covid_list) #Number of time series
 
+
 #In order not to work with lists, we construct a matrix
-#with number of cases for all countries.
+#with number of cases for all countries and.
 #It is not necessary, but it is more convenient to work with.
 covid_mat           <- matrix(NA, ncol = n_ts, nrow = t_len)
 colnames(covid_mat) <- countries
@@ -59,17 +65,15 @@ for (country in countries) {
   i = i + 1
 }
 
-#Cleaning the data: there are weird cases in the dataset
-#when the number of new cases is negative! 
-sum(covid_mat < 0) #How many there are
-covid_mat[covid_mat < 0] <- 0 #Replace them with 0
-
+#Cleaning the data: there are weird cases in the dataset when the number of new cases is negative! 
+sum(covid_mat < 0)
+covid_mat[covid_mat < 0] <- 0
 
 m_hat <- function(vect_u, data_p, grid_p, bw){
   m_hat_vec <- c()
   for (u in vect_u){
-    result = sum((((grid_p - u) / bw <= 1) & ((grid_p - u) / bw >= -1)) * data_p)
-    norm = sum((((grid_p - u) / bw <= 1) & ((grid_p - u) / bw >= -1)))
+    result <- sum((((u - grid_p) / bw <= 1) & ((u - grid_p) / bw >= -1)) * data_p)
+    norm   <- sum((((u - grid_p) / bw <= 1) & ((u - grid_p) / bw >= -1)))
     if (norm == 0){
       m_hat_vec <- c(m_hat_vec, 0)
     } else {
@@ -112,25 +116,30 @@ for (k in 1:n_ts) {
                                 subdivisions = 2000)$value)
 }
 
+
 #Matrix with the distances: Step 3
 Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
 
-for (i in 1:(n_ts - 1)){
-  p_i <- function(x) {m_hat(a_vec[i] + b_vec[i] * x, data_p = covid_mat[, i],
-                            grid_p = grid_points,
-                            bw = bw_abs/sqrt(t_len)) / c_vec[i]}
+for (i in 20:(n_ts - 1)){
+  p_i_star <- function(x) {(m_hat(a_vec[i] + b_vec[i] * x, data_p = covid_mat[, i],
+                                  grid_p = grid_points,
+                                  bw = bw_abs/sqrt(t_len)) / c_vec[i]) / norm_p[i]}
   for (j in (i + 1):n_ts){
-    p_j <- function(x) {m_hat(a_vec[j] + b_vec[j] * x, data_p = covid_mat[, j],
-                              grid_p = grid_points,
-                              bw = bw_abs/sqrt(t_len)) / c_vec[j]}
-    integrand <- function(x) {sqrt(p_i(x)/norm_p[i]) - sqrt(p_j(x)/norm_p[j])}
-    if (i == 2 & j == 28){
+    p_j_star <- function(x) {(m_hat(a_vec[j] + b_vec[j] * x, data_p = covid_mat[, j],
+                                    grid_p = grid_points,
+                                    bw = bw_abs/sqrt(t_len)) / c_vec[j]) / norm_p[j]}
+    integrand <- function(x) {(sqrt(p_i_star(x)) - sqrt(p_j_star(x)))^2}
+    if (((i == 1) & ((j == 68) | (j == 117))) | ((i == 2) & (j == 24)) |
+        ((i == 9) & (j == 71))| ((i == 11) & (j == 52)) |
+        ((i == 14) & ((j == 45) | (j == 73))) | ((i == 15) & (j == 24)) |
+        ((i == 19) & ((j == 72) | (j == 89))) | ((i == 20) & (j == 62))){
       tmp <- integrate(integrand, lower = -Inf, upper = Inf,
                        subdivisions=3000)$value
     } else {
       tmp <- integrate(integrand, lower = -Inf, upper = Inf,
-                       subdivisions=2000)$value
+                       subdivisions=3000)$value
     }
+
     Delta_hat[i, j] <- tmp
     Delta_hat[j, i] <- tmp
     cat("i = ", i, ", j = ", j, " - success\n")
@@ -142,17 +151,38 @@ colnames(Delta_hat) <- countries
 rownames(Delta_hat) <- countries
 
 delta_dist <- as.dist(Delta_hat)
+plot(res)
+
+# for (i in 1:(n_ts - 1)){
+#   p_i <- function(x) {m_hat(a_vec[i] + b_vec[i] * x, data_p = covid_mat[, i],
+#                             grid_p = grid_points,
+#                             bw = bw_abs/sqrt(t_len)) / c_vec[i]}
+#   for (j in (i + 1):n_ts){
+#     p_j <- function(x) {m_hat(a_vec[j] + b_vec[j] * x, data_p = covid_mat[, j],
+#                               grid_p = grid_points,
+#                               bw = bw_abs/sqrt(t_len)) / c_vec[j]}
+#     integrand <- function(x) {sqrt(p_i(x)/norm_p[i]) - sqrt(p_j(x)/norm_p[j])}
+#     Delta_hat[i, j] <- tmp
+#     Delta_hat[j, i] <- tmp
+#     cat("i = ", i, ", j = ", j, " - success\n")
+#   }
+# }
+
+n_cl <- 10
 res        <- hclust(delta_dist)
+plot(res, cex = 0.8, xlab = "", ylab = "")
+rect.hclust(res, k = n_cl, border = 2:(n_cl + 1))
 
 
 #Plotting world map
 covid_map         <- data.frame(countries)
 covid_map$cluster <- cutree(res, n_cl)
-covid_map[covid_map$countries == 'XKX', "countries"] <- "KOS"
+covid_map[covid_map$countries == 'Czechia', "countries"] <- "Czech Republic"
+covid_map[covid_map$countries == 'Taiwan*', "countries"] <- "Taiwan"
 
 covidMap <- joinCountryData2Map(covid_map, 
                                 nameJoinColumn="countries", 
-                                joinCode="ISO3",
+                                joinCode="NAME",
                                 verbose = TRUE)
 
 mapDevice('x11') #create a world shaped window
@@ -165,13 +195,18 @@ mapCountryData(covidMap,
                numCats = n_cl,
                mapTitle = "")
 
-pdf("plots/dendrogram.pdf", width = 15, height = 6, paper = "special")
+pdf("plots/160_countries/dendrogram_alt.pdf", width = 15, height = 6, paper = "special")
 par(cex = 1, tck = -0.025)
 par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
 plot(res, cex = 0.8, xlab = "", ylab = "")
 rect.hclust(res, k = n_cl, border = 2:(n_cl + 1))
 dev.off()
+
+
+save(Delta_hat, file = "results_alt_approach.RData")
+
+
 
 subgroups <- cutree(res, n_cl)
 

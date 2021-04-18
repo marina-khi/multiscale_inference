@@ -59,8 +59,8 @@ for (country in unique(covid$countryterritoryCode)){
 
 #We are mainly interested in the "main" european countries,
 #so we leave all the others out of the analysis
-covid_list <- covid_list[names(covid_list) %in% c("DEU", "FRA", "GBR", "ESP", "ITA") == TRUE]
-#covid_list <- covid_list[names(covid_list) %in% c("DEU", "FRA", "GBR", "ITA") == TRUE]
+#covid_list <- covid_list[names(covid_list) %in% c("DEU", "FRA", "GBR", "ESP", "ITA") == TRUE]
+covid_list <- covid_list[names(covid_list) %in% c("DEU", "FRA", "GBR", "ITA") == TRUE]
 
 
 #Calculate the number of days that we have data for all fivecountries.
@@ -125,15 +125,15 @@ result <- multiscale_test(data = covid_mat, sigma = sigmahat,
                           sim_runs = sim_runs)
 
 #Rename the countries for the plot
-countries_names <- c("Germany", "Spain", "France", "United Kingdom", "Italy")
-#countries_names <- c("Germany", "France", "United Kingdom", "Italy")
+#countries_names <- c("Germany", "Spain", "France", "United Kingdom", "Italy")
+countries_names <- c("Germany", "France", "United Kingdom", "Italy")
 
 
 #Plotting pairwise comparison 
 for (l in seq_len(nrow(result$ijset))){
   i <- result$ijset[l, 1]
   j <- result$ijset[l, 2]
-  filename = paste0("plots/", countries[i], "_vs_", countries[j], ".pdf")
+  filename = paste0("plots/", countries[i], "_vs_", countries[j], "_four_countries.pdf")
   produce_plots(results = result, l = l, data_i = covid_mat[, i], data_j = covid_mat[, j],
                 gov_resp_i = gov_resp[, i], gov_resp_j = gov_resp[, j],
                 country_i = countries_names[i], country_j = countries_names[j],
