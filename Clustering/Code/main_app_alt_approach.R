@@ -117,58 +117,43 @@ for (k in 1:n_ts) {
 }
 
 
-#Matrix with the distances: Step 3
-Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
-
-for (i in 20:(n_ts - 1)){
-  p_i_star <- function(x) {(m_hat(a_vec[i] + b_vec[i] * x, data_p = covid_mat[, i],
-                                  grid_p = grid_points,
-                                  bw = bw_abs/sqrt(t_len)) / c_vec[i]) / norm_p[i]}
-  for (j in (i + 1):n_ts){
-    p_j_star <- function(x) {(m_hat(a_vec[j] + b_vec[j] * x, data_p = covid_mat[, j],
-                                    grid_p = grid_points,
-                                    bw = bw_abs/sqrt(t_len)) / c_vec[j]) / norm_p[j]}
-    integrand <- function(x) {(sqrt(p_i_star(x)) - sqrt(p_j_star(x)))^2}
-    if (((i == 1) & ((j == 68) | (j == 117))) | ((i == 2) & (j == 24)) |
-        ((i == 9) & (j == 71))| ((i == 11) & (j == 52)) |
-        ((i == 14) & ((j == 45) | (j == 73))) | ((i == 15) & (j == 24)) |
-        ((i == 19) & ((j == 72) | (j == 89))) | ((i == 20) & (j == 62))){
-      tmp <- integrate(integrand, lower = -Inf, upper = Inf,
-                       subdivisions=3000)$value
-    } else {
-      tmp <- integrate(integrand, lower = -Inf, upper = Inf,
-                       subdivisions=3000)$value
-    }
-
-    Delta_hat[i, j] <- tmp
-    Delta_hat[j, i] <- tmp
-    cat("i = ", i, ", j = ", j, " - success\n")
-  }
-}
-
-#And now the clustering itself
-colnames(Delta_hat) <- countries
-rownames(Delta_hat) <- countries
-
-delta_dist <- as.dist(Delta_hat)
-plot(res)
-
-# for (i in 1:(n_ts - 1)){
-#   p_i <- function(x) {m_hat(a_vec[i] + b_vec[i] * x, data_p = covid_mat[, i],
-#                             grid_p = grid_points,
-#                             bw = bw_abs/sqrt(t_len)) / c_vec[i]}
+# #Matrix with the distances: Step 3
+# Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
+# 
+# for (i in 20:(n_ts - 1)){
+#   p_i_star <- function(x) {(m_hat(a_vec[i] + b_vec[i] * x, data_p = covid_mat[, i],
+#                                   grid_p = grid_points,
+#                                   bw = bw_abs/sqrt(t_len)) / c_vec[i]) / norm_p[i]}
 #   for (j in (i + 1):n_ts){
-#     p_j <- function(x) {m_hat(a_vec[j] + b_vec[j] * x, data_p = covid_mat[, j],
-#                               grid_p = grid_points,
-#                               bw = bw_abs/sqrt(t_len)) / c_vec[j]}
-#     integrand <- function(x) {sqrt(p_i(x)/norm_p[i]) - sqrt(p_j(x)/norm_p[j])}
+#     p_j_star <- function(x) {(m_hat(a_vec[j] + b_vec[j] * x, data_p = covid_mat[, j],
+#                                     grid_p = grid_points,
+#                                     bw = bw_abs/sqrt(t_len)) / c_vec[j]) / norm_p[j]}
+#     integrand <- function(x) {(sqrt(p_i_star(x)) - sqrt(p_j_star(x)))^2}
+#     if (((i == 1) & ((j == 68) | (j == 117))) | ((i == 2) & (j == 24)) |
+#         ((i == 9) & (j == 71))| ((i == 11) & (j == 52)) |
+#         ((i == 14) & ((j == 45) | (j == 73))) | ((i == 15) & (j == 24)) |
+#         ((i == 19) & ((j == 72) | (j == 89))) | ((i == 20) & (j == 62))){
+#       tmp <- integrate(integrand, lower = -Inf, upper = Inf,
+#                        subdivisions=3000)$value
+#     } else {
+#       tmp <- integrate(integrand, lower = -Inf, upper = Inf,
+#                        subdivisions=2000)$value
+#     }
+# 
 #     Delta_hat[i, j] <- tmp
 #     Delta_hat[j, i] <- tmp
 #     cat("i = ", i, ", j = ", j, " - success\n")
 #   }
 # }
+#
+##And now the clustering itself
+#colnames(Delta_hat) <- countries
+#rownames(Delta_hat) <- countries
 
-n_cl <- 10
+
+load("results_alt_approach.RData")
+n_cl <- 12
+delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
 plot(res, cex = 0.8, xlab = "", ylab = "")
 rect.hclust(res, k = n_cl, border = 2:(n_cl + 1))
@@ -191,11 +176,11 @@ mapDevice('x11') #create a world shaped window
 mapCountryData(covidMap, 
                nameColumnToPlot='cluster', 
                catMethod='categorical', 
-               colourPalette = 2:(n_cl + 1),
+               colourPalette = rainbow(n_cl),
                numCats = n_cl,
                mapTitle = "")
 
-pdf("plots/160_countries/dendrogram_alt.pdf", width = 15, height = 6, paper = "special")
+pdf(paste0("plots/dendrogram_alt.pdf"), width = 15, height = 6, paper = "special")
 par(cex = 1, tck = -0.025)
 par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
@@ -203,16 +188,12 @@ plot(res, cex = 0.8, xlab = "", ylab = "")
 rect.hclust(res, k = n_cl, border = 2:(n_cl + 1))
 dev.off()
 
-
-save(Delta_hat, file = "results_alt_approach.RData")
-
-
-
+plotting_grid <- seq(-5, 5, by = 1 / t_len)
 subgroups <- cutree(res, n_cl)
 
 for (cl in 1:n_cl){
   countries_cluster <- colnames(Delta_hat)[subgroups == cl]
-  pdf(paste0("plots/results_cluster_", cl, ".pdf"), width=7, height=6, paper="special")
+  pdf(paste0("plots/results_cluster_", cl, "_alt.pdf"), width=7, height=6, paper="special")
   
   #Setting the layout of the graphs
   par(cex = 1, tck = -0.025)
@@ -220,42 +201,32 @@ for (cl in 1:n_cl){
   par(oma = c(1.5, 0.2, 0.2, 0.2)) #Outer margins
   
   if (length(countries_cluster) == 1){
-    m_hat_vec <- m_hat(grid_points, b = 1, covid_mat[, countries_cluster],
-                       grid_points, bw = bw_abs/t_len)
-    norm      <- integrate1_cpp(b = 1, data_points = covid_mat[, countries_cluster],
-                                grid_points = grid_points,
-                                bw = bw_abs/t_len, subdiv = 2000)$res
-    plot((1:t_len) / t_len, m_hat_vec/norm, yaxt = "n",
-         ylim = c(0, max(m_hat_vec/norm) + 1), xlab="u",
+    ind <- match(countries_cluster, countries)
+    m_hat_vec <- m_hat(a_vec[ind] + b_vec[ind] * plotting_grid,
+                       covid_mat[, countries_cluster],
+                       grid_points,
+                       bw = bw_abs/sqrt(t_len)) / (c_vec[ind] * norm_p[ind])
+    plot(plotting_grid, m_hat_vec, yaxt = "n",
+         ylim = c(0, max(m_hat_vec) + 1), xlab="u",
          ylab = "", mgp = c(2, 0.5, 0), type = "l", col = "red")
     title(main = paste("Cluster", cl), line = 1)
     legend("topleft", inset = 0.02, legend=countries_cluster,
            lty = 1, cex = 0.7, ncol = 1)
   } else {
-    b_res_cl     <- b_res[subgroups == cl, subgroups == cl]
-    inds         <- which.max(apply(b_res_cl, 1, function(x) sum(x == 1, na.rm = TRUE)))
-    repr_country <- rownames(b_res_cl)[inds]
-    m_hat_vec    <- m_hat(grid_points, b = 1, covid_mat[, repr_country],
-                          grid_points, bw = bw_abs/t_len)
-    norm         <- integrate1_cpp(b = 1, data_points = covid_mat[, repr_country],
-                                   grid_points = grid_points,
-                                   bw = bw_abs/t_len, subdiv = 2000)$res
-    cat("Country", repr_country, ", cluster", cl, " - success \n")
-    if (cl == 2) {height <- 13} else {height <- 3} #This should be manually adjusted for nice plots
-    plot(grid_points, m_hat_vec/norm,
-         ylim = c(0, max(m_hat_vec/norm) + height), xlab="u", yaxt = "n",
-         ylab = "m_hat(b * u)", mgp = c(2, 0.5, 0), type = "l", col = "red")
-    countries_cluster_1 <- countries_cluster[countries_cluster != repr_country]
-    for (country in countries_cluster_1){
-      b           <- max(1, b_res_cl[country, repr_country] / b_res_cl[repr_country, country])
-      m_hat_vec_1 <- m_hat(grid_points, b = b, covid_mat[, country],
-                           grid_points, bw = bw_abs/t_len)
-      m_hat_vec_1[(m_hat_vec_1 == 0 | is.nan(m_hat_vec_1))] <- NA
-      norm_1      <- integrate1_cpp(b = b, data_points = covid_mat[, country],
-                                    grid_points = grid_points,
-                                    bw = bw_abs/t_len, subdiv = 2000)$res
+    inds <- match(countries_cluster, countries)
+    i    <- inds[1]
+    m_hat_vec <- m_hat(a_vec[i] + b_vec[i] * plotting_grid, covid_mat[, i],
+                       grid_points,
+                       bw = bw_abs/sqrt(t_len)) / (c_vec[i] * norm_p[i])
+    plot(plotting_grid, m_hat_vec,
+         ylim = c(0, max(m_hat_vec) + 1), xlab="u", yaxt = "n",
+        mgp = c(2, 0.5, 0), type = "l", col = "red")
+    for (j in inds[2:length(inds)]){
+      m_hat_vec <- m_hat(a_vec[j] + b_vec[j] * plotting_grid, covid_mat[, j],
+                         grid_points,
+                         bw = bw_abs/sqrt(t_len)) / (c_vec[j] * norm_p[j])
       #cat("Country", country, " - success \n")
-      lines((1:length(m_hat_vec_1)) / t_len, m_hat_vec_1/(norm_1/(1/b)))
+      lines(plotting_grid, m_hat_vec)
     }
     title(main = paste("Cluster", cl), line = 1)
     legend("topleft", inset = 0.02, legend = countries_cluster,

@@ -6,7 +6,8 @@
 \usepackage{epsfig}
 \usepackage{graphics}
 \usepackage{pdfpages}
-\usepackage{subcaption}
+%\usepackage{subcaption}
+\usepackage{subfig}
 \usepackage[font=small]{caption}
 \usepackage[hang,flushmargin]{footmisc} 
 \usepackage{float}
@@ -303,21 +304,6 @@ Figures \ref{fig:dend_14days}--\ref{fig:map_14days} present the corresponding re
 
 \newpage 
 \FloatBarrier
-\begin{sidewaysfigure}[t!]
-%\begin{minipage}[t]{0.98\textwidth}
-\includegraphics[width=\textwidth]{plots/dendrogram_10}
-\caption{Results of HAC for $10$ clusters.}\label{fig:dend}
-%\end{minipage}
-\end{sidewaysfigure}
-
-\newpage 
-\FloatBarrier
-\begin{sidewaysfigure}[t!]
-%\begin{minipage}[t]{0.98\textwidth}
-\includegraphics[width=\textwidth]{plots/dendrogram_alt_10}
-\caption{Results of HAC for $10$ clusters, alternative approach}\label{fig:dend}
-%\end{minipage}
-\end{sidewaysfigure}
 
 
 %\begin{figure}[t!]
@@ -354,14 +340,14 @@ Figures \ref{fig:dend_14days}--\ref{fig:map_14days} present the corresponding re
 \begin{figure}[t!]
 \begin{minipage}[t]{0.98\textwidth}
 \includegraphics[width=\textwidth]{plots/choropleth_10}
-\caption{Results of HAC for $10$ clusters on a map: each country is coloured according to the group it belongs to.}\label{fig:map}
+\caption{Results of HAC for $10$ clusters on a map: each country is coloured according to the group it belongs to.}\label{fig:map_10cl}
 \end{minipage}
 \end{figure}
 
 \begin{figure}[t!]
 \begin{minipage}[t]{0.98\textwidth}
 \includegraphics[width=\textwidth]{plots/choropleth_alt_10}
-\caption{Results of HAC for $10$ clusters (alternative approach) on a map: each country is coloured according to the group it belongs to.}\label{fig:map}
+\caption{Results of HAC for $10$ clusters (alternative approach) on a map: each country is coloured according to the group it belongs to.}
 \end{minipage}
 \end{figure}
 
@@ -401,23 +387,6 @@ Figures \ref{fig:dend_14days}--\ref{fig:map_14days} present the corresponding re
 
 \newpage 
 \FloatBarrier
-\begin{sidewaysfigure}[t!]
-%\begin{minipage}[t]{0.98\textwidth}
-\includegraphics[width=\textwidth]{plots/dendrogram_15}
-\caption{Results of HAC for $15$ clusters.}
-%\end{minipage}
-\end{sidewaysfigure}
-
-\newpage 
-\FloatBarrier
-\begin{sidewaysfigure}[t!]
-%\begin{minipage}[t]{0.98\textwidth}
-\includegraphics[width=\textwidth]{plots/dendrogram_alt_15}
-\caption{Results of HAC for $15$ clusters, alternative approach}
-%\end{minipage}
-\end{sidewaysfigure}
-
-
 \begin{figure}[t!]
 \begin{minipage}[t]{0.98\textwidth}
 \includegraphics[width=\textwidth]{plots/choropleth_15}
@@ -433,54 +402,73 @@ Figures \ref{fig:dend_14days}--\ref{fig:map_14days} present the corresponding re
 \end{figure}
 
 
-%\newpage 
-%\FloatBarrier
-%\begin{sidewaysfigure}[t!]
-%%\begin{minipage}[t]{0.98\textwidth}
-%\includegraphics[width=\textwidth]{plots/14days/dendrogram}
-%\caption{Results of HAC for $h = 7/T$.}\label{fig:dend_14days}
-%%\end{minipage}
-%\end{sidewaysfigure}
-%
-%\begin{figure}[t!]
-%\centering
-%\begin{subfigure}[b]{0.48\textwidth}
-%\subfloat[][]{\includegraphics[width=\textwidth]{plots/14days/results_cluster_1}\label{fig:cl1_14days}}
-%\end{subfigure}\hspace{0.25cm}
-%\begin{subfigure}[b]{0.48\textwidth}
-%\subfloat[][]{\includegraphics[width=\textwidth]{plots/14days/results_cluster_2}\label{fig:cl2_14days}}
-%\end{subfigure}\\
-%\begin{subfigure}[b]{0.48\textwidth}
-%\subfloat[][]{\includegraphics[width=\textwidth]{plots/14days/results_cluster_3}\label{fig:cl3_14days}}
-%\end{subfigure}\hspace{0.25cm}
-%\begin{subfigure}[b]{0.48\textwidth}
-%\subfloat[][]{\includegraphics[width=\textwidth]{plots/14days/results_cluster_4}\label{fig:cl4_14days}}
-%\end{subfigure}\\
-%\begin{subfigure}[b]{0.48\textwidth}
-%\subfloat[][]{\includegraphics[width=\textwidth]{plots/14days/results_cluster_5}\label{fig:cl5_14days}}
-%\end{subfigure}\hspace{0.25cm}
-%\begin{subfigure}[b]{0.48\textwidth}
-%\subfloat[][]{\includegraphics[width=\textwidth]{plots/14days/results_cluster_6}\label{fig:cl6_14days}}
-%\end{subfigure}
-%\end{figure}
-%
-%\begin{figure}
-%\ContinuedFloat
-%\centering
-%\begin{subfigure}[b]{0.48\textwidth}
-%\subfloat[][]{\includegraphics[width=\textwidth]{plots/14days/results_cluster_7}\label{fig:cl7_14days}}
-%\end{subfigure}
-%\caption{Clusters produced by the algorithm. Each panel presents appropriately scaled curve estimates $\hat{m}_i$ that belong to a particular cluster. The bandwidth $h$ is taken to be $7/T$.}\label{fig:clusters}
-%\end{figure}
-%
-%\begin{figure}[t!]
-%\begin{minipage}[t]{0.98\textwidth}
-%\includegraphics[width=\textwidth]{plots/14days/choropleth}
-%\caption{Results of HAC for $h = 7/T$ on a map: each country is coloured according to the group it belongs to.}\label{fig:map_14days}
-%\end{minipage}
-%\end{figure}
+\newpage 
+\FloatBarrier
+\begin{figure}[t!]
+\centering
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_1}\label{fig:cl1}}
+\hspace{0.25cm}
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_2}\label{fig:cl2}}
+\\
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_3}\label{fig:cl3}}
+\hspace{0.25cm}
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_4}\label{fig:cl4}}
+\\
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_5}\label{fig:cl5}}
+\hspace{0.25cm}
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_6}\label{fig:cl6}}
+\end{figure}
 
+\begin{figure}
+\ContinuedFloat
+\centering
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_7}\label{fig:cl7}}
+\hspace{0.25cm}
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_8}\label{fig:cl8}}
+\\
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_9}\label{fig:cl9}}
+\hspace{0.25cm}
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_10}\label{fig:cl10}}
+\\
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_11}\label{fig:cl11}}
+\hspace{0.25cm}
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_12}\label{fig:cl12}}
+\caption{Clusters produced by the algorithm. Each panel presents appropriately scaled curve estimates $\hat{m}_i$ that belong to a particular cluster. The bandwidth $h$ is taken to be $3.5/T$.}\label{fig:clusters}
+\end{figure}
 
+\newpage 
+\FloatBarrier
+\begin{figure}[t!]
+\centering
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_1_alt}\label{fig:cl1_alt}}
+\hspace{0.25cm}
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_2_alt}\label{fig:cl2_alt}}
+\\
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_3_alt}\label{fig:cl3_alt}}
+\hspace{0.25cm}
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_4_alt}\label{fig:cl4_alt}}
+\\
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_5_alt}\label{fig:cl5_alt}}
+\hspace{0.25cm}
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_6_alt}\label{fig:cl6_alt}}
+\end{figure}
+
+\begin{figure}
+\ContinuedFloat
+\centering
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_7_alt}\label{fig:cl7_alt}}
+\hspace{0.25cm}
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_8_alt}\label{fig:cl8_alt}}
+\\
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_9_alt}\label{fig:cl9_alt}}
+\hspace{0.25cm}
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_10_alt}\label{fig:cl10_alt}}
+\\
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_11_alt}\label{fig:cl11_alt}}
+\hspace{0.25cm}
+\subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/results_cluster_12_alt}\label{fig:cl12_alt}}
+\caption{Clusters produced by the algorithm. Each panel presents appropriately scaled curve estimates $\hat{m}_i$ that belong to a particular cluster. The bandwidth $h$ is taken to be $3.5/T$.}\label{fig:clusters}
+\end{figure}
 
 \clearpage
 \bibliographystyle{ims}

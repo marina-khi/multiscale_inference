@@ -1,17 +1,16 @@
-########################################
-#Analysis of covid data by John Hopkins#
-########################################
+########################
+#Analysis of covid data#
+########################
 rm(list=ls())
 
 library(tidyr)
 library(aweek)
 library(dendextend)
 library(Rcpp)
-library(viridis)
 
 require(rworldmap)
 
-Rcpp::sourceCpp("example.cpp")
+Rcpp::sourceCpp("integration.cpp")
 
 #Defining necessary constants
 b_bar  <- 2
@@ -19,44 +18,42 @@ bw_abs <- 3.5
 n_cl   <- 7 #number of clusters
 
 #Loading the world coronavirus data
-covid_tmp          <- read.csv("data/time_series_covid19_confirmed_global.csv", sep = ",", 
-                               stringsAsFactors = FALSE, na.strings = "", check.names = FALSE)
-names(covid_tmp)[names(covid_tmp) == "Country/Region"] <- 'CountryName'
-covid_tmp          <- covid_tmp[, -c(1, 3, 4)]
+covid         <- read.csv("data/covid.csv", sep = ",", dec = ".", stringsAsFactors = FALSE, na.strings = "")
+covid         <- covid[!is.na(covid$countryterritoryCode), ]
+covid$dateRep <- as.Date(covid$dateRep, format = "%d/%m/%Y")
+covid         <- complete(covid, dateRep = seq.Date(min(dateRep), max(dateRep), by='day'),
+                          countryterritoryCode, fill = list(cases = 0, deaths = 0))
 
-new_covid          <- aggregate(. ~ CountryName, covid_tmp, sum)
-
-covid         <- gather(new_covid, key = "dateRep", value = "cumcases", 2:442)
-rm(covid_tmp, new_covid)
-
-covid$dateRep <- as.Date(covid$dateRep, format = "%m/%d/%y")
-covid$cases   <- 0
-covid$weekday <- weekdays(covid$dateRep)
+#Now we "normalize" the data counting only the countries with more than 1000 deaths overall
+#and taking the day of 100th case as the starting point
+covid$weekday         <- weekdays(covid$dateRep)
+covid$cumcases        <- 0
+#covid$cumdeaths       <- 0
 
 covid_list <- list()
-for (country in unique(covid$CountryName)){
-  cumcases_column <- covid[covid$CountryName == country, "cumcases"]
-  time_range      <- length(cumcases_column)
-  covid[covid$CountryName == country, "cases"] <- c(0, cumcases_column[2:time_range] - cumcases_column[1:(time_range - 1)])
-  tmp <- max(covid[covid$CountryName == country, "cumcases"])
-  if (tmp >= 1000){
-    #We restrict our attention only to the contries with more than 1000 cases and only starting from 100th case
-    tmp_df <- covid[(covid$CountryName == country & covid$cumcases >= 100),
+for (country in unique(covid$countryterritoryCode)){
+  covid[covid$countryterritoryCode == country, "cumcases"]  <- cumsum(covid[covid$countryterritoryCode == country, "cases"])
+#  covid[covid$countryterritoryCode == country, "cumdeaths"] <- cumsum(covid[covid$countryterritoryCode == country, "deaths"])
+  tmp <- max(covid[covid$countryterritoryCode == country, "cumcases"])
+#  if (length(covid[covid$countryterritoryCode == country, "cumcases"]) >= 192){
+  if (tmp >= 100){
+    tmp_df <- covid[(covid$countryterritoryCode == country & covid$cumcases >= 100),
                     c("dateRep", "cases", "cumcases", "weekday")]
-    tmp_index <- match("Monday", tmp_df$weekday)
-    if (nrow(tmp_df) > 300) {
+    if (nrow(tmp_df) >= 192){
+      tmp_index <- match("Monday", tmp_df$weekday)
+      #tmp_index = 1 #If we do not want to normalize by Mondays
       covid_list[[country]] <- tmp_df[tmp_index:nrow(tmp_df), ]
     }
   }
 }
 
+
 #Calculate the number of days that we have data for all countries.
 #We are not considering CHN = China as it has too long dataset.
-t_len     <- min(sapply(covid_list, NROW))
+t_len     <- min(sapply(covid_list[names(covid_list) != "CHN"], NROW))
 countries <- names(covid_list)
 dates     <- unique(covid$dateRep)
 n_ts      <- length(covid_list) #Number of time series
-
 
 #In order not to work with lists, we construct a matrix
 #with number of cases for all countries and.
@@ -74,7 +71,18 @@ for (country in countries) {
 sum(covid_mat < 0)
 covid_mat[covid_mat < 0] <- 0
 
-#Nadaraya-Watson estimator
+
+# m_hat <- function(vect_u, b, data_p, grid_p, bw){
+#   m_hat_vec <- c()
+#   for (u in vect_u){
+#     result = sum((abs((grid_p - u * b) / bw) <= 1) * data_p)
+#     #norm = sum((abs((grid_p - u * b) / bw) <= 1))
+#     norm = min(floor((u * b + bw) * t_len), t_len) - max(ceiling((u * b - bw) * t_len), 1) + 1
+#     m_hat_vec <- c(m_hat_vec, result/norm)
+#   }
+#   return(m_hat_vec)
+# }
+
 m_hat <- function(vect_u, b, data_p, grid_p, bw){
   m_hat_vec <- c()
   for (u in vect_u){
@@ -107,15 +115,15 @@ for (b in b_grid){
   for (i in 1:(n_ts - 1)){
     for (j in (i + 1):n_ts){
       delta_ij <- 1/b * integrate2_cpp(b = b, data_points_1 = covid_mat[, i],
-                                       data_points_2 = covid_mat[, j],
-                                       norm_1 = norm_b[i], norm_2 = norm[j],
-                                       grid_points = grid_points, bw = bw_abs/t_len,
-                                       subdiv=2000)$res
+                                  data_points_2 = covid_mat[, j],
+                                  norm_1 = norm_b[i], norm_2 = norm[j],
+                                  grid_points = grid_points, bw = bw_abs/t_len,
+                                  subdiv=2000)$res
       delta_ji <- 1/b * integrate2_cpp(b = b, data_points_1 = covid_mat[, j],
-                                       data_points_2 = covid_mat[, i],
-                                       norm_1 = norm_b[j], norm_2 = norm[i],
-                                       grid_points = grid_points, bw = bw_abs/t_len,
-                                       subdiv=2000)$res
+                                  data_points_2 = covid_mat[, i],
+                                  norm_1 = norm_b[j], norm_2 = norm[i],
+                                  grid_points = grid_points, bw = bw_abs/t_len,
+                                  subdiv=2000)$res
       if (b == 1) {
         Delta_hat_tmp[i, j] <- delta_ij
         Delta_hat_tmp[j, i] <- delta_ji
@@ -154,9 +162,10 @@ rownames(Delta_hat) <- countries
 colnames(b_res) <- countries
 rownames(b_res) <- countries
 
+#Saving the results to work with them later
+save(Delta_hat, b_res, file = "results.RData")
 load("results.RData")
 
-n_cl <- 15
 delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
 
@@ -164,7 +173,6 @@ res        <- hclust(delta_dist)
 covid_map         <- data.frame(countries)
 covid_map$cluster <- cutree(res, n_cl)
 covid_map[covid_map$countries == 'Czechia', "countries"] <- "Czech Republic"
-covid_map[covid_map$countries == 'Taiwan*', "countries"] <- "Taiwan"
 
 covidMap <- joinCountryData2Map(covid_map, 
                                 nameJoinColumn="countries", 
@@ -177,13 +185,11 @@ mapDevice('x11') #create a world shaped window
 mapCountryData(covidMap, 
                nameColumnToPlot='cluster', 
                catMethod='categorical', 
-               colourPalette = rainbow(n_cl),
-                 #c("#999999", "#E69F00", "#56B4E9", "#009E73",
-                #               "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "red", "white"),
+               colourPalette = 2:(n_cl + 1),
                numCats = n_cl,
                mapTitle = "")
 
-pdf(paste0("plots/160_countries/dendrogram_", n_cl, ".pdf"), width = 15, height = 6, paper = "special")
+pdf("plots/160_countries/dendrogram.pdf", width = 15, height = 6, paper = "special")
 par(cex = 1, tck = -0.025)
 par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
@@ -195,8 +201,8 @@ subgroups <- cutree(res, n_cl)
 
 for (cl in 1:n_cl){
   countries_cluster <- colnames(Delta_hat)[subgroups == cl]
-  pdf(paste0("plots/results_cluster_", cl, ".pdf"), width=7, height=6, paper="special")
-  
+  pdf(paste0("plots/160_countries/results_cluster_", cl, ".pdf"), width=7, height=6, paper="special")
+
   #Setting the layout of the graphs
   par(cex = 1, tck = -0.025)
   par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
@@ -246,19 +252,3 @@ for (cl in 1:n_cl){
   }
   dev.off()
 }
-
-
-
-library("rjson")
-covid_russia_tmp <- fromJSON(file = "data/data.json")
-covid_russia_matrix <- matrix(data = rep(0, 286 * 85), ncol = 85, nrow = 286)
-names <- c()
-for (i in 1:85){
-  covid_russia_matrix[, i] <- covid_russia_tmp[['data']][[i]]$confirmed
-  names <- c(names, covid_russia_tmp[['data']][[i]]$name)
-}
-colnames(covid_russia_matrix) <- names
-
-dates <- seq(from = as.Date(covid_russia_tmp$startDate, format = "%m/%d/%Y"), by = 1, length.out = 286)
-covid_russia <- data.frame(dateRep = dates, cases_ru = rowSums(covid_russia_matrix))
-covid_russia <- merge(covid_russia, covid_list$Russia, by = "dateRep")

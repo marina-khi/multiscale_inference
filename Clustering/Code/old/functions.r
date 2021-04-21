@@ -66,3 +66,16 @@ norm <- c(norm, integrate(m_hat, lower = 0, upper = 1/b, b = 1,
                           data_p = covid_mat[, k], grid_p = grid_points, 
                           bw = bw_abs/t_len, subdivisions=1000)$value)
 
+library("rjson")
+covid_russia_tmp <- fromJSON(file = "data/data.json")
+covid_russia_matrix <- matrix(data = rep(0, 286 * 85), ncol = 85, nrow = 286)
+names <- c()
+for (i in 1:85){
+  covid_russia_matrix[, i] <- covid_russia_tmp[['data']][[i]]$confirmed
+  names <- c(names, covid_russia_tmp[['data']][[i]]$name)
+}
+colnames(covid_russia_matrix) <- names
+
+dates <- seq(from = as.Date(covid_russia_tmp$startDate, format = "%m/%d/%Y"), by = 1, length.out = 286)
+covid_russia <- data.frame(dateRep = dates, cases_ru = rowSums(covid_russia_matrix))
+covid_russia <- merge(covid_russia, covid_list$Russia, by = "dateRep")
