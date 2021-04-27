@@ -14,7 +14,7 @@ Rcpp::sourceCpp("integration.cpp")
 
 #Defining necessary constants
 b_bar  <- 2
-bw_abs <- 3.5
+bw_abs <- 14
 n_cl   <- 7 #number of clusters
 
 #Loading the world coronavirus data
@@ -77,8 +77,8 @@ covid_mat[covid_mat < 0] <- 0
 m_hat <- function(vect_u, b, data_p, grid_p, bw){
   m_hat_vec <- c()
   for (u in vect_u){
-    result = sum((((grid_p - u * b) / bw <= 1) & ((grid_p - u * b) / bw >= -1)) * data_p)
-    norm = sum((((grid_p - u * b) / bw <= 1) & ((grid_p - u * b) / bw >= -1)))
+    result = sum((((grid_p - u * b) / bw < 1) & ((grid_p - u * b) / bw >= -1)) * data_p)
+    norm = sum((((grid_p - u * b) / bw < 1) & ((grid_p - u * b) / bw >= -1)))
     m_hat_vec <- c(m_hat_vec, result/norm)
   }
   return(m_hat_vec)
@@ -86,7 +86,7 @@ m_hat <- function(vect_u, b, data_p, grid_p, bw){
 
 
 #Grid for b and for smoothing
-b_grid      <- seq(1, b_bar, by = 0.01)
+b_grid      <- seq(1, b_bar, by = 0.05)
 grid_points <- seq(1/t_len, 1, by = 1/t_len)
 
 #And finally calculating the distance matrix
@@ -154,7 +154,8 @@ rownames(Delta_hat) <- countries
 colnames(b_res) <- countries
 rownames(b_res) <- countries
 
-load("results.RData")
+save(Delta_hat, b_res, file = "results_28days.RData")
+#load("results.RData")
 
 n_cl <- 12
 delta_dist <- as.dist(Delta_hat)
