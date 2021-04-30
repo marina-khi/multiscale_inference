@@ -151,7 +151,7 @@ for (k in 1:n_ts) {
 # rownames(Delta_hat) <- countries
 # 
 #save(Delta_hat, file = "results_alt_approach_28days.RData")
-load("results_alt_approach_14days.RData")
+load("results_alt_approach_28days.RData")
 
 n_cl       <- 12
 
@@ -182,7 +182,7 @@ mapCountryData(covidMap,
                numCats = n_cl,
                mapTitle = "")
 
-pdf(paste0("plots/14days/dendrogram_alt.pdf"), width = 15, height = 6, paper = "special")
+pdf(paste0("plots/28days/dendrogram_alt.pdf"), width = 15, height = 6, paper = "special")
 par(cex = 1, tck = -0.025)
 par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
@@ -195,7 +195,7 @@ subgroups <- cutree(res, n_cl)
 
 for (cl in 1:n_cl){
   countries_cluster <- colnames(Delta_hat)[subgroups == cl]
-  pdf(paste0("plots/14days/results_cluster_", cl, "_alt.pdf"), width=7, height=6, paper="special")
+  pdf(paste0("plots/28days/results_cluster_", cl, "_alt.pdf"), width=7, height=6, paper="special")
   
   #Setting the layout of the graphs
   par(cex = 1, tck = -0.025)
