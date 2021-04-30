@@ -14,8 +14,7 @@ Rcpp::sourceCpp("integration.cpp")
 
 #Defining necessary constants
 b_bar  <- 2
-bw_abs <- 14
-n_cl   <- 7 #number of clusters
+bw_abs <- 7
 
 #Loading the world coronavirus data
 covid_tmp          <- read.csv("data/time_series_covid19_confirmed_global.csv", sep = ",", 
@@ -154,10 +153,10 @@ rownames(Delta_hat) <- countries
 colnames(b_res) <- countries
 rownames(b_res) <- countries
 
-save(Delta_hat, b_res, file = "results_28days.RData")
-#load("results.RData")
+save(Delta_hat, b_res, file = "results_14days.RData")
+load("results_28days.RData")
 
-n_cl <- 12
+n_cl       <- 12
 delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
 
@@ -184,7 +183,7 @@ mapCountryData(covidMap,
                numCats = n_cl,
                mapTitle = "")
 
-pdf(paste0("plots/dendrogram.pdf"), width = 15, height = 6, paper = "special")
+pdf(paste0("plots/14days/dendrogram.pdf"), width = 15, height = 6, paper = "special")
 par(cex = 1, tck = -0.025)
 par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
@@ -196,7 +195,7 @@ subgroups <- cutree(res, n_cl)
 
 for (cl in 1:n_cl){
   countries_cluster <- colnames(Delta_hat)[subgroups == cl]
-  pdf(paste0("plots/results_cluster_", cl, ".pdf"), width=7, height=6, paper="special")
+  pdf(paste0("plots/14days/results_cluster_", cl, ".pdf"), width=7, height=6, paper="special")
   
   #Setting the layout of the graphs
   par(cex = 1, tck = -0.025)

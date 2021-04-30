@@ -10,7 +10,7 @@ require(rworldmap)
 
 #Defining necessary constants
 b_bar  <- 2
-bw_abs <- 14
+bw_abs <- 7
 
 #Loading the world coronavirus data
 covid_tmp <- read.csv("data/time_series_covid19_confirmed_global.csv",
@@ -38,9 +38,9 @@ for (country in unique(covid$CountryName)){
     #and only starting from 100th case
     tmp_df <- covid[(covid$CountryName == country & covid$cumcases >= 100),
                     c("dateRep", "cases", "cumcases", "weekday")]
-    tmp_index <- match("Monday", tmp_df$weekday)
+    #tmp_index <- match("Monday", tmp_df$weekday)
     if (nrow(tmp_df) > 300) {
-      covid_list[[country]] <- tmp_df[tmp_index:nrow(tmp_df), ]
+      covid_list[[country]] <- tmp_df[1:nrow(tmp_df), ]
     }
   }
 }
@@ -116,44 +116,44 @@ for (k in 1:n_ts) {
                                 subdivisions = 2000)$value)
 }
 
-# 
-# #Matrix with the distances: Step 3
-# Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
-# 
-# for (i in 1:(n_ts - 1)){
-#   p_i_star <- function(x) {(m_hat(a_vec[i] + b_vec[i] * x, data_p = covid_mat[, i],
-#                                   grid_p = grid_points,
-#                                   bw = bw_abs/sqrt(t_len)) / c_vec[i]) / norm_p[i]}
-#   for (j in (i + 1):n_ts){
-#     p_j_star <- function(x) {(m_hat(a_vec[j] + b_vec[j] * x, data_p = covid_mat[, j],
-#                                     grid_p = grid_points,
-#                                     bw = bw_abs/sqrt(t_len)) / c_vec[j]) / norm_p[j]}
-#     integrand <- function(x) {(sqrt(p_i_star(x)) - sqrt(p_j_star(x)))^2}
-#     # if (((i == 1) & ((j == 68) | (j == 117))) | ((i == 2) & (j == 24)) |
-#     #     ((i == 9) & (j == 71))| ((i == 11) & (j == 52)) |
-#     #     ((i == 14) & ((j == 45) | (j == 73))) | ((i == 15) & (j == 24)) |
-#     #     ((i == 19) & ((j == 72) | (j == 89))) | ((i == 20) & (j == 62))){
-#     #   tmp <- integrate(integrand, lower = -Inf, upper = Inf,
-#     #                    subdivisions=3000)$value
-#     # } else {
-#       tmp <- integrate(integrand, lower = -Inf, upper = Inf,
-#                        subdivisions=3000)$value
-#     # }
-#     # 
-#     Delta_hat[i, j] <- tmp
-#     Delta_hat[j, i] <- tmp
-#     cat("i = ", i, ", j = ", j, " - success\n")
-#   }
-# }
-# 
-# #And now the clustering itself
-# colnames(Delta_hat) <- countries
-# rownames(Delta_hat) <- countries
-# 
-#save(Delta_hat, file = "results_alt_approach_28days.RData")
-load("results_alt_approach_28days.RData")
 
-n_cl       <- 12
+#Matrix with the distances: Step 3
+Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
+
+for (i in 1:(n_ts - 1)){
+  p_i_star <- function(x) {(m_hat(a_vec[i] + b_vec[i] * x, data_p = covid_mat[, i],
+                                  grid_p = grid_points,
+                                  bw = bw_abs/sqrt(t_len)) / c_vec[i]) / norm_p[i]}
+  for (j in (i + 1):n_ts){
+    p_j_star <- function(x) {(m_hat(a_vec[j] + b_vec[j] * x, data_p = covid_mat[, j],
+                                    grid_p = grid_points,
+                                    bw = bw_abs/sqrt(t_len)) / c_vec[j]) / norm_p[j]}
+    integrand <- function(x) {(sqrt(p_i_star(x)) - sqrt(p_j_star(x)))^2}
+    # if (((i == 1) & ((j == 68) | (j == 117))) | ((i == 2) & (j == 24)) |
+    #     ((i == 9) & (j == 71))| ((i == 11) & (j == 52)) |
+    #     ((i == 14) & ((j == 45) | (j == 73))) | ((i == 15) & (j == 24)) |
+    #     ((i == 19) & ((j == 72) | (j == 89))) | ((i == 20) & (j == 62))){
+    #   tmp <- integrate(integrand, lower = -Inf, upper = Inf,
+    #                    subdivisions=3000)$value
+    # } else {
+      tmp <- integrate(integrand, lower = -Inf, upper = Inf,
+                       subdivisions=3000)$value
+    # }
+    #
+    Delta_hat[i, j] <- tmp
+    Delta_hat[j, i] <- tmp
+    cat("i = ", i, ", j = ", j, " - success\n")
+  }
+}
+
+#And now the clustering itself
+colnames(Delta_hat) <- countries
+rownames(Delta_hat) <- countries
+
+save(Delta_hat, file = "results_alt_approach_14days.RData")
+#load("results_alt_approach_14days.RData")
+
+n_cl       <- 15
 
 delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
