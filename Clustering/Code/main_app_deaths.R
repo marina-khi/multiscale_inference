@@ -17,30 +17,48 @@ b_bar  <- 2
 bw_abs <- 7
 
 #Loading the world coronavirus data
-covid_tmp          <- read.csv("data/time_series_covid19_confirmed_global.csv", sep = ",", 
-                               stringsAsFactors = FALSE, na.strings = "", check.names = FALSE)
-names(covid_tmp)[names(covid_tmp) == "Country/Region"] <- 'CountryName'
-covid_tmp          <- covid_tmp[, -c(1, 3, 4)]
+covid_deaths_tmp <- read.csv("data/time_series_covid19_deaths_global.csv", sep = ",", 
+                             stringsAsFactors = FALSE, na.strings = "", check.names = FALSE)
+covid_cases_tmp  <- read.csv("data/time_series_covid19_confirmed_global.csv", sep = ",", 
+                             stringsAsFactors = FALSE, na.strings = "", check.names = FALSE)
 
-new_covid          <- aggregate(. ~ CountryName, covid_tmp, sum)
+names(covid_deaths_tmp)[names(covid_deaths_tmp) == "Country/Region"] <- 'CountryName'
+covid_deaths_tmp <- covid_deaths_tmp[, -c(1, 3, 4)]
+names(covid_cases_tmp)[names(covid_cases_tmp) == "Country/Region"] <- 'CountryName'
+covid_cases_tmp  <- covid_cases_tmp[, -c(1, 3, 4)]
 
-covid         <- gather(new_covid, key = "dateRep", value = "cumcases", 2:442)
-rm(covid_tmp, new_covid)
+
+new_covid_cases  <- aggregate(. ~ CountryName, covid_cases_tmp, sum)
+new_covid_deaths <- aggregate(. ~ CountryName, covid_deaths_tmp, sum)
+
+covid_cases  <- gather(new_covid_cases, key = "dateRep",
+                       value = "cumcases", 2:480)
+covid_deaths <- gather(new_covid_deaths, key = "dateRep",
+                       value = "cumdeaths", 2:480)
+
+covid <- merge(covid_cases, covid_deaths, by = c("CountryName", "dateRep"))
+rm(covid_cases_tmp, covid_deaths_tmp, new_covid_deaths, new_covid_cases,
+   covid_cases, covid_deaths)
 
 covid$dateRep <- as.Date(covid$dateRep, format = "%m/%d/%y")
 covid$cases   <- 0
+covid$deaths  <- 0
 covid$weekday <- weekdays(covid$dateRep)
+
+covid <- covid[order(covid$CountryName, covid$dateRep), ]
 
 covid_list <- list()
 for (country in unique(covid$CountryName)){
-  cumcases_column <- covid[covid$CountryName == country, "cumcases"]
-  time_range      <- length(cumcases_column)
-  covid[covid$CountryName == country, "cases"] <- c(0, cumcases_column[2:time_range] - cumcases_column[1:(time_range - 1)])
+  cumdeaths_column <- covid[covid$CountryName == country, "cumdeaths"]
+  cumcases_column  <- covid[covid$CountryName == country, "cumcases"]
+  time_range       <- length(cumdeaths_column)
+  covid[covid$CountryName == country, "deaths"] <- c(0, cumdeaths_column[2:time_range] - cumdeaths_column[1:(time_range - 1)])
+  covid[covid$CountryName == country, "cases"]  <- c(0, cumcases_column[2:time_range] - cumcases_column[1:(time_range - 1)])
   tmp <- max(covid[covid$CountryName == country, "cumcases"])
   if (tmp >= 1000){
     #We restrict our attention only to the contries with more than 1000 cases and only starting from 100th case
     tmp_df <- covid[(covid$CountryName == country & covid$cumcases >= 100),
-                    c("dateRep", "cases", "cumcases", "weekday")]
+                    c("dateRep", "deaths", "cumdeaths", "cases", "cumcases", "weekday")]
     tmp_index <- match("Monday", tmp_df$weekday)
     if (nrow(tmp_df) > 300) {
       covid_list[[country]] <- tmp_df[tmp_index:nrow(tmp_df), ]
@@ -64,7 +82,7 @@ colnames(covid_mat) <- countries
 
 i = 1
 for (country in countries) {
-  covid_mat[, i] <- covid_list[[country]]$cases[1:t_len]
+  covid_mat[, i] <- covid_list[[country]]$deaths[1:t_len]
   i = i + 1
 }
 
@@ -153,8 +171,8 @@ rownames(Delta_hat) <- countries
 colnames(b_res) <- countries
 rownames(b_res) <- countries
 
-save(Delta_hat, b_res, file = "results_14days.RData")
-load("results_14days.RData")
+save(Delta_hat, b_res, file = "results_14days_deaths.RData")
+#load("results_14days.RData")
 
 n_cl       <- 15
 delta_dist <- as.dist(Delta_hat)
