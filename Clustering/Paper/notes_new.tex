@@ -319,7 +319,10 @@ and choose the number of clusters by maximizing the BIC criterion
 
 In terms of the application, it is also of interest to do the classification by deaths to see the overlap between cases and deaths.
 
+<<<<<<< HEAD
+=======
 {\color{red} Figures \ref{fig:map_deaths} and \ref{fig:map_alt_deaths} present the choropleth maps for the the results of the classification by deaths for the number of clusters $K = 12$. We can directly compare the results of classification by cases and classification by deaths: Figure \ref{fig:map_12cl} vs. Figure \ref{fig:map_deaths} and Figures \ref{fig:map_alt_12cl} vs. Figure \ref{fig:map_alt_deaths} for Approaches 1 and 2 respectively.}
+>>>>>>> 240237a12058308281bc573d491f51a086ac77a7
 
 \subsection{Determining common factors}
 
@@ -333,6 +336,7 @@ Instead of the Hellinger distance, one may use
 
 
 \subsection{Clustering other features of the data}
+<<<<<<< HEAD
 
 This section may be more about enhancing the application. 
 
@@ -356,9 +360,37 @@ coefficients $\gamma _{k1},\ldots ,\gamma _{kJ}$ and every member of group $k$ h
 \]%
 This reduces dimensionality from $n\times J$ to $n+K\times J.$ This is a
 standard regression clustering.
+=======
+
+This section may be more about enhancing the application. 
+>>>>>>> 240237a12058308281bc573d491f51a086ac77a7
+
+The trend is the dominant feature of the data but seasonality and comovement
+are also of interest. For example, suppose that 
+\[
+u_{it}=\sum_{j=1}^{J}\beta _{ij}D_{jt}+\varepsilon _{it},
+\]%
+where $J=7$ for daily data, while $E(\varepsilon _{it})=0$ and 
+\[
+E(\varepsilon _{it}\varepsilon _{jt})=\sigma _{ij}.
+\]%
+We may estimate $B=(\beta _{ij})$ and $\Sigma =(\sigma _{ij})$ using the
+time series data country by country. The question is whether there are
+distinct groups with regard to $B,\Sigma .$ Specifically, by arranging the
+countries in groups determined by the trend, is $\Sigma $ close to block
+diagonal? Can we also divide $B$ into groups as in for group $k$ there are
+coefficients $\gamma _{k1},\ldots ,\gamma _{kJ}$ and every member of group $k$ has 
+\[
+\beta _{ij}=c_{i}\times \gamma _{kj}.
+\]%
+This reduces dimensionality from $n\times J$ to $n+K\times J.$ This is a
+standard regression clustering.
 
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 240237a12058308281bc573d491f51a086ac77a7
 \newpage
 \section{Empirical analysis}\label{sec:app}
 
@@ -375,12 +407,23 @@ In Section \ref{subsec:sim}, we assess the finite sample performance of our clus
 
 \subsection{Analysis of COVID-19 data}\label{subsec:app}
 
+<<<<<<< HEAD
+%In what follows, we refer to the procedures described in Sections \ref{subsec:diss} and \ref{subsec:diss_alt} as Method 1 and Method 2 respectively.
+
+\subsubsection{Data}
+
+
+We analyze data from $160$ countries. We consider only those countries that have a total number of at least $1\,000$ cases of infection during the considered time period. We also restrict our attention only to the countries for which the observed time period is around $300$ days. For each country $i$, we observe a time series $\mathcal{Y}_i = \{ Y_{it}: 1 \le t \le T \}$, where $Y_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available in the COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at John Hopkins University (\texttt{https://github.com/CSSEGISandData/COVID-19}) and were downloaded on 29 April 2021. For the application of Method 1, we take the first Monday after reaching $100$ confirmed cases in each country as the starting date $t=1$, whereas for the application of Method 2, we take the first day after reaching $100$ confirmed cases in each country as the starting date $t=1$.
+Beginning the time series of each country on the day when that country reached $100$ confirmed cases is a common way of ``normalizing'' the data \citep[see e.g.][]{Cohen2020}. Additionally aligning the data by Monday allows to take care of possible weekly cycles in the data which are produced by delays in reporting new cases over the weekend. 
+The time series length $T$ is taken to be the longest interval for which we have observations for all $160$ countries. The resulting dataset thus consists of $n = 160$ time series, each with $T = 296$ and $T = 301$ observations in case of Method 1 or Method 2 respectively. Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in $45$ replacements.
+=======
 \subsubsection{Data}
 
 
 We analyze data from $160$ countries. We consider only those countries that have a total number of at least $1\,000$ cases of infection during the considered time period. We also restrict our attention only to the countries for which the observed time period is around $300$ days. For each country $i$, we observe a time series $\mathcal{Y}_i = \{ Y_{it}: 1 \le t \le T \}$, where $Y_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available in the COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at John Hopkins University (\texttt{https://github.com/CSSEGISandData/COVID-19}) and were downloaded on 29 April 2021. For the application of Approach 1, we take the first Monday after reaching $100$ confirmed cases in each country as the starting date $t=1$, whereas for the application of Approach 2, we take the first day after reaching $100$ confirmed cases in each country as the starting date $t=1$.
 Beginning the time series of each country on the day when that country reached $100$ confirmed cases is a common way of ``normalizing'' the data \citep[see e.g.][]{Cohen2020}. Additionally aligning the data by Monday allows to take care of possible weekly cycles in the data which are produced by delays in reporting new cases over the weekend. 
 The time series length $T$ is taken to be the longest interval for which we have observations for all $160$ countries. The resulting dataset thus consists of $n = 160$ time series, each with $T = 296$ and $T = 301$ observations in case of Approach 1 or Approach 2 respectively. Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in $45$ replacements.
+>>>>>>> 240237a12058308281bc573d491f51a086ac77a7
 
 
 \subsubsection{Results for Approach 1}\label{subsubsec:method1}
@@ -398,7 +441,11 @@ To implement the HAC algorithm, we make the following choices:
 \end{itemize}
 The estimation results are presented in Figures \ref{fig:map_10cl}--\ref{fig:clusters_14days}:
 \begin{itemize}[leftmargin=0.6cm]
+<<<<<<< HEAD
+\item Figures \ref{fig:map_10cl}--\ref{fig:map_15cl} show the estimated clusters in a world map for different numbers of clusters $K =10, 12, 15$, where each country is coloured according to the class it belongs to. 
+=======
 \item Figures \ref{fig:map_10cl}--\ref{fig:map_12cl} show the estimated clusters in a world map for different numbers of clusters $K =10, 15, 12$, where each country is coloured according to the class it belongs to. Figure \ref{fig:map_deaths} presents the results of classification by deaths for $K =12$.
+>>>>>>> 240237a12058308281bc573d491f51a086ac77a7
 \item Figures \ref{fig:dend} shows the dendrogram of the HAC algorithm with a border drawn around each of $K = 12$ clusters.
 \item Figures \ref{fig:cl1_14days}--\ref{fig:cl12_14days} depict the trend functions of the countries in the different estimated classes, each figure corresponding to a specific class. Since the functions $m_i$ in a given class $\mathcal{G}_k$ are only identical up to the scaling by the constants $c$ and $b$, we do not plot the (estimated) functions $m_i$ themselves. We rather proceed as follows: Consider a specific class $\mathcal{G}_k$,  write the trends in this class as $m_i(u) = c_i \cdot g_k(b_i \cdot u)$ with some constants $c_i$ and $b_i$, and fix some country $i_k \in \mathcal{G}_k$. It holds that $m_i(u) = \{ c_{i_k}/c_i \} \cdot m_i(\{ b_{i_k}/b_i \} u)$ for all $i \in \mathcal{G}_k$. Hence, the functions $\{ c_{i_k}/c_i \} \cdot m_i(\{ b_{i_k}/b_i \} u)$ are identical for all $i \in \mathcal{G}_k$. Rather than plotting the estimates $\hat{m}_i(u)$, we thus pick some $i_k \in \hat{\mathcal{G}}_k$ and plot the renormalized functions $\{ \hat{c}_{i_k}/\hat{c}_i \} \cdot \hat{m}_i(\{ \hat{b}_{i_k}/\hat{b}_i \} u)$, where $\hat{c}_{i_k}/\hat{c}_i$ and $\hat{b}_{i_k}/\hat{b}_i$ are estimates of the ratios $c_{i_k}/c_i$ and $b_{i_k}/b_i$. (The index $i_k$ is chosen such that $\hat{b}_{i_k}/\hat{b}_i < 1$ for all $i \in \hat{\mathcal{G}}_k$.)
 \end{itemize}
@@ -490,7 +537,11 @@ The estimation results are presented in Figures \ref{fig:map_10cl}--\ref{fig:clu
 \begin{sidewaysfigure}[t!]
 %\begin{minipage}[t]{0.98\textwidth}
 \includegraphics[width=\textwidth]{plots/14days/dendrogram}
+<<<<<<< HEAD
+\caption{Results of HAC for $12$ clusters (Method 1)}\label{fig:dend}
+=======
 \caption{Results of HAC for $12$ clusters (Approach 1)}\label{fig:dend}
+>>>>>>> 240237a12058308281bc573d491f51a086ac77a7
 %\end{minipage}
 \end{sidewaysfigure}
 
@@ -527,11 +578,24 @@ The estimation results are presented in Figures \ref{fig:map_10cl}--\ref{fig:clu
 \subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/14days/results_cluster_11}\label{fig:cl11_14days}}
 \hspace{0.25cm}
 \subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/14days/results_cluster_12}\label{fig:cl12_14days}}
+<<<<<<< HEAD
+\caption{Clusters produced by the algorithm (Method 1). Each panel presents appropriately scaled curve estimates $\hat{m}_i$ that belong to a particular cluster. The bandwidth $h$ is taken to be $7/T$.}\label{fig:clusters_14days}
+=======
 \caption{Clusters produced by the algorithm (Approach 1). Each panel presents appropriately scaled curve estimates $\hat{m}_i$ that belong to a particular cluster. The bandwidth $h$ is taken to be $7/T$.}\label{fig:clusters_14days}
+>>>>>>> 240237a12058308281bc573d491f51a086ac77a7
 \vspace{1cm}
 
 \end{figure}
 
+<<<<<<< HEAD
+
+\FloatBarrier 
+
+
+\subsubsection{Results for Method 2}
+
+
+=======
 
 \FloatBarrier 
 
@@ -539,6 +603,7 @@ The estimation results are presented in Figures \ref{fig:map_10cl}--\ref{fig:clu
 \subsubsection{Results for Approach 2}
 
 
+>>>>>>> 240237a12058308281bc573d491f51a086ac77a7
 We assume that the data $Y_{it}$ of each country $i$ in our sample follow the nonparametric trend model \eqref{eq:model_alt}
 and we impose the group structure ($\text{G}^\prime$) on the data. 
 To implement the HAC algorithm, we make the following choices:
@@ -548,7 +613,11 @@ To implement the HAC algorithm, we make the following choices:
 \end{itemize}
 The estimation results are presented in Figures \ref{fig:map_alt_10cl}--\ref{fig:clusters_alt_14days}:
 \begin{itemize}[leftmargin=0.6cm]
+<<<<<<< HEAD
+\item Figures \ref{fig:map_alt_10cl}--\ref{fig:map_alt_15cl} show the estimated clusters in a world map for different numbers of clusters $K =10, 12, 15$, where each country is coloured according to the class it belongs to. 
+=======
 \item Figures \ref{fig:map_alt_10cl}--\ref{fig:map_alt_12cl} show the estimated clusters in a world map for different numbers of clusters $K =10, 15, 12$, where each country is coloured according to the class it belongs to. Figure \ref{fig:map_alt_deaths} presents the results of classification by deaths for $K =12$.
+>>>>>>> 240237a12058308281bc573d491f51a086ac77a7
 \item Figures \ref{fig:dend_alt} shows the dendrogram of the HAC algorithm with a border drawn around each of $K = 12$ clusters.
 \item Figures \ref{fig:cl1_alt_14days}--\ref{fig:cl12_alt_14days} depict the trend functions of the countries in the different estimated classes, each figure corresponding to a specific class. Since the functions $m_i$ in a given class $\mathcal{G}_k$ are only identical up to the scaling by the constants $a, b$ and $c$, we do not plot the (estimated) functions $m_i$ themselves. We rather plot the estimates $\hat{p}_i(v) = \hat{m}_i(\hat{a}_i + \hat{b}_i \, v)/\hat{c}_i$. Moreover, even though $m_i$ is defined on $(-\infty, \infty)$, we restrict our attention to $[-5, 5]$, which seems to be enough for all of the countries.
 \end{itemize}
@@ -585,6 +654,13 @@ The estimation results are presented in Figures \ref{fig:map_alt_10cl}--\ref{fig
 \caption{Results of HAC for the number of deaths for $12$ clusters (Approach 2) on a map: each country is coloured according to the group it belongs to.}\label{fig:map_alt_deaths}
 \end{minipage}
 \end{figure}
+
+\begin{sidewaysfigure}[t!]
+%\begin{minipage}[t]{0.98\textwidth}
+\includegraphics[width=\textwidth]{plots/14days/dendrogram_alt}
+\caption{Results of HAC for $12$ clusters (Method 2)}\label{fig:dend_alt}
+%\end{minipage}
+\end{sidewaysfigure}
 
 
 \begin{sidewaysfigure}[t!]
@@ -627,7 +703,11 @@ The estimation results are presented in Figures \ref{fig:map_alt_10cl}--\ref{fig
 \subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/14days/results_cluster_11_alt}\label{fig:cl11_alt_14days}}
 \hspace{0.25cm}
 \subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/14days/results_cluster_12_alt}\label{fig:cl12_alt_14days}}
+<<<<<<< HEAD
+\caption{Clusters produced by the algorithm (Method 2). Each panel presents appropriately scaled curve estimates $\hat{m}_i$ that belong to a particular cluster. The bandwidth $h$ is taken to be $7/T$.}\label{fig:clusters_alt_14days}
+=======
 \caption{Clusters produced by the algorithm (Approach 2). Each panel presents appropriately scaled curve estimates $\hat{m}_i$ that belong to a particular cluster. The bandwidth $h$ is taken to be $7/T$.}\label{fig:clusters_alt_14days}
+>>>>>>> 240237a12058308281bc573d491f51a086ac77a7
 \end{figure}
 
 \clearpage
