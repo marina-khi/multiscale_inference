@@ -55,7 +55,8 @@ for (country in unique(covid$CountryName)){
   covid[covid$CountryName == country, "deaths"] <- c(0, cumdeaths_column[2:time_range] - cumdeaths_column[1:(time_range - 1)])
   covid[covid$CountryName == country, "cases"]  <- c(0, cumcases_column[2:time_range] - cumcases_column[1:(time_range - 1)])
   tmp <- max(covid[covid$CountryName == country, "cumcases"])
-  if (tmp >= 1000){
+  tmp_deaths <- max(cumdeaths_column)
+  if (tmp >= 1000 & tmp_deaths >= 100 & country != "Cambodia"){
     #We restrict our attention only to the contries with more than 1000 cases and only starting from 100th case
     tmp_df <- covid[(covid$CountryName == country & covid$cumcases >= 100),
                     c("dateRep", "deaths", "cumdeaths", "cases", "cumcases", "weekday")]
@@ -172,7 +173,7 @@ colnames(b_res) <- countries
 rownames(b_res) <- countries
 
 save(Delta_hat, b_res, file = "results_14days_deaths.RData")
-#load("results_14days.RData")
+#load("results_14days_deaths.RData")
 
 n_cl       <- 15
 delta_dist <- as.dist(Delta_hat)
