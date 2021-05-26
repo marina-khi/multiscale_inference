@@ -17,30 +17,49 @@ b_bar  <- 2
 bw_abs <- 7
 
 #Loading the world coronavirus data
-covid_tmp          <- read.csv("data/time_series_covid19_confirmed_global.csv", sep = ",", 
-                               stringsAsFactors = FALSE, na.strings = "", check.names = FALSE)
-names(covid_tmp)[names(covid_tmp) == "Country/Region"] <- 'CountryName'
-covid_tmp          <- covid_tmp[, -c(1, 3, 4)]
+covid_deaths_tmp <- read.csv("data/time_series_covid19_deaths_global.csv", sep = ",", 
+                             stringsAsFactors = FALSE, na.strings = "", check.names = FALSE)
+covid_cases_tmp  <- read.csv("data/time_series_covid19_confirmed_global.csv", sep = ",", 
+                             stringsAsFactors = FALSE, na.strings = "", check.names = FALSE)
 
-new_covid          <- aggregate(. ~ CountryName, covid_tmp, sum)
+names(covid_deaths_tmp)[names(covid_deaths_tmp) == "Country/Region"] <- 'CountryName'
+covid_deaths_tmp <- covid_deaths_tmp[, -c(1, 3, 4)]
+names(covid_cases_tmp)[names(covid_cases_tmp) == "Country/Region"] <- 'CountryName'
+covid_cases_tmp  <- covid_cases_tmp[, -c(1, 3, 4)]
 
-covid         <- gather(new_covid, key = "dateRep", value = "cumcases", 2:442)
-rm(covid_tmp, new_covid)
+
+new_covid_cases  <- aggregate(. ~ CountryName, covid_cases_tmp, sum)
+new_covid_deaths <- aggregate(. ~ CountryName, covid_deaths_tmp, sum)
+
+covid_cases  <- gather(new_covid_cases, key = "dateRep",
+                       value = "cumcases", 2:480)
+covid_deaths <- gather(new_covid_deaths, key = "dateRep",
+                       value = "cumdeaths", 2:480)
+
+covid <- merge(covid_cases, covid_deaths, by = c("CountryName", "dateRep"))
+rm(covid_cases_tmp, covid_deaths_tmp, new_covid_deaths, new_covid_cases,
+   covid_cases, covid_deaths)
 
 covid$dateRep <- as.Date(covid$dateRep, format = "%m/%d/%y")
 covid$cases   <- 0
+covid$deaths  <- 0
 covid$weekday <- weekdays(covid$dateRep)
+
+covid <- covid[order(covid$CountryName, covid$dateRep), ]
 
 covid_list <- list()
 for (country in unique(covid$CountryName)){
-  cumcases_column <- covid[covid$CountryName == country, "cumcases"]
-  time_range      <- length(cumcases_column)
-  covid[covid$CountryName == country, "cases"] <- c(0, cumcases_column[2:time_range] - cumcases_column[1:(time_range - 1)])
+  cumdeaths_column <- covid[covid$CountryName == country, "cumdeaths"]
+  cumcases_column  <- covid[covid$CountryName == country, "cumcases"]
+  time_range       <- length(cumdeaths_column)
+  covid[covid$CountryName == country, "deaths"] <- c(0, cumdeaths_column[2:time_range] - cumdeaths_column[1:(time_range - 1)])
+  covid[covid$CountryName == country, "cases"]  <- c(0, cumcases_column[2:time_range] - cumcases_column[1:(time_range - 1)])
   tmp <- max(covid[covid$CountryName == country, "cumcases"])
-  if (tmp >= 1000){
+  tmp_deaths <- max(cumdeaths_column)
+  if (tmp >= 1000 & tmp_deaths >= 100 & country != "Cambodia"){
     #We restrict our attention only to the contries with more than 1000 cases and only starting from 100th case
     tmp_df <- covid[(covid$CountryName == country & covid$cumcases >= 100),
-                    c("dateRep", "cases", "cumcases", "weekday")]
+                    c("dateRep", "deaths", "cumdeaths", "cases", "cumcases", "weekday")]
     tmp_index <- match("Monday", tmp_df$weekday)
     if (nrow(tmp_df) > 300) {
       covid_list[[country]] <- tmp_df[tmp_index:nrow(tmp_df), ]
@@ -64,7 +83,7 @@ colnames(covid_mat) <- countries
 
 i = 1
 for (country in countries) {
-  covid_mat[, i] <- covid_list[[country]]$cases[1:t_len]
+  covid_mat[, i] <- covid_list[[country]]$deaths[1:t_len]
   i = i + 1
 }
 
@@ -153,10 +172,10 @@ rownames(Delta_hat) <- countries
 colnames(b_res) <- countries
 rownames(b_res) <- countries
 
-save(Delta_hat, b_res, file = "results_14days.RData")
-load("results_14days.RData")
+#save(Delta_hat, b_res, file = "results_14days_deaths.RData")
+load("results_14days_deaths.RData")
 
-n_cl       <- 15
+n_cl       <- 12
 delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
 
@@ -183,7 +202,7 @@ mapCountryData(covidMap,
                numCats = n_cl,
                mapTitle = "")
 
-pdf(paste0("plots/14days/dendrogram.pdf"), width = 15, height = 6, paper = "special")
+pdf(paste0("plots/deaths/dendrogram.pdf"), width = 15, height = 6, paper = "special")
 par(cex = 1, tck = -0.025)
 par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
@@ -195,7 +214,7 @@ subgroups <- cutree(res, n_cl)
 
 for (cl in 1:n_cl){
   countries_cluster <- colnames(Delta_hat)[subgroups == cl]
-  pdf(paste0("plots/14days/results_cluster_", cl, ".pdf"), width=7, height=6, paper="special")
+  pdf(paste0("plots/deaths/results_cluster_", cl, ".pdf"), width=7, height=6, paper="special")
   
   #Setting the layout of the graphs
   par(cex = 1, tck = -0.025)
@@ -247,27 +266,3 @@ for (cl in 1:n_cl){
   dev.off()
 }
 
-sigma_hat <- function(data_p, grid_p, bw){
-  m_hat_vec <- m_hat(grid_p, b = 1, data_p, grid_p, bw)
-  return(mean((data_p - m_hat_vec)^2))
-}
-
-sigma_hat_vec <- c()
-for (i in 1:n_ts){
-  sigma_hat_vec <- c(sigma_hat_vec,
-                     sigma_hat(covid_mat[, i], grid_points,
-                               bw = bw_abs/t_len))
-}
-
-diff_K  <- 5:15
-BIC_mat <- matrix(c(diff_K, rep(NA, length(diff_K))),
-                  ncol = 2, byrow = FALSE)
-colnames(BIC_mat) <- c("K", "BIC")
-
-for (K in diff_K){
-  tmp <- t_len * sum(log(sigma_hat_vec))
-         - log(n_ts * t_len) * (K * (n_ts + t_len) + n_ts)
-  BIC_mat[BIC_mat[, 1] == K, 2] <- tmp 
-}
-
-plot(BIC_mat[, 1], BIC_mat[, 2], type = "l")

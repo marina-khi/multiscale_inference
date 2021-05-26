@@ -59,7 +59,10 @@
 
 
 
-\section{Model}
+\section{Approach 1}
+
+
+\subsection{Model}
 
 
 Let $Y_{it}$ be the number of new COVID-19 infections on day $t$ in country $i$ and suppose we observe a time series $\mathcal{Y}_i = \{ Y_{it}: 1 \le t \le T \}$ for a large number $n$ of different countries $i$. In order to align the data of different countries, we take the starting date $t=1$ to be the first Monday after reaching $100$ confirmed cases in each country. Considering the dates after reaching a certain level of confirmed cases is a common practice of ``normalizing'' the data \citep[see e.g.][]{Cohen2020}. Starting on a Monday additionally aligns the data across countries by the day of the week. This allows us to take care of possible weekly cycles in the data which are produced by delays in reporting new cases over the weekend. 
@@ -94,7 +97,7 @@ Importantly, (A) is not an additional assumption but rather a harmless renormali
 \end{remark}
 
 
-\pagebreak 
+\pagebreak
 \begin{remark}\label{rem:classes_def}
 We could replace the above definition of $\mathcal{F}_k$ by the more general version 
 \begin{align*}
@@ -108,13 +111,13 @@ Obviously, the group structure in the data is not observed. In particular, the g
 
 
 
-\section{Clustering procedure}
+\subsection{Clustering procedure}
 
 
 In this section, we construct a hierarchical clustering algorithm to estimate the unknown group structure from the data. We first design a suitable dissimilarity measure and then build a HAC (Hierarchical Agglomerative Clustering) algorithm based on this measure.
 
 
-\subsection{Construction of the dissimilarity measure}\label{subsec:diss}
+\subsubsection{Construction of the dissimilarity measure}\label{subsec:diss}
 
 
 \begin{enumerate}[label=\textit{Step \arabic*.},leftmargin=1.45cm]
@@ -161,106 +164,11 @@ To understand the idea behind the statistic $\Delta_{ij}$ and thus the dissimila
 \end{align*}
 The two right-hand sides of the above display become identical upon setting $b = b_j/b_i$, which implies that $\delta_{ij}(b) = 0$. This suggests the following: $\delta_{ij}(b)$ tends to be small for some $b \in [1,\bar{b}]$ if $i$ and $j$ belong to the same group $\mathcal{G}_k$. Similar considerations suggest that $\delta_{ij}(b)$ tends to be large for all $b \in [1,\bar{b}]$ if $i$ and $j$ belong to different groups. As a consequence, we expect the statistic $\Delta_{ij}$ to be small/large if $i$ and $j$ belong to the same group/different groups. 
 
-\subsection{Alternative dissimilarity measure}\label{subsec:diss_alt}
 
-In this section, we discuss an alternative definition of the dissimilarity measure. In order to introduce this definition, we consider a variation of the model \eqref{eq:model} which can be formally stated as follows. Each time series $\mathcal{Y}_i$ is assumed to satisfy the nonparametric regression equation
-\begin{equation}\label{eq:model_alt}
-Y_{it} = m_i(t) + u_{it} \qquad (1 \le t \le T) 
-\end{equation}
-with $\ex[u_{it}]= 0$, where $m_i$ is an unknown smooth trend curve defined on $(-\infty, \infty)$. The difference between the models lies in the fact that in \eqref{eq:model} we let the regression function $m_i$ depend on rescaled time $t/T$, whereas in \eqref{eq:model_alt} the trend function $m_i$ depends on real time $t$. 
-
-Furthermore, we impose a slightly different group structure than before. Formally speaking, but the class structure is defined as follows:
-
-\begin{enumerate}[leftmargin=0.8cm]
-\item[($\text{G}^\prime$)] The set of countries $\{1,\ldots,n\}$ can be partitioned into $K$ groups $\mathcal{G}^\prime_1,\ldots,\mathcal{G}^\prime_K$ such that 
-\[ m_i \in \class_k \quad \text{for all } i \in \mathcal{G}^\prime_k, \]
-where $\class^\prime_k$ are function classes defined as
-\begin{align*} \class^\prime_k := \big\{ & f:\reals \rightarrow \reals_{+} \,\big|\, f = c \cdot g_k\Big(\frac{u - a}{b}\Big) \text{ with } a, b, c > 0 \text{ and } \\
-& g_k \text{ a density of a random variable with mean } 0 \text{ and variance } 1 \big\}.
-\end{align*}
-For identification purposes, the classes are supposed to be distinct, \linebreak i.e., $\class_k^\prime \cap \class_{k^\prime}^\prime = \emptyset$ for any $k \neq k^\prime$. 
-\end{enumerate}
-
-As before, the elements of the class $\mathcal{F}^\prime_k$ are rescaled versions of some density function $g_k$ (which is unknown in practice). The main difference between the conditions $\text{G}$ and $\text{G}^\prime$ lies in the definition of the support of the density function: while in $\text{G}$ we assume that the support of the density function is bounded, we relax this assumption in $\text{G}^\prime$. We still regard $c$ as a country-specific scaling parameter that accounts for the size of the country or population density and the constant $b$ can be interpreted as the time parameter of the model. We also introduce an additional parameter $a$ that accounts for the differences in the start of the pandemic. We briefly commented on the possibility of introducing such parameter in the Remark \ref{rem:classes_def}.
+\subsubsection{HAC algorithm}\label{sec:alg}
 
 
-\begin{remark}
-Note that this definition of $m_i$ allows us to rewrite its moments using the parameters $a, b$ and $c$. Specifically, suppose $i \in \mathcal{G}_k$, then we can write $m_i(u) = c_i \cdot g_k\Big(\frac{u - a_i}{b_i}\Big)$ and using the assumptions on the density function $g_k$, we have
-\begin{align}\label{eq:parameters}
-\int_{-\infty}^\infty m_i(u) du &= \int_{-\infty}^\infty c_i \cdot g_k\Big(\frac{u - a_i}{b_i}\Big) du \nonumber\\
-&= c_i \int_{-\infty}^\infty b_i \cdot g_k(v) dv = c_i b_i, \nonumber\\
-\int_{-\infty}^\infty u m_i(u) du &= \int_{-\infty}^\infty c_i \cdot u g_k\Big(\frac{u - a_i}{b_i}\Big) du \nonumber\\
-&= c_i b_i \int_{-\infty}^\infty (a_i + b_i v) \cdot g_k(v) dv = c_i b_i a_i, \\
-\int_{-\infty}^\infty u^2 m_i(u) du &= \int_{-\infty}^\infty c_i \cdot u^2 g_k\Big(\frac{u - a_i}{b_i}\Big) du \nonumber\\
-&= c_i b_i \int_{-\infty}^\infty (a_i + b_i v)^2 \cdot g_k(v) dv = c_i b_i a_i^2+ c_i b_i b_i^2.\nonumber
-\end{align}
-We will use these equalities later on for estimation of $a_i, b_i$ and $c_i$ for each $i$.
-\end{remark}
-
-Furthermore, define the normalized version of $m_i$ as $$m_i^*(u) = \frac{m_i(u)}{\int_{-\infty}^\infty m_i(v)dv}.$$ Using \eqref{eq:parameters}, the parameters $a_i, b_i$ and $c_i$ can be rewritten as
-
-\begin{align*}
-a_i &= \int_{-\infty}^\infty u \, m_i^*(u) du, \\
-b_i &= \bigg\{ \int_{-\infty}^\infty u^2 m_i^*(u) du  - \Big(\int_{-\infty}^\infty u\, m_i^*(u) du \Big)^2 \bigg\}^{1/2}, \\
-c_i & = \frac{\int_{-\infty}^\infty m_i(u) du}{\Big\{ \int_{-\infty}^\infty u^2 m_i^*(u) du  - \Big(\int_{-\infty}^\infty u \,m_i^*(u) du \Big)^2 \Big\}^{1/2}}.
-\end{align*}
-
-Then, the alternative dissimilarity measure can be computed using the following algorithm.
-
-\begin{enumerate}[label=\textit{Step \arabic*.},leftmargin=1.45cm]
-
-
-\item For each $i$, estimate $m_i(u)$ by a version of a Nadaraya-Watson estimator with a rectangular kernel and bandwidth $h$:
-\begin{align}\label{eq:m_hat}
-\hat{m}_i(u) =  \frac{ \sum_{t=1}^T K\Big( \frac{u - t/\sqrt{T}}{h}\Big) Y_{it}}{\sum_{t=1}^T K\Big( \frac{u - t\sqrt{T}}{h}\Big)}
-\end{align}
-with $K$ being a rectangular kernel and $K_h(x) = K(x/h)/h$. 
-
-Here, we choose $h = 3.5/\sqrt{T}, 7/\sqrt{T}, \ldots$, and as before, this choice of bandwidth allows us to take care of possible weekly cycles in the data which are produced by delays in reporting new cases over the weekend.
-
-We then estimate $m_i^*(u)$ and the parameters $a_i, b_i$ and $c_i$ by simply plugging in \eqref{eq:m_hat} in the corresponding formulas:
-\begin{align*}
-\hat{m}_i^*(u) &= \frac{\hat{m}_i(u)}{\int_{-\infty}^\infty \hat{m}_i(v)dv}, \\
-\hat{a}_i &= \int_{-\infty}^\infty u \, \hat{m}_i^*(u) du, \\
-\hat{b}_i &= \bigg\{ \int_{-\infty}^\infty u^2 \hat{m}_i^*(u) du  - \Big(\int_{-\infty}^\infty u\, \hat{m}_i^*(u) du \Big)^2 \bigg\}^{1/2}, \\
-\hat{c}_i & = \frac{\int_{-\infty}^\infty \hat{m}_i(u) du}{\Big\{ \int_{-\infty}^\infty u^2 \hat{m}_i^*(u) du  - \Big(\int_{-\infty}^\infty u\, \hat{m}_i^*(u) du \Big)^2 \Big\}^{1/2}}.
-\end{align*}
-
-\item By definition, for all $i \in \mathcal{G}_k$ we have
-
-$$ m_i (a_i + b_i \, v)/c_i = g_k(v).$$
-
-Hence, consider the following function
-
-$$ \hat{p}_i(v) = \hat{m}_i (\hat{a}_i + \hat{b}_i \, v)/\hat{c}_i$$
-and its normalized version
-\begin{align} \label{eq:p_star_hat}
-\hat{p}^*_i(v) = \frac{\hat{p}_i(v)}{\int_{-\infty}^{\infty} \hat{p}_i(w)dw}.
-\end{align}
-Note that  $\hat{p}^*_i(v)$ is a proper density function since $\hat{p}^*_i(v) \geq 0$ by construction and 
-$$ \int_{-\infty}^{\infty} \hat{p}^*_i(v)dv = \int_{-\infty}^{\infty}\frac{\hat{p}_i(v)}{\int_{-\infty}^{\infty} \hat{p}_i(w)dw}dv = 1.$$
-
-\item For a given pair of countries $(i, j)$, define the statistic using \eqref{eq:p_star_hat}
-$$\Delta_{ij}^\prime = \int_{-\infty}^{\infty} \big( \sqrt{\hat{p}^*_i(v)} - \sqrt{\hat{p}^*_j(v)}\big)^2.$$
-
-This statistic measures a (squared) Hellinger distance between the functions $m_i (a_i + b_i \, v)/c_i$ and $m_j (a_j + b_j\, v)/c_j$.
-
-
-\item Let $S \subseteq \{1, \ldots, n\}$ and $S^\prime \subseteq \{1, \ldots, n\}$ be two sets of time series from our sample. As before, we work with the complete linkage measure of dissimilarity defined as 
-\begin{align*}
-\mathcal{D}^\prime (S, S^\prime) = \max_{i \in S, j\in S^\prime} \Delta^\prime_{ij}.
-\end{align*}
-Alternatively, we may use a single or average linkage measure. 
-
-
-\end{enumerate}
-
-
-
-\subsection{HAC algorithm}\label{sec:alg}
-
-
-The HAC algorithm based on the dissimilarity measure $\mathcal{D}$ (or $\mathcal{D}^\prime$ in case of the alternative approach) proceeds as follows:
+The HAC algorithm based on the dissimilarity measure $\mathcal{D}$ proceeds as follows:
 \begin{itemize}[leftmargin=1.4cm]
 
 \item[\textit{Step 0}] \textit{(Initialization)}. Let $\hat{\mathcal{G}}_i^{[0]} = \{i\}$ denote the $i$th singleton cluster for $1 \leq i \leq n$ and define $\{\hat{\mathcal{G}}_1^{[0]}, \ldots, \hat{\mathcal{G}}_n^{[0]}\}$ to be the
@@ -300,6 +208,158 @@ Iterating this procedure for $r = 1, \ldots, n-1$ yields a tree of nested partit
 
 
 
+\section{Approach 2}\label{subsec:diss_alt}
+
+
+\subsection{Model}
+
+
+We consider a variation of the model \eqref{eq:model} which can be formally stated as follows. Each time series $\mathcal{Y}_i$ is assumed to satisfy the nonparametric regression equation
+\begin{equation}\label{eq:model_alt}
+Y_{it} = m_i\Big(\frac{t}{\sqrt{T}}\Big) + u_{it} \qquad (1 \le t \le T) 
+\end{equation}
+with $\ex[u_{it}]= 0$, where $m_i$ is an unknown smooth trend curve defined on $(-\infty, \infty)$. The difference between the models lies in the fact that we work with a different rescaling device ($t/\sqrt{T}$ versus $t/T$). Furthermore, we impose a slightly different group structure than before:
+\begin{enumerate}[leftmargin=0.9cm]
+\item[($\text{G}^\prime$)] The set of countries $\{1,\ldots,n\}$ can be partitioned into $K$ groups $\mathcal{G}^\prime_1,\ldots,\mathcal{G}^\prime_K$ such that 
+\[ m_i \in \class_k^\prime \quad \text{for all } i \in \mathcal{G}^\prime_k, \]
+where $\class^\prime_k$ are function classes defined as
+\begin{align*} \class^\prime_k := \big\{ f:\reals \rightarrow \reals_{+} \,\big|\, & f = c \cdot g_k\Big(\frac{u - a}{b}\Big) \text{ with } a, b, c > 0 \text{ and } \\
+& g_k \text{ a density with mean } 0 \text{ and variance } 1 \big\}.
+\end{align*}
+For identification purposes, the classes are supposed to be distinct, \linebreak i.e., $\class_k^\prime \cap \class_{k^\prime}^\prime = \emptyset$ for any $k \neq k^\prime$. 
+\end{enumerate}
+As before, the elements of the class $\mathcal{F}^\prime_k$ are rescaled versions of some density function $g_k$ (which is unknown in practice). %The main difference between the conditions $\text{G}$ and $\text{G}^\prime$ lies in the definition of the support of the density function: while in $\text{G}$ we assume that the support of the density function is bounded, we relax this assumption in $\text{G}^\prime$. 
+We still regard $c$ as a country-specific scaling parameter that accounts for the size of the country or population density and the constant $b$ can be interpreted as the time parameter of the model. We also introduce an additional parameter $a$ that accounts for the differences in the start of the pandemic. We briefly commented on the possibility of introducing such a parameter in Remark \ref{rem:classes_def}. %In contrast to before, we thus do not need to align the data across countries! 
+
+
+\subsection{Clustering procedure}
+
+
+For $i \in \mathcal{G}_k$, we can write $m_i(u) = c_i \cdot g_k(\frac{u - a_i}{b_i})$ and use the assumptions on the density function $g_k$ to obtain that
+\begin{align*}
+\int_{-\infty}^\infty m_i(u) du &= \int_{-\infty}^\infty c_i \cdot g_k\Big(\frac{u - a_i}{b_i}\Big) du \nonumber\\
+&= c_i \int_{-\infty}^\infty b_i \cdot g_k(v) dv = c_i b_i, \nonumber\\
+\int_{-\infty}^\infty u m_i(u) du &= \int_{-\infty}^\infty c_i \cdot u g_k\Big(\frac{u - a_i}{b_i}\Big) du \nonumber\\
+&= c_i b_i \int_{-\infty}^\infty (a_i + b_i v) \cdot g_k(v) dv = c_i b_i a_i, \\
+\int_{-\infty}^\infty u^2 m_i(u) du &= \int_{-\infty}^\infty c_i \cdot u^2 g_k\Big(\frac{u - a_i}{b_i}\Big) du \nonumber\\
+&= c_i b_i \int_{-\infty}^\infty (a_i + b_i v)^2 \cdot g_k(v) dv = c_i b_i a_i^2+ c_i b_i b_i^2.\nonumber
+\end{align*}
+With 
+$$m_i^*(u) = \frac{m_i(u)}{\int_{-\infty}^\infty m_i(v)dv},$$
+the parameters $a_i$, $b_i$ and $c_i$ can thus be expressed as
+\begin{align*}
+a_i &= \int_{-\infty}^\infty u \, m_i^*(u) du, \\
+b_i &= \bigg\{ \int_{-\infty}^\infty u^2 m_i^*(u) du  - \Big(\int_{-\infty}^\infty u\, m_i^*(u) du \Big)^2 \bigg\}^{1/2}, \\
+c_i & = \frac{\int_{-\infty}^\infty m_i(u) du}{\Big\{ \int_{-\infty}^\infty u^2 m_i^*(u) du  - \Big(\int_{-\infty}^\infty u \,m_i^*(u) du \Big)^2 \Big\}^{1/2}}.
+\end{align*}
+We now compute a dissimilarity measure as follows:
+\begin{enumerate}[label=\textit{Step \arabic*.},leftmargin=1.45cm]
+
+
+\item For each $i$, estimate $m_i(u)$ by a Nadaraya-Watson estimator with a rectangular kernel and bandwidth $h$:
+\begin{align}\label{eq:m_hat}
+\hat{m}_i(u) =  \frac{ \sum_{t=1}^T K\Big( \frac{u - t/\sqrt{T}}{h}\Big) Y_{it}}{\sum_{t=1}^T K\Big( \frac{u - t\sqrt{T}}{h}\Big)}
+\end{align}
+with $K$ being a rectangular kernel and $K_h(x) = K(x/h)/h$. Here, we choose $h = 3.5/\sqrt{T}, 7/\sqrt{T}, \ldots$, and as before, this choice of bandwidth allows us to take care of possible weekly cycles in the data which are produced by delays in reporting new cases over the weekend.
+We then estimate $m_i^*(u)$ and the parameters $a_i, b_i$ and $c_i$ by simply plugging \eqref{eq:m_hat} into the corresponding formulas:
+\begin{align*}
+\hat{m}_i^*(u) &= \frac{\hat{m}_i(u)}{\int_{-\infty}^\infty \hat{m}_i(v)dv}, \\
+\hat{a}_i &= \int_{-\infty}^\infty u \, \hat{m}_i^*(u) du, \\
+\hat{b}_i &= \bigg\{ \int_{-\infty}^\infty u^2 \hat{m}_i^*(u) du  - \Big(\int_{-\infty}^\infty u\, \hat{m}_i^*(u) du \Big)^2 \bigg\}^{1/2}, \\
+\hat{c}_i & = \frac{\int_{-\infty}^\infty \hat{m}_i(u) du}{\Big\{ \int_{-\infty}^\infty u^2 \hat{m}_i^*(u) du  - \Big(\int_{-\infty}^\infty u\, \hat{m}_i^*(u) du \Big)^2 \Big\}^{1/2}}.
+\end{align*}
+
+
+\item By definition, for all $i \in \mathcal{G}_k$, we have
+$$ m_i (a_i + b_i \, v)/c_i = g_k(v).$$
+Compute the estimator
+$$ \hat{p}_i(v) = \hat{m}_i (\hat{a}_i + \hat{b}_i \, v)/\hat{c}_i$$
+and its normalized version
+\begin{align} \label{eq:p_star_hat}
+\hat{p}^*_i(v) = \frac{\hat{p}_i(v)}{\int_{-\infty}^{\infty} \hat{p}_i(w)dw}.
+\end{align}
+Note that $\hat{p}^*_i(v)$ is a proper density function since $\hat{p}^*_i(v) \geq 0$ by construction and 
+$$ \int_{-\infty}^{\infty} \hat{p}^*_i(v)dv = \int_{-\infty}^{\infty}\frac{\hat{p}_i(v)}{\int_{-\infty}^{\infty} \hat{p}_i(w)dw}dv = 1.$$
+
+
+\item For a given pair of countries $(i, j)$, define the statistic 
+$$\Delta_{ij}^\prime = \int_{-\infty}^{\infty} \big( \sqrt{\hat{p}^*_i(v)} - \sqrt{\hat{p}^*_j(v)}\big)^2dv,$$
+which measures the (squared) Hellinger distance between the functions \linebreak $m_i (a_i + b_i \, v)/c_i$ and $m_j (a_j + b_j\, v)/c_j$.
+
+
+\item Let $S \subseteq \{1, \ldots, n\}$ and $S^\prime \subseteq \{1, \ldots, n\}$ be two sets of time series from our sample. As before, we work with the complete linkage measure of dissimilarity defined as 
+\begin{align*}
+\mathcal{D}^\prime (S, S^\prime) = \max_{i \in S, j\in S^\prime} \Delta^\prime_{ij}.
+\end{align*}
+Alternatively, we may use a single or average linkage measure. 
+
+
+\end{enumerate}
+To obtain cluster estimates, we now run the HAC algorithm from the previous section based on $\mathcal{D}^\prime$ rather than $\mathcal{D}$. 
+
+
+
+\section{ToDos}
+
+
+\subsection{Estimating the number of clusters}
+
+\textbf{Approach 1.} \textcolor{red}{Not clear to me how to choose the number of clusters.} 
+\medskip 
+
+\noindent \textbf{Approach 2.} For $K=1,2,\ldots$, let $\{\hat{G}_1^{[K]},\ldots,\hat{G}_K^{[K]}\}$ be the estimated groups. The group-specific densities $g_k$ can be estimated by 
+\[ \hat{g}_k^{[K]}(v) = \frac{1}{|\hat{G}_k^{[K]}|} \sum\limits_{i \in \hat{G}_k^{[K]}} \hat{p}_i^*(v) \]
+for $k=1,\ldots,K$ with $\hat{p}_i^*(v)$ defined in \eqref{eq:p_star_hat}. Use these to compute 
+\[ \hat{\sigma}_i^2(K) = \frac{1}{T} \sum_{t=1}^T \Big\{ Y_{it} - \hat{c}_i \hat{g}_k^{[K]}\Big(\frac{t/\sqrt{T} - \hat{a}_i}{\hat{b}_i}\Big) \Big\}^2 \quad \text{for } i \in \hat{G}_k^{[K]} \]
+and choose the number of clusters by maximizing the BIC criterion
+\[ \text{BIC}(K) = T\sum_{i=1}^{n}\log (\hat{\sigma }_{i}^{2}(K))-\log (nT)\left(K(n+T)+n\right). \]
+
+
+\subsection{Classification by deaths}
+
+In terms of the application, it is also of interest to do the classification by deaths to see the overlap between cases and deaths.
+
+{\color{red} Figures \ref{fig:map_deaths} and \ref{fig:map_alt_deaths} present the choropleth maps for the the results of the classification by deaths for the number of clusters $K = 12$. We can directly compare the results of classification by cases and classification by deaths: Figure \ref{fig:map_12cl} vs. Figure \ref{fig:map_deaths} and Figures \ref{fig:map_alt_12cl} vs. Figure \ref{fig:map_alt_deaths} for Approaches 1 and 2 respectively.}
+
+\subsection{Determining common factors}
+
+We need to identify the common factors that place the countries in a particular grouping and determine their acceleration constants. One could do a logit or multinomial fit of the category (i.e., group membership of country $i$) on country specific predictors like demographics, income level, health care expenditure, lock down severity.
+
+
+\subsection{Other distance measures (in Approach 2)}
+
+Instead of the Hellinger distance, one may use 
+\[ \Delta_{ij}'' = \frac{\langle \hat{p}_i^*, \hat{p}_j^* \rangle}{\| \hat{p}_i^* \|  \| \hat{p}_j^* \|}. \] 
+
+
+\subsection{Clustering other features of the data}
+
+This section may be more about enhancing the application. 
+
+The trend is the dominant feature of the data but seasonality and comovement
+are also of interest. For example, suppose that 
+\[
+u_{it}=\sum_{j=1}^{J}\beta _{ij}D_{jt}+\varepsilon _{it},
+\]%
+where $J=7$ for daily data, while $E(\varepsilon _{it})=0$ and 
+\[
+E(\varepsilon _{it}\varepsilon _{jt})=\sigma _{ij}.
+\]%
+We may estimate $B=(\beta _{ij})$ and $\Sigma =(\sigma _{ij})$ using the
+time series data country by country. The question is whether there are
+distinct groups with regard to $B,\Sigma .$ Specifically, by arranging the
+countries in groups determined by the trend, is $\Sigma $ close to block
+diagonal? Can we also divide $B$ into groups as in for group $k$ there are
+coefficients $\gamma _{k1},\ldots ,\gamma _{kJ}$ and every member of group $k$ has 
+\[
+\beta _{ij}=c_{i}\times \gamma _{kj}.
+\]%
+This reduces dimensionality from $n\times J$ to $n+K\times J.$ This is a
+standard regression clustering.
+
+
+
+\newpage
 \section{Empirical analysis}\label{sec:app}
 
 
@@ -315,21 +375,18 @@ In Section \ref{subsec:sim}, we assess the finite sample performance of our clus
 
 \subsection{Analysis of COVID-19 data}\label{subsec:app}
 
-In what follows, we refer to the procedures described in Sections \ref{subsec:diss} and \ref{subsec:diss_alt} as Method 1 and Method 2 respectively.
-
 \subsubsection{Data}
 
 
-We analyze data from $160$ countries. We consider only those countries that have a total number of at least $1\,000$ cases of infection during the considered time period. We also restrict our attention only to the countries for which the observed time period is around $300$ days. For each country $i$, we observe a time series $\mathcal{Y}_i = \{ Y_{it}: 1 \le t \le T \}$, where $Y_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available in the COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University (\texttt{https://github.com/CSSEGISandData/COVID-19}) and were downloaded on 29 April 2021. For the application of Method 1, we take the first Monday after reaching $100$ confirmed cases in each country as the starting date $t=1$, whereas for the application of Method 2, we take the first day after reaching $100$ confirmed cases in each country as the starting date $t=1$.
+We analyze data from $160$ countries. We consider only those countries that have a total number of at least $1\,000$ cases of infection during the considered time period. We also restrict our attention only to the countries for which the observed time period is around $300$ days. For each country $i$, we observe a time series $\mathcal{Y}_i = \{ Y_{it}: 1 \le t \le T \}$, where $Y_{it}$ is the number of newly confirmed COVID-19 cases in country $i$ on day $t$. The data are freely available in the COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at John Hopkins University (\texttt{https://github.com/CSSEGISandData/COVID-19}) and were downloaded on 29 April 2021. For the application of Approach 1, we take the first Monday after reaching $100$ confirmed cases in each country as the starting date $t=1$, whereas for the application of Approach 2, we take the first day after reaching $100$ confirmed cases in each country as the starting date $t=1$.
 Beginning the time series of each country on the day when that country reached $100$ confirmed cases is a common way of ``normalizing'' the data \citep[see e.g.][]{Cohen2020}. Additionally aligning the data by Monday allows to take care of possible weekly cycles in the data which are produced by delays in reporting new cases over the weekend. 
-The time series length $T$ is taken to be the longest interval for which we have observations for all $160$ countries. The resulting dataset thus consists of $n = 160$ time series, each with $T = 296$ and $T = 301$ observations in case of Method 1 of Method 2 respectively. Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in $45$ replacements.
+The time series length $T$ is taken to be the longest interval for which we have observations for all $160$ countries. The resulting dataset thus consists of $n = 160$ time series, each with $T = 296$ and $T = 301$ observations in case of Approach 1 or Approach 2 respectively. Some of the time series contain negative values which we replaced by $0$. Overall, this resulted in $45$ replacements.
 
 
-\subsubsection{Results for Method 1}\label{subsubsec:method1}
+\subsubsection{Results for Approach 1}\label{subsubsec:method1}
 
-We assume that the data $Y_{it}$ of each country $i$ in our sample follow the nonparametric trend model 
-\[ Y_{it} = m_i\Big(\frac{t}{T}\Big) + u_{it} \]
-from equation \eqref{eq:model} and we impose the group structure (G) on the data. 
+
+We assume that the data $Y_{it}$ of each country $i$ in our sample follow the nonparametric trend model from equation \eqref{eq:model} and we impose the group structure (G) on the data. 
 %. As in the theoretical part of the paper, we assume that all of the countries $i$ can be partitioned into $K$ classes $\mathcal{G}_1, \ldots, \mathcal{G}_K$ such that for each $1 \leq k\leq K$ and for all $i \in \mathcal{G}_k$, $m_i(u) = c \cdot g_k(b \cdot u)$ for some $c>0$ and $b\in[1, \bar{b}]$. We thus suppose that the general shape of the time trends $m_i$ are the same (or at least very similar) in all countries $i$ in a given group $\mathcal{G}_k$, but the scale and time parameters may vary across countries from the same group. 
 To implement the HAC algorithm, we make the following choices:
 \begin{itemize}[leftmargin=0.6cm]
@@ -339,11 +396,9 @@ To implement the HAC algorithm, we make the following choices:
 \item We assume that the number of classes $K$ is equal to $12$. We also produce the choropleth maps for $K=10$ and $K = 15$ clusters. \textcolor{red}{(We haven't considered the problem of estimating $K$ yet. So far, $K$ is handpicked. @Oliver: Any ideas how to estimate $K$???)}
 \item The values $\delta_{ij}(b)$ and $\delta_{ji}(b)$ are calculated not for all $b\in [1, \bar{b}]$, but on a grid that consists of the values $\{1, 1.05, 1.1, \ldots, \bar{b}\}$. Since this grid is finite, we write $\min_{b \in [1, \bar{b}]} \delta_{ij}(b)$ and $\min_{b \in [1, \bar{b}]} \delta_{ji}(b)$ instead of $\inf_{b \in [1, \bar{b}]} \delta_{ij}(b)$ and $\inf_{b \in [1, \bar{b}]} \delta_{ji}(b)$ in what follows.
 \end{itemize}
-
-
 The estimation results are presented in Figures \ref{fig:map_10cl}--\ref{fig:clusters_14days}:
 \begin{itemize}[leftmargin=0.6cm]
-\item Figures \ref{fig:map_10cl}--\ref{fig:map_15cl} show the estimated clusters in a world map for different number of clusters $K =10, 12, 15$, where each country is coloured according to to the different classes it belongs to. 
+\item Figures \ref{fig:map_10cl}--\ref{fig:map_12cl} show the estimated clusters in a world map for different numbers of clusters $K =10, 15, 12$, where each country is coloured according to the class it belongs to. Figure \ref{fig:map_deaths} presents the results of classification by deaths for $K =12$.
 \item Figures \ref{fig:dend} shows the dendrogram of the HAC algorithm with a border drawn around each of $K = 12$ clusters.
 \item Figures \ref{fig:cl1_14days}--\ref{fig:cl12_14days} depict the trend functions of the countries in the different estimated classes, each figure corresponding to a specific class. Since the functions $m_i$ in a given class $\mathcal{G}_k$ are only identical up to the scaling by the constants $c$ and $b$, we do not plot the (estimated) functions $m_i$ themselves. We rather proceed as follows: Consider a specific class $\mathcal{G}_k$,  write the trends in this class as $m_i(u) = c_i \cdot g_k(b_i \cdot u)$ with some constants $c_i$ and $b_i$, and fix some country $i_k \in \mathcal{G}_k$. It holds that $m_i(u) = \{ c_{i_k}/c_i \} \cdot m_i(\{ b_{i_k}/b_i \} u)$ for all $i \in \mathcal{G}_k$. Hence, the functions $\{ c_{i_k}/c_i \} \cdot m_i(\{ b_{i_k}/b_i \} u)$ are identical for all $i \in \mathcal{G}_k$. Rather than plotting the estimates $\hat{m}_i(u)$, we thus pick some $i_k \in \hat{\mathcal{G}}_k$ and plot the renormalized functions $\{ \hat{c}_{i_k}/\hat{c}_i \} \cdot \hat{m}_i(\{ \hat{b}_{i_k}/\hat{b}_i \} u)$, where $\hat{c}_{i_k}/\hat{c}_i$ and $\hat{b}_{i_k}/\hat{b}_i$ are estimates of the ratios $c_{i_k}/c_i$ and $b_{i_k}/b_i$. (The index $i_k$ is chosen such that $\hat{b}_{i_k}/\hat{b}_i < 1$ for all $i \in \hat{\mathcal{G}}_k$.)
 \end{itemize}
@@ -401,35 +456,41 @@ The estimation results are presented in Figures \ref{fig:map_10cl}--\ref{fig:clu
 \begin{figure}[t!]
 \begin{minipage}[t]{0.98\textwidth}
 \includegraphics[width=\textwidth]{plots/14days/map_10cl}
-\caption{Results of HAC for $10$ clusters (Method 1) on a map: each country is coloured according to the group it belongs to.}\label{fig:map_10cl}
+\caption{Results of HAC for $10$ clusters (Approach 1) on a map: each country is coloured according to the group it belongs to.}\label{fig:map_10cl}
 \end{minipage}
 \end{figure}
-
-
 
 \begin{figure}[t!]
 \begin{minipage}[t]{0.98\textwidth}
-\includegraphics[width=\textwidth]{plots/14days/map_12cl}
-\caption{Results of HAC for $12$ clusters (Method 1) on a map: each country is coloured according to the group it belongs to.}
+\includegraphics[width=\textwidth]{plots/14days/map_15cl}
+\caption{Results of HAC for $15$ clusters (Approach 1) on a map: each country is coloured according to the group it belongs to.}\label{fig:map_15cl}
 \end{minipage}
 \end{figure}
-
 
 \newpage 
 \FloatBarrier
 \begin{figure}[t!]
 \begin{minipage}[t]{0.98\textwidth}
-\includegraphics[width=\textwidth]{plots/14days/map_15cl}
-\caption{Results of HAC for $15$ clusters (Method 1) on a map: each country is coloured according to the group it belongs to.}\label{fig:map_15cl}
+\includegraphics[width=\textwidth]{plots/14days/map_12cl}
+\caption{Results of HAC for the number of cases for $12$ clusters (Approach 1) on a map: each country is coloured according to the group it belongs to.}\label{fig:map_12cl}
 \end{minipage}
 \end{figure}
+
+\begin{figure}[t!]
+\begin{minipage}[t]{0.98\textwidth}
+\includegraphics[width=\textwidth]{plots/deaths/map}
+\caption{Results of HAC for the number of deaths for $12$ clusters (Approach 1) on a map: each country is coloured according to the group it belongs to.}\label{fig:map_deaths}
+\end{minipage}
+\end{figure}
+
+
 
 \newpage 
 \FloatBarrier
 \begin{sidewaysfigure}[t!]
 %\begin{minipage}[t]{0.98\textwidth}
 \includegraphics[width=\textwidth]{plots/14days/dendrogram}
-\caption{Results of HAC for $12$ clusters, Method 1}\label{fig:dend}
+\caption{Results of HAC for $12$ clusters (Approach 1)}\label{fig:dend}
 %\end{minipage}
 \end{sidewaysfigure}
 
@@ -466,58 +527,72 @@ The estimation results are presented in Figures \ref{fig:map_10cl}--\ref{fig:clu
 \subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/14days/results_cluster_11}\label{fig:cl11_14days}}
 \hspace{0.25cm}
 \subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/14days/results_cluster_12}\label{fig:cl12_14days}}
-\caption{Clusters produced by the algorithm. Each panel presents appropriately scaled curve estimates $\hat{m}_i$ that belong to a particular cluster. The bandwidth $h$ is taken to be $7/T$.}\label{fig:clusters_14days}
+\caption{Clusters produced by the algorithm (Approach 1). Each panel presents appropriately scaled curve estimates $\hat{m}_i$ that belong to a particular cluster. The bandwidth $h$ is taken to be $7/T$.}\label{fig:clusters_14days}
+\vspace{1cm}
+
 \end{figure}
 
-\subsubsection{Results for Method 2}
 
-We assume that the data $Y_{it}$ of each country $i$ in our sample follow the nonparametric trend model 
-\[ Y_{it} = m_i(t) + u_{it} \]
+\FloatBarrier 
+
+
+\subsubsection{Results for Approach 2}
+
+
+We assume that the data $Y_{it}$ of each country $i$ in our sample follow the nonparametric trend model \eqref{eq:model_alt}
 and we impose the group structure ($\text{G}^\prime$) on the data. 
-
 To implement the HAC algorithm, we make the following choices:
 \begin{itemize}[leftmargin=0.6cm]
-\item We use a rectangular kernel $K(\cdot)$ to compute the version of a Nadaraya-Watson smoother $\hat{m}_{i}$ by \eqref{eq:m_hat} and consider the bandwidth $h = 7/\sqrt{T}$, which corresponds to effective sample sizes of $14$ days of data. 
+\item We use a rectangular kernel $K(\cdot)$ to compute the Nadaraya-Watson smoothers $\hat{m}_{i}$ from \eqref{eq:m_hat} and consider the bandwidth $h = 7/\sqrt{T}$, which corresponds to an effective sample size of $14$ days of data. 
 \item We assume that the number of classes $K$ is equal to $12$. We also produce the choropleth maps for $K=10$ and $K = 15$ clusters.
 \end{itemize}
-
-
 The estimation results are presented in Figures \ref{fig:map_alt_10cl}--\ref{fig:clusters_alt_14days}:
 \begin{itemize}[leftmargin=0.6cm]
-\item Figures \ref{fig:map_alt_10cl}--\ref{fig:map_alt_15cl} show the estimated clusters in a world map for different number of clusters $K =10, 12, 15$, where each country is coloured according to to the different classes it belongs to. 
+\item Figures \ref{fig:map_alt_10cl}--\ref{fig:map_alt_12cl} show the estimated clusters in a world map for different numbers of clusters $K =10, 15, 12$, where each country is coloured according to the class it belongs to. Figure \ref{fig:map_alt_deaths} presents the results of classification by deaths for $K =12$.
 \item Figures \ref{fig:dend_alt} shows the dendrogram of the HAC algorithm with a border drawn around each of $K = 12$ clusters.
 \item Figures \ref{fig:cl1_alt_14days}--\ref{fig:cl12_alt_14days} depict the trend functions of the countries in the different estimated classes, each figure corresponding to a specific class. Since the functions $m_i$ in a given class $\mathcal{G}_k$ are only identical up to the scaling by the constants $a, b$ and $c$, we do not plot the (estimated) functions $m_i$ themselves. We rather plot the estimates $\hat{p}_i(v) = \hat{m}_i(\hat{a}_i + \hat{b}_i \, v)/\hat{c}_i$. Moreover, even though $m_i$ is defined on $(-\infty, \infty)$, we restrict our attention to $[-5, 5]$, which seems to be enough for all of the countries.
 \end{itemize}
 
 \newpage 
 \FloatBarrier
-\begin{sidewaysfigure}[t!]
-%\begin{minipage}[t]{0.98\textwidth}
-\includegraphics[width=\textwidth]{plots/14days/dendrogram_alt}
-\caption{Results of HAC for $12$ clusters, Method 2}\label{fig:dend_alt}
-%\end{minipage}
-\end{sidewaysfigure}
-
 \begin{figure}[t!]
 \begin{minipage}[t]{0.98\textwidth}
 \includegraphics[width=\textwidth]{plots/14days/map_alt_10cl}
-\caption{Results of HAC for $10$ clusters (Method 2) on a map: each country is coloured according to the group it belongs to.}\label{fig:map_alt_10cl}
+\caption{Results of HAC for $10$ clusters (Approach 2) on a map: each country is coloured according to the group it belongs to.}\label{fig:map_alt_10cl}
 \end{minipage}
 \end{figure}
 
-\begin{figure}[t!]
-\begin{minipage}[t]{0.98\textwidth}
-\includegraphics[width=\textwidth]{plots/14days/map_alt_12cl}
-\caption{Results of HAC for $12$ clusters (Method 2) on a map: each country is coloured according to the group it belongs to.}
-\end{minipage}
-\end{figure}
 
 \begin{figure}[t!]
 \begin{minipage}[t]{0.98\textwidth}
 \includegraphics[width=\textwidth]{plots/14days/map_alt_15cl}
-\caption{Results of HAC for $15$ clusters (Method 2) on a map: each country is coloured according to the group it belongs to.}\label{fig:map_alt_15cl}
+\caption{Results of HAC for $15$ clusters (Approach 2) on a map: each country is coloured according to the group it belongs to.}\label{fig:map_alt_15cl}
 \end{minipage}
 \end{figure}
+
+\newpage 
+\FloatBarrier
+\begin{figure}[t!]
+\begin{minipage}[t]{0.98\textwidth}
+\includegraphics[width=\textwidth]{plots/14days/map_alt_12cl}
+\caption{Results of HAC for the number of cases for $12$ clusters (Approach 2) on a map: each country is coloured according to the group it belongs to.}\label{fig:map_alt_12cl}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[t!]
+\begin{minipage}[t]{0.98\textwidth}
+\includegraphics[width=\textwidth]{plots/deaths/map_alt}
+\caption{Results of HAC for the number of deaths for $12$ clusters (Approach 2) on a map: each country is coloured according to the group it belongs to.}\label{fig:map_alt_deaths}
+\end{minipage}
+\end{figure}
+
+
+\begin{sidewaysfigure}[t!]
+%\begin{minipage}[t]{0.98\textwidth}
+\includegraphics[width=\textwidth]{plots/14days/dendrogram_alt}
+\caption{Results of HAC for $12$ clusters (Approach 2)}\label{fig:dend_alt}
+%\end{minipage}
+\end{sidewaysfigure}
 
 
 \newpage 
@@ -552,7 +627,7 @@ The estimation results are presented in Figures \ref{fig:map_alt_10cl}--\ref{fig
 \subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/14days/results_cluster_11_alt}\label{fig:cl11_alt_14days}}
 \hspace{0.25cm}
 \subfloat[][]{\includegraphics[width=0.48\textwidth]{plots/14days/results_cluster_12_alt}\label{fig:cl12_alt_14days}}
-\caption{Clusters produced by the algorithm. Each panel presents appropriately scaled curve estimates $\hat{m}_i$ that belong to a particular cluster. The bandwidth $h$ is taken to be $7/T$.}\label{fig:clusters_alt_14days}
+\caption{Clusters produced by the algorithm (Approach 2). Each panel presents appropriately scaled curve estimates $\hat{m}_i$ that belong to a particular cluster. The bandwidth $h$ is taken to be $7/T$.}\label{fig:clusters_alt_14days}
 \end{figure}
 
 \clearpage
