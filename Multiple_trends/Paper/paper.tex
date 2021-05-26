@@ -41,9 +41,9 @@
 \vspace{-0.5cm}
 
 \authors{Marina Khismatullina\renewcommand{\thefootnote}{1}\footnotemark[1]}{University of Bonn}{Michael Vogt\renewcommand{\thefootnote}{2}\footnotemark[2]}{University of Bonn} 
-\footnotetext[1]{Address: Bonn Graduate School of Economics, University of Bonn, 53113 Bonn, Germany. Email: \texttt{marina.k@uni-bonn.de}.}
+\footnotetext[1]{Corresponding author. Address: Bonn Graduate School of Economics, University of Bonn, 53113 Bonn, Germany. Email: \texttt{marina.k@uni-bonn.de}.}
 \renewcommand{\thefootnote}{2}
-\footnotetext[2]{Corresponding author. Address: Department of Economics and Hausdorff Center for Mathematics, University of Bonn, 53113 Bonn, Germany. Email: \texttt{michael.vogt@uni-bonn.de}.}
+\footnotetext[2]{Address: Institute of Statistics, Department of Mathematics and Economics, Ulm University, 89081 Ulm, Germany. Email: \texttt{m.vogt@uni-ulm.de}.}
 \renewcommand{\thefootnote}{\arabic{footnote}}
 \setcounter{footnote}{0}
 
@@ -57,7 +57,7 @@
 
 \renewcommand{\abstractname}{}
 \begin{abstract}
-\noindent We develop multiscale methods to test qualitative hypotheses about nonparametric time trends. In many applications, practitioners are interested in whether the observed time series has a time trend at all, that is, whether the trend function is non-constant. Moreover, they would like to get further information about the shape of the trend function. Among other things, they would like to know in which time regions there is an upward/downward movement in the trend. When multiple time series are observed, another important question is whether the observed time series all have the same time trend. We design multiscale tests to formally approach these questions. We derive asymptotic theory for the proposed tests and investigate their finite sample performance by means of simulations. In addition, we illustrate the methods by two applications to temperature data. 
+\noindent We develop multiscale methods to test qualitative hypotheses about nonparametric time trends in the presence of covariates. In many applications, practitioners are interested whether the observed time series all have the same time trend. Moreover, when some of the trends are different, there may still be groups of time series with the same trend. In this case, it is often of interest to estimate the unknown groups from the data. In addition, when two trends are not the same, it may also be relevant to know in which time regions they differ from each other. We design multiscale tests to formally approach these questions. We derive asymptotic theory for the proposed tests and investigate their finite sample performance by means of simulations.
 \end{abstract}
 
 \vspace{-0.1cm}
@@ -76,7 +76,96 @@
 
 %\input{paper_intro}
 
-\section{The model}\label{sec-model}
+\section{Introduction}\label{sec:intro}
+
+Comparison of several regression curves is a classical topic in econometrics and statistics. In many cases of practical interest, the objective regression curves are of unknown functional form and the parametric approach is not applicable. In this paper, we are interested in performing the comparison of several regression curves in a nonparametric context. Specifically, we present a new testing procedure for detecting differences in the nonparametric trends curves. 
+
+In what follows, we consider a general panel framework with heterogeneous trends. Suppose we observe a panel of $n$ time series $\mathcal{Z}_i = \{ (Y_{it},\X_{it}): 1 \le t \le T \}$ for\linebreak $1 \le i \le n$, where $Y_{it}$ are real-valued random variables and $\X_{it} = (X_{it,1},\ldots,X_{it,d})^\top$ are $d$-dimensional random vectors. Each time series $\mathcal{Z}_i$ is modelled by the equation
+\begin{equation}\label{model}
+Y_{it} = m_i \Big( \frac{t}{T} \Big) + \bfbeta_i^\top \X_{it} + \alpha_i + \varepsilon_{it}
+\end{equation}
+for $1 \le t \le T$, where $\bm{\beta}_i$ is a $d \times 1$ vector of unknown parameters, $\mathbf{X}_{it}$ is a $d\times 1$ vector of individual covariates or controls, $m_i$ is an unknown nonparametric (deterministic) trend function defined on $[0,1]$, $\alpha_i$ are so-called fixed effect error terms and \linebreak $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ is a zero-mean stationary error process. 
+
+
+An important question in many applications is whether the observed time series have the common trend. In other words, the researchers would like to know if $m_i$ are the same for all $i$. Moreover, when some of the trends are different, there may still be groups of time series with the same trend. In this case, it is often of interest to estimate the unknown groups from the data. In addition, when two trends $m_i$ and $m_j$ are not the same, it may also be relevant to know in which time regions they differ from each other. In this paper, we introduce new statistical methods to approach these questions. In particular, we develop a test of the hypothesis that all time trends in model \eqref{model} are the same. In this setting, the null hypothesis is formulated as 
+\begin{align}\label{eq:null}
+H_0: m_1 = m_2 = \ldots = m_n,
+\end{align}
+whereas the alternative hypothesis is 
+$$H_1: \text{ there exists } x\in [0, 1] \text{ such that } m_i (x) \neq m_j(x) \text{ for some } 1\leq i < j \leq n.$$
+
+The method that we propose does not only allow to test whether the null hypothesis is violated. It also allows to detect, with a given statistical confidence, which time trends are different and in which time regions they differ. More specifically, for any given interval $[u-h,u+h] \subseteq [0,1]$, consider the hypothesis
+\[ H_0^{[i,j]}(u,h): m_i(w) = m_j(w) \text{ for all } w \in [u-h,u+h]. \] 
+Here, we can regard $h$ as a bandwidth parameter, a common tuning parameter in nonparametric estimation. The given interval $\interval_{(u, h)} = [u-h,u+h] \subseteq [0,1]$ is then fully characterized by $u$, its center (the location parameter), and $h$, the bandwidth. In order to determine the regions where the time trends are different, we consider a broad range of pairs $(u, h)$ with the property that they cover the unit interval $[0, 1]$. Formally, let $\grid := \{(u, h): \interval_{(u, h)} = [u-h, u+h] \subseteq [0,1]\}$ be a grid of location-bandwidth points such that %determine the family of (rescaled) time intervals $\family = \{ \interval_{(u, h)} = [u-h, u+h] \subseteq [0,1]: (u, h) \in \grid\}$ such that 
+\begin{align*}
+\bigcup_{(u, h) \in \grid}  \interval_{(u, h)} = [0,1].
+\end{align*}
+We then reformulate our null hypothesis \eqref{eq:null} as
+\begin{align*}
+H_0: \ & \text{The hypothesis } H_0^{[i,j]}(u,h) \text{ holds true for all intervals } [u-h,u+h], (u, h) \in \grid, \\ & \text{ and for all } 1 \le i < j \le n. 
+\end{align*} 
+
+In this paper, we introduce a method that allows to test the hypothesis $H_0^{[i,j]}(u,h)$  simultaneously for all pairs $(i, j)$ and for all intervals $\interval_{(u, h)}$ under consideration. The method that we propose is a multiscale test. The underlying idea of a multiscale test is to consider a number of test statistics (each of which corresponds to different values of some tuning parameters) simultaneously rather to consider a single test statistic. In our case, this results in testing many separate null hypotheses $H_0^{[i,j]}(u,h)$. In the paper, we also show how to derive appropriate critical values and we prove the main theoretical result that our multiscale test has the correct (asymptotic) level. 
+ 
+\vspace{10mm}
+
+controls the familywise
+error rate, that is, the probability of wrongly rejecting at least one null hypothesis H(ijk) 0 . As we will see, this allows us to make simultaneous confidence statements of the following form for a given signifcance level We now set up a multiscale method which simultaneously tests the hypothesis \linebreak $H_0^{[i,j]}(u,h)$ for all possible points $(u,h)$ and all pairs $(i,j)$ with $i < j$.\footnote{Obviously, in practice, we cannot consider all points $u \in (0,1)$ and all $h > 0$ but have to restrict attention to a finite subset of points. We ignore this in our presentation for simplicity.} Our strategy to derive such a method can be outlined as follows:
+\vspace{10pt}
+
+
+
+
+
+The problem of testing whether the observed time series all have the same trend  has been widely studied and tests for equality of trend or regression curves have been developed in \cite{HaerdleMarron1990}, \cite{Hall1990}, \cite{Delgado1993} and \cite{DegrasWu2012} among many others. Versions of model \eqref{model} with a parametric trend are studied in \cite{Vogelsang2005}, \cite{Sun2011} and \cite{Xu2012} among others. In the nonparametric context, \cite{LiChenGao2010}, \cite{Atak2011}, \cite{Robinson2012} and \cite{ChenGaoLi2012} considered panel models where the observed time series have a common time trend. In many applications, however, the assumption of a common time trend is quite harsh. In particular when the number of observed time series is large, it is quite natural to suppose that the time trend may differ across time series. More flexible panel settings with heterogeneous trends have been studied, for example, in \cite{DegrasWu2012},  \cite{Zhang2012} and \cite{Hidalgo2014}. \cite{DegrasWu2012} consider the problem of testing $H_0$ within the model framework that is a special case of \eqref{model} which does not include additional regressors. \cite{ChenWu2018} develop theory for test statistics closely related to those from \cite{DegrasWu2012}, but under more general conditions on the error terms.  \cite{Zhang2012} investigate the problem of testing the hypothesis $H_0$ in a slightly restricted version of model \eqref{model}, where $\beta_i = \beta$ for all $i$.
+
+
+ 
+  
+
+Recently, \cite{KhismatullinaVogt2021} proposed a new inference method that allows to detect differences between epidemic time trends in the context of the COVID-19 pandemic. They presented a statistically rigorous procedure that not only allows to compare trends across different countries, but also to pinpoint the time intervals where the differences occur. However, they examined a special case of the model \eqref{model} which does not include neither the covariates $\X_{it}$, nor the fixed effects $\alpha_i$, and restricts the error terms $\varepsilon_{it}$ to be independent across $t$. Our model \eqref{model} can be regarded as a generalization of their model, which allows for a wider range of economic and financial applications.
+
+  
+ 
+ 
+
+
+
+The statistical problem of comparing trends has a wide range of applications in economics, finance and other fields such as climatology and biology. In economics, one may wish is to compare trends in real gross domestic product (GDP) across different countries \citep[][]{Grier1989}. Another example concerns the dynamics of long-term interest rates. To better understand these dynamics, researchers aim to compare the yields of US Treasury bills at different maturities over time \citep[cp.][]{Park2009}. In finance, it is of interest to compare the volatility trends of different stocks \citep[][]{Nyblom2000}. Finally, in climatology, researchers are interested in comparing the trending behaviour of temperature time series across different spatial locations \citep[][]{KarolyWu2005}. 
+
+\vspace{10mm}
+
+In this article we discuss testing the equality of two regres-
+ sion functions that are specified in terms of only some
+ smoothness conditions and, consequently, allow the pro-
+ posed tests to be used for a wide class of functions. 
+ 
+
+ 
+
+Within the general framework of model \eqref{model}, we can formulate a number of interesting statistical questions concerning the set of trend functions $\{ m_i:  1 \le i \le n \}$. 
+
+
+Tests of $H_{0,\text{para}}$, $H_{0,\text{const}}$ and related hypotheses have for example been studied in \cite{Lyubchich2016}. 
+
+
+
+The tests of \cite{Zhang2012}, \cite{DegrasWu2012} and \cite{ChenWu2018} are based on nonparametric estimators of the trend functions $m_i$ that depend on one or several bandwidth parameters. In most cases, it is far from clear how to choose these bandwidths in an appropriate way. On the contrary, our method allows us consider a large collection of bandwidths simultaneously and thus, we avoid the need to choose only one bandwidth.
+
+%This is a general problem concerning essentially all tests based on nonparametric curve estimators. There are of course many theoretical results on optimal bandwidth choice for estimation purposes. However, the optimal bandwidth for curve estimation is usually not optimal for testing. Optimal bandwidth choice for tests is indeed an open problem, and only little theory for simple cases is available \citep[][]{GaoGijbels2008}. Since tests based on nonparametric curve estimators are commonly quite sensitive to the choice of bandwidth and theory for optimal bandwidth selection is not available, it appears preferable to work with bandwidth-free tests. A classical way to obtain a bandwidth-free test of the hypothesis $H_0$ is to use CUSUM-type statistics which are based on partial sum processes. This approach is taken in \cite{Hidalgo2014}. A more modern approach to obtain a bandwidth-free test is to employ multiscale methods.
+
+More specifically, the basic idea is as follows: Let $S_h$ be a test statistic for the null hypothesis of interest, which depends on the bandwidth $h$. Rather than considering only a single statistic $S_h$ for a specific bandwidth $h$, a multiscale approach simultaneously considers a whole family of statistics $\{S_h: h \in \mathcal{H} \}$, where $\mathcal{H}$ is a set of bandwidth values. The multiscale test then proceeds as follows: For each bandwidth or scale $h$, one checks whether $S_h > q_h(\alpha)$, where $q_h(\alpha)$ is a bandwidth-dependent critical value (for given significance level $\alpha$). The multiscale test rejects if $S_h > q_h(\alpha)$ for at least one scale $h$. The main theoretical difficulty in this approach is of course to derive appropriate critical values $q_h(\alpha)$. Specifically, the critical values $q_h(\alpha)$ need to be determined such that the multiscale test has the correct (asymptotic) level, that is, such that $\pr (S_h > q_h(\alpha) \text{ for some } h \in \mathcal{H} ) = (1-\alpha) + o(1)$. 
+
+
+Multiscale methods have been developed for a variety of different test problems in recent years. \cite{ChaudhuriMarron1999, ChaudhuriMarron2000} introduced the so-called SiZer method which has been extended in various directions; see for example \cite{HannigMarron2006} and \cite{Rondonotti2007}. \cite{HorowitzSpokoiny2001} proposed a multiscale test for the parametric form of a regression function. \cite{DuembgenSpokoiny2001} constructed a multiscale approach which works with additively corrected supremum statistics. This general approach has been very influential in recent years and has been further developed in numerous ways; see for example \cite{Duembgen2002}, \cite{Rohde2008} and \cite{ProkschWernerMunk2018} for multiscale methods in the regression context and \cite{DuembgenWalther2008}, \cite{RufibachWalther2010}, \cite{SchmidtHieber2013} and \cite{EckleBissantzDette2017} for methods in the context of density estimation. Importantly, all of these studies are restricted to the case of independent data. It turns out that it is highly non-trivial to extend the multiscale approach of \cite{DuembgenSpokoiny2001} to the case of dependent data. A first step into this direction has recently been made in \cite{KhismatullinaVogt2020}. They developed multiscale methods to test for local increases/decreases of the nonparametric trend function $m$ in the univariate time series model $Y_t = m(t/T) + \varepsilon_t$.  
+
+
+The main theoretical contribution of the current paper is the multiscale method that allows to make simultaneous confidence statements about the regions where the time trends differ. To the best of our knowledge, currently there are no equivalent statistical methods. Even though tests for equality of the trends have been developed already for a while, most existing procedures allow only to test whether the trend curves are all the same or not, but they almost never allow to infer which curves are different and where. The only two exceptions are \cite{KhismatullinaVogt2021} whose contribution is briefly discussed above and \cite{Park2009} who developed SiZer methods for the comparison of nonparametric trend curves in a strongly simplified version of model \eqref{model}. The analysis of \cite{Park2009}, however, is mainly methodological with the theory derived only for the special case $n=2$, that is, when only two time series are observed. 
+
+The paper is structured as follows. Section \ref{sec:model} introduces the model setting and the necessary technical assumptions that are required for the theory. The multiscale test is developed step by step in Section \ref{sec:test}. The main theoretical results are presented in Section \ref{sec:theo}. To keep the discussion as clear as possible, we include in the main text of the paper only the essential parts of the theoretical arguments, whereas the technical details and extended proofs are deferred to the Appendix. Section \ref{sec:concl} concludes.
+
+
+\section{The model}\label{sec:model}
 
 Before we proceed any further, we need to introduce some notation used throughout the paper. For a vector $\mathbf{v} = (v_1, \ldots, v_m)\in\reals^m$, we write $|\mathbf{v}| = \big(\sum_{i=1}^m v_i^2\big)^{1/2}$ and $|\mathbf{v}|_q = \big(\sum_{i=1}^m v_i^q\big)^{1/q}$ respectively. For a random vector $\mathbf{V}$, we define it's $\mathcal{L}^q, q>1$ norm as $||\mathbf{V}||_q = \big(\ex |\mathbf{V}|^q\big)^{1/q}$. For the particular case $q = 2$, we write $||\mathbf{V}|| := ||\mathbf{V}||_2$.
 
@@ -86,13 +175,13 @@ Following \cite{Wu2005}, we define the \textit{physical dependence measure} for 
 where $\mathcal{F}_t  = (\ldots, \epsilon_{-1}, \epsilon_0, \epsilon_1, \ldots, \epsilon_{t-1}, \epsilon_t)$ and $\mathcal{F}_t^\prime  = (\ldots, \epsilon_{-1}, \epsilon^\prime_0, \epsilon_1, \ldots, \epsilon_{t-1}, \epsilon_t)$ is a coupled process of $\mathcal{F}_t$ with $\epsilon_0^\prime$ being an i.i.d. copy of $\epsilon_0$.
 
 The model setting is as follows. We observe a panel of $n$ time series $\mathcal{Z}_i = \{(Y_{it}, \mathbf{X}_{it}): 1 \le t \le T \}$ of length $T$ for $1 \le i \le n$. Each time series $\mathcal{Z}_i$ satisfies the model equation \begin{equation}\label{model_full}
-Y_{it} = \bm{\beta}^\top_i \mathbf{X}_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
+Y_{it} = \bfbeta^\top_i \mathbf{X}_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
 \end{equation}
 for $1 \le t \le T$, where $\bm{\beta}_i$ is a $d \times 1$ vector of unknown parameters, $\mathbf{X}_{it}$ is a $d\times 1$ vector of individual covariates, $m_i$ is an unknown nonparametric trend function defined on $[0,1]$, $\alpha_i$ is a (deterministic or random) intercept term and $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ is a zero-mean stationary error process. As usual in nonparametric regression, the trend functions $m_i$ in model \eqref{model_full} depend on rescaled time $t/T$ rather than on real time $t$; cp.\ \cite{Robinson1989}, \cite{Dahlhaus1997} and \cite{VogtLinton2014} for the use and some discussion of the rescaled time argument. The functions $m_i$ are only identified up to an additive constant in model \eqref{model_full}: One can reformulate the model as $Y_{it} = [m_i(t/T) + c_i] + \bm{\beta}_i^\top \mathbf{X}_{it} + [\alpha_i - c_i] + \varepsilon_{it}$, that is, one can freely shift additive constants $c_i$ between the trend $m_i(t/T)$ and the error component $\alpha_i$. In order to obtain identification, one may impose different normalization constraints on the trends $m_i$. One possibility is to normalize them such that $\int_0^1 m_i(u) du = 0$ for all $i$. In what follows, we take for granted that the trends $m_i$ satisfy this constraint. The term $\alpha_i$ can also be regarded as an additional error component. In the econometrics literature, it is commonly called a fixed effect error term. It can be interpreted as capturing unobserved characteristics of the time series $\mathcal{Z}_i$ which remain constant over time. We allow the error terms $\alpha_i$ to be dependent across $i$ in an arbitrary way. Hence, by including them in model equation \eqref{model_full}, we allow the $n$ time series $\mathcal{Z}_i$ in our panel to be correlated with each other. Whereas the terms $\alpha_i$ may be correlated, the error processes $\mathcal{E}_i$ are assumed to be independent across $i$. Technical conditions regarding the model are discussed further in this section.
 
 Finally, note that throughout the paper, we restrict attention to the case where the number of time series $n$ in model \eqref{model_full} is fixed. Extending our theoretical results to the case where $n$ slowly grows with the sample size $T$ is a possible topic for further research.
 
-\subsection{Assumptions}\label{subsec-model-assumptions}
+\subsection{Assumptions}\label{subsec:model:assumptions}
 
 Each process $\mathcal{E}_i$ is supposed to satisfy the following conditions: 
 
@@ -114,7 +203,7 @@ where $A > \frac{2}{3} (1/q + 1 + \tau_q)$ and $\tau_q = \{q^2 - 4 + (q-2) \sqrt
 
 \end{enumerate}
 
-The conditions \ref{C-err1}--\ref{C-err3} are fulfilled by a wide range of stationary processes $\mathcal{E}_i$. For a detailed discussion of these properties, see \cite{KhismatullinaVogt2018}.
+The conditions \ref{C-err1}--\ref{C-err3} are fulfilled by a wide range of stationary processes $\mathcal{E}_i$. For a detailed discussion of these properties, see \cite{KhismatullinaVogt2020}.
 
 Regarding the independent variables $ \mathbf{X}_{it}$, we need the following additional assumptions for each $i$:
 
@@ -141,11 +230,11 @@ To be able to prove the main theorems in Section \ref{sec-test}, we need additio
 
 
 
-\section{Testing for equality of time trends}\label{sec-test}
+\section{Testing for equality of time trends}\label{sec:test}
 
 In this section, we adapt the multiscale method developed in \cite{KhismatullinaVogt2018} to the problem of comparison of the trend curves $m_i$ in model \eqref{model_full}.  As we will see, the proposed multiscale method does not only allow to test whether the null hypothesis is violated. It also provides information on where violations occur. More specifically, it allows to identify, with a pre-specified confidence, (i) trend functions which are different from each other and (ii) time intervals where these trend functions differ.
 
-\subsection{Construction of the test statistic}\label{subsec-test-stat}
+\subsection{Construction of the test statistic}\label{subsec:test:stat}
 
 In what follows, we describe the construction of the test statistic that adresses the question of comparing different trend curves. More specifically, we test the null hypothesis $H_0: m_1 = m_2 = \ldots = m_n$ in model \eqref{model_full}. We assume that all the trend functions $m_i(\cdot)$ are continuously differentiable on $[0, 1]$.
 
@@ -230,7 +319,7 @@ Moreover, we define the statistic
 and denote its $(1-\alpha)$-quantile by $q_{n,T}(\alpha)$. Our multiscale test of the hypothesis $H_0: m_1 = m_2 = \ldots = m_n$ is defined as follows: For a given significance level $\alpha \in (0,1)$, we reject $H_0$ if $\widehat{\Psi}_{n,T} > q_{n,T}(\alpha)$. 
 
 
-\subsection{Theoretical properties of the test}\label{subsec-test-theo}
+\section{Theoretical properties of the test}\label{sec:theo}
 
 
 To start with, we introduce the auxiliary statistic 
@@ -350,8 +439,32 @@ where $\widehat{\bm{\beta}}_i$ is the differencing estimator given by \eqref{dif
 %\end{prop}
 %The statement of Proposition \ref{prop-clustering-2} remains to hold true when the sets of intervals $\Pi_{n,T}(\ell,\ell^\prime)$ are replaced by the corresponding sets of minimal intervals. According to Proposition \ref{prop-clustering-2}, the sets $\Pi_{n,T}(\ell,\ell^\prime)$ allow us to locate, with a pre-specified confidence, time regions where the group-specific trend functions $g_\ell$ and $g_{\ell^\prime}$ differ from each other. In particular, we can claim with asymptotic confidence $\ge 1 - \alpha$ that the trend functions $g_\ell$ and $g_{\ell^\prime}$ differ on all intervals $I_{u,h} \in \Pi_{n,T}(\ell,\ell^\prime)$.
 
+\section{Conclusion}\label{sec:concl}
 
-%\newpage
+
+\noindent Consider the situation that the null hypothesis $H_0: m_1 = \ldots = m_n$ is violated in the general panel data model \eqref{model}. Even though some of the trend functions $m_i$ are different in this case, there may still be groups of time series with the same time trend. Formally, a group stucture can be defined as follows within the framework of model \eqref{model}: There exist sets or groups of time series $G_1,\ldots,G_{K_0}$ with $\{1,\ldots,n\} = \dot\bigcup_{k=1}^{K_0} G_k$ such that for each $1 \le k \le K_0$, 
+\begin{equation}\label{model-groups}
+m_i = m_j \quad \text{for all } i,j \in G_k. 
+\end{equation}
+According to \eqref{model-groups}, the time series of a given group $G_k$ all have the same time trend. In many applications, it is very natural to suppose that there is such a group structure in the data. An interesting statistical problem which we aim to investigate in our project is how to estimate the unknown groups $G_1,\ldots,G_{K_0}$ and their unknown number $K_0$ from the data. 
+
+
+The problem of estimating the unknown groups $G_1,\ldots,G_{K_0}$ and their unknown number $K_0$ in model \eqref{model} has close connections to functional data clustering. There, the aim is to cluster smooth random curves that are functions of (rescaled) time and that are observed with or without noise. A number of different clustering approaches have been proposed in the context of functional data models; see for example \cite{Abraham2003}, \cite{Tarpey2003} and \cite{Tarpey2007} for procedures based on $k$-means clustering, \cite{James2003} and \cite{Chiou2007} for model-based clustering approaches and \cite{Jacques2014} for a recent survey. 
+
+
+The problem of finding the unknown group structure in model \eqref{model} is also closely related to a developing literature in econometrics which aims to identify unknown group structures in parametric panel regression models. In its simplest form, the panel regression model under consideration is given by the equation $Y_{it} = \beta_i^\top X_{it} + u_{it}$ for $1 \le t \le T$ and $1 \le i \le n$, where the coefficient vectors $\beta_i$ are allowed to vary across individuals $i$ and the error terms $u_{it}$ may include fixed effects. Similar to the trend functions in model \eqref{model}, the coefficients $\beta_i$ are assumed to belong to a number of groups: there are $K_0$ groups $G_1,\ldots,G_{K_0}$ such that $\beta_i = \beta_j$ for all $i,j \in G_k$ and all $1\le k \le K_0$. The problem of estimating the unknown groups and their unknown number has been studied in different versions of this modelling framework; cp.\ \cite{Su2016}, \cite{Su2018} and \cite{Wang2018} among others. \cite{Bonhomme2015} considered a related model where the group structure is not imposed on the regression coefficients but rather on some unobserved time-varying fixed effect components of the panel model. 
+
+
+Virtually all the proposed procedures to cluster nonparametric curves in panel and functional data models related to \eqref{model} depend on a number of bandwidth or smoothing parameters required to estimate the nonparametric functions $m_i$. In general, nonparametric curve estimators are strongly affected by the chosen bandwidth parameters. A clustering procedure which is based on such estimators can be expected to be strongly influenced by the choice of bandwidths as well. Moreover, as in the context of statistical testing, there is no theory available on how to pick the bandwidths optimally for the clustering problem. Hence, as in the context of testing, it is desirable to construct a clustering procedure which is free of bandwidth or smoothing parameters that need to be selected. 
+
+
+%There are different ways to move into the direction of a bandwidth-free clustering algorithm. One possibility is to employ Wavelet methods. A Bayesian Wavelet-based method to cluster nonparametric curves has been developed in \cite{Ray2006}. There, the simple model $Y_{it} = m_i(t/T) + \varepsilon_{it}$ is considered, where $m_i$ are smooth functions of rescaled time $t/T$ and the error terms $\varepsilon_{it}$ are restricted to be i.i.d.\ Gaussian noise. Another possibility is to use multiscale methods ...
+
+
+One way to obtain a clustering method which does not require to select any bandwidth parameter is to use multiscale methods. This approach has recently been taken in \cite{VogtLinton2018}. They develop a clustering approach in the context of the panel model $Y_{it} = m_i(X_{it}) + u_{it}$, where $X_{it}$ are random regressors and $u_{it}$ are general error terms that may include fixed effects. Imposing the same group structure as in \eqref{model-groups} on their  model, they construct estimators of the unknown groups and their unknown number as follows: In a first step, they develop bandwidth-free multiscale statistics $\hat{d}_{ij}$ which measure the distance between pairs of functions $m_i$ and $m_j$. To construct them, they make use of the multiscale testing methods described in part (a) of this section. In a second step, the statistics $\hat{d}_{ij}$ are employed as dissimilarity measures in a hierarchical clustering algorithm. 
+
+
+\newpage
 \bibliographystyle{ims}
 {\small
 \setlength{\bibsep}{0.55em}
@@ -471,7 +584,7 @@ The intermediate statistic is then defined as
 with $\doublehattwo{\sigma}_i^2$ being an estmator of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_{i0}, \varepsilon_{i\ell})$ which is computed from the unobserved sample $\{ \doublehattwo{Y}_{it} : 1 \le t \le T \}$. We thus regard $\doublehattwo{\sigma}_i^2 = \doublehattwo{\sigma}_i^2(\doublehattwo{Y}_{i1},\ldots,\doublehattwo{Y}_{iT})$ as a function of the variables $\doublehat{Y}_{it}$ for $1 \le t \le T$. As with the estimator $\widehat{\sigma}_i^2$, we assume that $\doublehattwo{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$. 
 
 This statistic can thus be regarded as an approximation of the statistic $\widehat{\Phi}_{n,T}$. Heuristically, the kernel averages $\doublehat{\phi}_{ij,T}(u,h)$
-are close to the kernel averages $\widehat{\phi}_{ij,T}(u,h)$ because of the properties of our estimators $\widehat{\bbeta}_i$, $\doublehattwo{\sigma}_i^2$ and assumptions on $\mathbf{X}_{it}$. In the following two propositions we prove it formally.
+are close to the kernel averages $\widehat{\phi}_{ij,T}(u,h)$ because of the properties of our estimators $\widehat{\bfbeta}_i$, $\doublehattwo{\sigma}_i^2$ and assumptions on $\mathbf{X}_{it}$. In the following two propositions we prove it formally.
 
 \begin{propA}\label{propA-intermediate-relation-1}
 For any $x \in \reals$ and any $\gamma > 0$, we have
