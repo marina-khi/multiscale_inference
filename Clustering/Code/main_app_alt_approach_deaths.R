@@ -7,6 +7,7 @@ library(tidyr)
 library(aweek)
 library(dendextend)
 require(rworldmap)
+source("functions.R")
 
 #Defining necessary constants
 bw_abs <- 7
@@ -146,20 +147,10 @@ for (i in 1:(n_ts - 1)){
                                     grid_p = grid_points,
                                     bw = bw_abs/sqrt(t_len)) / c_vec[j]) / norm_p[j]}
     integrand <- function(x) {(sqrt(p_i_star(x)) - sqrt(p_j_star(x)))^2}
-    # if (((i == 1) & ((j == 68) | (j == 117))) | ((i == 2) & (j == 24)) |
-    #     ((i == 9) & (j == 71))| ((i == 11) & (j == 52)) |
-    #     ((i == 14) & ((j == 45) | (j == 73))) | ((i == 15) & (j == 24)) |
-    #     ((i == 19) & ((j == 72) | (j == 89))) | ((i == 20) & (j == 62))){
-    #   tmp <- integrate(integrand, lower = -Inf, upper = Inf,
-    #                    subdivisions=3000)$value
-    # } else {
     tmp <- integrate(integrand, lower = -Inf, upper = Inf,
                      subdivisions=3000)$value
-    # }
-    #
     Delta_hat[i, j] <- tmp
     Delta_hat[j, i] <- tmp
-    cat("i = ", i, ", j = ", j, " - success\n")
   }
 }
 
@@ -167,89 +158,46 @@ for (i in 1:(n_ts - 1)){
 colnames(Delta_hat) <- countries
 rownames(Delta_hat) <- countries
 
-save(Delta_hat, file = "results_alt_approach_14days_deaths.RData")
+#save(Delta_hat, file = "results_alt_approach_14days_deaths.RData")
 load("results_alt_approach_14days_deaths.RData")
-
-n_cl       <- 12
 
 delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
-plot(res, cex = 0.8, xlab = "", ylab = "")
-rect.hclust(res, k = n_cl, border = 2:(n_cl + 1))
 
-
-#Plotting world map
-covid_map         <- data.frame(countries)
-covid_map$cluster <- cutree(res, n_cl)
-covid_map[covid_map$countries == 'Czechia', "countries"] <- "Czech Republic"
-covid_map[covid_map$countries == 'Taiwan*', "countries"] <- "Taiwan"
-
-covidMap <- joinCountryData2Map(covid_map, 
-                                nameJoinColumn="countries", 
-                                joinCode="NAME",
-                                verbose = TRUE)
-
-mapDevice('x11') #create a world shaped window
-
-#plot the map
-mapCountryData(covidMap, 
-               nameColumnToPlot='cluster', 
-               catMethod='categorical', 
-               colourPalette = rainbow(n_cl),
-               numCats = n_cl,
-               mapTitle = "")
-
-pdf(paste0("plots/deaths/dendrogram_alt.pdf"), width = 15, height = 6, paper = "special")
-par(cex = 1, tck = -0.025)
-par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
-par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
-plot(res, cex = 0.8, xlab = "", ylab = "")
-rect.hclust(res, k = n_cl, border = 2:(n_cl + 1))
-dev.off()
-
-plotting_grid <- seq(-5, 5, by = 1 / t_len)
-subgroups <- cutree(res, n_cl)
-
-for (cl in 1:n_cl){
-  countries_cluster <- colnames(Delta_hat)[subgroups == cl]
-  pdf(paste0("plots/deaths/results_cluster_", cl, "_alt.pdf"), width=7, height=6, paper="special")
-  
-  #Setting the layout of the graphs
-  par(cex = 1, tck = -0.025)
-  par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
-  par(oma = c(1.5, 0.2, 0.2, 0.2)) #Outer margins
-  
-  if (length(countries_cluster) == 1){
-    ind <- match(countries_cluster, countries)
-    m_hat_vec <- m_hat(a_vec[ind] + b_vec[ind] * plotting_grid,
-                       covid_mat[, countries_cluster],
-                       grid_points,
-                       bw = bw_abs/sqrt(t_len)) / (c_vec[ind] * norm_p[ind])
-    plot(plotting_grid, m_hat_vec, yaxt = "n",
-         ylim = c(0, max(m_hat_vec) + 1), xlab="u",
-         ylab = "", mgp = c(2, 0.5, 0), type = "l", col = "red")
-    title(main = paste("Cluster", cl), line = 1)
-    legend("topleft", inset = 0.02, legend=countries_cluster,
-           lty = 1, cex = 0.7, ncol = 1)
-  } else {
-    inds <- match(countries_cluster, countries)
-    i    <- inds[1]
-    m_hat_vec <- m_hat(a_vec[i] + b_vec[i] * plotting_grid, covid_mat[, i],
-                       grid_points,
-                       bw = bw_abs/sqrt(t_len)) / (c_vec[i] * norm_p[i])
-    plot(plotting_grid, m_hat_vec,
-         ylim = c(0, max(m_hat_vec) + 1), xlab="u", yaxt = "n",
-         mgp = c(2, 0.5, 0), type = "l", col = "red")
-    for (j in inds[2:length(inds)]){
-      m_hat_vec <- m_hat(a_vec[j] + b_vec[j] * plotting_grid, covid_mat[, j],
-                         grid_points,
-                         bw = bw_abs/sqrt(t_len)) / (c_vec[j] * norm_p[j])
-      #cat("Country", country, " - success \n")
-      lines(plotting_grid, m_hat_vec)
-    }
-    title(main = paste("Cluster", cl), line = 1)
-    legend("topleft", inset = 0.02, legend = countries_cluster,
-           lty = 1, cex = 0.7, ncol = 4)
+g_hat <- function(x_vec, covid_mat, inds, a_vec, b_vec, c_vec, norm_p, bw_abs,
+                  t_len, grid_points){
+  g_hat_vec <- rep(0, length(x_vec))
+  for (ind in inds){
+    p_i_hat_star <- m_hat_standard(a_vec[ind] + b_vec[ind] * x_vec,
+                                   covid_mat[, ind], grid_points,
+                                   bw = bw_abs/sqrt(t_len)) / (c_vec[ind] * norm_p[ind])
+    g_hat_vec <- g_hat_vec + p_i_hat_star
   }
-  dev.off()
+  return(g_hat_vec/length(inds))
 }
+
+max_n_cl <- 20
+BIC_vec  <- c()
+
+for (n_cl in 1:max_n_cl){
+  subgroups         <- cutree(res, n_cl)
+  sigma_hat_vec     <- rep(0, n_ts)
+  for (cl in 1:n_cl){
+    countries_cluster <- colnames(Delta_hat)[subgroups == cl]
+    inds              <- match(countries_cluster, countries)
+    for (ind in inds){
+      x_vec <- (grid_points - a_vec[ind])/b_vec[ind]
+      g_hat_normed <- c_vec[ind] * g_hat(x_vec = x_vec, covid_mat = covid_mat,
+                                         inds = inds, a_vec = a_vec, b_vec = b_vec,
+                                         c_vec = c_vec, norm_p = norm_p,
+                                         bw_abs = bw_abs, t_len = t_len,
+                                         grid_point = grid_points)
+      sigma_hat_vec[ind] <- mean((covid_mat[, ind] - g_hat_normed)^2)
+    }
+  }
+  BIC <- t_len * sum(log(sigma_hat_vec)) - log(n_ts * t_len) * (n_cl * (n_ts + t_len) + n_ts)
+  BIC_vec <- c(BIC_vec, BIC)
+}
+
+#results_output_alt(res, covid_mat, Delta_hat, n_cl, countries, path = "plots/deaths/",
+#                   bw_abs, grid_points, t_len, a_vec, b_vec, c_vec, norm_p)
