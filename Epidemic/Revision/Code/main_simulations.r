@@ -35,11 +35,13 @@ number_of_cols <- length(n_ts_vec) * length(alpha_vec) #Needed for the output
 lambda_vec <- lambda_fct((1:100) / 100)
 
 pdf(paste0("plots/lambda_fct.pdf"), width=5, height=5, paper="special")
-par(mar = c(3, 2, 2, 0)) #Margins for each plot
+par(mar = c(3, 1.5, 1.5, 0)) #Margins for each plot
 par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
-plot((1:100) / 100, lambda_vec,  ylim = c(0, max(lambda_vec) + 100), xlab="u",
-     ylab = "", mgp=c(2,0.5,0), type = "l")
-title(main = expression(Plot ~ of ~ the ~ "function" ~ lambda), line = 1)
+plot((1:100) / 100, lambda_vec,  ylim = c(0, max(lambda_vec) + 100), xlab="",
+     ylab = "", mgp=c(2,0.5,0), type = "l", cex.lab = 0.7, cex.axis = 0.7)
+title(xlab="u", line = 0.9, cex.lab = 0.7)
+title(main = expression(Plot ~ of ~ the ~ "function" ~ lambda), line = 0.7, cex.main = 0.7)
+title(sub = "a)", cex.sub = 0.7, line = 2.0)
 dev.off()
 
 #However, you can change this function to whatever you like.
@@ -98,17 +100,19 @@ number_of_cols <- length(n_ts_vec) * length(alpha_vec) #Needed for the output
 lambda_vec_1 <- lambda_fct((1:100) / 100, c = 1000, height = 6000, position = 10)
 lambda_vec   <- lambda_fct((1:100) / 100, c = 1000, height = 5000, position = 10)
 
+
 pdf(paste0("plots/lambda_fcts_height.pdf"), width=5, height=4, paper="special")
-par(mar = c(3, 2, 2, 0)) #Margins for each plot
+par(mar = c(3.3, 1.5, 1.5, 0)) #Margins for each plot
 par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
 par(mgp = c(3, 0.5, 0))
 plot((1:100) / 100, lambda_vec_1,  ylim = c(0, max(lambda_vec_1, lambda_vec) + 100),
-     xlab="", ylab = "", type = "l")
+     xlab="", ylab = "", type = "l", cex.axis = 0.7)
 lines((1:100) / 100, lambda_vec, type = "l", col = "red")
-title(main = expression(Plot ~ of ~ the ~ "functions" ~ lambda[1] ~ and ~ lambda), line = 1)
-title(xlab="u", line=1.5)
+title(main = expression(Plot ~ of ~ the ~ "functions" ~ lambda[1] ~ and ~ lambda), line = 0.7, cex.main = 0.7)
+title(xlab="u", line=0.9, cex.lab = 0.7)
+title(sub = "a) Scenario A", cex.sub = 0.7, line = 2.0)
 legend("topright", inset = 0.02, legend=c(expression(lambda[1](u) ~" "), expression(lambda(u) ~" ")),
-       col = c("black", "red"), lty = 1, cex = 0.95, ncol = 1)
+       col = c("black", "red"), lty = 1, cex = 0.65, ncol = 1)
 dev.off()
 
 #However, you can change the function to whatever you like.
@@ -170,16 +174,17 @@ lambda_vec_1 <- lambda_fct((1:100) / 100, c = 1000, height = 5000, position = 9)
 lambda_vec   <- lambda_fct((1:100) / 100, c = 1000, height = 5000, position = 10)
 
 pdf(paste0("plots/lambda_fcts_shift.pdf"), width=5, height=4, paper="special")
-par(mar = c(3, 2, 2, 0)) #Margins for each plot
+par(mar = c(3.3, 1.5, 1.5, 0)) #Margins for each plot
 par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
 par(mgp = c(3, 0.5, 0))
 plot((1:100) / 100, lambda_vec_1,  ylim = c(0, max(lambda_vec_1, lambda_vec) + 100),
-     xlab="", ylab = "", type = "l")
+     xlab="", ylab = "", type = "l", cex.axis = 0.7)
 lines((1:100) / 100, lambda_vec, type = "l", col = "red")
-title(main = expression(Plot ~ of ~ the ~ "functions" ~ lambda[1] ~ and ~ lambda), line = 1)
-title(xlab="u", line=1.5)
+title(main = expression(Plot ~ of ~ the ~ "functions" ~ lambda[1] ~ and ~ lambda), line = 0.7, cex.main = 0.7)
+title(xlab="u", line=0.9, cex.lab = 0.7)
+title(sub = "b) Scenario B", cex.sub = 0.7, line = 2.0)
 legend("topright", inset = 0.02, legend=c(expression(lambda[1](u) ~" "), expression(lambda(u) ~" ")),
-       col = c("black", "red"), lty = 1, cex = 0.95, ncol = 1)
+       col = c("black", "red"), lty = 1, cex = 0.65, ncol = 1)
 dev.off()
 
 

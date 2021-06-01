@@ -28,19 +28,19 @@ produce_plots <- function (results, l, data_i, data_j,
   #Setting the layout of the graphs
 
   par(cex = 1, tck = -0.025)
-  par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
-  par(oma = c(0.2, 1.5, 2, 0.2)) #Outer margins
+  par(mar = c(0.5, 0.5, 2.5, 0)) #Margins for each plot
+  par(oma = c(0.2, 0.5, 1, 0.2)) #Outer margins
 
 
   plot(data_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
-      col="black", ylab="", xlab="", mgp=c(1, 0.5, 0))
+      col="black", ylab="", xlab="", mgp=c(1, 0.5, 0), cex.axis = 0.8)
   lines(data_j, col="red")
 
-  title(main = "(a) observed new cases per day", font.main = 1, line = 0.5)
+  title(main = "(a) observed new cases per day", font.main = 1, line = 0.5, cex.main = 0.8)
   legend("topright", inset = 0.02, legend=c(country_i, country_j),
-         col = c("black", "red"), lty = 1, cex = 0.95, ncol = 1, bg = 'white')
+         col = c("black", "red"), lty = 1, cex = 0.75, ncol = 1, bg = 'white')
 
-  par(mar = c(0.5, 0.5, 3, 0)) #Margins for each plot
+  par(mar = c(0.5, 0.5, 2.5, 0)) #Margins for each plot
 
   #Plotting the smoothed version of the time series that we have
   grid_points <- seq(from = 1 / Tlen, to = 1, length.out = Tlen) #grid points for estimating
@@ -50,16 +50,16 @@ produce_plots <- function (results, l, data_i, data_j,
                         MoreArgs = list(data_j, grid_points, bw = 3.5 / Tlen))
   
   plot(smoothed_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
-    col="black", ylab="", xlab = "", mgp=c(1,0.5,0))
-  title(main = "(b) smoothed curves from (a)", font.main = 1, line = 0.5)
+       col="black", ylab="", xlab = "", mgp=c(1,0.5,0), cex.axis = 0.8)
+  title(main = "(b) smoothed curves from (a)", font.main = 1, line = 0.5, cex.main = 0.8)
   lines(smoothed_j, col="red")
    
   plot(gov_resp_i, ylim=c(0, 100), type="l",
-        col="black", ylab="", xlab = "", mgp=c(1, 0.5, 0))
-  title(main = "(c) government response index", font.main = 1, line = 0.5)
+        col="black", ylab="", xlab = "", mgp=c(1, 0.5, 0), cex.axis = 0.8)
+  title(main = "(c) government response index", font.main = 1, line = 0.5, cex.main = 0.8)
   lines(gov_resp_j, col="red")
 
-  par(mar = c(2.7, 0.5, 3, 0)) #Margins for each plot
+  par(mar = c(2.7, 0.5, 2.5, 0)) #Margins for each plot
 
   a_t_set <- subset(gset, test == TRUE, select = c(u, h))
   if (nrow(a_t_set) > 0){
@@ -70,9 +70,9 @@ produce_plots <- function (results, l, data_i, data_j,
     #Produce minimal intervals
     p_t_set2  <- compute_minimal_intervals(p_t_set)
 
-    plot(NA, xlim=c(0, Tlen),  ylim = c(0, 1 + 1 / nrow(p_t_set)), xlab="", mgp=c(2, 0.5, 0), yaxt = "n")
-    title(main = "(d) (minimal) intervals produced by our test", font.main = 1, line = 0.5)
-    title(xlab = "days since first Monday after the hundredth case", line = 1.7, cex.lab = 0.9)
+    plot(NA, xlim=c(0, Tlen),  ylim = c(0, 1 + 1 / nrow(p_t_set)), xlab="", mgp=c(2, 0.5, 0), yaxt = "n", cex.axis = 0.7)
+    title(main = "(d) (minimal) intervals produced by our test", font.main = 1, cex.main = 0.8, line = 0.5)
+    title(xlab = "days since first Monday after the hundredth case", line = 1.7, cex.lab = 0.8)
     segments(p_t_set2$startpoint, p_t_set2$values, p_t_set2$endpoint, p_t_set2$values, lwd = 2)
     segments(p_t_set$startpoint, p_t_set$values, p_t_set$endpoint, p_t_set$values, col = "gray")
     print.xtable(xtable(p_t_set, digits = c(3), align = paste(replicate(4, "c"), collapse = "")),
@@ -84,11 +84,11 @@ produce_plots <- function (results, l, data_i, data_j,
   } else {
     #If there are no intervals where the test rejects, we produce empty plots
 
-    plot(NA, xlim=c(0, Tlen),  ylim = c(0, 1), xlab="", ylab = "", mgp=c(2,0.5,0), yaxt = "n")
-    title(main = "(d) (minimal) intervals produced by our test", font.main = 1, line = 0.5)
-    title(xlab = "days since first Monday after the hundredth case", line = 1.7, cex.lab = 0.9)
+    plot(NA, xlim=c(0, Tlen),  ylim = c(0, 1), xlab="", ylab = "", mgp=c(2,0.5,0), yaxt = "n", cex.axis = 0.7)
+    title(main = "(d) (minimal) intervals produced by our test", font.main = 1, cex.main = 0.8, line = 0.5)
+    title(xlab = "days since first Monday after the hundredth case", line = 1.7, cex.lab = 0.8)
   }
-  mtext(paste0("Comparison of ", country_i, " and ", country_j), side = 3, line = 0, outer = TRUE, font = 1, cex = 1.2)
+  mtext(paste0("Comparison of ", country_i, " and ", country_j), side = 3, line = -1, outer = TRUE, font = 1, cex = 0.9)
   dev.off()
 }
 

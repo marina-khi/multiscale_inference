@@ -59,15 +59,15 @@ for (country in unique(covid$countryterritoryCode)){
 
 #We are mainly interested in the "main" european countries,
 #so we leave all the others out of the analysis
-#covid_list <- covid_list[names(covid_list) %in% c("DEU", "FRA", "GBR", "ESP", "ITA") == TRUE]
-covid_list <- covid_list[names(covid_list) %in% c("DEU", "FRA", "GBR", "ITA") == TRUE]
+covid_list <- covid_list[names(covid_list) %in% c("DEU", "FRA", "GBR", "ESP", "ITA") == TRUE]
+#covid_list <- covid_list[names(covid_list) %in% c("DEU", "FRA", "GBR", "ITA") == TRUE]
 
 
 #Calculate the number of days that we have data for all fivecountries.
 #We are not considering CHN = China as it has too long dataset.
 #t_len     <- min(sapply(covid_list[names(covid_list) != "CHN"], NROW))
-#t_len     <- 150 #We consider the first five months of the pandemic
-t_len     <- 200
+t_len     <- 150 #We consider the first five months of the pandemic
+#t_len     <- 200
 countries <- names(covid_list)
 dates     <- unique(covid$dateRep)
 n_ts      <- length(covid_list) #Number of time series
@@ -103,10 +103,14 @@ all_intervals <- data.frame('startpoint' = (grid$gset$u - grid$gset$h) * t_len,
 all_intervals$values <- (1:nrow(all_intervals)) / nrow(all_intervals)
 
 pdf("plots/all_intervals.pdf", width=5, height=5, paper="special")
-par(mar = c(3, 0.5, 2, 0)) #Margins for each plot
+par(mar = c(3, 0.5, 1.5, 0)) #Margins for each plot
 par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
-plot(NA, xlim=c(0,t_len),  ylim = c(0, 1 + 1/nrow(all_intervals)), xlab="days", ylab = "", yaxt= "n", mgp=c(2,0.5,0))
-title(main = expression(The ~ family ~ of ~ intervals ~ italic(F)), line = 1)
+plot(NA, xlim=c(0,t_len),  ylim = c(0, 1 + 1/nrow(all_intervals)), xlab="",
+     ylab = "", yaxt= "n", mgp=c(2,0.5,0), cex.lab = 0.7, cex.axis = 0.7)
+title(xlab="days", line = 0.9, cex.lab = 0.7)
+title(main = expression(The ~ family ~ of ~ intervals ~ italic(F)), line = 0.7,
+      cex.main = 0.7)
+title(sub = "b)", cex.sub = 0.7, line = 2.0)
 segments(all_intervals$startpoint, all_intervals$values, all_intervals$endpoint, all_intervals$values, lwd = 1)
 dev.off()
 
@@ -125,15 +129,15 @@ result <- multiscale_test(data = covid_mat, sigma = sigmahat,
                           sim_runs = sim_runs)
 
 #Rename the countries for the plot
-#countries_names <- c("Germany", "Spain", "France", "United Kingdom", "Italy")
-countries_names <- c("Germany", "France", "United Kingdom", "Italy")
+countries_names <- c("Germany", "Spain", "France", "United Kingdom", "Italy")
+#countries_names <- c("Germany", "France", "United Kingdom", "Italy")
 
-
+source("functions/functions.R")
 #Plotting pairwise comparison 
 for (l in seq_len(nrow(result$ijset))){
   i <- result$ijset[l, 1]
   j <- result$ijset[l, 2]
-  filename = paste0("plots/", countries[i], "_vs_", countries[j], "_four_countries.pdf")
+  filename = paste0("plots/", countries[i], "_vs_", countries[j], ".pdf")
   produce_plots(results = result, l = l, data_i = covid_mat[, i], data_j = covid_mat[, j],
                 gov_resp_i = gov_resp[, i], gov_resp_j = gov_resp[, j],
                 country_i = countries_names[i], country_j = countries_names[j],
