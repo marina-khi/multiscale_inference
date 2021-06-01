@@ -105,7 +105,7 @@ We then reformulate our null hypothesis \eqref{eq:null} as
 H_0: \ & \text{The hypothesis } H_0^{[i,j]}(u,h) \text{ holds true for all intervals }  \interval_{(u, h)}, (u, h) \in \grid, \\ & \text{ and for all } 1 \le i < j \le n. 
 \end{align*} 
 
-In this paper, we introduce a method that allows to test the hypotheses $H_0^{[i,j]}(u,h)$  simultaneously for all pairs $(i, j)$ and for all intervals $\interval_{(u, h)}$ under consideration. Specifically, we develop a multiscale test for the model \eqref{eq:model}. The underlying idea of a multiscale test is to consider a number of test statistics (each of which corresponds to different values of some tuning parameters) simultaneously rather than to perform a test for a single test statistics. In our case, this means testing many separate null hypotheses $H_0^{[i,j]}(u,h)$ simultaneously. In the paper, we show how to derive appropriate critical values and prove that the proposed multiscale test has the correct (asymptotic) level, which constitutes the main theoretical result of the paper.
+In this paper, we introduce a method that allows to test the hypotheses $H_0^{[i,j]}(u,h)$  simultaneously for all pairs $(i, j)$ and for all intervals $\interval_{(u, h)}$ under consideration. Specifically, we develop a multiscale test for the model \eqref{eq:model}. The underlying idea of any multiscale test is to consider a number of test statistics (each of which corresponds to different values of some tuning parameters) all at once rather than to perform a separate test for each single test statistics. In our case, this means testing many different null hypotheses $H_0^{[i,j]}(u,h)$ simultaneously. In the paper, we show how to derive appropriate critical values and prove that the proposed multiscale test has the correct (asymptotic) level, which constitutes the main theoretical result of the paper.
 
 Trend comparison is a common statistical problem that arises in various contexts. For example, in economics the researchers are interested in comparing trends in real gross domestic product across several countries \citep[][]{Grier1989}, in yield over time of US Treasury bills at different maturities \citep[][]{Park2009}, or the evolution of long-term interest rates in a number of countries \citep[][]{Christiansen1997}. In finance, comparison and subsequent classification of the trends of market fragmentation can be used to assess the market quality in the European stock market (\citeauthor{VogtLinton2017}, \citeyear{VogtLinton2017}, \citeyear{VogtLinton2020}). In climatology, comparing the temperature time series in different areas is investigated in the context of the regional and global warming trends   \citep[][]{KarolyWu2005}. Finally, in industry, mobile phone providers are interested in comparison of the cell phone download activity in different locations \citep[][]{DegrasWu2012}.
 
@@ -134,8 +134,9 @@ The structure of the paper is as follows. Section \ref{sec:model} introduces the
 Throughout the paper, we adopt the following notation. For a vector $\mathbf{v} = (v_1, \ldots, v_m)\in\reals^m$, we write $|\mathbf{v}| = \big(\sum_{i=1}^m v_i^2\big)^{1/2}$ and $|\mathbf{v}|_q = \big(\sum_{i=1}^m v_i^q\big)^{1/q}$ respectively. For a random vector $\mathbf{V}$, we define it's $\mathcal{L}^q, q>1$ norm as $||\mathbf{V}||_q = \big(\ex |\mathbf{V}|^q\big)^{1/q}$. For the particular case $q = 2$, we write $||\mathbf{V}|| := ||\mathbf{V}||_2$.
 
 Following \cite{Wu2005}, we define the \textit{physical dependence measure} for the process $\mathbf{L}(\mathcal{F}_t)$ as the following:
-\[ \delta_q(\mathbf{L}, t) = || \mathbf{L}(\mathcal{F}_t) - \mathbf{L}(\mathcal{F}_t^\prime) ||_q,
-\]
+\begin{align}\label{eq:physical_dep}
+ \delta_q(\mathbf{L}, t) = || \mathbf{L}(\mathcal{F}_t) - \mathbf{L}(\mathcal{F}_t^\prime) ||_q,
+\end{align}
 where $\mathcal{F}_t  = (\ldots, \epsilon_{-1}, \epsilon_0, \epsilon_1, \ldots, \epsilon_{t-1}, \epsilon_t)$ and $\mathcal{F}_t^\prime  = (\ldots, \epsilon_{-1}, \epsilon^\prime_0, \epsilon_1, \ldots, \epsilon_{t-1}, \epsilon_t)$ is a coupled process of $\mathcal{F}_t$ with $\epsilon_0^\prime$ being an i.i.d. copy of $\epsilon_0$. Intuitively, $\delta_q(\mathbf{L}, t)$ measures the dependency of $\mathbf{L}(\mathcal{F}_t)$ on $\epsilon_0$, i.e., how replacing $\epsilon_0$ by an i.i.d. copy while keeping all other innovations in place affects the output $\mathbf{L}(\mathcal{F}_t)$.
 
 \subsection{Setting}\label{subsec:model_setting}
@@ -162,7 +163,7 @@ Each process $\mathcal{E}_i$ is supposed to satisfy the following conditions:
 \end{enumerate}
 The condition \ref{C-err1} can be translated as the restriction on the error process $\mathcal{E}_i$ to be stationary and causal (in a sense that $\varepsilon_{it}$ does not depend on the future innovations $\eta_{is},\, s >t$). The class of error processes that satisfies the condition \ref{C-err1} is massive, and includes linear processes, their nonlinear transformation, as well as a large variety of nonlinear processes such as Markov chain models and nonlinear autoregressive models \citep[][]{Wu2016}.
 
-Following \cite{Wu2005}, we impose conditions on the dependence structure of the error processes $\mathcal{E}_i$ in terms of the physical dependence measure $\delta_q(G_i, t)$ defined in the beginning of this Section. In particular, we assume the following: 
+Following \cite{Wu2005}, we impose conditions on the dependence structure of the error processes $\mathcal{E}_i$ in terms of the physical dependence measure $\delta_q(G_i, t)$ definedin \eqref{eq:physical_dep}. In particular, we assume the following: 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
 \setcounter{enumi}{2}
 
@@ -172,27 +173,27 @@ where $A > \frac{2}{3} (1/q + 1 + \tau_q)$ and \linebreak $\tau_q = \{q^2 - 4 + 
 
 \end{enumerate}
 
-For a fixed $t$, $\Theta_{i, t,q}$ measures the cumulative effect of $\eta_0$ on $(\varepsilon_{is})_{s\geq t}$. Condition \ref{C-err3} assumes that the cumulative effect is finite and puts some restrictions on the rate of decay of $\Theta_{i, t,q}$.
+For a fixed $t$, $\Theta_{i, t,q}$ measures the cumulative effect of $\eta_0$ on $(\varepsilon_{is})_{s\geq t}$. Condition \ref{C-err3} assumes that the overall cumulative effect is finite and puts some restrictions on the rate of decay of $\Theta_{i, t,q}$.
 
-The condition \ref{C-err3} is fulfilled by a wide range of stationary processes $\mathcal{E}_i$. For a detailed discussion of an assumption \ref{C-err3}, as well as the assumptions \ref{C-err1}--\ref{C-err2}, see \linebreak \cite{KhismatullinaVogt2020}.
+The condition \ref{C-err3} is fulfilled by a wide range of stationary processes $\mathcal{E}_i$. For a detailed discussion of an assumption \ref{C-err3}, as well as the assumptions \ref{C-err1}--\ref{C-err2} and some examples of the error processes that satisfy these conditions, see \linebreak \cite{KhismatullinaVogt2020}.
 
 Regarding the independent variables $ \mathbf{X}_{it}$, we assume the following for each $i$:
 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
 \setcounter{enumi}{3}
 
-\item \label{C-reg1} The covariates $ \mathbf{X}_{it}$ allow for the representation $ \mathbf{X}_{it} = \mathbf{H}_i(\ldots,u_{it-1},u_{it})$ with $u_{it}$ being i.i.d.\ random variables and $\mathbf{H}_i := (H_{i1}, H_{i2}, \ldots, H_{id})^\top: \reals^\integers \rightarrow \reals^d$ is a measurable function such that $\mathbf{H}_i(\mathcal{U}_{it})$ is well defined. Denote $\mathcal{U}_{it} = (\ldots, u_{it-1}, u_{it})$.
+\item \label{C-reg1} The covariates $ \mathbf{X}_{it}$ allow for the representation $ \mathbf{X}_{it} = \mathbf{H}_i(\ldots,u_{it-1},u_{it})$ with $u_{it}$ being i.i.d.\ random variables and $\mathbf{H}_i := (H_{i1}, H_{i2}, \ldots, H_{id})^\top: \reals^\integers \rightarrow \reals^d$ being a measurable function such that $\mathbf{H}_i(\mathcal{U}_{it})$ is well defined. We denote \linebreak $\mathcal{U}_{it} = (\ldots, u_{it-1}, u_{it})$.
 
-\item \label{C-reg2} Let $N_i$ be the $d\times d$ matrix with $kl$-th entry $n_{i, kl}= \ex[H_{ik}(\mathcal{U}_{i0})H_{il}(\mathcal{U}_{i0})]$. We assume that the smallest eigenvalue of $N_i$ is strictly bigger than $0$.
+\item \label{C-reg2} Let $\mathbf{N}_i$ be the $d\times d$ matrix with $kl$-th entry $n_{i, kl}= \ex[H_{ik}(\mathcal{U}_{i0})H_{il}(\mathcal{U}_{i0})]$. We assume that the smallest eigenvalue of $\mathbf{N}_i$ is strictly bigger than $0$.
 
 \item \label{C-reg3} Let $\ex [\mathbf{H}_{i}(\mathcal{U}_{i0})]=\mathbf{0}$ and $||\mathbf{H}_{i}(\mathcal{U}_{it})||_{q^\prime} <\infty$ for some $q^\prime > \max\{ 2\theta, 4\}$, where $\theta$ will be introduced further in Assumption \ref{C-grid}.
 \item \label{C-reg4} $\sum_{s=0}^\infty \delta_{q^\prime}(\mathbf{H}_i, s)<\infty$ for $q^\prime$ from Assumption \ref{C-reg3}.
 \item \label{C-reg5} For each $i$ it holds that $\sum_{s=t}^{\infty} \delta_{q^\prime}(\mathbf{H}_{i}, s)= O(t^{-\alpha}) $ for $q^\prime$ from Assumption \ref{C-reg3} and for some $\alpha > 1/2 - 1/{q^\prime}$.
 \end{enumerate}
 
-As with the error processes $\mathcal{E}_i$, we assume that $\X_i$ is stationary and causal (Assumption \ref{C-reg1}). Moreover, we also use the physical dependence measure $ \delta_{q^\prime}(\mathbf{H}_i, s)$, and Assumptions \ref{C-reg4} - \ref{C-reg5} makes certain that the cumulative effect of $u_0$ on $(\X_{it})_{t\geq 0}$ is finite. 
+As with the error processes $\mathcal{E}_i$, $\X_i$ is guaranteed to be stationary and causal by Assumption \ref{C-reg1}. Assumptions \ref{C-reg2} and \ref{C-reg3} are technical conditions that prevents asymptotic multicollinearity and ensures that all the necessary moments exist, respectively. Moreover, we also employ the defintion of the physical dependence measure $ \delta_{q}(\cdot, \cdot)$ in Assumptions \ref{C-reg4} - \ref{C-reg5}, that make certain that the cumulative effect of the innovation $u_0$ on $(\X_{it})_{t\geq 0}$ is finite. 
 
-Assumptions \ref{C-reg2} and \ref{C-reg3} are technical conditions that prevents asymptotic multicollinearity and ensures that all the necessary moments exist, respectively.
+
 
 To be able to prove the main theorems in Section \ref{sec:test}, we need additional assumptions on the relationship between the covariates and the error process.
 
@@ -202,13 +203,12 @@ To be able to prove the main theorems in Section \ref{sec:test}, we need additio
 \item \label{C-reg-err2} Let $\zeta_{i, t} = (u_{it}, \eta_{it})^\top$. Define $\mathcal{I}_{i, t} = (\ldots, \zeta_{i, t-1}, \zeta_{i, t})$ and $\mathbf{U}_i(\mathcal{I}_{i, t}) =  \mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{J}_{it})$. With this notation at hand, we assume that $\sum_{s=0}^\infty \delta_2(\mathbf{U}_i, s)<\infty$.
 
 \end{enumerate}
-
-Assumption \ref{C-reg-err2} ensures short-range dependence among the variables in our model. Again, we can interpret this as the fact that the cumulative effect of a single error on all future values is bounded.
+Assumption \ref{C-reg-err1} is a slightly relaxed independence assumption: even though we do not require the covariates $\X_{it}$ to be completely independent with the error terms $\varepsilon_{it}$, our theoretical results depend upon them being uncorrelated. We in particular need this assumption in order to prove asymptotic consistency for the differencing estimator $\widehat{\bfbeta}_i$ of $\bfbeta_i$ proposed in Section \ref{subsec:beta_est}. In principle, it would be possible to relax this assumption even further, but that would involve much more complicated estimation procedure of $\bfbeta_i$ and more arduous technical arguments. Assumption \ref{C-reg-err2} ensures short-range dependence among the variables in our model. Again, we can interpret this as the fact that the cumulative effect of a single error on all future values is bounded.
 
 We employ these assumptions to prove the main theoretical results in our paper. For detailed proofs, we refer the reader to the Appendix.
 
 \begin{remark}
-The conditions \ref{C-reg1}--\ref{C-reg-err2} can be relaxed to cover non-stationary regressors as well as stationary ones. For example, \ref{C-reg1} will then be replaced by
+The conditions \ref{C-reg1}--\ref{C-reg-err2} can be relaxed to cover nonstationary regressors as well as stationary ones. For example, \ref{C-reg1} will then be replaced by
 \begin{enumerate}[label=(C\arabic*$^\ast$),leftmargin=1.05cm]
 \setcounter{enumi}{3}
 \item \label{C-reg1-star} The covariates $ \mathbf{X}_{it}$ allow for the representation $ \mathbf{X}_{it} = \mathbf{H}_i(t; \ldots,u_{it-1},u_{it})$ with $u_{it}$ being i.i.d.\ random variables and $\mathbf{H}_i := (H_{i1}, H_{i2}, \ldots, H_{id})^\top: \reals^\integers \rightarrow \reals^d$ is a measurable function such that $\mathbf{H}_i(t;\mathcal{U}_{it})$ is well defined. 
@@ -217,28 +217,31 @@ The other assumptions can be adjusted accordingly. However, for the sake of clar
 \end{remark}
 
 
-
-
-
 \section{Testing for equality of time trends}\label{sec:test}
 
-In this section, we adapt the multiscale method developed in \cite{KhismatullinaVogt2018} to the problem of comparison of the trend curves $m_i$ in model \eqref{eq:model_full}.  As we will see, the proposed multiscale method does not only allow to test whether the null hypothesis is violated. It also provides information on where violations occur. More specifically, it allows to identify, with a pre-specified confidence, (i) trend functions which are different from each other and (ii) time intervals where these trend functions differ.
+In this section, we develop the multiscale testing procedure for the problem of comparison of the trend curves $m_i$ in model \eqref{eq:model_full}.  As we will see, the proposed multiscale method does not only allow to test whether the null hypothesis is violated. It also provides information on where violations occur. More specifically, it allows to identify, with a pre-specified confidence, (i) trend functions which are different from each other and (ii) time intervals where these trend functions differ.
+
+%\subsection{Construction of the grid}\label{subsec:test:grid}
+
+%As was mentioned in the Introduction, instead of constructing a single testing statistics for testing $H_0$, we consider a number of tes
 
 \subsection{Construction of the test statistic}\label{subsec:test:stat}
 
-In what follows, we describe the construction of the test statistic that adresses the question of comparing different trend curves. More specifically, we test the null hypothesis $H_0: m_1 = m_2 = \ldots = m_n$ in model \eqref{model_full}. We assume that all the trend functions $m_i(\cdot)$ are continuously differentiable on $[0, 1]$.
+In what follows, we describe the construction of the test statistic that adresses the question of comparing different trend curves. More specifically, we test the null hypothesis $H_0: m_1 = m_2 = \ldots = m_n$ in model \eqref{eq:model_full}. We assume that all the trend functions $m_i(\cdot)$ are continuously differentiable on $[0, 1]$.
 
-It is obvious that if $\alpha_i$ and $\bm{\beta}_i$ are known, the problem of testing for the common time trend would be greatly simplified. That is, we would test $H_0: m_1 = m_2 = \ldots = m_n$ in the model
+It is clear that if $\alpha_i$ and $\bm{\beta}_i$ are known, the problem of testing for the common time trend would be greatly simplified. That is, we would test $H_0: m_1 = m_2 = \ldots = m_n$ in the model
 \begin{align*}
 Y_{it} - \alpha_i - \bm{\beta}_i^\top \mathbf{X}_{it} & =: Y_{it}^\circ\\
 					& = m_i \Big( \frac{t}{T} \Big) + \varepsilon_{it}, 
 \end{align*}
-which is a standard nonparametric regression equation. The variables $Y_{it}^\circ$ are not observed since the intercept $\alpha_i$ and the coefficients $\bm{\beta}_i$ are not known. Given appropriate estimators $\widehat{\bm{\beta}}_i$ and $\widehat{\alpha}_i$, we can then consider
+which is a standard nonparametric regression equation. The variables $Y_{it}^\circ$ are not observed since the intercept $\alpha_i$ and the coefficients $\bm{\beta}_i$ are not known. However, given appropriate estimators $\widehat{\bm{\beta}}_i$ and $\widehat{\alpha}_i$, we can consider
 \begin{align*}
 	\widehat{Y}_{it} := Y_{it} -\widehat{\alpha}_i - \widehat{\bm{\beta}}_i^\top \mathbf{X}_{it} =(\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top \mathbf{X}_{it} + m_i \Big( \frac{t}{T} \Big) + \big( \alpha_i - \widehat{\alpha}_i \big) + \varepsilon_{it}. 
 \end{align*}
 
-Then our unobserved variables $Y_{it}^\circ$ can be approximated by $\widehat{Y}_{it}$ and we compute our test statistic based on $\widehat{Y}_{it}$. In what follows, we assume that an estimator with the property that $\bm{\beta}_i - \widehat{\bm{\beta}}_i = O_P(T^{-1/2})$ is given.  Details on one of the possible ways to construct $\widehat{\bm{\beta}}_i$ are deferred to Section \ref{subsec-test-est}.
+The unobserved variables $Y_{it}^\circ$ can be approximated by $\widehat{Y}_{it}$, and in this Section we provide the startegy for computing our test statistic based on $\widehat{Y}_{it}$.
+
+In what follows, we assume that an estimator with the property that $\bm{\beta}_i - \widehat{\bm{\beta}}_i = O_P(T^{-1/2})$ is given.  Details on one of the possible ways to construct $\widehat{\bm{\beta}}_i$ are deferred to Section \ref{subsec:test:beta}.
 
 Given $\widehat{\bm{\beta}}_i$, consider an appropriate estimator $\widehat{\alpha}_{i}$ for the intercept $\alpha_i$ calculated by
 \begin{align}\label{alpha-est}
@@ -341,7 +344,7 @@ Theorem \ref{theo-stat-equality} is the main stepping stone to derive the theore
 %\end{enumerate}
 %\end{prop}
 
-\subsection{Estimation of the parameters $\bm{\beta}_i$}\label{subsec-test-est}
+\subsection{Estimation of the parameters $\bm{\beta}_i$}\label{subsec:beta_est}
 
 We now focus on finding an appropriate estimator $\widehat{\bm{\beta}}_i$ of $\bm{\beta}_i$. For that purpose, for each $i$ we consider the time series $\{\Delta Y_{it}: 2 \leq t \leq T\}$ of the differences $\Delta Y_{it} = Y_{it} - Y_{i t-1}$. We then have
 \begin{align*}
@@ -353,7 +356,7 @@ where $\Delta  \mathbf{X}_{it} =  \mathbf{X}_{it} -  \mathbf{X}_{it-1}$ and $ \D
 \end{align}
 
 In particular, for each $i$ we employ the least squares estimation method to estimate $\bm{\beta}_i$ in \eqref{model_with_regs}, treating $\Delta \mathbf{X}_{it}$ as the regressors and $\Delta Y_{it}$ as the response variable. That is, we propose the following differencing estimator:
-\begin{align}\label{dif-est}
+\begin{align}\label{eq:beta_est}
 \widehat{\bm{\beta}}_i = \Big( \sum_{t=2}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \sum_{t=2}^T \Delta \mathbf{X}_{it} \Delta Y_{it}
 \end{align}
 

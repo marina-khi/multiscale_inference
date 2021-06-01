@@ -106,11 +106,11 @@ pdf("plots/all_intervals.pdf", width=5, height=5, paper="special")
 par(mar = c(3, 0.5, 1.5, 0)) #Margins for each plot
 par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
 plot(NA, xlim=c(0,t_len),  ylim = c(0, 1 + 1/nrow(all_intervals)), xlab="",
-     ylab = "", yaxt= "n", mgp=c(2,0.5,0), cex.lab = 0.7, cex.axis = 0.7)
-title(xlab="days", line = 0.9, cex.lab = 0.7)
+     ylab = "", yaxt= "n", mgp=c(2,0.5,0), cex.lab = 0.85, cex.axis = 0.85)
+title(xlab="days", line = 0.9, cex.lab = 0.85)
 title(main = expression(The ~ family ~ of ~ intervals ~ italic(F)), line = 0.7,
-      cex.main = 0.7)
-title(sub = "b)", cex.sub = 0.7, line = 2.0)
+      cex.main = 0.85)
+title(sub = "(b)", cex.sub = 0.85, line = 2.0)
 segments(all_intervals$startpoint, all_intervals$values, all_intervals$endpoint, all_intervals$values, lwd = 1)
 dev.off()
 

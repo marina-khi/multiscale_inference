@@ -70,7 +70,7 @@ produce_plots <- function (results, l, data_i, data_j,
     #Produce minimal intervals
     p_t_set2  <- compute_minimal_intervals(p_t_set)
 
-    plot(NA, xlim=c(0, Tlen),  ylim = c(0, 1 + 1 / nrow(p_t_set)), xlab="", mgp=c(2, 0.5, 0), yaxt = "n", cex.axis = 0.7)
+    plot(NA, xlim=c(0, Tlen),  ylim = c(0, 1 + 1 / nrow(p_t_set)), xlab="", mgp=c(2, 0.5, 0), yaxt = "n", cex.axis = 0.8)
     title(main = "(d) (minimal) intervals produced by our test", font.main = 1, cex.main = 0.8, line = 0.5)
     title(xlab = "days since first Monday after the hundredth case", line = 1.7, cex.lab = 0.8)
     segments(p_t_set2$startpoint, p_t_set2$values, p_t_set2$endpoint, p_t_set2$values, lwd = 2)

@@ -38,10 +38,10 @@ pdf(paste0("plots/lambda_fct.pdf"), width=5, height=5, paper="special")
 par(mar = c(3, 1.5, 1.5, 0)) #Margins for each plot
 par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
 plot((1:100) / 100, lambda_vec,  ylim = c(0, max(lambda_vec) + 100), xlab="",
-     ylab = "", mgp=c(2,0.5,0), type = "l", cex.lab = 0.7, cex.axis = 0.7)
-title(xlab="u", line = 0.9, cex.lab = 0.7)
-title(main = expression(Plot ~ of ~ the ~ "function" ~ lambda), line = 0.7, cex.main = 0.7)
-title(sub = "a)", cex.sub = 0.7, line = 2.0)
+     ylab = "", mgp=c(2,0.5,0), type = "l", cex.lab = 0.85, cex.axis = 0.85)
+title(xlab="u", line = 0.9, cex.lab = 0.85)
+title(main = expression(Plot ~ of ~ the ~ "function" ~ lambda), line = 0.7, cex.main = 0.85)
+title(sub = "(a)", cex.sub = 0.85, line = 2.0)
 dev.off()
 
 #However, you can change this function to whatever you like.
@@ -106,13 +106,13 @@ par(mar = c(3.3, 1.5, 1.5, 0)) #Margins for each plot
 par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
 par(mgp = c(3, 0.5, 0))
 plot((1:100) / 100, lambda_vec_1,  ylim = c(0, max(lambda_vec_1, lambda_vec) + 100),
-     xlab="", ylab = "", type = "l", cex.axis = 0.7)
+     xlab="", ylab = "", type = "l", cex.axis = 0.85)
 lines((1:100) / 100, lambda_vec, type = "l", col = "red")
-title(main = expression(Plot ~ of ~ the ~ "functions" ~ lambda[1] ~ and ~ lambda), line = 0.7, cex.main = 0.7)
-title(xlab="u", line=0.9, cex.lab = 0.7)
-title(sub = "a) Scenario A", cex.sub = 0.7, line = 2.0)
+title(main = expression(Plot ~ of ~ the ~ "functions" ~ lambda[1] ~ and ~ lambda), line = 0.7, cex.main = 0.85)
+title(xlab="u", line=0.9, cex.lab = 0.85)
+title(sub = "(a) Scenario A", cex.sub = 0.85, line = 2.0)
 legend("topright", inset = 0.02, legend=c(expression(lambda[1](u) ~" "), expression(lambda(u) ~" ")),
-       col = c("black", "red"), lty = 1, cex = 0.65, ncol = 1)
+       col = c("black", "red"), lty = 1, cex = 0.75, ncol = 1)
 dev.off()
 
 #However, you can change the function to whatever you like.
@@ -178,13 +178,13 @@ par(mar = c(3.3, 1.5, 1.5, 0)) #Margins for each plot
 par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
 par(mgp = c(3, 0.5, 0))
 plot((1:100) / 100, lambda_vec_1,  ylim = c(0, max(lambda_vec_1, lambda_vec) + 100),
-     xlab="", ylab = "", type = "l", cex.axis = 0.7)
+     xlab="", ylab = "", type = "l", cex.axis = 0.85)
 lines((1:100) / 100, lambda_vec, type = "l", col = "red")
-title(main = expression(Plot ~ of ~ the ~ "functions" ~ lambda[1] ~ and ~ lambda), line = 0.7, cex.main = 0.7)
-title(xlab="u", line=0.9, cex.lab = 0.7)
-title(sub = "b) Scenario B", cex.sub = 0.7, line = 2.0)
+title(main = expression(Plot ~ of ~ the ~ "functions" ~ lambda[1] ~ and ~ lambda), line = 0.7, cex.main = 0.85)
+title(xlab="u", line=0.9, cex.lab = 0.85)
+title(sub = "(b) Scenario B", cex.sub = 0.85, line = 2.0)
 legend("topright", inset = 0.02, legend=c(expression(lambda[1](u) ~" "), expression(lambda(u) ~" ")),
-       col = c("black", "red"), lty = 1, cex = 0.65, ncol = 1)
+       col = c("black", "red"), lty = 1, cex = 0.75, ncol = 1)
 dev.off()
 
 
