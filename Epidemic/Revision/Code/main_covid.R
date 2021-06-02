@@ -102,9 +102,20 @@ all_intervals <- data.frame('startpoint' = (grid$gset$u - grid$gset$h) * t_len,
                             'values' = 0)
 all_intervals$values <- (1:nrow(all_intervals)) / nrow(all_intervals)
 
-pdf("plots/all_intervals.pdf", width=5, height=5, paper="special")
-par(mar = c(3, 0.5, 1.5, 0)) #Margins for each plot
+pdf("plots/figure_1.pdf", width=10.3, height=5, paper="special")
+layout(matrix(c(1, 2), ncol=2), widths=c(5, 5.3), heights=c(5, 5), TRUE)
+
+lambda_vec <- lambda_fct((1:100) / 100)
+
+par(mar = c(3, 1.5, 1.5, 0)) #Margins for each plot
 par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
+plot((1:100) / 100, lambda_vec,  ylim = c(0, max(lambda_vec) + 100), xlab="",
+     ylab = "", mgp=c(2,0.5,0), type = "l", cex.lab = 0.85, cex.axis = 0.85)
+title(xlab="u", line = 0.9, cex.lab = 0.85)
+title(main = expression(Plot ~ of ~ the ~ "function" ~ lambda), line = 0.7, cex.main = 0.85)
+title(sub = "(a)", cex.sub = 0.85, line = 2.0)
+
+par(mar = c(3, 2, 1.5, 0)) #Margins for each plot
 plot(NA, xlim=c(0,t_len),  ylim = c(0, 1 + 1/nrow(all_intervals)), xlab="",
      ylab = "", yaxt= "n", mgp=c(2,0.5,0), cex.lab = 0.85, cex.axis = 0.85)
 title(xlab="days", line = 0.9, cex.lab = 0.85)
@@ -112,6 +123,7 @@ title(main = expression(The ~ family ~ of ~ intervals ~ italic(F)), line = 0.7,
       cex.main = 0.85)
 title(sub = "(b)", cex.sub = 0.85, line = 2.0)
 segments(all_intervals$startpoint, all_intervals$values, all_intervals$endpoint, all_intervals$values, lwd = 1)
+
 dev.off()
 
 #We also need to estimate the overdispersion parameter

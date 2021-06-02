@@ -222,3 +222,35 @@ for (sigma in sigma_vec){
 }
 
 #Now the results of power simulations for this scenario are stored as the tex tables in the folder ./plots/
+pdf(paste0("plots/figure_2.pdf"), width=10.5, height=4, paper="special")
+lambda_vec_1 <- lambda_fct((1:100) / 100, c = 1000, height = 6000, position = 10)
+lambda_vec   <- lambda_fct((1:100) / 100, c = 1000, height = 5000, position = 10)
+
+layout(matrix(c(1, 2),ncol=2), widths=c(5, 5.5),
+       heights=c(4, 4), TRUE)
+par(mar = c(3.3, 1.5, 1.5, 0)) #Margins for each plot
+par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
+par(mgp = c(3, 0.5, 0))
+plot((1:100) / 100, lambda_vec_1,  ylim = c(0, max(lambda_vec_1, lambda_vec) + 100),
+     xlab="", ylab = "", type = "l", cex.axis = 0.85)
+lines((1:100) / 100, lambda_vec, type = "l", col = "red")
+title(main = expression(Plot ~ of ~ the ~ "functions" ~ lambda[1] ~ and ~ lambda), line = 0.7, cex.main = 0.85)
+title(xlab="u", line=0.9, cex.lab = 0.85)
+title(sub = "(a) Scenario A", cex.sub = 0.85, line = 2.0)
+legend("topright", inset = 0.02, legend=c(expression(lambda[1](u) ~" "), expression(lambda(u) ~" ")),
+       col = c("black", "red"), lty = 1, cex = 0.75, ncol = 1)
+
+lambda_vec_1 <- lambda_fct((1:100) / 100, c = 1000, height = 5000, position = 9)
+lambda_vec   <- lambda_fct((1:100) / 100, c = 1000, height = 5000, position = 10)
+
+par(mar = c(3.3, 3, 1.5, 0)) #Margins for each plot
+plot((1:100) / 100, lambda_vec_1,  ylim = c(0, max(lambda_vec_1, lambda_vec) + 100),
+     xlab="", ylab = "", yaxt = "n", type = "l", cex.axis = 0.85)
+lines((1:100) / 100, lambda_vec, type = "l", col = "red")
+axis(2, at = seq(from = 0, to = 6000, by = 1000),labels=c("0", "1000", "", "3000", "", "5000", ""), las=0, cex.axis=0.85)
+title(main = expression(Plot ~ of ~ the ~ "functions" ~ lambda[1] ~ and ~ lambda), line = 0.7, cex.main = 0.85)
+title(xlab="u", line=0.9, cex.lab = 0.85)
+title(sub = "(b) Scenario B", cex.sub = 0.85, line = 2.0)
+legend("topright", inset = 0.02, legend=c(expression(lambda[1](u) ~" "), expression(lambda(u) ~" ")),
+       col = c("black", "red"), lty = 1, cex = 0.75, ncol = 1)
+dev.off()
