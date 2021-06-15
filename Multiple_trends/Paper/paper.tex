@@ -418,7 +418,7 @@ where $\widehat{\bm{\beta}}_i$ is the differencing estimator given by \eqref{eq:
 
 Detailed proof of the Theorem \ref{theo:beta} is provided in the Appendix. Here we briefly outline the main steps of the proof.
 
-After rearranging the terms we can write 
+After rearranging the terms, we can write 
 \begin{align}\label{eq:theo:beta}
 \begin{split}
  \sqrt{T}( \widehat{\bm{\beta}}_i - \bm{\beta}_i) = &\Big( \frac{1}{T}\sum_{t=2}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \frac{1}{\sqrt{T}}\sum_{t=2}^T \Delta \mathbf{X}_{it} \Delta m_{it}\\
@@ -646,45 +646,44 @@ where $C_1, C_2, C_3$ are constants that only depend on $q$ and $\alpha$.
 \end{theoremA}
 
 \begin{theoremA}{\cite{Wu2007}}\label{theo-wu-2}
-Let $(\xi_i)_{i \in \integers}$ be a stationary and ergodic Markov chain and $g(\cdot)$ be a measurable function. Let $g(\xi_1) \in \mathcal{L}^q, q > 2, \ex[g(\xi_0)] = 0$ and $\mathit{l}$ be a positive, nondecreasing slowly varying function. Assume that $$ \sum_{i = n}^\infty \big|\big| \ex [g(\xi_i)| \xi_0] - \ex [g(\xi_i)| \xi_{-1}]\big|\big|_q =O\big([\log n]^{-\beta}\big),$$ where $0 \leq \beta<1/q$ and 
+Let $(\xi_i)_{i \in \integers}$ be a stationary and ergodic Markov chain and $g(\cdot)$ be a measurable function. Let $g(\xi_1) \in \mathcal{L}^q, q > 2, \ex[g(\xi_0)] = 0$ and $\mathit{l}$ be a positive, nondecreasing slowly varying function. Assume that $$ \sum_{i = n}^\infty \Big|\Big| \ex [g(\xi_i)| \xi_0] - \ex [g(\xi_i)| \xi_{-1}]\Big|\Big|_q =O\Big([\log n]^{-\beta}\Big),$$ where $0 \leq \beta<1/q$ and 
 \begin{align*}
 \sum_{k=1}^\infty \frac{k^{-\beta q}}{[l(2^k)]^q} < \infty.	
 \end{align*}
-Then $S_n = g(\xi_1) + \ldots + g(\xi_n) = o_{a.s.}[\sqrt{n}l(n)]$.
+Then $S_n = g(\xi_1) + \ldots + g(\xi_n) = o_{a.s.}\big[\sqrt{n}l(n)\big]$.
 \end{theoremA}
 
 \begin{propA}{\cite{Wu2007}}\label{prop-wu}
 Let $(\epsilon_n)_{n\in\integers}$ be i.i.d. random variables, $\xi_n = (\ldots, \epsilon_{n-1}, \epsilon_n)$ and $g(\cdot)$ be a measurable function such that $g(\xi_n)$ is a proper random variable for each $n \geq 0$. For $k \geq 0$ let $\tilde{\xi}_k = (\ldots, \epsilon_{-1}, \epsilon_0^\prime, \epsilon_1, \ldots, \epsilon_{k-1}, \epsilon_k)$, where $\epsilon_0^\prime$ is an i.i.d. copy of $\epsilon_0$. Let $g(\xi_0) \in \mathcal{L}^q, q > 1$ and $\ex[g(\xi_0)] = 0$. For $n \geq 1$ we have
 
-$$\big|\big| \ex [g(\xi_n)| \xi_0] - \ex [g(\xi_n)| \xi_{-1}]\big|\big|_q \leq 2 \big|\big| g(\xi_n) - g(\tilde{\xi}_n)\big|\big|_q.$$
+$$\Big|\Big| \ex [g(\xi_n)| \xi_0] - \ex [g(\xi_n)| \xi_{-1}]\Big|\Big|_q \leq 2 \Big|\Big| g(\xi_n) - g(\tilde{\xi}_n)\Big|\Big|_q.$$
 \end{propA}
 
 \begin{propA}\label{propA-reg-5}
-Under the conditions of Theorem \ref{theo:stat:global}, it holds that 
-\begin{align*}
+Under the conditions of Theorem \ref{theo:stat:global}, for all $i \in \{1, \ldots, n\}$ it holds that
+\begin{align}\label{eqA:regs}
 \bar{\X}_i = \frac{1}{T}\sum_{t=1}^T \mathbf{H}_i (\mathcal{U}_{it}) = o_P(1).
-\end{align*}
+\end{align}
 \end{propA}
 \begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-reg-5}}}] 
 
-
-To prove this fact, we will use two results from \cite*{Wu2007} stated above. First, fix $j \in \{1, \ldots, d\}$. Denote $\xi_t = \mathcal{U}_{it}, \tilde{\xi}_t = \mathcal{U}^\prime_{it}$ and $g(\cdot) = H_{i,j}(\cdot)$. Then by Assumption \ref{C-reg3}, $g(\xi_0) = H_{i, j}(\mathcal{U}_{i0}) \in \mathcal{L}^{q^\prime}$ for $q^\prime > 4$ and $\ex[g(\xi_0)] = \ex[H_{i, j}(\mathcal{U}_{i0})] = 0$ and we can apply Proposition \ref{prop-wu} (Proposition 3(ii) in \cite{Wu2007}) that says that for all $s \geq 1$ we have:
+Take any $i \in \{1, \ldots, n\}$. To prove \eqref{eqA:regs}, we will use two results from \cite*{Wu2007} stated above. First, fix $j \in \{1, \ldots, d\}$. Denote $\xi_t = \mathcal{U}_{it},\, \tilde{\xi}_t = \mathcal{U}^\prime_{it}$ and $g(\cdot) = H_{i,j}(\cdot)$. Then by Assumption \ref{C-reg3}, $g(\xi_0) = H_{i, j}(\mathcal{U}_{i0}) \in \mathcal{L}^{q^\prime}$ for $q^\prime > 4$ and $\ex[g(\xi_0)] = \ex[H_{i, j}(\mathcal{U}_{i0})] = 0$ and we can apply Proposition \ref{prop-wu} (Proposition 3(ii) in \linebreak \cite{Wu2007}) that says that for all $s \geq 1$ we have:
 \begin{align*}
-\big|\big| \ex [g(\xi_s)| \xi_0] - \ex [g(\xi_s)| \xi_{-1}]\big|\big|_{q^\prime} \leq 2 \big|\big| g(\xi_s) - g(\tilde{\xi}_s)\big|\big|_{q^\prime},
+\big\lVert \ex [g(\xi_s)| \xi_0] - \ex [g(\xi_s)| \xi_{-1}]\big\rVert_{q^\prime} \leq 2 \big\lVert g(\xi_s) - g(\tilde{\xi}_s)\big\rVert_{q^\prime},
 \end{align*}
 or, equivalently,
 \begin{align*}
-\big|\big| \ex [H_{i, j}(\mathcal{U}_{is})| \mathcal{U}_{i0}] - \ex [H_{i, j}(\mathcal{U}_{is})| \mathcal{U}_{i(-1)}]\big|\big|_{q^\prime} \leq 2 \big|\big| H_{i, j}(\mathcal{U}_{is}) - H_{i, j}(\mathcal{U}_{is}^\prime)\big|\big|_{q^\prime}.
+\big\lVert \ex [H_{i, j}(\mathcal{U}_{is})| \mathcal{U}_{i0}] - \ex [H_{i, j}(\mathcal{U}_{is})| \mathcal{U}_{i(-1)}]\big\rVert_{q^\prime} \leq 2 \big\lVert H_{i, j}(\mathcal{U}_{is}) - H_{i, j}(\mathcal{U}_{is}^\prime)\big\rVert_{q^\prime}.
 \end{align*}
-Since this holds simultaneously for all $j \in \{1, \ldots, d\}$, we can use the obvious bound $\big|\big| H_{i, j}(\mathcal{U}_{is}) - H_{i, j}(\mathcal{U}_{is}^\prime)\big|\big|_{q^\prime} \leq \big|\big| \mathbf{H}_{i}(\mathcal{U}_{is}) - \mathbf{H}_{i}(\mathcal{U}_{is}^\prime)\big|\big|_{q^\prime} = \delta_{q^\prime}(\mathbf{H}_i, s)$ and Assumption \ref{C-reg5} to write 
+Since this holds simultaneously for all $j \in \{1, \ldots, d\}$, we can use the obvious bound $\big\lVert H_{i, j}(\mathcal{U}_{is}) - H_{i, j}(\mathcal{U}_{is}^\prime)\big\rVert_{q^\prime} \leq \big\lVert \mathbf{H}_{i}(\mathcal{U}_{is}) - \mathbf{H}_{i}(\mathcal{U}_{is}^\prime)\big\rVert_{q^\prime} = \delta_{q^\prime}(\mathbf{H}_i, s)$ and Assumption \ref{C-reg5} to write 
 \begin{align*}
-0 \leq \sum_{s = t}^\infty \big|\big| \ex [g(\xi_s)| \xi_0] - \ex [g(\xi_s)| \xi_{-1}]\big|\big|_{q^\prime} \leq \sum_{s = t}^\infty \delta_{q^\prime}(\mathbf{H}_i, s) =O(t^{-\alpha}),
+0 \leq \sum_{s = t}^\infty\big\lVert \ex [g(\xi_s)| \xi_0] - \ex [g(\xi_s)| \xi_{-1}]\big\rVert_{q^\prime} \leq \sum_{s = t}^\infty \delta_{q^\prime}(\mathbf{H}_i, s) =O(t^{-\alpha}),
 \end{align*}
 where $\alpha > 1/2 - 1/{q^\prime}$.
 
 Now we want to apply Theorem \ref{theo-wu-2} (Corollary 2(i) in \cite{Wu2007}). As a parameter $\beta$ in the theorem we can take any value satisfying assumption $0 \leq \beta < 1/{q^\prime}$ because for every $\beta \geq 0$ we have 
 \begin{align*}
-\sum_{s = t}^\infty \big|\big| \ex [g(\xi_s)| \xi_0] - \ex [g(\xi_s)| \xi_{-1}]\big|\big|_{q^\prime} \leq \sum_{s = t}^\infty \delta_{q^\prime}(\mathbf{H}_i, s) =O(t^{-\alpha}) = O\big([\log t]^{-\beta}\big).
+\sum_{s = t}^\infty \big\lVert \ex [g(\xi_s)| \xi_0] - \ex [g(\xi_s)| \xi_{-1}]\big\lVert_{q^\prime} \leq \sum_{s = t}^\infty \delta_{q^\prime}(\mathbf{H}_i, s) =O(t^{-\alpha}) = O\big([\log t]^{-\beta}\big).
 \end{align*}
 Furthermore, as a positive, nondecreasing slowly varying function $\mathit{l}$ we can take \linebreak $\mathit{l}(x) = \log^{2/{q^\prime} - \beta}(x)$. Then,
 \begin{align*}
@@ -703,13 +702,13 @@ Hence, $S_T = g(\xi_1) + \ldots + g(\xi_T) = o_{a.s.}[\sqrt{T}\log^{2/{q^\prime}
 The main steps of the proof of the Theorem \ref{theo:stat:global} are described below. We will build the proof on the auxiliary results stated in \ref{subsec:appendix:aux}.
  
 \begin{enumerate}
-\item First, we introduce the intermediate statistics $\doublehattwo{\Phi}_{n, T}$ that can be regarded as the version of the statistics $\widehat{\Phi}_{n, T}$ where we excluded the regressors $\X_{it}$ from the construction of the kernel averages. By Proposition \ref{propA:strong_approx}, we show that there exist statistics $\widetilde{\Phi}_{n, T}$ for $T = 1,2,\ldots$ which are distributed as $\doublehattwo{\Phi}_{n, T}$ for any $T \ge 1$ and which have the property that 
+\item First, we introduce the intermediate statistics $\doublehattwo{\Phi}_{n, T}$ that can be regarded as the version of the statistics $\widehat{\Phi}_{n, T}$ where we excluded the regressors $\X_{it}$ from the construction of the kernel averages. We show that we can replace this multiscale statistic $\doublehattwo{\Phi}_{n, T}$ by an identically distributed version $\widetilde{\Phi}_{n, T}$ which is close to the Gaussian statistics $\Phi_{n, T}$ defined in \eqref{eq:Phi}. Formally, in Proposition \ref{propA:strong_approx} we prove that there exist statistics $\widetilde{\Phi}_{n, T}$ for $T = 1,2,\ldots$ which are distributed as $\doublehattwo{\Phi}_{n, T}$ for any $T \ge 1$ and which have the property that 
 \begin{align*}
 \big| \widetilde{\Phi}_{n, T} - \Phi_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} + \rho_T\sqrt{\log T} \Big),
 \end{align*}
-where $\Phi_{n, T}$ is the Gaussian statistic defined in \eqref{eq:Phi}. This approximation result allows us to replace the multiscale statistic $\doublehattwo{\Phi}_{n, T}$ by an identically distributed version $\widetilde{\Phi}_{n, T}$ which is close to $\Phi_{n, T}$.
+where $\Phi_{n, T}$ is the Gaussian statistic.
 
-\item Second, by Proposition \ref{propA-anticon-equality} we show that $\Phi_{n,T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$ with $\delta_T$ converging to zero as $T\to \infty$. Or, in other words, it holds that 
+\item Second, in Proposition \ref{propA-anticon-equality} we demonstrate that $\Phi_{n,T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$ with $\delta_T$ converging to zero as $T\to \infty$. Or, in other words, it holds that 
 \begin{align*}
 \sup_{x \in \reals} \pr \big( | \Phi_{n,T} - x | \le \delta_T \big) = o(1),
 \end{align*}
@@ -720,7 +719,7 @@ where $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$.
 \end{equation*}
 This statement directly follows from the previous two steps and the fact that $\widetilde{\Phi}_{n, T}$ is distributed as $\doublehattwo{\Phi}_{n, T}$ for any $n \ge 2$, $T \ge 1$.
 
-\item In the fourth step, in Propositions \ref{propA:intermediate1} and \ref{propA:intermediate2} we formally show that this intermediate statistic $\doublehattwo{\Phi}_{n, T}$ is close to $\widehat{\Phi}_{n, T}$, i.e. there exists a sequence of positive numbers $\gamma_{n, T}$ that converges to $0$ as $T \to \infty$ such that for all $x\in \reals$ 
+\item In the fourth step, in Propositions \ref{propA:intermediate1} and \ref{propA:intermediate2} we formally show that the introduced intermediate statistic $\doublehattwo{\Phi}_{n, T}$ is close to $\widehat{\Phi}_{n, T}$, i.e. there exists a sequence of positive numbers $\gamma_{n, T}$ that converges to $0$ as $T \to \infty$ such that for all $x\in \reals$ 
 \begin{align*}
 \pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) - &\pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)\le \pr(\widehat{\Phi}_{n, T} \le x) \\
 &\le\pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big),
@@ -740,12 +739,12 @@ which immediately implies the statement of Theorem \ref{theo:stat:global}.
 
 \subsection*{Step 1}
 
-The auxiliary statistics $\widehat{\Phi}_{n,T}$ defined in \eqref{eq:Phi_hat} is equal to our multiscale statistics $\widehat{\Psi}_{n,T}$ under the null hypothesis, but has the property that it depends on the known covariates $\mathbf{X}_{it}$, whereas the Gaussian version $\Phi_{n,T}$ is independent of them. This is the reason why we need to introduce additional intermediate test statistic without the covariates that connects $\widehat{\Phi}_{n,T}$ and $\Phi_{n,T}$. 
+The auxiliary statistics $\widehat{\Phi}_{n,T}$ defined in \eqref{eq:Phi_hat} is equal to our multiscale statistics $\widehat{\Psi}_{n,T}$ under the null hypothesis, but has the property that it depends on the known covariates $\mathbf{X}_{it}$, whereas the Gaussian version $\Phi_{n,T}$ is independent of them. This is the reason why we need to introduce additional intermediate test statistics that do not include the covariates and connect $\widehat{\Phi}_{n,T}$ and $\Phi_{n,T}$. 
 
 We do it in the following way. For each $i$ and $j$, consider the kernel averages
 \[\doublehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) - (\varepsilon_{jt} - \bar{\varepsilon}_j)  \big\}. \]
 
-We can view these kernel averages as constructed (under the null) based on the unobserved variables $\doublehattwo{Y}_{it}$ and  $\doublehattwo{Y}_{jt}$ that are defined by 
+We can view these kernel averages as constructed (under the null) based on the unobserved variables $\doublehattwo{Y}_{it}$ and  $\doublehattwo{Y}_{jt}$ defined by 
 %Moreover, in the proof of our main theorem \ref{theo-stat-equality} we will need additional auxiliary statistics that do not include the covariates $\mathbf{X}_{it}$. Hence, we imagine that we know the parameters $\bm{\beta}_i$ and consider the unobserved variables 
 \begin{align*}
 \doublehattwo{Y}_{it} :&= Y_{it} - \bm{\beta}_i^\top \mathbf{X}_{it} -  \frac{1}{T}\sum_{t=1}^T \big(Y_{it} - \bm{\beta}_i^\top \mathbf{X}_{it}\big) =\\
@@ -754,12 +753,12 @@ We can view these kernel averages as constructed (under the null) based on the u
 
 The intermediate statistic is then defined as 
 \begin{align*}
-\doublehattwo{\Phi}_{n,T} &= \max_{1 \le i < j \le n}\max_{(u,h) \in \mathcal{G}_T} \doublehattwo{\phi}^0_{ij,T}(u, h)\quad  \text{with} \\
-\doublehattwo{\phi}^0_{ij,T}(u, h) &=  \bigg|\frac{\doublehat{\phi}_{ij,T}(u,h)}{\big\{\doublehattwo{\sigma}_i^2 + \doublehattwo{\sigma}_j^2\big\}^{1/2}}\bigg| - \lambda(h)
+\doublehattwo{\Phi}_{n,T} &= \max_{1 \le i < j \le n}\max_{(u,h) \in \mathcal{G}_T} \doublehattwo{\phi^0}_{ij,T}(u, h)\quad  \text{with} \\
+\doublehattwo{\phi^0}_{ij,T}(u, h) &=  \bigg|\frac{\doublehat{\phi}_{ij,T}(u,h)}{\big\{\doublehattwo{\sigma}_i^2 + \doublehattwo{\sigma}_j^2\big\}^{1/2}}\bigg| - \lambda(h)
 \end{align*}
 with $\doublehattwo{\sigma}_i^2$ being an estmator of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_{i0}, \varepsilon_{i\ell})$ which is computed from the unobserved sample $\{ \doublehattwo{Y}_{it} : 1 \le t \le T \}$. We thus regard $\doublehattwo{\sigma}_i^2 = \doublehattwo{\sigma}_i^2(\doublehattwo{Y}_{i1},\ldots,\doublehattwo{Y}_{iT})$ as a function of the variables $\doublehat{Y}_{it}$ for $1 \le t \le T$. As with the estimator $\widehat{\sigma}_i^2$, we assume that $\doublehattwo{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$. 
 
-The statistics $\doublehattwo{\Phi}_{n,T}$ can thus be viewed as an approximation of the statistic $\widehat{\Phi}_{n,T}$. However, formally we prove that these two statistics are close in Step 4. In this step, we are interested in another matter.
+The statistics $\doublehattwo{\Phi}_{n,T}$ can thus be viewed as a version of the statistic $\widehat{\Phi}_{n,T}$ without the covariates. However, we formally prove that these two statistics are close in Step 4. In this step, we are interested in another matter.
 
 %Heuristically, the kernel averages $\doublehat{\phi}_{ij,T}(u,h)$ are close to the kernel averages $\widehat{\phi}_{ij,T}(u,h)$ because of the properties of our estimators $\widehat{\bfbeta}_i$, $\doublehattwo{\sigma}_i^2$ and assumptions on $\mathbf{X}_{it}$. In the following two propositions we prove it formally.
 
