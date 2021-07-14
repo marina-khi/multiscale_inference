@@ -115,19 +115,28 @@ for (n_cl in 1:max_n_cl){
       sigma_hat_vec[ind] <- sum(tmp^2)/t_len
     }
   }
-  BIC <- t_len * sum(log(sigma_hat_vec)) - log(n_ts * t_len) * (n_cl * (n_ts + t_len) + n_ts)
+  BIC <- t_len * sum(log(sigma_hat_vec))# - log(n_ts * t_len) * (n_cl * (n_ts + t_len) + n_ts)
   BIC_vec <- c(BIC_vec, BIC)
 }
 
 
-pdf("plots/BIC_alt.pdf", width=7, height=5, paper="special")
+pdf("plots/BIC_alt_withoutpenalty.pdf", width=7, height=5, paper="special")
 par(cex = 1, tck = -0.025)
 par(mar = c(3.5, 2.5, 4, 0)) #Margins for each plot
 plot(1:max_n_cl, BIC_vec, type = "l", xlab = "", ylab = "")
 title(main = "COVID data", line = 2.5)
-title(main = expression(BIC==T~Sigma[i==1]^n~log(sigma[i]^2~(K))-log(nT)(K(n+T)+n)), line = 1)
+title(main = expression(BIC==T~Sigma[i==1]^n~log(sigma[i]^2~(K))), line = 1)
 title(xlab = "Number of clusters, K", line = 2.5)
 dev.off()
+
+# pdf("plots/BIC_alt.pdf", width=7, height=5, paper="special")
+# par(cex = 1, tck = -0.025)
+# par(mar = c(3.5, 2.5, 4, 0)) #Margins for each plot
+# plot(1:max_n_cl, BIC_vec, type = "l", xlab = "", ylab = "")
+# title(main = "COVID data", line = 2.5)
+# title(main = expression(BIC==T~Sigma[i==1]^n~log(sigma[i]^2~(K))-log(nT)(K(n+T)+n)), line = 1)
+# title(xlab = "Number of clusters, K", line = 2.5)
+# dev.off()
 
 AIC_vec <- c()
 BIC_vec_2  <- c()
@@ -147,30 +156,50 @@ for (n_cl in 1:max_n_cl){
       sigma_hat_vec[ind] <- sum((covid_mat[, ind] - g_hat_normed)^2)
     }
   }
-  BIC <- (-1) * n_ts * t_len * log(sum(sigma_hat_vec)/(n_ts * t_len)) - n_cl * n_ts * t_len * (2 * bw_abs / t_len) * log(n_ts * t_len)
+  BIC <- (-1) * n_ts * t_len * log(sum(sigma_hat_vec)/(n_ts * t_len))# - n_cl * n_ts * t_len * (2 * bw_abs / t_len) * log(n_ts * t_len)
   BIC_vec_2 <- c(BIC_vec_2, BIC)
-  AIC <- (-1) * n_ts * t_len * log(sum(sigma_hat_vec)/(n_ts * t_len)) - n_cl * n_ts * t_len * (2 * bw_abs / t_len)
+  AIC <- (-1) * n_ts * t_len * log(sum(sigma_hat_vec)/(n_ts * t_len))# - n_cl * n_ts * t_len * (2 * bw_abs / t_len)
   AIC_vec <- c(AIC_vec, AIC)
 }
 
-pdf("plots/BIC_2_alt.pdf", width=7, height=5, paper="special")
+pdf("plots/BIC_2_alt_withoutpenalty.pdf", width=7, height=5, paper="special")
 par(cex = 1, tck = -0.025)
 par(mar = c(3.5, 2.5, 4, 0)) #Margins for each plot
 plot(1:max_n_cl, BIC_vec_2, type = "l", xlab = "", ylab = "")
 title(main = "COVID data", line = 2.5)
-title(main = expression(BIC==-nT~log(tilde(sigma)^2)-Delta[K]~log(nT)), line = 1)
+title(main = expression(BIC==-nT~log(tilde(sigma)^2)), line = 1)
 title(xlab = "Number of clusters, K", line = 2.5)
 dev.off()
 
 
-pdf("plots/AIC_alt.pdf", width=7, height=5, paper="special")
+pdf("plots/AIC_alt_wihtoutpenalty.pdf", width=7, height=5, paper="special")
 par(cex = 1, tck = -0.025)
 par(mar = c(3.5, 2.5, 4, 0)) #Margins for each plot
 plot(1:max_n_cl, AIC_vec, type = "l", xlab = "", ylab = "")
 title(main = "COVID data", line = 2.5)
-title(main = expression(AIC==-nT~log(tilde(sigma)^2)-Delta[K]), line = 1)
+title(main = expression(AIC==-nT~log(tilde(sigma)^2)), line = 1)
 title(xlab = "Number of clusters, K", line = 2.5)
 dev.off()
+
+
+# pdf("plots/BIC_2_alt.pdf", width=7, height=5, paper="special")
+# par(cex = 1, tck = -0.025)
+# par(mar = c(3.5, 2.5, 4, 0)) #Margins for each plot
+# plot(1:max_n_cl, BIC_vec_2, type = "l", xlab = "", ylab = "")
+# title(main = "COVID data", line = 2.5)
+# title(main = expression(BIC==-nT~log(tilde(sigma)^2)-Delta[K]~log(nT)), line = 1)
+# title(xlab = "Number of clusters, K", line = 2.5)
+# dev.off()
+# 
+# 
+# pdf("plots/AIC_alt.pdf", width=7, height=5, paper="special")
+# par(cex = 1, tck = -0.025)
+# par(mar = c(3.5, 2.5, 4, 0)) #Margins for each plot
+# plot(1:max_n_cl, AIC_vec, type = "l", xlab = "", ylab = "")
+# title(main = "COVID data", line = 2.5)
+# title(main = expression(AIC==-nT~log(tilde(sigma)^2)-Delta[K]), line = 1)
+# title(xlab = "Number of clusters, K", line = 2.5)
+# dev.off()
 
 
 #results_output_alt(res, covid_mat, Delta_hat, n_cl, countries, path = "plots/",
