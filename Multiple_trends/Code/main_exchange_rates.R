@@ -1,40 +1,29 @@
 # This is the main file for the analysis of both applications which is reported in Section 6.
 rm(list=ls())
 
-library(Rcpp)
+library(multiscale)
 library(tictoc)
 #library(xtable)
 #options(xtable.floating = FALSE)
 #options(xtable.timestamp = "")
-
-# The following file contains functions that are used to estimate the AR parameters, in particular, to compute
-# the estimators of the coefficients, a_1, ... ,a_p, the estimator of the variance of the innovation term, sigma_eta^2 
-# and the estimator of the long-run variance sigma^2.
-source("functions/long_run_variance.r")
-
-#Load necessary functions  
-source("functions/ConstructGrid.r")
-source("functions/multiscale_statistics.r")
-source("functions/multiscale_quantiles.r")
-source("functions/multiscale_testing.r")
-source("functions/minimal_intervals.r")
-source("functions/functions.r")
-sourceCpp("functions/multiscale_statistics.cpp")
-
 
 ##############################
 #Defining necessary constants#
 ##############################
 
 alpha   <- 0.05 #confidence level for application
-SimRuns <- 5000
+sim_runs <- 5000
 
 
 ###########################################
 #Loading the real station data for England#
 ###########################################
 
-exchange_rates <- read.csv("data/exchange_rates.csv", sep = ",", dec = ".", stringsAsFactors = FALSE)
+#################################
+#Loading the exchange rates data#
+#################################
+
+exchange_rates <- read.csv("data/exchange_rates.csv", sep = ",", dec = ",", stringsAsFactors = FALSE)
 exchange_rates <- within(exchange_rates, rm("exusal", "exusec", "exuseu", "exusir", "exusnz", "exusuk", "twexb", "twexm", "twexo", "indexgx"))
 
 #exchange_rates <- as.matrix(exchange_rates)
@@ -43,15 +32,15 @@ colSums(is.na(exchange_rates))
 exchange_rates <- exchange_rates[,colSums(is.na(exchange_rates)) <= 100] #Ommitting the time series with too sparse data
 exchange_rates <- na.omit(exchange_rates)#Deleting the rows with ommitted variables
 
-Tlen          <- nrow(exchange_rates)
-N_ts          <- ncol(exchange_rates) - 1 #Updating the number of time series because of dropped stations
+t_len         <- nrow(exchange_rates)
+n_ts          <- ncol(exchange_rates) - 1 #Updating the number of time series because of dropped stations
 
 #column_names <- names(exchange_rates)
 
 #exchange_rates <-matrix(unlist(exchange_rates), nrow = Tlen)
 
 #colnames(exchange_rates) <- column_names
-exchange_rates[, 2:(N_ts + 1)] <- scale(exchange_rates[, 2:(N_ts + 1)], scale = FALSE)
+exchange_rates[, 2:(n_ts + 1)] <- scale(exchange_rates[, 2:(n_ts + 1)], scale = FALSE)
 
 
 #####################
