@@ -12,7 +12,7 @@ library(tictoc)
 ##############################
 
 alpha    <- 0.05 #confidence level for application
-sim_runs <- 5000
+sim_runs <- 500
 
 
 ###########################################
@@ -79,7 +79,7 @@ for (i in 1:nrow(criterion_matrix)){
   different_orders <- (1:9)
   
   for (order in different_orders){
-    AR.struc      <- AR_lrv(data=returns[, j], q=criterion_matrix$q[[i]], r.bar=criterion_matrix$r[[i]], p=order)
+    AR.struc      <- estimate_lrv(data=returns[, j], q=criterion_matrix$q[[i]], r_bar=criterion_matrix$r[[i]], p=order)
     sigma_eta_hat <- sqrt(AR.struc$vareta)
     FPE <- c(FPE, (sigma_eta_hat^2 * (t_len + order)) / (t_len - order))
     AIC <- c(AIC, t_len * log(sigma_eta_hat^2) + 2 * order)
@@ -96,37 +96,27 @@ for (i in 1:nrow(criterion_matrix)){
 cat("For stock ", colnames(returns)[j], " the results are as follows: ", max(criterion_matrix$FPE), " ", max(criterion_matrix$AIC), " ", max(criterion_matrix$AICC), " ", max(criterion_matrix$SIC), " ", max(criterion_matrix$HQ), " \n")
 
 
-
-
-
 #Setting tuning parameters for testing
 order <- c(1, 3, 2, 6, 4, 1, 4, 1, 1, 1)
 q     <- 50
-r.bar <- 10
+r_bar <- 10
 
 
 #Calculating each sigma_i separately
 sigmahat_vector <- c()
 for (i in 2:(n_ts+1)){
-  AR.struc        <- AR_lrv(data = returns[, i], q = q, r.bar = r.bar, p=order[i-1])
+  AR.struc        <- estimate_lrv(data = returns[, i], q = q, r_bar = r_bar, p=order[i-1])
   sigma_hat_i     <- sqrt(AR.struc$lrv)
   sigmahat_vector <- c(sigmahat_vector, sigma_hat_i)
 }
 
 
-
 #Calculating the statistic for real data
-result <- multiscale_testing(alpha = alpha, data = returns[, -1], sigma_vec = sigmahat_vector, SimRuns = SimRuns, n_ts = n_ts)
-
-#And now the testing itself
-if (max(result$Psi_ij) > result$quant) {
-  cat("We reject H_0 with probability", alpha, "Psihat_statistic = ", max(result$Psi_ij),
-      "Gaussian quantile value = ", result$quant, "\n")
-} else {
-  cat("We fail to reject H_0 with probability", alpha, "Psihat_statistic = ", max(result$Psi_ij),
-      "Gaussian quantile value = ", result$quant, "\n")
-}
-
+result <- multiscale_test(data = as.matrix(returns[, -1]),
+                          sigma_vec = sigmahat_vector,
+                          alpha = alpha,
+                          n_ts = n_ts, grid = grid,
+                          sim_runs = sim_runs, epidem = FALSE)
 
 
 #############
@@ -141,20 +131,20 @@ library(tictoc)
 #options(xtable.floating = FALSE)
 #options(xtable.timestamp = "")
 
-n_ts          <- 34 #number of different time series for application to first analyze
+n_ts          <- 10 #number of different time series for application to first analyze
 alpha         <- 0.05 #confidence level for application
-sim_runs      <- 1000
+sim_runs      <- 100
 
 ###########################################
 #Loading the real station data for England#
 ###########################################
 
 for (i in 1:n_ts){
-  filename = paste("data/txt", i, ".txt", sep = "")
-  temperature_tmp  <- read.table(filename, header = FALSE, skip = 7,
+  filename = paste("~/Desktop/Work/multiscale_inference/Multiple_trends/Code/data/txt", i, ".txt", sep = "")
+  temperature_tmp  <- read.table(filename, header = FALSE, skip = 7, quote = '"',
                                  col.names = c("year", "month", "tmax", "tmin", "af", "rain", "sun", "aux"), fill = TRUE,  na.strings = c("---"))
   monthly_temp_tmp <- data.frame('1' = as.numeric(temperature_tmp[['year']]), '2' = as.numeric(temperature_tmp[['month']]),
-                                 '3' = (temperature_tmp[["tmax"]] + temperature_tmp[["tmin"]]) / 2)
+                                 '3' = as.numeric(temperature_tmp[["tmax"]] + temperature_tmp[["tmin"]]) / 2)
   colnames(monthly_temp_tmp) <- c('year', 'month', paste0("tmean", i))
   if (i == 1){
     monthly_temp <- monthly_temp_tmp
@@ -205,17 +195,9 @@ for (i in TemperatureColumns){
 grid <- construct_grid(t = T_tempr)
 
 #Calculating the statistic for real data
-monthly_temp <- do.call(cbind, monthly_temp)
-result <- multiscale_test(data = monthly_temp[, -c(1, 2, 3)], sigma_vec = sigmahat_vector,
+#monthly_temp <- do.call(cbind.data.frame, monthly_temp)
+result <- multiscale_test(data = as.matrix(monthly_temp[, -c(1, 2, 3)]),
+                          sigma_vec = sigmahat_vector,
                           alpha = alpha,
                           n_ts = n_ts, grid = grid,
                           sim_runs = sim_runs, epidem = FALSE)
-
-#And now the testing itself
-if (max(result$Psi_ij) > result$quant) {
-  cat("We reject H_0 with probability", alpha, "Psihat_statistic = ", max(result$Psi_ij),
-      "Gaussian quantile value = ", result$quant, "\n")
-} else {
-  cat("We fail to reject H_0 with probability", alpha, "Psihat_statistic = ", max(result$Psi_ij),
-      "Gaussian quantile value = ", result$quant, "\n")
-}
