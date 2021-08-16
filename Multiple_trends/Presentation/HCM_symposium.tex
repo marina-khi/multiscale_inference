@@ -28,6 +28,11 @@
 
 \newcommand{\Prob}{\mathrm{P}}
 \newcommand{\E}{\mathbb{E}}
+\newcommand{\Eps}{\mathcal{E}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\X}{\boldsymbol{X}}
+\newcommand{\bfbeta}{\boldsymbol{\beta}}
 \newcommand{\Var}{\mathrm{Var}}
 \newcommand{\Cov}{\mathrm{Cov}}
 \newcommand{\Corr}{\mathrm{Corr}}
@@ -55,19 +60,19 @@
 \end{block}}
 	{\onslide<2>\begin{figure}
     		\centering
-    		\includegraphics[height=0.45\textheight]{plots/Germany_and_Italy.pdf}
+    		\includegraphics[height=0.45\textheight]{plots/indices.pdf}
   	\end{figure}}
 	{\onslide<3>
 	\vspace{-46,81mm}
 	\begin{figure}
     		\centering
-    		\includegraphics[height=0.45\textheight]{plots/Germany_and_Italy_1.pdf}
+    		\includegraphics[height=0.45\textheight]{plots/indices_1.pdf}
   	\end{figure}}	
 	{\onslide<4->
 	\vspace{-46,81mm}
 	\begin{figure}
     		\centering
-    		\includegraphics[height=0.45\textheight]{plots/Germany_and_Italy_2.pdf}
+    		\includegraphics[height=0.45\textheight]{plots/indices_2.pdf}
   	\end{figure}}	
 \vspace{-3mm}
 {\onslide<5->\textbf{Research question:}
@@ -83,7 +88,7 @@
 
 Finding systematic differences between trends = basis for further research
 
-$\quad \quad \Rightarrow$ understanding which government policies are more effective.\pause
+%$\quad \quad \Rightarrow$ understanding which government policies are more effective.\pause
 
 \vspace{3mm}
 
@@ -95,7 +100,7 @@ $\quad \quad \Rightarrow$ large probability of one true null hypothesis being re
 
 \vspace{3mm}
 
-\textbf{Is it limited to COVID-19?}
+\textbf{Is it limited to one application?}
 
 No! Our method = general method for comparing nonparametric trends
 
@@ -112,173 +117,167 @@ $\quad \quad \Rightarrow$ new statistical test for equality of nonparametric tre
 	\begin{itemize}
 		\item Chaudhuri and Marron (1999, 2000), Hall and Heckman (2000), D{\"u}mbgen and Spokoiny (2001), {\color<4>{mLightBrown}Park et al. (2009)}.
 	\end{itemize}\pause\pause
-	Studies of COVID-19:
+	Comparison of volatility trends:
 	\begin{itemize}
-		\item {\color<6>{mLightBrown}Dong et al. (2020)}, Gu et al. (2020), Li and Linton (2020), Jiang et al. (2020).
+		\item Nyblom and Harvey (2000), ...
 	\end{itemize}
 \end{frame}
 
 
 \section{Model}
-\begin{frame}{Motivation for the model}
-We observe $n$ time series $\mathcal{X}_i = \{X_{it}: 1 \le t \le T \}$ of length $T$.\pause
-
-\vspace{3mm}
-
-$X_{it}$ are non-negative integers $\Rightarrow$ can be modelled by a Poisson distribution with time-varying parameter $\lambda_i(t/T)$: $X_{it} \sim P_{\lambda_i(t/T)}$.\pause
-\vspace{3mm}
-
-Since $\lambda_i(t/T) = \E[X_{it}] = \Var(X_{it})$, we can rewrite $X_{it}$ as
-\vspace{-2mm}
-%\begin{overlayarea}{\textwidth}{2cm}
-\begin{align*}
-X_{it} &= \lambda_i\Big(\frac{t}{T}\Big) + \onslide<3>{u_{it} }\onslide<4->{\sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it},}
-\end{align*}
-%\end{overlayarea}
-\onslide<4->where $\eta_{it}$ has zero mean and unit variance.
-
-\vspace{3mm}
-
-\onslide<5->In applications the variance can be larger than the mean $\Rightarrow$ quasi-Poisson models.
-\end{frame}
 
 \begin{frame}{Model}
-Quasi-Poisson model:
+We observe a panel of $n$ time series $\mathcal{Z}_i = \{(Y_{it}, \X_{it}): 1 \le t \le T \}$ of length $T$, where $Y_{it} \in \reals$ and $\X_{it}\in \reals^{d}$.\pause
+
+We assume the following model:
 \begin{equation*}
-X_{it} = \lambda_i \Big( \frac{t}{T} \Big) + \sigma\sqrt{\lambda_i \Big( \frac{t}{T} \Big)} \eta_{it},
+Y_{it} = m_i \Big( \frac{t}{T} \Big) + \bfbeta_i^T\X_{it}+ \alpha_i + \varepsilon_{it},
 \end{equation*}\pause
 \vspace{-3mm}
 where
 \begin{itemize}
-\item $\lambda_i$ are unknown trend functions on $[0,1]$;\pause
-\item $\sigma$ is the overdispersion parameter;\pause
-\item $\eta_{it}$ are error terms that are independent across $i$ and $t$ and have zero mean and unit variance.
+\item $m_i$ are unknown trend functions on $[0,1]$;\pause
+\item $\bfbeta_i$ is $d\times 1$ vector of unknown parameters;\pause
+\item $\alpha_i$ are so-called fixed effect error terms;
+\item $\Eps_i = \{\eps_{it}: 1\leq t \leq T\}$ is a zero-mean stationary and causal error process.
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Model, part 2}
+How to make the problem less complicated?\pause
+
+First, we estimate $\bfbeta_i$:
+\begin{align*}
+\widehat{\bfbeta}_i = \Big( \sum_{t=2}^T \Delta \X_{it} \Delta \X_{it}^\top \Big)^{-1} \sum_{t=2}^T \Delta \X_{it} \Delta Y_{it}
+\end{align*}\pause
+\vspace{-3mm}
+\begin{block}{Theorem}
+Under certain regularity assumptions, $\widehat{\bfbeta}_i$ is a consistent estimator of $\bfbeta_i$ with the property $\bfbeta_i - \widehat{\bfbeta}_i = O_P(T^{-1/2})$.
+\end{block}\pause
+Then, we estimate the fixed effects $\alpha_i$:
+\begin{align*}
+\widehat{\alpha}_i &= \frac{1}{T}\sum_{t=1}^T \big(Y_{it} - \widehat{\bfbeta}_i^\top \X_{it}\big)
+\end{align*}\pause
+We then work with the augmented time series \color{mLightBrown}{$\widehat{Y}_{it} = Y_{it} - \widehat{\alpha}_i - \widehat{\bfbeta}_i^\top \X_{it}$}.
 \end{frame}
 
 \section{Testing procedure}
+
 \begin{frame}{Testing problem}
 
-Let $\mathcal{F} :=\{ \mathcal{I}_k \subseteq [0, 1]: 1 \le k \le K\}$ be a family of rescaled time intervals on $[0, 1]$, and for each triplet $(i, j, k)$ consider the null hypothesis that the functions $\lambda_i$ and $\lambda_j$ are equal on an interval $\mathcal{I}_k$\pause, i.e.
 \begin{align*}
-H_0^{(ijk)}:\quad  \lambda_i(w) = \lambda_j(w) \text{ for all } w\in \mathcal{I}_k
+H_0: m_1 = m_2 = \ldots = m_n
 \end{align*}\pause
-\vspace{-2mm}
 
-We want to test $H_0^{(ijk)}$ simultaneously for all pairs of countries $i$ and $j$ and all intervals $\mathcal{I}_k$ in the family $\mathcal{F}$ and we want to control the familywise error rate (FWER) at level $\alpha$\pause:
+\vspace{-4mm}
+\textbf{Question}: if we reject the global null, how to locate the differences between the trends? \pause
+
+Consider a grid $\mathcal{G}_T = \{(u, h): [u-h, u+h] \subseteq [0, 1]\}$ of location-bandwidth parameters. \pause For each pair $(i, j)$ and for each interval $[u-h, u+h]$ we consider the null hypothesis 
+\[ H_0^{[i,j]}(u,h): m_i(w) = m_j(w) \text{ for all } w \in [u-h,u+h]. \]\pause
+Then the global null $H_0: m_1 = m_2 = \ldots = m_n$ can be reformulated as
 \begin{align*}
-\text{FWER}(\alpha) = \Prob \Big( \exists (i,j,k): \text{we wrongly reject } H_0^{(ijk)} \Big)
-\end{align*}
-%where $\mathcal{M}_0$ is the set of triplets $(i, j, k)$ for which $H_0^{(ijk)}$ holds true.
-\end{frame} 
+H_0:  &\text{The hypotheses } H_0^{[i,j]}(u,h) \text{ hold true for all intervals } \\ &[u- h , u+h], (u, h) \in \mathcal{G}_T, \text{ and for all } 1 \le i < j \le n. 
+\end{align*} 
+\end{frame}
 
 
 \begin{frame}{Test statistic}
-For a given interval $\mathcal{I}_k$ and a pair of time series $i$ and $j$ we calculate
+For a given location $u \in [0,1]$ and bandwidth $h$ and a given pair $(i, j)$ we construct the kernel averages
 \begin{equation*}
-\hat{s}_{ijk} = \frac{1}{T h_k} \sum\limits_{t=1}^T \ind (X_{it} -X_{jt}), 
-\end{equation*}
-%\vspace{-3mm}
-where $h_k$ is the length of $\mathcal{I}_k$. \pause $\hat{s}_{ijk}$ estimates the average distance between $\lambda_i$ and $\lambda_j$ on $\mathcal{I}_k$: \pause 
+\widehat{\psi}_{ij, T}(u,h) = \sum\limits_{t=1}^T w_{t,T}(u,h) \big(\widehat{Y}_{it} - \widehat{Y}_{jt}), 
+\end{equation*}\pause
+\vspace{-3mm}
+where 
 \begin{align*}
-\hat{s}_{ijk} = &\frac{1}{Th_k} \sum\limits_{t=1}^T \ind \bigg( \lambda_i \Big(\frac{t}{T}\Big)  - \lambda_j \Big(\frac{t}{T}\Big)\bigg) \\
-&+  {\color<4-5>{mLightBrown} \frac{\sigma}{Th_k} \sum\limits_{t=1}^T \ind \Big(\sqrt{\lambda_i\Big(\frac{t}{T}\Big)} \eta_{it} -  \sqrt{ \lambda_j\Big(\frac{t}{T}\Big)} \eta_{jt} \Big)}\\
-%\end{align*}
-%Applying a law of large numbers, we get that
-%\begin{align*}
-%\hat{s}_{ijk} 
-\onslide<5-6>{= &\frac{1}{Th_k} \sum\limits_{t=1}^T \ind \bigg( \lambda_i \Big(\frac{t}{T}\Big)  - \lambda_j \Big(\frac{t}{T}\Big)\bigg) + {\color<5>{mLightBrown}o_P(1)}}
+w_{t,T}(u,h) &= \frac{\Lambda_{t,T}(u,h)}{ \{\sum\nolimits_{t=1}^T \Lambda_{t,T}^2(u,h)\}^{1/2} } ,\\
+\Lambda_{t,T}(u,h) &= K\Big(\frac{t/T-u}{h}\Big) \Big[ S_{T,2}(u,h)  - S_{T,1}(u,h)\Big(\frac{t/T-u}{h}\Big) \Big], \\
+S_{T,\ell}(u,h) &= \frac{1}{Th} \sum\nolimits_{t=1}^T K\Big(\frac{t/T-u}{h}\Big) \Big(\frac{t/T-u}{h}\Big)^\ell
 \end{align*}
+for $\ell = 1,2$ and $K$ is a kernel function.
 \end{frame}
-
-
-
 
 \begin{frame}[label = frame_teststatistic]{Test statistic, part 2}
-Under certain assumptions, 
-\begin{align*}
-\Var(\hat{s}_{ijk})  & = \frac{\sigma^2}{T^2 h_k^2} \sum\limits_{t=1}^T \ind \Big\{ \lambda_i\Big(\frac{t}{T}\Big) + \lambda_j\Big(\frac{t}{T}\Big) \Big\}
-\end{align*}\pause
-In order to normalize the variance of the statistic $\hat{s}_{ijk}$, we scale it by an estimator of its variance:
-\[ \widehat{\Var(\hat{s}_{ijk})} = \frac{\hat{\sigma}^2}{T^2 h_k^2} \sum\limits_{t=1}^T \ind (X_{it} + X_{jt} ), \]
-with $\hat{\sigma}^2$ being an appropriate estimator of $\sigma^2$. \hyperlink{frame_sigma}{\beamerbutton{Details}}
-\end{frame}
+The kernel averages $\widehat{\psi}_{ij, T}(u,h)$ measure the distance between two trend curves $m_i$ and $m_j$ on $[u - h, u + h]$. \pause
 
-
-\begin{frame}{Test statistic, part 3}
-Test statistic for the hypothesis $H_0^{(ijk)}$ is defined as
+Instead with working directly with $\widehat{\psi}_{ij, T}(u,h)$, we replace them by
 \begin{equation*}
-\widehat{\psi}_{ijk} : = \frac{\hat{s}_{ijk}}{\sqrt{\widehat{\Var(\hat{s}_{ijk})} }}= \frac{\sum\nolimits_{t=1}^T \indsmall (X_{it} -X_{jt})}{\hat{\sigma} \big\{ \sum\nolimits_{t=1}^T \indsmall  (X_{it} + X_{jt} )\big\}^{1/2}}
-\end{equation*}
-%Under certain conditions and under the null, $\widehat{\psi}_{ijk}$ can be approximated by a Gaussian version of the test statistic:
-%\begin{align*}
-%\phi_{ijk} = \frac{1}{\sqrt{2 T h_k}} \sum\limits_{t=1}^T \ind (Z_{it} - Z_{jt}), 
-%\end{align*}
-%where $Z_{it}$ are independent standard normal random variables.
-\end{frame}
-
-\begin{frame}[label = frame_critval]{Critical values}
-How to construct critical values $c_{ijk}(\alpha)$?\pause
-\begin{itemize} 
-\item Traditional approach: $c_{ijk}(\alpha) = c(\alpha)$ for all $(i,j,k)$. \pause
-\item More modern approach: $c_{ijk}(\alpha)$ depend on the length $h_k$ of the time interval (D{\"u}mbgen and Spokoiny (2001))\pause:
-\[c_{ijk}(\alpha) = c(\alpha,h_k) := b_k + q(\alpha)/a_k,\] where $a_k$ and $b_k$ are scale-dependent constants and $q(\alpha)$ is chosen such that we control FWER.
-\hyperlink{frame_scaleconstants}{\beamerbutton{Details}}
+\widehat{\psi}^0_{ij, T}(u,h) = \bigg\{ \bigg|\frac{\widehat{\psi}_{ij, T}(u,h)}{\big(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\big)^{1/2}}\bigg| - \lambda(h) \bigg\}, 
+\end{equation*}\pause
+\vspace{-3mm}
+%Test statistic is defined as follows
+%\begin{equation*}
+%\widehat{\Psi}_T = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widehat{\psi}_T(u,h)}{\widehat{\sigma}}\Big| - \lambda(h) \Big\}, 
+%\end{equation*} \pause
+where 
+\begin{itemize}
+\item $\widehat{\sigma}_i^2$ is an appropriate estimator of the long-run variance $\sigma^2_i$;
+\item $\lambda(h) = \sqrt{2 \log \{ 1/(2h) \}}$ is an additive correction term (D{\"u}mbgen and Spokoiny (2001)). \hyperlink{frame_lambda}{\beamerbutton{Explanation}}
 \end{itemize}
 \end{frame}
 
+\begin{frame}{Test statistic, part 3}
 
-\begin{frame}{Critical values, part 2}
-We want to control FWER. \pause Let $\mathcal{M}_0: = \big\{(i, j, k) | H_0^{(ijk)} \text{ is true} \big\}$, then
-\begin{align*}
-\text{FWER}(\alpha) &= \Prob \Big( \exists (i,j,k) \in \mathcal{M}_0:  |\widehat{\psi}_{ijk} | > c_{ijk}(\alpha) \Big) \\
-\onslide<3->{&= 1 - \Prob \Big( \forall (i,j,k) \in \mathcal{M}_0: |\widehat{\psi}_{ijk} | \le c_{ijk}(\alpha) \Big)}\\
-\onslide<4->{& =  1 - \Prob \Big( \forall (i,j,k) \in \mathcal{M}_0: a_k \big(|\hat{\psi}_{ijk}| - b_k\big) \le q(\alpha) \Big)}\\
-\onslide<5->{& = 1 - \Prob\Big( \max_{(i,j,k) \in \mathcal{M}_0} a_k \big( |\hat{\psi}_{ijk}| - b_k \big) \le q(\alpha) \Big)}\\
-\onslide<6->{ & \leq 1 - \Prob\Big( \max_{(i,j,k)} a_k \big( |{\color<7>{mLightBrown}\hat{\psi}_{ijk}^0}| - b_k \big) \le q(\alpha) \Big)}
-\end{align*}
-\onslide<8->{Hence, we choose $q(\alpha)$ as the $(1-\alpha)$-quantile of the statistic 
-\[ \hat{\Psi}_T = \max_{(i,j,k)} a_k \big( |\hat{\psi}_{ijk}^0| - b_k \big), \]
-where $\hat{\psi}_{ijk}^0$ is equal to $\hat{\psi}_{ijk}$ under the null.}
-\end{frame}
-
-\begin{frame}{Critical values, part 3}
-
-But we do not know the distribution of $\hat{\Psi}_T$ in practice!\pause
-
-$\Rightarrow$ the quantiles $q(\alpha)$ are also not known. How to approximate them?\pause
-
-Under our assumptions, 
-\[ \hat{\psi}_{ijk}^0 \approx \frac{1}{\sqrt{2 T h_k}} \sum\limits_{t=1}^T \ind  (\eta_{it} - \eta_{jt} ), \] \pause
-which can be approximated by a Gaussian version of the test statistic:
-\begin{align*}
-\phi_{ijk} = \frac{1}{\sqrt{2 T h_k}} \sum\limits_{t=1}^T \ind (Z_{it} - Z_{jt}), 
-\end{align*}
-where $Z_{it}$ are independent standard normal random variables.
-
-
-\end{frame}
-
-
-
-\begin{frame}[label = frame_test]{Test procedure}
-
-\begin{enumerate}
-	\item Consider the Gaussian test statistic 
-	\vspace{-2mm} \[ \Phi_T = \max_{(i,j,k)} a_k \big( |\phi_{ijk}| - b_k \big), \] where $a_k$ and $b_k$ are scale-dependent constants and $\phi_{ijk}$ are weighted averages of the differences of standard normal random variables.\pause
-	\item Compute a $(1-\alpha)$-quantile $q_{\text{Gauss}} (\alpha)$ of $\Phi_T$ by Monte Carlo simulations.\pause
-	\item Adjust $q_{ \text{Gauss}} (\alpha)$ by the scale-dependent constants \vspace{-2mm}  \[c_{\text{Gauss}}(\alpha,h_k) = b_k + q_{\text{Gauss}}(\alpha)/a_k\] \pause
-\end{enumerate}
-\vspace{-5mm}
-\begin{block}{Test procedure}
-For the given significance level $\alpha \in (0,1)$ and for each $(i,j,k)$, reject $H_0^{(ijk)}$ if $|\widehat{\psi}_{ijk}| > c_{\text{Gauss}}(\alpha,h_k)$.
-
+To test the global null, we aggregate the individual test statistics \linebreak for all $(i, j)$ and all location-bandwidth pairs $(u, h) \in \mathcal{G}_T$:
+\begin{equation*}
+\widehat{\Psi}_{n, T} = \max_{1 \leq i < j \leq n} \max_{(u,h) \in \mathcal{G}_T} \widehat{\psi}^0_{ij, T}(u,h). 
+\end{equation*}\pause
+\vspace{-3mm}
+\begin{block}{Note}
+Under certain conditions and under the null, $\widehat{\psi}^0_{ij, T}(u,h)$ and $\widehat{\Psi}_{n, T}$ can be approximated by the corresponding Gaussian versions of the test statistics.
 \end{block}
 \end{frame}
 
+\begin{frame}{Test procedure}
+Gaussian version of the individual test statistics:
+\begin{align*}
+{\phi}^0_{ij, T}(u,h) = \max_{(u,h) \in \mathcal{G}_T} \bigg\{ \bigg|\frac{\phi_T(u,h)}{\big(\sigma^2_i + \sigma^2_j\big)^{1/2}}\bigg| - \lambda(h) \bigg\},
+\end{align*} \pause
+\vspace{-3mm}
+where
+\begin{itemize}
+\item $\phi_T(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, {\color<3>{mLightBrown}\big\{\sigma_i(Z_{it} - \bar{Z}_i) - \sigma_j(Z_{jt} - \bar{Z}_j)\big\}}$;\pause
+\item $Z_{it}$ are independent standard normal random variables;\pause
+\item $\bar{Z}_i$ is the empirical average of $Z_{i1}, \ldots, Z_{iT}$.
+\end{itemize}\pause
+
+
+Aggregated Gaussian test statistics:
+\begin{equation*}
+\Phi_{n, T} = \max_{1 \leq i < j \leq n} \max_{(u,h) \in \mathcal{G}_T} \phi^0_{ij, T}(u,h). 
+\end{equation*}\pause
+
+\end{frame}
+
+\begin{frame}[label = frame_test]{Test procedure, part 2}
+
+\begin{enumerate}
+	\item Consider the Gaussian test statistic 
+	\vspace{-2mm} \[ \Phi_{n, T} = \max_{1 \leq i < j \leq n} \max_{(u,h) \in \mathcal{G}_T} \phi^0_{ij, T}(u,h), \] where $\phi^0_{ijk}$ are weighted averages of the differences of standard normal random variables.\pause
+	\item Compute a $(1-\alpha)$-quantile $q_{n, T} (\alpha)$ of $\Phi_{n,T}$ by Monte Carlo simulations.\pause
+	\item Perform the test for the global hypothesis $H_0$: reject $H_0$ if $\widehat{\Psi}_{n, T} > q_{n, T}(\alpha)$.\pause	\item For each $i, j$, and each $(u, h) \in \mathcal{G}_T$, carry out the test for the local null hypothesis $H^{[i,j]}_0(u, h)$: reject $H^{[i,j]}_0(u, h)$ if $\widehat{\psi}^0_{ij, T}(u, h) > q_{n, T}(\alpha)$.
+	\end{enumerate}
+\end{frame}
 
 
 \section{Theoretical properties}
+
+
+
+
+\begin{frame}{Assumptions}
+\begin{itemize}
+\item[$\mathcal{C}1$] \label{C-err1} The variables $\varepsilon_t$ are weakly dependent.\pause
+\item[$\mathcal{C}2$] \label{C-err2} It holds that $\| \varepsilon_t \|_q < \infty$ for some $q > 4$.\pause
+\item[$\mathcal{C}3$] \label{C-ker} Standard assumptions on the kernel function $K$. \pause
+\item[$\mathcal{C}4$] \label{C-grid} $|\mathcal{G}_T| = O(T^\theta)$ for some arbitrarily large but fixed constant $\theta > 0$.\pause
+\only<5>{\begin{align*}
+\mathcal{G}_T = \big\{ & (u,h): u = t/T \text{ for some } 1 \le t \le T \text{ and } h \in [h_{\min},h_{\max}] \\ & \text{ with } h = t/T \text{ for some } 1 \le t \le T  \big\},
+\end{align*}}\pause
+\item[$\mathcal{C}5$] \label{C-h} $h_{\min} \gg T^{-(1-\frac{2}{q})} \log T$ and $h_{\max} = o(1)$.\pause
+\item[$\mathcal{C}6$] Assume that  $\widehat{\sigma}^2 = \sigma^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$.
+\end{itemize}
+\end{frame}
+
 \begin{frame}{Assumptions}
 \begin{itemize}
 \onslide<1->\item[$\mathcal{C}1$] \label{C1} The functions $\lambda_i$ are uniformly Lipschitz continuous: $|\lambda_i(u) - \lambda_i(v)| \le L |u-v|$ for all $u, v \in [0,1]$.
@@ -289,7 +288,6 @@ For the given significance level $\alpha \in (0,1)$ and for each $(i,j,k)$, reje
 \onslide<6>\item[$\mathcal{C}6$] \label{C6} $p := \{ \# (i, j, k) \} = O(T^{(\theta/2)(1-b)-(1+\delta)})$ for some small $\delta > 0$.
 \end{itemize}
 \end{frame}
-
 
 \begin{frame}{Theoretical properties}
 \begin{prop}\label{prop1}
@@ -310,6 +308,73 @@ Consider a sequence of functions $\lambda_{i} = \lambda_{i,T}$, $\lambda_{j} = \
 \end{equation*}
 \end{prop}
 \end{frame}
+
+\begin{frame}{Strategy of the proof}
+\begin{itemize}
+\item Replace the statistic $\widehat{\Psi}_T$ under $H_0: m = 0$ by a statistic $\widetilde{\Phi}_T$ with the same distribution and the property that 
+\begin{equation*}\label{eq-theo-stat-strategy-step1}
+\big| \widetilde{\Phi}_T - \Phi_T \big| = o_p(\delta_T),
+\end{equation*}
+where $\delta_T = o(1)$. To do so, we make use of strong approximation theory for dependent processes as derived in Berkes et al. (2014)\pause
+\vspace{2mm}
+\item Using the anti-concentration results for Gaussian random vectors (Chernozhukov et al. 2015), prove that $\Phi_T$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$, i.e.
+\begin{equation*}\label{eq-theo-stat-strategy-step2}
+\sup_{x \in \mathbb{R}} \Prob \big( |\Phi_T - x| \le \delta_T \big) = o(1).
+\end{equation*}\pause
+\vspace{-2mm}
+\item Show that 
+\begin{equation*}\label{eq-theo-stat-strategy-claim}
+\sup_{x \in \mathbb{R}} \big| \Prob(\widetilde{\Phi}_T \le x) - \Prob(\Phi_T \le x) \big| = o(1). 
+\end{equation*}
+\end{itemize}
+\end{frame}
+
+
+
+%\begin{frame}[label = frame_critval]{Critical values}
+%How to construct critical values $c_{ijk}(\alpha)$?\pause
+%\begin{itemize} 
+%\item Traditional approach: $c_{ijk}(\alpha) = c(\alpha)$ for all $(i,j,k)$. \pause
+%\item More modern approach: $c_{ijk}(\alpha)$ depend on the length $h_k$ of the time interval (D{\"u}mbgen and Spokoiny (2001))\pause:
+%\[c_{ijk}(\alpha) = c(\alpha,h_k) := b_k + q(\alpha)/a_k,\] where $a_k$ and $b_k$ are scale-dependent constants and $q(\alpha)$ is chosen such that we control FWER.
+%\hyperlink{frame_scaleconstants}{\beamerbutton{Details}}
+%\end{itemize}
+%\end{frame}
+%
+%
+%\begin{frame}{Critical values, part 2}
+%We want to control FWER. \pause Let $\mathcal{M}_0: = \big\{(i, j, k) | H_0^{(ijk)} \text{ is true} \big\}$, then
+%\begin{align*}
+%\text{FWER}(\alpha) &= \Prob \Big( \exists (i,j,k) \in \mathcal{M}_0:  |\widehat{\psi}_{ijk} | > c_{ijk}(\alpha) \Big) \\
+%\onslide<3->{&= 1 - \Prob \Big( \forall (i,j,k) \in \mathcal{M}_0: |\widehat{\psi}_{ijk} | \le c_{ijk}(\alpha) \Big)}\\
+%\onslide<4->{& =  1 - \Prob \Big( \forall (i,j,k) \in \mathcal{M}_0: a_k \big(|\hat{\psi}_{ijk}| - b_k\big) \le q(\alpha) \Big)}\\
+%\onslide<5->{& = 1 - \Prob\Big( \max_{(i,j,k) \in \mathcal{M}_0} a_k \big( |\hat{\psi}_{ijk}| - b_k \big) \le q(\alpha) \Big)}\\
+%\onslide<6->{ & \leq 1 - \Prob\Big( \max_{(i,j,k)} a_k \big( |{\color<7>{mLightBrown}\hat{\psi}_{ijk}^0}| - b_k \big) \le q(\alpha) \Big)}
+%\end{align*}
+%\onslide<8->{Hence, we choose $q(\alpha)$ as the $(1-\alpha)$-quantile of the statistic 
+%\[ \hat{\Psi}_T = \max_{(i,j,k)} a_k \big( |\hat{\psi}_{ijk}^0| - b_k \big), \]
+%where $\hat{\psi}_{ijk}^0$ is equal to $\hat{\psi}_{ijk}$ under the null.}
+%\end{frame}
+%
+%\begin{frame}{Critical values, part 3}
+%
+%But we do not know the distribution of $\hat{\Psi}_T$ in practice!\pause
+%
+%$\Rightarrow$ the quantiles $q(\alpha)$ are also not known. How to approximate them?\pause
+%
+%Under our assumptions, 
+%\[ \hat{\psi}_{ijk}^0 \approx \frac{1}{\sqrt{2 T h_k}} \sum\limits_{t=1}^T \ind  (\eta_{it} - \eta_{jt} ), \] \pause
+%which can be approximated by a Gaussian version of the test statistic:
+%\begin{align*}
+%\phi_{ijk} = \frac{1}{\sqrt{2 T h_k}} \sum\limits_{t=1}^T \ind (Z_{it} - Z_{jt}), 
+%\end{align*}
+%where $Z_{it}$ are independent standard normal random variables.
+%
+%
+%\end{frame}
+
+
+
 
 \section{Application}
 
@@ -333,38 +398,38 @@ We can make similar confidence statements about minimal intervals:
 \end{align*}
 \end{frame}
 
-\begin{frame}{Application setting}
-\begin{itemize}
-\item Five countries: Germany, Italy, Spain, France and the UK.
-\item $T = 150$ days. 
-\item The data is aligned by weekdays: first Monday after reaching $100$ cases as $t=1$.
-\item Lengths of time intervals $7, 14, 21, 28$ days. The intervals start at days $1, 8, 15, \ldots$ and $4, 11, 19, \ldots$
-\item $\alpha = 0.05$.
-\item $5000$ Monte Carlo simulation runs to produce critical values.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Application results}
-	\begin{figure}
-		\includegraphics[width=0.49\textwidth]{plots/DEU_vs_ITA_presentation}
-   		%\caption{Observed new cases per day in Germany and Italy}    			\label{fig:DEUvsITA}
-		\hfill
-		\includegraphics[width=0.49\textwidth]{plots/DEU_vs_ESP_presentation}
-	\end{figure}
-\end{frame}
-
-\begin{frame}{Application results, part 2}
-	\begin{figure}
-		\includegraphics[width=0.49\textwidth]{plots/DEU_vs_GBR_presentation}
-   		%\caption{Observed new cases per day in Germany and Italy}    			\label{fig:DEUvsITA}
-		\hfill
-		\includegraphics[width=0.49\textwidth]{plots/DEU_vs_FRA_presentation}
-	\end{figure}
-\end{frame}
+%\begin{frame}{Application setting}
+%\begin{itemize}
+%\item Five countries: Germany, Italy, Spain, France and the UK.
+%\item $T = 150$ days. 
+%\item The data is aligned by weekdays: first Monday after reaching $100$ cases as $t=1$.
+%\item Lengths of time intervals $7, 14, 21, 28$ days. The intervals start at days $1, 8, 15, \ldots$ and $4, 11, 19, \ldots$
+%\item $\alpha = 0.05$.
+%\item $5000$ Monte Carlo simulation runs to produce critical values.
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}{Application results}
+%	\begin{figure}
+%		\includegraphics[width=0.49\textwidth]{plots/DEU_vs_ITA_presentation}
+%   		%\caption{Observed new cases per day in Germany and Italy}    			\label{fig:DEUvsITA}
+%		\hfill
+%		\includegraphics[width=0.49\textwidth]{plots/DEU_vs_ESP_presentation}
+%	\end{figure}
+%\end{frame}
+%
+%\begin{frame}{Application results, part 2}
+%	\begin{figure}
+%		\includegraphics[width=0.49\textwidth]{plots/DEU_vs_GBR_presentation}
+%   		%\caption{Observed new cases per day in Germany and Italy}    			\label{fig:DEUvsITA}
+%		\hfill
+%		\includegraphics[width=0.49\textwidth]{plots/DEU_vs_FRA_presentation}
+%	\end{figure}
+%\end{frame}
 
 
 \begin{frame}{Discussion}
-We can claim, with confidence of about $95\%$, that the null hypothesis is violated for all intervals (and all pairs of countries) for which our test rejects the null. \pause
+We can claim, with confidence of about $95\%$, that the null hypothesis is violated for all intervals (and all pairs of time series) for which our test rejects the null. \pause
 
 However, we can not say anything about the causes of such differences. This question requires further (probably not purely statistical) analysis.\pause
 
@@ -372,8 +437,8 @@ Further possible extensions:
 \vspace{-1mm}
 \begin{itemize}
 	\item introduce scaling factor in the trend function, that will allow to adjust for the size of the country (population, density, testing regimes, etc.);\pause
-	\item include dependence in the error terms;\pause
-	\item cluster the countries based on the trends they exhibit.
+	\item include the dependence between covariates and error terms;
+	\item cluster the time series based on the trends they exhibit.
 \end{itemize}
 \end{frame}
 
@@ -437,40 +502,6 @@ where $|r_{it}| \le C(1+|\eta_{it-1}|)/T$ with a sufficiently large $C$.\pause \
 Together with \[ \frac{1}{T} \sum_{t=1}^T X_{it} = \frac{1}{T} \sum_{t=1}^T \lambda_i(t/T) + o_p(1), \] we get that $\hat{\sigma}_i^2 = \sigma^2 + o_p(1)$ for any $i$ and thus $\hat{\sigma}^2 = \sigma^2 + o_p(1)$. \hyperlink{frame_teststatistic<4>}{\beamerbutton{Go back}}
 \end{frame}
 
-
-\begin{frame}[label = frame_notation]{Notation}
-\begin{center}
-In order to proceed with the proof, we will need the following notation:
-\end{center}
-\vspace{-2mm}
-\begin{align*}
-\hat{\psi}_{ijk, T} &= \frac{\sum\nolimits_{t=1}^T \indsmall (X_{it} -X_{jt})}{\hat{\sigma} \big\{ \sum\nolimits_{t=1}^T \indsmall  (X_{it} + X_{jt} )\big\}^{1/2}} &&\\
-\hat{\psi}_{ijk,T}^0 &= \frac{\sum\nolimits_{t=1}^T \indsmall \, \sigma \overline{\lambda}_{ij}^{1/2}(\frac{t}{T}) (\eta_{it} - \eta_{jt})}{ \hat{\sigma} \{ \sum\nolimits_{t=1}^T \indsmall (X_{it} + X_{jt}) \}^{1/2}} &&\hat{\Psi}_T^0 = \max_{(i,j,k)} a_k (|\hat{\psi}_{ijk,T}^0| - b_k)\\
-\psi_{ijk,T}^0 &= \frac{1}{\sqrt{2Th_k}} \sum\limits_{t=1}^T \ind (\eta_{it} - \eta_{jt}) &&\Psi_T = \max_{(i,j,k)} a_k (|\psi_{ijk,T}^0| - b_k)\\
-\phi_{ijk,T} &= \frac{1}{\sqrt{2 T h_k}} \sum\limits_{t=1}^T \ind (Z_{it} - Z_{jt}) &&\Phi_T = \max_{(i,j,k)} a_k (|\phi_{ijk,T}| - b_k)
-\end{align*}
-\end{frame}
-
-\begin{frame}{Strategy of the proof}
-\begin{enumerate}
-\item We prove that  $\big| \hat{\Psi}_T^0 - \Psi_T \big| = o_p(r_T)$, where $\{r_T\}$ is some null sequence.\pause
-\item With the help of results from Chernozhukov et al. (2017), we prove
-\begin{equation*}\label{eq:kolmogorov-distance}
-\sup_{q \in \mathbf{R}} \Big| \Prob\big( \Psi_T \le q \big) - \Prob\big( \Phi_T \le q \big) \Big| = o(1)
-\end{equation*}\pause
-\vspace{-2mm}
-\item By using these two results, we now show that 
-\begin{equation}\label{eq:kolmogorov-distance-hat}
-\sup_{q \in \mathbb{R}} \Big| \Prob\big( \hat{\Psi}_T^0 \le q \big) - \Prob\big( \Phi_T \le q \big) \Big| = o(1)
-\end{equation}\pause
-\vspace{-2mm}
-\item It can be shown that $\Prob (\Phi_T \le q_{\text{Gauss}}(\alpha)) = 1-\alpha$. From this and \eqref{eq:kolmogorov-distance-hat}, it immediately follows that  
-\begin{equation*}
-\Prob\big( \hat{\Psi}_T^0 \le q_{\text{Gauss}}(\alpha) \big) = 1 - \alpha + o(1), 
-\end{equation*}
-which in turn implies the desired statement. 
-\end{enumerate}
-\end{frame}
 
 
 \begin{frame}[label = frame_scaleconstants]{Idea behind $a_k$ and $b_k$}
