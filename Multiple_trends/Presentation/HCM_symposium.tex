@@ -144,9 +144,25 @@ where
 \end{frame}
 
 \begin{frame}{Model, part 2}
-How to make the problem less complicated?\pause
+\begin{equation*}
+Y_{it} = m_i \Big( \frac{t}{T} \Big) + \bfbeta_i^T\X_{it}+ \alpha_i + \varepsilon_{it},
+\end{equation*}\pause
+If we knew $\alpha_i$ and $\bfbeta_i$, then the model becomes much simpler:
+\begin{align*}
+Y_{it} - \alpha_i - \bfbeta_i^\top \X_{it} & =: Y_{it}^\circ\\
+					& = m_i \Big( \frac{t}{T} \Big) + \varepsilon_{it}. 
+\end{align*}\pause
+In reality the variables $Y_{it}^\circ$ are \textbf{not} observed. 
 
-First, we estimate $\bfbeta_i$:
+But given $\widehat{\alpha}_i$ and $\widehat{\bfbeta}_i$, we can consider
+\begin{align*}
+	\widehat{Y}_{it} := Y_{it} -\widehat{\alpha}_i - \widehat{\bfbeta}_i^\top \X_{it} =(\bfbeta_i - \widehat{\bfbeta}_i)^\top \X_{it} + m_i \Big( \frac{t}{T} \Big) + \big( \alpha_i - \widehat{\alpha}_i \big) + \varepsilon_{it}. 
+\end{align*}
+\end{frame}
+
+
+\begin{frame}{Model, part 3}
+1. We estimate $\bfbeta_i$:
 \begin{align*}
 \widehat{\bfbeta}_i = \Big( \sum_{t=2}^T \Delta \X_{it} \Delta \X_{it}^\top \Big)^{-1} \sum_{t=2}^T \Delta \X_{it} \Delta Y_{it}
 \end{align*}\pause
@@ -154,7 +170,7 @@ First, we estimate $\bfbeta_i$:
 \begin{block}{Theorem}
 Under certain regularity assumptions, $\widehat{\bfbeta}_i$ is a consistent estimator of $\bfbeta_i$ with the property $\bfbeta_i - \widehat{\bfbeta}_i = O_P(T^{-1/2})$.
 \end{block}\pause
-Then, we estimate the fixed effects $\alpha_i$:
+2. We estimate the fixed effects $\alpha_i$:
 \begin{align*}
 \widehat{\alpha}_i &= \frac{1}{T}\sum_{t=1}^T \big(Y_{it} - \widehat{\bfbeta}_i^\top \X_{it}\big)
 \end{align*}\pause
@@ -254,7 +270,8 @@ Aggregated Gaussian test statistics:
 	\item Consider the Gaussian test statistic 
 	\vspace{-2mm} \[ \Phi_{n, T} = \max_{1 \leq i < j \leq n} \max_{(u,h) \in \mathcal{G}_T} \phi^0_{ij, T}(u,h), \] where $\phi^0_{ijk}$ are weighted averages of the differences of standard normal random variables.\pause
 	\item Compute a $(1-\alpha)$-quantile $q_{n, T} (\alpha)$ of $\Phi_{n,T}$ by Monte Carlo simulations.\pause
-	\item Perform the test for the global hypothesis $H_0$: reject $H_0$ if $\widehat{\Psi}_{n, T} > q_{n, T}(\alpha)$.\pause	\item For each $i, j$, and each $(u, h) \in \mathcal{G}_T$, carry out the test for the local null hypothesis $H^{[i,j]}_0(u, h)$: reject $H^{[i,j]}_0(u, h)$ if $\widehat{\psi}^0_{ij, T}(u, h) > q_{n, T}(\alpha)$.
+	\item Perform the test for the global hypothesis $H_0$: reject $H_0$ if $\widehat{\Psi}_{n, T} > q_{n, T}(\alpha)$.\pause
+	\item For each $i, j$, and each $(u, h) \in \mathcal{G}_T$, carry out the test for the local null hypothesis $H^{[i,j]}_0(u, h)$: reject $H^{[i,j]}_0(u, h)$ if $\widehat{\psi}^0_{ij, T}(u, h) > q_{n, T}(\alpha)$.
 	\end{enumerate}
 \end{frame}
 
