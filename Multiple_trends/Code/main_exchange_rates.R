@@ -2,7 +2,6 @@
 rm(list=ls())
 
 library(multiscale)
-library(tictoc)
 #library(xtable)
 #options(xtable.floating = FALSE)
 #options(xtable.timestamp = "")
@@ -19,27 +18,96 @@ sim_runs <- 500
 #Loading the exchange rates data#
 #################################
 
-exchange_rates <- read.csv("data/exchange_rates.csv", sep = ",", dec = ",", quote = '"', stringsAsFactors = FALSE)
-exchange_rates <- within(exchange_rates, rm("exusal", "exusec", "exuseu", "exusir", "exusnz", "exusuk", "twexb", "twexm", "twexo", "indexgx", "exvzus"))
+exchange_rates <- read.csv("data/exchange_rates.csv", sep = ",", dec = ".", quote = '"', stringsAsFactors = FALSE)
 
 #exchange_rates <- as.matrix(exchange_rates)
 colSums(is.na(exchange_rates))
 
-exchange_rates <- exchange_rates[,colSums(is.na(exchange_rates)) <= 100] #Ommitting the time series with too sparse data
+#exchange_rates <- exchange_rates[,colSums(is.na(exchange_rates)) <= 100] #Ommitting the time series with too sparse data
 exchange_rates <- na.omit(exchange_rates)#Deleting the rows with ommitted variables
-exchange_rates <- exchange_rates[1:300, ]
+exchange_rates[["date"]] <- as.Date(as.character(exchange_rates[["date"]]), format = "%d/%m/%Y")
+
+#exchange_rates <- exchange_rates[1:300, ]
 
 
 t_len         <- nrow(exchange_rates)
 n_ts          <- ncol(exchange_rates) - 1 #Updating the number of time series because of dropped stations
 
-#column_names <- names(exchange_rates)
+column_names  <- names(exchange_rates[, 2:(n_ts + 1)])
 
 #exchange_rates <-matrix(unlist(exchange_rates), nrow = t_len)
 
 #colnames(exchange_rates) <- column_names
 exchange_rates[, 2:(n_ts + 1)] <- scale(exchange_rates[, 2:(n_ts + 1)], scale = FALSE)
 
+pdf("plots/exchange_rates.pdf", width=5.5, height=3, paper="special")
+
+par(cex = 1, tck = -0.025)
+par(mar = c(3, 3, 0.5, 0.5)) #Margins for each plot
+par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
+
+plot(x = exchange_rates[[1]], y = exchange_rates[[2]],
+     ylim=c(min(exchange_rates[[2]], exchange_rates[[4]]),
+            max(exchange_rates[[2]], exchange_rates[[4]] + 0.5)), type="l",
+     col="#EB811B", ylab="", xlab="", mgp=c(1, 0.5, 0))
+lines(x = exchange_rates[[1]], y = exchange_rates[[4]], col="#604c38")
+legend("topleft", inset = 0.02, legend=c("Australian Dollar", "New Zealand Dollar"),
+       col = c("#EB811B", "#604c38"), lty = 1, cex = 0.95, ncol = 1)
+dev.off()
+
+pdf("plots/exchange_rates_1.pdf", width=5.5, height=3, paper="special")
+
+par(cex = 1, tck = -0.025)
+par(mar = c(3, 3, 0.5, 0.5)) #Margins for each plot
+par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
+
+
+plot(x = exchange_rates[[1]], y = exchange_rates[[2]],
+     ylim=c(min(exchange_rates[[2]], exchange_rates[[4]]),
+            max(exchange_rates[[2]], exchange_rates[[4]] + 0.5)), type="l",
+     col="#EB811B", ylab="", xlab="", mgp=c(1, 0.5, 0))
+rect(xleft=as.Date("2014-09-01", format = "%Y-%m-%d"),
+     xright = as.Date("2016-12-31", format = "%Y-%m-%d"),
+     ybottom=par("usr")[3], ytop=par("usr")[4],
+     density=40, col = "#d3d3d3", border = NA)
+lines(x = exchange_rates[[1]], y = exchange_rates[[2]], col="#EB811B")
+lines(x = exchange_rates[[1]], y = exchange_rates[[4]], col="#604c38")
+segments(as.Date("2014-09-01", format = "%Y-%m-%d"), par("usr")[3],
+         as.Date("2016-12-31", format = "%Y-%m-%d"), par("usr")[3],
+         col="#604c38", lwd = 3)
+legend("topleft", inset = 0.02, legend=c("Australian Dollar", "New Zealand Dollar"),
+       col = c("#EB811B", "#604c38"), lty = 1, cex = 0.95, ncol = 1)
+dev.off()
+
+
+pdf("plots/exchange_rates_2.pdf", width=5.5, height=3, paper="special")
+
+par(cex = 1, tck = -0.025)
+par(mar = c(3, 3, 0.5, 0.5)) #Margins for each plot
+par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
+
+plot(x = exchange_rates[[1]], y = exchange_rates[[2]],
+     ylim=c(min(exchange_rates[[2]], exchange_rates[[4]]),
+            max(exchange_rates[[2]], exchange_rates[[4]] + 0.5)), type="l",
+     col="#EB811B", ylab="", xlab="", mgp=c(1, 0.5, 0))
+rect(xleft=as.Date("2014-09-01", format = "%Y-%m-%d"),
+     xright = as.Date("2016-12-31", format = "%Y-%m-%d"),
+     ybottom=par("usr")[3], ytop=par("usr")[4],
+     density=40, col = "#d3d3d3", border = NA)
+rect(xleft=as.Date("2011-08-01", format = "%Y-%m-%d"),
+     xright = as.Date("2013-06-30", format = "%Y-%m-%d"),
+     ybottom=par("usr")[3], ytop=par("usr")[4],
+     density=40, col = "#d3d3d3", border = NA)
+lines(x = exchange_rates[[1]], y = exchange_rates[[2]], col="#EB811B")
+lines(x = exchange_rates[[1]], y = exchange_rates[[4]], col="#604c38")
+segments(as.Date("2014-09-01", format = "%Y-%m-%d"), par("usr")[3],
+         as.Date("2016-12-31", format = "%Y-%m-%d"), par("usr")[3],
+         col="#604c38", lwd = 3)
+segments(as.Date("2011-08-01", format = "%Y-%m-%d"), par("usr")[3],
+         as.Date("2013-06-30", format = "%Y-%m-%d"), par("usr")[3], col="#604c38", lwd = 3)
+legend("topleft", inset = 0.02, legend=c("Australian Dollar", "New Zealand Dollar"),
+       col = c("#EB811B", "#604c38"), lty = 1, cex = 0.95, ncol = 1)
+dev.off()
 
 #####################
 #Estimating variance#
@@ -103,7 +171,11 @@ for (i in 2:(n_ts+1)){
 }
 
 #Constructing the grid
-grid <- construct_grid(t = t_len)
+u_grid <- seq(from = 100 / t_len, to = 1, by = 100 / t_len)
+h_grid <- seq(from = 100 / t_len, to = 1 / 4, by = 100 / t_len)
+h_grid <- h_grid[h_grid > log(t_len) / t_len]
+grid <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
+grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len) #for plotting
 
 #Calculating the statistic for real data
 result <- multiscale_test(data = matrix(unlist(exchange_rates[, 2:(n_ts + 1)]), ncol = n_ts, byrow = FALSE),

@@ -60,19 +60,19 @@
 \end{block}}
 	{\onslide<2>\begin{figure}
     		\centering
-    		\includegraphics[height=0.45\textheight]{plots/indices.pdf}
+    		\includegraphics[height=0.45\textheight]{plots/exchange_rates.pdf}
   	\end{figure}}
 	{\onslide<3>
 	\vspace{-46,81mm}
 	\begin{figure}
     		\centering
-    		\includegraphics[height=0.45\textheight]{plots/indices_1.pdf}
+    		\includegraphics[height=0.45\textheight]{plots/exchange_rates_1.pdf}
   	\end{figure}}	
 	{\onslide<4->
 	\vspace{-46,81mm}
 	\begin{figure}
     		\centering
-    		\includegraphics[height=0.45\textheight]{plots/indices_2.pdf}
+    		\includegraphics[height=0.45\textheight]{plots/exchange_rates_2.pdf}
   	\end{figure}}	
 \vspace{-3mm}
 {\onslide<5->\textbf{Research question:}
@@ -127,7 +127,7 @@ $\quad \quad \Rightarrow$ new statistical test for equality of nonparametric tre
 \section{Model}
 
 \begin{frame}{Model}
-We observe a panel of $n$ time series $\mathcal{Z}_i = \{(Y_{it}, \X_{it}): 1 \le t \le T \}$ of length $T$, where $Y_{it} \in \reals$ and $\X_{it}\in \reals^{d}$.\pause
+We observe a panel of $n$ time series $\mathcal{Z}_i = \{(Y_{it}, \X_{it}): 1 \le t \le T \}$ of length $T$, where $Y_{it} \in \reals$ and $\X_{it}\in \reals^{d}$. \pause We assume that $n$ is fixed. \pause
 
 We assume the following model:
 \begin{equation*}
@@ -281,28 +281,34 @@ Aggregated Gaussian test statistics:
 
 
 
-\begin{frame}{Assumptions}
+\begin{frame}[label = frame_assumptions]{Assumptions}
 \begin{itemize}
-\item[$\mathcal{C}1$] \label{C-err1} The variables $\varepsilon_t$ are weakly dependent.\pause
-\item[$\mathcal{C}2$] \label{C-err2} It holds that $\| \varepsilon_t \|_q < \infty$ for some $q > 4$.\pause
-\item[$\mathcal{C}3$] \label{C-ker} Standard assumptions on the kernel function $K$. \pause
-\item[$\mathcal{C}4$] \label{C-grid} $|\mathcal{G}_T| = O(T^\theta)$ for some arbitrarily large but fixed constant $\theta > 0$.\pause
-\only<5>{\begin{align*}
-\mathcal{G}_T = \big\{ & (u,h): u = t/T \text{ for some } 1 \le t \le T \text{ and } h \in [h_{\min},h_{\max}] \\ & \text{ with } h = t/T \text{ for some } 1 \le t \le T  \big\},
-\end{align*}}\pause
-\item[$\mathcal{C}5$] \label{C-h} $h_{\min} \gg T^{-(1-\frac{2}{q})} \log T$ and $h_{\max} = o(1)$.\pause
-\item[$\mathcal{C}6$] Assume that  $\widehat{\sigma}^2 = \sigma^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$.
+
+\item[$\mathcal{C}1$] \label{C-err1} For all $i$ it holds that $\E[\varepsilon_{it}] =0$ and $\| \varepsilon_{it} \|_q < \infty$ for some $q > 4$.\pause
+\item[$\mathcal{C}2$] For each $i$ the variables $\varepsilon_{it}$ are weakly dependent. \hyperlink{tech_assumptions}{\beamerbutton{Details}}\pause
+
+\item[$\mathcal{C}3$] \label{C-reg} For each $i$ we have that $\X_{it}$ is stationary and causal with all the necessary moments and no asymptotic multicollinearity.\pause
+
+\item[$\mathcal{C}4$] For each $i$ the variables $\X_{it}$ are weakly dependent. \hyperlink{tech_assumptions_2}{\beamerbutton{Details}}\pause
+\item[$\mathcal{C}5$]  $\X_{it}$ (elementwise) and $\varepsilon_{is}$ are uncorrelated for each $t, s$.\pause
+
+\item[$\mathcal{C}6$] All of the variables in the model are short-range dependent.\hyperlink{tech_assumptions_3}{\beamerbutton{Details}}\pause
+
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Assumptions}
+\begin{frame}{Assumptions, part 2}
 \begin{itemize}
-\onslide<1->\item[$\mathcal{C}1$] \label{C1} The functions $\lambda_i$ are uniformly Lipschitz continuous: $|\lambda_i(u) - \lambda_i(v)| \le L |u-v|$ for all $u, v \in [0,1]$.
-\onslide<2->\item[$\mathcal{C}2$] \label{C2} $0 < \lambda_{\min} \le \lambda_i(w) \le \lambda_{\max} < \infty$ for all $w \in [0, 1]$ and all $i$. 
-\onslide<3->\item[$\mathcal{C}3$] \label{C3} $\eta_{it}$ are independent both across $i$ and $t$.
-\onslide<4->\item[$\mathcal{C}4$] \label{C4} $\E[\eta_{it}] = 0$, $\E[\eta_{it}^2] = 1$ and $\E[|\eta_{it}|^\theta] \le C_\theta < \infty$ for some $\theta > 4$. 
-\onslide<5->\item[$\mathcal{C}5$] \label{C5} $h_{\max} = o(1/\log T)$ and $h_{\min} \ge CT^{-b}$ for some $b \in (0,1)$.
-\onslide<6>\item[$\mathcal{C}6$] \label{C6} $p := \{ \# (i, j, k) \} = O(T^{(\theta/2)(1-b)-(1+\delta)})$ for some small $\delta > 0$.
+
+
+\item[$\mathcal{C}7$]\label{C-ker} Standard assumptions on the kernel function $K$. \pause
+
+\item[$\mathcal{C}8$] \label{C-grid} $|\mathcal{G}_T| = O(T^\theta)$ for some arbitrarily large but fixed constant $\theta > 0$.\pause
+\only<3>{\begin{align*}
+\mathcal{G}_T = \big\{ & (u,h): u = t/T \text{ for some } 1 \le t \le T \text{ and } h \in [h_{\min},h_{\max}] \\ & \text{ with } h = t/T \text{ for some } 1 \le t \le T  \big\},
+\end{align*}}\pause
+\item[$\mathcal{C}9$] \label{C-h} $h_{\min} \gg T^{-(1-\frac{2}{q})} \log T$ and $h_{\max} <1/2$.\pause
+\item[$\mathcal{C}10$] Assume that $\sigma_i^2 = \sigma_j^2$ for all $i, j$ and $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$.
 \end{itemize}
 \end{frame}
 
@@ -393,7 +399,7 @@ where $\delta_T = o(1)$. To do so, we make use of strong approximation theory fo
 
 
 
-\section{Application}
+\section{Illustration}
 
 \begin{frame}{Graphical representation}
 How to represent the results of the test? \pause
@@ -557,6 +563,49 @@ Then we can rewrite the uncorrected test statistic as
 $\Rightarrow \quad \max_m \ldots =\sqrt{2\log(1/h_l)} + o_P(1) \to \infty$ as $h \to 0$ and the stochastic behavior of $\Phi^{\text{uncor}}$ is dominated by the elements with small bandwidths $h_l$. \hyperlink{frame_test<4>}{\beamerbutton{Go back}}
 \end{frame}
 
+\begin{frame}{Dependence measure}
+Following Wu (2005), we define the \textit{physical dependence measure} for the process $\boldsymbol{L}(\mathcal{F}_t)$ as the following:
+\begin{align*}
+ \delta_q(\boldsymbol{L}, t) = || \boldsymbol{L}(\mathcal{F}_t) - \boldsymbol{L}(\mathcal{F}_t^\prime) ||_q,
+\end{align*}
+where $\mathcal{F}_t  = (\ldots, \epsilon_{-1}, \epsilon_0, \epsilon_1, \ldots, \epsilon_{t-1}, \epsilon_t)$ and $\mathcal{F}_t^\prime  = (\ldots, \epsilon_{-1}, \epsilon^\prime_0, \epsilon_1, \ldots, \epsilon_{t-1}, \epsilon_t)$ is a coupled process of $\mathcal{F}_t$ with $\epsilon_0^\prime$ being an i.i.d. copy of $\epsilon_0$.\pause
+
+Intuitively, $\delta_q(\boldsymbol{L}, t)$ measures the dependency of $\boldsymbol{L}(\mathcal{F}_t)$ on $\epsilon_0$, i.e., how replacing $\epsilon_0$ by an i.i.d. copy while keeping all other innovations in place affects the output $\boldsymbol{L}(\mathcal{F}_t)$.
+\end{frame}
+
+\begin{frame}[label=tech_assumptions]{Technical assumptions}
+\begin{enumerate}
+
+\item[$\mathcal{C}1^\prime$] The variables $\varepsilon_{it}$ allow for the representation $\varepsilon_{it} = G_i(\ldots,\eta_{it-1},\eta_{it})$, where $\eta_{it}$ are i.i.d.\ random variables across $t$ and $G_i: \mathbb{R}^\mathbb{Z} \rightarrow \reals$ is a measurable function. Denote $\mathcal{J}_{it} = (\ldots,\eta_{it-2},\eta_{it-1},\eta_{it})$.
+
+\item[$\mathcal{C}1^{\prime\prime\prime}$]  Define $\Theta_{i, t,q} = \sum\nolimits_{s \ge t} \delta_q(G_i, s)$ for $t \ge 0$. For each $i$ it holds that \linebreak
+$\Theta_{i, t,q} = O ( t^{-\tau_q} (\log t)^{-A} )$,  
+where $A > \frac{2}{3} (1/q + 1 + \tau_q)$ and \linebreak $\tau_q = \{q^2 - 4 + (q-2) \sqrt{q^2 + 20q + 4}\} / 8q$. \hyperlink{frame_assumptions<3>}{\beamerbutton{Go back}}
+
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}[label=tech_assumptions_2]{Technical assumptions, part 2}
+\begin{enumerate}
+
+\item[$\mathcal{C}3^\prime$] $ \X_{it}$ allow for the representation $ \X_{it} = \boldsymbol{H}_i(\ldots,u_{it-1},u_{it})$ with $u_{it}$ being i.i.d.\ random variables and $\boldsymbol{H}_i := (H_{i1}, H_{i2}, \ldots, H_{id})^\top:\linebreak \mathbb{R}^\mathbb{Z} \rightarrow \reals^d$ being a measurable function such that $\boldsymbol{H}_i(\mathcal{U}_{it})$ is well defined. Denote  $\mathcal{U}_{it} = (\ldots, u_{it-1}, u_{it})$.
+
+\item[$\mathcal{C}3^{\prime\prime}$] Let $\boldsymbol{N}_i$ be the $d\times d$ matrix with $n_{i, kl}= \E[H_{ik}(\mathcal{U}_{i0})H_{il}(\mathcal{U}_{i0})]$ being $kl$-th entry. We assume that the smallest eigenvalue of $\boldsymbol{N}_i$ is strictly bigger than $0$.
+
+\item[$\mathcal{C}3^{\prime\prime\prime}$]  Let $\E [\mathbf{H}_{i}(\mathcal{U}_{i0})]=\mathbf{0}$ and $||\mathbf{H}_{i}(\mathcal{U}_{it})||_{q^\prime} <\infty$ for some $q^\prime > \max\{ 2\theta, 4\}$, where $\theta$ will be introduced further.
+\item[$\mathcal{C}4^\prime$] $\sum_{s=0}^\infty \delta_{q^\prime}(\mathbf{H}_i, s)<\infty$ for $q^\prime$ from Assumption $\mathcal{C}3^{\prime\prime\prime}$.
+\item[$\mathcal{C}4^{\prime\prime}$] For each $i$ it holds that $\sum_{s=t}^{\infty} \delta_{q^\prime}(\mathbf{H}_{i}, s)= O(t^{-\alpha}) $ for $q^\prime$ from Assumption $\mathcal{C}3^{\prime\prime\prime}$ and for some $\alpha > 1/2 - 1/{q^\prime}$. \hyperlink{frame_assumptions<5>}{\beamerbutton{Go back}}
+
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[label=tech_assumptions_3]{Technical assumptions, part 3}
+\begin{enumerate}
+
+\item[$\mathcal{C}6$] Let $\zeta_{i, t} = (u_{it}, \eta_{it})^\top$. Define $\mathcal{I}_{it} = (\ldots, \zeta_{i, t-1}, \zeta_{i, t})$ and $\mathbf{U}_i(\mathcal{I}_{it}) =  \mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{J}_{it})$. With this notation at hand, we assume that $\sum_{s=0}^\infty \delta_2(\mathbf{U}_i, s)<\infty$.\hyperlink{frame_assumptions<7>}{\beamerbutton{Go back}}
+\end{enumerate}
+\end{frame}
 
 
 \end{document}
