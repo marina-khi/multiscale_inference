@@ -1,4 +1,4 @@
-\documentclass[10pt, handout]{beamer}
+\documentclass[10pt]{beamer}
 
 \usetheme[progressbar=frametitle]{metropolis}
 
@@ -86,7 +86,7 @@
 \vspace{-4mm}
 \textbf{Why is it relevant?}
 
-Finding systematic differences between trends = basis for further research
+Finding systematic differences between trends = basis for further research.\pause
 
 %$\quad \quad \Rightarrow$ understanding which government policies are more effective.\pause
 
@@ -116,11 +116,12 @@ $\quad \quad \Rightarrow$ new statistical test for equality of nonparametric tre
 	Multiscale tests:
 	\begin{itemize}
 		\item Chaudhuri and Marron (1999, 2000), Hall and Heckman (2000), D{\"u}mbgen and Spokoiny (2001), {\color<4>{mLightBrown}Park et al. (2009)}.
-	\end{itemize}\pause\pause
-	Comparison of volatility trends:
-	\begin{itemize}
-		\item Nyblom and Harvey (2000), ...
-	\end{itemize}
+	\end{itemize}\pause
+%	\pause
+%	Comparison of volatility trends:
+%	\begin{itemize}
+%		\item Nyblom and Harvey (2000), ...
+%	\end{itemize}
 \end{frame}
 
 
@@ -138,7 +139,7 @@ where
 \begin{itemize}
 \item $m_i$ are unknown trend functions on $[0,1]$;\pause
 \item $\bfbeta_i$ is $d\times 1$ vector of unknown parameters;\pause
-\item $\alpha_i$ are so-called fixed effect error terms;
+\item $\alpha_i$ are so-called fixed effect error terms;\pause
 \item $\Eps_i = \{\eps_{it}: 1\leq t \leq T\}$ is a zero-mean stationary and causal error process.
 \end{itemize}
 \end{frame}
@@ -152,7 +153,7 @@ If we knew $\alpha_i$ and $\bfbeta_i$, then the model becomes much simpler:
 Y_{it} - \alpha_i - \bfbeta_i^\top \X_{it} & =: Y_{it}^\circ\\
 					& = m_i \Big( \frac{t}{T} \Big) + \varepsilon_{it}. 
 \end{align*}\pause
-In reality the variables $Y_{it}^\circ$ are \textbf{not} observed. 
+In reality the variables $Y_{it}^\circ$ are \textbf{not} observed. \pause
 
 But given $\widehat{\alpha}_i$ and $\widehat{\bfbeta}_i$, we can consider
 \begin{align*}
@@ -251,7 +252,7 @@ Gaussian version of the individual test statistics:
 \vspace{-3mm}
 where
 \begin{itemize}
-\item $\phi_T(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, {\color<3>{mLightBrown}\big\{\sigma_i(Z_{it} - \bar{Z}_i) - \sigma_j(Z_{jt} - \bar{Z}_j)\big\}}$;\pause
+\item $\phi_T(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, {\color<3>{mLightBrown}\big\{\sigma_i(Z_{it} - \bar{Z}_i) - \sigma_j(Z_{jt} - \bar{Z}_j)\big\}}$;\pause\pause
 \item $Z_{it}$ are independent standard normal random variables;\pause
 \item $\bar{Z}_i$ is the empirical average of $Z_{i1}, \ldots, Z_{iT}$.
 \end{itemize}\pause
@@ -260,7 +261,7 @@ where
 Aggregated Gaussian test statistics:
 \begin{equation*}
 \Phi_{n, T} = \max_{1 \leq i < j \leq n} \max_{(u,h) \in \mathcal{G}_T} \phi^0_{ij, T}(u,h). 
-\end{equation*}\pause
+\end{equation*}
 
 \end{frame}
 
@@ -292,21 +293,19 @@ Aggregated Gaussian test statistics:
 \item[$\mathcal{C}4$] For each $i$ the variables $\X_{it}$ are weakly dependent. \hyperlink{tech_assumptions_2}{\beamerbutton{Details}}\pause
 \item[$\mathcal{C}5$]  $\X_{it}$ (elementwise) and $\varepsilon_{is}$ are uncorrelated for each $t, s$.\pause
 
-\item[$\mathcal{C}6$] All of the variables in the model are short-range dependent.\hyperlink{tech_assumptions_3}{\beamerbutton{Details}}\pause
+\item[$\mathcal{C}6$] All of the variables in the model are short-range dependent.\hyperlink{tech_assumptions_3}{\beamerbutton{Details}}
 
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Assumptions, part 2}
 \begin{itemize}
-
-
 \item[$\mathcal{C}7$]\label{C-ker} Standard assumptions on the kernel function $K$. \pause
-
 \item[$\mathcal{C}8$] \label{C-grid} $|\mathcal{G}_T| = O(T^\theta)$ for some arbitrarily large but fixed constant $\theta > 0$.\pause
-\only<3>{\begin{align*}
+\begin{align*}
 \mathcal{G}_T = \big\{ & (u,h): u = t/T \text{ for some } 1 \le t \le T \text{ and } h \in [h_{\min},h_{\max}] \\ & \text{ with } h = t/T \text{ for some } 1 \le t \le T  \big\},
-\end{align*}}\pause
+\end{align*}\pause
+\vspace{-5mm}
 \item[$\mathcal{C}9$] \label{C-h} $h_{\min} \gg T^{-(1-\frac{2}{q})} \log T$ and $h_{\max} <1/2$.\pause
 \item[$\mathcal{C}10$] Assume that $\sigma_i^2 = \sigma_j^2$ for all $i, j$ and $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$.
 \end{itemize}
@@ -337,7 +336,7 @@ Consider a sequence of functions $m_{i} = m_{i,T}$, $m_{j} = m_{j, T}$ such that
 
 \begin{frame}{Strategy of the proof}
 \begin{itemize}
-\item Introduce $\widehat{\Phi}_{n, T}$ that is close in distribution to $\widehat{\Psi}_{n, T}$ under the null.
+\item Introduce $\widehat{\Phi}_{n, T}$ that is close in distribution to $\widehat{\Psi}_{n, T}$ under the null.\pause
 \item Using strong approximation theory for dependent processes as derived in Berkes et al. (2014), replace $\widehat{\Phi}_{n, T}$ by $\widetilde{\Phi}_{n, T}$ with the same distribution and the property that 
 \begin{equation*}\label{eq-theo-stat-strategy-step1}
 \big| \widetilde{\Phi}_{n, T} - \Phi_{n, T} \big| = o_p(\delta_T),
@@ -457,7 +456,7 @@ Further possible extensions:
 \vspace{-1mm}
 \begin{itemize}
 	\item introduce scaling factor in the trend function, that will allow to adjust for the size of the country (population, density, testing regimes, etc.);\pause
-	\item include the dependence between covariates and error terms;
+	\item include the dependence between covariates and error terms;\pause
 	\item cluster the time series based on the trends they exhibit.
 \end{itemize}
 \end{frame}
@@ -473,20 +472,6 @@ Further possible extensions:
 	\begin{figure}
 		\includegraphics[width=0.95\textwidth]{plots/all_intervals}
 	\end{figure}
-\end{frame}
-
-\begin{frame}{Simulation results for the size of the test}
-\begin{figure}[t!]
-	\includegraphics[height = 0.4\textheight]{plots/lambda_fct}
-\end{figure}
-\vspace{-2mm}
-\scriptsize{\begin{table}[t]
-\begin{center}
-\caption{Size of the multiscale test}
-\label{tab:size_shape}
-\input{plots/size_overdispersion_15}
-\end{center}
-\end{table}}
 \end{frame}
 
 
