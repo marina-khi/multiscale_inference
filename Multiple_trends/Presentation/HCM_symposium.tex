@@ -227,7 +227,7 @@ Instead with working directly with $\widehat{\psi}_{ij, T}(u,h)$, we replace the
 where 
 \begin{itemize}
 \item $\widehat{\sigma}_i^2$ is an appropriate estimator of the long-run variance $\sigma^2_i$;
-\item $\lambda(h) = \sqrt{2 \log \{ 1/(2h) \}}$ is an additive correction term (D{\"u}mbgen and Spokoiny (2001)). \hyperlink{frame_lambda}{\beamerbutton{Explanation}}
+\item $\lambda(h) = \sqrt{2 \log \{ 1/(2h) \}}$ is an additive correction term (D{\"u}mbgen and Spokoiny (2001)). %\hyperlink{frame_lambda}{\beamerbutton{Explanation}}
 \end{itemize}
 \end{frame}
 
@@ -308,46 +308,49 @@ Aggregated Gaussian test statistics:
 \mathcal{G}_T = \big\{ & (u,h): u = t/T \text{ for some } 1 \le t \le T \text{ and } h \in [h_{\min},h_{\max}] \\ & \text{ with } h = t/T \text{ for some } 1 \le t \le T  \big\},
 \end{align*}}\pause
 \item[$\mathcal{C}9$] \label{C-h} $h_{\min} \gg T^{-(1-\frac{2}{q})} \log T$ and $h_{\max} <1/2$.\pause
-\item[$\mathcal{C}10$] Assume that $\sigma_i^2 = \sigma_j^2$ for all $i, j$ and $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$.
+\item[$\mathcal{C}10$] Assume that $\sigma_i^2 = \sigma_j^2$ for all $i, j$ and $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$.
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Theoretical properties}
-\begin{prop}\label{prop1}
-Let $\mathcal{M}_0$ be the set of triplets $(i, j, k)$ for which $H_0^{(ijk)}$ holds true. Then under $\mathcal{C}1 - \mathcal{C}6$, it holds that 
+\begin{prop} Under $\mathcal{C}1 - \mathcal{C}10$ and under the null, it holds that 
 \vspace{-2mm}
 \begin{align*}
- \Prob\Big( \forall (i,j,k) \in \mathcal{M}_0: |\hat{\psi}_{ijk}| \le c_{\textnormal{Gauss}}(\alpha,h_k) \Big) \ge 1 - \alpha + o(1)
+\Prob\Big(\widehat{\Psi}_{n, T} \leq q_{n, T}(\alpha)\Big) = 1 - \alpha + o(1)
 \end{align*}
-\end{prop}\pause
+\vspace{-5mm}
+\end{prop} \pause
+\begin{corollary} $$\text{FWER}(\alpha)\leq \alpha$$
+\end{corollary} \pause
 \begin{prop}\label{prop2}
-Consider a sequence of functions $\lambda_{i} = \lambda_{i,T}$, $\lambda_{j} = \lambda_{j, T}$ such that 
-\begin{equation}\label{eq:localt}
-\exists \, \mathcal{I}_{k}:  \lambda_{i}(w) - \lambda_{j}(w) \ge c_T \sqrt{\log T / (T h_{k})} \,\, \forall w \in \mathcal{I}_{k},
-\end{equation} and $c_T \rightarrow \infty$ faster than $\frac{\sqrt{\log T}\sqrt{\log \log T}}{\log \log \log T}$.  Let $\mathcal{M}_1$ be the set of triplets $(i, j, k)$ for which \eqref{eq:localt} holds true. Then under $\mathcal{C}1 - \mathcal{C}6$, it holds that
+Consider a sequence of functions $m_{i} = m_{i,T}$, $m_{j} = m_{j, T}$ such that 
+\begin{equation*}
+\exists \, (u, h)\in \mathcal{G}_{T}:  m_{i}(w) - m_{j}(w) \ge c_T \sqrt{\log T / (T h)} \,\, \forall w \in [u-h, u+h],
+\end{equation*} and $c_T \rightarrow \infty$. Then under $\mathcal{C}1 - \mathcal{C}10$, it holds that
 \vspace{-2mm}
 \begin{equation*}
-\Prob\Big( \forall (i,j,k) \in \mathcal{M}_1: |\hat{\psi}_{ijk}| > c_{\textnormal{Gauss}}(\alpha,h_k) \Big) = 1 - o(1)
+\Prob\Big( \widehat{\Psi}_{n, T} \leq q_{n, T}(\alpha)\Big) = 1 - o(1)
 \end{equation*}
+\vspace{-5mm}
 \end{prop}
 \end{frame}
 
 \begin{frame}{Strategy of the proof}
 \begin{itemize}
-\item Replace the statistic $\widehat{\Psi}_T$ under $H_0: m = 0$ by a statistic $\widetilde{\Phi}_T$ with the same distribution and the property that 
+\item Introduce $\widehat{\Phi}_{n, T}$ that is close in distribution to $\widehat{\Psi}_{n, T}$ under the null.
+\item Using strong approximation theory for dependent processes as derived in Berkes et al. (2014), replace $\widehat{\Phi}_{n, T}$ by $\widetilde{\Phi}_{n, T}$ with the same distribution and the property that 
 \begin{equation*}\label{eq-theo-stat-strategy-step1}
-\big| \widetilde{\Phi}_T - \Phi_T \big| = o_p(\delta_T),
+\big| \widetilde{\Phi}_{n, T} - \Phi_{n, T} \big| = o_p(\delta_T),
 \end{equation*}
-where $\delta_T = o(1)$. To do so, we make use of strong approximation theory for dependent processes as derived in Berkes et al. (2014)\pause
-\vspace{2mm}
-\item Using the anti-concentration results for Gaussian random vectors (Chernozhukov et al. 2015), prove that $\Phi_T$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$, i.e.
+where $\delta_T = o(1)$.\pause
+\item Using the anti-concentration results for Gaussian random vectors (Chernozhukov et al. 2015), prove that $\Phi_{n, T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$, i.e.
 \begin{equation*}\label{eq-theo-stat-strategy-step2}
-\sup_{x \in \mathbb{R}} \Prob \big( |\Phi_T - x| \le \delta_T \big) = o(1).
+\sup_{x \in \mathbb{R}} \Prob \big( |\Phi_{n, T} - x| \le \delta_T \big) = o(1).
 \end{equation*}\pause
 \vspace{-2mm}
 \item Show that 
 \begin{equation*}\label{eq-theo-stat-strategy-claim}
-\sup_{x \in \mathbb{R}} \big| \Prob(\widetilde{\Phi}_T \le x) - \Prob(\Phi_T \le x) \big| = o(1). 
+\sup_{x \in \mathbb{R}} \big| \Prob(\widetilde{\Phi}_{n, T} \le x) - \Prob(\Phi_{n, T} \le x) \big| = o(1). 
 \end{equation*}
 \end{itemize}
 \end{frame}
@@ -404,21 +407,15 @@ where $\delta_T = o(1)$. To do so, we make use of strong approximation theory fo
 \begin{frame}{Graphical representation}
 How to represent the results of the test? \pause
 
-Plot the results of pairwise comparison $\mathcal{F}_{\text{reject}}(i, j)$:
-\begin{align*}
- \Prob\Big( \forall (i,j,k) \in \mathcal{M}_0: \mathcal{I}_k \notin \mathcal{F}_{\text{reject}}(i, j) \Big) \ge 1 - \alpha + o(1)
+For each pair of time series $(i, j)$, denote by $\mathcal{S}^{[i, j]}(\alpha)$ the set of intervals $[u-h, u+h]$ that consists of the intervals where we reject $H_0^{[i,j]}(u,h)$ at a significance level $\alpha$.\pause
+\begin{align*}\Prob\Big(& \forall \, i,j \in \{1, \ldots, n\}, (u, h) \in \mathcal{G}_T \text{ such that }\\
+&H_0^{[i, j]}(u, h) \text{ is true}: |\hat{\psi}^0_{ij,T}(u, h)| \le q_{n,T}(\alpha) \Big) \ge 1 - \alpha + o(1)
 \end{align*}
-
 \pause
+\vspace{-3mm}
 \begin{block}{Minimal intervals}
-An interval $\mathcal{I}_k \in \mathcal{F}_{\text{reject}}(i, j)$ is called \textbf{minimal} if there is no other interval $\mathcal{I}_{k^\prime} \in \mathcal{F}_{\text{reject}}(i, j)$ with $\mathcal{I}_{k^\prime} \subset \mathcal{I}_k$.
-
-The set of minimal intervals is denoted $\mathcal{F}_{\text{reject}}^{\min} (i, j)$.
-\end{block}\pause
-We can make similar confidence statements about minimal intervals:
-\begin{align*}
- \Prob\Big( \forall (i,j,k) \in \mathcal{M}_0: \mathcal{I}_k \notin \mathcal{F}_{\text{reject}}^{\min} (i, j) \Big) \ge 1 - \alpha + o(1)
-\end{align*}
+An interval $[u-h, u+h] \in \mathcal{S}^{[i, j]}$ is called \textbf{minimal} if there is no other interval $[u^\prime-h^\prime, u^\prime+h^\prime] \in  \mathcal{S}^{[i, j]}$ with $[u^\prime-h^\prime, u^\prime+h^\prime] \subset [u-h, u+h]$.
+\end{block}
 \end{frame}
 
 %\begin{frame}{Application setting}
@@ -490,39 +487,6 @@ Further possible extensions:
 \input{plots/size_overdispersion_15}
 \end{center}
 \end{table}}
-\end{frame}
-
-\begin{frame}{Simulation results for the power of the test}
-\begin{figure}[t!]
-	\onslide<1->\includegraphics[width = 0.49\textwidth, height = 0.4\textheight]{plots/lambda_fcts_height}
-	\onslide<2->\includegraphics[width = 0.49\textwidth, height = 0.4\textheight]{plots/lambda_fcts_shift}	
-\end{figure}\pause
-\vspace{-5mm}
-{\onslide<1>\scriptsize{\begin{table}[t]
-\begin{center}
-\caption{Power of the multiscale test for scenario A}
-\label{tab:size_shape}
-\input{plots/power_sigma_15_higher_peak}
-\end{center}
-\end{table}}}
-{\onslide<2>
-\vspace{-39.5mm}
-\scriptsize{\begin{table}[t]
-\begin{center}
-\caption{Power of the multiscale test for scenario B}
-\label{tab:size_shape}
-\input{plots/power_sigma_15_shifted_peak}
-\end{center}
-\end{table}}}
-\end{frame}
-
-\begin{frame}[label = frame_sigma]{Estimator of ${\sigma}^2$}
-We estimate the overdispersion paramter $\sigma^2$ by \[\widehat{\sigma}^2= \frac{1}{n} \sum_{i = 1}^n \hat{\sigma}_i^2 \text{ and } \hat{\sigma}_i^2 = \frac{\sum_{t=2}^T (X_{it}-X_{it-1})^2}{2 \sum_{t=1}^T X_{it}}\] \pause
-We assume that $\lambda_i$ is Lipschitz continuous. Then
-\[ X_{it} - X_{it-1} = \sigma \sqrt{\lambda_i\Big(\frac{t}{T}\Big)} (\eta_{it} - \eta_{it-1}) + r_{it}, \]
-where $|r_{it}| \le C(1+|\eta_{it-1}|)/T$ with a sufficiently large $C$.\pause \, Hence,
-\[ \frac{1}{T} \sum_{t=2}^T (X_{it} - X_{it-1})^2 = 2 \sigma^2 \Big\{ \frac{1}{T} \sum_{t=2}^T \lambda_i(t/T) \Big\} + o_p(1)\] \pause
-Together with \[ \frac{1}{T} \sum_{t=1}^T X_{it} = \frac{1}{T} \sum_{t=1}^T \lambda_i(t/T) + o_p(1), \] we get that $\hat{\sigma}_i^2 = \sigma^2 + o_p(1)$ for any $i$ and thus $\hat{\sigma}^2 = \sigma^2 + o_p(1)$. \hyperlink{frame_teststatistic<4>}{\beamerbutton{Go back}}
 \end{frame}
 
 
