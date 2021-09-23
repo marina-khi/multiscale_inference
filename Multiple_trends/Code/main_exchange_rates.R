@@ -19,6 +19,7 @@ sim_runs <- 1000
 #################################
 
 exchange_rates <- read.csv("data/exchange_rates.csv", sep = ",", dec = ".", quote = '"', stringsAsFactors = FALSE)
+exchange_rates[['exvzus']] <- NULL
 
 #exchange_rates <- as.matrix(exchange_rates)
 colSums(is.na(exchange_rates))
@@ -282,29 +283,4 @@ for (l in seq_len(nrow(result$ijset))){
 # n_cl       <- 12
 # #results_output(res, covid_mat, Delta_hat, b_res, n_cl, countries,
 # #               path = "plots/", bw_abs, grid_points, t_len)
-# 
-# sigma_hat <- function(data_p, grid_p, bw){
-#   m_hat_vec <- m_hat(grid_p, b = 1, data_p, grid_p, bw)
-#   return(mean((data_p - m_hat_vec)^2))
-# }
-# 
-# sigma_hat_vec <- c()
-# for (i in 1:n_ts){
-#   sigma_hat_vec <- c(sigma_hat_vec,
-#                      sigma_hat(covid_mat[, i], grid_points,
-#                                bw = bw_abs/t_len))
-# }
-# 
-# diff_K  <- 5:15
-# BIC_mat <- matrix(c(diff_K, rep(NA, length(diff_K))),
-#                   ncol = 2, byrow = FALSE)
-# colnames(BIC_mat) <- c("K", "BIC")
-# 
-# for (K in diff_K){
-#   tmp <- t_len * sum(log(sigma_hat_vec))
-#   - log(n_ts * t_len) * (K * (n_ts + t_len) + n_ts)
-#   BIC_mat[BIC_mat[, 1] == K, 2] <- tmp 
-# }
-# 
-# plot(BIC_mat[, 1], BIC_mat[, 2], type = "l")
-# 
+#
