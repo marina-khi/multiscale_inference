@@ -8,7 +8,7 @@ library(tictoc)
 #options(xtable.timestamp = "")
 
 alpha         <- 0.05 #confidence level for application
-sim_runs      <- 1000
+sim_runs      <- 5000
 
 ###########################################
 #Loading the real station data for England#
