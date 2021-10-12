@@ -19,6 +19,7 @@ sim_runs <- 500
 #################################
 
 exchange_rates <- read.csv("data/exchange_rates.csv", sep = ",", dec = ".", quote = '"', stringsAsFactors = FALSE)
+exchange_rates[['exvzus']] <- NULL
 
 #exchange_rates <- as.matrix(exchange_rates)
 colSums(is.na(exchange_rates))
@@ -283,88 +284,91 @@ for (l in seq_len(nrow(result$ijset))){
   }
 }
 
-
-
-
-
-for (cl in 1:n_cl){
-  countries_cluster <- colnames(Delta_hat)[subgroups == cl]
-
-  if (length(countries_cluster) == 1){
-    m_hat_vec <- m_hat(grid_points, b = 1, covid_mat[, countries_cluster],
-                       grid_points, bw = bw_abs/t_len)
-    norm      <- integrate1_cpp(b = 1, data_points = covid_mat[, countries_cluster],
-                                  grid_points = grid_points,
-                                  bw = bw_abs/t_len, subdiv = 2000)$res
-      plot((1:t_len) / t_len, m_hat_vec/norm, yaxt = "n",
-           ylim = c(0, max(m_hat_vec/norm) + 1), xlab="u",
-           ylab = "", mgp = c(2, 0.5, 0), type = "l", col = "red")
-      title(main = paste("Cluster", cl), line = 1)
-      legend("topleft", inset = 0.02, legend=countries_cluster,
-             lty = 1, cex = 0.7, ncol = 1)
-    } else {
-      b_res_cl     <- b_res[subgroups == cl, subgroups == cl]
-      inds         <- which.max(apply(b_res_cl, 1, function(x) sum(x == 1, na.rm = TRUE)))
-      repr_country <- rownames(b_res_cl)[inds]
-      m_hat_vec    <- m_hat(grid_points, b = 1, covid_mat[, repr_country],
-                            grid_points, bw = bw_abs/t_len)
-      norm         <- integrate1_cpp(b = 1, data_points = covid_mat[, repr_country],
-                                     grid_points = grid_points,
-                                     bw = bw_abs/t_len, subdiv = 2000)$res
-      #cat("Country", repr_country, ", cluster", cl, " - success \n")
-      if (cl == 2) {height <- 8} else {height <- 3} #This should be manually adjusted for nice plots
-      plot(grid_points, m_hat_vec/norm,
-           ylim = c(0, max(m_hat_vec/norm) + height), xlab="u", yaxt = "n",
-           ylab = "m_hat(b * u)", mgp = c(2, 0.5, 0), type = "l", col = "red")
-      countries_cluster_1 <- countries_cluster[countries_cluster != repr_country]
-      for (country in countries_cluster_1){
-        b           <- max(1, b_res_cl[country, repr_country] / b_res_cl[repr_country, country])
-        m_hat_vec_1 <- m_hat(grid_points, b = b, covid_mat[, country],
-                             grid_points, bw = bw_abs/t_len)
-        m_hat_vec_1[(m_hat_vec_1 == 0 | is.nan(m_hat_vec_1))] <- NA
-        norm_1      <- integrate1_cpp(b = b, data_points = covid_mat[, country],
-                                      grid_points = grid_points,
-                                      bw = bw_abs/t_len, subdiv = 2000)$res
-        #cat("Country", country, " - success \n")
-        lines((1:length(m_hat_vec_1)) / t_len, m_hat_vec_1/(norm_1/(1/b)))
-      }
-      title(main = paste("Cluster", cl), line = 1)
-      legend("topleft", inset = 0.02, legend = countries_cluster,
-             lty = 1, cex = 0.7, ncol = 4)
-    }
-    dev.off()
-  }
-}
-
-
-
-
-n_cl       <- 12
-#results_output(res, covid_mat, Delta_hat, b_res, n_cl, countries,
-#               path = "plots/", bw_abs, grid_points, t_len)
-
-sigma_hat <- function(data_p, grid_p, bw){
-  m_hat_vec <- m_hat(grid_p, b = 1, data_p, grid_p, bw)
-  return(mean((data_p - m_hat_vec)^2))
-}
-
-sigma_hat_vec <- c()
-for (i in 1:n_ts){
-  sigma_hat_vec <- c(sigma_hat_vec,
-                     sigma_hat(covid_mat[, i], grid_points,
-                               bw = bw_abs/t_len))
-}
-
-diff_K  <- 5:15
-BIC_mat <- matrix(c(diff_K, rep(NA, length(diff_K))),
-                  ncol = 2, byrow = FALSE)
-colnames(BIC_mat) <- c("K", "BIC")
-
-for (K in diff_K){
-  tmp <- t_len * sum(log(sigma_hat_vec))
-  - log(n_ts * t_len) * (K * (n_ts + t_len) + n_ts)
-  BIC_mat[BIC_mat[, 1] == K, 2] <- tmp 
-}
-
-plot(BIC_mat[, 1], BIC_mat[, 2], type = "l")
-
+# 
+# 
+# #for the distance matrix we need a symmetrical one
+# Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
+# for (i in 1:(n_ts - 1)){
+#   for (j in (i + 1):n_ts){
+#     Delta_hat[i, j] <- result$stat_pairwise[i, j]
+#     Delta_hat[j, i] <- result$stat_pairwise[i, j]
+#   }
+# }
+# 
+# currencies <- colnames(exchange_rates[, 2:(n_ts + 1)])
+# 
+# colnames(Delta_hat) <- currencies
+# rownames(Delta_hat) <- currencies
+# 
+# delta_dist  <- as.dist(Delta_hat)
+# res         <- hclust(delta_dist)
+# n_cl        <- 5
+# grid_points <- seq(1/t_len, 1, by = 1/t_len)
+# 
+# #Plotting dendrogram
+# plot(res, cex = 0.8, xlab = "", ylab = "")
+# rect.hclust(res, k = n_cl, border = 2:(n_cl + 1))
+# 
+# subgroups <- cutree(res, n_cl)
+# 
+# 
+# 
+# 
+# 
+# 
+# for (cl in 1:n_cl){
+#   countries_cluster <- colnames(Delta_hat)[subgroups == cl]
+# 
+#   if (length(countries_cluster) == 1){
+#     m_hat_vec <- m_hat(grid_points, b = 1, covid_mat[, countries_cluster],
+#                        grid_points, bw = bw_abs/t_len)
+#     norm      <- integrate1_cpp(b = 1, data_points = covid_mat[, countries_cluster],
+#                                   grid_points = grid_points,
+#                                   bw = bw_abs/t_len, subdiv = 2000)$res
+#       plot((1:t_len) / t_len, m_hat_vec/norm, yaxt = "n",
+#            ylim = c(0, max(m_hat_vec/norm) + 1), xlab="u",
+#            ylab = "", mgp = c(2, 0.5, 0), type = "l", col = "red")
+#       title(main = paste("Cluster", cl), line = 1)
+#       legend("topleft", inset = 0.02, legend=countries_cluster,
+#              lty = 1, cex = 0.7, ncol = 1)
+#     } else {
+#       b_res_cl     <- b_res[subgroups == cl, subgroups == cl]
+#       inds         <- which.max(apply(b_res_cl, 1, function(x) sum(x == 1, na.rm = TRUE)))
+#       repr_country <- rownames(b_res_cl)[inds]
+#       m_hat_vec    <- m_hat(grid_points, b = 1, covid_mat[, repr_country],
+#                             grid_points, bw = bw_abs/t_len)
+#       norm         <- integrate1_cpp(b = 1, data_points = covid_mat[, repr_country],
+#                                      grid_points = grid_points,
+#                                      bw = bw_abs/t_len, subdiv = 2000)$res
+#       #cat("Country", repr_country, ", cluster", cl, " - success \n")
+#       if (cl == 2) {height <- 8} else {height <- 3} #This should be manually adjusted for nice plots
+#       plot(grid_points, m_hat_vec/norm,
+#            ylim = c(0, max(m_hat_vec/norm) + height), xlab="u", yaxt = "n",
+#            ylab = "m_hat(b * u)", mgp = c(2, 0.5, 0), type = "l", col = "red")
+#       countries_cluster_1 <- countries_cluster[countries_cluster != repr_country]
+#       for (country in countries_cluster_1){
+#         b           <- max(1, b_res_cl[country, repr_country] / b_res_cl[repr_country, country])
+#         m_hat_vec_1 <- m_hat(grid_points, b = b, covid_mat[, country],
+#                              grid_points, bw = bw_abs/t_len)
+#         m_hat_vec_1[(m_hat_vec_1 == 0 | is.nan(m_hat_vec_1))] <- NA
+#         norm_1      <- integrate1_cpp(b = b, data_points = covid_mat[, country],
+#                                       grid_points = grid_points,
+#                                       bw = bw_abs/t_len, subdiv = 2000)$res
+#         #cat("Country", country, " - success \n")
+#         lines((1:length(m_hat_vec_1)) / t_len, m_hat_vec_1/(norm_1/(1/b)))
+#       }
+#       title(main = paste("Cluster", cl), line = 1)
+#       legend("topleft", inset = 0.02, legend = countries_cluster,
+#              lty = 1, cex = 0.7, ncol = 4)
+#     }
+#     dev.off()
+#   }
+# }
+# 
+# 
+# 
+# 
+# n_cl       <- 12
+# #results_output(res, covid_mat, Delta_hat, b_res, n_cl, countries,
+# #               path = "plots/", bw_abs, grid_points, t_len)
+#
