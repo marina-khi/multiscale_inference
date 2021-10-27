@@ -3,9 +3,6 @@ rm(list=ls())
 
 library(multiscale)
 library(tictoc)
-#library(xtable)
-#options(xtable.floating = FALSE)
-#options(xtable.timestamp = "")
 
 ##############################
 #Defining necessary constants#
