@@ -100,7 +100,7 @@ $\quad \quad \Rightarrow$ large probability of one true null hypothesis being re
 
 \vspace{3mm}
 
-\textbf{Is it limited to one application?}
+\textbf{Is it limited to a particular application?}
 
 No! Our method = general method for comparing nonparametric trends
 
@@ -115,7 +115,7 @@ $\quad \quad \Rightarrow$ new statistical test for equality of nonparametric tre
 	\end{itemize}\pause\pause
 	Multiscale tests:
 	\begin{itemize}
-		\item Chaudhuri and Marron (1999, 2000), Hall and Heckman (2000), D{\"u}mbgen and Spokoiny (2001), {\color<4>{mLightBrown}Park et al. (2009)}.
+		\item Chaudhuri and Marron (1999, 2000), Hall and Heckman (2000), D{\"u}mbgen and Spokoiny (2001), {\color<4>{mLightBrown}Park et al. (2009)}, Khismatullina and Vogt (2020).
 	\end{itemize}\pause
 %	\pause
 %	Comparison of volatility trends:
@@ -130,7 +130,7 @@ $\quad \quad \Rightarrow$ new statistical test for equality of nonparametric tre
 \begin{frame}{Model}
 We observe a panel of $n$ time series $\mathcal{Z}_i = \{(Y_{it}, \X_{it}): 1 \le t \le T \}$ of length $T$, where $Y_{it} \in \reals$ and $\X_{it}\in \reals^{d}$. \pause We assume that $n$ is fixed. \pause
 
-We assume the following model:
+We consider the following model:
 \begin{equation*}
 Y_{it} = m_i \Big( \frac{t}{T} \Big) + \bfbeta_i^T\X_{it}+ \alpha_i + \varepsilon_{it},
 \end{equation*}\pause
@@ -257,7 +257,7 @@ Instead with working directly with $\widehat{\psi}_{ij, T}(u,h)$, we replace the
 %\end{equation*} \pause
 where 
 \begin{itemize}
-\item $\widehat{\sigma}_i^2$ is an appropriate estimator of the long-run variance $\sigma^2_i$;
+\item $\widehat{\sigma}_i^2$ is an appropriate estimator of the long-run variance $\sigma^2_i$;\pause
 \item $\lambda(h) = \sqrt{2 \log \{ 1/(2h) \}}$ is an additive correction term (D{\"u}mbgen and Spokoiny (2001)). %\hyperlink{frame_lambda}{\beamerbutton{Explanation}}
 \end{itemize}
 \end{frame}
@@ -269,7 +269,7 @@ To test the global null, we aggregate the individual test statistics \linebreak 
 \widehat{\Psi}_{n, T} = \max_{1 \leq i < j \leq n} \max_{(u,h) \in \mathcal{G}_T} \widehat{\psi}^0_{ij, T}(u,h). 
 \end{equation*}\pause
 \vspace{-3mm}
-\begin{block}{Note}
+\begin{block}{Main theoretical result}
 Under certain conditions and under the null, $\widehat{\psi}^0_{ij, T}(u,h)$ and $\widehat{\Psi}_{n, T}$ can be approximated by the corresponding Gaussian versions of the test statistics.
 \end{block}
 \end{frame}
@@ -283,7 +283,7 @@ Gaussian version of the individual test statistics:
 where
 \begin{itemize}
 \item $\phi_{ij, T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, {\color<3>{mLightBrown}\big\{\sigma_i(Z_{it} - \bar{Z}_i) - \sigma_j(Z_{jt} - \bar{Z}_j)\big\}}$;\pause\pause
-\item $Z_{it}$ are independent standard normal random variables;\pause
+\item $Z_{it}$ are independent (across $i$ and $t$) standard normal random variables;\pause
 \item $\bar{Z}_i$ is the empirical average of $Z_{i1}, \ldots, Z_{iT}$.
 \end{itemize}\pause
 
@@ -358,7 +358,7 @@ Consider a sequence of functions $m_{i} = m_{i,T}$, $m_{j} = m_{j, T}$ such that
 \end{equation*} and $c_T \rightarrow \infty$. Then under $\mathcal{C}1 - \mathcal{C}10$, it holds that
 \vspace{-2mm}
 \begin{equation*}
-\Prob\Big( \widehat{\Psi}_{n, T} \leq q_{n, T}(\alpha)\Big) = 1 - o(1)
+\Prob\Big( \widehat{\Psi}_{n, T} \leq q_{n, T}(\alpha)\Big) = o(1)
 \end{equation*}
 \vspace{-5mm}
 \end{prop}
@@ -371,7 +371,7 @@ Consider a sequence of functions $m_{i} = m_{i,T}$, $m_{j} = m_{j, T}$ such that
 \begin{equation*}\label{eq-theo-stat-strategy-step1}
 \big| \widetilde{\Phi}_{n, T} - \Phi_{n, T} \big| = o_p(\delta_T),
 \end{equation*}
-where $\delta_T = o(1)$.\pause
+where $\delta_T$ goes to $0$ as $T\to\infty$ sufficiently fast.\pause
 \item Using the anti-concentration results for Gaussian random vectors (Chernozhukov et al. 2015), prove that $\Phi_{n, T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$, i.e.
 \begin{equation*}\label{eq-theo-stat-strategy-step2}
 \sup_{x \in \mathbb{R}} \Prob \big( |\Phi_{n, T} - x| \le \delta_T \big) = o(1).
@@ -478,7 +478,7 @@ An interval $[u-h, u+h] \in \mathcal{S}^{[i, j]}$ is called \textbf{minimal} if 
 
 
 \begin{frame}{Discussion}
-We can claim, with confidence of about $95\%$, that the null hypothesis is violated for all intervals (and all pairs of time series) for which our test rejects the null. \pause
+We can claim, with confidence of at least $95\%$, that the null hypothesis is violated for all intervals (and all pairs of time series) for which our test rejects the null. \pause
 
 However, we can not say anything about the causes of such differences. This question requires further (probably not purely statistical) analysis.\pause
 
@@ -498,25 +498,12 @@ Further possible extensions:
 
 \appendix
 
-\begin{frame}{Family of time intervals}
-	\begin{figure}
-		\includegraphics[width=0.95\textwidth]{plots/all_intervals}
-	\end{figure}
-\end{frame}
 
+\begin{frame}[label = frame_scaleconstants]{Idea behind $\lambda(h)$}
 
+D{\"u}mbgen and Spokoiny (2001): the critical values for testing the 'local' null hypothesis depend on the scale of the testing problem, i.e. the length $h$ of the time interval.\pause 
 
-\begin{frame}[label = frame_scaleconstants]{Idea behind $a_k$ and $b_k$}
-
-D{\"u}mbgen and Spokoiny (2001): the critical values $c_{ijk}(\alpha)$ depend on the scale of the testing problem, i.e. the length $h_k$ of the time interval.\pause 
-
-Specifically, 
-\[c_{ijk}(\alpha) = c(\alpha,h_k) := b_k + q(\alpha)/a_k,\] where $a_k = \{\log(e/h_k)\}^{1/2} / \log \log(e^e / h_k)$ and $b_k = \sqrt{2 \log(1/h_k)}$ are scale-dependent constants and $q(\alpha)$ is chosen such that we control FWER.
-\end{frame}
-
-\begin{frame}{Idea behind $a_k$ and $b_k$, part 2}
-
-This choice of scale-dependent constants helps us balance the significance of hypotheses between the time intervals of different lengths $h_k$:
+Introduction of a scale-dependent parameter helps us balance the significance of hypotheses between the time intervals of different lengths $h_k$:
 
 \begin{figure}
     		\centering
@@ -555,9 +542,9 @@ Intuitively, $\delta_q(\boldsymbol{L}, t)$ measures the dependency of $\boldsymb
 \begin{frame}[label=tech_assumptions]{Technical assumptions}
 \begin{enumerate}
 
-\item[$\mathcal{C}1^\prime$] The variables $\varepsilon_{it}$ allow for the representation $\varepsilon_{it} = G_i(\ldots,\eta_{it-1},\eta_{it})$, where $\eta_{it}$ are i.i.d.\ random variables across $t$ and $G_i: \mathbb{R}^\mathbb{Z} \rightarrow \reals$ is a measurable function. Denote $\mathcal{J}_{it} = (\ldots,\eta_{it-2},\eta_{it-1},\eta_{it})$.
+\item[$\mathcal{C}1^\prime$] The variables $\varepsilon_{it}$ are independent across $i$ and allow for the representation $\varepsilon_{it} = G_i(\ldots,\eta_{it-1},\eta_{it})$, where $\eta_{it}$ are i.i.d.\ random variables across $t$ and $G_i: \mathbb{R}^\mathbb{Z} \rightarrow \reals$ is a measurable function..
 
-\item[$\mathcal{C}1^{\prime\prime\prime}$]  Define $\Theta_{i, t,q} = \sum\nolimits_{s \ge t} \delta_q(G_i, s)$ for $t \ge 0$. For each $i$ it holds that \linebreak
+\item[$\mathcal{C}1^{\prime\prime}$]  Define $\Theta_{i, t,q} = \sum\nolimits_{s \ge t} \delta_q(G_i, s)$ for $t \ge 0$. For each $i$ it holds that \linebreak
 $\Theta_{i, t,q} = O ( t^{-\tau_q} (\log t)^{-A} )$,  
 where $A > \frac{2}{3} (1/q + 1 + \tau_q)$ and \linebreak $\tau_q = \{q^2 - 4 + (q-2) \sqrt{q^2 + 20q + 4}\} / 8q$. \hyperlink{frame_assumptions<3>}{\beamerbutton{Go back}}
 
@@ -568,13 +555,13 @@ where $A > \frac{2}{3} (1/q + 1 + \tau_q)$ and \linebreak $\tau_q = \{q^2 - 4 + 
 \begin{frame}[label=tech_assumptions_2]{Technical assumptions, part 2}
 \begin{enumerate}
 
-\item[$\mathcal{C}3^\prime$] $ \X_{it}$ allow for the representation $ \X_{it} = \boldsymbol{H}_i(\ldots,u_{it-1},u_{it})$ with $u_{it}$ being i.i.d.\ random variables and $\boldsymbol{H}_i := (H_{i1}, H_{i2}, \ldots, H_{id})^\top:\linebreak \mathbb{R}^\mathbb{Z} \rightarrow \reals^d$ being a measurable function such that $\boldsymbol{H}_i(\mathcal{U}_{it})$ is well defined. Denote  $\mathcal{U}_{it} = (\ldots, u_{it-1}, u_{it})$.
+\item[$\mathcal{C}3^\prime$] $ \X_{it}$ allow for the representation $ \X_{it} = \boldsymbol{H}_i(\ldots,u_{it-1},u_{it})$ with $u_{it}$ being i.i.d.\ random variables and $\boldsymbol{H}_i := (H_{i1}, H_{i2}, \ldots, H_{id})^\top:\linebreak \mathbb{R}^\mathbb{Z} \rightarrow \reals^d$ being a measurable function such that $\boldsymbol{H}_i(\mathcal{U}_{it})$ is well defined.
 
 \item[$\mathcal{C}3^{\prime\prime}$] Let $\boldsymbol{N}_i$ be the $d\times d$ matrix with $n_{i, kl}= \E[H_{ik}(\mathcal{U}_{i0})H_{il}(\mathcal{U}_{i0})]$ being $kl$-th entry. We assume that the smallest eigenvalue of $\boldsymbol{N}_i$ is strictly bigger than $0$.
 
-\item[$\mathcal{C}3^{\prime\prime\prime}$]  Let $\E [\mathbf{H}_{i}(\mathcal{U}_{i0})]=\mathbf{0}$ and $||\mathbf{H}_{i}(\mathcal{U}_{it})||_{q^\prime} <\infty$ for some $q^\prime > \max\{ 2\theta, 4\}$, where $\theta$ will be introduced further.
-\item[$\mathcal{C}4^\prime$] $\sum_{s=0}^\infty \delta_{q^\prime}(\mathbf{H}_i, s)<\infty$ for $q^\prime$ from Assumption $\mathcal{C}3^{\prime\prime\prime}$.
-\item[$\mathcal{C}4^{\prime\prime}$] For each $i$ it holds that $\sum_{s=t}^{\infty} \delta_{q^\prime}(\mathbf{H}_{i}, s)= O(t^{-\alpha}) $ for $q^\prime$ from Assumption $\mathcal{C}3^{\prime\prime\prime}$ and for some $\alpha > 1/2 - 1/{q^\prime}$. \hyperlink{frame_assumptions<5>}{\beamerbutton{Go back}}
+\item[$\mathcal{C}3^{\prime\prime\prime}$]  Let $\E [\boldsymbol{H}_{i}(\mathcal{U}_{i0})]=\mathbf{0}$ and $||\boldsymbol{H}_{i}(\mathcal{U}_{it})||_{q^\prime} <\infty$ for some $q^\prime > \max\{ 2\theta, 4\}$, where $\theta$ will be introduced further.
+\item[$\mathcal{C}4^\prime$] $\sum_{s=0}^\infty \delta_{q^\prime}(\boldsymbol{H}_i, s)<\infty$ for $q^\prime$ from Assumption $\mathcal{C}3^{\prime\prime\prime}$.
+\item[$\mathcal{C}4^{\prime\prime}$] For each $i$ it holds that $\sum_{s=t}^{\infty} \delta_{q^\prime}(\boldsymbol{H}_{i}, s)= O(t^{-\alpha}) $ for $q^\prime$ from Assumption $\mathcal{C}3^{\prime\prime\prime}$ and for some $\alpha > 1/2 - 1/{q^\prime}$. \hyperlink{frame_assumptions<5>}{\beamerbutton{Go back}}
 
 \end{enumerate}
 \end{frame}
@@ -582,7 +569,7 @@ where $A > \frac{2}{3} (1/q + 1 + \tau_q)$ and \linebreak $\tau_q = \{q^2 - 4 + 
 \begin{frame}[label=tech_assumptions_3]{Technical assumptions, part 3}
 \begin{enumerate}
 
-\item[$\mathcal{C}6$] Let $\zeta_{i, t} = (u_{it}, \eta_{it})^\top$. Define $\mathcal{I}_{it} = (\ldots, \zeta_{i, t-1}, \zeta_{i, t})$ and $\mathbf{U}_i(\mathcal{I}_{it}) =  \mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{J}_{it})$. With this notation at hand, we assume that $\sum_{s=0}^\infty \delta_2(\mathbf{U}_i, s)<\infty$.\hyperlink{frame_assumptions<7>}{\beamerbutton{Go back}}
+\item[$\mathcal{C}6$] Let $\zeta_{i, t} = (u_{it}, \eta_{it})^\top$. Denote $\mathcal{I}_{it} = (\ldots, \zeta_{i, t-1}, \zeta_{i, t})$, $\mathcal{J}_{it} = (\ldots,\eta_{it-2},\eta_{it-1},\eta_{it})$, $\mathcal{U}_{it} = (\ldots, u_{it-1}, u_{it})$, and $\mathbf{U}_i(\mathcal{I}_{it}) =  \boldsymbol{H}_i(\mathcal{U}_{it})G_i(\mathcal{J}_{it})$. With this notation at hand, we assume that $\sum_{s=0}^\infty \delta_2(\mathbf{U}_i, s)<\infty$.\hyperlink{frame_assumptions<6>}{\beamerbutton{Go back}}
 \end{enumerate}
 \end{frame}
 
