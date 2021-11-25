@@ -19,8 +19,8 @@
 %\setbeamercolor{progress bar}{fg=UniBlue, bg= UniYellow}
 \usepackage{xspace}
 
-\title{Multiscale inference for nonparametric time trends}
-\date{November 2, 2021\\ Econometrics Seminar \\ Erasmus University Rotterdam}
+\title{Multiscale testing for equality of nonparametric trend curves}
+\date{November 26, 2021\\ Workshop on panel data \\ Tinbergen Institute \& University of Amsterdam}
 \author{Marina Khismatullina \and Michael Vogt}
 \setbeamertemplate{frame footer}{Multiscale inference for nonparametric time trends}
 \metroset{block=fill}
@@ -364,25 +364,7 @@ Consider a sequence of functions $m_{i} = m_{i,T}$, $m_{j} = m_{j, T}$ such that
 \end{prop}
 \end{frame}
 
-\begin{frame}{Strategy of the proof}
-\begin{itemize}
-\item Introduce $\widehat{\Phi}_{n, T}$ that is close in distribution to $\widehat{\Psi}_{n, T}$ under the null.\pause
-\item Using strong approximation theory for dependent processes as derived in Berkes et al. (2014), replace $\widehat{\Phi}_{n, T}$ by $\widetilde{\Phi}_{n, T}$ with the same distribution and the property that 
-\begin{equation*}\label{eq-theo-stat-strategy-step1}
-\big| \widetilde{\Phi}_{n, T} - \Phi_{n, T} \big| = o_p(\delta_T),
-\end{equation*}
-where $\delta_T$ goes to $0$ as $T\to\infty$ sufficiently fast.\pause
-\item Using the anti-concentration results for Gaussian random vectors (Chernozhukov et al. 2015), prove that $\Phi_{n, T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$, i.e.
-\begin{equation*}\label{eq-theo-stat-strategy-step2}
-\sup_{x \in \mathbb{R}} \Prob \big( |\Phi_{n, T} - x| \le \delta_T \big) = o(1).
-\end{equation*}\pause
-\vspace{-2mm}
-\item Show that 
-\begin{equation*}\label{eq-theo-stat-strategy-claim}
-\sup_{x \in \mathbb{R}} \big| \Prob(\widetilde{\Phi}_{n, T} \le x) - \Prob(\Phi_{n, T} \le x) \big| = o(1). 
-\end{equation*}
-\end{itemize}
-\end{frame}
+
 
 
 
@@ -436,16 +418,27 @@ where $\delta_T$ goes to $0$ as $T\to\infty$ sufficiently fast.\pause
 \begin{frame}{Graphical representation}
 How to represent the results of the test? \pause
 
-For each pair of time series $(i, j)$, denote by $\mathcal{S}^{[i, j]}(\alpha)$ the set of intervals $[u-h, u+h]$ that consists of the intervals where we reject $H_0^{[i,j]}(u,h)$ at a significance level $\alpha$.\pause
-\begin{align*}\Prob\Big(& \forall \, i,j \in \{1, \ldots, n\}, (u, h) \in \mathcal{G}_T \text{ such that }\\
-&H_0^{[i, j]}(u, h) \text{ is true}: |\hat{\psi}^0_{ij,T}(u, h)| \le q_{n,T}(\alpha) \Big) \ge 1 - \alpha + o(1)
-\end{align*}
-\pause
-\vspace{-3mm}
-\begin{block}{Minimal intervals}
-An interval $[u-h, u+h] \in \mathcal{S}^{[i, j]}$ is called \textbf{minimal} if there is no other interval $[u^\prime-h^\prime, u^\prime+h^\prime] \in  \mathcal{S}^{[i, j]}$ with $[u^\prime-h^\prime, u^\prime+h^\prime] \subset [u-h, u+h]$.
-\end{block}
+We can plot all of the intervals where we reject the local null. \pause
+
+But what if there are too many?\pause
+
+An interval $[u-h, u+h]$ is called \textbf{minimal} if the corresponding local null $H_0^{[i,j]}(u,h)$ is rejected and there is no other interval $[u^\prime-h^\prime, u^\prime+h^\prime]$ such that we reject $H_0^{[i,j]}(u^\prime,h^\prime)$ and $[u^\prime-h^\prime, u^\prime+h^\prime] \subset [u-h, u+h]$.
+
 \end{frame}
+
+%\begin{frame}{Graphical representation}
+%How to represent the results of the test? \pause
+%
+%For each pair of time series $(i, j)$, denote by $\mathcal{S}^{[i, j]}(\alpha)$ the set of intervals $[u-h, u+h]$ that consists of the intervals where we reject $H_0^{[i,j]}(u,h)$ at a significance level $\alpha$.\pause
+%\begin{align*}\Prob\Big(& \forall \, i,j \in \{1, \ldots, n\}, (u, h) \in \mathcal{G}_T \text{ such that }\\
+%&H_0^{[i, j]}(u, h) \text{ is true}: |\hat{\psi}^0_{ij,T}(u, h)| \le q_{n,T}(\alpha) \Big) \ge 1 - \alpha + o(1)
+%\end{align*}
+%\pause
+%\vspace{-3mm}
+%\begin{block}{Minimal intervals}
+%An interval $[u-h, u+h] \in \mathcal{S}^{[i, j]}$ is called \textbf{minimal} if there is no other interval $[u^\prime-h^\prime, u^\prime+h^\prime] \in  \mathcal{S}^{[i, j]}$ with $[u^\prime-h^\prime, u^\prime+h^\prime] \subset [u-h, u+h]$.
+%\end{block}
+%\end{frame}
 
 %\begin{frame}{Application setting}
 %\begin{itemize}
@@ -498,6 +491,25 @@ Further possible extensions:
 
 \appendix
 
+\begin{frame}{Strategy of the proof}
+\begin{itemize}
+\item Introduce $\widehat{\Phi}_{n, T}$ that is close in distribution to $\widehat{\Psi}_{n, T}$ under the null.\pause
+\item Using strong approximation theory for dependent processes as derived in Berkes et al. (2014), replace $\widehat{\Phi}_{n, T}$ by $\widetilde{\Phi}_{n, T}$ with the same distribution and the property that 
+\begin{equation*}\label{eq-theo-stat-strategy-step1}
+\big| \widetilde{\Phi}_{n, T} - \Phi_{n, T} \big| = o_p(\delta_T),
+\end{equation*}
+where $\delta_T$ goes to $0$ as $T\to\infty$ sufficiently fast.\pause
+\item Using the anti-concentration results for Gaussian random vectors (Chernozhukov et al. 2015), prove that $\Phi_{n, T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$, i.e.
+\begin{equation*}\label{eq-theo-stat-strategy-step2}
+\sup_{x \in \mathbb{R}} \Prob \big( |\Phi_{n, T} - x| \le \delta_T \big) = o(1).
+\end{equation*}\pause
+\vspace{-2mm}
+\item Show that 
+\begin{equation*}\label{eq-theo-stat-strategy-claim}
+\sup_{x \in \mathbb{R}} \big| \Prob(\widetilde{\Phi}_{n, T} \le x) - \Prob(\Phi_{n, T} \le x) \big| = o(1). 
+\end{equation*}
+\end{itemize}
+\end{frame}
 
 \begin{frame}[label = frame_scaleconstants]{Idea behind $\lambda(h)$}
 
