@@ -4,33 +4,31 @@ library(tidyr)
 library(multiscale)
 library(zoo)
 library(dplyr)
+library(seasonal)
 
 #Defining necessary constants
 alpha    <- 0.05 #confidence level for application
-sim_runs <- 5000 #Number of simulation runs to produce the Gaussian qauntiles
+sim_runs <- 5000 #Number of simulation runs to produce the Gaussian quantiles
 
 ################################
 #Loading the human capital data#
 ################################
 
-h      <- read.csv("data/human_capital_long.csv", sep = ",", dec = ".",
-                   stringsAsFactors = FALSE, na.strings = "")
+h      <- read.csv("data/human_capital.csv", sep = ",", dec = ".",
+                   stringsAsFactors = FALSE, na.strings = "", fileEncoding="UTF-8-BOM")
 h$date <- as.Date(paste0("01-01-", h$year), format = "%d-%m-%Y")
 h      <- subset(h, select = - c(BLcode, sex, agefrom, ageto, year, region_code))
 
 h_data <- complete(h, date = seq.Date(min(date), max(date), by='quarter'),
                    country)
-h_data <- h_data[order(h_data$country, h_data$date),]
-
-h_data        <- fill(h_data, WBcode, .direction = "up")
-h_data$yr_sch <- na.approx(h_data$yr_sch)
-
 h_data <- 
   h_data %>%
-  group_by(WBcode) %>%
-  mutate(delta_h_it = log(yr_sch) - log(dplyr::lag(yr_sch, n = 1, default = NA)))
-
-h_data <- subset(h_data, select = c('date', 'WBcode', 'delta_h_it'))
+  arrange(country, date) %>%
+  group_by(country) %>%
+  fill(WBcode, .direction = "up") %>%
+  transform(h_it = na.approx(yr_sch)) %>%
+  select(date, WBcode, h_it) %>%
+  subset(date > as.Date("30-09-1975", format = "%d-%m-%Y"))
 
 rm(h)
 
@@ -38,88 +36,324 @@ rm(h)
 #Loading the labour data#
 #########################
 
-l           <- read.csv("data/labour.csv", sep = ",", dec = ".",
-                           stringsAsFactors = FALSE, na.strings = "")
-l_data      <- subset(l, Subject == 'Employed population, Aged 15 and over, All persons')
-l_data$date <- as.Date(as.yearqtr(l_data$TIME, format = '%Y-Q%q'), format = "%d-%m-%Y")
-l_data <- complete(l_data, date = seq.Date(min(date), max(date), by='quarter'),
-                   LOCATION)
-l_data      <- l_data[order(l_data$LOCATION, l_data$date),]
-l_data$Value <- na.approx(l_data$Value)
-
+l <- read.csv("data/labour.csv", sep = ",", dec = ".",
+              stringsAsFactors = FALSE, na.strings = "", fileEncoding="UTF-8-BOM")
 
 l_data <- 
-  l_data %>%
-  group_by(LOCATION) %>%
-  mutate(delta_l_it = log(Value) - log(dplyr::lag(Value, n = 1, default = NA)))
+  l %>%
+  subset(Subject == 'Employed population, Aged 15 and over, All persons') %>%
+  mutate(date = as.Date(as.yearqtr(TIME, format = '%Y-Q%q'), format = "%d-%m-%Y")) %>%
+  select(date, LOCATION, Value) %>%
+  subset(date > as.Date("30-09-1975", format = "%d-%m-%Y")) %>%
+  complete(date = seq.Date(min(date), max(date), by = 'quarter'), LOCATION) %>%
+  arrange(LOCATION, date)
 
-l_data <- subset(l_data, select = c('date', 'LOCATION', 'delta_l_it'))
-colnames(l_data) <- c('date', 'WBcode', 'delta_l_it')
+colnames(l_data) <- c('date', 'WBcode', 'l_it_FRED')
+rm(l)
+
+l2 <- read.csv("data/datastream_employment.csv", sep = ";", dec = ",",
+               stringsAsFactors = FALSE, na.strings = "", fileEncoding="UTF-8-BOM")
+
+#There are four observations missing for Spain so we fill them in
+l2 <-
+  l2 %>%
+  fill(ESP, .direction = 'up') %>%
+  mutate(date = as.Date(as.yearqtr(date, format = 'Q%q %Y'), format = "%d-%m-%Y")) %>%
+  subset(date > as.Date("30-09-1975", format = "%d-%m-%Y"))
+
+l2_data <- gather(l2, WBcode, l_it_datastream, USA:BEL, factor_key=FALSE)
+
+#l2_data <- 
+#  empl_data %>%
+#  group_by(LOCATION) %>%
+#  mutate(delta_l_it = log(Value) - log(dplyr::lag(Value, n = 1, default = NA)))
+
+rm(l2)
+
+#FINLAND, NORWAY and ITALY - not seasonally adjusted data!!
+l3      <- read.csv("data/datastream_employment_not_sa.csv", sep = ";", dec = ",",
+                    stringsAsFactors = FALSE, na.strings = "", fileEncoding="UTF-8-BOM")
+l3$date <- as.Date(as.yearqtr(l3$date, format = 'Q%q %Y'), format = "%d-%m-%Y")
+
+#Seasonal adjustment using seasonal package, default options
+fin_ts    <- ts(l3$FIN, frequency = 4, start = c(1959, 1))
+fin_ts_sa <- seas(x = fin_ts)
+l3[!is.na(l3$FIN), 'FIN'] <- fin_ts_sa$data[, 'seasonaladj']
+
+nor_ts    <- ts(l3$NOR, frequency = 4, start = c(1959, 1))
+nor_ts_sa <- seas(x = nor_ts)
+l3[!is.na(l3$NOR), 'NOR'] <- nor_ts_sa$data[, 'seasonaladj']
+
+ita_ts    <- ts(l3$ITA, frequency = 4, start = c(1959, 1))
+ita_ts_sa <- seas(x = ita_ts)
+l3[!is.na(l3$ITA), 'ITA'] <- ita_ts_sa$data[, 'seasonaladj']
+
+#There are five observations missing for Italy so we fill them in
+l3 <-
+  l3 %>%
+  fill(ITA, .direction = 'up') %>%
+  mutate(date = as.Date(as.yearqtr(date, format = 'Q%q %Y'), format = "%d-%m-%Y")) %>%
+  subset(date > as.Date("30-09-1975", format = "%d-%m-%Y"))
+
+# empl2_data <- 
+#   empl2_data %>%
+#   group_by(LOCATION) %>%
+#   mutate(delta_l_it = log(Value) - log(dplyr::lag(Value, n = 1, default = NA)))
+
+l3_data <- gather(l3, WBcode, l_it_datastream_not_sa, FIN:ITA, factor_key=FALSE)
+rm(l3, fin_ts_sa, nor_ts_sa, ita_ts_sa)
+
+
+#PANAMA - monthly data!!
+l4 <- read.csv("data/datastream_employment_monthly_sa.csv", sep = ";", dec = ",",
+               stringsAsFactors = FALSE, na.strings = "", fileEncoding="UTF-8-BOM")
+
+l4_data <-
+  l4 %>%
+  mutate(date = as.Date(date, format = "%d-%m-%Y")) %>%
+  group_by(date = paste(quarters(date), lubridate::year(date))) %>%
+  summarise(PAN = mean(PAN)) %>%
+  mutate(date = as.Date(as.yearqtr(date, format = 'Q%q %Y'), format = "%d-%m-%Y")) %>%
+  subset(date > as.Date("30-09-1975", format = "%d-%m-%Y")) %>%
+  arrange(date)
+
+l4_data <- gather(l4_data, WBcode, l_it_datastream_monthly_sa, PAN, factor_key=FALSE)
+
+# empl3_data <- 
+#   empl3_data %>%
+#   group_by(LOCATION) %>%
+#   mutate(delta_l_it = log(Value) - log(dplyr::lag(Value, n = 1, default = NA)))
+
+rm(l4)
+
+#Annual data!!
+l5 <- read.csv("data/datastream_employment_annual.csv", sep = ";", dec = ",",
+               stringsAsFactors = FALSE, na.strings = "", fileEncoding="UTF-8-BOM")
+
+l5_data <-
+  l5 %>%
+  mutate(date = paste0("01-01-", Name)) %>%
+  select(date, TUN:THA) %>%
+  mutate(date = as.Date(date, format = "%d-%m-%Y")) %>%
+  subset(date > as.Date("30-09-1974", format = "%d-%m-%Y")) %>%
+  subset(date <= as.Date("30-09-2011", format = "%d-%m-%Y")) %>%
+  fill(IND, .direction = 'up') %>%
+  fill(THA, .direction = 'up') %>%
+  complete(date = seq.Date(min(date), max(date), by = 'quarter')) %>%
+  arrange(date) %>%
+  mutate(IND = na.approx(IND)) %>%
+  mutate(THA = na.approx(THA)) %>%
+  mutate(date = as.Date(as.yearqtr(date, format = 'Q%q %Y'), format = "%d-%m-%Y")) %>%
+  subset(date > as.Date("30-09-1975", format = "%d-%m-%Y")) %>%
+#  complete(date = seq.Date(min(date), max(as.Date("30-09-2010", format = "%d-%m-%Y")), by = 'quarter')) %>%
+  arrange(date)
+
+l5_data <- gather(l5_data, WBcode, l_it_datastream_annual, TUN:THA, factor_key=FALSE)
+rm(l5)
+
 
 X_mat <- merge(h_data, l_data, all = TRUE)
-rm(l)
+
+X_mat <- merge(X_mat, l2_data, all = TRUE)
+X_mat <- merge(X_mat, l3_data, all = TRUE)
+X_mat <- merge(X_mat, l4_data, all = TRUE)
+X_mat <- merge(X_mat, l5_data, all = TRUE)
+
+X_mat$l_it <- ifelse(X_mat$WBcode %in% c("CHE", "FRA", "BEL", "ESP", "CYP", "CHN", "ISR"),
+                     X_mat$l_it_datastream,
+                     ifelse(X_mat$WBcode %in% c("FIN", "NOR", "ITA"),
+                            X_mat$l_it_datastream_not_sa,
+                            ifelse(X_mat$WBcode == 'PAN',
+                                   X_mat$l_it_datastream_monthly_sa,
+                                   ifelse(X_mat$WBcode %in% c("IND", "THA"),
+                                          X_mat$l_it_datastream_annual,
+                                          X_mat$l_it_FRED))))
+countries_aux <- unique(X_mat$WBcode)
 
 ######################
 #Loading the gdp data#
 ######################
 
-gdp      <- read.delim("data/GDP_Quarterly_Quarterly.txt",
-                       stringsAsFactors = FALSE, na.strings = "")
-colnames(gdp) <- c("date", "AUT", "AUS", "BEL", "BRA", "CAN", "CHE", "CHL", "CZE", "DEU",
-                   "DEU_log", "DNK", "EST", "ESP", "FIN", "FRA", "GBR", "GRC",
-                   "HUN","IND", "IRL", "ISR", "IND", "ITA", "JPN", "KOR", "LUX",
-                   "MEX", "NLD", "NOR", "NZL", "POL", "PRT", "RUS", "SWE", "SVN",
-                   "SVK", "TUR", "USA", "ZAF")
-gdp      <- subset(gdp, select = -c(DEU_log))
-gdp$date <- as.Date(gdp$date, format = "%Y-%m-%d")
 
-gdp_data <- gather(gdp, WBcode, Value, AUT:ZAF, factor_key = FALSE)
-gdp_data <- gdp_data[order(gdp_data$WBcode, gdp_data$date),]
 
-gdp_data <- 
-  gdp_data %>%
-  group_by(WBcode) %>%
-  mutate(delta_gdp_it = log(Value) - log(dplyr::lag(Value, n = 1, default = NA)))
+gdp      <- read.csv("data/gdp_oecd.csv", sep = ",", dec = ".",
+                     stringsAsFactors = FALSE, na.strings = "", fileEncoding="UTF-8-BOM")
 
-gdp_data <- subset(gdp_data, select = c('date', 'WBcode', 'delta_gdp_it'))
+gdp_data <-
+  gdp %>%
+  subset(Subject == 'Gross domestic product - expenditure approach') %>%
+  mutate(date = as.Date(as.yearqtr(TIME, format = '%Y-Q%q'), format = "%d-%m-%Y")) %>%
+  select(date, LOCATION, Value) %>%
+  subset(date > as.Date("30-09-1975", format = "%d-%m-%Y")) %>%
+  subset(LOCATION %in% c("AUT", "AUS", "CAN", "CHE", "CHN", "CYP", "DEU",
+                         "ESP", "FIN", "FRA", "GBR", "IND", "ISR", "ITA", "JPN",
+                         "NOR", "PAN", "THA", "USA")) %>%
+  complete(date = seq.Date(min(date), max(date), by = 'quarter'), LOCATION) %>%
+  arrange(LOCATION, date)
+
+colnames(gdp_data) <- c('date', 'WBcode', 'gdp_it_OECD')
+
+gdp_annual           <- read.delim("data/GDP_non_standard_Annual.txt",
+                                   stringsAsFactors = FALSE, na.strings = "")
+colnames(gdp_annual) <- c("date", "CHN_gdp", "CYP_gdp", "PAN_gdp", "CHN_pop",
+                          "CYP_pop", "PAN_pop") 
+  
+gdp_annual_data <-
+  gdp_annual %>%
+  mutate(CHN = CHN_gdp * CHN_pop / 1000000) %>%
+  mutate(CYP = CYP_gdp * CYP_pop / 1000000) %>%
+  mutate(PAN = PAN_gdp * PAN_pop / 1000000) %>%
+  mutate(date = as.Date(date, format = "%Y-%d-%m")) %>%
+  select(date, CHN, CYP, PAN) %>%
+  subset(date > as.Date("30-09-1974", format = "%d-%m-%Y")) %>%
+  complete(date = seq.Date(min(date), max(date), by = 'quarter')) %>%
+  arrange(date) %>%
+  mutate(CHN = na.approx(CHN)) %>%
+  mutate(CYP = na.approx(CYP)) %>%
+  mutate(PAN = na.approx(PAN)) %>%
+  subset(date > as.Date("30-09-1975", format = "%d-%m-%Y")) %>%
+  arrange(date)
+
+gdp_annual_data <- gather(gdp_annual_data, WBcode, gdp_it_annual, CHN:PAN, factor_key=FALSE)
+
+  
+  #   
+#   select(-DEU_log) %>%
+#   mutate(date = as.Date(date, format = "%Y-%m-%d")) %>%
+#   subset(date > as.Date("30-09-1975", format = "%d-%m-%Y"))
+# 
+# gdp_data <- gather(gdp, WBcode, gdp_it, AUT:ZAF, factor_key = FALSE)
+# gdp_data <- gdp_data[order(gdp_data$WBcode, gdp_data$date),]
+
+# gdp_data <- 
+#   gdp_data %>%
+#   group_by(WBcode) %>%
+#   mutate(delta_gdp_it = log(Value) - log(dplyr::lag(Value, n = 1, default = NA)))
 
 X_mat <- merge(X_mat, gdp_data, all = TRUE)
-rm(gdp)
+X_mat <- merge(X_mat, gdp_annual_data, all = TRUE)
+
+X_mat$gdp_it <- ifelse(X_mat$WBcode %in% c("CHN", "CYP", "PAN"),
+                       X_mat$gdp_it_annual, X_mat$gdp_it_OECD)
+
+rm(gdp, gdp_annual)
 
 ################################
 #Loading the capital stock data#
 ################################
 
-k      <- read.delim("data/Capital_stock_Annual.txt",
-                     stringsAsFactors = FALSE, na.strings = "")
+k           <- read.delim("data/Capital_stock_Annual.txt",
+                          stringsAsFactors = FALSE, na.strings = "")
 colnames(k) <- c("date", "AUT", "AUS", "BEL", "CAN", "CHE", "DEU",
                  "DNK", "ESP", "FIN", "FRA", "GBR", "GRC",
                  "IRL", "ISL", "ITA", "JPN", "LUX",
                  "NLD", "NOR", "NZL", "PRT", "SWE", "TUR", "USA")
-k$date <- as.Date(k$date, format = "%Y-%m-%d")
+k$date      <- as.Date(k$date, format = "%Y-%m-%d")
 
-k_data       <- gather(k, WBcode, Value, AUT:USA, factor_key = FALSE)
-k_data       <- complete(k_data, date = seq.Date(min(date), max(date), by='quarter'),
-                         WBcode)
-k_data       <- k_data[order(k_data$WBcode, k_data$date),]
-k_data$Value <- na.approx(k_data$Value)
 
-k_data <- 
+k_china           <- read.csv("data/capital_stock_china.csv", sep = ",", dec = ".",
+                              stringsAsFactors = FALSE, na.strings = "")
+colnames(k_china) <- c("date", "CHN")
+k_china$date      <- as.Date(k_china$date, format = "%Y-%m-%d")
+
+
+k_israel           <- read.csv("data/capital_stock_israel.csv", sep = ",", dec = ".",
+                               stringsAsFactors = FALSE, na.strings = "")
+colnames(k_israel) <- c("date", "ISR")
+k_israel$date      <- as.Date(k_israel$date, format = "%Y-%m-%d")
+
+k_cyprus           <- read.csv("data/capital_stock_cyprus.csv", sep = ",", dec = ".",
+                               stringsAsFactors = FALSE, na.strings = "")
+colnames(k_cyprus) <- c("date", "CYP")
+k_cyprus$date      <- as.Date(k_cyprus$date, format = "%Y-%m-%d")
+
+k_panama           <- read.csv("data/capital_stock_panama.csv", sep = ",", dec = ".",
+                               stringsAsFactors = FALSE, na.strings = "")
+colnames(k_panama) <- c("date", "PAN")
+k_panama$date      <- as.Date(k_panama$date, format = "%Y-%m-%d")
+
+
+k <- merge(k, k_china, all = TRUE)
+k <- merge(k, k_israel, all = TRUE)
+k <- merge(k, k_cyprus, all = TRUE)
+k <- merge(k, k_panama, all = TRUE)
+
+k_data       <- gather(k, WBcode, Value, AUT:PAN, factor_key = FALSE)
+
+k_data <-
   k_data %>%
+  complete(date = seq.Date(min(date), max(date), by='quarter'), WBcode) %>%
+  arrange(WBcode, date) %>%
   group_by(WBcode) %>%
-  mutate(delta_k_it = log(Value) - log(dplyr::lag(Value, n = 1, default = NA)))
+  transform(k_it = na.approx(Value)) %>%
+  subset(date > as.Date("30-09-1975", format = "%d-%m-%Y")) %>%
+  select(date, WBcode, k_it)
 
-k_data <- subset(k_data, select = c('date', 'WBcode', 'delta_k_it'))
+
+# k_data <- 
+#   k_data %>%
+#   group_by(WBcode) %>%
+#   mutate(delta_k_it = log(Value) - log(dplyr::lag(Value, n = 1, default = NA)))
 
 X_mat  <- merge(X_mat, k_data, all = TRUE)
-rm(k)
+rm(k, k_china, k_cyprus, k_panama, k_israel)
+
+
+###################################
+#Checking the availability of data#
+###################################
+
+X_mat_filled <- 
+  X_mat %>%
+  subset(date <= as.Date("30-09-2010", format = "%d-%m-%Y")) %>%
+  subset(WBcode %in% c("AUT", "AUS", "CAN", "CHE", "CHN", "CYP", "DEU",
+                       "ESP", "FIN", "FRA", "GBR", "ITA", "JPN", "NOR",
+                       "PAN", "USA")) %>%
+  group_by(WBcode)  %>%
+  fill(h_it, .direction = 'down')  #Extrapolating educational attainment for the last two quarters 
+
+#X_mat <- complete(X_mat, date = seq.Date(min(date), max(date), by='quarter'), WBcode)
+
+countries <- unique(X_mat_filled$WBcode)
+dates     <- unique(X_mat_filled$date)
+n_ts      <- length(unique(X_mat_filled$WBcode))
+t_len     <- nrow(X_mat_filled) / n_ts
+
+gdp_mat_original           <- matrix(NA, ncol = n_ts, nrow = t_len)
+colnames(gdp_mat_original) <- countries
+
+l_mat_original           <- matrix(NA, ncol = n_ts, nrow = t_len)
+colnames(l_mat_original) <- countries
+
+k_mat_original           <- matrix(NA, ncol = n_ts, nrow = t_len)
+colnames(k_mat_original) <- countries
+
+h_mat_original           <- matrix(NA, ncol = n_ts, nrow = t_len)
+colnames(h_mat_original) <- countries
+
+i <- 1
+
+for (country in countries){
+  tmp <- X_mat_filled[X_mat_filled$WBcode == country, ]
+  tmp <- tmp[order(tmp$date),]
+  gdp_mat_original[, i] <- tmp$gdp_it
+  l_mat_original[, i] <- tmp$l_it
+  k_mat_original[, i] <- tmp$k_it
+  h_mat_original[, i] <- tmp$h_it
+  i = i + 1
+}
+
+colSums(is.na(gdp_mat_original))
+colSums(is.na(l_mat_original))
+colSums(is.na(h_mat_original))
+colSums(is.na(k_mat_original))
 
 ##########################
 #All of the data together#
 ##########################
 
 
-X_mat <- subset(X_mat, date > as.Date("30-03-1980", format = "%d-%m-%Y") & date < as.Date("02-01-2015", format = "%d-%m-%Y"))
+X_mat <- subset(X_mat, date > as.Date("30-09-1975", format = "%d-%m-%Y") & date < as.Date("30-09-2010", format = "%d-%m-%Y"))
 #X_mat <- subset(X_mat, WBcode %in% c("AUT", "AUS", "BEL", "CAN", "CHE", "DEU",
 #                                   "DNK", "ESP", "FIN", "FRA", "GBR", "GRC",
 #                                   "IRL", "ITA", "JPN", "LUX",
@@ -137,6 +371,8 @@ country_names <- c("Australia", "Austria", "Canada", "Germany", "UK", "Japan", "
 dates     <- unique(X_mat$date)
 n_ts      <- length(unique(X_mat$WBcode))
 t_len     <- nrow(X_mat) / n_ts
+
+
 
 
 #############################
