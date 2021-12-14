@@ -363,8 +363,8 @@ In practice, we implement the test procedure described in Sections \ref{subsec:t
 \begin{enumerate}[label=\textit{Step \arabic*.}, leftmargin=1.45cm]
 \item Fix a significance level $\alpha \in (0, 1)$. 
 \item Compute the (approximated) quantile $q_{n, T}(\alpha)$ by Monte Carlo simulations. Specifically, draw a large number $N$ (say $N=5000$) of samples of independent standard normal random variables $\{Z_{it}^{(\ell)} : 1 \le t \le T, \, 1 \le i \le n \}$ for $1 \le \ell \le N$. For each sample $\ell$, compute the value $\Phi_{n,T}^{(\ell)}$ of the Gaussian test statistics $\Phi_{n, T}$ and store them. Calculate the empirical $(1-\alpha)$-quantile $\hat{q}_{n, T}(\alpha)$ from the stored values $\{ \Phi_{n, T}^{(\ell)}: 1 \le \ell \le N \}$. Use $\hat{q}_{n, T}(\alpha)$ as an approximated value of the quantile $q_{n, T}(\alpha)$.
-\item Carry out the test for the global hypothesis $H_0$ by calculating $\widehat{\Psi}_{n, T}$ and checking if $\widehat{\Psi}_{n, T} > q_{n, T}(\alpha)$. Reject the null if it is true.
-\item For each $i, j,\, 1 \le i < j \le n$, and each $(u, h) \in \grid_T$, carry out the test for the local null hypothesis $H_0^{[i, j]}(u, h)$ by checking if $\hat{\psi}^0_{ij, T}(u, h)> q_{n, T}(\alpha)$. For each pair of time series $(i, j)$, find the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ that consists of the intervals where we reject $H_0^{[i,j]}(u,h)$. 
+\item Carry out the test for the global hypothesis $H_0$ by calculating $\widehat{\Psi}_{n, T}$ and checking if {\color{red}$\widehat{\Psi}_{n, T} > \hat{q}_{n, T}(\alpha)$}. Reject the null if it is true.
+\item For each $i, j,\, 1 \le i < j \le n$, and each $(u, h) \in \grid_T$, carry out the test for the local null hypothesis $H_0^{[i, j]}(u, h)$ by checking if {\color{red}$\hat{\psi}^0_{ij, T}(u, h)> \hat{q}_{n, T}(\alpha)$}. For each pair of time series $(i, j)$, find the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ that consists of the intervals where we reject $H_0^{[i,j]}(u,h)$. 
 %Store the test results in the variable $r_{ij,T}(u, h) = \mathds{1}( |\hat{\psi}_{ij,T}^0(u, h)| > q_{n, T}(\alpha))$, where $\mathds{1}(\cdot)$ is an indicator function that is equal to $1$ if the condition inside the brackets is met and $0$ otherwise.
 \item Display the results. One of the possible ways to do that is to produce a separate plot for each of the pairwise comparisons and draw only the intervals where we reject the corresponding local null. Formally, on each of the plots that present the results of the comparison of time series $i$ and $j$, we display the intervals $\interval_{(u, h)} = [u- h, u+h] \in \mathcal{S}^{[i, j]}(\alpha)$, i.e. the (rescaled) time intervals where we reject $H_0^{[i, j]}(u, h)$. 
 \end{enumerate}
@@ -475,7 +475,7 @@ Suppose that the conditions  of Theorem \ref{theo:stat:global} are satisfied. Th
 \[ FWER(\alpha) \leq \alpha. \]
 \end{prop}
 
-Proposition \ref{prop:test:fwer} is a direct consequence of Theorem \ref{theo:stat:global}. Nevertheless, the detailed proof of the proposition is provided in the 
+Proposition \ref{prop:test:fwer} is a direct consequence of Theorem \ref{theo:stat:global}. Nevertheless, the detailed proof of this proposition is provided in the 
 Appendix. 
 
 The following corollary is an immediate consequence of Proposition \ref{prop:test:fwer} and gives the theoretical justification necessary for making simultaneous confidence statements about the locations of the differences between the trends.
@@ -637,6 +637,75 @@ This means that we can for example have $\rho_T = T^{-1/3}\log^\iota T$, which i
 %\end{prop}
 %The statement of Proposition \ref{prop-clustering-2} remains to hold true when the sets of intervals $\Pi_{n,T}(\ell,\ell^\prime)$ are replaced by the corresponding sets of minimal intervals. According to Proposition \ref{prop-clustering-2}, the sets $\Pi_{n,T}(\ell,\ell^\prime)$ allow us to locate, with a pre-specified confidence, time regions where the group-specific trend functions $g_\ell$ and $g_{\ell^\prime}$ differ from each other. In particular, we can claim with asymptotic confidence $\ge 1 - \alpha$ that the trend functions $g_\ell$ and $g_{\ell^\prime}$ differ on all intervals $I_{u,h} \in \Pi_{n,T}(\ell,\ell^\prime)$.
 
+\section{Applications}\label{sec:app}
+\subsection{Analysis of the GDP growth}\label{subsec:app:gdp}
+
+
+To illustrate our test method from Section \ref{sec:test}, we repeat an application example from \cite{Zhang2012}, where the authors test the hypothesis of a common trend in the GDP growth data for $16$ OECD countries. Since we do not have access neither to the original dataset that the authors use in their analysis, nor to the exact data specifications, we perform our analysis on the data available from the common sources: Barro-Lee Educational Attainment dataset \citep*{Barro2013}, Refinitiv Datastream, OECD.Stat, and Federal Reserve Economics Data (FRED). In our analysis, we aim to use the specification of the data that is as close as possible to the one in \linebreak \cite{Zhang2012} with one important distinction. In the original study, the authors examine 16 OECD countries (without specifying which ones), whereas we consider only $11$ OECD countries: Australia, Austria, Canada, Finland, France, Germany, Japan, Norway, Switzerland, UK, and USA. The reason for focusing our attention on $11$ countries lies in the fact that only for these countries there exist quarterly data of good quality covering the time period used in the original study (from the fourth quarter of 1975 up to and including the third quarter of 2010). In the appendix, we repeat the analysis for these $11$ countries plus additional $5$ countries for which some of the time series contain missing values by linearly extrapolating the available values. Details how this extrapolation is done are deferred to Section \ref{subsec:appendix:app}.
+
+We collect the data from multiple sources. In the following list, we provide the specifications for the variables that we use in our analysis.
+
+\begin{enumerate}
+\item \textbf{GDP:} We use data on the gross domestic product ($GDP$) downloaded from the OECD.Stat \nocite{OECD} database (https://stats.oecd.org/Index.aspx). The data are freely available and were accessed on 7 December 2021. To be as close as possible to the specification of the data in \cite{Zhang2012}, we use the seasonally adjusted quarterly data on the GDP (expenditure approach) expressed in millions of \linebreak 2015 US dollars \footnote{Since the publication of the original paper in 2013, the OECD reference year has changed from 2005 to 2015. We have decided to analyse the latest version of the data in order to be able to make more accurate conclusions.}. The data span from 1960 to 2021 which fully covers the time period necessary for our analysis (1975Q4 to 2010Q3). 
+\item \textbf{Capital:} We use the data on Capital Stock at Constant National Prices ($K$) from the Penn World Table \citep*{Feenstra2015} retrieved from FRED (https://fred.stlouisfed.org/, accessed on 7~December 2021). The data are given in the millions of the $2017$ US dollars. Since the obrservations are given at an annual frequency, we linear intrapolate the data to obtain the quarterly values. Here are approach is different from the one in \cite{Zhang2012} where they use the quarterly data from the beginning. The reason for such discrepancy is the fact that we have not found the quarterly time series of sufficient quality on Capital Stock at Constant National Prices in the common sources. We repeat the analysis using quarterly data on Gross Capital Formation instead of Capital Stock in the Appendix.
+\item \textbf{Labour:} We collect the data on the number of employed people ($L$) from various sources. For most of the countries (Austria, Australia, Canada, Germany, Japan, UK and the USA) we download the OECD data on Employed Population: Aged 15 and Over retrieved from FRED (https://fred.stlouisfed.org/, accessed on 7~December 2021). \nocite{OECDempl} The data for France and Switzerland were downloaded from Refinitiv Datastream on 7~December~2021. For all of the aforementioned countries the observations are at quarterly frequency and seasonally adjusted. The data for Finland and Norway was also obtained via Refinitiv Datastream on 7~December~2021, however, the only quarterly time series that are long enough to fully cover the time period under consideration are not seasonally adjusted. For these two countries we perform the seasonal adjustment ourselves with the help of \verb|R| package \verb|seasonal| \citep*{Sax2018} which is an interface to X-13-ARIMA-SEATS, the seasonal adjustment software used by the US Census Bureau. Specifcially, we use the default method of the function \verb|seas|. We perform the analysis using the data that is not seasonally adjusted as a robustness check and we report the results in the Appendix.
+
+For all of the countries, the observations are given in the thousands of persons.
+\item \textbf{Human capital:} We use Educational Attainment for Population Aged 25 and Over ($H$) collected from http://www.barrolee.com (accessed on 7 December 2021) as a measure of human capital. Since the only available data is five-year census data, we follow \cite{Zhang2012} and use linear intropolation between the observation and constant exptrapolation on the boundaries (second and third quarters of 2010) to obtain the quarterly observations.
+\end{enumerate}
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.8\textwidth]{Plots/smoothed_gdp_data.pdf}
+\vspace{0.2cm}
+\caption{Local linear kernel estimates of the $n=11$ original time trends from the application of Section \ref{subsec:app:gdp}. Each panel shows the estimates for a different bandwidth $h$.}\label{plot:app:gdp}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.8\textwidth]{Plots/smoothed_gdp_data_augmented.pdf}
+\vspace{0.2cm}
+\caption{Local linear kernel estimates of the $n=11$ augmented time trends from the application of Section \ref{subsec:app:gdp}. Each panel shows the estimates for a different bandwidth $h$.}\label{plot:app:gdp}
+\end{figure}
+
+
+We thus observe a panel of $n = 11$ time series $\mathcal{W}_i = \{(Y_{it}, \mathbf{X}_{it}): 1 \le t \le T \}$ of length $T = 140$ for each country $i \in \{1,\ldots,11\}$  where $Y_{it} = \Delta \ln GDP_{it} := \ln GDP_{it} - \ln GDP_{i(t-1)}$, $\mathbf{X}_{it} = (\Delta \ln L_{it}, \Delta \ln K_{it}, \Delta \ln H_{it})^\top$ with $\Delta \ln L_{it} := \ln L_{it} - \ln L_{i(t-1)}$, $\Delta \ln K_{it} := \ln K_{it} - \ln K_{i(t-1)}$ and $\Delta \ln H_{it} := \ln H_{it} - \ln H_{i(t-1)}$. Without loss of generality, we let $\Delta \ln GDP_{i1} = \Delta \ln L_{i1} = \Delta \ln K_{i1} = \Delta \ln H_{i1} = 0$. The time series $\mathcal{W}_i$ is assumed to follow the model 
+\begin{equation}\label{eq:model:app}
+Y_{it} = \bfbeta^\top_i \mathbf{X}_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
+\end{equation}
+for $1 \le t \le T$, $\bfbeta_i = (\beta_{i, 1}, \beta_{i, 2}, \beta_{i, 3})^\top$ is a vector of unknown parameters, $m_i$ is a country-specific unknown nonparametric time trend, and $\alpha_i$ is a fixed effect term. Similarly to \cite{Zhang2012}, we write the model \eqref{eq:model:app} as follows.
+
+\begin{equation}\label{eq:model:app2}
+\Delta \ln GDP_{it} = \beta_{i, 1} \Delta \ln L_{it} + \beta_{i, 2} \Delta \ln K_{it} + \beta_{i, 3} \Delta \ln H_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it},
+\end{equation}
+
+for $i \in \{1, \ldots, 11\}$ and $t \in \{1, \ldots, 140\}$.
+
+Our testing procedure involves estimation of many unknown parameters. As noted in \cite{KhismatullinaVogt2020}, estimating the long-run error variance in such models under general weak dependence conditions is a particularly difficult problem. Estimators often tend to be quite imprecise. Hence, in practive we opt for imposing certain conditions on the error processes $\mathcal{E}_i$. Specifically, the error process $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ is assumed to have the AR($p_i$) structure $\varepsilon_{it} = \sum_{j=1}^{p_i} a_{i, j} \varepsilon_{i,t-j} + \eta_{it}$ for each $i$, where the order of the process $p_i$ is country-specific and not known, and $\eta_{it}$ are i.i.d.\ innovations with mean zero. We choose $p_i$ for each country separately based on BIC.
+
+
+We aim to test whether the time trend $m_i$ is the same at each of the $11$ countries. In other words, we want to test the null hypothesis $H_0: m_1 = \ldots = m_n$ with $n = 11$ in model \eqref{eq:model:app2}. To do so, we implement the multiscale test from Section \ref{sec:test} with the following specifications. 
+
+\begin{enumerate}
+\item We choose $K$ to be an Epanechnikov kernel.
+\item We let $\mathcal{G}_T = U_T \times H_T$ with 
+\begin{align*}
+U_T & = \big\{ u \in [0,1]: u = \textstyle{\frac{5t}{T}} \text{ for some } t \in \naturals \big\} \\
+H_T & = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5\ell}{T}} \text{ for some } \ell \in \naturals \big\}. 
+\end{align*}
+We thus take into account all locations $u$ on an equidistant grid $U_T$ with step length $5/T$ and all bandwidths $h=5/T, 10/T, 15/T,\ldots$ with $\log T /T \le h \le 1/4$. Note that the lower bound $\log T / T$ is motivated by \ref{C-h} which requires that $\log T /T \ll h_{\min}$ (given that all moments of $\varepsilon_t$ exist).
+\item We fix the significance level $\alpha = 0.05$.
+\item To obtain an estimator $\hat{\sigma}_i^2$ for the long-run error variance $\sigma^2_i$, for each $i$ we apply the procedure from \cite{KhismatullinaVogt2020} with $\underline{r}=1$, $\overline{r}=10$ and $q = 12$. In the next step, we make use of our assumption that $\sigma_i^2 = \sigma_j^2$ for $i \neq j$ and we average the estimators $\hat{\sigma}_i^2$ to obtain $\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n \hat{\sigma}_i^2$. We need $\hat{\sigma}^2$ to calculate the
+\item To compute the critical values $q_{n, T}(\alpha)$ of the multiscale test, we simulate $5000$ values of the statistic $\Phi_{n, T}$ defined in Section \ref{subsec:method:test} and compute their empirical $(1-\alpha)$ quantile $\hat{q}_{n, T}(\alpha)$.
+\end{enumerate}
+
+ %We implement the test in the same way as in the simulations of Section \ref{sec:sim}. 
+
+
+We are now ready to apply the test procedure to the data. Figure \ref{plot-results-app2} depicts local linear estimates of the trend functions $m_i$ for the $n=25$ different stations. Each panel corresponds to a different bandwidth $h$. As can be seen, for a given bandwidth $h$, the fits look very similar to each other. Visual inspection thus suggests that there are no strong differences between the time trends $m_i$. Our test confirms this impression. It does not reject the null hypothesis at the most common levels $\alpha = 0.01, 0.05, 0.1$. Hence, the test does not provide any evidence for a violation of the null. 
+
+
 \section{Conclusion}\label{sec:conclusion}
 
 In this paper, we develop a new multiscale testing procedure for multiple time series for testing hypotheses about nonparametric time trends in the presence of covariates. This procedure addresses two important statistical problems about comparison of the time trends. First and foremost, with the help of the proposed method, we are able to test if all the time trends in the observed time series are the same or not. We prove the main theoretical results of the paper that the test has (asymptotically) the correct size and has an (asymptotic) power of one against a specific class of local alternatives. Second, our multiscale procedure allows us to tell which of the time trends are different and where the differences are located. For the purpose of pinpointing the differences, we consider many local null hypotheses at the same time, each corresponding to only a pair of time trends and a specific time interval. Our method allows us to test all of these hypotheses simultaneously controling the family-wise error rate, i.e. the probability of wrongly rejecting at least one true null hypothesis (making at least one type I error), at a desired level $\alpha$. This result allows us to make simultaneous confidence statements as follows: 
@@ -655,7 +724,7 @@ Regarding future research, this project suggests some interesting issues and top
 \bibliographystyle{ims}
 {\small
 \setlength{\bibsep}{0.55em}
-\nobibliography{bibliography}}
+\bibliography{bibliography}}
 
 \newpage
 \appendix
