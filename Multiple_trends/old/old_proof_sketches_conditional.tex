@@ -1,0 +1,161 @@
+\section{Appendix}\label{sec-appendix}
+
+\subsection{Proof of Theorem \ref{theo-stat-equality}}\label{subsec-appendix-stat-equaility}
+
+\subsection*{Auxiliary results using strong approximation theory}
+
+
+The main purpose of this section is to prove that there is a version of the multiscale statistic $\widehat{\Phi}_{n,T}$ defined in \eqref{Phi-hat-statistic} which is close to a Gaussian statistic whose distribution is known. More specifically, we prove the following result. 
+\begin{propA}\label{propA-strong-approx-equality}
+Under the conditions of Theorem \ref{theo-stat-equality}, there exist statistics $\widetilde{\Phi}_{n,T}$ for $T = 1,2,\ldots$ with the following two properties: (i) $\widetilde{\Phi}_{n, T}$ has the same distribution as $\widehat{\Phi}_{n, T}$ for any $T$, and (ii)
+\begin{align*}
+\big| \widetilde{\Phi}_{n, T} - \Phi_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} &+ \rho_T \sqrt{\log T} + \rho_T\max_{1\le i\le n} \Big|\sum\limits_{s=1}^T \widehat{\bm{\beta}}_i^\top(\mathbf{X}_{is} - \bar{\mathbf{X}}_{i} )\Big| +\\
+&+ \frac{T^{-1/2}}{\sqrt{Th_{min}}} \max_{1 \le i \le n}\max_{1\le t \le T}\Big|\sum\limits_{s=1}^t (\mathbf{X}_{is} - \bar{\mathbf{X}}_{i} )\Big|  \Big),
+\end{align*}
+where $\Phi_{n,T}$ is a Gaussian statistic as defined in \eqref{Phi-statistic}. 
+\end{propA}
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-strong-approx-equality}}}] 
+For the proof, we draw on strong approximation theory for each stationary process $\mathcal{E}_i = \{\varepsilon_{it}: 1 \leq t \leq T\}$ that fulfill the conditions \ref{C-err1}--\ref{C-err3}. By Theorem 2.1 and Corollary 2.1 in \cite{BerkesLiuWu2014}, the following strong approximation result holds true: On a richer probability space, there exist a standard Brownian motion $\mathbb{B}$ and a sequence $\{ \widetilde{\varepsilon}_{t}: t \in \naturals \}$ such that $[\widetilde{\varepsilon}_{1},\ldots,\widetilde{\varepsilon}_{T}] \stackrel{\mathcal{D}}{=} [\varepsilon_{1},\ldots,\varepsilon_{T}]$ for each $T$ and 
+\begin{equation}\label{eq-strongapprox-dep}
+\max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{s} - \sigma \mathbb{B}(t) \Big| = o\big( T^{1/q} \big) \quad \text{a.s.},  
+\end{equation}
+where $\sigma^2 = \sum_{k \in \integers} \cov(\varepsilon_{0}, \varepsilon_{k})$ denotes the long-run error variance.
+
+To apply this result, we define 
+\begin{align}\label{Phi-tilde-statistic}
+\widetilde{\Phi}_{n,T} = \max_{1 \le i < j \le n} \widetilde{\Phi}_{ij,T},
+\end{align}
+where
+\[ \widetilde{\Phi}_{ij, T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widetilde{\phi}_{ij, T}(u,h)}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big\}, \]
+where $\widetilde{\phi}_{ij, T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \big\{ (\widetilde{\varepsilon}_{it} - \bar{\widetilde{\varepsilon}}_i) + \bm{\beta}_i^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - (\widetilde{\varepsilon}_{jt} - \bar{\widetilde{\varepsilon}}_j) -\bm{\beta}_j^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\}$ and $\widetilde{\sigma}^2_i$ are the same estimators as $\widehat{\sigma}^2_i$ with $Y_{it} = 
+(\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top \mathbf{X}_{it} + m_i ( t/T) + \big( \alpha_i - \widehat{\alpha}_i \big) + \varepsilon_{it}$
+replaced by $\widetilde{Y}_{t,T} = 
+(\bm{\beta}_i - \widehat{\bm{\beta}}_i)^\top \mathbf{X}_{it} + m_i(t/T) + \big( \alpha_i - \widehat{\alpha}_i \big) + \widetilde{\varepsilon}_{it}$  for $1 \le t \le T$. In addition, we let
+\begin{align*}
+\Phi_{n, T} & = \max_{1\leq i < j \leq n} \Phi_{ij, T}= \max_{1\leq i < j \leq n} \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij, T}(u,h)}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}}\Big| - \lambda(h) \Big\} \\
+\Phi_{n, T}^{\diamond} & =\max_{1\leq i < j \leq n} \Phi_{ij, T}^{\diamond} = \max_{1\leq i< j \leq n}\max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij, T}(u,h)}{\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{1/2}}\Big| - \lambda(h) \Big\} 
+\end{align*}
+with $$\phi_{ij, T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \big\{ \widehat{\sigma}_i (Z_{it} - \bar{Z}_i) + \widehat{\bm{\beta}}_i^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) - \widehat{\bm{\beta}}_j^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\}$$ and $Z_{it} = \mathbb{B}_i(t) - \mathbb{B}_i(t-1)$. With this notation, we can write 
+\begin{equation}\label{eq-strongapprox-bound1}
+\big| \widetilde{\Phi}_{n, T} - \Phi_{n, T} \big| \le \big| \widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond} \big| + \big| \Phi_{n, T}^{\diamond} - \Phi_{n, T} \big|. 
+\end{equation}
+First consider $|\widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond}|$. Straightforward calculations yield that 
+\begin{align}\label{eq-strongapprox-bound2}
+\big| \widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond} \big| \le \{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{-1/2} \max_{1\le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \big| \widetilde{\phi}_{ij, T}(u,h) - \phi_{ij, T}(u,h) \big|.
+\end{align}
+Using summation by parts,
+($\sum_{i=1}^n a_i b_i = \sum_{i=1}^{n-1} A_i (b_i - b_{i+1}) + A_n b_n$ with $A_j = \sum_{j=1}^i a_j$) 
+we further obtain that 
+\begin{align*}
+\big| \widetilde{\phi}_{ij, T}(u,h) &- \phi_{ij, T}(u,h) \big| = \\
+=&\bigg|\sum_{t=1}^T w_{t,T}(u,h) \big\{ (\widetilde{\varepsilon}_{it} - \bar{\widetilde{\varepsilon}}_i) + \bm{\beta}_i^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - (\widetilde{\varepsilon}_{jt} - \bar{\widetilde{\varepsilon}}_j) -\bm{\beta}_j^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) -\\
+&-\widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\bm{\beta}}_i^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) + \widehat{\bm{\beta}}_j^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\}\bigg| = \\
+=&\Big|\sum_{t=1}^{T-1} A_{ij, t} \big(w_{t,T}(u,h) -w_{t+1,T}(u,h)\big) + A_{ij, T} w_{t,T}(u,h)\Big|,
+\end{align*}
+where 
+\begin{align*}
+A_{ij, t} = \sum_{s=1}^t \big\{ (\widetilde{\varepsilon}_{is} - \bar{\widetilde{\varepsilon}}_i) &+ \bm{\beta}_i^\top (\mathbf{X}_{is} - \bar{\mathbf{X}}_{i}) - (\widetilde{\varepsilon}_{js} - \bar{\widetilde{\varepsilon}}_j) -\bm{\beta}_j^\top (\mathbf{X}_{js} - \bar{\mathbf{X}}_{j}) - \\
+&-\widehat{\sigma}_i (Z_{it} - \bar{Z}_i) - \widehat{\bm{\beta}}_i^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) - \widehat{\sigma}_j (Z_{jt} - \bar{Z}_j) + \widehat{\bm{\beta}}_j^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\}.
+\end{align*}
+Note that by construction $A_{ij, T} = 0$ for all pairs $(i, j)$. Denoting 
+\[ W_T(u,h) = \sum\limits_{t=1}^{T-1} |w_{t+1,T}(u,h) - w_{t,T}(u,h)|,\]
+we have 
+\begin{align}\label{eq-strongapprox-bound3}
+\big| \widetilde{\phi}_{ij, T}(u,h) - \phi_{ij, T}(u,h) \big| =& \Big|\sum_{t=1}^{T-1} A_{ij, t} \big(w_{t,T}(u,h) -w_{t+1,T}(u,h)\big)\Big|\le W_T(u, h)\max_{1 \le t \le T} |A_{ij, t}|.
+\end{align}
+Now consider $\max_{1 \le t \le T} |A_{ij, t}|$:
+\begin{align*}
+\max_{1 \le t \le T} |A_{ij, t}|  \le & \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t (\widetilde{\varepsilon}_{is} - \bar{\widetilde{\varepsilon}}_{i}) - \sigma_i \sum\limits_{s=1}^t \big\{ Z_{is} - \bar{Z_i} \big\} \Big| + \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t (\widetilde{\varepsilon}_{js} - \bar{\widetilde{\varepsilon}}_{j}) - \sigma_j \sum\limits_{s=1}^t \big\{ Z_{js} - \bar{Z_j} \big\} \Big| + \\
+& + \max_{1 \le t \le T} \Big|\sum\limits_{s=1}^t(\bm{\beta}_i - \widehat{\bm{\beta}_i})^\top (\mathbf{X}_{is} - \bar{\mathbf{X}}_{i}) \Big| 
++ \max_{1 \le t \le T} \Big|\sum\limits_{s=1}^t(\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{js} - \bar{\mathbf{X}}_{j}) \Big| \le \\
+\le & \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \sigma_i \sum\limits_{s=1}^t Z_{is} \Big| + \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \sigma_j \sum\limits_{s=1}^t Z_{js} \Big| +\\
+& + \max_{1 \le t \le T} \Big| t (\bar{\widetilde{\varepsilon}}_{i} - \sigma_i \bar{Z_i}) \Big| + \max_{1 \le t \le T} \Big| t (\bar{\widetilde{\varepsilon}}_{j} - \sigma_j \bar{Z_j}) \Big| + \\
+& + \max_{1 \le t \le T} \Big|\sum\limits_{s=1}^t(\bm{\beta}_i - \widehat{\bm{\beta}_i})^\top (\mathbf{X}_{is} - \bar{\mathbf{X}}_{i}) \Big| 
++ \max_{1 \le t \le T} \Big|\sum\limits_{s=1}^t(\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{js} - \bar{\mathbf{X}}_{j}) \Big| \le \\
+\le & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \sigma_i \sum\limits_{s=1}^t Z_{is} \Big| + 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \sigma_j \sum\limits_{s=1}^t Z_{js} \Big| +\\
+& + \max_{1 \le t \le T} \Big|\sum\limits_{s=1}^t(\bm{\beta}_i - \widehat{\bm{\beta}_i})^\top (\mathbf{X}_{is} - \bar{\mathbf{X}}_{i}) \Big| 
++ \max_{1 \le t \le T} \Big|\sum\limits_{s=1}^t(\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{js} - \bar{\mathbf{X}}_{j}) \Big| = \\
+= & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \sigma_i \sum\limits_{s=1}^t \big(\mathbb{B}_{i}(s) - \mathbb{B}_{i}(s-1) \big) \Big| +\\
+& +  2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \sigma_j \sum\limits_{s=1}^t \big(\mathbb{B}_{j}(s) - \mathbb{B}_{j}(s-1) \big) \Big| +\\
+& + \max_{1 \le t \le T} \Big|\sum\limits_{s=1}^t(\bm{\beta}_i - \widehat{\bm{\beta}_i})^\top (\mathbf{X}_{is} - \bar{\mathbf{X}}_{i}) \Big| 
++ \max_{1 \le t \le T} \Big|\sum\limits_{s=1}^t(\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top (\mathbf{X}_{js} - \bar{\mathbf{X}}_{j}) \Big| =\\
+= & 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{is} - \sigma_i \mathbb{B}_{i}(t) \Big| + 2 \max_{1 \le t \le T} \Big| \sum\limits_{s=1}^t \widetilde{\varepsilon}_{js} - \sigma_j \mathbb{B}_{j}(t) \Big| +\\
+& + \max_{1 \le t \le T} \Big|(\bm{\beta}_i - \widehat{\bm{\beta}_i})^\top\sum\limits_{s=1}^t (\mathbf{X}_{is} - \bar{\mathbf{X}}_{i}) \Big| 
++ \max_{1 \le t \le T} \Big|(\bm{\beta}_j - \widehat{\bm{\beta}}_j)^\top\sum\limits_{s=1}^t (\mathbf{X}_{js} - \bar{\mathbf{X}}_{j}) \Big|
+\end{align*}
+Now suppose that \textcolor{red}{for all $1 \le i \le n$ we have $\bm{\beta}_i - \widehat{\bm{\beta}}_i = o_P(T^{-1/2})$ almost surely}. Then applying the strong approximation result \eqref{eq-strongapprox-dep}, we can infer that
+\begin{align}\label{max_At}
+\max_{1 \le t \le T} |A_{ij, t}|  = o(T^{1/q}) + o_P(T^{-1/2})\max_{1 \le t \le T}\Big|\sum\limits_{s=1}^t (\mathbf{X}_{is} - \bar{\mathbf{X}}_{i})\Big| +  o_P(T^{-1/2})\max_{1 \le t \le T}\Big|\sum\limits_{s=1}^t (\mathbf{X}_{js} - \bar{\mathbf{X}}_{j} )\Big|
+\end{align}
+Standard arguments show that $\max_{(u,h) \in \mathcal{G}_T} W_T(u,h) = O( 1/\sqrt{Th_{\min}} )$. Plugging \eqref{max_At} in \eqref{eq-strongapprox-bound3} and then in \eqref{eq-strongapprox-bound2}, we can thus infer that 
+\begin{align}\label{eq-strongapprox-bound4}
+\big| \widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond} \big| &\le \{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{-1/2}  \max_{(u,h) \in \mathcal{G}_T} W_T(u, h) \max_{1\le i < j \le n}\max_{1\le t \le T} |A_{ij, t}|\le\nonumber \\
+&\le o\Big( \frac{T^{1/q}}{\sqrt{Th_{\min}}} \Big) + o_P \Big( \frac{T^{-1/2}}{\sqrt{Th_{\min}}} \Big)\max_{1 \le i \le n}\max_{1\le t \le T}\Big|\sum\limits_{s=1}^t (\mathbf{X}_{is} - \bar{\mathbf{X}}_{i} )\Big|.
+\end{align}
+
+Now consider $|\Phi_{n, T}^{\diamond} - \Phi_{n, T}|$. Since $\phi_{ij, T}(u,h)$ conditionally on $\{\mathbf{X}_{it}\}$ is distributed as $ \normal(\widehat{\bm{\beta}}_i^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) -  \widehat{\bm{\beta}}_j^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}),\sigma^2_i + \sigma^2_j)$ for all $(u,h) \in \mathcal{G}_T$ and all $1\le i < j \le n$, $|\mathcal{G}_T| = O(T^\theta)$ for some large but fixed constant $\theta$ by Assumption (??), $n$ is fixed and $\widehat{\sigma}^2_i = \sigma^2_i + o_p(\rho_T)$ as well as $\widetilde{\sigma}^2_i = \sigma^2_i + o_p(\rho_T)$, we can establish that
+\begin{align}\label{eq-strongapprox-bound5}
+\big| \Phi_{n, T}^{\diamond} - \Phi_{n, T} \big| &\le \max_{1\leq i< j \leq n}\max_{(u,h) \in \mathcal{G}_T} \Big|\frac{\phi_{ij, T}(u,h)}{\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{1/2}} - \frac{\phi_{ij, T}(u,h)}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}}\Big| = \nonumber\\
+&=o_P(\rho_T \sqrt{\log T}) + o_P(\rho_T)\max_{1\le i\le n} \Big|\sum\limits_{s=1}^T \widehat{\bm{\beta}}_i^\top(\mathbf{X}_{is} - \bar{\mathbf{X}}_{i} )\Big|.
+\end{align}
+Plugging \eqref{eq-strongapprox-bound4} and \eqref{eq-strongapprox-bound5} in \eqref{eq-strongapprox-bound1} completes the proof.
+\end{proof}
+
+
+
+\subsection*{Auxiliary results using anti-concentration bounds}
+
+
+In this section, we establish some properties of the Gaussian statistic $\Phi_{n,T}$ defined in \eqref{Phi-statistic}. We in particular show that $\Phi_{n,T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$ with $\delta_T$ converging to zero.  
+%
+%
+\begin{propA}\label{propA-anticon-equality}
+Under the conditions of Theorem \ref{theo-stat-equality}, it holds that 
+\[ \sup_{x \in \reals} \pr \Big( | \Phi_{n,T} - x | \le \delta_T \big| \{\mathbf{X}_{it}: 1\le i \le n, 1 \le t \le T \} \Big) = o(1) \text{ a.s.}, \]
+where $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$.
+\end{propA}
+%
+%
+\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-anticon-equality}}}] 
+
+We write $x = (u,h)$ along with $\mathcal{G}_T = \{ x : x \in \mathcal{G}_T \} = \{x_1,\ldots,x_p\}$, where $p := |\mathcal{G}_T| \le O(T^\theta)$ for some large but fixed $\theta > 0$ by our assumptions. Moreover, for $k = 1,\ldots,p$, we set 
+\begin{align*}
+U_{ij, 2k-1} & = \frac{\phi_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} - \lambda(x_{k2}) \\
+U_{ij, 2k} & = -\frac{\phi_{ij, T}(x_{k1},x_{k2})}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} - \lambda(x_{k2}) 
+\end{align*}
+with $x_k = (x_{k1},x_{k2})$. This notation allows us to write
+\[ \Phi_{n, T} = \max_{1\le i < j \le n} \max_{1 \le k \le 2p} U_{ij, k}, \]
+where $(U_{12, 1},\ldots,U_{(n-1)n, 2p})^\top \in \reals^{n(n-1)p}$ is a Gaussian random vector.
+
+\color{red}{Here we need proposition with conditional mean and variances!
+
+The main technical tool for proving Proposition \ref{propA-anticon-equality} are anti-concentration bounds for Gaussian random vectors. The following proposition slightly generalizes anti-concentration results derived in \cite{Chernozhukov2015}, in particular Theorem 3 therein.
+
+\begin{propA}\label{theo-anticon}
+Let $(X_1,\ldots,X_p)^\top$ be a Gaussian random vector in $\reals^p$ with $\ex[X_j] = \mu_j$ and $\var(X_j) = \sigma_j^2 > 0$ for $1 \le j \le p$. Define $\overline{\mu} = \max_{1 \le j \le p} |\mu_j|$ together with $\underline{\sigma} = \min_{1 \le j \le p} \sigma_j$ and $\overline{\sigma} = \max_{1 \le j \le p} \sigma_j$. Moreover, set $a_p = \ex[ \max_{1 \le j \le p} (X_j-\mu_j)/\sigma_j ]$ and $b_p = \ex[ \max_{1 \le j \le p} (X_j-\mu_j) ]$. For every $\delta > 0$, it holds that
+\[ \sup_{x \in \reals} \pr \Big( \big| \max_{1 \le j \le p} X_j - x \big| \le \delta \Big) \le C \delta \big\{ \overline{\mu} + a_p + b_p + \sqrt{1 \vee \log(\underline{\sigma}/\delta)} \big\}, \]
+where $C > 0$ depends only on $\underline{\sigma}$ and $\overline{\sigma}$. 
+\end{propA} 
+The proof of Proposition \ref{theo-anticon} is provided in \cite{KhismatullinaVogt2018}.}
+%(i) $\mu_{ij, k} := \ex[U_{ij, k} | \{X_{it}\}] = - \lambda(x_{j2})$ and thus $\overline{\mu} = \max_{1 \le j \le 2p} |\mu_j| \le C \sqrt{\log T}$, and (ii) $\sigma_j^2 := \var(X_j) = 1$ for all $j$. Since $\sigma_j = 1$ for all $j$, it holds that $a_{2p} = b_{2p}$. Moreover, as the variables $(X_j - \mu_j)/\sigma_j$ are standard normal, we have that $a_{2p} = b_{2p} \le \sqrt{2 \log (2p)} \le C \sqrt{\log T}$. With this notation at hand, we can apply Proposition \ref{theo-anticon} to obtain that 
+%\[ \sup_{x \in \reals} \pr \Big( \big| \Phi_T - x \big| \le \delta_T \Big) \le C \delta_T \Big[ \sqrt{\log T} + \sqrt{ \log(1/\delta_T) } \Big] = o(1) \]
+%with $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$, which is the statement of Proposition \ref{propA-anticon-equaility}.
+\end{proof}
+
+
+
+\subsection*{Proof of Theorem \ref{theo-stat-equality}}
+
+
+To prove Theorem \ref{theo-stat-equality}, we make use of the two auxiliary results derived above. By Proposition \ref{propA-strong-approx-equality}, there exist statistics $\widetilde{\Phi}_{n, T}$ for $T = 1,2,\ldots$ which are distributed as $\widehat{\Phi}_T$ for any $T \ge 1$ and which have the property that 
+\begin{align}\label{statement-propA-strong-approx-equality}
+\big| \widetilde{\Phi}_{n, T} - \Phi_{n,T} \big| = o_p \Big( \frac{T^{1/q}}{\sqrt{T h_{\min}}} &+ \rho_T \sqrt{\log T} + \rho_T\max_{1\le i\le n} \Big|\sum\limits_{s=1}^T \widehat{\bm{\beta}}_i^\top(\mathbf{X}_{is} - \bar{\mathbf{X}}_{i} )\Big| +\nonumber\\
+&+ \frac{T^{-1/2}}{\sqrt{Th_{min}}} \max_{1 \le i \le n}\max_{1\le t \le T}\Big|\sum\limits_{s=1}^t (\mathbf{X}_{is} - \bar{\mathbf{X}}_{i} )\Big|  \Big),
+\end{align}
+where $\Phi_{n, T}$ is a Gaussian statistic as defined in \eqref{Phi-statistic}. The approximation result \eqref{statement-propA-strong-approx-equality} allows us to replace the multiscale statistic $\widehat{\Phi}_{n, T}$ by an identically distributed version $\widetilde{\Phi}_{n, T}$ which is close to the Gaussian statistic $\Phi_{n, T}$.
+
+\color{red}{In the next step, we show that  
+\begin{equation}\label{eq-theo-stat-equality-step2}
+\sup_{x \in \reals} \big| \pr(\widetilde{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = o(1) \text{ a.s.}, 
+\end{equation}
+which immediately implies the statement of Theorem \ref{theo-stat-equality}.}
