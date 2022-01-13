@@ -1,0 +1,233 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb,amsthm,graphicx}
+\usepackage{enumitem}
+\usepackage{color}
+\usepackage{epsfig}
+\usepackage{graphics}
+\usepackage{pdfpages}
+\usepackage{subcaption}
+\usepackage[font=small]{caption}
+\usepackage[hang,flushmargin]{footmisc} 
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage[mathscr]{euscript}
+\usepackage{natbib}
+\usepackage{setspace}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage[left=2.7cm,right=2.7cm,bottom=2.7cm,top=2.7cm]{geometry}
+\parindent0pt 
+\setlength{\parskip}{1em}
+
+\input{macros}
+
+
+
+\begin{document}
+\section{Testing for equality of time trends}\label{sec-test-equality}
+
+
+
+\subsection{Construction of the test statistic}\label{subsec-test-equality-stat}
+
+The $i$-th time series in the model satisfies the equation $Y_{it} = m_i(\frac{t}{T}) + \varepsilon_{it}$, where $\varepsilon_{it}$ are zero-mean error terms and $\int_0^1 m_i(u) du = 0$ by normalization.
+
+The stationary error process $\{\varepsilon_{it}\}$ for each $i$ is assumed to have the following properties:
+
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+
+\item \label{C-err1} The variables $\varepsilon_t$ allow for the representation $\varepsilon_t = G(\ldots,\eta_{t-1},\eta_t)$, where $\eta_t$ are i.i.d.\ random variables and $G$ is a measurable function. 
+
+\item \label{C-err2} It holds that $\| \varepsilon_t \|_q < \infty$ for some $q > 4$, where $\| \varepsilon_t \|_q = (\ex|\varepsilon_t|^q)^{1/q}$. 
+
+\end{enumerate}
+
+Following \cite{Wu2005}, we impose conditions on the dependence structure of the error process $\{\varepsilon_t\}$ in terms of the physical dependence measure $d_{t,q} = \| \varepsilon_t - \varepsilon_t^\prime \|_q$, where $\varepsilon_t^\prime = G(\ldots,\eta_{-1},\eta_0^\prime,\eta_1,\ldots,\eta_{t-1},\eta_t,\eta_{t+1},\ldots)$ with $\{\eta_t^\prime\}$ being an i.i.d.\ copy of $\{\eta_t\}$. In particular, we assume the following: 
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+\setcounter{enumi}{2}
+\item \label{C-err3} Define $\Theta_{t,q} = \sum\nolimits_{|s| \ge t} d_{s,q}$ for $t \ge 0$. It holds that 
+\[ \Theta_{t,q} = O \big( t^{-\tau_q} (\log t)^{-A} \big), \]
+where $A > \frac{2}{3} (1/q + 1 + \tau_q)$ and $\tau_q = \{q^2 - 4 + (q-2) \sqrt{q^2 + 20q + 4}\} / 8q$. 
+\end{enumerate}
+
+We further let $\widehat{\sigma}_i^2$ be an estimator of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_{i0}, \varepsilon_{i\ell})$. Throughout the section, we assume that $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$. Furthermore, we need to impose certain bounds on the long-run error variances $\sigma_i^2$:
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+\setcounter{enumi}{3}
+\item \label{C-var} There exist constants $c>0, C>0$ such that $\forall i\in \{1, \ldots, n\}$ we have $c \le \sigma_i^2 \le C$.
+\end{enumerate}
+
+In order to use the coupling method further, we split the whole sample into $S = \lceil T^{1/2} \rceil$ different blocks with the length of the blocks being $r = T / \lceil T^{1/2} \rceil \approx T^{1/2} $.
+
+We are now ready to introduce the multiscale statistic for testing the hypothesis $H_0: m_1 = m_2 = \ldots = m_n$. For any pair of time series $i$ and $j$, we define the kernel averages
+\[ \widehat{\psi}_{ij,T}(u,h) = \sum\limits_{t=1}^T w_{t,T}(u,h)({Y}_{it} - {Y}_{jt}), \]
+where the kernel weights $w_{t,T}(u,h)$ are defined \textcolor{red}{something about block-specific nature: assume that are kernel weights $w_{t, T}(u, h)$ are constant on each ``block'', i.e. $w_{t, T}(u, h) = u_{s, S}(u, h)$ for $t\in$ block $s$, $s \in \{1, \ldots, S\}$}.
+
+We aggregate the kernel averages $\widehat{\psi}_{ij,T}(u,h)$ for all $(u,h) \in \mathcal{G}_T$ by the multiscale statistic 
+\[ \widehat{\Psi}_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\widehat{\psi}_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\}, \] 
+where $\lambda(h) = \sqrt{2 \log \{ 1/(2h) \}}$. The statistic $\widehat{\Psi}_{ij,T}$ can be interpreted as a distance measure between the two curves $m_i$ and $m_j$. We finally define the multiscale statistic for testing the null hypothesis $H_0: m_1 =m_2 = \ldots = m_n$ as
+\[ \widehat{\Psi}_{n,T} = \max_{1 \le i < j \le n} \widehat{\Psi}_{ij,T}, \]
+that is, we define it as the maximal distance $\widehat{\Psi}_{ij,T}$ between any pair of curves $m_i$ and $m_j$ with $i \ne j$. 
+
+
+\subsection{The test procedure}\label{subsec-test-equality-test}
+
+
+Let $Z_{it}$ for $1 \le t \le T$ and $1 \le i \le n$ be independent standard normal random variables which are independent of the error terms $\varepsilon_{it}$. For each $i$ and $j$, we introduce the Gaussian statistic 
+\[ \Phi_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\}, \] 
+where 
+$$\phi_{ij,T}(u,h) = \sum\nolimits_{s=1}^{\lceil T^{1/2} \rceil} u_{s,\lceil T^{1/2} \rceil}(u,h) \, \{ \widehat{\sigma}_i Z_{is} - \widehat{\sigma}_j Z_{js} \} = \sum\nolimits_{s=1}^{S} u_{s,S}(u,h) \, \{ \widehat{\sigma}_i Z_{is} - \widehat{\sigma}_j Z_{js} \}.$$
+Moreover, we define the statistic
+\[ \Phi_{n,T} = \max_{1 \le i < j \le n} \Phi_{ij,T} \]
+and denote its $(1-\alpha)$-quantile by $q_{n,T}(\alpha)$. Our multiscale test of the hypothesis $H_0: m_1 = m_2 = \ldots = m_n$ is defined as follows: For a given significance level $\alpha \in (0,1)$, we reject $H_0$ if $\widehat{\Psi}_{n,T} > q_{n,T}(\alpha)$. 
+
+
+\subsection{Theoretical properties of the test}\label{subsec-test-equality-theo}
+
+
+To start with, we introduce the auxiliary statistic 
+\[ \widehat{\Phi}_{n,T} = \max_{1 \le i < j \le n} \widehat{\Phi}_{ij,T}, \]
+where
+\[ \widehat{\Phi}_{ij,T} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\phi}_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \Big| - \lambda(h) \Big \} \]
+and $\widehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \{ \varepsilon_{it} - \varepsilon_{jt} \}$.
+
+Our first theoretical result characterizes the asymptotic behaviour of the statistic $\widehat{\Phi}_{n,T}$.
+ 
+\begin{theorem}\label{theo-stat-equality}
+Suppose that the error processes $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ are independent across $i$ and satisfy \ref{C-err1}--\ref{C-err3} for each $i$. Moreover, let \ref{C-var} and standard assumptions on the kernel $K(\cdot)$ as well as usual assumptions on the set $\mathcal{G}_T$ be fulfilled and assume that $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$ for each $i$. Then 
+\[ \pr \big( \widehat{\Phi}_{n,T} \le q_{n,T}(\alpha) \big) = (1 - \alpha) + o(1). \]
+\end{theorem}
+
+\subsection*{Proof of Theorem \ref{theo-stat-equality}}
+
+First of all, we let
+\[ \Phi_{n,T}^* = \max_{1\le i < j \le n} \Phi_{ij,T}^* \quad \text{with} \quad \Phi_{ij,T}^* = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi_{ij,T}^*(u,h)}{(\sigma_i^2 + \sigma_j^2)^{1/2}}\Big| - \lambda(h) \Big\}, \] 
+where 
+$$\phi_{ij,T}^*(u,h) = \sum\nolimits_{s=1}^{\lceil T^{1/2} \rceil} u_{s,\lceil T^{1/2} \rceil}(u,h) \, \{ \sigma_i Z_{is} - \sigma_j Z_{js} \} = \sum\nolimits_{s=1}^{S} u_{s,S}(u,h) \, \{ \sigma_i Z_{is} - \sigma_j Z_{js} \}$$
+with the same $Z_{is}$ as in the Gaussian statistic $\Phi_{n,T}$. 
+
+It holds that 
+\begin{equation}\label{eq-theo-stat-equality-res1}
+\big| \Phi_{n,T} - \Phi_{n,T}^* \big| = o_p \big( \rho_T \sqrt{\log S} \big) = o_p \big( \rho_T \sqrt{\log T} \big), 
+\end{equation}
+which is a consequence of the following facts: (i) the variables $Z_{it}$ are i.i.d.\ standard normal, (ii) $|\mathcal{G}_T| = O(T^\theta)$ for some large but fixed constant $\theta$, (iii) $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$, (iv) $\max_{(u,h) \in \mathcal{G}_T} | \sum_{t=1}^S u_{s,S}(u,h) | \le C S h_{\max}$, where the constant $C$ is independent of $T$, and (v) $n = T^\gamma$ for some large but fixed contant $\gamma$.
+Moreover, define
+\begin{align*}
+\Phi_{n,T}^{\diamond} = \max_{1\le i < j \le n}\Phi_{ij,T}^{\diamond} \quad \text{with} \quad \Phi_{ij,T}^{\diamond} = \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big|\frac{\phi^*_{ij, T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \Big\} .
+\end{align*}
+With this notation, we can write 
+\begin{equation}\label{eq-theo-stat-equality-res2}
+\big| \widehat{\Phi}_{n,T} - \Phi_{n,T}^* \big| \le \big| \widehat{\Phi}_{n,T} - \Phi_{n,T}^{\diamond} \big| + \big| \Phi_{n,T}^{\diamond} - \Phi_{n, T}^* \big| = \big| \widehat{\Phi}_{n,T} - \Phi_{n,T}^{\diamond} \big| + o_p \big( \rho_T \sqrt{\log T} \big), 
+\end{equation}
+where the last equality follows by taking into account the same arguments as in \eqref{eq-theo-stat-equality-res1}.
+
+Straightforward calculations yield that 
+\[ \big| \widehat{\Phi}_{n,T} - \Phi_{n,T}^{\diamond} \big| \le \max_{1\le i < j \le n}(\widehat{\sigma}_i^{2} + \widehat{\sigma}^2_j)^{-1/2} \max_{1\le i < j \le n}\max_{(u,h) \in \mathcal{G}_T} \big| \widehat{\phi}_{ij,T}(u,h) - \phi^*_{ij,T}(u,h) \big|. \]
+
+Due to the Assumption \ref{C-var} we know that $\max_{1\le i < j \le n}(\widehat{\sigma}_i^{2} + \widehat{\sigma}^2_j)^{-1/2} =O_P(1)$.
+
+Assuming that are kernel weights $w_{t, T}(u, h)$ are constant on each ``block'', i.e. $w_{t, T}(u, h) = u_{s, S}(u, h)$ for $t\in$ block $s$, $s \in \{1, \ldots, S\}$, we have
+\begin{align*}
+\big| \widehat{\phi}_{ij,T}(u,h) - \phi_{ij,T}^*(u,h) \big| =& \bigg| \sum_{t=1}^T w_{t, T}(u, h) \{\varepsilon_{it} - \varepsilon{jt}\} - \sum_{s=1}^S u_{s, S}(u, h) \{\sigma_i Z_{is} - \sigma_j Z_{js}\} \bigg| =\\
+ =& \bigg| \sum_{s=1}^S u_{s, S}(u, h) \Big[\sum_{t \in \text{ block } s}\{\varepsilon_{it} - \varepsilon_{jt}\} - \{\sigma_i Z_{is} - \sigma_j Z_{js}\}\Big] \bigg|.
+\end{align*}
+
+Using summation by parts
+($\sum_{i=1}^n a_i b_i = \sum_{i=1}^{n-1} A_i (b_i - b_{i+1}) + A_n b_n$ with $A_j = \sum_{j=1}^i a_j$),
+we further obtain that 
+\begin{equation}\label{eq-theo-stat-equality-res3}
+	\begin{split}
+		\big| \widehat{\phi}_{ij,T}(u,h) - \phi_{ij,T}^*(u,h) \big| \le &  U_S(u,h) \max_{1 \le s \le S} \bigg| \sum\limits_{o=1}^s \Big(\sum_{t \in \text{ block } o}\{\varepsilon_{it} - \varepsilon_{jt}\} - \{\sigma_i Z_{io} - \sigma_j Z_{jo}\}\Big) \bigg| \le \\
+		\le & U_S(u,h) \max_{1 \le s \le S} \bigg| \sum\limits_{o=1}^s \Big(\sum_{t \in \text{ block } o}\varepsilon_{it} -  \sigma_i Z_{io}\Big) \bigg| +\\
+		&+ U_S(u,h) \max_{1 \le s \le S} \bigg| \sum\limits_{o=1}^s \Big(\sum_{t \in \text{ block } o}\varepsilon_{jt} -  \sigma_j Z_{jo}\Big) \bigg|
+		\end{split}
+\end{equation}
+where
+\[ U_S(u,h) = \sum\limits_{s=1}^{S-1} |u_{s+1,S}(u,h) - u_{s,S}(u,h)| + |u_{S,S}(u,h)|. \]
+%and $t_s = \max \{t \in \{1, \ldots, T\}| t \text{ lies in block } s\}$.
+
+Standard arguments show that $\max_{(u,h) \in \mathcal{G}_T} U_S(u,h) = O( 1/\sqrt{Sh_{\min}}) = O(1/\sqrt{\sqrt{T}h_{\min}})$.
+
+\textbf{Coupling}
+
+Fix $i \in \{1, \ldots, n\}$. Let $S_{iT} = \sum_{t=1}^T \varepsilon_{it}$. Consider an auxiliary time process $X_{it} = \varepsilon_{i[t+1]}$, $t \in \reals$. We clearly have $\int_{0}^T X_{iu}du = S_{iT} = \sum_{t=1}^T \varepsilon_{it}$.
+
+Let us now define ``subblocks'' as follows:
+\begin{align*}
+&V_{i1} = \int_{0}^{\log T} X_{iu}du  && V_{i1}^\prime = \int_{\log T}^{r - \log T} X_{iu}du &&V_{i1}^{\prime\prime} = \int_{r - \log T}^{r} X_{iu}du \\
+&V_{i2} = \int_{r}^{r + \log T} X_{iu}du &&V_{i2}^\prime = \int_{r + \log T}^{2r - \log T}&& V_{i2}^{\prime\prime} = \int_{2r - \log T}^{2 r} X_{iu}du \\
+&\ldots && \ldots && \ldots\\
+&V_{iS} = \int_{(S-1) r}^{(S-1)r + \log T} X_{iu}du && V_{iS}^\prime = \int_{(S-1)r + \log T}^{Sr - \log T} && V_{iS}^{\prime\prime} = \int_{Sr - \log T}^{T} X_{iu}du
+\end{align*}
+with $S =\lceil T^{1/2} \rceil$ as before and $r = T / \lceil T^{1/2} \rceil$ are breaking points between blocks. The total number of ``subblocks'' is $3S$ and $V_{i1}^\prime, \ldots, V_{iS}^\prime$ lie in the interior of the bigger blocks, whereas  $V_{i1}, \ldots, V_{iS}$ and $V_{i1}^{\prime\prime}, \ldots, V_{iS}^{\prime\prime}$ consist of the points close to the border of these bigger blocks.
+
+Using recursively Bradley's lemma we may 
+\begin{itemize}
+\item define independent random variables $W_{i1}, \ldots, W_{iS}$ such that $\pr_{W_{i1}} = \pr_{V_{i1}}, \ldots, \pr_{W_{iS}} = \pr_{V_{iS}}$ and 
+\begin{align}\label{eq-bradleys-lemma1}
+\pr\big(|W_{is} - V_{is}| > \xi \big) \le 11 \Big(\frac{\norm{V_{is} + c}_q}{\xi}\Big)^{\frac{q}{2q+1}}\alpha\big([r - \log T]\big)^{\frac{2q}{2q+1}};
+\end{align}
+\item define independent random variables $W_{i1}^\prime, \ldots, W_{iS}^\prime$ such that $\pr_{W_{i1}^\prime} = \pr_{V_{i1}^\prime}, \ldots, \pr_{W_{iS}^\prime} = \pr_{V_{iS}^\prime}$ and 
+\begin{align}\label{eq-bradleys-lemma2}
+\pr\big(|W_{is}^\prime - V_{is}^\prime| > \xi \big) \le 11 \Big(\frac{\norm{V_{is}^\prime + c}_q}{\xi}\Big)^{\frac{q}{2q+1}}\alpha\big([2\log T]\big)^{\frac{2q}{2q+1}};
+\end{align}
+\item define independent random variables $W_{i1}^{\prime\prime}, \ldots, W_{iS}^{\prime\prime}$ such that $\pr_{W_{i1}^{\prime\prime}} = \pr_{V_{i1}^{\prime\prime}}, \ldots, \pr_{W_{iS}^{\prime\prime}} = \pr_{V_{iS}^{\prime\prime}}$ and 
+\begin{align}\label{eq-bradleys-lemma3}
+\pr\big(|W_{is}^{\prime\prime} - V_{is}^{\prime\prime}| > \xi \big) \le 11 \Big(\frac{\norm{V_{is}^{\prime\prime} + c}_q}{\xi}\Big)^{\frac{q}{2q+1}}\alpha\big([r -\log T]\big)^{\frac{2q}{2q+1}}.
+\end{align}
+\end{itemize}
+Note that 
+\begin{align*}
+V_{is} + V_{is}^{\prime} + V_{is}^{\prime\prime} = \sum_{\substack{t \in \text{ interior} \\ \text{ of block }s}} \varepsilon_{it}+\sum_{\substack{t \notin \text{ interior} \\ \text{ of block }s}} \varepsilon_{it} = 
+ \sum_{t \in \text{ block }s} \varepsilon_{it}.
+\end{align*}
+
+Plugging this into \eqref{eq-theo-stat-equality-res3} we get the following:
+\begin{align}\label{eq-theo-stat-equality-res4}
+		 &\big| \widehat{\phi}_{ij,T}(u,h) - \phi_{ij,T}^*(u,h) \big| \le 2U_S(u,h) \max_{1 \le s \le S} &&\bigg| \sum\limits_{o=1}^s \sum_{t \in \text{ block } o}\varepsilon_{it} - \sum\limits_{o=1}^s  \sigma_i  Z_{io}\bigg| \le\nonumber\\
+		&\le  2U_S(u, h) \max_{1 \le s \le S} \bigg( \bigg| \sum\limits_{o=1}^s W_{io}^\prime - \sum\limits_{o=1}^s  \sigma_i  Z_{io}\bigg| &+& \bigg|\sum\limits_{o=1}^s W_{io}^\prime - \sum\limits_{o=1}^s  V_{is}^\prime\bigg| + \bigg|  \sum\limits_{o=1}^s\sum_{\substack{t \notin \text{ interior} \\ \text{ of block }o}} \varepsilon_{it}\bigg| \bigg) \le  \nonumber\\
+		&\le 2U_S(u, h) \max_{1 \le s \le S} \bigg( \bigg| \sum\limits_{o=1}^s W_{io}^\prime - \sum\limits_{o=1}^s  \sigma_i  Z_{io}\bigg| &+& \bigg|\sum\limits_{o=1}^s W_{io}^\prime - \sum\limits_{o=1}^s  V_{is}^\prime\bigg| +\nonumber\\
+		 &&+&2\bigg|  \sum\limits_{o=1}^s  W_{io} - \sum\limits_{o=1}^s  V_{io} \bigg| +2\bigg|  \sum\limits_{o=1}^s W_{io}\bigg|  \bigg)
+\end{align}
+
+\textcolor{red}{We need to show: 
+\begin{equation}
+\big| \widehat{\Phi}_{n,T} - \Phi_{n,T}^\diamond \big| = o_p \Big(\ldots \Big)
+\end{equation}
+or 
+\begin{align*}
+\max_{1\le i < j \le n}&\max_{(u,h) \in \mathcal{G}_T} \big| \widehat{\phi}_{ij,T}(u,h) - \phi^*_{ij,T}(u,h) \big| \le \\
+ \le &\max_{(u,h) \in \mathcal{G}_T}U_S(u, h) \max_{1\le i < j \le n} \Bigg[ \max_{1 \le s \le S} \bigg( \bigg| \sum\limits_{o=1}^s W_{io}^\prime -  \sigma_i \sum\limits_{o=1}^s Z_{io}\bigg| + \bigg|\sum\limits_{o=1}^s W_{io}^\prime - \sum\limits_{o=1}^s  V_{io}^\prime\bigg| +\\
+		 &+2\bigg|  \sum\limits_{o=1}^s  W_{io} - \sum\limits_{o=1}^s  V_{io} \bigg| +2\bigg|  \sum\limits_{o=1}^s W_{io}\bigg|  \bigg)\Bigg] = o_p \Big( \ldots \Big). 
+\end{align*}.
+}
+
+First consider $\max_{1\le i < j \le n} \max_{1 \le s \le S} \bigg|\sum\limits_{o=1}^s W_{is}^\prime - \sum\limits_{o=1}^s  V_{is}^\prime\bigg|$. From \eqref{eq-bradleys-lemma1} we know that 
+
+\begin{align*}
+\pr\big(|W_{is}^\prime - V_{is}^\prime| > \xi \big) \le 11 \Big(\frac{\norm{V_{is}^\prime + c}_q}{\xi}\Big)^{\frac{q}{2q+1}}\alpha\big([2\log T]\big)^{\frac{2q}{2q+1}}...
+\end{align*}
+
+
+\textbf{Strong approximation}
+
+Finally, by arguments very similar to those for Proposition \textcolor{red}{for the anticoncentration bounds}, we obtain that 
+\begin{equation}\label{eq-theo-stat-equality-res4}
+\sup_{x \in \mathbb{R}} \pr \Big( \big| \Phi_{n,T}^* - x \big| \le \delta_T \Big) = o(1) 
+\end{equation}
+with $\delta_T = T^{1/q} / \sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$. Combining \eqref{eq-theo-stat-equality-res1}--\eqref{eq-theo-stat-equality-res3} with Lemma \ref{lemma1-theo-stat}, we can infer that 
+\begin{align}
+\sup_{x \in \reals} \big| \pr \big( \widehat{\Phi}_{n,T} \le x \big) -  \pr \big( \Phi_{n,T}^* \le x \big) \big| & = o(1) \label{eq-theo-stat-equality-res4} \\
+\sup_{x \in \reals} \big| \pr \big( \Phi_{n,T} \le x \big) -  \pr \big( \Phi_{n,T}^* \le x \big) \big| & = o(1). \label{eq-theo-stat-equality-res5}
+\end{align}
+From \eqref{eq-theo-stat-equality-res4} and \eqref{eq-theo-stat-equality-res5}, it immediately follows that 
+\[ \sup_{x \in \reals} \big| \pr \big( \widehat{\Phi}_{n,T} \le x \big) -  \pr \big( \Phi_{n,T} \le x \big) \big| = o(1), \]
+which in turn implies that $\pr ( \widehat{\Phi}_{n,T} \le q_{n,T}(\alpha) ) = (1 - \alpha) + o(1)$. This completes the proof of Theorem \ref{theo-stat-equality}. 
+
+\bibliographystyle{ims}
+{\small
+\setlength{\bibsep}{0.55em}
+\bibliography{bibliography}}
+
+
+\end{document}

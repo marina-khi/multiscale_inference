@@ -1,24 +1,24 @@
 \documentclass[a4paper,12pt]{article}
-\usepackage{amsmath}
+\usepackage{amsmath, bm}
 \usepackage{amssymb,amsthm,graphicx}
-%\usepackage{bbm} (Do not want to use these, may create conflicts)
-%\usepackage{gensymb}
 \usepackage{enumitem}
 \usepackage{color}
-\usepackage{epsfig}
-\usepackage{graphics}
-\usepackage{pdfpages}
-\usepackage{subcaption}
-\usepackage[font=small]{caption}
-\usepackage[hang,flushmargin]{footmisc} 
 \usepackage{float}
-\usepackage{booktabs}
+\usepackage{subcaption}
 \usepackage[mathscr]{euscript}
+\usepackage{dsfont}
 \usepackage{natbib}
-\usepackage{setspace}
-\usepackage{mathrsfs}
+\usepackage{amsmath}
+\makeatletter
+\renewcommand{\eqref}[1]{\tagform@{\ref{#1}}}
+\def\maketag@@@#1{\hbox{#1}}
+\makeatother
+\usepackage{bibentry}
 \usepackage[left=2.7cm,right=2.7cm,bottom=2.7cm,top=2.7cm]{geometry}
-\parindent0pt 
+%\parindent0pt 
+\newcommand{\doublehat}[1]{\skew{5.5}\widehat{\widehat{#1}}}
+\newcommand{\doublehattwo}[1]{\widehat{\widehat{#1}}}
+
 
 \input{macros}
 
@@ -28,20 +28,16 @@
 
 
 
-\heading{Multiscale Inference for}{Nonparametric Time Trends}
+\heading{Multiscale Testing for Equality}{of Nonparametric Trend Curves}
 
 \vspace{-0.5cm}
 
-\authors{Marina Khismatullina\renewcommand{\thefootnote}{1}\footnotemark[1]}{University of Bonn}{Michael Vogt\renewcommand{\thefootnote}{2}\footnotemark[2]}{University of Bonn} 
-\footnotetext[1]{Address: Bonn Graduate School of Economics, University of Bonn, 53113 Bonn, Germany. Email: \texttt{marina.k@uni-bonn.de}.}
+\authors{Marina Khismatullina\renewcommand{\thefootnote}{1}\footnotemark[1]}{University of Bonn}{Michael Vogt\renewcommand{\thefootnote}{2}\footnotemark[2]}{University of Ulm} 
+\footnotetext[1]{Corresponding author. Address: Erasmus School of Economics, Erasmus University Rotterdam, 3062 PA Rotterdam, Netherlands. Email: \texttt{khismatullina@ese.eur.nl}.}
 \renewcommand{\thefootnote}{2}
-\footnotetext[2]{Corresponding author. Address: Department of Economics and Hausdorff Center for Mathematics, University of Bonn, 53113 Bonn, Germany. Email: \texttt{michael.vogt@uni-bonn.de}.}
+\footnotetext[2]{Address: Institute of Statistics, Department of Mathematics and Economics, Ulm University, 89081 Ulm, Germany. Email: \texttt{m.vogt@uni-ulm.de}.}
 \renewcommand{\thefootnote}{\arabic{footnote}}
 \setcounter{footnote}{0}
-
-%\vspace{-0.5cm}
-
-%\version{\today}
 
 \vspace{-1cm}
 
@@ -49,7 +45,7 @@
 
 \renewcommand{\abstractname}{}
 \begin{abstract}
-\noindent We develop multiscale methods to test qualitative hypotheses about nonparametric time trends. In many applications, practitioners are interested in whether the observed time series has a time trend at all, that is, whether the trend function is non-constant. Moreover, they would like to get further information about the shape of the trend function. Among other things, they would like to know in which time regions there is an upward/downward movement in the trend. When multiple time series are observed, another important question is whether the observed time series all have the same time trend. We design multiscale tests to formally approach these questions. We derive asymptotic theory for the proposed tests and investigate their finite sample performance by means of simulations. In addition, we illustrate the methods by two applications to temperature data. 
+{\noindent We develop multiscale methods to test qualitative hypotheses about nonparametric time trends in the presence of covariates. In many applications, practitioners are interested whether the observed time series all have the same time trend. Moreover, when some of the trends are different, it may be useful to know exactly which of the time trends are different. In addition, when two trends are not the same, it may also be relevant to know in which time regions they differ from each other. We design multiscale tests to formally approach these questions. We derive asymptotic theory for the proposed tests and show that the proposed test has asymptotic power of one against a certain class of local alternatives.}
 \end{abstract}
 
 \vspace{-0.1cm}
@@ -66,17 +62,745 @@
 \numberwithin{equation}{section}
 \allowdisplaybreaks[1]
 
+%\input{paper_intro}
+
+%\setlength{\parindent}{10ex} 
+
+\section{Introduction}\label{sec:intro}
+
+Comparison of several regression curves is a classical topic in econometrics and statistics. In many cases of practical interest, the functional forms of the objective regression curves are unknown, hence, the parametric approach is not applicable. In this paper, we propose a novel approach that addresses this particular problem in a nonparametric context. Specifically, we present a new testing procedure for detecting differences between the nonparametric trends curves. 
+
+In what follows, we consider a general panel framework with heterogeneous trends. Suppose we observe a panel of $n$ time series $\mathcal{W}_i = \{ (Y_{it},\mathbf{X}_{it}): 1 \le t \le T \}$ for\linebreak $1 \le i \le n$, where $Y_{it}$ are real-valued random variables and $\mathbf{X}_{it} = (X_{it,1},\ldots,X_{it,d})^\top$ are $d$-dimensional random vectors. Each time series $\mathcal{W}_i$ is modelled by the equation
+\begin{equation}\label{eq:model}
+Y_{it} = m_i \Big( \frac{t}{T} \Big) + \bfbeta_i^\top \mathbf{X}_{it} + \alpha_i + \varepsilon_{it}
+\end{equation}
+for $1 \le t \le T$, where $\bfbeta_i$ is a $d \times 1$ vector of unknown parameters, $\mathbf{X}_{it}$ is a $d\times 1$ vector of individual covariates or controls, $m_i$ is an unknown nonparametric (deterministic) trend function defined on $[0,1]$, $\alpha_i$ are so-called fixed effect error terms and \linebreak $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ is a zero-mean stationary error process. 
 
 
-\input{sections_intro}
-\input{sections_method}
-\input{sections_app}
+An important question in many applications is whether the observed time series have a common trend. In other words, the researchers would like to know if $m_i$ are the same for all $i$. Moreover, when there is evidence that this is not the case, one of the major related statistical problems is to determine which of the trends are different.% and whether we can group the time series with the similar trends together.
+In addition, when two trends $m_i$ and $m_j$ are not the same, it may also be relevant to know in which time regions they differ from each other. In this paper, we introduce new statistical methods to approach these questions. In particular, we develop a test of the hypothesis that all time trends in model \eqref{eq:model} are the same. In this setting, the null hypothesis is formulated as 
+\begin{align}\label{eq:null}
+H_0: m_1 = m_2 = \ldots = m_n,
+\end{align}
+whereas the alternative hypothesis is 
+$$H_1: \text{ there exists } x\in [0, 1] \text{ such that } m_i (x) \neq m_j(x) \text{ for some } 1\leq i < j \leq n.$$
+
+The method that we propose does not only allow to test whether the null hypothesis is violated. It also allows to detect, with a given statistical confidence, which time trends are different and in which time regions they differ. More specifically, for any given interval $[u-h,u+h] \subseteq [0,1]$, consider the hypothesis
+\[ H_0^{[i,j]}(u,h): m_i(w) = m_j(w) \text{ for all } w \in [u-h,u+h]. \] 
+Here, we can regard $h$ as a bandwidth, a common tuning parameter in nonparametric estimation. The given interval $\interval_{(u, h)} = [u-h,u+h] \subseteq [0,1]$ is then fully characterized by $u$, its center (a location parameter), and $h$, the bandwidth. In order to determine the regions where the time trends are different, we consider a broad range of pairs $(u, h)$ with the property that they fully cover the unit interval $[0, 1]$. Formally, let \linebreak $\grid := \{(u, h): \interval_{(u, h)} = [u-h, u+h] \subseteq [0,1]\}$ be a grid of location-bandwidth points such that 
+\begin{align*}
+\bigcup_{(u, h) \in \grid}  \interval_{(u, h)} = [0,1].
+\end{align*}
+We then reformulate our null hypothesis \eqref{eq:null} as
+\begin{align*}
+H_0: \ & \text{The hypotheses } H_0^{[i,j]}(u,h) \text{ hold true for all intervals }  \interval_{(u, h)}, (u, h) \in \grid, \\ & \text{ and for all } 1 \le i < j \le n. 
+\end{align*} 
+$H_0^{[i,j]}(u,h)$ can thus be viewed as a local null hypothesis that characterizes the behavior of two trend functions only locally, whereas $H_0$ specified in \eqref{eq:null} is the global null hypothesis that is concerned with the comparison of all of the trends on the whole unit interval.
+
+In this paper, we introduce a method that allows us to test the hypotheses $H_0^{[i,j]}(u,h)$  simultaneously for all pairs $(i, j)$ and for all intervals $\interval_{(u, h)}$ under consideration. Specifically, we develop a multiscale test for the model \eqref{eq:model}. The underlying idea of any multiscale test is to consider a number of test statistics (each corresponding to a different set of values of some tuning parameters) all at once rather than to perform a separate test for each single test statistics. In our case, this means testing many local null hypotheses $H_0^{[i,j]}(u,h)$ simultaneously which leads to a well-known multiple testing problem. Our method accounts for this problem by using appropriate critical values that depend on the scale of the problem, i.e. on the number of hypotheses tested simultaneously and the relationship between them. In the paper, we show that the suggested procedure for obtaining critical values leads to good theoretical properties of the proposed test: it has the correct (asymptotic) level and an (asymptotic) power of one against a certain class of local alternatives. %Moreover, we prove that when testing at a given level $\alpha$, the probability of rejecting even one local null hypothesis is no more than this level $\alpha$.
+
+Trend comparison is a common statistical problem that arises in various contexts. For example, in economics the researchers compare trends in real gross domestic product across several countries \citep[][]{Grier1989}, in yield over time of US Treasury bills at different maturities \citep[][]{Park2009}, or the evolution of long-term interest rates in a number of countries \citep[][]{Christiansen1997}. In finance, comparison and subsequent classification of the trends of market fragmentation can be used to assess the market quality in the European stock market (\citeauthor{VogtLinton2017}, \citeyear{VogtLinton2017}, \citeyear{VogtLinton2020}). In climatology, the temperature time series in different geographical areas are investigated in the context of the regional and global warming trends \citep[][]{KarolyWu2005}. Finally, in industry, mobile phone providers are interested in finding the differences between the cell phone download activity in various locations \citep[][]{DegrasWu2012}.
+
+
+In the statistical literature, the problem of testing whether the observed time series all have the same trend  has been widely studied, and tests for equality of trends or regression curves have been developed in \cite{HaerdleMarron1990}, \cite{Hall1990}, \linebreak \cite{Delgado1993} and \cite{DegrasWu2012} among many others. Versions of model \eqref{eq:model} with a parametric trend are considered in \cite{Vogelsang2005}, \cite{Sun2011} and \cite{Xu2012} among others. In the nonparametric context, \cite{LiChenGao2010}, \cite{Atak2011}, \cite{Robinson2012} and \cite{ChenGaoLi2012} studied panel models under the assumption that the observed time series have a common time trend. However, in many applications the restriction of including a common time trend in the model is questionable at best. For instance, when we observe a large number of time series it is reasonable to expect that at least some of the trends are different from the others. Consequently, it often makes sense to relax the assumption of a common trend, which leads to more flexible panel settings with heterogeneous trends. Such models have been studied, for example, in \cite{DegrasWu2012},  \cite{Zhang2012} and \cite{Hidalgo2014}. \cite{DegrasWu2012} consider the problem of testing $H_0$ in a model that is a special case of \eqref{eq:model} and does not include additional regressors. \cite{ChenWu2018} develop theory for a very similar model framework but under more general conditions on the error terms. \linebreak \cite{Zhang2012} investigate the problem of testing the hypothesis $H_0$ in a slightly restricted version of model \eqref{eq:model}, where $\bfbeta_i = \bfbeta$ for all $i$. All of these tests have an important drawback: they involve classical nonparametric estimation of the trend functions that depends on one or several bandwidth parameters, which imposes a certain limit on the applicability of such tests since in most cases it is far from clear how to choose bandwidth parameters in an appropriate way. Contrary to the aforementioned methods, our multiscale testing procedure allows us to consider a large collection of bandwidths simultaneously avoiding the problem of choosing only one bandwidth altogether.
+
+Recently, \cite{KhismatullinaVogt2021} proposed a new inference method that allows researchers to detect differences between epidemic time trends in the context of the COVID-19 pandemic. In their paper, the authors present a statistically rigorous procedure that, similarly to ours, not only allows to compare trends across different countries, but to pinpoint the time intervals where the differences occur as well. Moreover, they also circumvent the need to pick a bandwidth parameter by using a multiscale testing approach. However, the model in \cite{KhismatullinaVogt2021} is only a special case of the model \eqref{eq:model} which includes neither the covariates $\mathbf{X}_{it}$, nor the fixed effects $\alpha_i$. Furthermore, the authors place major restriction on the error terms: in their model, $\varepsilon_{it}$ are independent across $t$. In contrast, our model \eqref{eq:model} can be regarded as a generalized version of theirs that allows for a wider range of economic and financial applications.
+
+%This is a general problem concerning essentially all tests based on nonparametric curve estimators. There are of course many theoretical results on optimal bandwidth choice for estimation purposes. However, the optimal bandwidth for curve estimation is usually not optimal for testing. Optimal bandwidth choice for tests is indeed an open problem, and only little theory for simple cases is available \citep[][]{GaoGijbels2008}. Since tests based on nonparametric curve estimators are commonly quite sensitive to the choice of bandwidth and theory for optimal bandwidth selection is not available, it appears preferable to work with bandwidth-free tests. A classical way to obtain a bandwidth-free test of the hypothesis $H_0$ is to use CUSUM-type statistics which are based on partial sum processes. This approach is taken in \cite{Hidalgo2014}. A more modern approach to obtain a bandwidth-free test is to employ multiscale methods.
+
+%More specifically, the basic idea is as follows: Let $S_h$ be a test statistic for the null hypothesis of interest, which depends on the bandwidth $h$. Rather than considering only a single statistic $S_h$ for a specific bandwidth $h$, a multiscale approach simultaneously considers a whole family of statistics $\{S_h: h \in \mathcal{H} \}$, where $\mathcal{H}$ is a set of bandwidth values. The multiscale test then proceeds as follows: For each bandwidth or scale $h$, one checks whether $S_h > q_h(\alpha)$, where $q_h(\alpha)$ is a bandwidth-dependent critical value (for given significance level $\alpha$). The multiscale test rejects if $S_h > q_h(\alpha)$ for at least one scale $h$. The main theoretical difficulty in this approach is of course to derive appropriate critical values $q_h(\alpha)$. Specifically, the critical values $q_h(\alpha)$ need to be determined such that the multiscale test has the correct (asymptotic) level, that is, such that $\pr (S_h > q_h(\alpha) \text{ for some } h \in \mathcal{H} ) = (1-\alpha) + o(1)$. 
+
+
+%Multiscale methods have been developed for a variety of different test problems in recent years. \cite{ChaudhuriMarron1999, ChaudhuriMarron2000} introduced the so-called SiZer method which has been extended in various directions; see for example \cite{HannigMarron2006} and \cite{Rondonotti2007}. \cite{HorowitzSpokoiny2001} proposed a multiscale test for the parametric form of a regression function. \cite{DuembgenSpokoiny2001} constructed a multiscale approach which works with additively corrected supremum statistics. This general approach has been very influential in recent years and has been further developed in numerous ways; see for example \cite{Duembgen2002}, \cite{Rohde2008} and \cite{ProkschWernerMunk2018} for multiscale methods in the regression context and \cite{DuembgenWalther2008}, \cite{RufibachWalther2010}, \cite{SchmidtHieber2013} and \cite{EckleBissantzDette2017} for methods in the context of density estimation. Importantly, all of these studies are restricted to the case of independent data. It turns out that it is highly non-trivial to extend the multiscale approach of \cite{DuembgenSpokoiny2001} to the case of dependent data. A first step into this direction has recently been made in \cite{KhismatullinaVogt2020}. They developed multiscale methods to test for local increases/decreases of the nonparametric trend function $m$ in the univariate time series model $Y_t = m(t/T) + \varepsilon_t$.  
+
+
+To sum up, the main theoretical contribution of the current paper is the multiscale testing method that allows to make simultaneous confidence statements about which of the time trends are distinct and the regions where they differ. We believe that currently there are no equivalent statistical methods. Even though tests for equality of the trends have been developed already for a while, most existing procedures allow only to test whether the trend curves are all the same or not, but they almost never allow to infer which curves are different and where. To the best of our knowledge, the only two exceptions are \cite{KhismatullinaVogt2021}, whose contribution is briefly discussed above, and \cite{Park2009} who developed SiZer methods for the comparison of nonparametric trend curves in a significantly simplified version of the model \eqref{eq:model}. In addition to restricted model, \cite{Park2009} derive theoretical results for their analysis only for the special case of observing only two time series, whereas in other cases, the algorithm is provided without detailed proof.
+
+The structure of the paper is as follows. Section \ref{sec:model} introduces the model setting and the necessary technical assumptions that are required for the theory. The multiscale test is developed step by step in Section \ref{sec:test}. The main theoretical results are presented in Section \ref{sec:theo}. Section \ref{sec:para} deals with estimating the unknown parameters necessary for construction of the test statistics. To keep the discussion as clear as possible, we include in the main text of the paper only the essential parts of the theoretical arguments, and the technical details and extended proofs are deferred to the Appendix. Section \ref{sec:conclusion} concludes.
+
+
+\section{The model}\label{sec:model}
+
+Throughout the paper, we adopt the following notation. For a real-valued vector \linebreak $\mathbf{v} = (v_1, \ldots, v_m)\in\reals^m$, we write $|\mathbf{v}| = \big(\sum_{i=1}^m v_i^2\big)^{1/2}$ and $|\mathbf{v}|_q = \big(\sum_{i=1}^m v_i^q\big)^{1/q}$ respectively. For a random vector $\mathbf{V}$, we define it's $\mathcal{L}^q, q>1$ norm as $||\mathbf{V}||_q = \big(\ex |\mathbf{V}|^q\big)^{1/q}$. For the particular case $q = 2$, we write $||\mathbf{V}|| := ||\mathbf{V}||_2$.
+
+\textcolor{red}{Let $\epsilon_t, t \in \integers,$ be independent and identically distributed (i.i.d.) random variables and let $\mathbf{L}$ be a measurable real-valued vector function such that $\mathbf{L}(\ldots, \epsilon_{t-1}, \epsilon_t)$ is a properly defined random variable. Denote $\mathcal{F}_t  = (\ldots, \epsilon_{t-1}, \epsilon_t)$.}  Following \cite{Wu2005}, we define the \textit{physical dependence measure} for the process $\mathbf{L}(\mathcal{F}_t)$ as the following:
+\begin{align}\label{eq:physical_dep}
+ \delta_q(\mathbf{L}, t) = || \mathbf{L}(\mathcal{F}_t) - \mathbf{L}(\mathcal{F}_t^\prime) ||_q,
+\end{align}
+where $\mathcal{F}_t^\prime  = (\ldots, \epsilon_{-1}, \epsilon^\prime_0, \epsilon_1, \ldots, \epsilon_{t-1}, \epsilon_t)$ is a coupled process of $\mathcal{F}_t$ with $\epsilon_0^\prime$ being an i.i.d. copy of $\epsilon_0$. Intuitively, $\delta_q(\mathbf{L}, t)$ measures the dependency of $\mathbf{L}(\mathcal{F}_t)$ on $\epsilon_0$, i.e., how replacing $\epsilon_0$ by an i.i.d. copy while keeping all other innovations in place affects the output $\mathbf{L}(\mathcal{F}_t)$.
+
+\subsection{Setting}\label{subsec:model_setting}
+
+As was already briefly discussed in Section \ref{sec:intro}, the model setting is as follows. We observe a panel of $n$ time series $\mathcal{W}_i = \{(Y_{it}, \mathbf{X}_{it}): 1 \le t \le T \}$ of length $T$ for $1 \le i \le n$. Each time series $\mathcal{W}_i$ satisfies the model equation 
+\begin{equation}\label{eq:model_full}
+Y_{it} = \bfbeta^\top_i \mathbf{X}_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
+\end{equation}
+for $1 \le t \le T$, where $\bfbeta_i$ is a $d \times 1$ vector of unknown parameters, $\mathbf{X}_{it}$ is a $d\times 1$ vector of individual covariates, $m_i$ is an unknown nonparametric trend function defined on $[0,1]$ with $\int_0^1 m_i(u) du = 0$ for all $i$, $\alpha_i$ is a (deterministic or random) intercept term and \linebreak $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ is a zero-mean stationary error process. As common in nonparametric regression, the trend functions $m_i$ in model \eqref{eq:model_full} depend on rescaled time $t/T$ rather than on real time $t$. Using rescaled time is equivalent to restricting the domain of the functions to the unit interval which in turn allows us to apply the usual asymptotic arguments. Discussion about the application of the rescaled time in the context of nonparametric estimation can be found in \ \cite{Robinson1989}, \cite{Dahlhaus1997} and \cite{VogtLinton2014}. The condition $\int_0^1 m_i(u) du = 0$ for all $i$ is a necessary identification condition due the presence of  $\alpha_i$. Without imposing this condition, we can freely increase the functions $m_i$ by any (positive or negative) constant $c_i$ while simultaneously subtract the same constant from the intercept term $\alpha_i$:
+$$Y_{it} = [m_i(t/T) + c_i] + \bfbeta_i^\top \mathbf{X}_{it} + [\alpha_i - c_i] + \varepsilon_{it}.$$
+The term $\alpha_i$ can be regarded as an additional error component. In the econometrics literature, it is commonly called a fixed effect and is often interpreted as the term which captures unobserved characteristics of the time series $\mathcal{W}_i$ that remain constant over time. We allow the error terms $\alpha_i$ to be dependent across $i$ in an arbitrary way. Hence, by including them in model equation \eqref{eq:model_full}, we allow the $n$ time series $\mathcal{W}_i$ in our panel to be correlated with each other. Whereas the terms $\alpha_i$ may be correlated, the error processes $\mathcal{E}_i$ are assumed to be independent across $i$. As usual in nonparametric estimation, we also assume that all the trend functions $m_i(\cdot)$ are continuously differentiable on $[0, 1]$. Technical conditions regarding the model are discussed further in this section.
+
+Finally, throughout the paper we restrict attention to the case where the number of time series $n$ in model \eqref{eq:model_full} is fixed. Extending our theoretical results to the case where $n$ slowly grows with the sample size $T$ is a possible topic for further research.
+
+\subsection{Assumptions}\label{subsec:model_assumptions}
+
+Each process $\mathcal{E}_i$ is supposed to satisfy the following conditions: 
+
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+
+\item \label{C-err1} \textcolor{red}{The variables $\varepsilon_{it}$ are independent across $i$} and for each $i$ the variables $\varepsilon_{it}$ allow for the representation $\varepsilon_{it} = G_i(\ldots,\eta_{it-1},\eta_{it})$, where $\eta_{it}$ are i.i.d.\ random variables across $t$ and $G_i: \reals^\integers \rightarrow \reals$ is a measurable function. Denote \linebreak $\mathcal{J}_{it} = (\ldots,\eta_{it-2},\eta_{it-1},\eta_{it})$.
+
+\item \label{C-err2} For all $i$ it holds that $\ex[\varepsilon_{it}] =0$ and $\| \varepsilon_{it} \|_q < \infty$ for some $q > 4$ \textcolor{red}{(uncorrelatedness from \ref{C-reg-err1} is enough, we do not use $\ex[\varepsilon_{it}| \X_{it}] = 0$ in the proofs)}.
+\end{enumerate}
+Assumption \ref{C-err1} can be translated as the restriction on the error process $\mathcal{E}_i$ to be stationary and causal (in the sense that $\varepsilon_{it}$ does not depend on the future innovations $\eta_{is},\, s >t$). The class of error processes that satisfies the condition \ref{C-err1} is massive, and includes linear processes, their nonlinear transformation, as well as a large variety of nonlinear processes such as Markov chain models and nonlinear autoregressive models \citep[][]{Wu2016}. Assumption \ref{C-err2} is a standard moment condition.
+
+Following \cite{Wu2005}, we impose conditions on the dependence structure of the error processes $\mathcal{E}_i$ in terms of the physical dependence measure $\delta_q(G_i, t)$ defined in \eqref{eq:physical_dep}. In particular, we assume the following: 
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+\setcounter{enumi}{2}
+
+\item \label{C-err3} Define $\Theta_{i, t,q} = \sum\nolimits_{s \ge t} \delta_q(G_i, s)$ for $t \ge 0$. For each $i$ it holds that \linebreak
+$\Theta_{i, t,q} = O ( t^{-\tau_q} (\log t)^{-A} )$,  
+where $A > \frac{2}{3} (1/q + 1 + \tau_q)$ and \linebreak $\tau_q = \{q^2 - 4 + (q-2) \sqrt{q^2 + 20q + 4}\} / 8q$. 
+
+\end{enumerate}
+
+For fixed $i$ and $t$, $\Theta_{i, t,q}$ measures the cumulative effect of $\eta_0$ on $(\varepsilon_{is})_{s\geq t}$ in terms of $\mathcal{L}^q$-norm. Condition \ref{C-err3} assumes that the overall cumulative effect is finite and puts some restrictions on the rate of decay of $\Theta_{i, t,q}$. Assumption \ref{C-err3} is fulfilled by a wide range of stationary processes $\mathcal{E}_i$. For a detailed discussion of assumption \ref{C-err3}, as well as assumptions \ref{C-err1}--\ref{C-err2} and some examples of the error processes that satisfy these conditions, see \cite{KhismatullinaVogt2020}.
+
+Regarding the independent variables $ \mathbf{X}_{it}$, we assume the following for each $i$:
+
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+\setcounter{enumi}{3}
+
+\item \label{C-reg1} The covariates $ \mathbf{X}_{it}$ allow for the representation $ \mathbf{X}_{it} = \mathbf{H}_i(\ldots,u_{it-1},u_{it})$ with $u_{it}$ being i.i.d.\  \textcolor{red} {across $t$ (I do not think that we need independence across $i$, can you have a look?)} random variables and $\mathbf{H}_i := (H_{i1}, H_{i2}, \ldots, H_{id})^\top: \reals^\integers \rightarrow \reals^d$ being a measurable function such that $\mathbf{H}_i(\mathcal{U}_{it})$ is well defined. We denote \linebreak $\mathcal{U}_{it} = (\ldots, u_{it-1}, u_{it})$.
+
+\item \label{C-reg2} Let $\mathbf{N}_i$ be the $d\times d$ matrix with $kl$-th entry $n_{i, kl}= \ex[H_{ik}(\mathcal{U}_{i0})H_{il}(\mathcal{U}_{i0})]$. We assume that the smallest eigenvalue of $\mathbf{N}_i$ is strictly bigger than $0$.
+
+\item \label{C-reg3} Let $\ex [\mathbf{H}_{i}(\mathcal{U}_{i0})]=\mathbf{0}$ and $||\mathbf{H}_{i}(\mathcal{U}_{it})||_{q^\prime} <\infty$ for some $q^\prime > \max\{ 2\theta, 4\}$, where $\theta$ will be introduced further in Assumption \ref{C-grid}.
+\item \label{C-reg4} $\sum_{s=0}^\infty \delta_{q^\prime}(\mathbf{H}_i, s)<\infty$ for $q^\prime$ from Assumption \ref{C-reg3}.
+\item \label{C-reg5} For each $i$ it holds that $\sum_{s=t}^{\infty} \delta_{q^\prime}(\mathbf{H}_{i}, s)= O(t^{-\alpha}) $ for $q^\prime$ from Assumption \ref{C-reg3} and for some $\alpha > 1/2 - 1/{q^\prime}$.
+\end{enumerate}
+
+As with the error processes $\mathcal{E}_i$, $\mathbf{X}_i$ is guaranteed to be stationary and causal by Assumption \ref{C-reg1}. Assumptions \ref{C-reg2} and \ref{C-reg3} are technical conditions that prevent asymptotic multicollinearity and ensure that all the necessary moments exist, respectively. Moreover, similarly to the restriction on the error processes, we also employ the definition of the physical dependence measure $ \delta_{q}(\cdot, \cdot)$ in Assumptions \ref{C-reg4} - \ref{C-reg5}, thus, making certain that the cumulative effect of the innovation $u_0$ on $(\mathbf{X}_{it})_{t\geq 0}$ is finite. 
+
+
+
+To be able to prove the main theorems in Section \ref{sec:test}, we need additional assumptions on the relationship between the covariates and the error process.
+
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+\setcounter{enumi}{8}
+\item \label{C-reg-err1} $\mathbf{X}_{it}$ (elementwise) and $\varepsilon_{is}$ are uncorrelated for each $t, s\in \{1, \ldots, T\}$.
+\item \label{C-reg-err2} Let $\zeta_{i, t} = (u_{it}, \eta_{it})^\top$. Define $\mathcal{I}_{it} = (\ldots, \zeta_{i, t-1}, \zeta_{i, t})$ and $\mathbf{U}_i(\mathcal{I}_{it}) =  \mathbf{H}_i(\mathcal{U}_{it})G_i(\mathcal{J}_{it})$. With this notation at hand, we assume that $\sum_{s=0}^\infty \delta_2(\mathbf{U}_i, s)<\infty$.
+
+\end{enumerate}
+Assumption \ref{C-reg-err1} is a slightly relaxed independence assumption: even though we do not require the covariates $\mathbf{X}_{it}$ to be completely independent with the error terms $\varepsilon_{it}$, our theoretical results depend upon them being uncorrelated. We in particular need this restriction in order to prove asymptotic consistency for the differencing estimator $\widehat{\bfbeta}_i$ of $\bfbeta_i$ proposed in Section \ref{subsec:para:beta}. In principle, it would be possible to relax this assumption even further, but that would involve much more complicated estimation procedure of $\bfbeta_i$ and more arduous technical arguments. Assumption \ref{C-reg-err2} ensures short-range dependence among the variables in our model. Again, we can interpret this as the fact that the cumulative effect of a single error on all future values is bounded.
+
+We employ these assumptions to prove the main theoretical results in our paper. For detailed proofs, we refer the reader to the Appendix.
+
+\begin{remark}
+The conditions \ref{C-reg1}--\ref{C-reg-err2} can be relaxed to cover nonstationary regressors as well as stationary ones. For example, \ref{C-reg1} may then be replaced by
+\begin{enumerate}[label=(C\arabic*$^\ast$),leftmargin=1.05cm]
+\setcounter{enumi}{3}
+\item \label{C-reg1-star} The covariates $ \mathbf{X}_{it}$ allow for the representation $ \mathbf{X}_{it} = \mathbf{H}_i(t; \ldots,u_{it-1},u_{it})$ with $u_{it}$ being i.i.d.\ random variables and $\mathbf{H}_i := (H_{i1}, H_{i2}, \ldots, H_{id})^\top: \reals^\integers \rightarrow \reals^d$ is a measurable function such that $\mathbf{H}_i(t;\mathcal{U}_{it})$ is well defined. 
+\end{enumerate} 
+The other assumptions can be adjusted accordingly. Our main theoretical results will in principle still hold in this case, however, the complexity of the technical arguments will increase drastically. Hence, for the sake of clarity, we restrict our attention only to stationary  covariates $\mathbf{X}_{it}$. 
+\end{remark}
+
+
+\section{Testing procedure}\label{sec:test}
+
+In this section, we develop a multiscale testing procedure for the problem of comparison of the trend curves $m_i$ in model \eqref{eq:model_full}.  As we will see, the proposed multiscale method does not only allow to test whether the null hypothesis is violated. It also provides information on where violations occur. More specifically, it allows to identify, with a pre-specified confidence, (i) trend functions which are different from each other and (ii) time intervals where these trend functions differ.
+
+\subsection{Preliminary steps}\label{subsec:test:prep}
+
+Testing the null hypothesis $H_0: m_1 = m_2 = \ldots = m_n$ in model \eqref{eq:model_full} is a challenging task not only because it involves nonparametric estimation of the functions $m_i(\cdot)$, but also due to the presence of an unknown fixed term $\alpha_i$ and a vector of unknown parameters $\bfbeta_i$. It is clear that if $\alpha_i$ and $\bfbeta_i$ are known, the problem of testing for the common time trend would be greatly simplified. That is, we would test $H_0: m_1 = m_2 = \ldots = m_n$ in the model
+\begin{align*}
+Y_{it} - \alpha_i - \bfbeta_i^\top \mathbf{X}_{it} & =: Y_{it}^\circ\\
+					& = m_i \Big( \frac{t}{T} \Big) + \varepsilon_{it}, 
+\end{align*}
+which is a standard nonparametric regression equation. However, in reality the variables $Y_{it}^\circ$ are not observed since the intercept $\alpha_i$ and the coefficients $\bfbeta_i$ are not known. Nevertheless, given appropriate estimators $\widehat{\alpha}_i$ and $\widehat{\bfbeta}_i$, we can consider
+\begin{align*}
+	\widehat{Y}_{it} := Y_{it} -\widehat{\alpha}_i - \widehat{\bfbeta}_i^\top \mathbf{X}_{it} =(\bfbeta_i - \widehat{\bfbeta}_i)^\top \mathbf{X}_{it} + m_i \Big( \frac{t}{T} \Big) + \big( \alpha_i - \widehat{\alpha}_i \big) + \varepsilon_{it}. 
+\end{align*}
+Thus, the unobserved variables $Y_{it}^\circ$ can be approximated by $\widehat{Y}_{it}$, and in what follows we show that under some mild conditions on $\widehat{\alpha}_i$ and $\widehat{\bfbeta}_i$, this approximation is indeed sufficient for our analysis. 
+
+But before we proceed further, we show how to construct consistent estimates $\widehat{\alpha}_i$ and $\widehat{\bfbeta}_i$. To begin with, we focus on the estimation of the vector of unknown parameters $\bfbeta_i$. We construct the estimator  $\widehat{\bfbeta}_i$ in the following way.
+
+For each $i$, we consider the time series $\{\Delta Y_{it}: 2 \leq t \leq T\}$ of the differences \linebreak $\Delta Y_{it} = Y_{it} - Y_{i t-1}$. We can write
+\begin{align*}
+	\Delta Y_{it} = Y_{it} - Y_{i t-1} =\bfbeta_i^\top \Delta \mathbf{X}_{it} + \bigg(m_i \Big( \frac{t}{T} \Big) - m_i \Big(\frac{t-1}{T}\Big)\bigg) + \Delta \varepsilon_{it},
+\end{align*}
+where $\Delta  \mathbf{X}_{it} =  \mathbf{X}_{it} -  \mathbf{X}_{it-1}$ and $ \Delta \varepsilon_{it} = \varepsilon_{it} - \varepsilon_{i t-1}$. Since $m_i(\cdot)$ is Lipschitz (by our assumption that $m_i(\cdot)$ is continuously differentiable on $[0, 1]$), we can use the fact that $ \big|m_i \big( \frac{t}{T} \big) - m_i \big(\frac{t-1}{T}\big) \big| = O\big(\frac{1}{T}\big)$ and rewrite 
+\begin{align}\label{model_with_regs}
+	\Delta Y_{it} = \bfbeta_i^\top \Delta \mathbf{X}_{it} + \Delta \varepsilon_{it} + O\Big(\frac{1}{T}\Big).
+\end{align}
+
+Now, for each $i$ we employ the least squares estimation method to estimate $\bfbeta_i$ in \eqref{model_with_regs}, treating $\Delta \mathbf{X}_{it}$ as the regressors and $\Delta Y_{it}$ as the response variable. That is, we propose the following differencing estimator:
+\begin{align}\label{eq:beta:est}
+\widehat{\bfbeta}_i = \Big( \sum_{t=2}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \sum_{t=2}^T \Delta \mathbf{X}_{it} \Delta Y_{it}
+\end{align}
+We will show in Section \ref{subsec:para:beta} that $\widehat{\bfbeta}_i$ is a consistent estimator of $\bfbeta_i$ with the property $\bfbeta_i - \widehat{\bfbeta}_i = O_P(T^{-1/2})$.
+
+Next, given $\widehat{\bfbeta}_i$, consider an appropriate estimator $\widehat{\alpha}_{i}$ for the intercept $\alpha_i$ calculated by
+\begin{align}\label{eq:alpha:est}
+\widehat{\alpha}_i &= \frac{1}{T}\sum_{t=1}^T \big(Y_{it} - \widehat{\bfbeta}_i^\top \mathbf{X}_{it}\big) = \frac{1}{T}\sum_{t=1}^T \big(\bfbeta_i^\top \mathbf{X}_{it} - \widehat{\bfbeta}_i^\top \mathbf{X}_{it} + \alpha_i + m_i(t/T) + \varepsilon_{it}\big) =\\
+&= \big(\bfbeta_i - \widehat{\bfbeta}_i \big)^\top\frac{1}{T}\sum_{t=1}^T  \mathbf{X}_{it} + \alpha_i + \frac{1}{T}\sum_{i=1}^T m_i(t/T) + \frac{1}{T}\sum_{i=1}^T \varepsilon_{it}.\nonumber
+\end{align}
+Note that $\frac{1}{T}\sum_{i=1}^T \varepsilon_{it} = O_P(T^{-1/2})$ and $\frac{1}{T}\sum_{i=1}^T m_i(t/T) = O(T^{-1})$ due to Lipschitz continuity of $m_i$ and normalization $\int_{0}^1 m_i(u)du = 0$. Furthermore, $\frac{1}{T}\sum_{t=1}^T  \mathbf{X}_{it} = O_P(1)$ by Chebyshev's inequality and $\widehat{\bfbeta}_i - \bfbeta_i = O_P (T^{-1/2})$. Plugging all these results together in \eqref{alpha-est}, we get that $\widehat{\alpha}_i - \alpha_i = O_P(T^{-1/2})$. Thus, the unobserved variables \linebreak $Y_{it}^\circ := Y_{it} - \bfbeta_i^\top \mathbf{X}_{it} - \alpha_i = m_i(t/T) + \varepsilon_{it}$ can be well approximated by $\widehat{Y}_{it} $ since \linebreak $\widehat{Y}_{it} = Y_{it} -\widehat{\alpha}_i - \widehat{\bfbeta}_i^\top \mathbf{X}_{it} = Y_{it}^\circ + O_P(T^{-1/2})$.
+
+We now turn to the estimator of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_{i0}, \varepsilon_{i\ell})$ which is necessary for the construction of the test statistics later on. For the moment, we assume that the long-run variance does not depend on $i$, that is $\sigma_i^2 = \sigma^2$ for all $i$. We will need this further for conducting the testing procedure properly. Nevertheless, we keep the indices throughout the paper in order to be congruous in notation. We further let $\widehat{\sigma}_i^2$ be an estimator of $\sigma_i^2$ which is computed from the constructed sample $\{ \widehat{Y}_{it}: 1 \le t \le T \}$. We thus regard $\widehat{\sigma}_i^2 = \widehat{\sigma}_i^2(\widehat{Y}_{i1},\ldots,\widehat{Y}_{iT})$ as a function of the variables $\widehat{Y}_{it}$ for $1 \le t \le T$. Hence, whereas the true long-run variance is the same for all time series, the estimators are different. Throughout the section, we assume that $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ where the conditions on $\rho_T$ will be provided further in Section \ref{sec:theo}. Details on how to construct $\widehat{\sigma}_i^2$ are deferred to Section \ref{subsec:para:lrv}. 
+
+\subsection{Construction of the test statistics}\label{subsec:test:stat}
+
+We are now ready to introduce the multiscale statistic for testing the hypothesis \linebreak $H_0: m_1 = m_2 = \ldots = m_n$. For any pair of time series $i$ and $j$ and for any location-bandwidth pair $(u, h)$, we define the kernel averages
+\begin{align}\label{eq:psi_hat_ij}
+ \widehat{\psi}_{ij,T}(u,h) = \sum\limits_{t=1}^T w_{t,T}(u,h)(\widehat{Y}_{it} - \widehat{Y}_{jt}),
+ \end{align}
+where $w_{t,T}(u,h)$ are the local linear kernel weights calculated by the following formula:
+\begin{equation}\label{eq:weights}
+w_{t,T}(u,h) = \frac{\Lambda_{t,T}(u,h)}{ \{\sum\nolimits_{t=1}^T \Lambda_{t,T}(u,h)^2 \}^{1/2} }, 
+\end{equation}
+where
+\[ \Lambda_{t,T}(u,h) = K\Big(\frac{\frac{t}{T}-u}{h}\Big) \Big[ S_{T,2}(u,h) - \Big(\frac{\frac{t}{T}-u}{h}\Big) S_{T,1}(u,h) \Big], \]
+$S_{T,\ell}(u,h) = (Th)^{-1} \sum\nolimits_{t=1}^T K(\frac{\frac{t}{T}-u}{h}) (\frac{\frac{t}{T}-u}{h})^\ell$ for $\ell = 1,2$ and $K$ is a kernel function. As common in the nonparametric estimation, we assume that $K$ has the following properties: 
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+\setcounter{enumi}{10}
+\item \label{C-ker} The kernel $K$ is non-negative, symmetric about zero and integrates to one. Moreover, it has compact support $[-1,1]$ and is Lipschitz continuous, that is,\linebreak $|K(v) - K(w)| \le C |v-w|$ for any $v,w \in \reals$ and some constant $C > 0$. 
+\end{enumerate} 
+Assumption \ref{C-ker} allows us to use the usual kernel functions such as rectangular, Epanechnikov and Gaussian kernels.
+
+We regard the kernel average $\widehat{\psi}_{ij,T}(u,h)$ as a measure of the distance between the two trend curves $m_i$ and $m_j$ on the interval $\interval_{(u, h)} = [u-h,u+h]$. However, instead of working directly with the kernel averages $\widehat{\psi}_{ij,T}(u,h)$, we replace them by their normalized and corrected version:
+\begin{align}\label{eq:psi_zero_ij}
+\hat{\psi}^0_{ij,T}(u, h) =  \Big|\frac{\widehat{\psi}_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h).
+\end{align}
+Here, $\lambda(h) = \sqrt{2 \log \{ 1/(2h) \}}$ is an additive correction term that balances the significance of many test statistics that correspond to different values of bandwidth parameters (see the discussion on this topic and comparison between multiscale testing procedures with and without this correction term in \citet{KhismatullinaVogt2020}).
+
+We now aggregate the test statistics $\hat{\psi}^0_{ij, T}(u,h)$ for all $i$ and $j$ and a wide range of different locations $u$ and bandwidths (scales) $h$:
+\begin{align}\label{eq:Psi_hat}
+	\widehat{\Psi}_{n,T} = \max_{1 \le i < j \le n}\max_{(u,h) \in \mathcal{G}_T} \hat{\psi}^0_{ij,T}(u, h),
+\end{align}
+
+In \eqref{eq:Psi_hat}, $\mathcal{G}_T$ stands for the set of location-bandwidth pairs $(u, h)$ that was mentioned in Section \ref{sec:intro}. We use the subscript $T$ in $\grid_T$ to point out that the choice of the grid depends on the sample size $T$. Specifically, throughout the paper, we suppose that $\mathcal{G}_T$ is some subset of $\mathcal{G}_T^{\text{full}} = \{ (u,h): u = t/T \text{ and } h = s/T \text{ for some } 1 \le t, s \le T \text{ such that } \linebreak h \in [h_{\min},h_{\max}] \}$, where $h_{\min}$ and $h_{\max}$ denote some minimal and maximal bandwidth value, respectively. As was already discussed in Section \ref{sec:intro}, we assume that the set of intervals $\{\interval_{(u, h)} = [u-h, u+h]: (u, h) \in \grid_T\}$ covers the whole unit interval. Furthermore, for our theoretical results, we require the following additional conditions to hold:
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+\setcounter{enumi}{11}
+
+\item \label{C-grid} $|\mathcal{G}_T| = O(T^\theta)$ for some arbitrarily large but fixed constant $\theta > 0$, where $|\mathcal{G}_T|$ denotes the cardinality of $\mathcal{G}_T$. 
+
+\item \label{C-h} $h_{\min} \gg T^{-(1-\frac{2}{q})} \log T$, that is, $h_{\min} / \{ T^{-(1-\frac{2}{q})} \log T \} \rightarrow \infty$ with $q > 4$ defined in \ref{C-err2} and $h_{\max} < 1/2$.
+
+\end{enumerate}
+Assumption \ref{C-grid} places relatively mild restrictions on the grid $\grid_T$: we allow the grid to grow with the sample size but only at a polynomial rate $T^\theta$ with fixed $\theta$. This is not a severe constraint because under this limitation, we can still work with the full set of location-bandwidth points $\grid_T = \grid_T^{\text{full}}$ which is more than enough for most applied problems. Assumption \ref{C-h} is concerned with the minimal and the maximal bandwidths that we use for our analysis. Specifically, according to Assumption \ref{C-h}, we can choose the minimal bandwidth $h_{\min}$ that converges to zero slower than $T^{-(1-\frac{2}{q})} \log T$ as the sample size $T$ goes to infinity. The maximal bandwidth $h_{\max}$ can be picked very large.
+
+Note that the value $\max_{(u,h) \in \mathcal{G}_T} \hat{\psi}^0_{ij,T}(u, h)$ simultaneously takes into account all intervals $\interval_{(u, h)} = [u- h, u+h]$ with $(u,h) \in \mathcal{G}_T$. Thus, it can be interpreted as a global distance measure between the two curves $m_i$ and $m_j$, and the test statistics $\widehat{\Psi}_{n,T}$ is then defined as the maximal distance between any pair of curves $m_i$ and $m_j$ with $i \ne j$.
+
+In Section \ref{subsec:test:test}, we show how to test the null hypothesis $H_0: m_1 =m_2 = \ldots = m_n$ using the multiscale test statistics $\widehat{\Psi}_{n,T}$.
+
+\subsection{The testing procedure}\label{subsec:test:test}
+
+
+Let $Z_{it}$ for $1 \le t \le T$ and $1 \le i \le n$ be independent standard normal random variables which are independent of the error terms $\varepsilon_{js}$ and the covariates $\mathbf{X}_{js}$ for all $1 \leq s \leq T $ and $1 \leq j \leq n$. Denote the empirical average of the variables $Z_{i1},\ldots,Z_{iT}$ by $\bar{Z}_{i,T} = T^{-1} \sum_{t=1}^T Z_{it}$. To simplify the notation, we will omit the subscript $T$ in $\bar{Z}_{i,T}$ in what follows. Similarly as with $\hat{\psi}^0_{ij,T}(u, h)$, for each $i$ and $j$, we introduce the normalized and corrected Gaussian kernel averages 
+\begin{align}\label{eq:phi_zero_ij}
+\phi^0_{ij,T}(u, h) =  \bigg|\frac{\phi_{ij,T}(u,h)}{(\sigma_i^2 + \sigma_j^2)^{1/2}}\bigg| - \lambda(h),
+\end{align}
+where 
+\begin{align}\label{eq:phi_ij}
+\phi_{ij,T}(u,h) = \sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ \sigma_i (Z_{it} - \bar{Z}_i) - \sigma_j (Z_{jt} - \bar{Z}_j) \big\}
+\end{align}
+with $w_{t, T}(u, h)$ defined in \eqref{eq:weights}. 
+
+Next, in the same way as in \eqref{eq:Psi_hat}, we define the global Gaussian test statistic
+\begin{align}\label{eq:Phi}
+\Phi_{n,T} = \max_{1 \le i < j \le n}\max_{(u,h) \in \mathcal{G}_T} \phi^0_{ij,T}(u, h)
+\end{align}
+and denote its $(1-\alpha)$-quantile by $q_{n,T}(\alpha)$.
+
+Our multiscale test of the hypothesis $H_0: m_1 = m_2 = \ldots = m_n$ is defined as follows: 
+\begin{center}
+\begin{minipage}[c][0.75cm][c]{13cm}
+\textit{For a given significance level $\alpha \in (0,1)$, we reject $H_0$ if $\widehat{\Psi}_{n,T} > q_{n,T}(\alpha)$.}
+\end{minipage}
+\end{center}
+
+\begin{remark}
+To prove the theoretical results in Section \ref{sec:theo}, we will use the following fact. By our assumption that the long-run variance $\sigma_i^2$ does not depend on $i$ \linebreak (i.e. $\sigma_i^2 = \sigma^2_j = \sigma^2$), we can rewrite the Gaussian normalized kernel averages \eqref{eq:phi_zero_ij} as
+\[\phi^0_{ij,T}(u, h) = \frac{1}{\sqrt{2}} \Big|\sum\nolimits_{t=1}^T w_{t,T}(u,h) \, \big\{ (Z_{it} - \bar{Z}_i) - (Z_{jt} - \bar{Z}_j) \big\}\Big| - \lambda(h), \] 
+which means that the distribution of the Gaussian test statistics does not depend neither on the data $\mathcal{W}_i =\{ (Y_{it}, \mathbf{X}_{it}) : 1\leq t \leq T)\}, \mathcal{W}_j =\{ (Y_{jt}, \mathbf{X}_{jt}) : 1\leq t \leq T)\}$, nor on any unknown quantities such as $\sigma^2_i$ or $\sigma_j^2$, and thus can be regarded as known. In addition to exploiting this fact while proving the theoretical results, we will also use it for calculating (approximately) the quantiles of $\Phi_{n, T}$ by the Monte Carlo simulations in Section \ref{subsec:test:impl}. However, for the sake of similarity to $\hat{\psi}^0_{ij,T}(u, h)$, in what follows, we will stick to the definition \eqref{eq:phi_zero_ij}, which involves the long-run variances $\sigma_i$ and $\sigma_j$.
+\end{remark}
+
+\begin{remark}
+By construction, the $(1-\alpha)$ Gaussian quantile $q_{n, T}(\alpha)$ depends not only on the number of times series considered $n$ and the sample size $T$, but on the choice of the set of location-bandwidth pairs $\grid_T$ as well. However, we do not explicitly include this dependence since we believe it will only lead to the unnecessary complication of the notation. 
+\end{remark}
+
+\subsection{Locating the differences}\label{subsec:test:loc}
+
+Suppose we reject the null hypothesis $H_0$. This fact does not provide us with a lot of information about the behaviour of the trend functions $m_i(\cdot)$. After performing the test described in Section \ref{subsec:test:test}, we can only make confidence statements that some of the trend functions are not equal somewhere on $[0, 1]$ (with a given statistical confidence), but we can not tell which of the functions are different and where they differ. Hence, we need an additional step in the testing procedure in order to locate those differences.
+
+Formally, for a given pair of time series $(i, j)$ and for any given interval \linebreak $\interval_{(u, h)} = [u-h, u+h]$ such that $(u, h) \in \grid_T$ we consider the hypothesis 
+\[ H_0^{[i,j]}(u,h): m_i(w) = m_j(w) \text{ for all } w \in [u-h,u+h]. \] 
+We view $H_0^{[i,j]}(u,h)$ as the 'local' null hypothesis because it is concerned with only two trend functions $m_i(\cdot)$ and $m_j(\cdot)$ and their equality on a small, 'local', interval $\interval_{(u, h)} = [u-h, u+h]$. In contrast, we refer to $H_0$ introduced in \eqref{eq:null} as the global null hypothesis.
+
+We define the multiscale test of the hypothesis $H_0^{[i,j]}(u,h)$ as follows: 
+\begin{center}
+\begin{minipage}[c][1.25cm][c]{13cm}
+\textit{For a given significance level $\alpha \in (0,1)$, we reject $H_0^{[i,j]}(u,h)$ if \linebreak $\hat{\psi}^0_{ij,T}(u, h) > q_{n,T}(\alpha)$.}
+\end{minipage}
+\end{center}
+
+For each pair of time series $(i, j)$, denote the set of intervals $\interval_{(u, h)}$ that consists of the intervals where we reject $H_0^{[i,j]}(u,h)$ at a significance level $\alpha$ by $\mathcal{S}^{[i, j]}(\alpha)$. We will prove later in Section \ref{sec:theo}, that we can make the following confidence statements:
+
+\begin{center}
+\begin{minipage}[c][1.25cm][c]{13cm}
+\textit{We can state with (asymptotic) probability at least $1-\alpha$ that for all $i, j, \linebreak1\leq i < j \leq n$, we have that $m_i(\cdot)$ and $m_j(\cdot)$ differ on all of the intervals $\interval_{(u, h)} \in \mathcal{S}^{[i, j]}(\alpha)$.}
+\end{minipage}
+\end{center}
+
+
+\subsection{Implementation of the test in practice}\label{subsec:test:impl}
+
+In practice, we implement the test procedure described in Sections \ref{subsec:test:test} and \ref{subsec:test:loc} in the following way. 
+\begin{enumerate}[label=\textit{Step \arabic*.}, leftmargin=1.45cm]
+\item Fix a significance level $\alpha \in (0, 1)$. 
+\item Compute the (approximated) quantile $q_{n, T}(\alpha)$ by Monte Carlo simulations. Specifically, draw a large number $N$ (say $N=5000$) of samples of independent standard normal random variables $\{Z_{it}^{(\ell)} : 1 \le t \le T, \, 1 \le i \le n \}$ for $1 \le \ell \le N$. For each sample $\ell$, compute the value $\Phi_{n,T}^{(\ell)}$ of the Gaussian test statistics $\Phi_{n, T}$ and store them. Calculate the empirical $(1-\alpha)$-quantile $\hat{q}_{n, T}(\alpha)$ from the stored values $\{ \Phi_{n, T}^{(\ell)}: 1 \le \ell \le N \}$. Use $\hat{q}_{n, T}(\alpha)$ as an approximated value of the quantile $q_{n, T}(\alpha)$.
+\item Carry out the test for the global hypothesis $H_0$ by calculating $\widehat{\Psi}_{n, T}$ and checking if {\color{red}$\widehat{\Psi}_{n, T} > \hat{q}_{n, T}(\alpha)$}. Reject the null if it is true.
+\item For each $i, j,\, 1 \le i < j \le n$, and each $(u, h) \in \grid_T$, carry out the test for the local null hypothesis $H_0^{[i, j]}(u, h)$ by checking if {\color{red}$\hat{\psi}^0_{ij, T}(u, h)> \hat{q}_{n, T}(\alpha)$}. For each pair of time series $(i, j)$, find the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ that consists of the intervals where we reject $H_0^{[i,j]}(u,h)$. 
+%Store the test results in the variable $r_{ij,T}(u, h) = \mathds{1}( |\hat{\psi}_{ij,T}^0(u, h)| > q_{n, T}(\alpha))$, where $\mathds{1}(\cdot)$ is an indicator function that is equal to $1$ if the condition inside the brackets is met and $0$ otherwise.
+\item Display the results. One of the possible ways to do that is to produce a separate plot for each of the pairwise comparisons and draw only the intervals where we reject the corresponding local null. Formally, on each of the plots that present the results of the comparison of time series $i$ and $j$, we display the intervals $\interval_{(u, h)} = [u- h, u+h] \in \mathcal{S}^{[i, j]}(\alpha)$, i.e. the (rescaled) time intervals where we reject $H_0^{[i, j]}(u, h)$. 
+\end{enumerate}
+
+
+\section{Theoretical properties of the test}\label{sec:theo}
+
+
+In order to investigate the theoretical properties of our multiscale test, we introduce two auxiliary test statistics. First auxiliary test statistics $\widehat{\Phi}_{n, T}$ can be regarded as a version of $\widehat{\Psi}_{n, t}$ which is exactly equal to it under the global null:
+\begin{align}\label{eq:Phi_hat}
+\widehat{\Phi}_{n,T} = \max_{1 \le i < j \le n}  \max_{(u,h) \in \mathcal{G}_T} \widehat{\phi}^0_{ij,T}(u,h),
+\end{align}
+where
+\begin{align}\label{eq:phi_hat_ij_zero}
+\widehat{\phi}^0_{ij,T}(u,h) &=\bigg| \frac{\widehat{\phi}_{ij,T}(u,h)} {\{ \widehat{\sigma}_i^2 + \widehat{\sigma}_j^2 \}^{1/2}} \bigg| - \lambda(h)\\
+\text{and} \quad \widehat{\phi}_{ij,T}(u,h) &= \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) + (\bfbeta_i - \widehat{\bfbeta}_i)^\top (\mathbf{X}_{it} - \bar{\mathbf{X}}_{i}) \nonumber\\
+& \quad \quad - (\varepsilon_{jt} - \bar{\varepsilon}_j) -  (\bfbeta_j - \widehat{\bfbeta}_j)^\top (\mathbf{X}_{jt} - \bar{\mathbf{X}}_{j}) \big\}.\nonumber
+\end{align}
+Here we denote $\bar{\varepsilon}_i = \bar{\varepsilon}_{i,T} := T^{-1} \sum_{t=1}^T \varepsilon_{it}$ and
+$ \bar{\mathbf{X}}_{i} =  \bar{\mathbf{X}}_{i, T} := T^{-1}\sum_{t=1}^T  \mathbf{X}_{it}$. Note that under the global null, we have $\widehat{\phi}_{ij,T}(u,h) = \widehat{\psi}_{ij,T}(u,h)$, $\widehat{\phi}^0_{ij,T}(u,h) = \widehat{\psi}^0_{ij,T}(u,h)$ and $\widehat{\Phi}_{n,T} = \widehat{\Psi}_{n,T}$, where the first two equalities hold true even under the corresponding local null $H_0^{[i, j]}(u, h)$. Hence, in order to determine the distribution of our main test statistic $\widehat{\Psi}_{n,T}$ under the null, we can simply study the behaviour of $\widehat{\Phi}_{n,T}$. 
+
+However, $\widehat{\Phi}_{n,T}$ depends on the covariates $\mathbf{X}_{it}$ whereas the Gaussian version $\Phi_{n,T}$ that is used to calculate critical values for our test (defined in \eqref{eq:Phi}) is independent of them. This is the reason why we need to introduce additional intermediate test statistic that does not include the covariates, therefore, connecting $\widehat{\Phi}_{n,T}$ and $\Phi_{n,T}$. This intermediate test statistics will play an important role in the proof of our main theoretical result.
+
+Formally, for each $i,j$ we construct the kernel averages as 
+\[\doublehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) - (\varepsilon_{jt} - \bar{\varepsilon}_j)  \big\}. \]
+We can view these kernel averages as constructed under the null from the unobserved variables $\doublehattwo{Y}_{it}$ and  $\doublehattwo{Y}_{jt}$ given by the following formula: 
+\begin{align*}
+\doublehattwo{Y}_{it} :&= Y_{it} - \bfbeta_i^\top \mathbf{X}_{it} -  \frac{1}{T}\sum_{t=1}^T \big(Y_{it} - \bfbeta_i^\top \mathbf{X}_{it}\big) =\\
+&=m_i \Big( \frac{t}{T} \Big)  - \frac{1}{T}\sum_{t=1}^T  m_i \Big( \frac{t}{T} \Big) + \varepsilon_{it} - \frac{1}{T}\sum_{t=1}^T \varepsilon_{it}.
+\end{align*}
+
+The intermediate statistic $\doublehattwo{\Phi}_{n, T}$ is then defined as 
+\begin{align}\label{eq:Phi_doublehat}
+\doublehattwo{\Phi}_{n,T} &= \max_{1 \le i < j \le n}\max_{(u,h) \in \mathcal{G}_T} \Bigg\{\bigg|\frac{\doublehat{\phi}_{ij,T}(u,h)}{\big(\doublehattwo{\sigma}_i^2 + \doublehattwo{\sigma}_j^2\big)^{1/2}}\bigg| - \lambda(h)\Bigg\}
+\end{align}
+with $\doublehattwo{\sigma}_i^2$ being an estimator of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty} \cov(\varepsilon_{i0}, \varepsilon_{i\ell})$ which is computed from the unobserved sample $\{ \doublehattwo{Y}_{it} : 1 \le t \le T \}$. We thus regard $\doublehattwo{\sigma}_i^2 = \doublehattwo{\sigma}_i^2(\doublehattwo{Y}_{i1},\ldots,\doublehattwo{Y}_{iT})$ as a function of the variables $\doublehat{Y}_{it}$ for $1 \le t \le T$. As with the estimator $\widehat{\sigma}_i^2$, we assume that $\doublehattwo{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$. 
+
+The statistics $\doublehattwo{\Phi}_{n,T}$ can thus be viewed as a version of the statistic $\widehat{\Phi}_{n,T}$ without the covariates. We formally prove that these two statistics are close in Proposition \ref{propA:intermediate2}.
+
+Now we can formally state our main theoretical result which characterizes the asymptotic behaviour of the statistic $\widehat{\Phi}_{n,T}$. 
+
+\begin{theorem}\label{theo:stat:global}
+Suppose that the error processes $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$ are independent across $i$ and satisfy \ref{C-err1}--\ref{C-err3} for each $i$. Moreover, let \ref{C-reg1}--\ref{C-h} be fulfilled and assume that for all $i$, $m_i(\cdot)$ is a continuously differentiable function on $[0, 1]$ satisfying the property $\int_0^1 m_i(u) du = 0$. Furthermore, for all $i$, $i \in \{1, \ldots, n\}$ assume that we have $\sigma_i^2 = \sigma^2$, $\widehat{\sigma}_i^2 = \sigma^2_i + o_p(\rho_T)$ and $\doublehattwo{\sigma}_i^2 = \sigma^2_i + o_p(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$. Then 
+\[ \pr \big( \widehat{\Phi}_{n,T} \le q_{n,T}(\alpha) \big) = (1 - \alpha) + o(1). \]
+\end{theorem}
+Theorem \ref{theo:stat:global} is the principal instrument for deriving theoretical properties of our multiscale test. The full proof of the theorem is provided in the Appendix. Here, we briefly present the main arguments.
+
+First, we show that the distribution of the intermediate statistics $\doublehattwo{\Phi}_{n, T}$ introduced in \eqref{eq:Phi_doublehat} is indeed close to the distribution of $\widehat{\Phi}_{n, T}$, and therefore, we can approximate the distribution of $\widehat{\Phi}_{n, T}$ with the help of $\doublehattwo{\Phi}_{n, T}$.
+%, i.e. there exists a sequence of positive numbers $\gamma_{n, T}$ that converges to $0$ as $T \to \infty$ such that for all $x\in \reals$ 
+%\begin{align*}
+%\pr\Big(\doublehattwo{\Phi}_{n,T} \le x - \gamma_{n, T}\Big) - &\pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big)\le \pr(\widehat{\Phi}_{n, T} \le x) \\
+%&\le\pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_{n, T}\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big),
+%\end{align*}
+%and
+%\begin{align*}
+%\pr \Big(\big|\doublehattwo{\Phi}_{n,T} &- \widehat{\Phi}_{n,T}\big| > \gamma_{n, T} \Big) = o(1).
+%\end{align*}
+
+Second, we show that we can replace $\doublehattwo{\Phi}_{n, T}$ by an identically distributed version $\widetilde{\Phi}_{n, T}$ which is close to the Gaussian statistics $\Phi_{n, T}$ defined in \eqref{eq:Phi}. Formally, by the means of strong approximation theory derived in \cite{BerkesLiuWu2014} we prove that there exist statistics $\widetilde{\Phi}_{n, T}$ which are distributed as $\doublehattwo{\Phi}_{n, T}$ for any $T \ge 1$ and which have the property that 
+\begin{align}\label{eq:proof1}
+\big| \widetilde{\Phi}_{n, T} - \Phi_{n,T} \big| = o_p( \delta_T),
+\end{align}
+where $\delta_T = o(1)$.
+
+Then, we employ the anti-concentration results derived in \cite{Chernozhukov2015} in order to show that $\Phi_{n,T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$. Or, in other words, it holds that 
+\begin{align}\label{eq:proof2}
+\sup_{x \in \reals} \pr \big( | \Phi_{n,T} - x | \le \delta_T \big) = o(1)
+\end{align}
+Taking \eqref{eq:proof1} together with \eqref{eq:proof2} and the fact that $\widetilde{\Phi}_{n, T}$ has the same distribution as $\doublehattwo{\Phi}_{n, T}$ yields that 
+\begin{equation*}
+\sup_{x \in \reals} \big| \pr(\doublehattwo{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = o(1). 
+\end{equation*}
+ 
+And finally, by the fact mentioned in the beginning of this proof that the distribution of the intermediate statistics $\doublehattwo{\Phi}_{n, T}$ is close to the distribution of $\widehat{\Phi}_{n, T}$, we conclude that 
+\begin{equation*}
+\sup_{x \in \reals} \big| \pr(\widehat{\Phi}_{n, T} \le x) - \pr(\Phi_{n,T} \le x) \big| = o(1),
+\end{equation*}
+which immediately implies the statement of Theorem \ref{theo:stat:global}.
+
+\begin{remark}
+The proof of Theorem \ref{theo:stat:global} builds on two important theoretical results: strong approximation theory developed in \cite{BerkesLiuWu2014} and anti-concentration results proved in \cite{Chernozhukov2015}. These results were already combined together for the purpose of developing the multiscale test for dependent data in \cite{KhismatullinaVogt2020}. We can say that our proof can be regarded as a further development of the proof strategy in \cite{KhismatullinaVogt2020} where they proposed a similar testing procedure for investigating properties of the trend function in one time series. We extend their theoretical result not only by working with multiple time series, but also by including the covariate terms in the model \eqref{eq:model}. Hence, our proof strategy builds on the similar stones but is much more technically involved.
+\end{remark}
+
+Now we examine the theoretical properties of the testing procedure proposed in \linebreak Sections \ref{subsec:test:test} and \ref{subsec:test:loc} with the help of Theorem \ref{theo:stat:global}. The following proposition (which is a direct consequence of Theorem \ref{theo:stat:global}) states that our test has correct (asymptotical) size.
+
+\begin{prop}\label{prop:test}
+Suppose that the conditions of Theorem \ref{theo:stat:global} are satisfied. Then under the null $H_0$, we have
+\[ \pr \big( \widehat{\Psi}_{n,T} \le q_{n,T}(\alpha) \big) = (1 - \alpha) + o(1). \]
+\end{prop}
+
+The next proposition characterizes the behaviour of our multiscale test under a particular class of local alternatives. To formulate this result, we consider a sequence of pairs of functions $m_ i := m_{i,T}$ and $m_ j := m_{j,T}$ that depend on the sample size and that are locally sufficiently far from each other.
+
+\begin{prop}\label{prop:test:power}
+Let the conditions  of Theorem \ref{theo:stat:global} be satisfied. Moreover, assume that for some pair of indices $i$ and $j$, the functions $m_ i = m_{i,T}$ and $m_ j = m_{j,T}$ have the following property: There exists $(u,h) \in \mathcal{G}_T$ with $[u-h,u+h] \subseteq [0,1]$ such that $m_{i,T}(w) - m_{j,T}(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$ or $m_{j,T}(w) - m_{i,T}(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$, where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$. Then 
+\[ \pr \big( \widehat{\Psi}_{n,T} \le q_{n,T}(\alpha) \big) = o(1). \]
+\end{prop}
+
+Proof of Proposition \ref{prop:test:power} is provided in the Appendix.
+
+Finally, we turn our attention to the local null hypotheses $H_0^{[i, j]}(u, h)$. Since we are testing many hypotheses at the same time, we would like to bound the probability of making even one false discovery. For this purpose, we employ the notion of the family-wise error rate (FWER) which is equal to the probability of making one or more \linebreak type I errors. Formally, FWER is defined as:
+\begin{align*} \text{FWER}(\alpha) = \pr (\exists \,  i, j \in \{1, \ldots, n \}, (u, h) \in \grid_T: \interval_{(u, h)} \in \mathcal{S}^{[i, j]}(\alpha) \text{ and } H_0^{[i, j]}(u, h) \text { is true}).
+\end{align*}
+
+We say that the FWER is controlled at level $\alpha$ if $\text{FWER}(\alpha) \leq \alpha$. The following result assures that for our testing procedure, it is indeed the case:
+
+\begin{prop}\label{prop:test:fwer}
+Suppose that the conditions  of Theorem \ref{theo:stat:global} are satisfied. Then 
+\[ FWER(\alpha) \leq \alpha. \]
+\end{prop}
+
+Proposition \ref{prop:test:fwer} is a direct consequence of Theorem \ref{theo:stat:global}. Nevertheless, the detailed proof of this proposition is provided in the 
+Appendix. 
+
+The following corollary is an immediate consequence of Proposition \ref{prop:test:fwer} and gives the theoretical justification necessary for making simultaneous confidence statements about the locations of the differences between the trends.
+
+\begin{corollary}\label{corollary1}
+Under the conditions of Theorem \ref{theo:stat:global}, for any given $\alpha \in (0,1)$ we have
+%\[ \pr\Big( \forall (i,j,k) \in \indexset: \text{ If } |\hat{\psi}_{ijk,T}| > c_{T,\textnormal{Gauss}}(\alpha,h_k), \text{ then } (i,j,k) \notin \indexset_0 \Big) \ge 1 - \alpha + o(1) \]
+\begin{align*}\pr\Big( \forall \, i,j \in \{1, \ldots, n\}, &(u, h) \in \grid_T \text{ such that }\\
+&H_0^{[i, j]}(u, h) \text{ is true}: |\hat{\psi}^0_{ij,T}(u, h)| \le q_{n,T}(\alpha) \Big) \ge 1 - \alpha + o(1).
+\end{align*}
+%Hence, with asymptotic probability at least $1-\alpha$, the two intensity functions $\lambda_i$ and $\lambda_j$ differ on the interval $\mathcal{I}_k$ for all $(i,j,k) \in \indexset$ for which the test rejects $H_0^{(ijk)}$. 
+\end{corollary} 
+
+
+With the help of Corollary \ref{corollary1}, we are able to make simultaneous confidence statements about which of the trends are different and where:
+
+\begin{center}
+\begin{minipage}[c][1.75cm][c]{13cm}
+\textit{We can state with (asymptotic) probability at least $1-\alpha$ that for all \linebreak $i, j \in \{1,\ldots, n\}$, we have that $m_i(\cdot)$ and $m_j(\cdot)$ differ on all of the intervals $\interval_{(u, h)} \in \mathcal{S}^{[i, j]}(\alpha)$.}
+\end{minipage}
+\end{center}
+
+
+
+\section{Estimation of the parameters}\label{sec:para}
+
+\subsection{Estimation of  $\bfbeta_i$}\label{subsec:para:beta}
+
+As was already mentioned in Section \ref{subsec:test:prep}, for each $i$, we construct a differencing estimator $\widehat{\bfbeta}_i$ of the vector of unknown parameters $\bfbeta_i$ using the first differences:
+\begin{align}\label{eq:beta:est2}
+\widehat{\bfbeta}_i = \Big( \sum_{t=2}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \sum_{t=2}^T \Delta \mathbf{X}_{it} \Delta Y_{it}
+\end{align}
+where $\Delta  \mathbf{X}_{it} =  \mathbf{X}_{it} -  \mathbf{X}_{it-1}$ and $\Delta Y_{it} = Y_{it} - Y_{i t-1}$. The asymptotic consistency for this differencing estimator is given by the following theorem:
+\begin{theorem}\label{theo:beta}
+Under the conditions of Theorem \ref{theo:stat:global}, we have
+\[\bfbeta_i - \widehat{\bfbeta}_i  = O_P \Big(\frac{1}{\sqrt{T}}\Big),
+\]
+where $\widehat{\bfbeta}_i$ is the differencing estimator given by \eqref{eq:beta:est2}.
+\end{theorem}
+
+Detailed proof of the Theorem \ref{theo:beta} is provided in the Appendix. Here we briefly outline the main steps of the proof.
+
+After rearranging the terms, we can write 
+\begin{align}\label{eq:theo:beta}
+\begin{split}
+ \sqrt{T}( \widehat{\bfbeta}_i - \bfbeta_i) = &\Big( \frac{1}{T}\sum_{t=2}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1} \frac{1}{\sqrt{T}}\sum_{t=2}^T \Delta \mathbf{X}_{it} \Delta m_{it}\\
+&\quad+  \Big(\frac{1}{T} \sum_{t=2}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1}\frac{1}{\sqrt{T}} \sum_{t=2}^T \Delta \mathbf{X}_{it} \Delta \varepsilon_{it},
+\end{split}
+\end{align}
+where $\Delta m_{it} = m_i \left( \frac{t}{T} \right) - m_i \left(\frac{t-1}{T}\right)$ and $\Delta \varepsilon_{it} = \varepsilon_{it} - \varepsilon_{it-1}$.
+
+We look at each part of \eqref{eq:theo:beta} separately. First, by Assumption \ref{C-reg3} and applying Chebyshev's and Cauchy-Schwarz inequalities we show that
+\begin{align*}
+\frac{1}{\sqrt{T}}\sum_{t=2}^T \Delta \mathbf{X}_{it} \Delta m_{it}  = O_P\Big(\frac{1}{\sqrt{T}}\Big).
+\end{align*}
+
+Then, by similar arguments and applying Proposition \ref{propA:beta1}, we have that
+\begin{align*}
+\Bigg|  \Big(\frac{1}{T}\sum_{t=2}^T\Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top\Big)^{-1}\Bigg| = O_P(1),
+\end{align*}
+where $|A|$ with $A$ being a matrix is any matrix norm.
+
+These two facts together lead to the fact that the first summand in \eqref{eq:theo:beta} is $O_P(1/\sqrt{T})$.
+
+Finally, we turn our attention to the second summand in \eqref{eq:theo:beta}. We already know that $\Big|  \big(\frac{1}{T}\sum_{t=2}^T\Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top\big)^{-1}\Big| = O_P(1)$. Moreover, by Proposition \ref{propA:beta4}, 
+\[ \bigg| \frac{1}{\sqrt{T}}\sum_{t=2}^T \Delta \mathbf{X}_{it}\Delta \varepsilon_{it} \bigg| = O_P(1).
+\]
+Hence, we have that 
+\begin{align}\label{theo:beta:proof8}
+\Big(\frac{1}{T} \sum_{t=2}^T \Delta \mathbf{X}_{it} \Delta \mathbf{X}_{it}^\top \Big)^{-1}\frac{1}{\sqrt{T}} \sum_{t=2}^T \Delta \mathbf{X}_{it} \Delta \varepsilon_{it} = O_P(1).
+\end{align}
+
+The statement of the theorem follows.
+
+
+
+%\item Let $m_i = m_{i,T}$ be a Lipschitz continuous function with $\int_0^1 m_{i,T}(w) dw = 0$ for any $i$. In particular, suppose that $|m_{i,T}(v) - m_{i,T}(w)| \le L |v - w|$ for all $v,w \in [0,1]$ and some fixed constant $L < \infty$ which does not depend on $T$. Moreover, assume that for some pair of indices $i$ and $j$, the functions $m_{i,T}$ and $m_{j,T}$ have the following property: There exists $(u,h) \in \mathcal{G}_T$ with $[u-h,u+h] \subseteq [0,1]$ such that $m_{i,T}(w) - m_{j,T}(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$ or $m_{j,T}(w) - m_{i,T}(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$, where $\{c_T\}$ is any sequence of positive numbers with $c_T \rightarrow \infty$. Then 
+%\[ \pr \big( \widehat{\Psi}_{n,T}^\prime \le q_{n,T}^\prime(\alpha) \big) = o(1). \]
+
+
+\subsection{Estimation of  $\sigma^2_i$}\label{subsec:para:lrv}
+
+Following \cite{Kim2016}, we estimate the long-run variance $\sigma_i$ for each of the time \linebreak series $i$ using the variant of the subseries variance estimator proposed first by \linebreak \cite{Carlstein1986} and then extended by \cite{WuZhao2007}. Formally, we set
+\begin{small}
+\begin{align}\label{eq:lrv}
+\widehat{\sigma}_i^2 = \frac{1}{2(M-1)s_T}\sum_{m=1}^M \left[\sum_{t = 1}^{s_T} \left(Y_{i(t + ms_T)} - Y_{i(t + (m-1)s_T)} - \widehat{\bfbeta}_i^\top\left(\mathbf{X}_{i(t+ms_T)} - \mathbf{X}_{i(t+(m-1)s_T)}\right) \right)\right]^2,
+\end{align}
+\end{small}
+where $s_T$ is the length of subseries and $M = \lfloor T/s_T\rfloor$ is the largest integer not exceeding $T/s_T$. As per the optimality result in \cite{Carlstein1986}, we set $s_T \asymp T^{1/3}$. For a finite sample, we choose $s_T = \lfloor T^{1/3}\rfloor$. According to  Lemma \ref{lemmaA:lrv} in Appendix, $\widehat{\sigma}_i^2$ is an asymptotically consistent estimator of $\sigma_i^2$ with the rate of convergence $O_P(T^{-1/3})$. Recall that the rate of convergence of $\widehat{\sigma}^2_i$ necessary for proving our theoretical results is $o_P(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$. {\color{red}Hence, for our theory to work with this estimator, we need to put some restrictions on $\rho_T$. Specifically, we need to have \linebreak $T^{-1/3}/\rho_T = o(1)$ which can be translated to the following condition on the minimal bandwidth:
+\begin{align}\label{eq:hmin}
+h_{\min} \gg T^{-2/3}\log^{2+2\iota} T \text{ for some} \,\,\, \iota >0.
+\end{align} Remember that under Assumption \ref{C-h}, we have that $h_{\min} \gg T^{- \left(1 - \frac{2}{q}\right)}\log T$. Taking into account \eqref{eq:hmin}, we can rewrite Assumption \ref{C-h} as follows:
+
+\begin{enumerate}[label=(C\arabic*$^\ast$),leftmargin=1.40cm]
+\setcounter{enumi}{12}
+\item \label{C-h-star} $h_{\min} \gg \max\{ T^{-(1-\frac{2}{q})} \log T, T^{-2/3}\log^{2+2\iota}  T \}$, that is, $h_{\min} / \{ T^{-(1-\frac{2}{q})} \log T \} \rightarrow \infty$ with $q > 4$ defined in \ref{C-err2} and $h_{\min} / \{ T^{-2/3}\log^{2+2\iota}  T \} \rightarrow \infty$ for some $\iota >0$, and $h_{\max} < 1/2$.
+\end{enumerate}
+
+This means that we can for example have $\rho_T = T^{-1/3}\log^\iota T$, which is still a slower rate of convergence than $T^{-1/3}$. To sum up, under the Assumptions \ref{C-err1} - \ref{C-grid}, \ref{C-h-star}, the subseries variance estimator provided by \eqref{eq:lrv} satisfies the necessary conditions for Theorem \ref{theo:stat:global}, and thus can be used for the construction of our multiscale statistics $\widehat{\Psi}_{n, T}$.}
+
+
+
+%\section{Clustering}
+%\subsection{Clustering of time trends}\label{subsec-test-equality-clustering}
+%
+%
+%Consider a situation in which the null hypothesis $H_0: m_1 = m_2 = \ldots = m_n$ is violated. Even though some of the trend functions are different in this case, part of them may still be the same. Put differently, there may be groups of time series which have the same time trend. Formally speaking, we define a group structure as follows: There exist sets or groups of time series $G_1,\ldots,G_N$ with $N \le n$ and $\{1,\ldots,n\} = \mathbin{\dot{\bigcup}}_{\ell=1}^{N} G_\ell$ such that for each $1 \le \ell \le N$,
+%\[ m_i = g_\ell \quad \text{for all } i \in G_\ell, \]
+%where $g_\ell$ are group-specific trend functions. Hence, the time series which belong to the group $G_\ell$ all have the same time trend $g_\ell$. Throughout the section, we suppose that the group-specific trend functions $g_\ell$ have the following properties: For each $\ell$, $g_\ell = g_{\ell,T}$ is a Lipschitz continuous function with $\int_0^1 g_{\ell,T}(w) dw = 0$. In particular, it holds that $|g_{\ell,T}(v) - g_{\ell,T}(w)| \le L |v-w|$ for all $v,w \in [0,1]$ and some constant $L < \infty$ that does not depend on $T$. Moreover, for any $\ell \ne \ell^\prime$, the trends $g_{\ell,T}$ and $g_{\ell^\prime,T}$ are assumed to differ in the following sense: There exists $(u,h) \in \mathcal{G}_T$ with $[u-h,u+h] \subseteq [0,1]$ such that $g_{\ell,T}(w) - g_{\ell^\prime,T}(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$ or $g_{\ell^\prime,T}(w) - g_{\ell,T}(w) \ge c_T \sqrt{\log T/(Th)}$ for all $w \in [u-h,u+h]$, where $0 < c_T \rightarrow \infty$.
+%
+%
+%In many applications, it is natural to suppose that there is a group structure in the data. In this case, a particular interest lies in estimating the unknown groups from the data at hand. In what follows, we combine our multiscale methods with a clustering algorithm to achieve this. More specifically, we use the multiscale statistics $\widehat{\Psi}_{ij,T}$ as distance measures which are fed into a hierarchical clustering algorithm. To describe the algorithm, we first need to introduce the notion of a dissimilarity measure: Let $S \subseteq \{1,\ldots,n\}$ and $S^\prime \subseteq \{1,\ldots,n\}$ be two sets of time series from our sample. We define a dissimilarity measure between $S$ and $S^\prime$ by setting 
+%\begin{equation}\label{dissimilarity}
+%\widehat{\Delta}(S,S^\prime) = \max_{\substack{i \in S, \\ j \in S^\prime}} \widehat{\Psi}_{ij,T}. 
+%\end{equation}
+%This is commonly called a complete linkage measure of dissimilarity. Alternatively, we may work with an average or a single linkage measure. We now combine the dissimilarity measure $\widehat{\Delta}$ with a hierarchical agglomerative clustering (HAC) algorithm which proceeds as follows: 
+%\vspace{10pt}
+%
+%\noindent \textit{Step $0$ (Initialization):} Let $\widehat{G}_i^{[0]} = \{ i \}$ denote the $i$-th singleton cluster for $1 \le i \le n$ and define $\{\widehat{G}_1^{[0]},\ldots,\widehat{G}_n^{[0]} \}$ to be the initial partition of time series into clusters. 
+%\vspace{5pt}
+%
+%\noindent \textit{Step $r$ (Iteration):} Let $\widehat{G}_1^{[r-1]},\ldots,\widehat{G}_{n-(r-1)}^{[r-1]}$ be the $n-(r-1)$ clusters from the previous step. Determine the pair of clusters $\widehat{G}_{\ell}^{[r-1]}$ and $\widehat{G}_{{\ell}^\prime}^{[r-1]}$ for which 
+%
+%\[ \widehat{\Delta}(\widehat{G}_{\ell}^{[r-1]},\widehat{G}_{{\ell}^\prime}^{[r-1]}) = \min_{1 \le k < k^\prime \le n-(r-1)} \widehat{\Delta}(\widehat{G}_{k}^{[r-1]},\widehat{G}_{k^\prime}^{[r-1]}) \]  
+%and merge them into a new cluster. 
+%\vspace{10pt}
+%
+%\noindent Iterating this procedure for $r = 1,\ldots,n-1$ yields a tree of nested partitions $\{\widehat{G}_1^{[r]},\ldots$ $\ldots,\widehat{G}_{n-r}^{[r]}\}$, which can be graphically represented by a dendrogram. Roughly speaking, the HAC algorithm merges the $n$ singleton clusters $\widehat{G}_i^{[0]} = \{ i \}$ step by step until we end up with the cluster $\{1,\ldots,n\}$. In each step of the algorithm, the closest two clusters are merged, where the distance between clusters is measured in terms of the dissimilarity $\widehat{\Delta}$. We refer the reader to Section 14.3.12 in \cite{HastieTibshiraniFriedman2009} for an overview of hierarchical clustering methods. 
+%
+%
+%When the number of groups $N$ is known, we estimate the group structure $\{G_1,\ldots, G_N\}$ by the $N$-partition $\{\widehat{G}_1^{[n-N]},\ldots,\widehat{G}_{N}^{[n-N]}\}$ produced by the HAC algorithm. When $N$ is unknown, we estimate it by the $\widehat{N}$-partition $\{\widehat{G}_1^{[n-\widehat{N}]},\ldots,\widehat{G}_{\widehat{N}}^{[n-\widehat{N}]}\}$, where $\widehat{N}$ is an estimator of $N$. The latter is defined as 
+%\[ \widehat{N} = \min \Big\{ r = 1,2,\ldots \Big| \max_{1 \le \ell \le r} \widehat{\Delta} \big( \widehat{G}_\ell^{[n-r]} \big) \le q_{n,T}(\alpha) \Big\}, \]
+%where we write $\widehat{\Delta}(S) = \widehat{\Delta}(S,S)$ for short and $q_{n,T}(\alpha)$ is the $(1-\alpha)$-quantile of $\Phi_{n,T}$ defined in Section \ref{subsec-test-equality-test}. 
+%
+%
+%\newpage
+%The following proposition summarizes the theoretical properties of the estimators $\widehat{N}$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}} \}$, where we use the shorthand $\widehat{G}_\ell = \widehat{G}_\ell^{[n-\widehat{N}]}$ for $1 \le \ell \le \widehat{N}$. 
+%\begin{prop}\label{prop-clustering-1}
+%Let the conditions of Theorem \ref{theo-stat-equality} be satisfied. Then 
+%\[ \pr \Big( \big\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}} \big\} = \{ G_1,\ldots,G_N \} \Big) \ge (1-\alpha) + o(1) \]
+%and 
+%\[ \pr \big( \widehat{N} = N \big) \ge (1-\alpha) + o(1). \]
+%\end{prop}
+%This result allows us to make statistical confidence statements about the estimated clusters $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}} \}$ and their number $\widehat{N}$. In particular, we can claim with asymptotic confidence $\ge 1 - \alpha$ that the estimated group structure is identical to the true group structure. Note that it is possible to let the significance level $\alpha$ depend on the sample size $T$ in Proposition \ref{prop-clustering-1}. In particular, we can allow $\alpha = \alpha_T$ to converge slowly to zero as $T \rightarrow \infty$, in which case we obtain that $\pr ( \{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}} \} = \{ G_1,\ldots,G_N \} ) \rightarrow 1$ and $\pr ( \widehat{N} = N ) \rightarrow 1$. The proof of Proposition \ref{prop-clustering-1} can be found in the Supplementary Material.   
+%
+%
+%Our multiscale methods do not only allow us to compute estimators of the unknown groups $G_1,\ldots,G_N$. They also provide information on the locations where two group-specific trend functions $g_\ell$ and $g_{\ell^\prime}$ differ from each other. To turn this claim into a mathematically precise statement, we need to introduce some notation. First of all, note that the indexing of the estimators $\widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}$ is completely arbitrary. We could, for example, change the indexing according to the rule $\ell \mapsto \widehat{N} - \ell + 1$. In what follows, we suppose that the estimated groups are indexed such that $P( \widehat{G}_\ell = G_\ell \text{ for all } \ell ) \ge (1-\alpha) + o(1)$. Theorem \ref{prop-clustering-1} implies that this is possible without loss of generality. Keeping this convention in mind, we define the sets 
+%\[ \mathcal{A}_{n,T}(\ell,\ell^\prime) = \Big\{ (u,h) \in \mathcal{G}_T: \Big| \frac{\widehat{\psi}_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}} \Big| > q_{n,T}(\alpha) + \lambda(h) \text{ for some } i \in \widehat{G}_\ell, j \in \widehat{G}_{\ell^\prime} \Big\} \] 
+%and  
+%\[ \Pi_{n,T}(\ell,\ell^\prime) = \big\{ I_{u,h} = [u-h,u+h]: (u,h) \in \mathcal{A}_{n,T}(\ell,\ell^\prime) \big\} \]
+%for $1 \le \ell < \ell^\prime \le \widehat{N}$. An interval $I_{u,h}$ is contained in $\Pi_{n,T}(\ell,\ell^\prime)$ if our multiscale test indicates a significant difference between the trends $m_i$ and $m_j$ on the interval $I_{u,h}$ for some $i \in \widehat{G}_\ell$ and $j \in \widehat{G}_{\ell^\prime}$. Put differently,  $I_{u,h} \in \Pi_{n,T}(\ell,\ell^\prime)$ if the test suggests a significant difference between the trends of the $\ell$-th and the $\ell^\prime$-th group on the interval $I_{u,h}$. We further let
+%\[ E_{n,T}(\ell,\ell^\prime) = \Big\{ \forall I_{u,h} \in \Pi_{n,T}(\ell,\ell^\prime): g_\ell(v) \ne g_{\ell^\prime}(v) \text{ for some } v \in I_{u,h} = [u-h,u+h] \Big\} \]
+%be the event that the group-specific time trends $g_\ell$ and $g_{\ell^\prime}$ differ on all intervals $I_{u,h} \in \Pi_{n,T}(\ell,\ell^\prime)$. With this notation at hand, we can make the following formal statement whose proof is given in the Supplementary Material.
+%\begin{prop}\label{prop-clustering-2}
+%Under the conditions of Theorem \ref{theo-stat-equality}, the event 
+%\[ E_{n,T} = \Big\{ \bigcap_{1 \le \ell < \ell^\prime \le \widehat{N}} E_{n,T}(\ell,\ell^\prime) \Big\} \cap \Big\{ \widehat{N} = N \text{ and } \widehat{G}_\ell = G_\ell \text{ for all } \ell \Big\} \]
+%asymptotically occurs with probability $\ge 1-\alpha$, that is, 
+%\[ \pr \big( E_{n,T} \big) \ge (1 - \alpha) + o(1). \]
+%\end{prop}
+%The statement of Proposition \ref{prop-clustering-2} remains to hold true when the sets of intervals $\Pi_{n,T}(\ell,\ell^\prime)$ are replaced by the corresponding sets of minimal intervals. According to Proposition \ref{prop-clustering-2}, the sets $\Pi_{n,T}(\ell,\ell^\prime)$ allow us to locate, with a pre-specified confidence, time regions where the group-specific trend functions $g_\ell$ and $g_{\ell^\prime}$ differ from each other. In particular, we can claim with asymptotic confidence $\ge 1 - \alpha$ that the trend functions $g_\ell$ and $g_{\ell^\prime}$ differ on all intervals $I_{u,h} \in \Pi_{n,T}(\ell,\ell^\prime)$.
+
+{\color{red}
+\section{Applications}\label{sec:app}
+\subsection{Analysis of the GDP growth}\label{subsec:app:gdp}
+
+
+To illustrate our test method from Section \ref{sec:test}, we repeat an application example from \cite{Zhang2012}, where the authors test the hypothesis of a common trend in the GDP growth data for $16$ OECD countries. Since we do not have access neither to the original dataset from \cite{Zhang2012}, nor to the exact data specifications, we perform our analysis on the data available from the most commonly used sources: Barro-Lee Educational Attainment dataset \citep*{Barro2013}, Refinitiv Datastream, OECD.Stat database, and Federal Reserve Economics Data (FRED). In our illsutration example, we consider the specification of the data that is as close as possible to the one in \linebreak \cite{Zhang2012} with one important distinction. In the original study, the authors examine 16 OECD countries (not specifying which ones), whereas we consider only $11$ OECD countries: Australia, Austria, Canada, Finland, France, Germany, Japan, Norway, Switzerland, UK, and USA. The reason for focusing our attention on $11$ countries lies in the fact that only for these countries there exist quarterly data of good quality covering the time period used in the original study: from the fourth quarter of 1975 up to and including the third quarter of 2010. In the appendix, we repeat the analysis for these $11$ countries plus additional $5$ countries for which some of the time series contain missing values. We use linear extrapolation to impute the missing values for these countries. Details how this extrapolation is done are deferred to Section \ref{subsec:appendix:app}.
+
+For this example, we collect the data from multiple sources. In the following list, we provide the specifications for the variables that we use in our analysis.
+
+\begin{enumerate}
+\item \textbf{GDP:} We use data on the Gross Domestic Product - Expenditure Approach ($GDP$) downloaded from the OECD.Stat \nocite{OECD} database (https://stats.oecd.org/Index.aspx). The data are freely available and were accessed on 7 December 2021. To be as close as possible to the specification of the data in \cite{Zhang2012}, we use the seasonally adjusted quarterly data on the GDP expressed in millions of \linebreak 2015 US dollars.\footnote{Since the publication of the original paper in 2013, the OECD reference year has changed from 2005 to 2015. We have decided to analyse the latest version of the data in order to be able to make more accurate and up-to-date conclusions.} The data span from 1960 to 2021 which fully covers the time period necessary for our analysis (1975Q4 to 2010Q3). 
+\item \textbf{Capital:} We use data on Capital Stock at Constant National Prices ($K$) from the Penn World Table \citep{Feenstra2015} retrieved from FRED \linebreak (https://fred.stlouisfed.org/, accessed on 7~December 2021). The data are given in the millions of the $2017$ US dollars. Since the observations are at an annual frequency, we linear intrapolate the data to obtain the quarterly values. Our approach is different from the one in \cite{Zhang2012} where they use the quarterly data from the beginning. The reason for such discrepancy is the fact that we have not found the quarterly time series of sufficient quality on Capital Stock at Constant National Prices in the common sources. We repeat the analysis using the quarterly data on Gross Fixed Capital Formation instead of Capital Stock in the Appendix.
+\item \textbf{Labour:} We collect the data on the Number of Employed People ($L$) from various sources. For most of the countries (Austria, Australia, Canada, Germany, Japan, UK and the USA) we download the OECD data on Employed Population: Aged 15 and Over retrieved from FRED (https://fred.stlouisfed.org/, accessed on 7~December 2021). \nocite{OECDempl} The data for France and Switzerland were downloaded from Refinitiv Datastream on 7~December~2021. For all of the aforementioned countries the observations are at quarterly frequency and seasonally adjusted. The data for Finland and Norway were also obtained via Refinitiv Datastream on 7~December~2021, however, the only quarterly time series that are long enough to fully cover the time period under consideration are not seasonally adjusted. Hence, for these two countries we perform the seasonal adjustment ourselves. We do that using the default method of the function \verb|seas| from an \verb|R| package \verb|seasonal| \citep*{Sax2018} which is an interface to X-13-ARIMA-SEATS, the seasonal adjustment software used by the US Census Bureau. We repeat the analysis using not seasonally adjusted data for all of the $11$ countries as a robustness check and we report the results in the Appendix.
+
+For all of the countries, the observations are given in thousands of persons.
+\item \textbf{Human capital:} We use Educational Attainment for Population Aged 25 and Over ($H$) collected from http://www.barrolee.com (accessed on 7 December 2021) as a measure of human capital. Since the only available data is five-year census data, we follow \cite{Zhang2012} and use linear intropolation between the observation and constant extrapolation on the boundaries (second and third quarters of 2010) to obtain the quarterly observations.
+\end{enumerate}
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.8\textwidth]{Plots/smoothed_gdp_data.pdf}
+\vspace{0.2cm}
+\caption{Local linear kernel estimates of the $n=11$ original time trends from the application of Section \ref{subsec:app:gdp}. Each panel shows the estimates for a different bandwidth $h$.}\label{plot:app:gdp}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.8\textwidth]{Plots/smoothed_gdp_data_augmented.pdf}
+\vspace{0.2cm}
+\caption{Local linear kernel estimates of the $n=11$ augmented time trends from the application of Section \ref{subsec:app:gdp}. Each panel shows the estimates for a different bandwidth $h$.}\label{plot:app:gdp_augm}
+\end{figure}
+
+
+We thus observe a panel of $n = 11$ time series $\mathcal{W}_i = \{(Y_{it}, \mathbf{X}_{it}): 1 \le t \le T \}$ of length $T = 140$ for each country $i \in \{1,\ldots,11\}$, where $Y_{it} = \Delta \ln GDP_{it} := \ln GDP_{it} - \ln GDP_{i(t-1)}$, $\mathbf{X}_{it} = (\Delta \ln L_{it}, \Delta \ln K_{it}, \Delta \ln H_{it})^\top$ with $\Delta \ln L_{it} := \ln L_{it} - \ln L_{i(t-1)}$, $\Delta \ln K_{it} := \ln K_{it} - \ln K_{i(t-1)}$ and $\Delta \ln H_{it} := \ln H_{it} - \ln H_{i(t-1)}$. Without loss of generality, we let $\Delta \ln GDP_{i1} = \Delta \ln L_{i1} = \Delta \ln K_{i1} = \Delta \ln H_{i1} = 0$. The time series $\mathcal{W}_i$ is assumed to follow the model 
+\begin{equation}\label{eq:model:app}
+Y_{it} = \bfbeta^\top_i \mathbf{X}_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
+\end{equation}
+for $1 \le t \le T$, where $\bfbeta_i = (\beta_{i, 1}, \beta_{i, 2}, \beta_{i, 3})^\top$ is a vector of unknown parameters, $m_i$ is a country-specific unknown nonparametric time trend, and $\alpha_i$ is a fixed -effect term. Similarly to \cite{Zhang2012}, we rewrite the model \eqref{eq:model:app} as
+\begin{equation}\label{eq:model:app2}
+\Delta \ln GDP_{it} = \beta_{i, 1} \Delta \ln L_{it} + \beta_{i, 2} \Delta \ln K_{it} + \beta_{i, 3} \Delta \ln H_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it},
+\end{equation}
+
+for $i \in \{1, \ldots, 11\}$ and $t \in \{1, \ldots, 140\}$.
+
+Our testing procedure involves estimation of many unknown parameters. As noted in \cite{KhismatullinaVogt2020}, estimating the long-run error variance in such models under general weak dependence conditions is a particularly difficult problem. Estimators often tend to be quite imprecise. Hence, in practice we opt for imposing certain conditions on the error processes $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T \}$. Specifically, in our example for each $i$ the error process $\mathcal{E}_i$ is assumed to have the AR($p_i$) structure $\varepsilon_{it} = \sum_{j=1}^{p_i} a_{i, j} \varepsilon_{i(t-j)} + \eta_{it}$, where the order of the process $p_i$ is country-specific and not known and $\eta_{it}$ are i.i.d.\ innovations with mean zero. We choose $p_i$ for each country separately based on the values of the information criterion (need to elaborate here).
+
+We aim to test whether the time trend $m_i$ is the same at each of the $11$ countries. In other words, we want to test the null hypothesis $H_0: m_1 = \ldots = m_n$ with $n = 11$ in model \eqref{eq:model:app2}. To do so, we implement the multiscale test from Section \ref{sec:test} in the following way. 
+
+\begin{enumerate}
+\item We choose $K$ to be an Epanechnikov kernel.
+\item We let $\mathcal{G}_T = U_T \times H_T$ with 
+\begin{align*}
+U_T & = \big\{ u \in [0,1]: u = \textstyle{\frac{5t}{T}} \text{ for some } t \in \naturals \big\} \\
+H_T & = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5\ell}{T}} \text{ for some } \ell \in \naturals \big\}. 
+\end{align*}
+We thus take into account all locations $u$ on an equidistant grid $U_T$ with step length $5/T$ and all bandwidths $h=5/T, 10/T, 15/T,\ldots$ with $\log T /T \le h \le 1/4$. Note that the lower bound $\log T / T$ is motivated by \ref{C-h} which requires that $\log T /T \ll h_{\min}$ (given that all moments of $\varepsilon_{it}$ exist).
+\item We estimate the unknown parameters $\bfbeta_i = (\beta_{i, 1}, \beta_{i, 2}, \beta_{i, 3})^\top$ for each country $i$ separately using the first-differencing approach described in Section \ref{sec:para}.
+\item We compute the estimator of the fixed-effect term $\alpha_i$ using the formula \eqref{eq:alpha:est}. We then work with the augmented time series $\widehat{Y}_{it} = Y_{it} - \widehat{\bfbeta}_i^\top \X_{it} - \widehat{\alpha}_{i}$ instead of the original data on the GDP growth rate $Y_{it}$.
+\item To obtain an estimator $\hat{\sigma}_i^2$ for the long-run error variance $\sigma^2_i$, for each $i$ we apply the procedure from \cite{KhismatullinaVogt2020} to the augmented values $\widehat{Y}_{it}$ with $\underline{r}=1$, $\overline{r}=10$ and $q = 15$. We use $\hat{\sigma}^2_i$ for calculating the value of our main test statistic $\widehat{\Psi}_{n, T}$. %In the Appendix, we repeat the analysis using the averaged estimator $\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n \hat{\sigma}_i^2$.
+\item The significance levels are taken to be $\alpha = 0.05$ and $\alpha = 0.1$ (\citet{Zhang2012} report the results for testing at a significance level $\alpha = 0.1$).
+\item To obtain the (approximate) critical values $q_{n, T}(\alpha)$ of the multiscale test, we simulate $5000$ values of the statistic $\Phi_{n, T}$ defined in Section \ref{subsec:test:test} and compute their empirical $(1-\alpha)$ quantile $\hat{q}_{n, T}(\alpha)$.
+\end{enumerate}
+
+ %We implement the test in the same way as in the simulations of Section \ref{sec:sim}. 
+
+
+We are now ready to apply the test procedure to the data. Figure \ref{plot:app:gdp} depicts a smoothed version of each of the original time series on the GDP growth rate $\{Y_{it}: 1 \le t \le T\}$ for each of the countries $i$ of the $n=11$ countries under consideration. Figure \ref{plot:app:gdp_augm} presents local linear estimates of the trend functions $m_i$ for these countries after factoring out the effects of the covariates and the fixed-effect terms (i.e. calculated from the augmented time series~$\widehat{Y}_{it}$). In both figures, each panel corresponds to a different value of the bandwidth~$h$.
+
+As can be seen in Figure \ref{plot:app:gdp}, in the original data on the GDP growth there are some notable diffrences between the countries for bandwidths $h = 0.05$ and $h = 0.1$. For example, while most of the countries experience the increase in the growth rate in the last two years, the data for one of the countries suggests a decrease in the same period of time. Moreover, using the smallest bandwidth ($h= 0.05$) allows us to notice considerable differences in the behaviour of the time series in the middle of our time region. In constrast, the value of the bandwidth $h = 0.15$ is too big to detect any heterogeneity in the behaviour of the trend. As we see, the choice of the bandwidth is crucial in making conclusions in this example.
+
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/AUS_vs_AUT}
+\caption{Test results for the comparison of Australia and Austria.}\label{fig:Australia:Austria}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/AUS_vs_NOR}
+\caption{Test results for the comparison of Australia and Norway.}\label{fig:Australia:Norway}
+\end{minipage}
+\caption*{Note: In each figure, panel (a) shows the two augmented time series, panel (b) smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i,j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i,j]}_{min}(\alpha)$ in black.}
+\end{figure}
+
+
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/AUT_vs_FRA}
+\caption{Test results for the comparison of Austria and France.}\label{fig:Austria:France}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/AUT_vs_NOR}
+\caption{Test results for the comparison of Austria and Norway.}\label{fig:Austria:Norway}
+\end{minipage}
+
+\caption*{Note: In each figure, panel (a) shows the two augmented time series, panel (b) smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i,j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i,j]}_{min}(\alpha)$ in black.}
+\end{figure}
+
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/CAN_vs_NOR}
+\caption{Test results for the comparison of Canada and Norway.}\label{fig:Canada:Norway}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/CHE_vs_NOR}
+\caption{Test results for the comparison of Switzerland and Norway.}\label{fig:Switzerland:Norway}
+\end{minipage}
+
+\caption*{Note: In each figure, panel (a) shows the two augmented time series, panel (b) smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i,j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i,j]}_{min}(\alpha)$ in black.}
+\end{figure}
+
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/DEU_vs_NOR}
+\caption{Test results for the comparison of Germany and Norway.}\label{fig:Germany:Norway}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/FRA_vs_NOR}
+\caption{Test results for the comparison of France and Norway.}\label{fig:France:Norway}
+\end{minipage}
+
+\caption*{Note: In each figure, panel (a) shows the two augmented time series, panel (b) smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i,j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i,j]}_{min}(\alpha)$ in black.}
+\end{figure}
+
+\begin{figure}[p!]
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/GBR_vs_NOR}
+\caption{Test results for the comparison of the UK and Norway.}\label{fig:UK:Norway}
+\end{minipage}
+\hspace{0.25cm}
+\begin{minipage}[t]{0.49\textwidth}
+\includegraphics[width=\textwidth]{plots/NOR_vs_USA}
+\caption{Test results for the comparison of Norway and the USA.}\label{fig:Norway:USA}
+\end{minipage}
+\caption*{Note: In each figure, panel (a) shows the two augmented time series, panel (b) smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i,j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i,j]}_{min}(\alpha)$ in black.}
+\end{figure}
+
+
+Now we look at the local linear estimates of the trend functions $m_i$ after excluding the effects of the covariates (Figure \ref{plot:app:gdp_augm}). We can see that the differences between the trends are much more pronounced and some heterogeneity between the countries is notable even for large values of $h$.
+
+The results of applying our test are completely in line with the conclusions from the visual inspection. The test rejects the null hypothesis $H_0$ at both levels $\alpha =0.05$ and $\alpha = 0.1$ which is consistent with the findings of \cite{Zhang2012} where the authors report a rejection of the null hypothesis of a common trend at the level $\alpha = 0.1$. However, in contrast to \cite{Zhang2012}, we can say much more about the comparison of the trends between these $11$ countries. Specifically, we can make simultaneous confidence statements abouth which of the countries have different trends and where they differ. With the help of our multiscale method, we simultaneously test all of the local null hypotheses $H_0^{[i,j]}(u, h)$ that $m_i = m_j$ on the interval $\mathcal{I}_{(u, h)} = [u-h, u+h]$ for each $i, j, 1 \le i < j \le n$, and each $(u, h) \in \mathcal{G}_T$. The results are presented in Figures \ref{fig:Australia:Austria}--\ref{fig:Norway:USA}, with each figure corresponing to a specific pair of countries $(i,j)$ from our sample. Each figure is divided into three panels (a)--(c).  Panel (a) shows the augmented time series $\widehat{Y}_{it}$ and $\widehat{Y}_{jt}$ for the two countries $i$ and $j$ that are being compared. Panel (b) presents smoothed versions of the time series from (a), that is, it shows nonparametric kernel estimates (specifically, Nadaraya-Watson estimates) of the two trend functions $m_i$ and $m_j$, where the bandwidth is set to $14$ quarters (which corresponds to $h = 0.1$) and a rectangular kernel is used. Finally, panel (c) presents the results produced by our test for a significance level $\alpha = 0.05$: it depicts in grey the set $\mathcal{S}^{[i,j]}(\alpha)$ of all the intervals for which the test rejects the local null $H_0^{[i, j]}(u, h)$. The minimal intervals in the subset $\mathcal{S}^{[i,j]}(\alpha)$ are highlighted in black. Note that according to \eqref{corollary1}, we can make the following simultaneous confidence statement about the intervals plotted in panels (c) of Figures \ref{fig:Australia:Austria}--\ref{fig:Norway:USA}: we can claim, with confidence of about $95\%$, that there is a difference between the functions $m_i$ and $m_j$ on each of these intervals. 
+
+Now we briefly comment on the results. Out of $55$ pairwise comparisons, our test detects the differences in the trends $10$ times. In $8$ and $3$ of these instances, one of the countries involved comparison is Norway or Austria respectively. This fact suggests that among considered countries there may be groups that exhibit similar trends. Hence, it is very reasonable to investigate the data further using clustering methods. (Need to comment more).}
+
+
+\section{Conclusion}\label{sec:conclusion}
+
+In this paper, we develop a new multiscale testing procedure for multiple time series for testing hypotheses about nonparametric time trends in the presence of covariates. This procedure addresses two important statistical problems about comparison of the time trends. First and foremost, with the help of the proposed method, we are able to test if all the time trends in the observed time series are the same or not. We prove the main theoretical results of the paper that the test has (asymptotically) the correct size and has an (asymptotic) power of one against a specific class of local alternatives. Second, our multiscale procedure allows us to tell which of the time trends are different and where the differences are located. For the purpose of pinpointing the differences, we consider many local null hypotheses at the same time, each corresponding to only a pair of time trends and a specific time interval. Our method allows us to test all of these hypotheses simultaneously controling the family-wise error rate, i.e. the probability of wrongly rejecting at least one true null hypothesis (making at least one type I error), at a desired level $\alpha$. This result allows us to make simultaneous confidence statements as follows: 
+
+\begin{center}
+\begin{minipage}[c][1.75cm][c]{14cm}
+\textit{We can state with (asymptotic) probability at least $1-\alpha$ that for every pair of time series and every interval where our test rejects the local null, the trends of these time series differ at least somewhere on this particular interval.}
+\end{minipage}
+\end{center}
+
+For the proof of the theoretical results, the main tools that are used are strong approximation theory developed in \cite{BerkesLiuWu2014} and the anti-concentration bounds for Gaussian random vectors verified in \cite{Chernozhukov2015}. The proof strategy that we employ in our paper has already been used in \cite{KhismatullinaVogt2020}, however, in that paper the authors proposed a multiscale method for testing qualitative hypotheses only about one time series. Our method can be regarded as a generalized version of the test developed in \cite{KhismatullinaVogt2020} where we not only consider comparison between various time series, but also add the covariates to the model and propose an estimation procedure for the unknown parameters.
+
+Regarding future research, this project suggests some interesting issues and topics for consideration. First, consider the situation that the null hypothesis $H_0: m_1 = \ldots = m_n$ is violated in the general panel data model \eqref{eq:model}. Even though some of the trend functions $m_i$ are different in this case, there may still be groups of time series with the same time trend. An interesting statistical problem to investigate in the future is how to estimate the unknown groups (and their unknown number) from the data. Second, as was already mentioned, it should be possible to extend our theoretical results to the case where the number of time series slowly grows with the sample size. Further insight can be gained by broadening the current work in these and possibly other directions.
+
 \newpage
 \bibliographystyle{ims}
 {\small
 \setlength{\bibsep}{0.55em}
 \bibliography{bibliography}}
 
-
+\input{paper_appendix}
 
 \end{document}

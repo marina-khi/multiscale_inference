@@ -1,0 +1,123 @@
+
+% General
+
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\integers}{\mathbb{Z}}
+\newcommand{\naturals}{\mathbb{N}}
+
+\newcommand{\pr}{\mathbb{P}}        % probability
+\newcommand{\ex}{\mathbb{E}}        % expectation
+\newcommand{\var}{\textnormal{Var}} % variance
+\newcommand{\cov}{\textnormal{Cov}} % covariance
+
+\newcommand{\law}{\mathcal{L}} % law of X
+\newcommand{\normal}{N}        % normal distribution 
+
+\newcommand{\argmax}{\textnormal{argmax}}
+\newcommand{\argmin}{\textnormal{argmin}}
+
+\newcommand{\ind}{\boldsymbol{1}} % indicator function
+\renewcommand{\ker}{W} % kernel function
+
+\newcommand{\X}{X}
+\newcommand{\pairs}{\mathcal{S}}
+\newcommand{\countries}{\mathcal{C}}
+\newcommand{\intervals}{\mathcal{F}}
+\newcommand{\indexset}{\mathcal{M}}
+
+% Convergence
+
+\newcommand{\convd}{\stackrel{d}{\longrightarrow}}              % convergence in distribution
+\newcommand{\convp}{\stackrel{P}{\longrightarrow}}              % convergence in probability
+\newcommand{\convas}{\stackrel{\textrm{a.s.}}{\longrightarrow}} % convergence almost surely
+\newcommand{\convw}{\rightsquigarrow}                           % weak convergence
+
+
+% Theorem-like declarations
+
+\theoremstyle{plain}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{prop}{Proposition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{remark}{Remark}[section]
+\newtheorem{algo}{Algorithm}
+\newtheorem{theoremA}{Theorem}[section]
+\newtheorem{propA}{Proposition}[section]
+\newtheorem{corollaryA}{Corollary}[section]
+\newtheorem{lemmaA}{Lemma}[section]
+\renewcommand{\thetheoremA}{A.\arabic{theoremA}}
+\renewcommand{\thepropA}{A.\arabic{propA}}
+\renewcommand{\thecorollaryA}{A.\arabic{corollaryA}}
+\renewcommand{\thelemmaA}{A.\arabic{lemmaA}}
+\newtheorem{lemmaS}{Lemma}[section]
+\renewcommand{\thelemmaS}{S.\arabic{lemmaS}}
+
+
+% Theorem numbering to the left
+
+\makeatletter
+\newcommand{\lefteqno}{\let\veqno\@@leqno}
+\makeatother
+
+
+% Heading
+
+\newcommand{\heading}[3]
+{  \setcounter{page}{1}
+   \begin{center}
+
+   %\phantom{Distance to upper boundary}
+   %\vspace{0.5cm}
+
+   {\LARGE \textbf{#1}}
+   \vspace{0.25cm}
+
+   {\LARGE \textbf{#2}}
+   \vspace{0.25cm}
+
+   {\LARGE \textbf{#3}}
+   \end{center}
+}
+
+
+% Authors
+
+\newcommand{\authors}[4]
+{  %\parindent0pt
+   \begin{center}
+      \begin{minipage}[c][1.5cm][c]{5.5cm}
+      \begin{center} 
+      {\large #1} 
+      \vspace{0.1cm}
+      
+      #2 
+      \end{center}
+      \end{minipage}
+      \begin{minipage}[c][1.5cm][c]{5.5cm}
+      \begin{center} 
+      {\large #3}
+      \vspace{0.1cm}
+      
+      #4 
+      \end{center}
+      \end{minipage}
+   \end{center}
+}
+
+
+% Version
+
+\newcommand{\version}[1]
+{  \begin{center}
+   {\large #1}
+   \end{center}   
+} 
+
+
+
+
+
+

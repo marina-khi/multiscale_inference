@@ -1,0 +1,549 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb,amsthm,graphicx}
+\usepackage{titlesec}
+\usepackage{textcomp}
+\usepackage{enumitem}
+\usepackage{color}
+\usepackage{epsfig}
+\usepackage{graphics}
+\usepackage{pdfpages}
+\usepackage{subcaption}
+\usepackage[font=small]{caption}
+\usepackage[hang,flushmargin]{footmisc} 
+\usepackage{float}
+\usepackage{rotating,tabularx}
+\usepackage{booktabs}
+\usepackage[mathscr]{euscript}
+\usepackage{natbib}
+\usepackage{setspace}
+\usepackage{mathrsfs}
+\usepackage[official]{eurosym}
+\usepackage[left=2.8cm,right=2.8cm,bottom=2.8cm,top=2.5cm]{geometry}
+
+\setcounter{secnumdepth}{4}
+\renewcommand{\baselinestretch}{1.2}
+
+\input{macros}
+
+
+
+\begin{document}
+
+ 
+
+\noindent {\Large \bf Project Description} 
+\vspace{0.25cm}
+
+\noindent \hrulefill
+\vspace{0.5cm}
+
+\noindent\begin{tabular}{ll}
+\large{Applicant:} & \noindent {\large Michael Vogt, University of Bonn} \\[0.1cm]
+\large{Project Title:} & \noindent {\large New Methods and Theory for the Comparison of} \\
+ & \noindent {\large Nonparametric Trend Curves}
+\end{tabular}
+\vspace{0.5cm}
+
+\noindent \hrulefill
+
+
+
+\section{State of the art and preliminary work}\label{sec:stateofart}
+
+
+The comparison of nonparametric curves is a classic topic in econometrics and statistics. Depending on the specific application, the curves of interest are densities, distribution functions, time trends or regression curves. The problem of testing for equality of densities has been studied in \cite{Mammen1992}, \cite{Anderson1994} and \cite{Li2009} among others. Tests for equality of distribution functions can be found for example in \cite{Kiefer1959}, \cite{Anderson1962} and \cite{Finner2018}. Tests for equality of trend or regression curves have been developed in \cite{HaerdleMarron1990}, \cite{Hall1990}, \cite{Delgado1993}, \cite{DegrasWu2012}, \cite{Zhang2012} and \cite{Hidalgo2014} among many others. In the proposed project, we focus on the comparison of nonparametric trend curves.
+
+
+The statistical problem of comparing trends has a wide range of applications in economics, finance and other fields such as climatology and biology. In economics, one may wish is to compare trends in real gross domestic product (GDP) across different countries \citep[cp.][]{Grier1989}. Another example concerns the dynamics of long-term interest rates. To better understand these dynamics, researchers aim to compare the yields of US Treasury bills at different maturities over time \citep[cp.][]{Park2009}. In finance, it is of interest to compare the volatility trends of different stocks \citep[cp.][]{Nyblom2000}. Finally, in climatology, researchers are interested in comparing the trending behaviour of temperature time series across different spatial locations \citep[cp.][]{KarolyWu2005}. 
+
+
+Classically, time trends are modelled stochastically in econometrics; see e.g.\ \cite{Stock1988}. Recently, however, there has been a growing interest in econometric models with deterministic time trends; see \cite{Cai2007}, \cite{Atak2011}, \cite{Robinson2012} and \cite{ChenGaoLi2012} among others. Non- and semiparametric trend modelling has attracted particular interest in a panel data context. \cite{LiChenGao2010}, \cite{Atak2011}, \cite{Robinson2012} and \cite{ChenGaoLi2012} considered panel models where the observed time series have a common time trend. In many applications, however, the assumption of a common time trend is quite harsh. In particular when the number of observed time series is large, it is quite natural to suppose that the time trend may differ across time series. More flexible panel settings with heterogeneous trends have been studied, for example, in \cite{Zhang2012} and \cite{Hidalgo2014}. 
+
+ 
+In what follows, we consider a general panel framework with heterogeneous trends which is useful for a number of economic and financial applications: Suppose we observe a panel of $n$ time series $\mathcal{Z}_i = \{ (Y_{it},X_{it}): 1 \le t \le T \}$ for $1 \le i \le n$, where $Y_{it}$ are real-valued random variables and $X_{it} = (X_{it,1},\ldots,X_{it,d})^\top$ are $d$-dimensional random vectors. Each time series $\mathcal{Z}_i$ is modelled by the equation
+\begin{equation}\label{model}
+Y_{it} = m_i \Big( \frac{t}{T} \Big) + \beta_i^\top X_{it} + \alpha_i + \varepsilon_{it}
+\end{equation}
+for $1 \le t \le T$, where $m_i: [0,1] \rightarrow \mathbb{R}$ is a nonparametric (deterministic) trend function, $X_{it}$ is a vector of regressors or controls and $\beta_i$ is the corresponding parameter vector. Moreover, $\alpha_i$ are so-called fixed effect error terms and $\varepsilon_{it}$ are standard regression errors with $\ex[\varepsilon_{it}|X_{it}] = 0$ for all $t$. Model \eqref{model} nests a number of panel models which have recently been considered in the literature. Special cases of model \eqref{model} with a nonparametric trend specification are for example considered in \cite{Atak2011}, \cite{Zhang2012} and \cite{Hidalgo2014}. Versions of model \eqref{model} with a parametric trend are studied in \cite{Vogelsang2005}, \cite{Sun2011} and \cite{Xu2012} among others.
+
+
+As usual in nonparametric regression, the trend functions $m_i$ in model \eqref{model} depend on rescaled time $t/T$ rather than on real time $t$; cp.\ \cite{Robinson1989}, \cite{Dahlhaus1997} and \cite{VogtLinton2014} for the use and some discussion of the rescaled time argument. The functions $m_i$ are only identified up to an additive constant in model \eqref{model}: One can reformulate the model as $Y_{it} = [m_i(t/T) + c_i] + \beta_i^\top X_{it} + [\alpha_i - c_i] + \varepsilon_{it}$, that is, one can freely shift additive constants $c_i$ between the trend $m_i(t/T)$ and the error component $\alpha_i$. In order to obtain identification, one may impose different normalization constraints on the trends $m_i$. One possibility is to normalize them such that $\int_0^1 m_i(u) du = 0$ for all $i$. In what follows, we take for granted that the trends $m_i$ satisfy this constraint. 
+
+
+Within the general framework of model \eqref{model}, we can formulate a number of interesting statistical questions concerning the set of trend functions $\{ m_i:  1 \le i \le n \}$. 
+
+\vspace{10pt}
+
+
+\noindent \textbf{(a) Testing for equality of nonparametric trend curves} 
+\vspace{10pt} 
+
+ 
+\noindent In many application contexts, an important question is whether the time trends $m_i$ in model \eqref{model} are all the same. Put differently, the question is whether the observed time series
+have a common trend. This question can formally be addressed by a statistical test of the null hypothesis 
+\[ H_0: \text{There exists a function } m: [0,1] \rightarrow \mathbb{R} \text{ such that } m_i = m  \text{ for all } 1 \le i \le n. \]
+A closely related question is whether all time trends have the same parametric form. To formulate the corresponding null hypothesis, let $m(\theta,\cdot): [0,1] \rightarrow \mathbb{R}$ be a function which is known up to the finite-dimensional parameter $\theta \in \Theta$, where $\Theta$ denotes the parameter space. The null hypothesis of interest now reads as follows:  
+\[ H_{0,\text{para}}: \text{ There exists } \theta \in \Theta \text{ such that } m_i(\cdot) = m(\theta,\cdot) \text{ for all } 1 \le i \le n. \]  
+If $m(\theta,w) = a + b w$ with $\theta = (a,b)$, for example, then $H_0$ is the hypothesis that all trends $m_i$ are linear with the same intercept $a$ and slope $b$. A somewhat simpler but yet important hypothesis is given by 
+\[ H_{0,\text{const}}: m_i \equiv 0 \text{ for all } 1 \le i \le n. \]
+Under this hypothesis, there is no time trend at all in the observed time series. Put differently, all the time trends $m_i$ are constant. (Note that under the normalization constraint $\int_0^1 m_i(w) dw = 0$, $m_i$ must be equal to zero if it is a constant function.) A major goal of our project is to develop new tests for the hypotheses $H_0$, $H_{0,\text{para}}$ and $H_{0,\text{const}}$ in model \eqref{model}. In order to keep the exposition as clear as possible, we focus attention on the hypothesis $H_0$ in what follows. Tests of $H_{0,\text{para}}$, $H_{0,\text{const}}$ and related hypotheses have for example been studied in \cite{Lyubchich2016} and \cite{ChenWu2018}. 
+
+
+In recent years, a number of different approaches have been developed to test the hypothesis $H_0$. \cite{DegrasWu2012} consider the problem of testing $H_0$ within the model framework
+\begin{equation}\label{model-degras}
+Y_{it} = m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} \qquad (1 \le t \le T, \, 1 \le i \le n), 
+\end{equation}
+where $\mathbb{E}[\varepsilon_{it}] = 0$ for all $i$ and $t$ and the terms $\alpha_i$ are assumed to be deterministic. Obviously, \eqref{model-degras} is a special case of \eqref{model} which does not include additional regressors. \cite{DegrasWu2012} construct an $L_2$-type statistic to test $H_0$. The statistic is based on the difference between estimators of the trend with and without imposing $H_0$. Let $\hat{m}_{i,h}$ be the estimator of $m_i$ and $\hat{m}_h$ the estimator of the common trend $m$ under $H_0$, where $h$ denotes the bandwidth parameter. With these estimators, the authors define the statistic
+\begin{equation}\label{stat-degras}
+\Delta_{n,T} = \sum_{i=1}^n \int_0^1 \big(\hat{m}_{i,h}(u) - \hat{m}_h(u)\big)^2 du, 
+\end{equation} 
+which measures the $L_2$-distance between $\hat{m}_{i, h}$ and $\hat{m}_h$. In the theoretical part of their paper, they derive the limit distribution of $\Delta_{n,T}$. \cite{ChenWu2018} develop theory for test statistics closely related to those from \cite{DegrasWu2012}, but under more general conditions on the error terms. 
+
+
+\cite{Zhang2012} investigate the problem of testing the hypothesis $H_0$ in a slightly restricted version of model \eqref{model}, where $\beta_i = \beta$ for all $i$. The regression coefficients $\beta_i$ are thus assumed to be homogeneous in their setting. They construct a residual-based test statistic as follows: First, they obtain profile least squares estimators $\hat{\beta}$ and $\hat{m}_h(t/T)$ of the parameter vector $\beta$ and the common trend $m$ under $H_0$, where $h$ denotes the bandwidth. With these estimators, they compute the residuals $\hat{u}_{it} = Y_{it} - \hat{\beta}^T X_{it} - \hat{m}_h(t/T)$. These residuals are shown to have the form $\hat{u}_{it} = \Delta_i(t/T) + \eta_{it}$, where $\Delta_i$ is a deterministic function with the property that $\Delta_i \equiv 0$ under $H_0$ and $\eta_{it}$ denotes the error term. Testing $H_0$ is thus equivalent to testing the hypothesis $H_0^\prime: \Delta_i \equiv 0$ for all $1 \le i \le n$. The authors construct a test statistic for the hypothesis $H_0^\prime$ on the basis of nonparametric kernel estimators of the functions $\Delta_i$ and derive its limit distribution.  
+
+
+The tests of \cite{Zhang2012}, \cite{DegrasWu2012} and \cite{ChenWu2018} are based on nonparametric estimators of the trend functions $m_i$ that depend on one or several bandwidth parameters. Unfortunately, it is far from clear how to choose these bandwidths in an appropriate way. This is a general problem concerning essentially all tests based on nonparametric curve estimators. There are of course many theoretical results on optimal bandwidth choice for estimation purposes. However, the optimal bandwidth for curve estimation is usually not optimal for testing. Optimal bandwidth choice for tests is indeed an open problem, and only little theory for simple cases is available \citep[cp.][]{GaoGijbels2008}. Since tests based on nonparametric curve estimators are commonly quite sensitive to the choice of bandwidth and theory for optimal bandwidth selection is not available, it appears preferable to work with bandwidth-free tests. 
+
+
+A classical way to obtain a bandwidth-free test of the hypothesis $H_0$ is to use CUSUM-type statistics which are based on partial sum processes. This approach is taken in \cite{Hidalgo2014}. A more modern approach to obtain a bandwidth-free test is to employ multiscale methods. These methods avoid the need to choose a bandwidth by considering a large collection of bandwidths simultaneously. More specifically, the basic idea is as follows: Let $S_h$ be a test statistic for the null hypothesis of interest, which depends on the bandwidth $h$. Rather than considering only a single statistic $S_h$ for a specific bandwidth $h$, a multiscale approach simultaneously considers a whole family of statistics $\{S_h: h \in \mathcal{H} \}$, where $\mathcal{H}$ is a set of bandwidth values. The multiscale test then proceeds as follows: For each bandwidth or scale $h$, one checks whether $S_h > q_h(\alpha)$, where $q_h(\alpha)$ is a bandwidth-dependent critical value (for given significance level $\alpha$). The multiscale test rejects if $S_h > q_h(\alpha)$ for at least one scale $h$. The main theoretical difficulty in this approach is of course to derive appropriate critical values $q_h(\alpha)$. Specifically, the critical values $q_h(\alpha)$ need to be determined such that the multiscale test has the correct (asymptotic) level, that is, such that $\pr (S_h > q_h(\alpha) \text{ for some } h \in \mathcal{H} ) = (1-\alpha) + o(1)$. 
+
+
+Multiscale methods have been developed for a variety of different test problems in recent years. \cite{ChaudhuriMarron1999, ChaudhuriMarron2000} introduced the so-called SiZer method which has been extended in various directions; see for example \cite{HannigMarron2006} and \cite{Rondonotti2007}. \cite{HorowitzSpokoiny2001} proposed a multiscale test for the parametric form of a regression function. \cite{DuembgenSpokoiny2001} constructed a multiscale approach which works with additively corrected supremum statistics. This general approach has been very influential in recent years and has been further developed in numerous ways; see for example \cite{Duembgen2002}, \cite{Rohde2008} and \cite{ProkschWernerMunk2018} for multiscale methods in the regression context and \cite{DuembgenWalther2008}, \cite{RufibachWalther2010}, \cite{SchmidtHieber2013} and \cite{EckleBissantzDette2017} for methods in the context of density estimation. Importantly, all of these studies are restricted to the case of independent data. It turns out that it is highly non-trivial to extend the multiscale approach of \cite{DuembgenSpokoiny2001} to the case of dependent data. A first step into this direction has recently been made in \cite{KhismatullinaVogt2018}. They developed multiscale methods to test for local increases/decreases of the nonparametric trend function $m$ in the univariate time series model $Y_t = m(t/T) + \varepsilon_t$.  
+
+
+To the best of our knowledge, multiscale tests of the hypotheses $H_0$, $H_{0,\text{para}}$ and $H_{0,\text{const}}$ in model \eqref{model} are not available in the literature. The only exception is \cite{Park2009} who developed SiZer methods for the comparison of nonparametric trend curves in a strongly simplified version of model \eqref{model}. Their analysis, however, is mainly methodological and not fully backed up by theory. Indeed, theory has only been derived for the special case $n=2$, that is, for the case that only two time series are observed. 
+\vspace{10pt}
+
+
+\noindent \textbf{(b) Clustering of nonparametric trend curves} 
+\vspace{10pt} 
+
+
+\noindent Consider the situation that the null hypothesis $H_0: m_1 = \ldots = m_n$ is violated in the general panel data model \eqref{model}. Even though some of the trend functions $m_i$ are different in this case, there may still be groups of time series with the same time trend. Formally, a group stucture can be defined as follows within the framework of model \eqref{model}: There exist sets or groups of time series $G_1,\ldots,G_{K_0}$ with $\{1,\ldots,n\} = \dot\bigcup_{k=1}^{K_0} G_k$ such that for each $1 \le k \le K_0$, 
+\begin{equation}\label{model-groups}
+m_i = m_j \quad \text{for all } i,j \in G_k. 
+\end{equation}
+According to \eqref{model-groups}, the time series of a given group $G_k$ all have the same time trend. In many applications, it is very natural to suppose that there is such a group structure in the data. An interesting statistical problem which we aim to investigate in our project is how to estimate the unknown groups $G_1,\ldots,G_{K_0}$ and their unknown number $K_0$ from the data. 
+
+
+Several approaches to this problem have been proposed in the context of models closely related to \eqref{model}. \cite{DegrasWu2012} used a repeated testing procedure based on $L_2$-type test statistics of the form \eqref{stat-degras} in order to estimate the unknown group structure in model \eqref{model-degras}. \cite{Zhang2013} developed a clustering method within the same model framework which makes use of an extended Bayesian information criterion. \cite{VogtLinton2017} constructed a thresholding method to estimate the unknown group structure in the panel model $Y_{it} = m_i(X_{it}) + u_{it}$, where $X_{it}$ are random regressors and $u_{it}$ are general error terms that may include fixed effects. Their approach can also be adapted to the case of fixed regressors $X_{it} = t/T$.  As an alternative to a group structure, factor-type structures have been imposed on the trend and regression functions in panel models. Such factor-type structures are studied in \cite{Kneip2012}, \cite{LintonVogt2015} and \cite{BonevaLintonVogt2016} among others. 
+
+
+The problem of estimating the unknown groups $G_1,\ldots,G_{K_0}$ and their unknown number $K_0$ in model \eqref{model} has close connections to functional data clustering. There, the aim is to cluster smooth random curves that are functions of (rescaled) time and that are observed with or without noise. A number of different clustering approaches have been proposed in the context of functional data models; see for example \cite{Abraham2003}, \cite{Tarpey2003} and \cite{Tarpey2007} for procedures based on $k$-means clustering, \cite{James2003} and \cite{Chiou2007} for model-based clustering approaches and \cite{Jacques2014} for a recent survey. 
+
+
+The problem of finding the unknown group structure in model \eqref{model} is also closely related to a developing literature in econometrics which aims to identify unknown group structures in parametric panel regression models. In its simplest form, the panel regression model under consideration is given by the equation $Y_{it} = \beta_i^\top X_{it} + u_{it}$ for $1 \le t \le T$ and $1 \le i \le n$, where the coefficient vectors $\beta_i$ are allowed to vary across individuals $i$ and the error terms $u_{it}$ may include fixed effects. Similar to the trend functions in model \eqref{model}, the coefficients $\beta_i$ are assumed to belong to a number of groups: there are $K_0$ groups $G_1,\ldots,G_{K_0}$ such that $\beta_i = \beta_j$ for all $i,j \in G_k$ and all $1\le k \le K_0$. The problem of estimating the unknown groups and their unknown number has been studied in different versions of this modelling framework; cp.\ \cite{Su2016}, \cite{Su2018} and \cite{Wang2018} among others. \cite{Bonhomme2015} considered a related model where the group structure is not imposed on the regression coefficients but rather on some unobserved time-varying fixed effect components of the panel model. 
+
+
+Virtually all the proposed procedures to cluster nonparametric curves in panel and functional data models related to \eqref{model} depend on a number of bandwidth or smoothing parameters required to estimate the nonparametric functions $m_i$. In general, nonparametric curve estimators are strongly affected by the chosen bandwidth parameters. A clustering procedure which is based on such estimators can be expected to be strongly influenced by the choice of bandwidths as well. Moreover, as in the context of statistical testing, there is no theory available on how to pick the bandwidths optimally for the clustering problem. Hence, as in the context of testing, it is desirable to construct a clustering procedure which is free of bandwidth or smoothing parameters that need to be selected. 
+
+
+%There are different ways to move into the direction of a bandwidth-free clustering algorithm. One possibility is to employ Wavelet methods. A Bayesian Wavelet-based method to cluster nonparametric curves has been developed in \cite{Ray2006}. There, the simple model $Y_{it} = m_i(t/T) + \varepsilon_{it}$ is considered, where $m_i$ are smooth functions of rescaled time $t/T$ and the error terms $\varepsilon_{it}$ are restricted to be i.i.d.\ Gaussian noise. Another possibility is to use multiscale methods ...
+
+
+One way to obtain a clustering method which does not require to select any bandwidth parameter is to use multiscale methods. This approach has recently been taken in \cite{VogtLinton2018}. They develop a clustering approach in the context of the panel model $Y_{it} = m_i(X_{it}) + u_{it}$, where $X_{it}$ are random regressors and $u_{it}$ are general error terms that may include fixed effects. Imposing the same group structure as in \eqref{model-groups} on their  model, they construct estimators of the unknown groups and their unknown number as follows: In a first step, they develop bandwidth-free multiscale statistics $\hat{d}_{ij}$ which measure the distance between pairs of functions $m_i$ and $m_j$. To construct them, they make use of the multiscale testing methods described in part (a) of this section. In a second step, the statistics $\hat{d}_{ij}$ are employed as dissimilarity measures in a hierarchical clustering algorithm. 
+
+
+\subsection{Project-related publications}
+
+
+\subsubsection{Articles published by outlets with scientific quality assurance, book publications, and works accepted for publication but not yet published}
+
+
+{\small
+
+\hangindent=0.4cm \textsc{Boneva}, L. and \textsc{Linton}, O. and \textsc{Vogt}, M. (2015). A semiparametric model for heterogeneous panel data with fixed effects. \textit{Journal of Econometrics}, \textbf{188} 327-345.
+
+\vspace{5pt}
+
+\noindent \hangindent=0.4cm \textsc{Boneva}, L. and \textsc{Linton}, O. and \textsc{Vogt}, M. (2016). The effect of fragmentation in trading on market quality in the UK equity market. \textit{Journal of Applied Econometrics}, \textbf{31} 192-213.
+
+\vspace{5pt}
+
+\noindent \hangindent=0.4cm \textsc{Vogt}, M. and \textsc{Linton}, O. (2017). Classification of non-parametric regression functions in longitudinal data models. \textit{Journal of the Royal Statistical Society: Series B}, \textbf{79} 5-27.
+
+}
+
+
+\subsubsection{Other publications}
+
+
+{\small
+
+\hangindent=0.4cm \textsc{Khismatullina}, M. and \textsc{Vogt}, M. (2018). Multiscale inference and long-run variance estimation in nonparametric regression with time series errors. \textit{arXiv, ??}.
+
+\vspace{5pt}
+
+\noindent \hangindent=0.4cm \textsc{Vogt}, M. and \textsc{Linton}, O. (2018). Multiscale clustering of nonparametric regression curves. \textit{arXiv, ??}. 
+
+}
+
+
+
+\newpage
+\section{Objectives and work programme}\label{sec:objWP}
+
+
+\subsection{Anticipated total duration of the project}
+
+
+2 years from October 1, 2019 to September 30, 2021.
+
+
+\subsection{Objectives}\label{subsec:objectives}
+
+
+The main purpose of the project is to develop new methods and theory for the comparison and clustering of nonparametric trend curves. In particular, we aim to develop test and clustering methods which are free of classical bandwidth para\-meters and thus avoid the notoriously difficult problem of optimal bandwidth selection. 
+%can be regarded as bandwidth-free. We thus attempt to get rid of the very problematic bandwidth parameter from classical nonparametric statistics.
+To do so, we will build on the techniques from statistical multiscale testing reviewed in Section \ref{sec:stateofart}. The methodological and theoretical analysis of the project will be complemented by simulations and empirical applications. First of all, we will carry out a detailed simulation study to examine the finite sample performance of the proposed test and clustering methods. Moreover, we intend to demonstrate their usefulness by two empirical data examples which are described in more detail in the work programme in Section \ref{subsec:WP}. 
+
+As a modelling framework, we will consider the general panel setting \eqref{model} introduced in Section \ref{sec:stateofart}. We briefly summarize the model setting once again for convenience: Suppose we observe a panel of $n$ time series $\mathcal{Z}_i = \{(Y_{it},X_{it}): 1 \le t \le T\}$ for $ 1 \le i \le n$, where $Y_{it}$ are real-valued random variables and $X_{it}$ are $d$-dimensional random vectors. Each time series $\mathcal{Z}_i$ is modelled by the equation 
+\begin{equation}\label{model-objectives}
+Y_{it} = m_i \Big( \frac{t}{T} \Big) + \beta_i^\top X_{it} + \alpha_i + \varepsilon_{it} 
+\end{equation}
+for $ 1 \le t \le T$, where $m_i$ is a nonparametric time trend curve, $X_{it}$ is a vector of regressor or control variables, $\alpha_i$ are unobserved fixed effects and $\varepsilon_{it}$ are idiosyncratic error terms with $\mathbb{E}[\varepsilon_{it}|X_{it} ] = 0$. For each $i$, $\mathcal{P}_i = \{(X_{it},\varepsilon_{it}): 1 \le t \le T\}$ is assumed to be a general time series process which fulfills some weak dependence conditions (e.g.\ conditions formulated in terms of strong mixing coefficients or in terms of the physical dependence measure introduced by \cite{Wu2005}). We will not only allow for time series dependence in the data, but also for cross-sectional dependence. To derive our theoretical results, we will assume that the time series length $T$ tends to infinity. The number of time series $n$, in contrast, may either be bounded or diverging. 
+
+\vspace{10pt}
+
+
+\noindent \textbf{(a) Contributions to statistical multiscale testing} 
+\vspace{10pt} 
+
+
+\noindent The first main challenge of the project is to develop novel multiscale tests for the comparison of the trend curves $m_i$ in model \eqref{model-objectives}. More specifically, we aim to develop multiscale tests for the hypotheses $H_0$, $H_{0,\text{para}}$ and $H_{0,\text{const}}$ defined at the beginning of Section \ref{sec:stateofart}(a). The statistical strategy to construct such tests is laid out in the work programme in Section \ref{subsec:WP}. 
+
+
+Compared to existing test procedures, the proposed multiscale tests have the following main advantages: (i) By construction, they do not depend on a specific bandwidth para\-meter $h$ but take into account multiple scales or bandwidths $h$ simultaneously. They thus do not require a bandwidth choice. (ii) They are much more informative than non-multiscale tests. To make this point more precise, consider the hypothesis $H_0: m_1 = \ldots = m_n$. Practitioners are not only interested in whether $H_0$ is violated. They would also like to know which violations occur, in particular, which time trends are different and during which time periods they differ from each other. As explained in more detail in Section \ref{subsec:WP}, our multiscale test is designed to convey this additional information. In particular, it does not only allow to test whether the overall null hypothesis $H_0$ is violated. It also allows to make rigorous statistical confidence statements about which time series have a different trend and over which time periods these trends differ. 
+
+
+To the best of our knowledge, the only multiscale method available to test $H_0$ in (a strongly simplified version of) model \eqref{model-objectives} is the SiZer method of \cite{Park2009}. However, as already discussed in Section \ref{sec:stateofart}, their analysis is mainly methodological and not backed up by a general theory. In particular, theory is only available for the special case of $n=2$ time series. Moreover, the theoretical results are only valid under very severe restrictions on the set of bandwidths $\mathcal{H}$ that is taken into account by the multiscale method. In particular, the bandwidths $h$ in the set $\mathcal{H}$ are assumed to be bounded away from zero. Put differently, they are not allowed to converge to zero as the sample size grows, which is obviously a very severe limitation. In contrast to this, we attempt to derive a complete asymptotic theory for our multiscale tests which is valid under general conditions. 
+\vspace{10pt}
+
+
+\noindent \textbf{(b) Contributions to curve clustering} 
+\vspace{10pt} 
+
+
+\noindent The second main objective of the project is to develop a multiscale clustering method in the framework of model \eqref{model-objectives} which allows to estimate the unknown groups $G_1,\ldots,G_{K_0}$ and their unknown number $K_0$ defined in \eqref{model-groups}. 
+%The second main objective of the project is to develop a multiscale clustering method in the framework of model \eqref{model-objectives} endowed with the group structure \eqref{model-groups}. Put differently, we aim to construct a multiscale method to estimate the unknown groups $G_1,\ldots,G_{K_0}$ and their unknown number $K_0$.
+A brief summary of how to construct such a method is provided in the work programme in Section \ref{subsec:WP}. To the best of our knowledge, the only multiscale clustering method available in the literature is due to \cite{VogtLinton2018}. There, however, only basic consistency results were derived for the estimators of the unknown group structure. We aim to go beyond this basic theory and establish more advanced theory for our estimators of the unknown groups $G_1,\ldots,G_{K_0}$ and their unknown number $K_0$. A more detailed discussion of the theoretical statements we aim to establish is given in the work programme in Section \ref{subsec:WP}. 
+\vspace{10pt}
+
+
+\subsection{Work programme incl. proposed research methods}\label{subsec:WP}
+
+
+In what follows, we provide a detailed account of how we intend to address the challenges formulated in Section \ref{subsec:objectives}. 
+\vspace{10pt}
+
+
+\noindent \textbf{(a) Methods for statistical multiscale testing} 
+\vspace{10pt} 
+
+
+\noindent We first describe our strategy to construct multiscale tests of the hypotheses $H_0$, $H_{0,\text{para}}$ and $H_{0,\text{const}}$ in model \eqref{model-objectives}. To keep the exposition focused, we restrict attention to the hypothesis $H_0: m_1 = \ldots = m_n$. For any interval $[u-h,u+h] \subseteq [0,1]$, consider the hypothesis
+\[ H_0^{[i,j]}(u,h): m_i(w) = m_j(w) \text{ for all } w \in [u-h,u+h]. \] 
+Obviously, $H_0$ can be reformulated as
+\begin{align*}
+H_0: \ & \text{The hypothesis } H_0^{[i,j]}(u,h) \text{ holds true for all intervals } [u-h,u+h] \subseteq [0,1] \\ & \text{ and for all } 1 \le i < j \le n. 
+\end{align*} 
+We now set up a multiscale method which simultaneously tests the hypothesis \linebreak $H_0^{[i,j]}(u,h)$ for all possible points $(u,h)$ and all pairs $(i,j)$ with $i < j$.\footnote{Obviously, in practice, we cannot consider all points $u \in (0,1)$ and all $h > 0$ but have to restrict attention to a finite subset of points. We ignore this in our presentation for simplicity.} Our stra\-tegy to derive such a method can be outlined as follows:
+\vspace{10pt}
+
+
+\noindent \textit{Step 1: Construction of the test statistic.}
+\begin{enumerate}[label=(\roman*),leftmargin=0.75cm]
+
+\item Construct nonparametric kernel estimators $\hat{m}_{i,h}$ of the trend functions $m_i$, where $h$ denotes the bandwidth parameter.   
+
+\item For each given $(u,h)$ and $(i,j)$, construct a test statistic $\hat{S}_{ij}(u,h)$ of the hypothesis $H_0^{[i,j]}(u,h)$. A simple choice is a statistic of the form $\hat{S}_{ij}(u,h) = \sqrt{Th} (\hat{m}_{i,h}(u) - \hat{m}_{j,h}(u)) / \hat{\nu}_{ij,h}(u)$, where the term $\hat{\nu}_{ij,h}(u)$ is chosen to normalize the asymptotic variance of the statistic to $1$. 
+
+\item Aggregate the statistics $\hat{S}_{ij}(u,h)$ for all possible $(u,h)$ and $(i,j)$ into a multiscale statistic. In order to do so, we will use the aggregation scheme proposed by \cite{DuembgenSpokoiny2001}. The resulting multiscale statistic has the form 
+\[ \hat{\Psi}_{n,T} = \max_{1 \le i < j \le n} \sup_{u,h} \big\{ |\hat{S}_{ij}(u,h)| - \lambda(h) \big\},  \]
+where $\lambda(h)$ are (appropriately chosen) additive correction terms. As one can see, the multiscale statistic $\hat{\Psi}_{n,T}$ is not obtained by simply taking the supremum of the individual statistics $\hat{S}_{ij}(u,h)$. We rather take the supremum of the additively corrected statistics $|\hat{S}_{ij}(u,h)| - \lambda(h)$ as first suggested in \cite{DuembgenSpokoiny2001}. 
+
+\end{enumerate}
+
+
+\noindent \textit{Step 2: Construction of the test procedure.}
+\begin{enumerate}[label=(\roman*),leftmargin=0.75cm]
+
+\item Suppose for a moment we could compute the $(1-\alpha)$-quantile $q_{n,T}^*(\alpha)$ of the multiscale statistic $\hat{\Psi}_{n,T}$ under the null $H_0$. Then our multiscale test would be carried out as follows: 
+\begin{itemize}[leftmargin=1cm]
+
+\item[(T$^*$)] Reject the overall null hypothesis $H_0$ if $\hat{\Psi}_{n,T} > q_{n,T}^*(\alpha)$. 
+\end{itemize}
+By construction, the decision rule (T$^*$) is a rigorous level-$\alpha$-test, which means that $\mathbb{P}(\hat{\Psi}_{n,T} > q_{n,T}^*(\alpha)) = 1-\alpha$ under $H_0$. 
+\item The quantile $q_{n,T}^*(\alpha)$ is a highly complicated quantity which is not known in practice. Hence, it cannot be used to set up the test. We thus need to come up with an (asymptotic) approximation $q_{n,T}(\alpha)$ which is computable in practice. In particular, we require $q_{n,T}(\alpha)$ to be an approximation of the quantile $q_{n,T}^*(\alpha)$ in the sense that 
+\begin{equation}\label{q-approx}
+\mathbb{P} (\hat{\Psi}_{n,T} > q_{n,T}(\alpha)) = (1-\alpha) + o(1). 
+\end{equation}
+One of the main theoretical challenges of the project is to construct a suitable approximation $q_{n,T}(\alpha)$ and to verify that it has the property \eqref{q-approx}. Once we have succeeded in doing so, the multiscale test can be carried out as follows: 
+\begin{itemize}[leftmargin=0.8cm]
+\item[(T)] Reject the overall null hypothesis $H_0$ if $\hat{\Psi}_{n,T} > q_{n,T}(\alpha)$. 
+\end{itemize}
+
+\item By using the decision rule (T), we regard the constructed multiscale method as a test of the overall hypothesis $H_0$. Alternatively, one may view it as a simultaneous test of the family of hypotheses $H_0^{[i,j]}(u,h)$ for all points $(u,h)$ and pairs $(i,j)$. Looking at the method this way, one may proceed as follows: 
+\begin{itemize}[leftmargin=1.5cm]
+\item[(T$_\text{mult}$)] 
+For each interval $[u-h,u+h]$, reject the hypothesis $H_0^{[i,j]}(u,h)$ if the corrected test statistic $|\hat{S}_{ij}(u,h)| - \lambda(h)$ is above the critical value $q_{n,T}(\alpha)$, that is, if $|\hat{S}_{ij}(u,h)| - \lambda(h) > q_{n,T}(\alpha)$. 
+\end{itemize}
+We conjecture that it is possible to prove the following theoretical result on the multiple testing procedure $(T_{\text{mult}})$ under appropriate regularity conditions: 
+
+\textit{With asymptotic probability $\ge 1-\alpha$, the hypothesis $H_0^{[i,j]}(u,h)$ is violated for all pairs $(i,j)$ and for all intervals $[u-h,u+h]$ for which $|\hat{S}_{ij}(u,h)| - \lambda(h) > 0$.} 
+
+According to this conjecture, we can make the following simultaneous confidence statement: We can claim, with (asymptotic) confidence at least $1-\alpha$, that the hypothesis $H_0^{[i,j]}(u,h)$ is violated for all pairs of time series $(i,j)$ and for all intervals $[u-h,u+h]$ for which our test rejects. Hence, the multiscale test does not only give us information on whether the overall null hypothesis $H_0$ is violated. It also allows us to make rigorous statistical confidence statements about (i) which pairs of time series $(i,j)$ have different trends and (ii) in which time regions $[u-h,u+h]$ these trends differ. This is valuable information in many applications. 
+
+\end{enumerate}
+In order to derive the theory for the multiscale test outlined above, we will build on the theoretical results developed in \cite{KhismatullinaVogt2018}. Under very restrictive assumptions (such as $n=2$ and no cross-sectional dependence at all in the data) the results should carry over although the technical details need to be worked out. However, under more realistic assumptions (such as a general number of curves $n$ and cross-sectional dependence in the data), there is considerable work to be done and the results from \cite{KhismatullinaVogt2018} do not carry over in a straightforward way. 
+%However, since the data structure in the panel model \eqref{model-objectives} differs in various important respects from that of a univariate time series, the results from \cite{KhismatullinaVogt2018} do not carry over to our setting in a straightforward way. Hence, a substantial amount of work will be needed to develop the above multiscale methods and to derive theory for them. 
+\vspace{10pt}
+
+
+\noindent \textbf{(b) Multiscale clustering methods} 
+\vspace{10pt} 
+
+
+\noindent In order to construct a multiscale clustering algorithm in model \eqref{model-objectives}, we will adapt the clustering approach of \cite{VogtLinton2018}. In particular, we plan to proceed as follows: (i) We use the multiscale test statistics from the first part of the project to construct distance measures between pairs of trends $m_i$ and $m_j$. (ii) From these distance measures, we obtain so-called dissimilarity measures which form the basis of a hierarchical clustering algorithm. 
+
+
+\cite{VogtLinton2018} derived some basic consistency results for their estimators of the unknown groups $G_1,\ldots,G_{K_0}$ and their unknown number $K_0$. Letting $\hat{K}_0$ be the estimator of $K_0$ and $\{ \hat{G}_1,\ldots,\hat{G}_{\hat{K}_0} \}$ the estimator of the group structure $\{ G_1,\ldots,G_{K_0} \}$, they in particular show that under appropriate regularity conditions, 
+\begin{equation}\label{consistency-res-VogtLinton2018}
+\pr \big( \hat{K}_0 = K_0 \big) \rightarrow 1 \quad \text{and} \quad \pr \Big( \{ \hat{G}_1,\ldots,\hat{G}_{\hat{K}_0} \} = \{ G_1,\ldots,G_{K_0} \} \Big) \rightarrow 1 
+\end{equation}
+as the sample size goes to infinity. We intend to go beyond these basic consistency results and derive more advanced theory for our estimators. To be more specific, consider the problem of estimating the unknown number of groups $K_0$.  The estimator of $K_0$ in \cite{VogtLinton2018} depends on a tuning parameter $\pi_{n,T}$. Only a heuristic rule is available for the choice of this parameter. In contrast to this, we plan to derive rigorous theory for the choice of this tuning parameter. In particular, we intend to choose $\pi_{n,T} = q_{n,T}(\alpha)$, where $q_{n,T}(\alpha)$ is the approximate $(1-\alpha)$-quantile of the multiscale statistic defined above. With this choice, our estimator $\hat{K}_0$ of $K_0$ implicitly depends on the significance level $\alpha$, that is, $\hat{K}_0 = \hat{K}_0(\alpha)$. For a given $\alpha$, we conjecture that it is possible to prove that  
+\begin{equation}\label{res-K0}
+\mathbb{P}( \hat{K}_0 = K_0 ) \ge (1-\alpha) + O(r_{n,T}), 
+\end{equation}
+where $r_{n,T}$ is the rate of the lower order terms. This statement can be interpreted as follows: For given $\alpha$, $\hat{K}_0$ is equal to the true number of groups $K_0$ with (asymptotic) probability at least $1-\alpha$. Hence, we can tune the clustering algorithm in such a way that the probability of misestimating the number of groups $K_0$ is (asymptotically) controlled. \eqref{res-K0} can thus be understood as an asymptotic confidence statement about the estimator $\hat{K}_0$. In addition, we aim to derive an analogous confidence statement for the estimators $\hat{G}_1,\ldots,\hat{G}_{\hat{K}_0}$ of the unknown groups.
+\vspace{10pt}
+
+
+\noindent \textbf{Empirical applications} 
+\vspace{10pt}
+
+
+\noindent Our test and clustering methods have a wide range of potential applications in economics and finance. Among other things, they can be used to compare the volatility trends of different stocks \citep{Nyblom2000}, short-term risk-free interest rates \citep{Fan2008,Park2009} or long-term rates across countries \citep{Park2009}.
+Another potential application is concerned with economic growth, which has been a key topic in macroeconomics for many decades. Economists are very much interested in the question whether gross domestic product (GDP) growth has been faster in some countries than in others. A suitable econometric framework to investigate this question is the panel data model \eqref{model-objectives}. \cite{Zhang2012} used a special case of this model to analyze data from 16 OECD countries. For each of the $n=16$ countries, quarterly time series data on gross domestic product ($GDP$), capital stock ($K$), labour input ($L$) and human capital ($H$) were available. The data were assumed to follow the model 
+\[ \Delta \log GDP_{it} = m_i\Big(\frac{t}{T}\Big) + \beta_1 \Delta \log L_{it} + \beta_2 \Delta \log K_{it} + \beta_3 \Delta \log H_{it} + \alpha_i + \varepsilon_{it} \]
+with $1 \le t \le T = 140$ and $1 \le i \le n = 16$, where $m_i$ is the time trend of country $i$, $\beta_k$ are unknown regression coefficients and $\Delta \log Z_{it} = \log Z_{it} - \log Z_{it-1}$ for $Z_{it} = GDP_{it}$, $L_{it}$, $K_{it}$, $H_{it}$. \cite{Zhang2012} tested the widely used common trends hypothesis $H_0: m_1 = \ldots = m_n$ in this framework. Their analysis provided evidence against $H_0$. Specifically, their test rejected $H_0$ at the 10\% confidence level. However, even if the common trends hypothesis is violated, there may still be groups of countries with the same time trend. It may thus be interesting to cluster the OECD countries into groups. We intend to use the multiscale methods developed in the project to produce such a clustering and, more generally, to analyze an updated version of the data sample from \cite{Zhang2012}. 
+
+
+Another application we would like to explore deals with the analysis of temperature data, which has attracted some attention in econometrics in recent years; see for example \cite{Gao2006}, \cite{Atak2011} and \cite{Davidson2016}. Over the last decades, large panel data sets have become available which contain long temperature time series $\mathcal{Z}_i = \{ Y_{it}: 1 \le t \le T \}$ for a huge number of different spatial locations $i$; see the Berkeley Earth project at \texttt{http://berkeleyearth.org} for examples of such big data sets. A simple trend model for the time series $\mathcal{Z}_i$ is given by the equation
+\[ Y_{it} = m_i\Big(\frac{t}{T}\Big) + \alpha_i + \varepsilon_{it} \]
+with $\ex[\varepsilon_{it}] = 0$, where $m_i$ is the temperature trend at location $i$. %; cp.\ for example \cite{Ghil1991} and \cite{Mudelsee2018}. 
+If covariates are available, we could also work with the more general model \eqref{model-objectives}. Climatologists are very much interested in analyzing the trending behaviour of temperature time series. Information on the trending behaviour is needed to better understand long-term climate variability.  Among other things, they would like to know whether the time trends $m_i$ are the same across locations or whether they can be clustered into groups. We aim to investigate these questions by the test and clustering methods developed in the project. 
+\vspace{10pt}
+
+
+\noindent \textbf{Summary} 
+\vspace{10pt}
+
+
+\noindent The work programme consists of two main work packages: Package (a) is devoted to the multiscale test methods described in part (a) of Section \ref{subsec:objectives}. Package (b) will focus on the multiscale clustering methods described in part (b) of Section \ref{subsec:objectives}. In each of the two work packages, we will proceed as follows: We will first develop the statistical methodology, then derive the theoretical properties thereof, evaluate the finite sample performance by simulations, and finally illustrate the methods by the application examples discussed above. 
+\begin{center}
+\begin{tabular}{l c c c}
+\hspace{0.5cm} \textbf{Work package}  & {\bf 2019} & {\bf 2020} & {\bf 2021} \\
+\hline 
+(a) Multiscale tests & Oct--Dec & Jan--Dec & \\
+(b) Multiscale clustering & & & Jan--Oct
+\end{tabular}
+\end{center}
+\noindent The results of work package (a) will be presented at conferences in the second half of 2020. Possible venues are the World Congress of the Econometric Society (Aug 2020) and the CMStatistics Conference (Dec 2020). The results of package (b) will be presented at conferences in summer/autumn 2021. Possible venues are the European Summer Meeting of the Econometric Society and the European Meeting of Statisticians.
+
+
+%\begin{tabular}{l l}
+%\multicolumn{2}{l}{\textbf{Workpackage (a): Multiscale tests}} \\ 
+%Estimated duration: & Oct 2019 -- Dec 2020 \\
+%resentations (possible venues): & World Congress of the Econometric \\
+%                                 & Society, Aug 2020 \\ 
+%                                 & CMStatistics Conference, Dec 2020 \\
+%\end{tabular}
+%\vspace{10pt}
+%
+%\begin{tabular}{l l}
+%\multicolumn{2}{l}{\textbf{Workpackage (b): Multiscale clustering}} \\ 
+%Estimated duration: & Jan 2021 -- Oct 2021 \\
+%Presentations (possible venues): & European Summer Meeting of the \\
+%                                 & Econometric Society, Summer 2021 \\
+%                                 & European Meeting of Statisticians, \\
+%                                 & Summer 2021 \\
+%\end{tabular}
+
+
+%\subsection{Data handling}
+
+%[Text]
+
+%\subsection{Other information}
+%Please use this section for any additional information you feel is relevant which has not been provided elsewhere.
+
+%[Text]
+
+%\subsection{Descriptions of proposed investigations involving experiments on humans, human materials or animals as well as dual use research of concern}
+
+%[Text]
+
+%\subsection{Information on scientific and financial involvement of international cooperation partners}
+
+%[Text]
+
+
+
+\newpage
+\section{Bibliography}
+
+\vspace{-1.25cm}
+
+\renewcommand\refname{}
+\bibliographystyle{ims}
+{\small
+\setlength{\bibsep}{0.55em}
+\bibliography{bibliography}}
+
+
+
+\section{Requested modules/funds}
+%Explain each item for each applicant (stating last name, first name).
+
+
+\subsection{Basic Module}
+
+
+\subsubsection{Funding for Staff}
+
+\begin{center}
+\begin{tabular}{c l l}
+No. & Position & Funds \\
+\hline 
+1.  & Doctoral researcher & $49 725$ \euro{} per calender year \\
+    & (Bes.Gr. E13 Stufe 2 / E14 Stufe 1, 75\%) & \\
+2.  & Student Assistant & 2400 \euro{} \\  % SHK 10 Euro per hour, 10 hours per week.
+    & (10 hours per week for half a year) & \\[0.1cm]    
+\end{tabular}
+\end{center}
+
+\noindent Job description for requested staff: 
+\begin{enumerate}[leftmargin=0.5cm]
+\item As research staff, a doctoral student is required who already possesses a tho\-rough expertise in statistical multiscale methods. Marina Khismatullina who is a member of the Bonn Graduate School of Economics fits these requirements very well. Ms.\ Khismatullina and the applicant have already collaborated on a project which is concerned with statistical multiscale techniques; cp.\ \cite{KhismatullinaVogt2018}. Ms.\ Khismatullina would thus bring in the expertise needed for the project. Moreover, with her very advanced programming skills, she will be able to develop the computational software required for simulations and empirical applications. 
+\item At the onset of the project, a student assistant position should be available for support with data collection, exploratory data analysis and auxiliary programming. Specifically, the data for the empirical applications need to be collected from various sources, cleaned and brought into a form which allows to process them. The prerequisites are strong analytical and programming skills.
+\end{enumerate}
+
+\subsubsection{Direct Project Costs} 
+
+%\paragraph{Equipment up to Euro 10,000, Software and Consumables}
+
+\paragraph{Travel Expenses}
+
+\begin{center}
+%\vspace{5pt}
+
+\begin{tabular}{l c c c}
+ & 2019 & 2020 & 2021 \\
+\hline 
+International conferences & 0 \euro{} & 1000 \euro{} & 1000 \euro{} \\
+\end{tabular}
+%\vspace{5pt}
+
+\end{center}
+
+\noindent The doctoral researcher is supposed to present the project at international conferences and workshops. Possible venues are the meetings of the Econometric Society, the European Meeting of Statisticians and the CMStatistics conference. %the Conference of the ERCIM WG on Computational and Methodological Statistics (CMStatistics). 
+In order to cover the travel expenses of the doctoral researcher, the above funds are requested. 
+
+%\paragraph{Visiting Researchers (excluding Mercator Fellows)}
+
+%\paragraph{Expenses for Laboratory Animals}
+
+%\paragraph{Other Costs}
+
+\paragraph{Project-related publication expenses}
+
+\begin{center}
+%\vspace{5pt}
+
+\begin{tabular}{l c c c}
+ & 2019 & 2020 & 2021 \\
+\hline 
+Journal submission fees & 0 \euro{} & 200 \euro{} & 200 \euro{} \\
+\end{tabular}
+\end{center}
+
+
+%\subsubsection{Instrumentation}
+
+%\paragraph{Equipment exceeding Euro 10,000}
+
+%\paragraph{Major Instrumentation exceeding Euro 50,000}
+
+%\subsection{Module Temporary Position for Principal Investigator}
+
+%\subsection{Module Replacement Funding}
+
+%\subsection{Module Temporary Clinician Substitute}
+
+%\subsection{Module Mercator Fellows}
+
+%\subsection{Module Workshop Funding}
+
+%\subsection{Module Public Relations Funding}
+
+
+
+\section{Project requirements}
+
+\subsection{Employment status information}
+
+%For each applicant, state the last name, first name, and employment status (including duration of contract and funding body, if on a fixed-term contract).
+Vogt, Michael, Professor, tenured position
+
+\subsection{First-time proposal data}
+
+%Only if applicable: Last name, first name of first-time applicant
+Vogt, Michael
+
+\subsection{Composition of the project group}
+%List only those individuals who will work on the project but will not be paid out of the project funds. State each person’s name, academic title, employment status, and type of funding.
+Vogt, Michael, Professor, tenured position
+
+\subsection{Cooperation with other researchers}
+
+%\subsubsection{Researchers with whom you have agreed to cooperate on this project}
+
+\subsubsection{Researchers with whom you have collaborated scientifically within the past three years}
+
+\noindent Holger Dette -- Ruhr University Bochum, Germany 
+
+\noindent Oliver Linton -- University of Cambridge, UK
+
+\noindent Mar\'ia Dolores Mart\'inez-Miranda -- University of Granada, Spain
+
+\noindent Enno Mammen -- University of Heidelberg, Germany
+
+\noindent Jens Perch Nielsen -- CASS Business School, London, UK 
+
+\noindent Matthias Schmid -- University of Bonn, Germany
+
+\noindent Christopher Walsh -- Technical University of Dortmund, Germany 
+
+
+\subsection{Scientific equipment}
+The University of Bonn has a sufficient infrastructure in hard- and software to carry out the project. Personal computers are available and can be used within the project. Equipment like printers and copiers can be used as well.
+
+%\subsection{Project-relevant cooperation with commercial enterprises}
+%If applicable, please note the EU guidelines on state aid or contact your research institution in this regard.
+
+%\subsection{Project-relevant participation in commercial enterprises}
+%Information on connections between the project and the production branch of the enterprise
+
+
+
+\section{Additional information}
+%If applicable, please list proposals requesting major instrumentation and/or those previously submitted to a third party here.
+
+A request for funding this project has not been submitted to any other addresses. In the case that such a request will be submitted elsewhere, the DFG will be informed immediately. The DFG liaison officer Katrin Hahlen of the University of Bonn (\texttt{hahlen@} \texttt{verwaltung.uni-bonn.de}) has been informed about this application.
+
+
+
+\end{document}
