@@ -1,3 +1,7 @@
+add.quarters <- function(n, date_) {
+  seq(date_, by = paste (3 * n, "months"), length = 2)[2]
+}
+
 #Local linear estimator of the trend function 
 #using the rectangular kernel. 
 nadaraya_watson_smoothing <- function(u, data_p, grid_p, bw){
@@ -106,7 +110,8 @@ produce_smoothed_plots <- function(matrix, pdfname, dates){
       lines(grid_points, smoothed_curve)
     }
     
-    if (h == 0.15) {axis(1, at = grid_points[seq(5, 125, by = 20)], labels = dates[seq(5, 125, by = 20)])}
+    if (h == 0.15) {axis(1, at = grid_points[seq(5, 125, by = 20)],
+                         labels = dates[seq(5, 125, by = 20)])}
     #else {axis(1, at = grid_points[seq(5, 125, by = 20)], labels = NA)}
     legend("topright", inset = 0.01, legend = c(paste0("h = ", h)), lty = 1,
            cex = 0.95, ncol=1)
@@ -116,82 +121,101 @@ produce_smoothed_plots <- function(matrix, pdfname, dates){
 }
 
 
-produce_plots <- function(results, l, data_i, data_j,
-                           dates, name_i, name_j, filename){
-  if (result$stat_pairwise[i, j] > result$quant){
-
-    pdf(filename, width=5.5, height=10.5, paper="special")
-    layout(matrix(c(1, 2, 3),ncol=1), widths=c(2.2, 2.2, 2.2),
-           heights=c(1.5, 1.5, 1.8), TRUE)
-    
-    #Setting the layout of the graphs
-    
-    par(cex = 1, tck = -0.025)
-    par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
-    par(oma = c(0.2, 1.5, 2, 0.2)) #Outer margins
-    
-    plot(gdp_mat_augm[, i], ylim=c(min(gdp_mat_augm[, i], gdp_mat_augm[, j]),
-                                   max(gdp_mat_augm[, i], gdp_mat_augm[, j])),
-         type="l", col="blue", ylab="", xlab="", xaxt = "n", mgp=c(1, 0.5, 0))
-    lines(gdp_mat_augm[, j], col="red")
-    axis(side = 1, at = ticks, labels = as.yearqtr(dates[ticks + 1], format = '%Y-Q%q'),
-         cex.axis = 0.95, mgp=c(1, 0.5, 0))
-    
-    title(main = "(a) adjusted GDP", font.main = 1, line = 0.5)
-    legend("topright", inset = 0.02, legend=c(countries[i], countries[j]),
-           col = c("blue", "red"), lty = 1, cex = 0.95, ncol = 1)
-    
-    par(mar = c(0.5, 0.5, 3, 0)) #Margins for each plot
-    
-    #Plotting the smoothed version of the time series that we have
-    smoothed_i  <- mapply(nadaraya_watson_smoothing, grid_points,
-                          MoreArgs = list(gdp_mat_augm[, i], grid_points, bw = 0.1))
-    smoothed_j  <- mapply(nadaraya_watson_smoothing, grid_points,
-                          MoreArgs = list(gdp_mat_augm[, j], grid_points, bw = 0.1))
-    
-    plot(smoothed_i, ylim=c(min(gdp_mat_augm[, i], gdp_mat_augm[, j]),
-                            max(gdp_mat_augm[, i], gdp_mat_augm[, j])), type="l",
-         col="black", ylab="", xlab = "", xaxt = "n", mgp=c(1,0.5,0))
-    axis(side = 1, at = ticks, labels = as.yearqtr(dates[ticks + 1], format = '%Y-Q%q'),
-         cex.axis = 0.95, mgp=c(1, 0.5, 0))
-    title(main = "(b) smoothed curves from (a)", font.main = 1, line = 0.5)
-    lines(smoothed_j, col="red")
-    
-    par(mar = c(2.7, 0.5, 3, 0)) #Margins for each plot
-    gset    <- result$gset_with_values[[l]]
-    a_t_set <- subset(gset, test == TRUE, select = c(u, h))
-    if (nrow(a_t_set) > 0){
-      p_t_set <- data.frame('startpoint' = (a_t_set$u - a_t_set$h) * t_len + 0.5,
-                            'endpoint' = (a_t_set$u + a_t_set$h) * t_len - 0.5, 'values' = 0)
-      p_t_set$values <- (1:nrow(p_t_set))/nrow(p_t_set)
-      
-      #Produce minimal intervals
-      p_t_set2  <- compute_minimal_intervals(p_t_set)
-      
-      plot(NA, xlim=c(0, t_len),  ylim = c(0, 1 + 1 / nrow(p_t_set)), xlab="", xaxt = "n",
-           mgp=c(2, 0.5, 0), yaxt = "n")
-      axis(side = 1, at = ticks, labels = as.yearqtr(dates[ticks + 1], format = '%Y-Q%q'),
-           cex.axis = 0.95, mgp=c(1, 0.5, 0))
-      title(main = "(c) (minimal) intervals produced by our test", font.main = 1, line = 0.5)
-      #title(xlab = "quarter", line = 1.7, cex.lab = 0.9)
-      segments(p_t_set2$startpoint, p_t_set2$values, p_t_set2$endpoint, p_t_set2$values, lwd = 2)
-      segments(p_t_set$startpoint, p_t_set$values, p_t_set$endpoint, p_t_set$values, col = "gray")
-    } else {
-      #If there are no intervals where the test rejects, we produce empty plots
-      plot(NA, xlim=c(0, t_len),  ylim = c(0, 1), xlab="", ylab = "", xaxt = "n",
-           mgp=c(2,0.5,0), yaxt = "n")
-      axis(side = 1, at = ticks, labels = as.yearqtr(dates[ticks + 1], format = '%Y-Q%q'),
-           cex.axis = 0.95, mgp=c(1, 0.5, 0))
-      title(main = "(c) (minimal) intervals produced by our test", font.main = 1, line = 0.5)
-      #title(xlab = "quarter", line = 1.7, cex.lab = 0.9)
-    }
-    mtext(paste0("Comparison of ", countries[i], " and ", countries[j]), side = 3,
-          line = 0, outer = TRUE, font = 1, cex = 1.2)
-    dev.off()
-  }
+produce_plots <- function(results, data_i, data_j, ticks_, labels_,
+                          name_i, name_j, filename){
+  t_len <- length(data_i)
+  grid_points <- seq(1/t_len, 1, by = 1/t_len)
   
- 
+  pdf(filename, width=5.5, height=10.5, paper="special")
+  layout(matrix(c(1, 2, 3),ncol=1), widths=c(2.2, 2.2, 2.2),
+         heights=c(1.5, 1.5, 1.8), TRUE)
+    
+  #Setting the layout of the graphs
+  par(cex = 1, tck = -0.025)
+  par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
+  par(oma = c(0.2, 1.5, 2, 0.2)) #Outer margins
+    
+  plot(data_i, ylim=c(min(data_i, data_j), max(data_i, data_j)),
+       type="l", col = "blue", ylab = "", xlab="", xaxt = "n",
+       mgp = c(1, 0.5, 0))
+  lines(data_j, col = "red")
+  axis(side = 1, at = ticks_, cex.axis = 0.95, mgp = c(1, 0.5, 0), 
+       labels = labels_)
+    
+  title(main = "(a) adjusted GDP", font.main = 1, line = 0.5)
+  legend("topright", inset = 0.02, legend=c(name_i, name_j),
+         col = c("blue", "red"), lty = 1, cex = 0.95, ncol = 1)
+    
+  par(mar = c(0.5, 0.5, 3, 0)) #Margins for each plot
+    
+  #Plotting the smoothed version of the time series that we have
+  smoothed_i  <- mapply(nadaraya_watson_smoothing, grid_points,
+                        MoreArgs = list(data_i, grid_points, bw = 0.1))
+  smoothed_j  <- mapply(nadaraya_watson_smoothing, grid_points,
+                        MoreArgs = list(data_j, grid_points, bw = 0.1))
+    
+  plot(smoothed_i, ylim = c(min(data_i, data_j), max(data_i, data_j)),
+       type = "l", col = "black", ylab = "", xlab = "", xaxt = "n",
+       mgp=c(1,0.5,0))
+  axis(side = 1, at = ticks_, labels = labels_, cex.axis = 0.95,
+       mgp=c(1, 0.5, 0))
+  title(main = "(b) smoothed curves from (a)", font.main = 1, line = 0.5)
+  lines(smoothed_j, col = "red")
+    
+  par(mar = c(2.7, 0.5, 3, 0)) #Margins for each plot
+  gset    <- result$gset_with_values[[l]]
+  a_t_set <- subset(gset, test == TRUE, select = c(u, h))
+  if (nrow(a_t_set) > 0){
+    p_t_set <- data.frame('startpoint' = (a_t_set$u - a_t_set$h) * t_len + 0.5,
+                          'endpoint' = (a_t_set$u + a_t_set$h) * t_len - 0.5,
+                          'values' = 0)
+    p_t_set$values <- (1:nrow(p_t_set))/nrow(p_t_set)
+      
+    #Produce minimal intervals
+    p_t_set2  <- compute_minimal_intervals(p_t_set)
+      
+    plot(NA, xlim=c(0, t_len),  ylim = c(0, 1 + 1 / nrow(p_t_set)), xlab = "",
+         xaxt = "n", mgp=c(2, 0.5, 0), yaxt = "n")
+    axis(side = 1, at = ticks_, labels = labels_, cex.axis = 0.95,
+         mgp = c(1, 0.5, 0))
+    title(main = "(c) (minimal) intervals produced by our test", font.main = 1, line = 0.5)
+      #title(xlab = "quarter", line = 1.7, cex.lab = 0.9)
+    segments(p_t_set2$startpoint, p_t_set2$values, p_t_set2$endpoint,
+             p_t_set2$values, lwd = 2)
+    segments(p_t_set$startpoint, p_t_set$values, p_t_set$endpoint,
+             p_t_set$values, col = "gray")
+    p_t_set_tex <- data.frame("from" = as.character(as.Date(sapply((p_t_set$startpoint - 0.5), add.quarters,
+                                                      date_ = as.Date('01-10-1975', format = "%d-%m-%Y")))),
+                              "to" = as.character(as.Date(sapply((p_t_set$endpoint + 0.5), add.quarters,
+                                            date_ = as.Date('01-10-1975', format = "%d-%m-%Y")))))
+    p_t_set2_tex <- data.frame("from" = as.character(as.Date(sapply((p_t_set2$startpoint - 0.5), add.quarters,
+                                              date_ = as.Date('01-10-1975', format = "%d-%m-%Y")))),
+                              "to" = as.character(as.Date(sapply((p_t_set2$endpoint + 0.5), add.quarters,
+                                            date_ = as.Date('01-10-1975', format = "%d-%m-%Y")))))
+    print.xtable(xtable(p_t_set_tex[order(p_t_set_tex$from), ], digits = c(0),
+                        align = paste(replicate(3, "c"), collapse = "")),
+                 type="latex", file=paste0("plots/", name_i, "_vs_", name_j, ".tex"),
+                 include.colnames = FALSE)
+    print.xtable(xtable(p_t_set2_tex[order(p_t_set2_tex$from), ], digits = c(0),
+                        align = paste(replicate(3, "c"), collapse = "")),
+                 type="latex", file=paste0("plots/", name_i, "_vs_", name_j, "_min_intervals.tex"),
+                 include.colnames = FALSE)
+    
+  } else {
+    #If there are no intervals where the test rejects, we produce empty plots
+    plot(NA, xlim=c(0, t_len),  ylim = c(0, 1), xlab="", ylab = "", xaxt = "n",
+         mgp=c(2,0.5,0), yaxt = "n")
+    axis(side = 1, at = ticks_, labels = labels_, cex.axis = 0.95,
+         mgp = c(1, 0.5, 0))
+    title(main = "(c) (minimal) intervals produced by our test", font.main = 1,
+          line = 0.5)
+    #title(xlab = "quarter", line = 1.7, cex.lab = 0.9)
+  }
+  mtext(paste0("Comparison of ", name_i, " and ", name_j), side = 3,
+        line = 0, outer = TRUE, font = 1, cex = 1.2)
+  dev.off()
 }
+
 
 produce_plots_talk <- function(results, l, data_i, data_j,
                                dates, name_i, name_j, filename){

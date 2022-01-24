@@ -370,7 +370,8 @@ for (j in 1:n_ts){
 sigmahat_vector_2 <- c()
 for (i in 1:n_ts){
   AR.struc        <- estimate_lrv(data = hp_log_augm[, i], q = q, r_bar = r,
-                                  p = order_results_2[i])  #p = 1)
+                                  #p = order_results_2[i])  
+                                  p = 1)
   sigma_hat_i     <- sqrt(AR.struc$lrv)
   sigmahat_vector_2 <- c(sigmahat_vector_2, sigma_hat_i)
 }
@@ -382,7 +383,7 @@ for (i in 1:n_ts){
 
 #Constructing the grid
 u_grid      <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
-h_grid      <- seq(from = 5 / t_len, to = 1 / 4, by = 5 / t_len)
+h_grid      <- seq(from = 5 / t_len, to = 1 / 4, by = 1 / t_len)
 h_grid      <- h_grid[h_grid > log(t_len) / t_len]
 grid        <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
 

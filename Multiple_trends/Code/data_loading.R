@@ -246,7 +246,7 @@ X_mat_filled <-
   fill(h_it, .direction = 'down')  #Extrapolating educational attainment for the last two quarters 
   
 rm(list=setdiff(ls(), c("X_mat_filled", "capital_variable", "alpha",
-                        "sim_runs", "countries")))
+                        "sim_runs", "countries", "q", "r")))
 
 # ###Additional checks
 # X_mat_filled <-
