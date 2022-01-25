@@ -3,7 +3,7 @@
 
 
 
-\section{\textcolor{red}{Appendix}}\label{appendix}
+\section{Appendix}\label{appendix}
 
 
 In what follows, we provide detailed proofs of the theoretical results from Section \ref{sec:theo}. We use the following notation: The symbol $C$ denotes a universal real constant which may take a different value on each occurrence. For $a,b \in \reals$, we write $a \vee b = \max\{a,b\}$. For $x \in \reals_{\geq 0}$, we let $\lfloor x \rfloor$ denote the integer value of $x$ and $\lceil x \rceil$ the smallest integer greater than or equal to $x$. For any set $A$, the symbol $|A|$ denotes the cardinality of $A$. The expression $X \stackrel{\mathcal{D}}{=} Y$ means that the two random variables $X$ and $Y$ have the same distribution. Finally, we sometimes use the notation $a_T \ll b_T$ to express that $a_T = o(b_T)$. 
@@ -49,10 +49,10 @@ for all $T$. This means that $\sum_{t=1}^T Z_t / \sqrt{T} = O_p(1)$.
 \end{proof}
 
 
-Let $\Delta \varepsilon_{it} = \varepsilon_{it} - \varepsilon_{it-1}$ and $\Delta \boldsymbol{X}_{it} = \boldsymbol{X}_{it} - \boldsymbol{X}_{it-1}$. By Assumptions \ref{C-err1} and \ref{C-reg1}, $\Delta \boldsymbol{X}_{it} = \Delta g_i(\mathcal{F}_{it})$ and $\Delta \boldsymbol{X}_{it} = \Delta \boldsymbol{h}_{i}(\mathcal{G}_{it})$. We further define
+Let $\Delta \varepsilon_{it} = \varepsilon_{it} - \varepsilon_{it-1}$ and $\Delta \X_{it} = \X_{it} - \X_{it-1}$. By Assumptions \ref{C-err1} and \ref{C-reg1}, $\Delta \varepsilon_{it} = \Delta g_i(\mathcal{F}_{it})$ and $\Delta \X_{it} = \Delta \boldsymbol{h}_{i}(\mathcal{G}_{it})$. We further define
 \begin{align*}
-\boldsymbol{a}_{i}(\mathcal{H}_{it}) & := \Delta \boldsymbol{h}_{i}(\mathcal{G}_{it}) \Delta g_i(\mathcal{F}_{it})\phantom{^\top} = \Delta \boldsymbol{X}_{it} \Delta \varepsilon_{it} \\
-\boldsymbol{b}_{i}(\mathcal{G}_{it}) & := \Delta \boldsymbol{h}_{i}(\mathcal{G}_{it}) \Delta \boldsymbol{h}_{i}(\mathcal{G}_{it})^\top = \Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top,
+\boldsymbol{a}_{i}(\mathcal{H}_{it}) & := \Delta \boldsymbol{h}_{i}(\mathcal{G}_{it}) \Delta g_i(\mathcal{F}_{it})\phantom{^\top} = \Delta \X_{it} \Delta \varepsilon_{it} \\
+\boldsymbol{b}_{i}(\mathcal{G}_{it}) & := \Delta \boldsymbol{h}_{i}(\mathcal{G}_{it}) \Delta \boldsymbol{h}_{i}(\mathcal{G}_{it})^\top = \Delta \X_{it} \Delta \X_{it}^\top,
 \end{align*}
 where $\boldsymbol{a}_i = (a_{ij})_{j=1}^d$, $\boldsymbol{b}_i = (b_{ikl})_{k,l=1}^d$ and $\mathcal{H}_{it} = (\mathcal{H}_{it,1},\ldots,\mathcal{H}_{it,d})^\top$ with $\mathcal{H}_{it,j} = (\ldots, \nu_{it-1,j},\linebreak \nu_{it,j})$ and $\nu_{it,j} = (\eta_{it,j},\xi_{it,j})$. The next result gives bounds on the physical dependence measures of the processes $\{ \boldsymbol{a}_{i}(\mathcal{H}_{it}) \}_{t=-\infty}^\infty$ and $\{ \boldsymbol{b}_{i}(\mathcal{G}_{it}) \}_{t=-\infty}^\infty$. 
 
@@ -101,32 +101,32 @@ Let Assumptions \ref{C-err1}, \ref{C-err3} and \ref{C-reg1}--\ref{C-reg-err} be 
 \begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{lemma-beta-rate}.}}]
 The estimator $\widehat{\bfbeta}_i$ can be written as
 \begin{align*}
-\widehat{\bfbeta}_i &= \Big( \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top \Big)^{-1} \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta Y_{it} \\
-& =  \Big( \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top \Big)^{-1} \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \bigg(\Delta \boldsymbol{X}_{it}^\top \bfbeta_i +  \Delta m_{it}+ \Delta \varepsilon_{it} \bigg) \\
-&= \bfbeta_i + \Big( \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top \Big)^{-1} \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta m_{it} +  \Big( \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top \Big)^{-1} \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \varepsilon_{it}, 
+\widehat{\bfbeta}_i &= \Big( \sum_{t=2}^T \Delta \X_{it} \Delta \X_{it}^\top \Big)^{-1} \sum_{t=2}^T \Delta \X_{it} \Delta Y_{it} \\
+& =  \Big( \sum_{t=2}^T \Delta \X_{it} \Delta \X_{it}^\top \Big)^{-1} \sum_{t=2}^T \Delta \X_{it} \bigg(\Delta \X_{it}^\top \bfbeta_i +  \Delta m_{it}+ \Delta \varepsilon_{it} \bigg) \\
+&= \bfbeta_i + \Big( \sum_{t=2}^T \Delta \X_{it} \Delta \X_{it}^\top \Big)^{-1} \sum_{t=2}^T \Delta \X_{it} \Delta m_{it} +  \Big( \sum_{t=2}^T \Delta \X_{it} \Delta \X_{it}^\top \Big)^{-1} \sum_{t=2}^T \Delta \X_{it} \Delta \varepsilon_{it}, 
 \end{align*}
-where $\Delta \boldsymbol{X}_{it} = X_{it} - X_{it-1}$, $\Delta \varepsilon_{it} = \varepsilon_{it} - \varepsilon_{it-1}$ and $\Delta m_{it} = m_i (\frac{t}{T}) - m_i(\frac{t-1}{T})$. Hence, 
+where $\Delta \X_{it} = \X_{it} - \X_{it-1}$, $\Delta \varepsilon_{it} = \varepsilon_{it} - \varepsilon_{it-1}$ and $\Delta m_{it} = m_i (\frac{t}{T}) - m_i(\frac{t-1}{T})$. Hence, 
 \begin{align}
- \sqrt{T}( \widehat{\bfbeta}_i - \bfbeta_i) = &\Big( \frac{1}{T}\sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top \Big)^{-1} \frac{1}{\sqrt{T}}\sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta m_{it} \nonumber \\
-&\quad+  \Big(\frac{1}{T} \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top \Big)^{-1}\frac{1}{\sqrt{T}} \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \varepsilon_{it}. \label{theo:beta:proof1}
+ \sqrt{T}( \widehat{\bfbeta}_i - \bfbeta_i) = &\Big( \frac{1}{T}\sum_{t=2}^T \Delta \X_{it} \Delta \X_{it}^\top \Big)^{-1} \frac{1}{\sqrt{T}}\sum_{t=2}^T \Delta \X_{it} \Delta m_{it} \nonumber \\
+&\quad+  \Big(\frac{1}{T} \sum_{t=2}^T \Delta \X_{it} \Delta \X_{it}^\top \Big)^{-1}\frac{1}{\sqrt{T}} \sum_{t=2}^T \Delta \X_{it} \Delta \varepsilon_{it}. \label{theo:beta:proof1}
 \end{align}
 In what follows, we show that 
 \begin{align}
-\frac{1}{\sqrt{T}} \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \varepsilon_{it} & = O_p(1) \label{lemma-beta-rate-claim1} \\
-\Big( \frac{1}{T}\sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top \Big)^{-1} & = O_p(1) \label{lemma-beta-rate-claim2} \\
-\frac{1}{\sqrt{T}} \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta m_{it} & = O_p\Big(\frac{1}{\sqrt{T}}\Big). \label{lemma-beta-rate-claim3}
+\frac{1}{\sqrt{T}} \sum_{t=2}^T \Delta \X_{it} \Delta \varepsilon_{it} & = O_p(1) \label{lemma-beta-rate-claim1} \\
+\Big( \frac{1}{T}\sum_{t=2}^T \Delta \X_{it} \Delta \X_{it}^\top \Big)^{-1} & = O_p(1) \label{lemma-beta-rate-claim2} \\
+\frac{1}{\sqrt{T}} \sum_{t=2}^T \Delta \X_{it} \Delta m_{it} & = O_p\Big(\frac{1}{\sqrt{T}}\Big). \label{lemma-beta-rate-claim3}
 \end{align} 
-Theorem \ref{theo:beta} follows from applying these three statements together with standard arguments to formula \eqref{theo:beta:proof1}.
+Lemma \ref{lemma-beta-rate} follows from applying these three statements together with standard arguments to formula \eqref{theo:beta:proof1}.
 
 
-Since $\ex[\Delta \boldsymbol{X}_{it} \Delta \varepsilon_{it}] = 0$ by \ref{C-reg-err} and $\sum_{s=t}^\infty \delta_p(a_{ij}, s) = O(t^{-\alpha})$ for some $p > 2$ and all $j$ by Lemma \ref{lemma-bounds-dep-measure}, the claim \eqref{lemma-beta-rate-claim1} follows upon applying Lemma \ref{lemma-wlln}. Another application of Lemma \ref{lemma-wlln} yields that 
-\[ \frac{1}{T}\sum_{t=2}^T \big\{ \Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top - \ex[\Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top] \big\} = O_p\Big(\frac{1}{\sqrt{T}}\Big). \]
-As $\ex[\Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top]$ is invertible, we can invoke Slutsky's lemma to obtain \eqref{lemma-beta-rate-claim2}. By assumption, $m_i$ is Lipschitz continuous, which implies that $|\Delta m_{it}| = |m_i (\frac{t}{T}) - m_i (\frac{t-1}{T}) | \leq C/T$ for all $t \in \{1, \ldots, T\}$ and some constant $C > 0$. Hence, 
+Since $\ex[\Delta \X_{it} \Delta \varepsilon_{it}] = 0$ by \ref{C-reg-err} and $\sum_{s=t}^\infty \delta_p(a_{ij}, s) = O(t^{-\alpha})$ for some $p > 2$ and all $j$ by Lemma \ref{lemma-bounds-dep-measure}, the claim \eqref{lemma-beta-rate-claim1} follows upon applying Lemma \ref{lemma-wlln}. Another application of Lemma \ref{lemma-wlln} yields that 
+\[ \frac{1}{T}\sum_{t=2}^T \Big\{ \Delta \X_{it} \Delta \X_{it}^\top - \ex[\Delta \X_{it} \Delta \X_{it}^\top] \Big\} = O_p\Big(\frac{1}{\sqrt{T}}\Big). \]
+As $\ex[\Delta \X_{it} \Delta \X_{it}^\top]$ is invertible, we can invoke Slutsky's lemma to obtain \eqref{lemma-beta-rate-claim2}. By assumption, $m_i$ is Lipschitz continuous, which implies that $|\Delta m_{it}| = |m_i (\frac{t}{T}) - m_i (\frac{t-1}{T}) | \leq C/T$ for all $t \in \{1, \ldots, T\}$ and some constant $C > 0$. Hence, 
 \begin{align*}
 \Big| \frac{1}{\sqrt{T}}\sum_{t=2}^T \Delta X_{it,j} \Delta m_{it}\Big| &\leq \frac{1}{\sqrt{T}}\sum_{t=2}^T \big|\Delta X_{it,j} \big| \cdot \big| \Delta m_{it} \big| \\
 	& \leq \frac{C}{\sqrt{T}} \cdot \frac{1}{T} \sum_{t=2}^T \left|\Delta X_{it,j} \right| = O_p\Big(\frac{1}{\sqrt{T}}\Big),
 \end{align*}
-where we have used that $T^{-1} \sum_{t=2}^T |\Delta \boldsymbol{X}_{it,j}| = O_p(1)$ by Markov's inequality. This yields \eqref{lemma-beta-rate-claim3}.
+where we have used that $T^{-1} \sum_{t=2}^T |\Delta \X_{it,j}| = O_p(1)$ by Markov's inequality. This yields \eqref{lemma-beta-rate-claim3}.
 \end{proof}
 
 
@@ -155,7 +155,7 @@ where $\widehat{\sigma}_i^2$ is the subseries variance estimate of $\sigma_i^2$ 
 
 \begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{lemmaA:lrv}}}]
 \textcolor{blue}{(Proof not double-checked yet.)}
-For notational convenience, we let $Y_{it}^* = Y_{it} - \bfbeta_i^\top \boldsymbol{X}_{it}$. Note that 
+For notational convenience, we let $Y_{it}^* = Y_{it} - \bfbeta_i^\top \X_{it}$. Note that 
 \begin{align*}
 &Y_{i(t + ms_T)}^* - Y_{i(t + (m-1)s_T)}^* \\
 &= \alpha_i + m_i\left(\frac{t+m s_T}{T}\right) + \varepsilon_{i(t + ms_T)} \\
@@ -167,8 +167,8 @@ where $Y_{it}^\circ$ is the dependent variable in a well-studied standard nonpar
 Now, using simple arithmetic calculations, we can rewrite $\widehat{\sigma}_i^2$ as
 \begin{align}
 \widehat{\sigma}_i^2  &= \frac{1}{2(M-1)s_T}\sum_{m=1}^M \left[\sum_{t = 1}^{s_T} \left(Y_{i(t + ms_T)}^\circ - Y_{i(t + (m-1)s_T)}^\circ\right)\right]^2 \nonumber\\
-&\quad + \frac{1}{2(M-1)s_T}\sum_{m=1}^M \left[\sum_{t = 1}^{s_T} (\widehat{\bfbeta}_i - \bfbeta_i)^\top\left(\boldsymbol{X}_{i(t+ms_T)} - \boldsymbol{X}_{i(t+(m-1)s_T)}\right) \right]^2 \nonumber \\
- &\quad - \frac{1}{(M-1)s_T}\sum_{m=1}^M \bigg[\sum_{t = 1}^{s_T}  \left(Y_{i(t + ms_T)}^\circ - Y_{i(t + (m-1)s_T)}^\circ\right) \nonumber \\ & \phantom{\quad - \frac{1}{(M-1)s_T}\sum_{m=1}^M \bigg[} \times \sum_{t = 1}^{s_T} (\widehat{\bfbeta}_i - \bfbeta_i)^\top\left(\boldsymbol{X}_{i(t+ms_T)} - \boldsymbol{X}_{i(t+(m-1)s_T)}\right) \bigg]. \label{eqA:lrv:proof1}
+&\quad + \frac{1}{2(M-1)s_T}\sum_{m=1}^M \left[\sum_{t = 1}^{s_T} (\widehat{\bfbeta}_i - \bfbeta_i)^\top\left(\X_{i(t+ms_T)} - \X_{i(t+(m-1)s_T)}\right) \right]^2 \nonumber \\
+ &\quad - \frac{1}{(M-1)s_T}\sum_{m=1}^M \bigg[\sum_{t = 1}^{s_T}  \left(Y_{i(t + ms_T)}^\circ - Y_{i(t + (m-1)s_T)}^\circ\right) \nonumber \\ & \phantom{\quad - \frac{1}{(M-1)s_T}\sum_{m=1}^M \bigg[} \times \sum_{t = 1}^{s_T} (\widehat{\bfbeta}_i - \bfbeta_i)^\top\left(\X_{i(t+ms_T)} - \X_{i(t+(m-1)s_T)}\right) \bigg]. \label{eqA:lrv:proof1}
 \end{align}
 By \cite{Carlstein1986} and \cite{WuZhao2007}, we have
 \begin{align}\label{eqA:lrv:proof2}
@@ -176,12 +176,12 @@ By \cite{Carlstein1986} and \cite{WuZhao2007}, we have
 \end{align}
 Furthermore, by our assumption that $s_T \asymp T^{1/3}$, Assumption \ref{C-reg2} and Lemma \ref{lemma-beta-rate}, we have
 \begin{align}\label{eqA:lrv:proof3}
-\frac{1}{2(M-1)s_T}\sum_{m=1}^M \left[\sum_{t = 1}^{s_T} (\widehat{\bfbeta}_i - \bfbeta_i)^\top\Big(\boldsymbol{X}_{i(t+ms_T)} - \boldsymbol{X}_{i(t+(m-1)s_T)}\Big) \right]^2 = O_p(T^{-2/3}).
+\frac{1}{2(M-1)s_T}\sum_{m=1}^M \left[\sum_{t = 1}^{s_T} (\widehat{\bfbeta}_i - \bfbeta_i)^\top\Big(\X_{i(t+ms_T)} - \X_{i(t+(m-1)s_T)}\Big) \right]^2 = O_p(T^{-2/3}).
 \end{align}
 Finally, applying \eqref{eqA:lrv:proof2} and \eqref{eqA:lrv:proof3} together with the Cauchy-Schwarz inequality, we obtain
 \begin{align}\label{eqA:lrv:proof4}
 \frac{1}{(M-1)s_T}\sum_{m=1}^M \bigg[ & \sum_{t = 1}^{s_T}  \left(Y_{i(t + ms_T)}^\circ - Y_{i(t + (m-1)s_T)}^\circ\right) \nonumber \\
-& \times \sum_{t = 1}^{s_T} (\widehat{\bfbeta}_i - \bfbeta_i)^\top\left(\boldsymbol{X}_{i(t+ms_T)} - \boldsymbol{X}_{i(t+(m-1)s_T)}\right) \bigg] = O_p(T^{-1/3}).
+& \times \sum_{t = 1}^{s_T} (\widehat{\bfbeta}_i - \bfbeta_i)^\top\left(\X_{i(t+ms_T)} - \X_{i(t+(m-1)s_T)}\right) \bigg] = O_p(T^{-1/3}).
 \end{align}
 
 
@@ -434,11 +434,11 @@ The proof is an application of anti-concentration bounds for Gaussian random vec
 \begin{lemmaA}\label{lemma-Nazarov}
 Let $\boldsymbol{Z} = (Z_1,\ldots,Z_p)^\top$ be a centred Gaussian random vector in $\reals^p$ such that $\ex[Z_j^2] \ge b$ for all $1 \le j \le p$ and some constant $b > 0$. Then for every $\boldsymbol{z} \in \reals^p$ and $a > 0$,
 \[ \pr(\boldsymbol{Z} \le \boldsymbol{z} + a) - \pr(\boldsymbol{Z} \le \boldsymbol{z}) \le C a \sqrt{\log p}, \]  
-where the constant $C$ only depends on $b$.
+where the constant $C$ only depends on $b$. \textcolor{blue}{(Add notation vector + scalar?)}
 \end{lemmaA}
 To apply this result, we introduce the following notation: We write $x = (u,h)$ and $\mathcal{G}_T = \{ x : x \in \mathcal{G}_T \} = \{x_1,\ldots,x_p\}$, where $p := |\mathcal{G}_T| \le O(T^\theta)$ for some large but fixed $\theta > 0$ by our assumptions. For $k = 1,\ldots,p$ and $1 \le i < j \le n$, we further let 
 \[ Z_{ij, 2k-1} = \frac{\phi_{ij, T}(x_{k1},x_{k2})}{\{{\sigma}_i^2 + {\sigma}_j^2\}^{1/2}} \quad \text{and} \quad Z_{ij, 2k} = -\frac{\phi_{ij, T}(x_{k1},x_{k2})}{\{{\sigma}_i^2 + {\sigma}_j^2\}^{1/2}} \]  
-along with $\lambda_{ij,2k-1} = \lambda(x_{k2})$ and $\lambda_{ij,2k} = \lambda(x_{k2})$, where $x_k = (x_{k1},x_{k2})$. Under our assumptions, it holds that $\ex[Z_{ij,l}] = 0$ and $\ex[Z_{ij,l}^2] \ge b > 0$ \textcolor{blue}{(for this, $h_{\max} = o(1)$ is needed)} for all $i$, $j$ and $l$. We next construct the random vector $\boldsymbol{Z} = ( Z_{ij,l} : 1 \le i < j \le n, 1 \le l \le 2p)$ by stacking the variables $Z_{ij, l}$ in a certain order (which can be chosen freely) and construct the vector $\boldsymbol{\lambda} = (\lambda_{ij,l}: 1 \le i < j \le n, 1 \le l \le 2p)$ in an analogous way. Since the variables $Z_{ij,l}$ are normally distributed, $\boldsymbol{Z}$ is a Gaussian random vector of length $(n-1)np$. 
+along with $\lambda_{ij,2k-1} = \lambda(x_{k2})$ and $\lambda_{ij,2k} = \lambda(x_{k2})$, where $x_k = (x_{k1},x_{k2})$. Under our assumptions, it holds that $\ex[Z_{ij,l}] = 0$ and $\ex[Z_{ij,l}^2] \ge b > 0$ for all $i$, $j$ and $l$. We next construct the random vector $\boldsymbol{Z} = ( Z_{ij,l} : 1 \le i < j \le n, 1 \le l \le 2p)$ by stacking the variables $Z_{ij, l}$ in a certain order (which can be chosen freely) and construct the vector $\boldsymbol{\lambda} = (\lambda_{ij,l}: 1 \le i < j \le n, 1 \le l \le 2p)$ in an analogous way. Since the variables $Z_{ij,l}$ are normally distributed, $\boldsymbol{Z}$ is a Gaussian random vector of length $(n-1)np$. 
 
 
 With this notation at hand, we can express the probability $\pr(\Phi_{n,T} \le q)$ as follows for each $q \in \reals$: 
@@ -485,9 +485,9 @@ and
 where the difference of the kernel averages $\doublehat{\phi}_{ij, T}(u,h) - \widehat{\phi}_{ij, T}(u,h) $ does not include the error terms (they cancel out) and can be written as
 \begin{align*}
 \Big| & \doublehat{\phi}_{ij, T}(u,h) - \widehat{\phi}_{ij, T}(u,h) \Big| \\
- & = \bigg| \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\bfbeta_i - \widehat{\bfbeta}_i)^\top (\boldsymbol{X}_{it} - \bar{\boldsymbol{X}}_{i}) - (\bfbeta_j - \widehat{\bfbeta}_j)^\top (\boldsymbol{X}_{jt} - \bar{\boldsymbol{X}}_{j}) \big\} \bigg| \\
- & \le \Big|(\bfbeta_i - \widehat{\bfbeta}_i)^\top \sum_{t=1}^T w_{t,T}(u,h) \boldsymbol{X}_{it} \Big| +  \big|(\bfbeta_i - \widehat{\bfbeta}_i)^\top\bar{\boldsymbol{X}}_{i}\big| \bigg| \sum_{t=1}^T w_{t,T}(u,h)  \bigg| \\
- & \quad +\Big|(\bfbeta_j - \widehat{\bfbeta}_j)^\top \sum_{t=1}^T w_{t,T}(u,h) \boldsymbol{X}_{jt}  \Big| + \big|(\bfbeta_j - \widehat{\bfbeta}_j)^\top\bar{\boldsymbol{X}}_{j}\big| \bigg| \sum_{t=1}^T w_{t,T}(u,h)  \bigg|. 
+ & = \bigg| \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\bfbeta_i - \widehat{\bfbeta}_i)^\top (\X_{it} - \bar{\X}_{i}) - (\bfbeta_j - \widehat{\bfbeta}_j)^\top (\X_{jt} - \bar{\X}_{j}) \big\} \bigg| \\
+ & \le \Big|(\bfbeta_i - \widehat{\bfbeta}_i)^\top \sum_{t=1}^T w_{t,T}(u,h) \X_{it} \Big| +  \big|(\bfbeta_i - \widehat{\bfbeta}_i)^\top\bar{\X}_{i}\big| \bigg| \sum_{t=1}^T w_{t,T}(u,h)  \bigg| \\
+ & \quad +\Big|(\bfbeta_j - \widehat{\bfbeta}_j)^\top \sum_{t=1}^T w_{t,T}(u,h) \X_{jt}  \Big| + \big|(\bfbeta_j - \widehat{\bfbeta}_j)^\top\bar{\X}_{j}\big| \bigg| \sum_{t=1}^T w_{t,T}(u,h)  \bigg|. 
 \end{align*}
 Hence,
 \begin{equation}\label{ineq-diff-1}
@@ -496,8 +496,8 @@ Hence,
 where 
 \begin{align*}
 A_{n,T} & = \max_{1 \le i< j \le n} \max_{(u,h) \in \mathcal{G}_T} \Big|\doublehat{\phi}_{ij,T}(u,h)\Big| \\
-B_{n,T} & = \max_{1 \le i \le n} \max_{(u,h) \in \mathcal{G}_T} \Big| (\bfbeta_i - \widehat{\bfbeta}_i)^\top\sum_{t=1}^T w_{t,T}(u,h) \boldsymbol{X}_{it} \Big| \\
-C_{n,T} & = \max_{1 \le i \le n}\big|(\bfbeta_i - \widehat{\bfbeta}_i)^\top\bar{\boldsymbol{X}}_{i}\big| \max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big|. 
+B_{n,T} & = \max_{1 \le i \le n} \max_{(u,h) \in \mathcal{G}_T} \Big| (\bfbeta_i - \widehat{\bfbeta}_i)^\top\sum_{t=1}^T w_{t,T}(u,h) \X_{it} \Big| \\
+C_{n,T} & = \max_{1 \le i \le n}\big|(\bfbeta_i - \widehat{\bfbeta}_i)^\top\bar{\X}_{i}\big| \max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big|. 
 \end{align*}
 We examine each of these three terms separately. 
 
@@ -530,9 +530,9 @@ and $\pr(\max_{i,j,(u,h)}|\widetilde{\phi}_{ij, T}(u, h)- \phi_{ij, T}(u, h)| > 
 Moreover, since $\max_{i,j,(u,h)}\left|\phi_{ij, T}(u, h)\right| = O_p(\sqrt{\log{T}})$ as already proven in \eqref{eq:phi-bound-max-Gaussians}, we can make the probability $\pr( \max_{i,j,(u,h)}|\phi_{ij, T}(u, h)| \leq c\sqrt{\log T}/2)$ on the right-hand side of \eqref{eq:Ant:intermediate} arbitrarily close to $1$ by choosing the constant $c$ sufficiently large. Hence, for any $\delta > 0$, we can find a constant $c > 0$ such that $\pr(\max_{i,j,(u,h)}|\widetilde{\phi}_{ij, T}(u, h)| \leq c\sqrt{\log T} ) \ge 1 - \delta$ for sufficiently large $T$. This proves \eqref{eq:Ant:2}, which in turn yields \eqref{eq:Ant:1}. 
 
 
-We next turn to $B_{n,T}$. Without loss of generality, we assume that $\boldsymbol{X}_{it}$ is real-valued. The vector-valued case can be handled analogously. To start with, we have a closer look at the term $\sum_{t=1}^T w_{t,T}(u,h) \boldsymbol{X}_{it}$. By construction, the kernel weights $w_{t, T}(u, h)$ are unequal to $0$ if and only if $T(u-h) \le t \le T(u+h)$. We can use this fact to write
+We next turn to $B_{n,T}$. Without loss of generality, we assume that $\X_{it}$ is real-valued. The vector-valued case can be handled analogously. To start with, we have a closer look at the term $\sum_{t=1}^T w_{t,T}(u,h) \X_{it}$. By construction, the kernel weights $w_{t, T}(u, h)$ are unequal to $0$ if and only if $T(u-h) \le t \le T(u+h)$. We can use this fact to write
 \begin{align*}
-\Big| \sum_{t=1}^T w_{t,T}(u,h) \boldsymbol{X}_{it}   \Big|  = \bigg| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)\boldsymbol{X}_{it}   \bigg|.
+\Big| \sum_{t=1}^T w_{t,T}(u,h) \X_{it}   \Big|  = \bigg| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h) \X_{it}   \bigg|.
 \end{align*}
 Note that
 \begin{align}\label{eq:sum_weights}
@@ -546,24 +546,24 @@ Denoting by $D_{T, u, h}$ the number of integers between $\lfloor T(u-h) \rfloor
 \end{align*}
 Next, we apply Proposition \ref{theo-wu2016} with the weights $a_t = \sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h)$ to obtain that
 \begin{align}
-\pr \bigg(\bigg| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} & \sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h)\boldsymbol{X}_{it}  \bigg| \geq x\bigg) \nonumber \\
- & \leq C_1 \frac{\big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |\sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h)|^{q^\prime}\big) \| \boldsymbol{X}_{i \cdot}\|^{q^\prime}_{q^\prime, \alpha}}{ x^{q^\prime}} \nonumber \\
- & \qquad \qquad \qquad \qquad \qquad \qquad + C_2 \exp \left(-\frac{C_3  x^2}{D_{T, u, h}\| \boldsymbol{X}_{i\cdot}\|^{2}_{2, \alpha}}\right) \label{ineq-diff-8}
+\pr \bigg(\bigg| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} & \sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h) \X_{it}  \bigg| \geq x\bigg) \nonumber \\
+ & \leq C_1 \frac{\big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |\sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h)|^{q^\prime}\big) \| \X_{i \cdot}\|^{q^\prime}_{q^\prime, \alpha}}{ x^{q^\prime}} \nonumber \\
+ & \qquad \qquad \qquad \qquad \qquad \qquad + C_2 \exp \left(-\frac{C_3  x^2}{D_{T, u, h}\| \X_{i\cdot}\|^{2}_{2, \alpha}}\right) \label{ineq-diff-8}
 \end{align}
-for any $x > 0$, where $\| \boldsymbol{X}_{i\cdot}\|^{q^\prime}_{q^\prime, \alpha} = \sup_{t\geq 0} (t+1)^{\alpha} \sum_{s=t}^{\infty} \delta_{q^\prime}(\boldsymbol{X}_{i\cdot}, s)$ is the dependence adjusted norm introduced in Definition \ref{defA-DAN} and $\| \boldsymbol{X}_{i\cdot}\|^{q^\prime}_{q^\prime, \alpha} < \infty$ by Assumption \ref{C-reg3}. From \eqref{ineq-diff-8}, it follows that for any $\delta > 0$, 
+for any $x > 0$, where \textcolor{red}{$\| \X_{i\cdot}\|^{q^\prime}_{q^\prime, \alpha} = \sup_{t\geq 0} (t+1)^{\alpha} \sum_{s=t}^{\infty}\delta_{q^\prime}(\boldsymbol{h}_i, s)$} is the dependence adjusted norm introduced in Definition \ref{defA-DAN} and $\| \X_{i\cdot}\|^{q^\prime}_{q^\prime, \alpha} < \infty$ by Assumption \ref{C-reg3}. From \eqref{ineq-diff-8}, it follows that for any $\delta > 0$, 
 \begin{align}
-&\pr\left(\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)\boldsymbol{X}_{it}  \Big| \geq \delta T^{1/q} \right) \nonumber \\
-&\leq \sum_{(u, h) \in \mathcal{G}_T} \pr \left( \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)\boldsymbol{X}_{it}  \Big| \geq \delta T^{1/q} \right) \nonumber \\
-&= \sum_{(u, h) \in \mathcal{G}_T} \pr \left( \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} \sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h)\boldsymbol{X}_{it}  \Big| \geq \delta\sqrt{D_{T, u, h}}T^{1/q}  \right) \nonumber \\
-&\leq \sum_{(u, h) \in \mathcal{G}_T} \left[C_1 \frac{(\sqrt{D_{T, u, h}})^{q^\prime}\big( \sum |w_{t,T}(u,h)|^{q^\prime}\big) \|\boldsymbol{X}_{i\cdot}\|^{q^\prime}_{q^\prime, \alpha}}{ \big(\delta\sqrt{D_{T, u, h}}T^{1/q}\big)^{q^\prime}} + C_2 \exp \left(-\frac{C_3 \big(\delta\sqrt{D_{T, u, h}}T^{1/q} \big)^2}{D_{T, u, h}\|\boldsymbol{X}_{i\cdot}\|^{2}_{2, \alpha}}\right) \right] \nonumber \\
-&= \sum_{(u, h) \in \mathcal{G}_T} \left[C_1 \frac{\big( \sum |w_{t,T}(u,h)|^{q^\prime}\big) \|\boldsymbol{X}_{i\cdot}\|^{q^\prime}_{q^\prime, \alpha}}{\delta^{q^\prime}T^{q^\prime/q} } + C_2 \exp \left(-\frac{C_3 \delta^2 T^{2/q} }{\|\boldsymbol{X}_{i\cdot}\|^{2}_{2, \alpha}}\right) \right] \nonumber \\
-&\leq C_1 \frac{ T^\theta \|\boldsymbol{X}_{i\cdot}\|^{q^\prime}_{q^\prime, \alpha}}{\delta^{q^\prime} T^{q^\prime/q}} \max_{(u, h) \in \mathcal{G}_T} \left( \sum\nolimits_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime}\right)+ C_2 T^\theta \exp \left(-\frac{C_3 \delta^2 T^{2/q}}{\|\boldsymbol{X}_{i\cdot}\|^{2}_{2, \alpha}}\right) \nonumber \\
+&\pr\left(\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h) \X_{it}  \Big| \geq \delta T^{1/q} \right) \nonumber \\
+&\leq \sum_{(u, h) \in \mathcal{G}_T} \pr \left( \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h) \X_{it}  \Big| \geq \delta T^{1/q} \right) \nonumber \\
+&= \sum_{(u, h) \in \mathcal{G}_T} \pr \left( \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} \sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h) \X_{it}  \Big| \geq \delta\sqrt{D_{T, u, h}}T^{1/q}  \right) \nonumber \\
+&\leq \sum_{(u, h) \in \mathcal{G}_T} \left[C_1 \frac{(\sqrt{D_{T, u, h}})^{q^\prime}\big( \sum |w_{t,T}(u,h)|^{q^\prime}\big) \| \X_{i\cdot}\|^{q^\prime}_{q^\prime, \alpha}}{ \big(\delta\sqrt{D_{T, u, h}}T^{1/q}\big)^{q^\prime}} + C_2 \exp \left(-\frac{C_3 \big(\delta\sqrt{D_{T, u, h}}T^{1/q} \big)^2}{D_{T, u, h}\| \X_{i\cdot}\|^{2}_{2, \alpha}}\right) \right] \nonumber \\
+&= \sum_{(u, h) \in \mathcal{G}_T} \left[C_1 \frac{\big( \sum |w_{t,T}(u,h)|^{q^\prime}\big) \| \X_{i\cdot}\|^{q^\prime}_{q^\prime, \alpha}}{\delta^{q^\prime}T^{q^\prime/q} } + C_2 \exp \left(-\frac{C_3 \delta^2 T^{2/q} }{\|\X_{i\cdot}\|^{2}_{2, \alpha}}\right) \right] \nonumber \\
+&\leq C_1 \frac{ T^\theta \|\X_{i\cdot}\|^{q^\prime}_{q^\prime, \alpha}}{\delta^{q^\prime} T^{q^\prime/q}} \max_{(u, h) \in \mathcal{G}_T} \left( \sum\nolimits_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime}\right)+ C_2 T^\theta \exp \left(-\frac{C_3 \delta^2 T^{2/q}}{\|\X_{i\cdot}\|^{2}_{2, \alpha}}\right) \nonumber \\
 &= C \frac{ T^{\theta - q^\prime/q}}{\delta^{q^\prime}} + C T^\theta \exp \left(-C T^{2/q} \delta^2\right), \label{eq:exp-bound-BnT}
 \end{align}
 where the constant $C$ depends neither on $T$ nor on $\delta$. In the last equality of the above display, we have used the following facts:
 \begin{enumerate}[label=(\roman*),leftmargin=0.85cm]
-\item $\|\boldsymbol{X}_{i\cdot}\|^{q^\prime}_{q^\prime, \alpha}  < \infty$ by Assumption \ref{C-reg3}.
-\item $\|\boldsymbol{X}_{i\cdot}\|^{2}_{2, \alpha} < \infty$ (which follows from (i)).
+\item $\|\X_{i\cdot}\|^{q^\prime}_{q^\prime, \alpha}  < \infty$ by Assumption \ref{C-reg3}.
+\item $\|\X_{i\cdot}\|^{2}_{2, \alpha} < \infty$ (which follows from (i)).
 \item $\max_{(u, h) \in \mathcal{G}_T} ( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime} ) \leq 1$ for the following reason: By \eqref{eq:sum_weights}, it holds that $\sum_{t=1}^{T} w^2_{t,T}(u,h) = 1$ and thus $0 \leq w^2_{t,T}(u,h) \leq 1$ for all $t$, $T$ and $(u, h)$. This implies that $0 \leq |w_{t,T}(u,h)|^{q^\prime} =  (w^2_{t,T}(u,h))^{q^\prime/2} \leq w^2_{t,T}(u,h) \leq 1$ for all $t$, $T$ and $(u, h)$. As a result, 
 \begin{align*}
 \max_{(u, h) \in \mathcal{G}_T} \left( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |w_{t,T}(u,h)|^{q^\prime}\right) \leq
@@ -572,10 +572,10 @@ where the constant $C$ depends neither on $T$ nor on $\delta$. In the last equal
 \end{enumerate}
 Since $\theta - q^\prime/q <0$ by Assumption \ref{C-reg3}, the bound in \eqref{eq:exp-bound-BnT} converges to $0$ as $T \to \infty$ for any fixed $\delta >0$. Consequently, we obtain that
 \begin{align}\label{ineq-diff-9}
-\max_{(u, h) \in \mathcal{G}_T} \bigg| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)\boldsymbol{X}_{it}  \bigg| = o_p(T^{1/q}).
+\max_{(u, h) \in \mathcal{G}_T} \bigg| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)\X_{it}  \bigg| = o_p(T^{1/q}).
 \end{align}
 Using this together with the fact that $\bfbeta_i - \widehat{\bfbeta}_i = O_p(1/\sqrt{T})$ (which is the statement of Lemma \ref{lemma-beta-rate}), we arrive at the bound 
-\[ B_{n,T} = \max_{1 \le i \le n} \max_{(u,h) \in \mathcal{G}_T} \Big| (\bfbeta_i - \widehat{\bfbeta}_i)^\top\sum_{t=1}^T w_{t,T}(u,h) \boldsymbol{X}_{it} \Big| = o_p\Big(\frac{T^{1/q}}{\sqrt{T}}\Big). \]
+\[ B_{n,T} = \max_{1 \le i \le n} \max_{(u,h) \in \mathcal{G}_T} \Big| (\bfbeta_i - \widehat{\bfbeta}_i)^\top\sum_{t=1}^T w_{t,T}(u,h) \X_{it} \Big| = o_p\Big(\frac{T^{1/q}}{\sqrt{T}}\Big). \]
 
 
 We finally turn to $C_{n,T}$. Straightforward calculations yield that $| \sum_{t=1}^T w_{t,T}(u,h) | \le C \sqrt{T h_{\max}} = o(\sqrt{T})$. 
@@ -592,8 +592,8 @@ We finally turn to $C_{n,T}$. Straightforward calculations yield that $| \sum_{t
 %\begin{align}\label{ineq-diff-13}
 %\max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big| = O(\sqrt{T}).
 %\end{align}
-Moreover, $\bar{\boldsymbol{X}}_i = O_p(1/\sqrt{T})$ by Lemma \ref{lemma-wlln} and $\bfbeta_i - \widehat{\bfbeta}_i = O_p(1/\sqrt{T})$ by Lemma \ref{lemma-beta-rate}. This immediately yields that
-\[ C_{n,T} = \max_{1\le i  \le n}\big|(\bfbeta_i - \widehat{\bfbeta}_i)^\top\bar{\boldsymbol{X}}_{i}\big| \max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big| = o_p\Big(\frac{1}{\sqrt{T}}\Big). \]
+Moreover, $\bar{\X}_i = O_p(1/\sqrt{T})$ by Lemma \ref{lemma-wlln} and $\bfbeta_i - \widehat{\bfbeta}_i = O_p(1/\sqrt{T})$ by Lemma \ref{lemma-beta-rate}. This immediately yields that
+\[ C_{n,T} = \max_{1\le i  \le n}\big|(\bfbeta_i - \widehat{\bfbeta}_i)^\top\bar{\X}_{i}\big| \max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big| = o_p\Big(\frac{1}{\sqrt{T}}\Big). \]
 
 
 To summarize, we have shown that 
@@ -660,8 +660,8 @@ To start with, note that for some sufficiently large constant $C$ we have
 \end{equation}
 Write $\widehat{\psi}_{ij, T}(u,h) = \widehat{\psi}_{ij, T}^A(u,h) + \widehat{\psi}_{ij, T}^B(u,h)$ with 
 \begin{align*}
-\widehat{\psi}^A_{ij,T}(u,h) &= \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) + (\bfbeta_i - \widehat{\bfbeta}_i)^\top (\boldsymbol{X}_{it} - \bar{\boldsymbol{X}}_{i}) - \bar{m}_{i, T} \\
-& \quad \quad - (\varepsilon_{jt} - \bar{\varepsilon}_j) -  (\bfbeta_j - \widehat{\bfbeta}_j)^\top (\boldsymbol{X}_{jt} - \bar{\boldsymbol{X}}_{j}) + \bar{m}_{j, T} \big\} \\
+\widehat{\psi}^A_{ij,T}(u,h) &= \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) + (\bfbeta_i - \widehat{\bfbeta}_i)^\top (\X_{it} - \bar{\X}_{i}) - \bar{m}_{i, T} \\
+& \quad \quad - (\varepsilon_{jt} - \bar{\varepsilon}_j) -  (\bfbeta_j - \widehat{\bfbeta}_j)^\top (\X_{jt} - \bar{\X}_{j}) + \bar{m}_{j, T} \big\} \\
 \widehat{\psi}_{ij, T}^B(u,h) &= \sum\nolimits_{t=1}^T w_{t,T}(u,h) \bigg(m_{i, T}\Big(\frac{t}{T}\Big) - m_{j, T}\Big(\frac{t}{T}\Big) \bigg),
 \end{align*}
 where $\bar{m}_{i, T} = T^{-1} \sum_{t=1}^T m_{i, T} (t/T)$. Without loss of generality, consider the following scenario: there exists $(u_0,h_0) \in \mathcal{G}_T$ with $[u_0-h_0,u_0+h_0] \subseteq [0,1]$ such that \begin{align}\label{eqA:power2}

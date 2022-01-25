@@ -28,7 +28,7 @@ capital_variable <- "gfcf" #Either we are using capital stock ("stock") or
 #Data loading#
 ##############
 
-source("data_loading.R") #Now we have the matrix X_mat_filled with all the data
+source("functions/data_loading.R") #Now the matrix X_mat_filled contains all the data
 
 #Variables
 dates     <- unique(X_mat_filled$date)
@@ -48,13 +48,13 @@ if (capital_variable == "stock") {
 ################################$
 
 #Estimating alpha and beta
-source("parameters_estimation.R")
+source("functions/parameters_estimation.R")
 estimated      <- parameters(X_mat_filled, n_ts, t_len, countries)
 gdp_mat_growth <- estimated$gdp_mat_growth
 gdp_mat_augm   <- estimated$gdp_mat_augm
 
 #Estimating the variance
-source("sigma_estimation.R")
+source("functions/sigma_estimation.R")
 sigma_vec <- sigma(gdp_mat_augm, n_ts = n_ts, q = q, r = r)
 
 
@@ -81,7 +81,7 @@ result <- multiscale_test(data = gdp_mat_augm,
 
 #Producing the smoothed curves using local linear estimator
 
-source("functions.R")
+source("functions/functions.R")
 pdfname <- "plots/smoothed_gdp_data.pdf"
 produce_smoothed_plots(gdp_mat_growth, pdfname, dates)
 
@@ -95,12 +95,16 @@ at <- seq(5, 125, by = 20)
 for (l in seq_len(nrow(result$ijset))){
   i <- result$ijset[l, 1]
   j <- result$ijset[l, 2]
+  if (countries[i] == "NOR" & countries[j] == "USA"){
+    #For color consistency in the paper
+    i <- result$ijset[l, 2]
+    j <- result$ijset[l, 1]
+  }
   if (result$stat_pairwise[i, j] > result$quant) {
-    filename <- paste0("plots/", countries[i], "_vs_", countries[j], ".pdf")
     produce_plots(results = result, data_i = gdp_mat_augm[, i],
                   data_j = gdp_mat_augm[, j], ticks_ = at,
                   labels_ = dates[at], name_i = countries[i],
-                  name_j = countries[j], filename)
+                  name_j = countries[j])
   }
 }
 

@@ -48,7 +48,6 @@ hp_data <-
   mutate(delta_log_gdp = log(rgdppc) - log(dplyr::lag(rgdppc, n = 1, default = NA))) %>%
   mutate(delta_ltrate = ltrate - dplyr::lag(ltrate, n = 1, default = NA)) %>%
   mutate(delta_infl = infl - dplyr::lag(infl, n = 1, default = NA)) %>%
-  #subset(!(iso %in% c('ESP', 'IRL', 'ITA', 'PRT'))) 
   subset(iso %in% c('AUS', 'BEL', 'DNK', 'FRA', 'NLD', 'NOR', 'SWE', 'USA'))
 
 
@@ -259,7 +258,8 @@ for (j in 1:n_ts){
 sigmahat_vector <- c()
 for (i in 1:n_ts){
   AR.struc        <- estimate_lrv(data = hp_log_augm[, i], q = q, r_bar = r,
-                                  p = order_results[i])  #p = 1)
+                                  #p = order_results[i])  
+                                  p = 1)
   sigma_hat_i     <- sqrt(AR.struc$lrv)
   sigmahat_vector <- c(sigmahat_vector, sigma_hat_i)
 }
@@ -293,7 +293,7 @@ produce_smoothed_plots(matrix = hp_log,
 
 produce_smoothed_plots(matrix = hp_log_augm,
                        pdfname = "plots/smoothed_hp_log_data_augmented.pdf",
-                       y_min = min(hp_log), y_max = max(hp_log),
+                       y_min = min(hp_log_augm), y_max = max(hp_log_augm),
                        ticks_at =  ticks, ticks_labels = dates[ticks])
 
 
@@ -302,10 +302,10 @@ for (l in seq_len(nrow(result$ijset))){
   i <- result$ijset[l, 1]
   j <- result$ijset[l, 2]
   if (result$stat_pairwise[i, j] > result$quant){
-    filename <- paste0("plots/", countries[i], "_vs_", countries[j], ".pdf")
-    produce_plots(results = result, l = l, data_i = hp_log_augm[, i],
-                  data_j = hp_log_augm[, j], dates = dates,
-                  name_i = countries[i], name_j = countries[j], filename)
+    produce_plots(results = result, data_i = hp_log_augm[, i],
+                  data_j = hp_log_augm[, j], at_ = ticks,
+                  labels_ = dates[ticks], name_i = countries[i],
+                  name_j = countries[j])
   }
 }
 
@@ -417,10 +417,10 @@ for (l in seq_len(nrow(result$ijset))){
   i <- result$ijset[l, 1]
   j <- result$ijset[l, 2]
   if (result$stat_pairwise[i, j] > result$quant){
-    filename <- paste0("plots/growth_rate/", countries[i], "_vs_", countries[j], ".pdf")
-    produce_plots(results = result, l = l, data_i = hp_growth_rate_augm[, i],
-                  data_j = hp_growth_rate_augm[, j], dates = dates,
-                  name_i = countries[i], name_j = countries[j], filename)
+    produce_plots(results = result, data_i = hp_growth_rate_augm[, i],
+                  data_j = hp_growth_rate_augm[, j], at_ = ticks,
+                  labels_ = dates[ticks], name_i = countries[i],
+                  name_j = countries[j])
   }
 }
 

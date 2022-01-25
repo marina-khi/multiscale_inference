@@ -122,7 +122,8 @@ produce_smoothed_plots <- function(matrix, pdfname, dates){
 
 
 produce_plots <- function(results, data_i, data_j, ticks_, labels_,
-                          name_i, name_j, filename){
+                          name_i, name_j){
+  filename <- paste0("plots/", name_i, "_vs_", name_j, ".pdf")
   t_len <- length(data_i)
   grid_points <- seq(1/t_len, 1, by = 1/t_len)
   
@@ -135,7 +136,7 @@ produce_plots <- function(results, data_i, data_j, ticks_, labels_,
   par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
   par(oma = c(0.2, 1.5, 2, 0.2)) #Outer margins
     
-  plot(data_i, ylim=c(min(data_i, data_j), max(data_i, data_j)),
+  plot(data_i, ylim = c(min(data_i, data_j), max(data_i, data_j)),
        type="l", col = "blue", ylab = "", xlab="", xaxt = "n",
        mgp = c(1, 0.5, 0))
   lines(data_j, col = "red")
