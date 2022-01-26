@@ -32,7 +32,6 @@ source("functions/data_loading.R") #Now the matrix X_mat_filled contains all the
 
 #Variables
 dates     <- unique(X_mat_filled$date)
-#dates     <- dates[dates >= as.Date("01-01-1976", format = "%d-%m-%Y")]
 n_ts      <- length(unique(X_mat_filled$WBcode))
 t_len     <- nrow(X_mat_filled) / n_ts
 
@@ -68,7 +67,6 @@ h_grid      <- seq(from = 4 / t_len, to = 1 / 4, by = 4 / t_len)
 h_grid      <- h_grid[h_grid > log(t_len) / t_len]
 grid        <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
 
-
 result <- multiscale_test(data = gdp_mat_augm,
                           sigma_vec = sigma_vec,
                           alpha = alpha,
@@ -82,29 +80,32 @@ result <- multiscale_test(data = gdp_mat_augm,
 #Producing the smoothed curves using local linear estimator
 
 source("functions/functions.R")
-pdfname <- "plots/smoothed_gdp_data.pdf"
-produce_smoothed_plots(gdp_mat_growth, pdfname, dates)
-
-pdfname_augm <- "plots/smoothed_gdp_data_augmented.pdf"
-produce_smoothed_plots(gdp_mat_augm, pdfname_augm, dates)
-
-#Producing plots with the final results
-
 at <- seq(5, 125, by = 20)
 
+pdfname <- "plots/smoothed_gdp_data.pdf"
+produce_smoothed_plots(gdp_mat_growth, pdfname, y_min = min(gdp_mat_growth),
+                       y_max = max(gdp_mat_growth),
+                       ticks_at =  at, ticks_labels = dates[at])
+
+pdfname_augm <- "plots/smoothed_gdp_data_augmented.pdf"
+produce_smoothed_plots(gdp_mat_augm, pdfname_augm, y_min = min(gdp_mat_augm),
+                       y_max = max(gdp_mat_augm),
+                       ticks_at =  at, ticks_labels = dates[at])
+
+#Producing plots with the final results
 for (l in seq_len(nrow(result$ijset))){
   i <- result$ijset[l, 1]
   j <- result$ijset[l, 2]
-  if (countries[i] == "NOR" & countries[j] == "USA"){
-    #For color consistency in the paper
-    i <- result$ijset[l, 2]
-    j <- result$ijset[l, 1]
-  }
+
   if (result$stat_pairwise[i, j] > result$quant) {
+    if ((countries[i] %in% c("NOR", "USA")) & (countries[j] %in% c("USA", "NOR"))){
+      #For color consistency in the paper
+      i <- result$ijset[l, 2]
+      j <- result$ijset[l, 1]
+    }
     produce_plots(results = result, data_i = gdp_mat_augm[, i],
                   data_j = gdp_mat_augm[, j], ticks_ = at,
                   labels_ = dates[at], name_i = countries[i],
                   name_j = countries[j])
   }
 }
-
