@@ -99,6 +99,8 @@ for (i in 1:n_ts){
 
 #Constructing the grid
 grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len) #For plotting
+at_         <- seq(from = 1, to = t_len, by = 20) #For axis labels
+
 u_grid      <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
 h_grid      <- seq(from = 5 / t_len, to = 1 / 4, by = 5 / t_len)
 h_grid      <- h_grid[h_grid > log(t_len) / t_len]
@@ -128,7 +130,6 @@ rownames(Delta_hat) <- col_names
 
 delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
-n_cl       <- 12
 subgroups  <- cutree(res, h = result$quant)
 
 #Dendrogram
@@ -140,11 +141,11 @@ plot(res, cex = 0.8, xlab = "", ylab = "")
 rect.hclust(res, h = result$quant, border = 2:(max(subgroups) + 1))
 dev.off()
 
-at_ <- seq(1, t_len, by = 20)
 
-pdf(paste0("plots/results_all_clusters", ".pdf"), width=7, height=6, paper="special")
+#Plotting all clusters on one plot
+pdf(paste0("plots/results_all_clusters", ".pdf"), width = 7, height = 6,
+    paper="special")
 
-#Setting the layout of the graphs
 par(cex = 1, tck = -0.025)
 par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
@@ -153,19 +154,8 @@ plot(NA, ylab = "", xlab = "", xlim = c(0, 1),
      ylim = c(-1.5, 3.1), xaxt = 'n',
      mgp = c(2, 0.5, 0), cex = 1.2, tck = -0.025)  
 
-
 for (cl in 1:max(subgroups)){
   locations_cluster <- colnames(Delta_hat)[subgroups == cl]
-  # pdf(paste0("plots/results_cluster_", cl, ".pdf"), width=7, height=6, paper="special")
-  # 
-  # #Setting the layout of the graphs
-  # par(cex = 1, tck = -0.025)
-  # par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
-  # par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
-  # plot(NA, ylab = "", xlab = "", xlim = c(0, 1),
-  #      ylim = c(-1.5, 3.1), xaxt = 'n',
-  #      mgp = c(2, 0.5, 0), cex = 1.2, tck = -0.025)  
-
   for (column in locations_cluster){
     smoothed_curve <- mapply(local_linear_smoothing, grid_points,
                              MoreArgs = list(data_p = temp_matrix[, column],
@@ -173,10 +163,35 @@ for (cl in 1:max(subgroups)){
     lines(grid_points, smoothed_curve, col = c("red", "black", "blue")[cl])
   }
   axis(1, at = grid_points[at_], labels = dates[at_])
-  #dev.off()
 }
-title(main = paste("All", "Clusters"), line = 1)
+title(main = "All clusters", line = 1)
 dev.off()
+
+
+#Plotting each cluster on a separate plot
+for (cl in 1:max(subgroups)){
+  locations_cluster <- colnames(Delta_hat)[subgroups == cl]
+  pdf(paste0("plots/results_cluster_", cl, ".pdf"), width=7, height=6, paper="special")
+
+  #Setting the layout of the graphs
+  par(cex = 1, tck = -0.025)
+  par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
+  par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
+  plot(NA, ylab = "", xlab = "", xlim = c(0, 1),
+       ylim = c(-1.5, 3.1), xaxt = 'n',
+       mgp = c(2, 0.5, 0), cex = 1.2, tck = -0.025)
+  
+  for (column in locations_cluster){
+    smoothed_curve <- mapply(local_linear_smoothing, grid_points,
+                             MoreArgs = list(data_p = temp_matrix[, column],
+                                             grid_p = grid_points, bw = 0.1))
+    lines(grid_points, smoothed_curve, col = c("red", "black", "blue")[cl])
+  }
+  axis(1, at = grid_points[at_], labels = dates[at_])
+  title(main = paste0("Cluster ", cl), line = 1)
+  dev.off()
+}
+
 
 
 #Plotting world map
