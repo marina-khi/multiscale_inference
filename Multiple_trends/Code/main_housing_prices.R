@@ -288,12 +288,13 @@ result <- multiscale_test(data = hp_log_augm, sigma_vec = sigmahat_vector,
 
 produce_smoothed_plots(matrix = hp_log,
                        pdfname = "plots/smoothed_hp_data.pdf",
-                       y_min = min(hp_log), y_max = max(hp_log),
+                       y_min = min(hp_log) + 0.02, y_max = max(hp_log) - 0.01,
                        ticks_at =  ticks, ticks_labels = dates[ticks])
 
 produce_smoothed_plots(matrix = hp_log_augm,
                        pdfname = "plots/smoothed_hp_data_augmented.pdf",
-                       y_min = min(hp_log_augm), y_max = max(hp_log_augm),
+                       y_min = min(hp_log_augm) + 0.01,
+                       y_max = max(hp_log_augm) - 0.01,
                        ticks_at =  ticks, ticks_labels = dates[ticks])
 
 
