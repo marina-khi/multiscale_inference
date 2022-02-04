@@ -91,7 +91,8 @@ local_linear_smoothing <- function(u, data_p, grid_p, bw){
   }
 }
 
-produce_smoothed_plots <- function(matrix, pdfname, y_min, y_max, ticks_at, ticks_labels){
+produce_smoothed_plots <- function(matrix, pdfname, y_min, y_max, ticks_at,
+                                   ticks_labels, yaxp_){
   t_len <- nrow(matrix)
   grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
   
@@ -101,13 +102,14 @@ produce_smoothed_plots <- function(matrix, pdfname, y_min, y_max, ticks_at, tick
   par(oma = c(2.5, 1.5, 0.2, 0.2)) #Outer margins
   
   for (h in c(0.05, 0.1, 0.15)){
-    plot(NA, ylab="", xlab = "", xlim = c(0,1), ylim = c(y_min, y_max),
-         xaxt = 'n', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025)
+    plot(NA, ylab = "", xlab = "", xlim = c(0,1), ylim = c(y_min, y_max),
+         yaxp = yaxp_, xaxt = 'n', mgp = c(2,0.5,0), cex = 1.2, tck = -0.025)
     for (column in colnames(matrix)){
       smoothed_curve <- mapply(local_linear_smoothing, grid_points,
                                MoreArgs = list(matrix[, column], grid_points, h))
       lines(grid_points, smoothed_curve)
     }
+    #axis(2, at = y_ticks_at)
     
     if (h == 0.15) {axis(1, at = grid_points[ticks_at], labels = ticks_labels)}
     #else {axis(1, at = grid_points[seq(5, 125, by = 20)], labels = NA)}

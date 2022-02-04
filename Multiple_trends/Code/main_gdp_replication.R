@@ -83,14 +83,18 @@ source("functions/functions.R")
 at <- seq(5, 125, by = 20)
 
 pdfname <- "plots/smoothed_gdp_data.pdf"
-produce_smoothed_plots(gdp_mat_growth, pdfname, y_min = min(gdp_mat_growth),
-                       y_max = max(gdp_mat_growth),
-                       ticks_at =  at, ticks_labels = dates[at])
+produce_smoothed_plots(gdp_mat_growth, pdfname,
+                       y_min = min(gdp_mat_growth) + 0.035,
+                       y_max = max(gdp_mat_growth) - 0.02,
+                       ticks_at =  at, ticks_labels = dates[at],
+                       yaxp_ = c(-0.02, 0.02, 4))
 
 pdfname_augm <- "plots/smoothed_gdp_data_augmented.pdf"
-produce_smoothed_plots(gdp_mat_augm, pdfname_augm, y_min = min(gdp_mat_augm),
-                       y_max = max(gdp_mat_augm),
-                       ticks_at =  at, ticks_labels = dates[at])
+produce_smoothed_plots(gdp_mat_augm, pdfname_augm,
+                       y_min = min(gdp_mat_augm) + 0.03,
+                       y_max = max(gdp_mat_augm) - 0.02,
+                       ticks_at =  at, ticks_labels = dates[at],
+                       yaxp_ = c(-0.03, 0.01, 4))
 
 #Producing plots with the final results
 for (l in seq_len(nrow(result$ijset))){
