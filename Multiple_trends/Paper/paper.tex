@@ -227,7 +227,7 @@ Thus, the unobserved variables $Y_{it}^\circ$ can be approximated by $\widehat{Y
 
 But before we proceed further, we show how to construct consistent estimates $\widehat{\alpha}_i$ and $\widehat{\bfbeta}_i$. To begin with, we focus on the estimation of the vector of unknown parameters $\bfbeta_i$. We construct the estimator  $\widehat{\bfbeta}_i$ in the following way.
 
-\textcolor{red}{For each $i$, we consider the time series $\{(\Delta Y_{it}, \Delta \X_{it}): 2 \leq t \leq T\}$ of the first differences $\Delta Y_{it} = Y_{it} - Y_{i t-1}$ and $\Delta  \X_{it} =  \X_{it} -  \X_{it-1}$.} We can write
+\textcolor{red}{For each $i$, we consider the time series $\Delta \mathcal{T}_i = \{(\Delta Y_{it}, \Delta \X_{it}): 2 \leq t \leq T\}$ of the first differences $\Delta Y_{it} = Y_{it} - Y_{i t-1}$ and $\Delta  \X_{it} =  \X_{it} -  \X_{it-1}$.} We can write
 \begin{align*}
 	\Delta Y_{it} = Y_{it} - Y_{i t-1} =\bfbeta_i^\top \Delta \X_{it} + \bigg(m_i \Big( \frac{t}{T} \Big) - m_i \Big(\frac{t-1}{T}\Big)\bigg) + \Delta \varepsilon_{it},
 \end{align*}
@@ -360,7 +360,7 @@ Suppose we reject the null hypothesis $H_0$. This fact does not provide us with 
 
 Formally, for a given pair of time series $(i, j)$ and for any given interval \linebreak $\interval_{(u, h)} = [u-h, u+h]$ such that $(u, h) \in \grid_T$ we consider the hypothesis 
 \[ H_0^{[i,j]}(u,h): m_i(w) = m_j(w) \text{ for all } w \in [u-h,u+h]. \] 
-We view $H_0^{[i,j]}(u,h)$ as the local null hypothesis because \textcolor{red}{it involves only two trend functions $m_i$ and $m_j$ and their comparison locally, on an interval $\interval_{(u, h)} = [u-h, u+h]$.} In contrast, we refer to $H_0$ introduced in \eqref{eq:null} as the global null hypothesis.
+We view $H_0^{[i,j]}(u,h)$ as the local null hypothesis because \textcolor{red}{it compares two trend functions $m_i$ and $m_j$ locally, on the interval $\interval_{(u, h)} = [u-h, u+h]$.} In contrast, we refer to $H_0$ introduced in \eqref{eq:null} as the global null hypothesis.
 
 We define the multiscale test of the hypothesis $H_0^{[i,j]}(u,h)$ as follows: 
 \begin{center}
@@ -655,7 +655,7 @@ Figure \ref{plot:app:gdp} depicts smoothed versiosn of the original time series 
 
 As can be seen in Figure \ref{plot:app:gdp}, in the original data on the GDP growth there are some notable diffrences between the countries for bandwidths $h = 0.05$ and $h = 0.1$. For example, while most of the countries experience the increase in the growth rate in the last two years, the data for one of the countries (Norway) suggests a decrease in the same period of time. Moreover, using the smallest bandwidth ($h= 0.05$) allows us to notice considerable differences in the behaviour of the time series in the middle of our time region. In constrast, the value of the bandwidth $h = 0.15$ is too big to detect any heterogeneity in the behaviour of the trends. As we see, the choice of the bandwidth is crucial in making conclusions in this example.
 
-\begin{figure}[p!]
+\begin{figure}[b!]
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{Plots/AUT_vs_NOR}
 \caption{Test results for the comparison of Austria and Norway.}\label{fig:Austria:Norway}
@@ -668,7 +668,7 @@ As can be seen in Figure \ref{plot:app:gdp}, in the original data on the GDP gro
 \caption*{Note: In each figure, panel (a) shows the two augmented time series, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i,j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i,j]}_{min}(\alpha)$ in black.}
 \end{figure}
 
-\begin{figure}[p!]
+\begin{figure}[t!]
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{Plots/CHE_vs_NOR}
 \caption{Test results for the comparison of Switzerland and Norway.}\label{fig:Switzerland:Norway}
@@ -681,7 +681,7 @@ As can be seen in Figure \ref{plot:app:gdp}, in the original data on the GDP gro
 \caption*{Note: In each figure, panel (a) shows the two augmented time series, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i,j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i,j]}_{min}(\alpha)$ in black.}
 \end{figure}
 
-\begin{figure}[p!]
+\begin{figure}[t!]
 
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{Plots/FRA_vs_NOR}
@@ -713,41 +713,53 @@ As can be seen in Figure \ref{plot:app:gdp}, in the original data on the GDP gro
 Now we look at the local linear estimates of the trend functions $m_i$ after excluding the effects of the covariates (Figure \ref{plot:app:gdp_augm}). We can see that the differences between the trends are much more pronounced and some heterogeneity between the countries is notable even for large values of $h$.
 
 %We are now ready to apply the test procedure to the data. 
-The results of applying our test are completely in line with the conclusions from the visual inspection. Our test rejects the null hypothesis $H_0$ at both levels $\alpha =0.05$ and $\alpha = 0.1$ which is consistent with the findings in \cite{Zhang2012} where the authors report a rejection of the null hypothesis of a common trend at the level $\alpha = 0.1$. However, in contrast to \cite{Zhang2012}, we can say much more about the comparison of the trends between these $11$ countries. Specifically, we can make simultaneous confidence statements abouth which of the countries have different trends and where they differ. With the help of our multiscale method, we simultaneously test all of the local null hypotheses $H_0^{[i,j]}(u, h)$ that $m_i = m_j$ on the interval $\mathcal{I}_{(u, h)} = [u-h, u+h]$ for each $i, j, 1 \le i < j \le n$, and each $(u, h) \in \mathcal{G}_T$. The results are presented in Figures \ref{fig:Austria:Norway}--\ref{fig:France:USA}, with each figure corresponing to a specific pair of countries $(i,j)$ from our sample. Each figure is divided into three panels (a)--(c).  Panel (a) shows the augmented time series $\widehat{Y}_{it}$ and $\widehat{Y}_{jt}$ for the two countries $i$ and $j$ that are being compared. Panel (b) presents smoothed versions of the time series from (a), that is, it shows nonparametric kernel estimates (specifically, Nadaraya-Watson estimates) of the two trend functions $m_i$ and $m_j$, where the bandwidth is set to $14$ quarters (which corresponds to $h = 0.1$) and a rectangular kernel is used. Finally, panel (c) presents the results produced by our test for a significance level $\alpha = 0.05$: it depicts in grey the set $\mathcal{S}^{[i,j]}(\alpha)$ of all the intervals for which the test rejects the local null $H_0^{[i, j]}(u, h)$. The minimal intervals in the subset $\mathcal{S}^{[i,j]}(\alpha)$ are highlighted in black. Note that according to \eqref{corollary1}, we can make the following simultaneous confidence statement about the intervals plotted in panels (c) of Figures \ref{fig:Austria:Norway}--\ref{fig:France:USA}: we can claim, with confidence of about $95\%$, that there is a difference between the functions $m_i$ and $m_j$ on each of these intervals. 
+The results of applying our test are in line with our conclusions from the visual inspection: our test rejects the null hypothesis $H_0$ at both levels $\alpha =0.05$ and $\alpha = 0.1$. This result is consistent with the findings in \cite{Zhang2012} where the authors report a rejection of the null hypothesis of a common trend at the level $\alpha = 0.1$. However, in contrast to \cite{Zhang2012}, our method provides a more detailed comparison of the trends in the GDP growth rate in these $11$ countries. Specifically, we can make simultaneous confidence statements about which of the countries have different trends and where they differ. With the help of our multiscale method, we simultaneously test all local null hypotheses $H_0^{[i,j]}(u, h)$ that $m_i = m_j$ on the interval $\mathcal{I}_{(u, h)} = [u-h, u+h]$ for each $i, j, 1 \le i < j \le n$, and each $(u, h) \in \mathcal{G}_T$. The results are presented in Figures~\ref{fig:Austria:Norway}--\ref{fig:France:USA}, with each figure corresponding to a specific pair of countries $(i,j)$ from our sample.\footnote{We present the results only for those pairs $(i, j)$ where the set $\mathcal{S}^{[i, j]}(\alpha)$ is non-empty.} Each figure is divided into three panels (a)--(c).  Panel (a) shows the augmented time series $\{\widehat{Y}_{it}: 1 \le t \le T\}$ and $\{\widehat{Y}_{jt}: 1 \le t \le T\}$ for the two countries $i$ and $j$ that are being compared. Panel (b) presents smoothed versions of the time series from (a), that is, it shows nonparametric kernel estimates (specifically, Nadaraya-Watson estimates) of the two trend functions $m_i$ and $m_j$, where the bandwidth is set to $14$ quarters (which corresponds to $h = 0.1$) and a rectangular kernel is used. Finally, panel (c) presents the results produced by our test for a significance level $\alpha = 0.05$: it depicts in grey the set $\mathcal{S}^{[i,j]}(\alpha)$ of all the intervals for which the test rejects the local null $H_0^{[i, j]}(u, h)$. The set of minimal intervals $\mathcal{S}^{[i,j]}_{min}(\alpha) \subseteq \mathcal{S}^{[i,j]}(\alpha)$ is highlighted in black. Note that according to \eqref{corollary1}, we can make the following simultaneous confidence statement about the intervals plotted in panels (c) of Figures \ref{fig:Austria:Norway}--\ref{fig:France:USA}: we can claim, with confidence of about $95\%$, that there is a difference between the functions $m_i$ and $m_j$ on each of these intervals. 
 
-Now we briefly comment on the results. Out of $55$ pairwise comparisons, our test detects the differences in the trends $8$ times. In $7$ such cases, one of the countries involved in the comparison is Norway. First, we look closely at these $7$ cases. It is visible from Figures \ref{fig:Austria:Norway} -- \ref{fig:Japan:Norway} that the differences in the trends are more pronounced towards the end of the considered period: the set of intervals where our test rejects always covers last $11$ years from last quarter in $1998$ up to the third quarter in $2010$. This coincides with tour visual observation that in the last $10$ years, only Norway exhibited downward movement of the trend in the GDP growth which became even more pronounced after factoring out the effect of the individual covariates. All of the other countries appear to have a slightly increasing trend function in the same time period. Hence, our test finds significant differences between the trends of Norway and several other countries in this time region.
+Now we briefly comment on the results. Out of $55$ pairwise comparisons, our test detects the differences in the trends $8$ times. In $7$ cases, one of the countries involved in the comparison is Norway; these comparisons are depicted in Figures \ref{fig:Austria:Norway} -- \ref{fig:Japan:Norway}. Note that the differences in the trends seem to be more pronounced towards the end of the considered period: the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ for those pairs where one of the countries involved in comparison is Norway always covers last $11$ years of the analyzed time period (from the last quarter in $1998$ up to the third quarter in $2010$). This coincides with the visual observation mentioned above that in the last $10$ years only Norway exhibited downward movement of the trend in the GDP growth, and this tendency becomes even more pronounced after factoring out the effect of the individual covariates. All of the other countries appear to have a slight increase in the trend function in the same time period. Our test supports this observation.
 
-Figure \ref{fig:France:USA} presents the results of the pairwise comparison between France and the USA. In this case, our test detects the differences between the underlying trends in the GDP growth only in the beginning of the considered time period. Specifically, we can claim with confidence no less than 95\%, that there are differences between the trends for France and the USA up to the fourth quarter 1986 but there is no evidence of any significant differences between the trends in the period of 1987 onwards.
+Figure \ref{fig:France:USA} presents the results of the pairwise comparison between France and the USA. In this case, our test detects the differences between the underlying trends in the GDP growth only in the beginning of the considered time period. We can claim with confidence no less than 95\%, that there are differences between the trends for France and the USA up to the fourth quarter 1986 but there is no evidence of any differences between the trends from 1987 onwards.
 
+\newpage
 \subsection{Analysis of the house prices}\label{subsec:app:house}
-We next analyse the historical dataset on housing prices for OECD countries that covers time period 1870 -- 2012. We restrict our attention to the years 1890 -- 2012 since it implies almost no additional manipulations with the data.
+We next analyse the historical dataset on annual house prices from \cite{Knoll2017} that contains the data for $14$ advanced economies that covers $143$ years from $1870$ to $2012$. We focus our attention on 8 countries\footnote{Australia, Belgium, Denmark, France, the Netherlands, Norway, Sweden and the USA.} and on the time period 1890 -- 2012 since it implies almost no additional manipulations with the data. Specifically, the data on house prices for all of the countries in our analysis except one (Belgium) contains no missing values, and for Belgium there are only five missing observations\footnote{The missing values in the time series on the house prices for Belgium span five years during the World War I.} which we impute using linear interpolation from the nearest years. Time series for other $6$ countries present in the dataset contains more missing value, and hence are not being analyzed here.
 
-We focus our attention on 8 countries (Australia, Belgium, Denmark, France, the Netherlands, Norway, Sweden and the USA) for which the imputation of the data is minimal. Specifically, for all of the countries except Belgium the time series cover the whole time period under consideration (1890 - 2012), and for Belgium there are only five missing values\footnote{The missing values in the time series for Belgium span five years during the World War I.} which we fill using linear interpolation from the nearest years. Time series for other countries in the dataset \cite{Knoll2017}
+We deflate the nominal house prices from  \cite{Knoll2017} with the corresponding consumer price index (CPI) to obtain real house prices ($HP$). We assume that the real house prices depend on the real GDP ($GDP$), population size ($POP$), long-term interest rate ($I$) and inflation ($INFL$). Data for CPI, real GDP, population size and long-term interest rate are taken from the Jordà-Schularick-Taylor Macrohistory Database,\footnote{See \cite{Jorda2017} for the detailed descriprion of the variable construction.} which is freely available at \url{http://www.macrohistory.net/data/} (accessed on 13 January 2022). Inflation ($INFL$) is measured as change in CPI.
 
-
-
-Data for consumer price index (CPI), real GDP ($GDP$), population size ($POP$) and long-term interest rate ($I$) are taken from the Jordà-Schularick-Taylor Macrohistory Database,\footnote{See \cite{Jorda2017} for the detailed descriprion of the variable construction.} which is freely available at \linebreak \url{http://www.macrohistory.net/data/} (accessed on 13 January 2022).
-
-We deflate the nominal house prices from  \cite{Knoll2017} with the corresponding CPI to obtain real house prices ($HP$). 
-
-Inflation ($INFL$) is measured as change in CPI.
-
-We thus observe a panel of $n = 8$ time series $\mathcal{T}_i = \{(Y_{it}, \X_{it}): 1 \le t \le T \}$ of length \linebreak$T = 123$ for each country $i \in \{1,\ldots,8\}$, where $Y_{it} = \ln HP_{it}$, \linebreak $\X_{it} = (\ln GDP_{it}, \ln POP_{it}, I_{it}, INFL_{it})^\top$. The time series $\mathcal{T}_i$ is assumed to follow the model 
+We thus observe a panel of $n = 8$ time series $\mathcal{T}_i = \{(Y_{it}, \X_{it}): 1 \le t \le T \}$ of length \linebreak$T = 123$ for each country $i \in \{1,\ldots,8\}$, where $Y_{it} = \ln HP_{it}$ and $\X_{it} = (\ln GDP_{it}, \linebreak \ln POP_{it}, I_{it}, INFL_{it})^\top$. The time series $\mathcal{T}_i$ is assumed to follow the model 
 \begin{equation}\label{eq:model:app3}
 Y_{it} = \bfbeta^\top_i \X_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it} 
 \end{equation}
-for $1 \le t \le T$, where $\bfbeta_i = (\beta_{i, 1}, \beta_{i, 2}, \beta_{i, 3}, \beta_{i, 4})^\top$ is a vector of unknown parameters, $m_i$ is a country-specific unknown nonparametric time trend, and $\alpha_i$ is a fixed-effect term. As in Section \ref{subsec:app:gdp}, we rewrite the model \eqref{eq:model:app2} as
+for $1 \le t \le T$, where $\bfbeta_i = (\beta_{i, 1}, \beta_{i, 2}, \beta_{i, 3}, \beta_{i, 4})^\top$ is a vector of unknown parameters, $m_i$ is a country-specific unknown nonparametric time trend, and $\alpha_i$ is a fixed-effect term. As in Section \ref{subsec:app:gdp}, we rewrite the model \eqref{eq:model:app3} as
 \begin{equation}\label{eq:model:app4}
 \ln HP_{it} = \beta_{i, 1} \ln GDP_{it} + \beta_{i, 2} \ln POP_{it} + \beta_{i, 3} I_{it} + \beta_{i, 4} INFL_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it}.
 \end{equation}
 
-Including nonparametric trend function is justified by the evidence found in \cite{Zhang2016}, where the authors claim that the time series for the logarithmic US house prices are trend stationary, i.e. it can be transformed into a stationary series by subtracting the deterministic trend. They find the evidence for this claim in a 120-year national dataset and metro area level and state level panel data sets. 
+Including nonparametric trend function while modelling the evolution of the house prices is supported by \cite{Zhang2016} where the authors show that the time series for the logarithmic US house prices are trend stationary, i.e. it can be transformed into a stationary series by subtracting the deterministic trend. Similar models for the cross-country comparison in the house prices have been also studied in ... \cite{Ugarte2009} model the temporal trends in average Spanish house prices using splines. \cite{Holly2010} consider a linear parametric model of the logarithm of the house prices, where the control variables include the rate of change in the population and the nte cost of borrowing that depends on the long-term interest rate.
+
+GDP is the most commonly used measure of a country’s economic
+wellbeing, and has been found to be correlated with house prices (see, e.
+g., Leung, 2003; Otto, 2007). Population is an important factor that
+determines trends relating to the
+
+Population is an important factor that
+determines trends relating to the demand and supply of housing, and is
+therefore often included as a control variable in house price regressions
+to control for demographic factors as well as potential trends relating to
+demand and supply (see, e.g., Day, 2018; Engelhardt and Poterba, 1991;
+Miles, 2012). Mortgage loans to GDP ratio is often used as a proxy for
+housing investment and credit supply in an economy, while
+non-mortgage loans is a proxy for financial development (Adelino et al.,
+2012; Carb´o-Valverde and Rodriguez-Fernandez, 2010; Fitzpatrick and
+McQuinn, 2007). We also control for interest rate and inflation given
+that they influence market trends and household ability to finance their
+homes (Anari and Kolari, 2002; Kuang and Liu, 2015; McQuinn and
+O’Reilly, 2008; Tang and Tan, 2015; Xu and Tang, 2014).
 
 We implement the multiscale test in exactly the same way as in the previous application example.
 
 Our findings coincide with the observations in \cite{Knoll2017}, where the authors find considerable cross-country heterogeneity in the trends in house prices.
 
-\begin{figure}[p!]
+\begin{figure}[b!]
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{Plots/hp_AUS_vs_NLD}
 \caption{Test results for the comparison of the housing prices in Australia and the Netherlands.}\label{fig:hp:Australia:Netherlands}
@@ -760,7 +772,7 @@ Our findings coincide with the observations in \cite{Knoll2017}, where the autho
 \caption*{Note: In each figure, panel (a) shows the two augmented time series of the house prices, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i,j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i,j]}_{min}(\alpha)$ in black.}
 \end{figure}
 
-\begin{figure}[p!]
+\begin{figure}[t!]
 \begin{minipage}[t]{0.49\textwidth}
 \includegraphics[width=\textwidth]{Plots/hp_BEL_vs_NLD}
 \caption{Test results for the comparison of the housing prices in Belgium and the Netherlands.}\label{fig:hp:Belgium:Netherlands}
