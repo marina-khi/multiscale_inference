@@ -721,9 +721,13 @@ Figure \ref{fig:France:USA} presents the results of the pairwise comparison betw
 
 \newpage
 \subsection{Analysis of the house prices}\label{subsec:app:house}
-We next analyse the historical dataset on annual house prices from \cite{Knoll2017} that contains the data for $14$ advanced economies that covers $143$ years from $1870$ to $2012$. We focus our attention on 8 countries\footnote{Australia, Belgium, Denmark, France, the Netherlands, Norway, Sweden and the USA.} and on the time period 1890 -- 2012 since it implies almost no additional manipulations with the data. Specifically, the data on house prices for all of the countries in our analysis except one (Belgium) contains no missing values, and for Belgium there are only five missing observations\footnote{The missing values in the time series on the house prices for Belgium span five years during the World War I.} which we impute using linear interpolation from the nearest years. Time series for other $6$ countries present in the dataset contains more missing value, and hence are not being analyzed here.
+We next analyse the historical dataset on nominal annual house prices from \cite{Knoll2017} that contains the data for $14$ advanced economies that covers $143$ years from $1870$ to $2012$.  To ensure minimal manipulation with the data for all time series, we consider observations over the period 1890~--~2012 for 8 countries\footnote{Australia, Belgium, Denmark, France, the Netherlands, Norway, Sweden and the USA.}. Specifically, the data on house prices for all of the countries in our analysis except one (Belgium) contains no missing values, and for Belgium there are only five missing observations\footnote{The missing values in the time series on the house prices for Belgium span five years during the World War I.} which we impute using linear interpolation from the nearest years. Time series for other $6$ countries present in the dataset from \cite{Knoll2017} contains more missing value, and hence are not being analyzed here.
 
-We deflate the nominal house prices from  \cite{Knoll2017} with the corresponding consumer price index (CPI) to obtain real house prices ($HP$). We assume that the real house prices depend on the real GDP ($GDP$), population size ($POP$), long-term interest rate ($I$) and inflation ($INFL$). Data for CPI, real GDP, population size and long-term interest rate are taken from the Jordà-Schularick-Taylor Macrohistory Database,\footnote{See \cite{Jorda2017} for the detailed descriprion of the variable construction.} which is freely available at \url{http://www.macrohistory.net/data/} (accessed on 13 January 2022). Inflation ($INFL$) is measured as change in CPI.
+Many potential influences on houseprices have been proposed including: the role ofinterest rates; demographic factors such as pop-ulation growth; real income growth; constraintson the supply of new housing due to govern-ment regulations; and the performance of thestock market. However, it remains unclear as towhich of these variables (if any) are quantita-tively important influences on property prices.
+
+We deflate the nominal house prices with the corresponding consumer price index (CPI) to obtain real house prices ($HP$). Factors that influence the average house prices are numerous, and there seems to be no general consensus about what the main causes of fluctuations are. Possible determinants include, but are not limited to, demographic factors such as population growth (\citealt{Holly2010}, \citealt{Wang2014}, \citealt{Churchill2021}); fundamental economic factors such as economic growth (\citealt{Churchill2021}), interest rate and inflation (\citealt{Abelson2005}, \citealt{Otto2007}, \citealt{Huang2013}, \citealt{Jorda2015}); urban factors such as crime rate and urban development; government subsidies and regulations; etc. In our analysis, we focus on the following determinants of the average house prices: real GDP ($GDP$), population size ($POP$), long-term interest rate ($I$) and inflation ($INFL$) which is measured as change in CPI. Other factors (such as government regulations, construction costs, and real wages) vary rather slowly over time and can be captured by fixed effects and slope heterogeneity.
+
+Data for CPI, real GDP, population size and long-term interest rate are taken from the Jordà-Schularick-Taylor Macrohistory Database,\footnote{See \cite{Jorda2017} for the detailed descriprion of the variable construction.} which is freely available at \linebreak\url{http://www.macrohistory.net/data/} (accessed on 13 January 2022).
 
 We thus observe a panel of $n = 8$ time series $\mathcal{T}_i = \{(Y_{it}, \X_{it}): 1 \le t \le T \}$ of length \linebreak$T = 123$ for each country $i \in \{1,\ldots,8\}$, where $Y_{it} = \ln HP_{it}$ and $\X_{it} = (\ln GDP_{it}, \linebreak \ln POP_{it}, I_{it}, INFL_{it})^\top$. The time series $\mathcal{T}_i$ is assumed to follow the model 
 \begin{equation}\label{eq:model:app3}
@@ -734,30 +738,6 @@ for $1 \le t \le T$, where $\bfbeta_i = (\beta_{i, 1}, \beta_{i, 2}, \beta_{i, 3
 \ln HP_{it} = \beta_{i, 1} \ln GDP_{it} + \beta_{i, 2} \ln POP_{it} + \beta_{i, 3} I_{it} + \beta_{i, 4} INFL_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it}.
 \end{equation}
 
-Including nonparametric trend function while modelling the evolution of the house prices is supported by \cite{Zhang2016} where the authors show that the time series for the logarithmic US house prices are trend stationary, i.e. it can be transformed into a stationary series by subtracting the deterministic trend. Similar models for the cross-country comparison in the house prices have been also studied in ... \cite{Ugarte2009} model the temporal trends in average Spanish house prices using splines. \cite{Holly2010} consider a linear parametric model of the logarithm of the house prices, where the control variables include the rate of change in the population and the nte cost of borrowing that depends on the long-term interest rate.
-
-GDP is the most commonly used measure of a country’s economic
-wellbeing, and has been found to be correlated with house prices (see, e.
-g., Leung, 2003; Otto, 2007). Population is an important factor that
-determines trends relating to the
-
-Population is an important factor that
-determines trends relating to the demand and supply of housing, and is
-therefore often included as a control variable in house price regressions
-to control for demographic factors as well as potential trends relating to
-demand and supply (see, e.g., Day, 2018; Engelhardt and Poterba, 1991;
-Miles, 2012). Mortgage loans to GDP ratio is often used as a proxy for
-housing investment and credit supply in an economy, while
-non-mortgage loans is a proxy for financial development (Adelino et al.,
-2012; Carb´o-Valverde and Rodriguez-Fernandez, 2010; Fitzpatrick and
-McQuinn, 2007). We also control for interest rate and inflation given
-that they influence market trends and household ability to finance their
-homes (Anari and Kolari, 2002; Kuang and Liu, 2015; McQuinn and
-O’Reilly, 2008; Tang and Tan, 2015; Xu and Tang, 2014).
-
-We implement the multiscale test in exactly the same way as in the previous application example.
-
-Our findings coincide with the observations in \cite{Knoll2017}, where the authors find considerable cross-country heterogeneity in the trends in house prices.
 
 \begin{figure}[b!]
 \begin{minipage}[t]{0.49\textwidth}
@@ -784,6 +764,31 @@ Our findings coincide with the observations in \cite{Knoll2017}, where the autho
 \end{minipage}
 \caption*{Note: In each figure, panel (a) shows the two augmented time series of the house prices, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i,j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i,j]}_{min}(\alpha)$ in black.}
 \end{figure}
+%
+%are growth in real per capita disposable income and population—see, for example, Malpezzi (1999) and
+%Gallin (2006), among others.  An
+
+The motivation for including nonparametric trend function $m_i$ in the model \ref{eq:model:app4} is supported by the literature. For example, \cite{Ugarte2009} model the temporal trends in average Spanish house prices using splines. \cite{Winter2022} include a long-term trend component when describing the dynamic behaviour of the time series of real house prices in eight advanced economies. Including nonparametric trend function while modelling the evolution of the house prices is also the main conclusion in \cite{Zhang2016}, where the authors show that the time series for the logarithmic US house prices are trend stationary, i.e. it can be transformed into a stationary series by subtracting the deterministic trend. 
+
+%\cite{Huang2013} use the GDP growth rate as an axplanatory variable for the changes in house price index. \cite{Holly2010} consider a linear parametric model of the logarithm of the house prices, where the control variables include the rate of change in the population and the net cost of borrowing that depends on the long-term interest rate.
+
+%GDP is the most commonly used measure of a country’s economic
+%wellbeing, and has been found to be correlated with house prices (see, e.
+%g., Leung, 2003; Otto, 2007). 
+%Population is an important factor that
+%determines trends relating to the demand and supply of housing, and is
+%therefore often included as a control variable in house price regressions
+%to control for demographic factors as well as potential trends relating to
+%demand and supply (see, e.g., Day, 2018; Engelhardt and Poterba, 1991;
+%Miles, 2012). We also control for interest rate and inflation given
+%that they influence market trends and household ability to finance their
+%homes (Anari and Kolari, 2002; Kuang and Liu, 2015; McQuinn and
+%O’Reilly, 2008; Tang and Tan, 2015; Xu and Tang, 2014).
+
+We implement the multiscale test in exactly the same way as in the previous application example.
+
+Our findings coincide with the observations in \cite{Knoll2017}, where the authors find considerable cross-country heterogeneity in the trends in house prices.
+
 
 \section{Conclusion}\label{sec:conclusion}
 
