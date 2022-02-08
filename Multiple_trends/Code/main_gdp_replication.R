@@ -62,7 +62,7 @@ sigma_vec <- sigma(gdp_mat_augm, n_ts = n_ts, q = q, r = r)
 #########
 
 #Constructing the grid
-u_grid      <- seq(from = 4 / t_len, to = 1, by = 4 / t_len)
+u_grid      <- seq(from = 5 / (2 * t_len), to = 1, by = 2 / t_len)
 h_grid      <- seq(from = 4 / t_len, to = 1 / 4, by = 4 / t_len)
 h_grid      <- h_grid[h_grid > log(t_len) / t_len]
 grid        <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)

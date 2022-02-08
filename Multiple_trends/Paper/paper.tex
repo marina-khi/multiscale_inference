@@ -636,10 +636,10 @@ We aim to test whether the time trend $m_i$ is the same for all $11$ countries. 
 \item We choose $K$ to be an Epanechnikov kernel.
 \item We let $\mathcal{G}_T = U_T \times H_T$ with 
 \begin{align*}
-U_T & = \big\{ u \in [0,1]: u = \textstyle{\frac{4t}{T}} \text{ for some } t \in \naturals \big\} \\
+U_T & = \big\{ u \in [0,1]: u = \textstyle{\frac{4t + 1}{2T}} \text{ for some } t \in \naturals \big\} \\
 H_T & = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{4t}{T}} \text{ for some } t \in \naturals \big\}. 
 \end{align*}
-We thus take into account all locations $u$ on an equidistant grid $U_T$ with step length $4/T$ and all bandwidths $h=4/T, 8/T, 12/T,\ldots$ with $\log T /T \le h \le 1/4$. Note that the lower bound $\log T / T$ is motivated by \ref{C-h} which requires that $\log T /T \ll h_{\min}$ (given that all moments of $\varepsilon_{it}$ exist).
+We thus take into account all locations $u$ on an equidistant grid $U_T$ with step length $2/T$ and all bandwidths $h=4/T, 8/T, 12/T,\ldots$ with $\log T /T \le h \le 1/4$. Our choice of the grid is motivated by the structure of the data: for each interval $\mathcal{I}_{(u, h)} = [u-h, u+h]$, the effective sample size is $8, 16, 24, \ldots$ quarters, i.e. $2, 4, 6, \ldots$ years. Note that the lower bound $\log T / T$ is motivated by \ref{C-h} which requires that $\log T /T \ll h_{\min}$ (given that all moments of $\varepsilon_{it}$ exist).
 \item We estimate the unknown parameters $\bfbeta_i = (\beta_{i, 1}, \beta_{i, 2}, \beta_{i, 3})^\top$ for each country $i$ separately using the first-differencing approach described in Section \ref{subsec:test:prep}.
 \item We compute the estimator of the fixed-effect term $\alpha_i$ by emplying \eqref{eq:alpha:est}. We then work with the augmented time series $\widehat{Y}_{it} = Y_{it} - \widehat{\bfbeta}_i^\top \X_{it} - \widehat{\alpha}_{i}$ instead of the original data on the GDP growth rate $Y_{it}$.
 \item To obtain the estimator $\hat{\sigma}_i^2$ of the long-run error variance $\sigma^2_i$, for each $i$ we apply the procedure from \cite{KhismatullinaVogt2020} to the augmented values \linebreak $\{\widehat{Y}_{it}: 1\leq t \leq T\}$. The details are summarized in Section \ref{subsec:app:lrv} of the Appendix. % with the following specification of the parameters: $\underline{r}=1$, $\overline{r}=10$ and $q = 15$.
@@ -721,11 +721,13 @@ Figure \ref{fig:France:USA} presents the results of the pairwise comparison betw
 
 \newpage
 \subsection{Analysis of the house prices}\label{subsec:app:house}
-We next analyse the historical dataset on nominal annual house prices from \cite{Knoll2017} that contains the data for $14$ advanced economies that covers $143$ years from $1870$ to $2012$.  To ensure minimal manipulation with the data for all time series, we consider observations over the period 1890~--~2012 for 8 countries\footnote{Australia, Belgium, Denmark, France, the Netherlands, Norway, Sweden and the USA.}. Specifically, the data on house prices for all of the countries in our analysis except one (Belgium) contains no missing values, and for Belgium there are only five missing observations\footnote{The missing values in the time series on the house prices for Belgium span five years during the World War I.} which we impute using linear interpolation from the nearest years. Time series for other $6$ countries present in the dataset from \cite{Knoll2017} contains more missing value, and hence are not being analyzed here.
+We next analyse the historical dataset on nominal annual house prices from \linebreak\cite{Knoll2017} that contains the data for $14$ advanced economies that covers $143$ years from $1870$ to $2012$.  To ensure minimal manipulation with the data for all time series, we consider observations over the period 1890~--~2012 for 8 countries\footnote{Australia, Belgium, Denmark, France, the Netherlands, Norway, Sweden and the USA.}. Specifically, the data on house prices for all of the countries in our analysis except one (Belgium) contains no missing values, and for Belgium there are only five missing observations\footnote{The missing values in the time series on the house prices for Belgium span five years during the World War I.} which we impute using linear interpolation from the nearest years. Each of the time series for other $6$ countries present in the dataset from \cite{Knoll2017} contains more than $10$ missing values, and hence these countries are excluded from our analysis.
 
-Many potential influences on houseprices have been proposed including: the role ofinterest rates; demographic factors such as pop-ulation growth; real income growth; constraintson the supply of new housing due to govern-ment regulations; and the performance of thestock market. However, it remains unclear as towhich of these variables (if any) are quantita-tively important influences on property prices.
+We deflate the nominal house prices with the corresponding consumer price index (CPI) to obtain real house prices ($HP$). Variables that potentially can influence the average house prices are numerous, and there seems to be no general consensus about what the main causes of fluctuations are. Possible determinants include, but are not limited to, demographic factors such as population growth (\citealt{Holly2010}, \citealt{Wang2014}, \citealt{Churchill2021}); fundamental economic factors such as economic growth (\citealt{Huang2013}, \citealt{Churchill2021}), interest rate and inflation (\citealt{Abelson2005}, \citealt{Otto2007}, \citealt{Huang2013}, \citealt{Jorda2015}); urbanisation (\citealt{Chen2011}, \citealt{Wang2017}); government subsidies and regulations (\citealt{Malpezzi1999}); stock marrkets (\citealt{Gallin2006}); etc. In our analysis, we focus on the following determinants of the average house prices: real GDP ($GDP$), population size ($POP$), long-term interest rate ($I$) and inflation ($INFL$) which is measured as change in CPI. Most other factors (such as government regulations, construction costs, and real wages) vary rather slowly over time and can be captured by fixed effects and slope heterogeneity.
 
-We deflate the nominal house prices with the corresponding consumer price index (CPI) to obtain real house prices ($HP$). Factors that influence the average house prices are numerous, and there seems to be no general consensus about what the main causes of fluctuations are. Possible determinants include, but are not limited to, demographic factors such as population growth (\citealt{Holly2010}, \citealt{Wang2014}, \citealt{Churchill2021}); fundamental economic factors such as economic growth (\citealt{Churchill2021}), interest rate and inflation (\citealt{Abelson2005}, \citealt{Otto2007}, \citealt{Huang2013}, \citealt{Jorda2015}); urban factors such as crime rate and urban development; government subsidies and regulations; etc. In our analysis, we focus on the following determinants of the average house prices: real GDP ($GDP$), population size ($POP$), long-term interest rate ($I$) and inflation ($INFL$) which is measured as change in CPI. Other factors (such as government regulations, construction costs, and real wages) vary rather slowly over time and can be captured by fixed effects and slope heterogeneity.
+%\cite{Huang2013} use the GDP growth rate as an axplanatory variable for the changes in house price index. \cite{Holly2010} consider a linear parametric model of the logarithm of the house prices, where the control variables include the rate of change in the population and the net cost of borrowing that depends on the long-term interest rate.
+
+%GDP is the most commonly used measure of a country’s economic wellbeing, and has been found to be correlated with house prices (see, e. g., Leung, 2003; Otto, 2007).  Population is an important factor that determines trends relating to the demand and supply of housing, and is herefore often included as a control variable in house price regressions to control for demographic factors as well as potential trends relating to demand and supply (see, e.g., Day, 2018; Engelhardt and Poterba, 1991; Miles, 2012). We also control for interest rate and inflation given that they influence market trends and household ability to finance their homes (Anari and Kolari, 2002; Kuang and Liu, 2015; McQuinn and O’Reilly, 2008; Tang and Tan, 2015; Xu and Tang, 2014).
 
 Data for CPI, real GDP, population size and long-term interest rate are taken from the Jordà-Schularick-Taylor Macrohistory Database,\footnote{See \cite{Jorda2017} for the detailed descriprion of the variable construction.} which is freely available at \linebreak\url{http://www.macrohistory.net/data/} (accessed on 13 January 2022).
 
@@ -737,7 +739,6 @@ for $1 \le t \le T$, where $\bfbeta_i = (\beta_{i, 1}, \beta_{i, 2}, \beta_{i, 3
 \begin{equation}\label{eq:model:app4}
 \ln HP_{it} = \beta_{i, 1} \ln GDP_{it} + \beta_{i, 2} \ln POP_{it} + \beta_{i, 3} I_{it} + \beta_{i, 4} INFL_{it} + m_i \Big( \frac{t}{T} \Big) + \alpha_i + \varepsilon_{it}.
 \end{equation}
-
 
 \begin{figure}[b!]
 \begin{minipage}[t]{0.49\textwidth}
@@ -764,28 +765,26 @@ for $1 \le t \le T$, where $\bfbeta_i = (\beta_{i, 1}, \beta_{i, 2}, \beta_{i, 3
 \end{minipage}
 \caption*{Note: In each figure, panel (a) shows the two augmented time series of the house prices, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i,j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i,j]}_{min}(\alpha)$ in black.}
 \end{figure}
-%
-%are growth in real per capita disposable income and population—see, for example, Malpezzi (1999) and
-%Gallin (2006), among others.  An
 
-The motivation for including nonparametric trend function $m_i$ in the model \ref{eq:model:app4} is supported by the literature. For example, \cite{Ugarte2009} model the temporal trends in average Spanish house prices using splines. \cite{Winter2022} include a long-term trend component when describing the dynamic behaviour of the time series of real house prices in eight advanced economies. Including nonparametric trend function while modelling the evolution of the house prices is also the main conclusion in \cite{Zhang2016}, where the authors show that the time series for the logarithmic US house prices are trend stationary, i.e. it can be transformed into a stationary series by subtracting the deterministic trend. 
+The motivation for including nonparametric trend function $m_i$ in the model \ref{eq:model:app4} is supported by the literature. For example, \cite{Ugarte2009} model the temporal trends in average Spanish house prices using splines. \cite{Winter2022} include a long-term trend stochastic component when describing the dynamic behaviour of the time series of real house prices in eight advanced economies. Including nonparametric trend function while modelling the evolution of the house prices is also the main conclusion in \cite{Zhang2016}, where the authors show that the time series for the logarithmic US house prices is trend-stationary, i.e. it can be transformed into a stationary series by subtracting the deterministic trend.
 
-%\cite{Huang2013} use the GDP growth rate as an axplanatory variable for the changes in house price index. \cite{Holly2010} consider a linear parametric model of the logarithm of the house prices, where the control variables include the rate of change in the population and the net cost of borrowing that depends on the long-term interest rate.
+As in Section \ref{sub}
 
-%GDP is the most commonly used measure of a country’s economic
-%wellbeing, and has been found to be correlated with house prices (see, e.
-%g., Leung, 2003; Otto, 2007). 
-%Population is an important factor that
-%determines trends relating to the demand and supply of housing, and is
-%therefore often included as a control variable in house price regressions
-%to control for demographic factors as well as potential trends relating to
-%demand and supply (see, e.g., Day, 2018; Engelhardt and Poterba, 1991;
-%Miles, 2012). We also control for interest rate and inflation given
-%that they influence market trends and household ability to finance their
-%homes (Anari and Kolari, 2002; Kuang and Liu, 2015; McQuinn and
-%O’Reilly, 2008; Tang and Tan, 2015; Xu and Tang, 2014).
+Our goal is to test $H_0: m_1 = \ldots = m_8$ in the model \eqref{eq:model:app4}. To do so, we implement the multiscale test in the same way as in the previous application example with the following adjustments.
 
-We implement the multiscale test in exactly the same way as in the previous application example.
+\begin{enumerate}
+\item We let $\mathcal{G}_T = U_T \times H_T$ with 
+\begin{align*}
+U_T & = \big\{ u \in [0,1]: u = \textstyle{\frac{1}{T}} \text{ for some } t \in \naturals \big\} \\
+H_T & = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{T}} \text{ for some } t \in \naturals \big\}. 
+\end{align*}
+We thus take into account all locations $u$ on an equidistant grid $U_T$ with step length $1/T$ and all bandwidths $h=2/T, 7/T, 12/T,\ldots$ with $\log T /T \le h \le 1/4$. The effective sample sizes are therefore $5, 15, 25, \ldots$ years. As before, the lower bound $\log T / T$ is motivated by \ref{C-h} which requires that $\log T /T \ll h_{\min}$ (given that all moments of $\varepsilon_{it}$ exist).
+\item We assume 
+To obtain the estimator $\hat{\sigma}_i^2$ of the long-run error variance $\sigma^2_i$, for each $i$ we apply the procedure from \cite{KhismatullinaVogt2020} to the augmented values \linebreak $\{\widehat{Y}_{it}: 1\leq t \leq T\}$. The details are summarized in Section \ref{subsec:app:lrv} of the Appendix. % with the following specification of the parameters: $\underline{r}=1$, $\overline{r}=10$ and $q = 15$.
+We choose $p_i$ based on the values of the information criterion. \textcolor{blue}{(need to elaborate here)} We use $\hat{\sigma}^2_i$ for calculating the value of our main test statistic $\widehat{\Psi}_{n, T}$. %In the Appendix, we repeat the analysis using the averaged estimator $\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n \hat{\sigma}_i^2$.
+\item The significance levels are taken to be $\alpha = 0.05$ and $\alpha = 0.1$ (\citet{Zhang2012} report the results for testing at a significance level $\alpha = 0.1$).
+\item To obtain the (approximate) critical values $q_{n, T}(\alpha)$ of the multiscale test, we simulate $5000$ values of the statistic $\Phi_{n, T}$ defined in Section \ref{subsec:test:test} and compute their empirical $(1-\alpha)$ quantile $\hat{q}_{n, T}(\alpha)$.
+\end{enumerate}
 
 Our findings coincide with the observations in \cite{Knoll2017}, where the authors find considerable cross-country heterogeneity in the trends in house prices.
 

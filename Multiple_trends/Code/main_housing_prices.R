@@ -271,7 +271,7 @@ for (i in 1:n_ts){
 
 #Constructing the grid
 u_grid      <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
-h_grid      <- seq(from = 5 / t_len, to = 1 / 4, by = 5 / t_len)
+h_grid      <- seq(from = 2 / t_len, to = 1 / 4, by = 2 / t_len)
 h_grid      <- h_grid[h_grid > log(t_len) / t_len]
 grid        <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
 

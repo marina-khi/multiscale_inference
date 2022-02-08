@@ -173,8 +173,8 @@ produce_plots <- function(results, data_i, data_j, ticks_, labels_,
   gset    <- result$gset_with_values[[l]]
   a_t_set <- subset(gset, test == TRUE, select = c(u, h))
   if (nrow(a_t_set) > 0){
-    p_t_set <- data.frame('startpoint' = (a_t_set$u - a_t_set$h) * t_len + 0.5,
-                          'endpoint' = (a_t_set$u + a_t_set$h) * t_len - 0.5,
+    p_t_set <- data.frame('startpoint' = (a_t_set$u - a_t_set$h) * t_len,
+                          'endpoint' = (a_t_set$u + a_t_set$h) * t_len,
                           'values' = 0)
     p_t_set$values <- (1:nrow(p_t_set))/nrow(p_t_set)
       
@@ -191,13 +191,13 @@ produce_plots <- function(results, data_i, data_j, ticks_, labels_,
              p_t_set2$values, lwd = 2)
     segments(p_t_set$startpoint, p_t_set$values, p_t_set$endpoint,
              p_t_set$values, col = "gray")
-    p_t_set_tex <- data.frame("from" = as.character(as.Date(sapply((p_t_set$startpoint - 0.5), add.quarters,
+    p_t_set_tex <- data.frame("from" = as.character(as.Date(sapply((p_t_set$startpoint + 0.5), add.quarters,
                                                       date_ = as.Date('01-10-1975', format = "%d-%m-%Y")))),
-                              "to" = as.character(as.Date(sapply((p_t_set$endpoint + 0.5), add.quarters,
+                              "to" = as.character(as.Date(sapply((p_t_set$endpoint - 0.5), add.quarters,
                                             date_ = as.Date('01-10-1975', format = "%d-%m-%Y")))))
-    p_t_set2_tex <- data.frame("from" = as.character(as.Date(sapply((p_t_set2$startpoint - 0.5), add.quarters,
+    p_t_set2_tex <- data.frame("from" = as.character(as.Date(sapply((p_t_set2$startpoint + 0.5), add.quarters,
                                               date_ = as.Date('01-10-1975', format = "%d-%m-%Y")))),
-                              "to" = as.character(as.Date(sapply((p_t_set2$endpoint + 0.5), add.quarters,
+                              "to" = as.character(as.Date(sapply((p_t_set2$endpoint - 0.5), add.quarters,
                                             date_ = as.Date('01-10-1975', format = "%d-%m-%Y")))))
     print.xtable(xtable(p_t_set_tex[order(p_t_set_tex$from), ], digits = c(0),
                         align = paste(replicate(3, "c"), collapse = "")),
