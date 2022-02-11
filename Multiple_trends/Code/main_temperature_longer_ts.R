@@ -101,8 +101,9 @@ for (i in 1:n_ts){
 grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len) #For plotting
 at_         <- seq(from = 1, to = t_len, by = 20)
 
-u_grid      <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
-h_grid      <- seq(from = 5 / t_len, to = 1 / 4, by = 5 / t_len)
+u_grid      <- (3:t_len)[c(TRUE, FALSE, TRUE, rep(FALSE, 2))]/t_len
+#u_grid      <- seq(from = 5 / t_len, to = 1, by = 1 / t_len)
+h_grid      <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
 h_grid      <- h_grid[h_grid > log(t_len) / t_len]
 grid        <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
 

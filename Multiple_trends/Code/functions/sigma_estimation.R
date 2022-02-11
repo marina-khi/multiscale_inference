@@ -7,6 +7,7 @@ sigma <- function(gdp_mat, n_ts, q = 15, r = 10){
   q_vec <- 10:20
   r_vec <- 10:15
   order_results <- c()
+  order_results_BIC <- c()
   
   for (j in 1:n_ts){
     criterion_matrix <- expand.grid(q = q_vec, r = r_vec)
@@ -44,14 +45,16 @@ sigma <- function(gdp_mat, n_ts, q = 15, r = 10){
     }
     maxim <- max(criterion_matrix[, 3:7])
     order_results <- c(order_results, maxim)
-    #cat("For the country ", colnames(gdp_mat_augm)[j], " the results are as follows: ", max(criterion_matrix$FPE), " ", max(criterion_matrix$AIC), " ", max(criterion_matrix$AICC), " ", max(criterion_matrix$SIC), " ", max(criterion_matrix$HQ), " \n")
+    order_results_BIC <- c(order_results_BIC, max(criterion_matrix$SIC))
+    cat("For the country ", colnames(gdp_mat_augm)[j], " the results are as follows: ", max(criterion_matrix$FPE), " ", max(criterion_matrix$AIC), " ", max(criterion_matrix$AICC), " ", max(criterion_matrix$SIC), " ", max(criterion_matrix$HQ), " \n")
   }
   
   #Calculating each sigma_i separately
   sigmahat_vector <- c()
   for (i in 1:n_ts){
     AR.struc        <- estimate_lrv(data = gdp_mat_augm[, i], q = q, r_bar = r,
-                                    p = order_results[i])
+                                    p = order_results_BIC[i])
+                                   # p = order_results[i])
                                    #p = 1)
     sigma_hat_i     <- sqrt(AR.struc$lrv)
     sigmahat_vector <- c(sigmahat_vector, sigma_hat_i)

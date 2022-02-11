@@ -73,41 +73,41 @@ countries <- unique(hp_data$iso)
 #Plotting the time series#
 ##########################
 
-pdf("plots/real_housing_prices.pdf", width=10, height=10, paper="special")
-par(mfrow = c(3,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
-par(mar = c(0, 0.5, 1.5, 0)) #Margins for each plot
-par(oma = c(2.5, 1.5, 0.2, 0.2)) #Outer margins
-
-plot(NA, ylab="", xlab = "", xlim = c(0, t_len),
-     ylim = c(0, max(hp_data$hpreal, na.rm = TRUE)), xaxt = 'n',
-     mgp=c(2,0.5,0), cex = 1.2, tck = -0.025, main = "Real house prices")
-for (country in countries){
-  tmp <- hp_data[hp_data$iso == country, ]
-  tmp <- tmp[order(tmp$year),]
-  lines(1:t_len, tmp$hpreal)
-}
-
-plot(NA, ylab="", xlab = "", xlim = c(0,t_len),
-     ylim = c(1, max(hp_data$log_hp, na.rm = TRUE)), xaxt = 'n',
-     mgp=c(2,0.5,0), cex = 1.2, tck = -0.025,
-     main = "Logarithm of the real house prices")
-for (country in countries){
-  tmp <- hp_data[hp_data$iso == country, ]
-  tmp <- tmp[order(tmp$year),]
-  lines(1:t_len, tmp$log_hp)
-}
-
-plot(NA, ylab="", xlab = "", xlim = c(0,t_len), ylim = c(-0.5, 0.75),
-     xaxt = 'n', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025,
-     main = "Growth rate of the logarithm of the real house prices")
-for (country in countries){
-  tmp <- hp_data[hp_data$iso == country, ]
-  tmp <- tmp[order(tmp$year),]
-  lines(1:t_len, tmp$delta_log_hp)
-}
-axis(1, at = ticks, labels = dates[ticks])
-
-dev.off()
+# pdf("plots/real_housing_prices.pdf", width=10, height=10, paper="special")
+# par(mfrow = c(3,1), cex = 1.1, tck = -0.025) #Setting the layout of the graphs
+# par(mar = c(0, 0.5, 1.5, 0)) #Margins for each plot
+# par(oma = c(2.5, 1.5, 0.2, 0.2)) #Outer margins
+# 
+# plot(NA, ylab="", xlab = "", xlim = c(0, t_len),
+#      ylim = c(0, max(hp_data$hpreal, na.rm = TRUE)), xaxt = 'n',
+#      mgp=c(2,0.5,0), cex = 1.2, tck = -0.025, main = "Real house prices")
+# for (country in countries){
+#   tmp <- hp_data[hp_data$iso == country, ]
+#   tmp <- tmp[order(tmp$year),]
+#   lines(1:t_len, tmp$hpreal)
+# }
+# 
+# plot(NA, ylab="", xlab = "", xlim = c(0,t_len),
+#      ylim = c(1, max(hp_data$log_hp, na.rm = TRUE)), xaxt = 'n',
+#      mgp=c(2,0.5,0), cex = 1.2, tck = -0.025,
+#      main = "Logarithm of the real house prices")
+# for (country in countries){
+#   tmp <- hp_data[hp_data$iso == country, ]
+#   tmp <- tmp[order(tmp$year),]
+#   lines(1:t_len, tmp$log_hp)
+# }
+# 
+# plot(NA, ylab="", xlab = "", xlim = c(0,t_len), ylim = c(-0.5, 0.75),
+#      xaxt = 'n', mgp=c(2,0.5,0), cex = 1.2, tck = -0.025,
+#      main = "Growth rate of the logarithm of the real house prices")
+# for (country in countries){
+#   tmp <- hp_data[hp_data$iso == country, ]
+#   tmp <- tmp[order(tmp$year),]
+#   lines(1:t_len, tmp$delta_log_hp)
+# }
+# axis(1, at = ticks, labels = dates[ticks])
+# 
+# dev.off()
 
 
 #################################
@@ -270,8 +270,8 @@ for (i in 1:n_ts){
 #########
 
 #Constructing the grid
-u_grid      <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
-h_grid      <- seq(from = 2 / t_len, to = 1 / 4, by = 2 / t_len)
+u_grid      <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
+h_grid      <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
 h_grid      <- h_grid[h_grid > log(t_len) / t_len]
 grid        <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
 
@@ -289,13 +289,15 @@ result <- multiscale_test(data = hp_log_augm, sigma_vec = sigmahat_vector,
 produce_smoothed_plots(matrix = hp_log,
                        pdfname = "plots/smoothed_hp_data.pdf",
                        y_min = min(hp_log) + 0.02, y_max = max(hp_log) - 0.01,
-                       ticks_at =  ticks, ticks_labels = dates[ticks])
+                       ticks_at =  ticks, ticks_labels = dates[ticks],
+                       yaxp_ = c(0, 6, 6))
 
 produce_smoothed_plots(matrix = hp_log_augm,
                        pdfname = "plots/smoothed_hp_data_augmented.pdf",
                        y_min = min(hp_log_augm) + 0.01,
                        y_max = max(hp_log_augm) - 0.01,
-                       ticks_at =  ticks, ticks_labels = dates[ticks])
+                       ticks_at =  ticks, ticks_labels = dates[ticks],
+                       yaxp_ = c(-3, 3, 6))
 
 
 #Producing plots with the final results

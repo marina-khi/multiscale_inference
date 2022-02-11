@@ -122,8 +122,8 @@ produce_smoothed_plots <- function(matrix, pdfname, y_min, y_max, ticks_at,
 
 
 produce_plots <- function(results, data_i, data_j, ticks_, labels_,
-                          name_i, name_j){
-  filename <- paste0("plots/", name_i, "_vs_", name_j, ".pdf")
+                          name_i, name_j, path){
+  filename <- paste0(path, name_i, "_vs_", name_j, ".pdf")
   t_len <- length(data_i)
   grid_points <- seq(1/t_len, 1, by = 1/t_len)
   
@@ -141,10 +141,16 @@ produce_plots <- function(results, data_i, data_j, ticks_, labels_,
   } else {
     shift <- 0.012
   }
-    
-  plot(data_i, ylim = c(min(data_i, data_j), max(data_i, data_j) + shift),
-       type="l", col = "blue", ylab = "", xlab="", xaxt = "n",
-       mgp = c(1, 0.5, 0))
+  
+  if ((name_i == 'USA') & (name_j == 'FRA')){
+    plot(data_i, ylim = c(-0.04, 0.04),
+         type="l", col = "blue", ylab = "", xlab="", xaxt = "n",
+         mgp = c(1, 0.5, 0))
+  } else {
+    plot(data_i, ylim = c(min(data_i, data_j), max(data_i, data_j) + shift),
+         type="l", col = "blue", ylab = "", xlab="", xaxt = "n",
+         mgp = c(1, 0.5, 0))
+  }
   lines(data_j, col = "red")
   axis(side = 1, at = ticks_, cex.axis = 0.95, mgp = c(1, 0.5, 0), 
        labels = labels_)
@@ -201,11 +207,11 @@ produce_plots <- function(results, data_i, data_j, ticks_, labels_,
                                             date_ = as.Date('01-10-1975', format = "%d-%m-%Y")))))
     print.xtable(xtable(p_t_set_tex[order(p_t_set_tex$from), ], digits = c(0),
                         align = paste(replicate(3, "c"), collapse = "")),
-                 type="latex", file=paste0("plots/", name_i, "_vs_", name_j, ".tex"),
+                 type="latex", file=paste0(path, name_i, "_vs_", name_j, ".tex"),
                  include.colnames = FALSE)
     print.xtable(xtable(p_t_set2_tex[order(p_t_set2_tex$from), ], digits = c(0),
                         align = paste(replicate(3, "c"), collapse = "")),
-                 type="latex", file=paste0("plots/", name_i, "_vs_", name_j, "_min_intervals.tex"),
+                 type="latex", file=paste0(path, name_i, "_vs_", name_j, "_min_intervals.tex"),
                  include.colnames = FALSE)
     
   } else {
