@@ -104,17 +104,21 @@ produce_smoothed_plots <- function(matrix, pdfname, y_min, y_max, ticks_at,
   for (h in c(0.05, 0.1, 0.15)){
     plot(NA, ylab = "", xlab = "", xlim = c(0,1), ylim = c(y_min, y_max),
          yaxp = yaxp_, xaxt = 'n', mgp = c(2,0.5,0), cex = 1.2, tck = -0.025)
+    #i <- 1
     for (column in colnames(matrix)){
       smoothed_curve <- mapply(local_linear_smoothing, grid_points,
                                MoreArgs = list(matrix[, column], grid_points, h))
-      lines(grid_points, smoothed_curve)
+      lines(grid_points, smoothed_curve)#, col = i)
+    #  i <- i + 1
     }
     #axis(2, at = y_ticks_at)
     
     if (h == 0.15) {axis(1, at = grid_points[ticks_at], labels = ticks_labels)}
     #else {axis(1, at = grid_points[seq(5, 125, by = 20)], labels = NA)}
     legend("bottomright", inset = 0.01, legend = c(paste0("h = ", h)), lty = 1,
-           cex = 0.95, ncol=1)
+           cex = 0.95, ncol = 1)
+    #legend("topright", inset = 0.01, legend = colnames(matrix), lty = 1,
+    #       cex = 0.95, ncol = 1, col = 1:ncol(matrix))
   }
   
   dev.off()
