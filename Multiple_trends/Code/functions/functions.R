@@ -317,9 +317,9 @@ produce_plots_hp <- function(results, data_i, data_j,
   
   #Plotting the smoothed version of the time series that we have
   smoothed_i  <- mapply(nadaraya_watson_smoothing, grid_points,
-                        MoreArgs = list(data_i, grid_points, bw = 10/t_len))
+                        MoreArgs = list(data_i, grid_points, bw = 7/t_len))
   smoothed_j  <- mapply(nadaraya_watson_smoothing, grid_points,
-                        MoreArgs = list(data_j, grid_points, bw = 10/t_len))
+                        MoreArgs = list(data_j, grid_points, bw = 7/t_len))
   
   plot(smoothed_i, ylim = c(min(data_i, data_j), max(data_i, data_j)), type = "l",
        col="blue", ylab = "", xlab = "", xaxt = "n", mgp = c(1,0.5,0))
