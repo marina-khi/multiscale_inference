@@ -14,7 +14,7 @@ source("functions/functions.R")
 #Coefficients#
 ##############
 
-alpha     <- 0.05
+alpha     <- 0.1
 sim_runs  <- 1000
 q         <- 25 #Parameters for the estimation of sigma
 r         <- 10
@@ -113,7 +113,7 @@ result <- multiscale_test(data = temp_matrix, sigma_vec = sigmahat_vector,
                           sim_runs = sim_runs, epidem = FALSE)
 format(Sys.time(), "%a %b %d %X %Y")
 
-save(result, file = "result_long_ts.RData")
+save(result, file = "result_long_ts_alpha_010.RData")
 #load(file = "result_long_ts.RData")
 
 ###########################
