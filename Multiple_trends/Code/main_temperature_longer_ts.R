@@ -14,7 +14,7 @@ source("functions/functions.R")
 #Coefficients#
 ##############
 
-alpha     <- 0.1
+alpha     <- 0.05
 sim_runs  <- 1000
 q         <- 25 #Parameters for the estimation of sigma
 r         <- 10
@@ -36,8 +36,7 @@ tmp2 <- array(NA, dim = c(dim(tmp)[1] / 5, dim(tmp)[2] / 5, dim(tmp)[3] / 12))
 for (i in 1:(dim(tmp)[1] / 5)){
   for (j in 1:(dim(tmp)[2] / 5)){
     for (k in 1:(dim(tmp)[3] / 12)){
-      tmp2[i, j, k] <- mean(tmp[(5 *(i - 1) + 1):(5 * i), (5 *(j - 1) + 1):(5 * j),
-                                (12 * (k - 1) + 1):(12 * k)])
+      tmp2[i, j, k] <- mean(tmp[5 * (i - 1), 5 * (j - 1) + 1, (12 * (k - 1) + 1):(12 * k)])
     }
   }
 }
@@ -107,18 +106,26 @@ h_grid      <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
 h_grid      <- h_grid[h_grid > log(t_len) / t_len]
 grid        <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
 
+# format(Sys.time(), "%a %b %d %X %Y")
+# stat_value <- statistics(data = temp_matrix, sigma_vec = sigmahat_vector,
+#                          alpha = alpha,  n_ts = n_ts, grid = grid,
+#                          sim_runs = sim_runs)
+# format(Sys.time(), "%a %b %d %X %Y")
+
 format(Sys.time(), "%a %b %d %X %Y")
 result <- multiscale_test(data = temp_matrix, sigma_vec = sigmahat_vector,
                           alpha = alpha,  n_ts = n_ts, grid = grid,
                           sim_runs = sim_runs, epidem = FALSE)
 format(Sys.time(), "%a %b %d %X %Y")
 
-save(result, file = "result_long_ts_alpha_010.RData")
+save(result, file = "result_alpha_010.RData")
 #load(file = "result_long_ts.RData")
 
 ###########################
 #CLustering of the results#
 ###########################
+
+n_cl <- 10
 
 #for the distance matrix we need a symmetrical one
 Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
@@ -134,20 +141,24 @@ rownames(Delta_hat) <- col_names
 
 delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
-subgroups  <- cutree(res, h = result$quant)
+subgroups  <- cutree(res, k = n_cl)
+#subgroups  <- cutree(res, h = result$quant)
 
 #Dendrogram
-pdf("plots/dendrogram_long_ts.pdf", width = 15, height = 6, paper = "special")
+pdf(paste0("plots/clustering/dendrogram_k_", n_cl, ".pdf"), width = 15, height = 6,
+    paper = "special")
 par(cex = 1, tck = -0.025)
 par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
 plot(res, cex = 0.8, xlab = "", ylab = "")
-rect.hclust(res, h = result$quant, border = 2:(max(subgroups) + 1))
+rect.hclust(res, k = n_cl, border = 2:(max(subgroups) + 1))
+#rect.hclust(res, h = result$quant, border = 2:(max(subgroups) + 1))
 dev.off()
 
 
 #Plotting all clusters on one plot
-pdf("plots/results_all_clusters_long_ts.pdf", width=7, height=6, paper="special")
+pdf(paste0("plots/clustering/all_clusters_k_", n_cl, ".pdf"), width = 7,
+    height = 6, paper="special")
 
 #Setting the layout of the graphs
 par(cex = 1, tck = -0.025)
@@ -165,7 +176,7 @@ for (cl in 1:max(subgroups)){
     smoothed_curve <- mapply(local_linear_smoothing, grid_points,
                              MoreArgs = list(data_p = temp_matrix[, column],
                                              grid_p = grid_points, bw = 0.1))
-    lines(grid_points, smoothed_curve, col = c("red", "black", "blue")[cl])
+    lines(grid_points, smoothed_curve, col = cl + 1)
   }
   axis(1, at = grid_points[at_], labels = dates[at_])
 }
@@ -176,8 +187,8 @@ dev.off()
 #Plotting the trend functions of each cluster on a separate graph
 for (cl in 1:max(subgroups)){
   locations_cluster <- colnames(Delta_hat)[subgroups == cl]
-  pdf(paste0("plots/results_cluster_", cl, "_long_ts.pdf"), width = 7,
-      height = 6, paper="special")
+  pdf(paste0("plots/clustering/results_cluster_", cl, "_k_", n_cl, ".pdf"),
+      width = 7, height = 6, paper = "special")
   
   #Setting the layout of the graphs
   par(cex = 1, tck = -0.025)
@@ -191,7 +202,7 @@ for (cl in 1:max(subgroups)){
     smoothed_curve <- mapply(local_linear_smoothing, grid_points,
                              MoreArgs = list(data_p = temp_matrix[, column],
                                              grid_p = grid_points, bw = 0.1))
-    lines(grid_points, smoothed_curve, col = c("red", "black", "blue")[cl])
+    lines(grid_points, smoothed_curve, col = cl + 1)
   }
   axis(1, at = grid_points[at_], labels = dates[at_])
   title(main = paste0("Cluster ", cl), line = 1)

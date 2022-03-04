@@ -554,3 +554,32 @@ produce_plots_talk <- function(results, l, data_i, data_j,
 # legend("topright", inset = 0.02, legend=c(country_names[country1], country_names[country2]),
 #        col = c("#EB811B", "#604c38"), lty = 1, cex = 0.95, ncol = 1)
 # dev.off()
+
+
+statistics <- function(data, sigma = 1, sigma_vec = 1, n_ts = 2, grid = NULL,
+                       ijset = NULL, alpha = 0.05, sim_runs = 1000) {
+  
+  t_len <- nrow(data)
+
+  #If grid is not supplied, we construct it by default
+  if (is.null(grid)) {
+    grid <- construct_grid(t_len)
+  }
+  
+  #If ijset is not supplied, we compare all
+  #possible pairs of time series.
+  if (is.null(ijset)) {
+    ijset <- expand.grid(i = 1:n_ts, j = 1:n_ts)
+    ijset <- ijset[ijset$i < ijset$j, ]
+  }
+  
+  psi   <- compute_statistics(data = data, sigma = sigma, 
+                              sigma_vec = sigma_vec, n_ts = n_ts,
+                              grid = grid, deriv_order = 0,
+                              epidem = FALSE)
+  stat  <- psi$stat
+  gset_with_values <- psi$gset_with_values
+    
+  return(list(stat = stat, stat_pairwise = psi$stat_pairwise,
+              ijset = ijset, gset_with_values = gset_with_values))
+}
