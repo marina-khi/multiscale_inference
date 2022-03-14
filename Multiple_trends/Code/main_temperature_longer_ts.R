@@ -14,7 +14,7 @@ source("functions/functions.R")
 #Coefficients#
 ##############
 
-alpha     <- 0.05
+alpha     <- 0.10
 sim_runs  <- 1000
 q         <- 25 #Parameters for the estimation of sigma
 r         <- 10
@@ -28,22 +28,45 @@ temp_data <- nc_open('data/Complete_TAVG_LatLong1.nc')
 lon <- ncvar_get(temp_data, "longitude")
 lat <- ncvar_get(temp_data, "latitude", verbose = F)
 t   <- ncvar_get(temp_data, "time")
+t   <- t[t < 2022] #deleting the last observations for year 2022
 
 tmp  <- ncvar_get(temp_data, "temperature") # store the data in a 3-dimensional array
+
+# #Choosing the grid 
+# for (s in 1:5){
+#   for (p in 1:5){
+#     #Taking 5x5 grid instead of 1x1 and yearly observation instead of monthly
+#     tmp2 <- array(NA, dim = c(dim(tmp)[1] / 5, dim(tmp)[2] / 5, dim(tmp)[3] / 12))
+#     for (i in 1:(dim(tmp)[1] / 5)){
+#       for (j in 1:(dim(tmp)[2] / 5)){
+#         for (k in 1:(dim(tmp)[3] / 12)){
+#           tmp2[i, j, k] <- mean(tmp[5 * (i - 1) + s, 5 * (j - 1) + p, (12 * (k - 1) + 1):(12 * k)])
+#         }
+#       }
+#     }
+#     
+#     #Checking how many time series satisfy our requirements of no NaNs
+#     n_ts <- 0
+#     for (i in 1:(dim(tmp2)[1])){
+#       for (j in 1:(dim(tmp2)[2])){
+#         if (sum(is.na(tmp2[i, j, 101:(dim(tmp2)[3])])) == 0){
+#           n_ts <- n_ts + 1
+#         }
+#       }
+#     }
+#     if (n_ts > 370) {cat("For s =", s, " and p =", p, ", we have n_ts =", n_ts, "\n")}
+#   }
+# }
 
 #Taking 5x5 grid instead of 1x1 and yearly observation instead of monthly
 tmp2 <- array(NA, dim = c(dim(tmp)[1] / 5, dim(tmp)[2] / 5, dim(tmp)[3] / 12))
 for (i in 1:(dim(tmp)[1] / 5)){
   for (j in 1:(dim(tmp)[2] / 5)){
     for (k in 1:(dim(tmp)[3] / 12)){
-      tmp2[i, j, k] <- mean(tmp[5 * (i - 1), 5 * (j - 1) + 1, (12 * (k - 1) + 1):(12 * k)])
+      tmp2[i, j, k] <- mean(tmp[5 * (i - 1) + 4, 5 * (j - 1) + 1, (12 * (k - 1) + 1):(12 * k)])
     }
   }
 }
-
-dimnames(tmp2) <- list(Col1 = lon[seq(3, length(lon), by = 5)],
-                       Col2 = lat[seq(3, length(lat), by = 5)],
-                       Col3 = floor(t[seq(1, length(t), by = 12)]))
 rm(tmp)
 
 #Checking how many time series satisfy our requirements of no NaNs
@@ -55,6 +78,9 @@ for (i in 1:(dim(tmp2)[1])){
     }
   }
 }
+dimnames(tmp2) <- list(Col1 = lon[seq(4, length(lon), by = 5)],
+                       Col2 = lat[seq(1, length(lat), by = 5)],
+                       Col3 = floor(t[seq(1, length(t), by = 12)]))
 
 #Our main temperature matrix
 dates       <- dimnames(tmp2)$Col3[101:(dim(tmp2)[3])]
@@ -73,7 +99,6 @@ for (i in 1:(dim(tmp2)[1])){
     }
   }
 }
-
 
 rownames(temp_matrix) <- dates
 colnames(temp_matrix) <- col_names
@@ -100,32 +125,32 @@ for (i in 1:n_ts){
 grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len) #For plotting
 at_         <- seq(from = 1, to = t_len, by = 20)
 
-u_grid      <- (3:t_len)[c(TRUE, FALSE, TRUE, rep(FALSE, 2))]/t_len
-#u_grid      <- seq(from = 5 / t_len, to = 1, by = 1 / t_len)
+#u_grid      <- (3:t_len)[c(TRUE, FALSE, TRUE, rep(FALSE, 2))]/t_len
+u_grid      <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
 h_grid      <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
 h_grid      <- h_grid[h_grid > log(t_len) / t_len]
 grid        <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
 
-# format(Sys.time(), "%a %b %d %X %Y")
-# stat_value <- statistics(data = temp_matrix, sigma_vec = sigmahat_vector,
+format(Sys.time(), "%a %b %d %X %Y")
+result <- statistics(data = temp_matrix, sigma_vec = sigmahat_vector,
+                         alpha = alpha,  n_ts = n_ts, grid = grid,
+                         sim_runs = sim_runs)
+format(Sys.time(), "%a %b %d %X %Y")
+
+#format(Sys.time(), "%a %b %d %X %Y")
+#result <- multiscale_test(data = temp_matrix, sigma_vec = sigmahat_vector,
 #                          alpha = alpha,  n_ts = n_ts, grid = grid,
-#                          sim_runs = sim_runs)
-# format(Sys.time(), "%a %b %d %X %Y")
-
-format(Sys.time(), "%a %b %d %X %Y")
-result <- multiscale_test(data = temp_matrix, sigma_vec = sigmahat_vector,
-                          alpha = alpha,  n_ts = n_ts, grid = grid,
-                          sim_runs = sim_runs, epidem = FALSE)
-format(Sys.time(), "%a %b %d %X %Y")
-
-save(result, file = "result_alpha_010.RData")
-#load(file = "result_long_ts.RData")
+#                          sim_runs = sim_runs, epidem = FALSE)
+#format(Sys.time(), "%a %b %d %X %Y")
+#
+#save(result, file = "result_alpha_010.RData")
+#load(file = "result_alpha_010.RData")
 
 ###########################
 #CLustering of the results#
 ###########################
 
-n_cl <- 10
+n_cl <- 20
 
 #for the distance matrix we need a symmetrical one
 Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
@@ -183,31 +208,31 @@ for (cl in 1:max(subgroups)){
 title(main = "All clusters", line = 1)
 dev.off()
 
-
-#Plotting the trend functions of each cluster on a separate graph
-for (cl in 1:max(subgroups)){
-  locations_cluster <- colnames(Delta_hat)[subgroups == cl]
-  pdf(paste0("plots/clustering/results_cluster_", cl, "_k_", n_cl, ".pdf"),
-      width = 7, height = 6, paper = "special")
-  
-  #Setting the layout of the graphs
-  par(cex = 1, tck = -0.025)
-  par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
-  par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
-  plot(NA, ylab = "", xlab = "", xlim = c(0, 1),
-       ylim = c(-1.5, 3.1), xaxt = 'n',
-       mgp = c(2, 0.5, 0), cex = 1.2, tck = -0.025)
-  
-  for (column in locations_cluster){
-    smoothed_curve <- mapply(local_linear_smoothing, grid_points,
-                             MoreArgs = list(data_p = temp_matrix[, column],
-                                             grid_p = grid_points, bw = 0.1))
-    lines(grid_points, smoothed_curve, col = cl + 1)
-  }
-  axis(1, at = grid_points[at_], labels = dates[at_])
-  title(main = paste0("Cluster ", cl), line = 1)
-  dev.off()
-}
+# 
+# #Plotting the trend functions of each cluster on a separate graph
+# for (cl in 1:max(subgroups)){
+#   locations_cluster <- colnames(Delta_hat)[subgroups == cl]
+#   pdf(paste0("plots/clustering/results_cluster_", cl, "_k_", n_cl, ".pdf"),
+#       width = 7, height = 6, paper = "special")
+#   
+#   #Setting the layout of the graphs
+#   par(cex = 1, tck = -0.025)
+#   par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
+#   par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
+#   plot(NA, ylab = "", xlab = "", xlim = c(0, 1),
+#        ylim = c(-1.5, 3.1), xaxt = 'n',
+#        mgp = c(2, 0.5, 0), cex = 1.2, tck = -0.025)
+#   
+#   for (column in locations_cluster){
+#     smoothed_curve <- mapply(local_linear_smoothing, grid_points,
+#                              MoreArgs = list(data_p = temp_matrix[, column],
+#                                              grid_p = grid_points, bw = 0.1))
+#     lines(grid_points, smoothed_curve, col = cl + 1)
+#   }
+#   axis(1, at = grid_points[at_], labels = dates[at_])
+#   title(main = paste0("Cluster ", cl), line = 1)
+#   dev.off()
+# }
 
 
 #Plotting world map
@@ -226,7 +251,6 @@ temp_map     <- as.matrix(temp_map)
 
 rm(temp_tmp)
 
-temp_slice <- tmp2[, , 1]
 r <- raster(t(temp_map), xmn = min(lon), xmx = max(lon), ymn = min(lat),
             ymx = max(lat),
             crs = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs+ towgs84=0,0,0"))
