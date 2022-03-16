@@ -556,7 +556,7 @@ produce_plots_talk <- function(results, l, data_i, data_j,
 # dev.off()
 
 
-statistics <- function(data, sigma = 1, sigma_vec = 1, n_ts = 2, grid = NULL,
+statistics <- function(data, sigma_vec = 1, n_ts = 2, grid = NULL,
                        ijset = NULL, alpha = 0.05, sim_runs = 1000) {
   
   t_len <- nrow(data)
@@ -573,9 +573,8 @@ statistics <- function(data, sigma = 1, sigma_vec = 1, n_ts = 2, grid = NULL,
     ijset <- ijset[ijset$i < ijset$j, ]
   }
   
-  psi   <- compute_statistics(data = data, sigma = sigma, 
-                              sigma_vec = sigma_vec, n_ts = n_ts,
-                              grid = grid, deriv_order = 0,
+  psi   <- compute_statistics(data = data, sigma = 1, sigma_vec = sigma_vec,
+                              n_ts = n_ts, grid = grid, deriv_order = 0,
                               epidem = FALSE)
   stat  <- psi$stat
   gset_with_values <- psi$gset_with_values
@@ -583,3 +582,75 @@ statistics <- function(data, sigma = 1, sigma_vec = 1, n_ts = 2, grid = NULL,
   return(list(stat = stat, stat_pairwise = psi$stat_pairwise,
               ijset = ijset, gset_with_values = gset_with_values))
 }
+
+statistics_full <- function(data, sigma_vec = 1, n_ts = 2, grid = NULL,
+                            ijset = NULL, alpha = 0.05, sim_runs = 1000) {
+  
+  t_len <- nrow(data)
+
+  #If grid is not supplied, we construct it by default
+  if (is.null(grid)) {
+    grid <- construct_grid(t_len)
+  }
+  
+  #If ijset is not supplied, we compare all
+  #possible pairs of time series.
+  if (is.null(ijset)) {
+    ijset <- expand.grid(i = 1:n_ts, j = 1:n_ts)
+    ijset <- ijset[ijset$i < ijset$j, ]
+  }
+  
+  # Select (1-alpha) quantile of the multiscale statistic under the null
+  quantiles <- compute_quantiles(t_len = t_len, grid = grid, n_ts = n_ts,
+                                 ijset = ijset, sigma = 1,
+                                 sim_runs = sim_runs,
+                                 deriv_order = 0,
+                                 correction = TRUE, epidem = FALSE)
+  
+  probs <- as.vector(quantiles$quant[1, ])
+  quant <- as.vector(quantiles$quant[2, ])
+  
+  quant_vec <- c()
+  for (alpha_ind in alpha){
+    if (sum(probs == (1 - alpha_ind)) == 0)
+      pos <- which.min(abs(probs - (1 - alpha_ind)))
+    if (sum(probs == (1 - alpha_ind)) != 0)
+      pos <- which.max(probs == (1 - alpha_ind))    
+    quant_vec <- c(quant_vec, quant[pos])
+  }
+  
+  psi   <- compute_statistics(data = data, sigma = 1, 
+                              sigma_vec = sigma_vec, n_ts = n_ts,
+                              grid = grid, deriv_order = 0,
+                              epidem = FALSE)
+  stat  <- psi$stat
+  
+  return(list(quant = quant_vec, stat = stat, stat_pairwise = psi$stat_pairwise,
+              ijset = ijset))
+}
+
+# #Choosing the grid 
+# for (s in 1:5){
+#   for (p in 1:5){
+#     #Taking 5x5 grid instead of 1x1 and yearly observation instead of monthly
+#     tmp2 <- array(NA, dim = c(dim(tmp)[1] / 5, dim(tmp)[2] / 5, dim(tmp)[3] / 12))
+#     for (i in 1:(dim(tmp)[1] / 5)){
+#       for (j in 1:(dim(tmp)[2] / 5)){
+#         for (k in 1:(dim(tmp)[3] / 12)){
+#           tmp2[i, j, k] <- mean(tmp[5 * (i - 1) + s, 5 * (j - 1) + p, (12 * (k - 1) + 1):(12 * k)])
+#         }
+#       }
+#     }
+#     
+#     #Checking how many time series satisfy our requirements of no NaNs
+#     n_ts <- 0
+#     for (i in 1:(dim(tmp2)[1])){
+#       for (j in 1:(dim(tmp2)[2])){
+#         if (sum(is.na(tmp2[i, j, 101:(dim(tmp2)[3])])) == 0){
+#           n_ts <- n_ts + 1
+#         }
+#       }
+#     }
+#     if (n_ts > 370) {cat("For s =", s, " and p =", p, ", we have n_ts =", n_ts, "\n")}
+#   }
+# }
