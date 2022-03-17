@@ -98,36 +98,40 @@ for (i in 1:n_ts){
   sigmahat_vector <- c(sigmahat_vector, sigma_hat_i)
 }
 
-#Constructing the grid
-grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len) #For plotting
+#For plotting
+grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
 at_         <- seq(from = 1, to = t_len, by = 20)
 
+#Constructing the grid
 u_grid      <- (3:t_len)[c(TRUE, FALSE, TRUE, FALSE, FALSE)]/t_len
-#u_grid      <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
-h_grid      <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
-h_grid      <- h_grid[h_grid > log(t_len) / t_len]
+h_grid      <- seq(from = 2 / t_len, to = 15 / t_len, by = 5 / t_len)
+# u_grid      <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
+# h_grid      <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
+# h_grid      <- h_grid[h_grid > log(t_len) / t_len]
 grid        <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
 
+format(Sys.time(), "%a %b %d %X %Y")
+result <- statistics_full(data = temp_matrix, sigma_vec = sigmahat_vector,
+                          alpha = alpha,  n_ts = n_ts, grid = grid,
+                          sim_runs = sim_runs)
+format(Sys.time(), "%a %b %d %X %Y")
+
+# Calculating statistics without the Gaussian quantile
 # format(Sys.time(), "%a %b %d %X %Y")
 # result <- statistics(data = temp_matrix, sigma_vec = sigmahat_vector,
 #                      alpha = alpha,  n_ts = n_ts, grid = grid,
 #                      sim_runs = sim_runs)
 # format(Sys.time(), "%a %b %d %X %Y")
-
-format(Sys.time(), "%a %b %d %X %Y")
-result <- statistics_full(data = temp_matrix, sigma_vec = sigmahat_vector,
-                     alpha = alpha,  n_ts = n_ts, grid = grid,
-                     sim_runs = sim_runs)
-format(Sys.time(), "%a %b %d %X %Y")
-
-#format(Sys.time(), "%a %b %d %X %Y")
-#result <- multiscale_test(data = temp_matrix, sigma_vec = sigmahat_vector,
-#                          alpha = alpha,  n_ts = n_ts, grid = grid,
-#                          sim_runs = sim_runs, epidem = FALSE)
-#format(Sys.time(), "%a %b %d %X %Y")
 #
-#save(result, file = "result_alpha_010.RData")
-#load(file = "result_alpha_010.RData")
+# Calculating statistics together with the quantiles, most general way
+# format(Sys.time(), "%a %b %d %X %Y")
+# result <- multiscale_test(data = temp_matrix, sigma_vec = sigmahat_vector,
+#                           alpha = alpha,  n_ts = n_ts, grid = grid,
+#                           sim_runs = sim_runs, epidem = FALSE)
+# format(Sys.time(), "%a %b %d %X %Y")
+#
+# save(result, file = "result_alpha_010.RData")
+# load(file = "result_alpha_010.RData")
 
 ###########################
 #CLustering of the results#

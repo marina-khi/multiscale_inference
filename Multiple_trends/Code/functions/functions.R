@@ -85,9 +85,9 @@ local_linear_smoothing <- function(u, data_p, grid_p, bw){
     for (i in 1:T_size){
       k = (s_t_2_value - s_t_1_value * ((grid_p[i] - u) / bw)) * epanechnikov_kernel((grid_p[i] - u) / bw)
       result = result + k * data_p[i]
-      norm = norm + k 
+      norm = norm + k * k
     }
-    return(result/norm)
+    return(result/sqrt(norm))
   }
 }
 
