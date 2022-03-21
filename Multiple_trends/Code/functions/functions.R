@@ -629,6 +629,20 @@ statistics_full <- function(data, sigma_vec = 1, n_ts = 2, grid = NULL,
               ijset = ijset))
 }
 
+#Create a matrix (for size and power table for example) and write them in the tex file
+creating_matrix_and_texing <- function(vect, vect_t, vect_alpha, filename){
+  matrix_ <- matrix(vect, nrow = length(vect_t), ncol = length(vect_alpha), byrow = TRUE)
+  rownames(matrix_) <- vect_t
+  colnames(matrix_) <- vect_alpha
+  
+  addtorow     <- list()
+  addtorow$pos <- list(0, 0)
+  addtorow$command <- c("& \\multicolumn{3}{c}{nominal size $\\alpha$} \\\\\n",
+                        "$T$ & 0.01 & 0.05 & 0.1 \\\\\n") 
+  print.xtable(xtable(matrix_, digits = c(3), align = "cccc"), type = "latex",
+               file = filename, add.to.row = addtorow, include.colnames = FALSE)
+}
+
 # #Choosing the grid 
 # for (s in 1:5){
 #   for (p in 1:5){
