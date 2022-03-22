@@ -1,0 +1,166 @@
+rm(list=ls())
+
+library(ggplot2)
+library(reshape2)
+library(multiscale)
+library(dendextend)
+library(car)
+library(Matrix)
+library(xtable)
+options(xtable.floating = FALSE)
+options(xtable.timestamp = "")
+
+
+source("functions/functions.R")
+
+##############################
+#Defining necessary constants#
+##############################
+
+n_ts     <- 15 #number of different time series for simulation
+n_rep    <- 1000 #number of simulations for calculating size and power
+sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
+
+different_T     <- c(250) #Different lengths of time series for which we calculate size and power
+different_alpha <- c(0.01, 0.05, 0.1) #Different alpha for which we calculate size and power
+
+a_hat <- 0.5 
+sigma <- 0.5
+q     <- 25 #Parameters for the estimation of sigma
+r     <- 10
+
+###################################################
+#Simulating the data and performing the clustering#
+###################################################
+
+for (t_len in different_T){
+  simulated_data           <- matrix(NA, nrow = t_len, ncol = n_ts)
+  colnames(simulated_data) <- 1:n_ts
+  
+  #Constructing the grid and the 
+  ijset <- expand.grid(i = 1:n_ts, j = 1:n_ts)
+  ijset <- ijset[ijset$i < ijset$j, ]
+  grid  <- construct_grid(t = t_len)
+  
+  m1 <- numeric(t_len)
+  m2 <- numeric(t_len)
+  for (j in 1:t_len){
+    m1[j] = (j - 0.5 * t_len) * (1 / t_len)
+    m2[j] = (j - 0.5 * t_len) * (-1 / t_len)
+  }
+  
+  simulated_statistic = replicate(n_rep, {
+    sigmahat_vector <- c()
+    for (i in 1:(floor(n_ts / 3))){
+      simulated_data[, i] <- arima.sim(model = list(ar = a_hat), innov = rnorm(t_len, 0, sigma), n = t_len)
+      AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q, r_bar = r, p = 1)
+      sigma_hat_i         <- sqrt(AR.struc$lrv)
+      sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
+    }
+    for (i in (floor(n_ts / 3) + 1):(floor(2 * n_ts / 3))){
+      simulated_data[, i] <- m1 + arima.sim(model = list(ar = a_hat), innov = rnorm(t_len, 0, sigma), n = t_len)
+      AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q, r_bar = r, p = 1)
+      sigma_hat_i         <- sqrt(AR.struc$lrv)
+      sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
+    }
+    for (i in (floor(2 * n_ts / 3) + 1):n_ts){
+      simulated_data[, i] <- m2 + arima.sim(model = list(ar = a_hat), innov = rnorm(t_len, 0, sigma), n = t_len)
+      AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q, r_bar = r, p = 1)
+      sigma_hat_i         <- sqrt(AR.struc$lrv)
+      sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
+    }
+    simulated_data <- simulated_data - colMeans(simulated_data)[col(simulated_data)] #Subtracting the column means
+
+    psi     <- compute_statistics(data = simulated_data, sigma = 1, sigma_vec = sigmahat_vector,
+                                  n_ts = n_ts, grid = grid, deriv_order = 0,
+                                  epidem = FALSE)
+    results <- as.vector(psi$stat_pairwise)
+    results
+  })
+  for (alpha in different_alpha){
+    quantiles <- compute_quantiles(t_len = t_len, grid = grid, n_ts = n_ts,
+                                   ijset = ijset, sigma = 1,
+                                   sim_runs = sim_runs,
+                                   deriv_order = 0,
+                                   correction = TRUE, epidem = FALSE)
+    probs  <- as.vector(quantiles$quant[1, ])
+    quants <- as.vector(quantiles$quant[2, ])
+    if (sum(probs == (1 - alpha)) == 0)
+      pos <- which.min(abs(probs - (1 - alpha)))
+    if (sum(probs == (1 - alpha)) != 0)
+      pos <- which.max(probs == (1 - alpha))    
+    quant <- quants[pos]
+    
+    groups_mat <- matrix(NA, ncol = n_rep, nrow = n_ts)
+    colnames(groups_mat) <- paste0("rep_", 1:n_rep)
+    rownames(groups_mat) <- paste0("ts_", 1:n_ts)
+    number_of_groups_vec <- c()
+    for (i in 1:n_rep){
+      statistic_vector <- simulated_statistic[, i]
+      statistic_value  <- max(statistic_vector)
+      if (statistic_value > quant) {
+        statistic_matrix  <- matrix(statistic_vector, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
+        statistic_matrix  <- forceSymmetric(statistic_matrix, uplo = "U")
+        statistic_matrix  <- as.dist(statistic_matrix)
+        clustering        <- hclust(statistic_matrix, method = "complete")
+        groups            <- cutree(clustering, h = quant)
+        number_of_groups  <- max(groups)
+#        plot(clustering, cex = 0.8, xlab = "", ylab = "")
+#        rect.hclust(clustering, h = quant, border = 2:(max(groups) + 1))
+      } else {
+        number_of_groups <- 1
+        groups           <- rep(1, n_ts)
+      }
+      groups_mat[, i]      <- groups
+      number_of_groups_vec <- c(number_of_groups_vec, number_of_groups)
+    }
+    clustering_results <- rbind(number_of_groups_vec, groups_mat)
+    filename = paste0("plots/clustering/results_for_T_", t_len, "_and_alpha_", alpha * 100, ".RData")
+    save(clustering_results, file = filename)      
+  }
+}
+
+correct_number_of_groups_vec   <- c()
+correctly_specified_groups_vec <- c()
+for (t_len in different_T){
+  for (alpha in different_alpha){
+    filename = paste0("plots/clustering/results_for_T_", t_len, "_and_alpha_", alpha * 100, ".RData")
+    load(file = filename)
+    n_rep <- ncol(clustering_results)
+    
+    correct_specification      <- c(rep(1, (floor(n_ts / 3))),
+                                    rep(2, (floor(2 * n_ts / 3) - floor(n_ts / 3))),
+                                    rep(3, n_ts - floor(2 * n_ts / 3)))
+    correct_number_of_groups   <- 0
+    correctly_specified_groups <- 0
+    
+    for (i in 1:n_rep){
+      if (clustering_results[1, i] == 3) {
+        correct_number_of_groups = correct_number_of_groups + 1
+        groups132  <- recode(clustering_results[2:(n_ts + 1), i], "2=3;3=2")
+        groups213  <- recode(clustering_results[2:(n_ts + 1), i], "1=2;2=1")
+        groups231  <- recode(clustering_results[2:(n_ts + 1), i], "1=2;2=3;3=1")
+        groups312  <- recode(clustering_results[2:(n_ts + 1), i], "1=3;2=1;3=2")
+        groups321  <- recode(clustering_results[2:(n_ts + 1), i], "1=3;3=1")
+        difference <- min(sum(!correct_specification == groups132),
+                          sum(!correct_specification == groups213), 
+                          sum(!correct_specification == groups231),
+                          sum(!correct_specification == groups312),
+                          sum(!correct_specification == groups321),
+                          sum(!correct_specification == clustering_results[2:(n_ts + 1), i]))
+        if (difference == 0){
+          correctly_specified_groups = correctly_specified_groups + 1  
+        }
+      }
+    }
+    correct_number_of_groups_vec   <- c(correct_number_of_groups_vec, correct_number_of_groups/n_rep)
+    correctly_specified_groups_vec <- c(correctly_specified_groups_vec, correctly_specified_groups/n_rep)
+    cat("Percentage of detecting true number of clusters", correct_number_of_groups/n_rep, "with alpha = ", alpha, "T = ", t_len, "\n")
+    cat("Percentage of detecting true clustering", correctly_specified_groups/n_rep, "with alpha = ", alpha, "T = ", t_len, "\n")
+  }
+}
+
+filename = paste0("plots/clustering/", n_ts, "_ts_correct_number_of_groups.tex")
+creating_matrix_and_texing(correct_number_of_groups_vec, different_T, different_alpha, filename)
+filename2 = paste0("plots/clustering/", n_ts, "_ts_correct_groups.tex")
+creating_matrix_and_texing(correctly_specified_groups_vec, different_T, different_alpha, filename2)
