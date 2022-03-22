@@ -17,7 +17,7 @@ n_ts     <- 15 #number of different time series for simulation
 n_rep    <- 1000 #number of simulations for calculating size and power
 sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
 
-different_T     <- c(250) #Different lengths of time series
+different_T     <- c(250, 500, 1000) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
 
 a_hat <- 0.5 
@@ -115,47 +115,59 @@ for (t_len in different_T){
   }
 }
 
-correct_number_of_groups_vec   <- c()
-correctly_specified_groups_vec <- c()
+###################################################
+#Now we need to analyse how good the clustering is#
+###################################################
+
+correct_groups   <- c()
+correct_structure <- c()
+
 for (t_len in different_T){
   for (alpha in different_alpha){
     filename = paste0("plots/clustering/results_for_T_", t_len, "_and_alpha_", alpha * 100, ".RData")
     load(file = filename)
-    n_rep <- ncol(clustering_results)
-    
     correct_specification      <- c(rep(1, (floor(n_ts / 3))),
                                     rep(2, (floor(2 * n_ts / 3) - floor(n_ts / 3))),
                                     rep(3, n_ts - floor(2 * n_ts / 3)))
-    correct_number_of_groups   <- 0
+    correct_number_of_groups   <- 0 #Starting the counter from zero
     correctly_specified_groups <- 0
     
     for (i in 1:n_rep){
       if (clustering_results[1, i] == 3) {
         correct_number_of_groups = correct_number_of_groups + 1
-        groups132  <- recode(clustering_results[2:(n_ts + 1), i], "2=3;3=2")
-        groups213  <- recode(clustering_results[2:(n_ts + 1), i], "1=2;2=1")
-        groups231  <- recode(clustering_results[2:(n_ts + 1), i], "1=2;2=3;3=1")
-        groups312  <- recode(clustering_results[2:(n_ts + 1), i], "1=3;2=1;3=2")
-        groups321  <- recode(clustering_results[2:(n_ts + 1), i], "1=3;3=1")
-        difference <- min(sum(!correct_specification == groups132),
-                          sum(!correct_specification == groups213), 
-                          sum(!correct_specification == groups231),
-                          sum(!correct_specification == groups312),
-                          sum(!correct_specification == groups321),
-                          sum(!correct_specification == clustering_results[2:(n_ts + 1), i]))
+        groups123  <- clustering_results[2:(n_ts + 1), i]
+        groups132  <- recode(groups123, "2=3;3=2")
+        groups213  <- recode(groups123, "1=2;2=1")
+        groups231  <- recode(groups123, "1=2;2=3;3=1")
+        groups312  <- recode(groups123, "1=3;2=1;3=2")
+        groups321  <- recode(groups123, "1=3;3=1")
+        difference <- min(sum(correct_specification != groups132),
+                          sum(correct_specification != groups213), 
+                          sum(correct_specification != groups231),
+                          sum(correct_specification != groups312),
+                          sum(correct_specification != groups321),
+                          sum(correct_specification != groups123))
         if (difference == 0){
           correctly_specified_groups = correctly_specified_groups + 1  
         }
       }
     }
-    correct_number_of_groups_vec   <- c(correct_number_of_groups_vec, correct_number_of_groups/n_rep)
-    correctly_specified_groups_vec <- c(correctly_specified_groups_vec, correctly_specified_groups/n_rep)
-    cat("Percentage of detecting true number of clusters", correct_number_of_groups/n_rep, "with alpha = ", alpha, "T = ", t_len, "\n")
-    cat("Percentage of detecting true clustering", correctly_specified_groups/n_rep, "with alpha = ", alpha, "T = ", t_len, "\n")
+    correct_groups   <- c(correct_groups, correct_number_of_groups/n_rep)
+    correct_structure <- c(correct_structure, correctly_specified_groups/n_rep)
+    cat("Percentage of detecting true number of clusters",
+        correct_number_of_groups/n_rep, "with alpha = ", alpha,
+        "T = ", t_len, "\n")
+    cat("Percentage of detecting true clustering",
+        correctly_specified_groups/n_rep, "with alpha = ", alpha,
+        "T = ", t_len, "\n")
   }
 }
 
-filename = paste0("plots/clustering/", n_ts, "_ts_correct_number_of_groups.tex")
-creating_matrix_and_texing(correct_number_of_groups_vec, different_T, different_alpha, filename)
-filename2 = paste0("plots/clustering/", n_ts, "_ts_correct_groups.tex")
-creating_matrix_and_texing(correctly_specified_groups_vec, different_T, different_alpha, filename2)
+#######################
+#Output of the results#
+#######################
+
+filename = paste0("plots/clustering/", n_ts, "_ts_correct_group_number.tex")
+creating_matrix_and_texing(correct_groups, different_T, different_alpha, filename)
+filename2 = paste0("plots/clustering/", n_ts, "_ts_correct_group_structure.tex")
+creating_matrix_and_texing(correct_structure, different_T, different_alpha, filename2)
