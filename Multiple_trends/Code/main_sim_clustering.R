@@ -1,15 +1,11 @@
 rm(list=ls())
 
-library(ggplot2)
-library(reshape2)
 library(multiscale)
-library(dendextend)
 library(car)
 library(Matrix)
 library(xtable)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
-
 
 source("functions/functions.R")
 
@@ -21,12 +17,12 @@ n_ts     <- 15 #number of different time series for simulation
 n_rep    <- 1000 #number of simulations for calculating size and power
 sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
 
-different_T     <- c(250) #Different lengths of time series for which we calculate size and power
-different_alpha <- c(0.01, 0.05, 0.1) #Different alpha for which we calculate size and power
+different_T     <- c(250) #Different lengths of time series
+different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
 
 a_hat <- 0.5 
 sigma <- 0.5
-q     <- 25 #Parameters for the estimation of sigma
+q     <- 25 #Parameters for the estimation of long-run-variance
 r     <- 10
 
 ###################################################
@@ -37,7 +33,7 @@ for (t_len in different_T){
   simulated_data           <- matrix(NA, nrow = t_len, ncol = n_ts)
   colnames(simulated_data) <- 1:n_ts
   
-  #Constructing the grid and the 
+  #Constructing the grid and the the set of pairwise comparisons
   ijset <- expand.grid(i = 1:n_ts, j = 1:n_ts)
   ijset <- ijset[ijset$i < ijset$j, ]
   grid  <- construct_grid(t = t_len)
@@ -77,14 +73,15 @@ for (t_len in different_T){
     results <- as.vector(psi$stat_pairwise)
     results
   })
+  quantiles <- compute_quantiles(t_len = t_len, grid = grid, n_ts = n_ts,
+                                 ijset = ijset, sigma = 1,
+                                 sim_runs = sim_runs,
+                                 deriv_order = 0,
+                                 correction = TRUE, epidem = FALSE)
+  probs  <- as.vector(quantiles$quant[1, ])
+  quants <- as.vector(quantiles$quant[2, ])
+  
   for (alpha in different_alpha){
-    quantiles <- compute_quantiles(t_len = t_len, grid = grid, n_ts = n_ts,
-                                   ijset = ijset, sigma = 1,
-                                   sim_runs = sim_runs,
-                                   deriv_order = 0,
-                                   correction = TRUE, epidem = FALSE)
-    probs  <- as.vector(quantiles$quant[1, ])
-    quants <- as.vector(quantiles$quant[2, ])
     if (sum(probs == (1 - alpha)) == 0)
       pos <- which.min(abs(probs - (1 - alpha)))
     if (sum(probs == (1 - alpha)) != 0)
@@ -105,8 +102,6 @@ for (t_len in different_T){
         clustering        <- hclust(statistic_matrix, method = "complete")
         groups            <- cutree(clustering, h = quant)
         number_of_groups  <- max(groups)
-#        plot(clustering, cex = 0.8, xlab = "", ylab = "")
-#        rect.hclust(clustering, h = quant, border = 2:(max(groups) + 1))
       } else {
         number_of_groups <- 1
         groups           <- rep(1, n_ts)

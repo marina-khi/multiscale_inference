@@ -14,8 +14,8 @@ source("functions/functions.R")
 #Coefficients#
 ##############
 
-alpha     <- c(0.05, 0.1)
-sim_runs  <- 1000
+alpha     <- c(0.01, 0.05, 0.1)
+sim_runs  <- 5000
 q         <- 25 #Parameters for the estimation of sigma
 r         <- 10
 
@@ -116,6 +116,7 @@ result <- statistics_full(data = temp_matrix, sigma_vec = sigmahat_vector,
                           alpha = alpha,  n_ts = n_ts, grid = grid,
                           sim_runs = sim_runs)
 format(Sys.time(), "%a %b %d %X %Y")
+save(result, file = "result.RData")
 
 # Calculating statistics without the Gaussian quantile
 # format(Sys.time(), "%a %b %d %X %Y")
