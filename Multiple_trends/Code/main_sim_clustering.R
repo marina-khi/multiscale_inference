@@ -17,7 +17,7 @@ n_ts     <- 15 #number of different time series for simulation
 n_rep    <- 1000 #number of simulations for calculating size and power
 sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
 
-different_T     <- c(250, 500, 1000) #Different lengths of time series
+different_T     <- c(250, 500) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
 
 a_hat <- 0.5 
