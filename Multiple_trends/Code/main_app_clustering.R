@@ -104,19 +104,22 @@ at_         <- seq(from = 1, to = t_len, by = 20)
 
 #Constructing the grid
 u_grid      <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
-h_grid      <- seq(from = 2 / t_len, to = 15 / t_len, by = 5 / t_len)
+h_grid      <- seq(from = 2 / t_len, to = 6 / t_len, by = 1 / t_len)
+h_grid      <- h_grid[h_grid > log(t_len) / t_len]
 
 # u_grid      <- (3:t_len)[c(TRUE, FALSE, TRUE, FALSE, FALSE)]/t_len
-# h_grid      <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
-# h_grid      <- h_grid[h_grid > log(t_len) / t_len]
+#h_grid      <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
+#h_grid      <- h_grid[h_grid > log(t_len) / t_len]
 grid        <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
+grid$u_grid <- u_grid
+grid$h_grid <- h_grid
 
 format(Sys.time(), "%a %b %d %X %Y")
 result <- statistics_full(data = temp_matrix, sigma_vec = sigmahat_vector,
                           alpha = alpha,  n_ts = n_ts, grid = grid,
                           sim_runs = sim_runs)
 format(Sys.time(), "%a %b %d %X %Y")
-save(result, file = "result.RData")
+save(result, file = "result3.RData")
 
 # Calculating statistics without the Gaussian quantile
 # format(Sys.time(), "%a %b %d %X %Y")
@@ -135,11 +138,7 @@ save(result, file = "result.RData")
 # save(result, file = "result_alpha_010.RData")
 # load(file = "result_alpha_010.RData")
 
-###########################
-#CLustering of the results#
-###########################
 
-n_cl <- 15
 
 #for the distance matrix we need a symmetrical one
 Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
@@ -153,12 +152,38 @@ for (i in 1:(n_ts - 1)){
 colnames(Delta_hat) <- col_names
 rownames(Delta_hat) <- col_names
 
+###########################################
+#CLustering based on the Gaussian quantile#
+###########################################
+
+delta_dist <- as.dist(Delta_hat)
+res        <- hclust(delta_dist)
+subgroups  <- cutree(res, h = result$quant)
+
+pdf("plots/clustering/dendrogram3.pdf", width = 15, height = 6, paper = "special")
+par(cex = 1, tck = -0.025)
+par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
+par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
+plot(res, cex = 0.8, xlab = "", ylab = "",
+     main = paste0("Clusters obtained using ", 2 * h_grid * t_len + 1," years"))
+abline(h = result$quant[alpha == 0.05], lty = 2, col = "red")
+abline(h = result$quant[alpha == 0.1], lty = 2, col = "blue")
+legend(x = "topright", inset = c(0.01, 0.10),
+       legend = c("alpha = 0.05", "alpha = 0.10"),
+       lty = 2, col = c("red", "blue"))
+#rect.hclust(res, h = result$quant[alpha == 0.05], border = 2:(max(subgroups) + 1))
+dev.off()
+
+############################################
+#CLustering based on the number of clusters#
+############################################
+
+n_cl <- 15
+
 delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
 subgroups  <- cutree(res, k = n_cl)
-#subgroups  <- cutree(res, h = result$quant)
 
-#Dendrogram
 pdf(paste0("plots/clustering/dendrogram_k_", n_cl, ".pdf"), width = 15, height = 6,
     paper = "special")
 par(cex = 1, tck = -0.025)
@@ -166,7 +191,6 @@ par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
 plot(res, cex = 0.8, xlab = "", ylab = "")
 rect.hclust(res, k = n_cl, border = 2:(max(subgroups) + 1))
-#rect.hclust(res, h = result$quant, border = 2:(max(subgroups) + 1))
 dev.off()
 
 

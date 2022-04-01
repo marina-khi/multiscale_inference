@@ -584,7 +584,7 @@ statistics <- function(data, sigma_vec = 1, n_ts = 2, grid = NULL,
 }
 
 statistics_full <- function(data, sigma_vec = 1, n_ts = 2, grid = NULL,
-                            ijset = NULL, alpha = 0.05, sim_runs = 1000) {
+                            ijset = NULL, alpha = c(0.05), sim_runs = 1000) {
   
   t_len <- nrow(data)
 
@@ -626,7 +626,7 @@ statistics_full <- function(data, sigma_vec = 1, n_ts = 2, grid = NULL,
   stat  <- psi$stat
   
   return(list(quant = quant_vec, stat = stat, stat_pairwise = psi$stat_pairwise,
-              ijset = ijset))
+              ijset = ijset, sim_runs = sim_runs, grid = grid))
 }
 
 #Create a matrix (for size and power table for example) and write them in the tex file
