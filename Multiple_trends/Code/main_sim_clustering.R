@@ -3,6 +3,8 @@ rm(list=ls())
 library(multiscale)
 library(car)
 library(Matrix)
+library(parallel)
+library(future.apply)
 library(xtable)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
@@ -25,18 +27,26 @@ sigma <- 0.5
 q     <- 25 #Parameters for the estimation of long-run-variance
 r     <- 10
 
+numCores <- detectCores()
+
+
 ###################################################
 #Simulating the data and performing the clustering#
 ###################################################
+
+#Constructing the set of pairwise comparisons
+ijset <- expand.grid(i = 1:n_ts, j = 1:n_ts)
+ijset <- ijset[ijset$i < ijset$j, ]
 
 for (t_len in different_T){
   simulated_data           <- matrix(NA, nrow = t_len, ncol = n_ts)
   colnames(simulated_data) <- 1:n_ts
   
-  #Constructing the grid and the the set of pairwise comparisons
-  ijset <- expand.grid(i = 1:n_ts, j = 1:n_ts)
-  ijset <- ijset[ijset$i < ijset$j, ]
-  grid  <- construct_grid(t = t_len)
+  #Constructing the grid
+  u_grid <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
+  h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
+  h_grid <- h_grid[h_grid > log(t_len) / t_len]
+  grid   <- construct_grid(t = t_len)
   
   m1 <- numeric(t_len)
   m2 <- numeric(t_len)
@@ -45,34 +55,68 @@ for (t_len in different_T){
     m2[j] = (j - 0.5 * t_len) * (-1 / t_len)
   }
   
-  simulated_statistic = replicate(n_rep, {
+  f <- function(i){
     sigmahat_vector <- c()
     for (i in 1:(floor(n_ts / 3))){
       simulated_data[, i] <- arima.sim(model = list(ar = a_hat), innov = rnorm(t_len, 0, sigma), n = t_len)
+      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
       AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q, r_bar = r, p = 1)
       sigma_hat_i         <- sqrt(AR.struc$lrv)
       sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
     }
     for (i in (floor(n_ts / 3) + 1):(floor(2 * n_ts / 3))){
       simulated_data[, i] <- m1 + arima.sim(model = list(ar = a_hat), innov = rnorm(t_len, 0, sigma), n = t_len)
+      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
       AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q, r_bar = r, p = 1)
       sigma_hat_i         <- sqrt(AR.struc$lrv)
       sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
     }
     for (i in (floor(2 * n_ts / 3) + 1):n_ts){
       simulated_data[, i] <- m2 + arima.sim(model = list(ar = a_hat), innov = rnorm(t_len, 0, sigma), n = t_len)
+      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
       AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q, r_bar = r, p = 1)
       sigma_hat_i         <- sqrt(AR.struc$lrv)
       sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
     }
-    simulated_data <- simulated_data - colMeans(simulated_data)[col(simulated_data)] #Subtracting the column means
-
     psi     <- compute_statistics(data = simulated_data, sigma = 1, sigma_vec = sigmahat_vector,
                                   n_ts = n_ts, grid = grid, deriv_order = 0,
                                   epidem = FALSE)
     results <- as.vector(psi$stat_pairwise)
-    results
-  })
+    return(results)
+  }
+  system.time(mclapply(1:n_rep, f))
+  #simulated_statistic <- lapply(1:n_rep, f)
+  
+  # simulated_statistic = future_replicate(n_rep, {
+  #   sigmahat_vector <- c()
+  #   for (i in 1:(floor(n_ts / 3))){
+  #     simulated_data[, i] <- arima.sim(model = list(ar = a_hat), innov = rnorm(t_len, 0, sigma), n = t_len)
+  #     simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
+  #     AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q, r_bar = r, p = 1)
+  #     sigma_hat_i         <- sqrt(AR.struc$lrv)
+  #     sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
+  #   }
+  #   for (i in (floor(n_ts / 3) + 1):(floor(2 * n_ts / 3))){
+  #     simulated_data[, i] <- m1 + arima.sim(model = list(ar = a_hat), innov = rnorm(t_len, 0, sigma), n = t_len)
+  #     simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
+  #     AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q, r_bar = r, p = 1)
+  #     sigma_hat_i         <- sqrt(AR.struc$lrv)
+  #     sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
+  #   }
+  #   for (i in (floor(2 * n_ts / 3) + 1):n_ts){
+  #     simulated_data[, i] <- m2 + arima.sim(model = list(ar = a_hat), innov = rnorm(t_len, 0, sigma), n = t_len)
+  #     simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
+  #     AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q, r_bar = r, p = 1)
+  #     sigma_hat_i         <- sqrt(AR.struc$lrv)
+  #     sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
+  #   }
+  #   psi     <- compute_statistics(data = simulated_data, sigma = 1, sigma_vec = sigmahat_vector,
+  #                                 n_ts = n_ts, grid = grid, deriv_order = 0,
+  #                                 epidem = FALSE)
+  #   results <- as.vector(psi$stat_pairwise)
+  #   results
+  # })
+
   quantiles <- compute_quantiles(t_len = t_len, grid = grid, n_ts = n_ts,
                                  ijset = ijset, sigma = 1,
                                  sim_runs = sim_runs,
