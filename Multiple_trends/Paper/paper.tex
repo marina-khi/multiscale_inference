@@ -345,10 +345,10 @@ Our multiscale test of the hypothesis $H_0: m_1 = m_2 = \ldots = m_n$ is defined
 \end{minipage}
 \end{center}
 
-\begin{remark}
+\begin{remark}\label{rem:simpl}
 To prove the theoretical results in Section \ref{sec:theo}, we will use the following fact. By our assumption that the long-run variance $\sigma_i^2$ does not depend on $i$ \linebreak (i.e. $\sigma_i^2 = \sigma^2_j = \sigma^2$), we can rewrite the Gaussian normalised kernel averages \eqref{eq:phi_zero_ij} as
 \[\phi^0_{ij, T}(u, h) = \frac{1}{\sqrt{2}} \Big|\sum\nolimits_{t=1}^T w_{t,T}(u, h) \, \big\{ (Z_{it} - \bar{Z}_i) - (Z_{jt} - \bar{Z}_j) \big\}\Big| - \lambda(h), \] 
-which means that the distribution of the Gaussian test statistics does not depend neither on the data $\mathcal{T}_i =\{ (Y_{it}, \X_{it}) : 1\leq t \leq T)\}, \mathcal{T}_j =\{ (Y_{jt}, \X_{jt}) : 1\leq t \leq T)\}$, nor on any unknown quantities such as $\sigma^2_i$ or $\sigma_j^2$, and thus can be regarded as known. In addition to exploiting this fact while proving the theoretical results, we will also use it for calculating (approximately) the quantiles of $\Phi_{n, T}$ by the Monte Carlo simulations in Section \ref{subsec:test:impl}. \textcolor{red}{However, throughout the paper, we will stick to the definition \eqref{eq:phi_zero_ij} for the sake of similarity to $\hat{\psi}^0_{ij, T}(u, h)$.}%, which involves the long-run variances $\sigma_i$ and $\sigma_j$.
+which means that the distribution of the Gaussian test statistics does not depend neither on the data $\mathcal{T}_i =\{ (Y_{it}, \X_{it}) : 1\leq t \leq T)\}, \mathcal{T}_j =\{ (Y_{jt}, \X_{jt}) : 1\leq t \leq T)\}$, nor on any unknown quantities such as $\sigma^2_i$ or $\sigma_j^2$, and thus can be regarded as known. In addition to exploiting this fact while proving the theoretical results, we will also use it for \textcolor{red}{(approximately) calculating the quantiles of $\Phi_{n, T}$ by the Monte Carlo simulations in Sections \ref{sec:sim} and \ref{sec:app}. However, throughout the paper, we will stick to the definition \eqref{eq:phi_zero_ij} for the sake of similarity to $\hat{\psi}^0_{ij, T}(u, h)$.}%, which involves the long-run variances $\sigma_i$ and $\sigma_j$.
 \end{remark}
 
 \begin{remark}
@@ -591,7 +591,7 @@ The statement of Proposition \ref{prop:clustering:2} remains to hold true when t
 
 \section{\textcolor{red}{Simulations}}\label{sec:sim}
 
-In this Section, we present the results for the simulation study for the testing method described in Section \ref{sec:test}. The simulation design is as follows. We generate data from the model $Y_{it} = m_i(\frac{t}{T}) + \varepsilon_{it}$, where the number of time series $i$ is set to $n = 15$ and we consider different time series lengths $T$. For each $i$, the errors $\varepsilon_{it}$ are drawn from the AR(1) model $\varepsilon_{it} = a \varepsilon_{i, t-1} + \eta_{it}$, where $a = 0.5$ and the innovations $\eta_{it}$ are i.i.d.\ normally distributed with mean $0$ and variance $0.25$. To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ without loss of generality. To produce data under the alternative, we define $m_1(u) = \beta \, (u - 0.5) $ with $\beta = 0.75, 1, 1.25$ and set $m_i = 0$ for all $i \ne 1$. Hence, all trend functions are the same except for $m_1$ which is an increasing linear function. We use a linear function as the normalisation constraint $\int_0^1 m_1(u) du = 0$ is directly satisfied in this case. 
+In this Section, we present the results for the simulation study for the testing method described in Section \ref{sec:test}. The simulation design is as follows. We generate data from the model $Y_{it} = m_i(\frac{t}{T}) + \varepsilon_{it}$, where the number of time series $i$ is set to $n = 15$ and we consider different time series lengths $T$. For each $i$, the errors $\varepsilon_{it}$ are drawn from the AR(1) model $\varepsilon_{it} = a \varepsilon_{i, t-1} + \eta_{it}$, where $a = 0.5$ and the innovations $\eta_{it}$ are i.i.d.\ normally distributed with mean $0$ and variance $0.25$. To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ without loss of generality. To produce data under the alternative, we define $m_1(u) = \beta \, (u - 0.5) $ with $\beta = 1, 2, 3$ and set $m_i = 0$ for all $i \ne 1$. Hence, all trend functions are the same except for $m_1$ which is an increasing linear function. We use a linear function as the normalisation constraint $\int_0^1 m_1(u) du = 0$ is directly satisfied in this case. 
 %
 %\addtocounter{table}{-1} 
 %\begin{table}[t]
@@ -627,39 +627,44 @@ In this Section, we present the results for the simulation study for the testing
 %\vspace{-0.4cm}
 %\end{table}
 %
-The test is implemented as follows. We use an Epanechnikov kernel, we define the grid $\mathcal{G}_T$ as in \eqref{grid-sim-app} and we set the two tuning parameters $q$ and $r$ to $\lfloor \sqrt{T} \rfloor$ and $\lfloor 2\sqrt{T} \rfloor$, respectively. In order to compute the critical values of the test, we simulate $5000$ values of the statistic $\Phi_{n,T}$ defined in Section \ref{subsec-test-equality-test} and compute their empirical $(1-\alpha)$ quantile $q_{n,T}(\alpha)$. Note that the statistic $\Phi_{n,T}$ depends on the estimators $\widehat{\sigma}_i^2$ of the long-run error variances $\sigma_i^2$. This implies that for each simulated sample, we have to recompute the empirical quantile $q_{n,T}(\alpha)$ and thus the critical value of the test. This is of course computationally extremely expensive. In order to circumvent this issue, we make the additional assumption that the long-run error variance is known to be the same across $i$, that is, $\sigma_i^2 = \sigma^2$ for all $i$. Under this assumption, we can estimate $\sigma^2$ by $\widehat{\sigma}^2 = (\sum_{i = 1}^n\widehat{\sigma_i}^2)/n$, and the Gaussian statistic $\Phi_{n,T}$ simplifies to $\Phi_{n,T} = \max_{1 \le i < j \le n} \Phi_{ij, T}$ with $\Phi_{ij, T} = \max_{(u, h) \in \mathcal{G}_T} \{ | \phi_{ij, T}(u, h)| - \lambda(h) \}$ and $\phi_{ij, T}(u, h) = \sum_{t=1}^T w_{t,T}(u, h) \{ (Z_{it} - \bar{Z}_i) - (Z_{jt} - \bar{Z}_j)\}$. This statistic does not depend on the estimators $\widehat{\sigma}_i^2$ anymore. We thus do not need to recompute the critical values for each simulated sample, which decreases the running time significantly.
-%
-%
-%The simulation results are reported in Tables \ref{tab:size_equality} and \ref{tab:power_equality}. The entries of the tables are computed in the same way as those in Tables \ref{tab:size_shape} and \ref{tab:power_shape}. Inspecting Table \ref{tab:size_equality}, the actual size of the test can be seen to approximate the nominal target $\alpha$ quite well even for small values of $T$. Moreover, as can be seen from Table \ref{tab:power_equality}, the test also has reasonable power against the alternatives considered. For the smallest slope $\beta=0.75$ and the smallest sample size $T = 250$, the power is only moderate, reflecting the fact that the alternative is not very far away from the null. However, as we increase the slope $\beta$ and the sample size $T$, the power quickly increases. 
-%%For the largest slope $\beta = 1.25$ and $T=350$, we already reach a power of $1.00$.
-%
-%
+The test is implemented as follows. We use an Epanechnikov kernel and we define the grid  as $\mathcal{G}_T = U_T \times H_T$ with 
+\begin{align*}
+U_T & = \big\{ u \in [0,1]: u = \textstyle{\frac{t}{T}} \text{ for some } t \in \naturals \big\} \\
+H_T & = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5 t -3}{T}} \text{ for some } t \in \naturals \big\}. 
+\end{align*}
+Hence, the number of data points in each interval $\mathcal{I}_{u, h} = [u-h, u+h]$ is equal to $5, 15, 25, \ldots$. Furthermore, since the errors follow an AR($1$) process, we estimate the long-run variances $\sigma_i^2$ using the difference-based estimator proposed in \cite{KhismatullinaVogt2020} setting the tuning parameters $q$ and $r$ to $10$ and $25$, respectively. In order to compute the critical values of the test, we simulate $1000$ values of the statistic $\Phi_{n,T}$ defined in Section \ref{subsec:test:test} in \eqref{eq:Phi} and compute their empirical $(1-\alpha)$ quantile $q_{n,T}(\alpha)$.
 
-We finally investigate the finite sample performance of the clustering algorithm from Section \ref{sec:clustering}. To do so, we partition the $n = 15$ time series into $N=3$ groups, each containing $5$ time series. Specifically, we set $G_1 = \{1,\ldots, 5\}$, $G_2 = \{6,\ldots, 10\}$ and $G_3 =  \{11,\ldots, 15\}$. Moreover, we define the group-specific trend functions $g_1$, $g_2$ and $g_3$ by $g_1(u) = 0$, $g_2(u) = 1 \cdot (u - 0.5)$ and $g_3(u) =  (- 1) \cdot (u - 0.5)$. In order to compute our estimators of the groups $G_1$, $G_2$, $G_3$ and their number $N = 3$, we use the same implementation as before followed by the clustering procedure from Section \ref{sec:clustering}. The estimation results are reported in Table \ref{tab:clustering:1}. The entries in Table $\ref{tab:clustering:2}$ are computed as the number of simulations for which $\widehat{N} = N$ divided by the total number of simulations. They thus specify the empirical probabilities with which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$. Analogously, the entries of Table $\ref{tab:clustering:1}$ give the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$. 
-%
-%
-%\addtocounter{table}{-1} 
-%\begin{table}[t]
-%\footnotesize{
-%\begin{center}
-%\caption{Clustering results for different sample sizes $T$ and nominal sizes $\alpha$.}\label{tab:clustering:1}
-%\begin{subtable}[b]{0.48\textwidth}
-%\centering
-%\caption{Empirical probabilities that \\ $\widehat{N} = N$}\label{tab:clustering_number_of_groups}
-%\renewcommand{\arraystretch}{1.2}
-%\input{plots/15_ts_correct_number_of_groups}
-%\end{subtable}
-%\begin{subtable}[b]{0.48\textwidth}
-%\centering
-%\caption{\centering Empirical probabilities that $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{ G_1,G_2,G_3\}$}\label{tab:clustering:2}
-%\renewcommand{\arraystretch}{1.2}
-%\input{Plots/15_ts_correct_groups}
-%\end{subtable}
-%\end{center}}
-%\vspace{-0.5cm}
-%\end{table}
+Note that in general the statistic $\Phi_{n,T}$ depends on the long-run error variances $\sigma_i^2$. However, as stated in the Remark \ref{rem:simpl}, due to our assumption that the long-run error variance is known to be the same across $i$, that is, $\sigma_i^2 = \sigma^2$ for all $i$, we can simplify the formula for the kernel averages $\phi^0_{ij, T}(u, h)$ such that the ditribution of $\Phi_{n, T}$ does not depend on any unknown quantities (including $\sigma_i^2$). We employ this fact to (approximately) calculate the gaussian quantiles $q_{n, T}(\alpha)$ which are further used for testing.
 
-The simulation results nicely illustrate the theoretical properties of our clustering algorithm. According to Proposition \ref{prop:clustering:1}, the probability that $\widehat{N} = N$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{G_1,G_2,G_3\}$ should be at least $(1-\alpha)$ asymptotically. For the sample sizes $T = 500$ and $T = 1000$, the empirical probabilities reported in Table \ref{tab:clustering} can indeed be seen to exceed the value $(1-\alpha)$ as predicted by Proposition \ref{prop:clustering:1}. Only for $T = 500$ and $\alpha = 0.01$, the empirical probability is slightly below $(1-\alpha)$. For the smaller sample sizes $T=250$ and $T=350$, in contrast, some of the empirical probabilities are much smaller than $(1-\alpha)$. This reflects the asymptotic nature of Proposition \ref{prop:clustering:1} and is not very surprising. It simply mirrors the fact that for small sample sizes, the effective noise level in the simulated data is quite high. Even though some of the empirical probabilities for $T=250$ and $T=350$ are clearly below the target $(1-\alpha)$, they are still quite substantial. Hence, even for these small sample sizes, our estimates $\widehat{N}$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}} \}$ are equal to the true values in a large number of simulations. 
+%Under this assumption, we can estimate $\sigma^2$ by $\widehat{\sigma}^2 = (\sum_{i = 1}^n\widehat{\sigma_i}^2)/n$, and the Gaussian statistic $\Phi_{n,T}$ simplifies to $\Phi_{n,T} = \max_{1 \le i < j \le n} \Phi_{ij, T}$ with $\Phi_{ij, T} = \max_{(u, h) \in \mathcal{G}_T} \{ | \phi_{ij, T}(u, h)| - \lambda(h) \}$ and $\phi_{ij, T}(u, h) = \sum_{t=1}^T w_{t,T}(u, h) \{ (Z_{it} - \bar{Z}_i) - (Z_{jt} - \bar{Z}_j)\}$. This statistic does not depend on the estimators $\widehat{\sigma}_i^2$ anymore. We thus do not need to recompute the critical values for each simulated sample, which decreases the running time significantly.
+%
+%
+The simulation results are reported in Tables \ref{tab:size} and \ref{tab:power}. The entries of the tables are computed as follows. Inspecting Table \ref{tab:size}, the actual size of the test can be seen to approximate the nominal target $\alpha$ quite well even for small values of $T$. Moreover, as can be seen from Table \ref{tab:power}, the test also has reasonable power against the alternatives considered. For the smallest slope $\beta=1$ and the smallest sample size $T = 250$, the power is only moderate, reflecting the fact that the alternative is not very far away from the null. However, as we increase the slope $\beta$ and the sample size $T$, the power quickly increases. For the largest slope $\beta = 3$ and $T=??$, we already reach a power of $1.00$.
+
+We finally investigate the finite sample performance of the clustering algorithm from Section \ref{sec:clustering}. To do so, we partition the $n = 15$ time series into $N=3$ groups, each containing $5$ time series. Specifically, we set $G_1 = \{1,\ldots, 5\}$, $G_2 = \{6,\ldots, 10\}$ and $G_3 =  \{11,\ldots, 15\}$. Moreover, we define the group-specific trend functions $g_1$, $g_2$ and $g_3$ by $g_1(u) = 0$, $g_2(u) = 1 \cdot (u - 0.5)$ and $g_3(u) =  (- 1) \cdot (u - 0.5)$. In order to compute our estimators of the groups $G_1$, $G_2$, $G_3$ and their number $N = 3$, we use the same implementation as before followed by the clustering procedure from Section \ref{sec:clustering}. The estimation results are reported in Table \ref{tab:clustering}. The entries in Table $\ref{tab:clustering:1}$ are computed as the number of simulations for which $\widehat{N} = N$ divided by the total number of simulations. They thus specify the empirical probabilities with which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$. Analogously, the entries of Table $\ref{tab:clustering:2}$ give the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$. 
+
+\begin{table}[t]
+\footnotesize{
+\begin{center}
+\caption{Clustering results for different sample sizes $T$ and nominal sizes $\alpha$.}\label{tab:clustering}
+\begin{subtable}[b]{0.48\textwidth}
+\centering
+\caption{Empirical probabilities that \\ $\widehat{N} = N$}\label{tab:clustering:1}
+\renewcommand{\arraystretch}{1.2}
+\input{plots/15_ts_correct_group_number}
+\end{subtable}
+\begin{subtable}[b]{0.48\textwidth}
+\centering
+\caption{\centering Empirical probabilities that $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{ G_1,G_2,G_3\}$}\label{tab:clustering:2}
+\renewcommand{\arraystretch}{1.2}
+\input{Plots/15_ts_correct_group_structure}
+\end{subtable}
+\end{center}}
+\vspace{-0.5cm}
+\end{table}
+
+The simulation results nicely illustrate the theoretical properties of our clustering algorithm. According to Proposition \ref{prop:clustering:1}, the probability that $\widehat{N} = N$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{G_1,G_2,G_3\}$ should be at least $(1-\alpha)$ asymptotically. For the sample size $T = 1000$, the empirical probabilities reported in Table \ref{tab:clustering} can indeed be seen to exceed the value $(1-\alpha)$ as predicted by Proposition \ref{prop:clustering:1}. %Only for $T = 500$ and $\alpha = 0.01$, the empirical probability is slightly below $(1-\alpha)$.
+For the smaller sample sizes $T=250$ and $T=500$, in contrast, some of the empirical probabilities are much smaller than $(1-\alpha)$. This reflects the asymptotic nature of Proposition \ref{prop:clustering:1} and is not very surprising. It simply mirrors the fact that for small sample sizes, the effective noise level in the simulated data is quite high. Even though some of the empirical probabilities for $T=250$ and $T=500$ are clearly below the target $(1-\alpha)$, they are still quite substantial. Hence, even for these small sample sizes, our estimates $\widehat{N}$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}} \}$ are equal to the true values in a large number of simulations. 
 %
 
 

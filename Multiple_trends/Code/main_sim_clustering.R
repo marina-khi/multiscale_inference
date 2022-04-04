@@ -17,7 +17,7 @@ n_ts     <- 15 #number of different time series for simulation
 n_rep    <- 1000 #number of simulations for calculating size and power
 sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
 
-different_T     <- c(250) #Different lengths of time series
+different_T     <- c(250, 500, 1000) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
 
 a_hat <- 0.5 
@@ -110,7 +110,7 @@ for (t_len in different_T){
       number_of_groups_vec <- c(number_of_groups_vec, number_of_groups)
     }
     clustering_results <- rbind(number_of_groups_vec, groups_mat)
-    filename = paste0("plots/clustering/results_for_T_", t_len, "_and_alpha_", alpha * 100, ".RData")
+    filename = paste0("output/misc/results_for_T_", t_len, "_and_alpha_", alpha * 100, ".RData")
     save(clustering_results, file = filename)      
   }
 }
@@ -124,7 +124,7 @@ correct_structure <- c()
 
 for (t_len in different_T){
   for (alpha in different_alpha){
-    filename = paste0("plots/clustering/results_for_T_", t_len, "_and_alpha_", alpha * 100, ".RData")
+    filename = paste0("output/misc/results_for_T_", t_len, "_and_alpha_", alpha * 100, ".RData")
     load(file = filename)
     correct_specification      <- c(rep(1, (floor(n_ts / 3))),
                                     rep(2, (floor(2 * n_ts / 3) - floor(n_ts / 3))),
@@ -167,7 +167,7 @@ for (t_len in different_T){
 #Output of the results#
 #######################
 
-filename = paste0("plots/clustering/", n_ts, "_ts_correct_group_number.tex")
+filename = paste0("output/tables/", n_ts, "_ts_correct_group_number.tex")
 creating_matrix_and_texing(correct_groups, different_T, different_alpha, filename)
-filename2 = paste0("plots/clustering/", n_ts, "_ts_correct_group_structure.tex")
+filename2 = paste0("output/tables/", n_ts, "_ts_correct_group_structure.tex")
 creating_matrix_and_texing(correct_structure, different_T, different_alpha, filename2)

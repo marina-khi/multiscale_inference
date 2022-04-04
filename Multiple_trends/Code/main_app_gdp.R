@@ -28,7 +28,7 @@ capital_variable <- "gfcf" #Either we are using capital stock ("stock") or
 #Data loading#
 ##############
 
-source("functions/data_loading.R") #Now the matrix X_mat_filled contains all the data
+source("functions/data_loading.R") #Now matrix X_mat_filled contains all data
 
 #Variables
 dates     <- unique(X_mat_filled$date)
@@ -52,7 +52,7 @@ estimated      <- parameters(X_mat_filled, n_ts, t_len, countries)
 gdp_mat_growth <- estimated$gdp_mat_growth
 gdp_mat_augm   <- estimated$gdp_mat_augm
 
-#Estimating the variance
+#Estimating the long-run variance
 source("functions/sigma_estimation.R")
 sigma_vec <- sigma(gdp_mat_augm, n_ts = n_ts, q = q, r = r)
 
@@ -67,11 +67,9 @@ h_grid      <- seq(from = 4 / t_len, to = 1 / 4, by = 4 / t_len)
 h_grid      <- h_grid[h_grid > log(t_len) / t_len]
 grid        <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
 
-result <- multiscale_test(data = gdp_mat_augm,
-                          sigma_vec = sigma_vec,
-                          alpha = alpha,
-                          n_ts = n_ts, grid = grid,
-                          sim_runs = sim_runs, epidem = FALSE)
+result <- multiscale_test(data = gdp_mat_augm, sigma_vec = sigma_vec,
+                          alpha = alpha,  n_ts = n_ts, grid = grid,
+                          sim_runs = sim_runs)
 
 #####################
 #Plots for the paper#
@@ -80,21 +78,22 @@ result <- multiscale_test(data = gdp_mat_augm,
 #Producing the smoothed curves using local linear estimator
 source("functions/functions.R")
 
+#Ticks and labels on the x-axis
 at <- seq(5, 125, by = 20)
-# 
-# pdfname <- "plots/smoothed_gdp_data.pdf"
-# produce_smoothed_plots(gdp_mat_growth, pdfname,
-#                        y_min = min(gdp_mat_growth) + 0.035,
-#                        y_max = max(gdp_mat_growth) - 0.02,
-#                        ticks_at =  at, ticks_labels = dates[at],
-#                        yaxp_ = c(-0.02, 0.02, 4))
-# 
-# pdfname_augm <- "plots/smoothed_gdp_data_augmented.pdf"
-# produce_smoothed_plots(gdp_mat_augm, pdfname_augm,
-#                        y_min = min(gdp_mat_augm) + 0.03,
-#                        y_max = max(gdp_mat_augm) - 0.02,
-#                        ticks_at =  at, ticks_labels = dates[at],
-#                        yaxp_ = c(-0.03, 0.01, 4))
+
+pdfname <- "output/plots/smoothed_gdp_data.pdf"
+produce_smoothed_plots(gdp_mat_growth, pdfname,
+                       y_min = min(gdp_mat_growth) + 0.035,
+                       y_max = max(gdp_mat_growth) - 0.02,
+                       ticks_at =  at, ticks_labels = dates[at],
+                       yaxp_ = c(-0.02, 0.02, 4))
+
+pdfname_augm <- "output/plots/smoothed_gdp_data_augmented.pdf"
+produce_smoothed_plots(gdp_mat_augm, pdfname_augm,
+                       y_min = min(gdp_mat_augm) + 0.03,
+                       y_max = max(gdp_mat_augm) - 0.02,
+                       ticks_at =  at, ticks_labels = dates[at],
+                       yaxp_ = c(-0.03, 0.01, 4))
 
 #Producing plots with the final results
 for (l in seq_len(nrow(result$ijset))){
@@ -110,6 +109,6 @@ for (l in seq_len(nrow(result$ijset))){
     produce_plots(results = result, data_i = gdp_mat_augm[, i],
                   data_j = gdp_mat_augm[, j], ticks_ = at,
                   labels_ = dates[at], name_i = countries[i],
-                  name_j = countries[j], path = "plots/high_frequency/")
+                  name_j = countries[j], path = "output/plots/high_frequency/")
   }
 }

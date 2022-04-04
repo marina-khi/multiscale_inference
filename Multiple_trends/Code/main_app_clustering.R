@@ -119,7 +119,7 @@ result <- statistics_full(data = temp_matrix, sigma_vec = sigmahat_vector,
                           alpha = alpha,  n_ts = n_ts, grid = grid,
                           sim_runs = sim_runs)
 format(Sys.time(), "%a %b %d %X %Y")
-save(result, file = "result3.RData")
+save(result, file = "output/misc/result3.RData")
 
 # Calculating statistics without the Gaussian quantile
 # format(Sys.time(), "%a %b %d %X %Y")
@@ -135,8 +135,8 @@ save(result, file = "result3.RData")
 #                           sim_runs = sim_runs, epidem = FALSE)
 # format(Sys.time(), "%a %b %d %X %Y")
 #
-# save(result, file = "result_alpha_010.RData")
-# load(file = "result_alpha_010.RData")
+# save(result, file = "output/misc/result.RData")
+# load(file = "output/misc/result.RData")
 
 
 
@@ -160,7 +160,7 @@ delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
 subgroups  <- cutree(res, h = result$quant)
 
-pdf("plots/clustering/dendrogram3.pdf", width = 15, height = 6, paper = "special")
+pdf("output/plots/dendrogram3.pdf", width = 15, height = 6, paper = "special")
 par(cex = 1, tck = -0.025)
 par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
@@ -184,7 +184,7 @@ delta_dist <- as.dist(Delta_hat)
 res        <- hclust(delta_dist)
 subgroups  <- cutree(res, k = n_cl)
 
-pdf(paste0("plots/clustering/dendrogram_k_", n_cl, ".pdf"), width = 15, height = 6,
+pdf(paste0("output/plots/dendrogram_k_", n_cl, ".pdf"), width = 15, height = 6,
     paper = "special")
 par(cex = 1, tck = -0.025)
 par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
@@ -195,7 +195,7 @@ dev.off()
 
 
 #Plotting all clusters on one plot
-pdf(paste0("plots/clustering/all_clusters_k_", n_cl, ".pdf"), width = 7,
+pdf(paste0("output/plots/all_clusters_k_", n_cl, ".pdf"), width = 7,
     height = 6, paper="special")
 
 #Setting the layout of the graphs
@@ -225,7 +225,7 @@ dev.off()
 # #Plotting the trend functions of each cluster on a separate graph
 # for (cl in 1:max(subgroups)){
 #   locations_cluster <- colnames(Delta_hat)[subgroups == cl]
-#   pdf(paste0("plots/clustering/results_cluster_", cl, "_k_", n_cl, ".pdf"),
+#   pdf(paste0("output/plots/results_cluster_", cl, "_k_", n_cl, ".pdf"),
 #       width = 7, height = 6, paper = "special")
 #   
 #   #Setting the layout of the graphs
