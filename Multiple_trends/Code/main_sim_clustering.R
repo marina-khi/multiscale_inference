@@ -3,8 +3,10 @@ rm(list=ls())
 library(multiscale)
 library(car)
 library(Matrix)
+library(foreach)
 library(parallel)
-library(future.apply)
+library(iterators)
+library(doParallel)
 library(xtable)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
@@ -16,8 +18,8 @@ source("functions/functions.R")
 ##############################
 
 n_ts     <- 15 #number of different time series for simulation
-n_rep    <- 1000 #number of simulations for calculating size and power
-sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
+n_rep    <- 500 #number of simulations for calculating size and power
+sim_runs <- 500 #number of simulations to calculate the Gaussian quantiles
 
 different_T     <- c(250, 500, 1000) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
@@ -27,9 +29,6 @@ sigma <- 0.5
 q     <- 25 #Parameters for the estimation of long-run-variance
 r     <- 10
 
-numCores <- detectCores()
-
-
 ###################################################
 #Simulating the data and performing the clustering#
 ###################################################
@@ -38,12 +37,13 @@ numCores <- detectCores()
 ijset <- expand.grid(i = 1:n_ts, j = 1:n_ts)
 ijset <- ijset[ijset$i < ijset$j, ]
 
-for (t_len in different_T){
+#for (t_len in different_T){
+  t_len <- different_T[1]
   simulated_data           <- matrix(NA, nrow = t_len, ncol = n_ts)
   colnames(simulated_data) <- 1:n_ts
   
   #Constructing the grid
-  u_grid <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
+  u_grid <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
   h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
   h_grid <- h_grid[h_grid > log(t_len) / t_len]
   grid   <- construct_grid(t = t_len)
@@ -78,13 +78,39 @@ for (t_len in different_T){
       sigma_hat_i         <- sqrt(AR.struc$lrv)
       sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
     }
-    psi     <- compute_statistics(data = simulated_data, sigma = 1, sigma_vec = sigmahat_vector,
-                                  n_ts = n_ts, grid = grid, deriv_order = 0,
-                                  epidem = FALSE)
+    psi     <- compute_statistics(data = simulated_data, sigma_vec = sigmahat_vector,
+                                  n_ts = n_ts, grid = grid)
     results <- as.vector(psi$stat_pairwise)
     return(results)
   }
-  system.time(mclapply(1:n_rep, f))
+  
+  a1 <- Sys.time()
+  foreach (val = 1:n_rep, .combine = "cbind") %do% { 
+    f(val) # Loop one-by-one using foreach
+  } -> simulated_statistic1
+  b1 <- Sys.time()
+  cat("Simple foreach:", b1 - a1, "\n")
+  
+  a2 <- Sys.time()
+  simulated_statistic2 <- lapply(1:n_rep, f)
+  b2 <- Sys.time()
+  cat("Simple lapply:", b2 - a2, "\n")
+  
+  a3 <- Sys.time()
+  simulated_statistic3 <- mclapply(1:n_rep, f)
+  b3 <- Sys.time()
+  cat("mclapply:", b3 - a3, "\n")
+
+  numCores <- detectCores()
+  registerDoParallel(numCores - 2)
+  a4 <- Sys.time()
+  foreach (val = 1:n_rep, .combine = "cbind") %do% { 
+    f(val) # Loop one-by-one using foreach
+  } -> simulated_statistic4
+  b4 <- Sys.time()
+  cat("Foreach parallelised:", b4 - a4, "\n")
+  
+  
   #simulated_statistic <- lapply(1:n_rep, f)
   
   # simulated_statistic = future_replicate(n_rep, {
@@ -157,7 +183,7 @@ for (t_len in different_T){
     filename = paste0("output/misc/results_for_T_", t_len, "_and_alpha_", alpha * 100, ".RData")
     save(clustering_results, file = filename)      
   }
-}
+#}
 
 ###################################################
 #Now we need to analyze how good the clustering is#

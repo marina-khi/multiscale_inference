@@ -53,14 +53,12 @@ for (t_len in different_T){
       simulated_data[, i] <- arima.sim(model = list(ar = a_hat),
                                        innov = rnorm(t_len, 0, sigma),
                                        n = t_len)
+      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
       AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q,
                                           r_bar = r, p = 1)
       sigma_hat_i         <- sqrt(AR.struc$lrv)
       sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
     }
-    #Subtracting the column means
-    simulated_data <- simulated_data - colMeans(simulated_data)[col(simulated_data)] 
-    
     psi     <- compute_statistics(data = simulated_data,
                                   sigma_vec = sigmahat_vector,
                                   n_ts = n_ts, grid = grid)

@@ -16,7 +16,7 @@ source("functions/functions.R")
 ##############
 
 alpha     <- c(0.05, 0.1)
-sim_runs  <- 1000
+sim_runs  <- 500
 q         <- 25 #Parameters for the estimation of sigma
 r         <- 10
 
@@ -130,7 +130,7 @@ for (i in 1:(n_ts - 1)){
   }
 }
 
-pdf("plots/clustering/pearson_correlation.pdf", width = 30, height = 30,
+pdf("output/plots/pearson_correlation.pdf", width = 30, height = 30,
     paper = "special")
 #par(cex = 1, tck = -0.025)
 par(mar = c(0, 0, 0, 0)) #Margins for each plot
@@ -171,13 +171,6 @@ result <- statistics_full(data = temp_matrix, sigma_vec = sigmahat_vector,
 format(Sys.time(), "%a %b %d %X %Y")
 save(result, file = "output/misc/result_10by10.RData")
 
-# Calculating statistics without the Gaussian quantile
-# format(Sys.time(), "%a %b %d %X %Y")
-# result <- statistics(data = temp_matrix, sigma_vec = sigmahat_vector,
-#                      alpha = alpha,  n_ts = n_ts, grid = grid,
-#                      sim_runs = sim_runs)
-# format(Sys.time(), "%a %b %d %X %Y")
-#
 # Calculating statistics together with the quantiles, most general way
 # format(Sys.time(), "%a %b %d %X %Y")
 # result <- multiscale_test(data = temp_matrix, sigma_vec = sigmahat_vector,
@@ -187,8 +180,6 @@ save(result, file = "output/misc/result_10by10.RData")
 #
 # save(result, file = "output/misc/result.RData")
 # load(file = "output/misc/result.RData")
-
-
 
 #for the distance matrix we need a symmetrical one
 Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
