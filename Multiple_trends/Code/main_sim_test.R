@@ -42,10 +42,10 @@ for (t_len in different_T){
   colnames(simulated_data) <- 1:n_ts
   
   #Constructing the grid
-  u_grid      <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
-  h_grid      <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
-  h_grid      <- h_grid[h_grid > log(t_len) / t_len]
-  grid  <- construct_grid(t = t_len)
+  u_grid <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
+  h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
+  h_grid <- h_grid[h_grid > log(t_len) / t_len]
+  grid   <- construct_grid(t = t_len)
   
   simulated_statistic = replicate(n_rep, {
     sigmahat_vector <- c()
@@ -53,14 +53,12 @@ for (t_len in different_T){
       simulated_data[, i] <- arima.sim(model = list(ar = a_hat),
                                        innov = rnorm(t_len, 0, sigma),
                                        n = t_len)
+      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
       AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q,
                                           r_bar = r, p = 1)
       sigma_hat_i         <- sqrt(AR.struc$lrv)
       sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
     }
-    #Subtracting the column means
-    simulated_data <- simulated_data - colMeans(simulated_data)[col(simulated_data)] 
-    
     psi     <- compute_statistics(data = simulated_data,
                                   sigma_vec = sigmahat_vector,
                                   n_ts = n_ts, grid = grid)

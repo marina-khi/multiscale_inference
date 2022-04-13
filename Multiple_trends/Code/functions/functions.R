@@ -642,29 +642,3 @@ creating_matrix_and_texing <- function(vect, vect_t, vect_alpha, filename){
   print.xtable(xtable(matrix_, digits = c(3), align = "cccc"), type = "latex",
                file = filename, add.to.row = addtorow, include.colnames = FALSE)
 }
-
-# #Choosing the grid 
-# for (s in 1:5){
-#   for (p in 1:5){
-#     #Taking 5x5 grid instead of 1x1 and yearly observation instead of monthly
-#     tmp2 <- array(NA, dim = c(dim(tmp)[1] / 5, dim(tmp)[2] / 5, dim(tmp)[3] / 12))
-#     for (i in 1:(dim(tmp)[1] / 5)){
-#       for (j in 1:(dim(tmp)[2] / 5)){
-#         for (k in 1:(dim(tmp)[3] / 12)){
-#           tmp2[i, j, k] <- mean(tmp[5 * (i - 1) + s, 5 * (j - 1) + p, (12 * (k - 1) + 1):(12 * k)])
-#         }
-#       }
-#     }
-#     
-#     #Checking how many time series satisfy our requirements of no NaNs
-#     n_ts <- 0
-#     for (i in 1:(dim(tmp2)[1])){
-#       for (j in 1:(dim(tmp2)[2])){
-#         if (sum(is.na(tmp2[i, j, 101:(dim(tmp2)[3])])) == 0){
-#           n_ts <- n_ts + 1
-#         }
-#       }
-#     }
-#     if (n_ts > 370) {cat("For s =", s, " and p =", p, ", we have n_ts =", n_ts, "\n")}
-#   }
-# }
