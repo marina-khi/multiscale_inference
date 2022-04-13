@@ -14,13 +14,13 @@ source("functions/functions.R")
 ##############################
 
 n_ts     <- 15 #number of different time series for simulation
-n_rep    <- 1000 #number of simulations for calculating size and power
-sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
+n_rep    <- 5000 #number of simulations for calculating size and power
+sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
 
 different_T     <- c(250, 500, 1000) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
 len             <- length(different_alpha) #Necessary for output of the results
-different_beta  <- c(1, 2, 3)
+different_beta  <- c(0.75, 1, 1.25)
 
 a_hat <- 0.5 
 sigma <- 0.5
@@ -42,7 +42,7 @@ for (t_len in different_T){
   colnames(simulated_data) <- 1:n_ts
   
   #Constructing the grid
-  u_grid <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
+  u_grid <- seq(from = 5 / t_len, to = 1, by = 1 / 50)
   h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
   h_grid <- h_grid[h_grid > log(t_len) / t_len]
   grid   <- construct_grid(t = t_len)
