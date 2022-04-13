@@ -75,18 +75,7 @@ for (t_len in different_T){
   probs  <- as.vector(quantiles$quant[1, ])
   quants <- as.vector(quantiles$quant[2, ])
   
-  for (alpha in different_alpha){
-    if (sum(probs == (1 - alpha)) == 0)
-      pos <- which.min(abs(probs - (1 - alpha)))
-    if (sum(probs == (1 - alpha)) != 0)
-      pos <- which.max(probs == (1 - alpha))    
-    quant <- quants[pos]
-    
-    size <- sum(simulated_statistic > quant)/n_rep
-    size_vec = c(size_vec, size)
-    cat("Ratio of rejection under H0 is ", size, "with alpha = ", alpha,
-        "and T = ", t_len, "\n")
-  }
+ 
 }
 
 
