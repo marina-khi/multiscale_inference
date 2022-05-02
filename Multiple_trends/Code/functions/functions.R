@@ -642,3 +642,13 @@ creating_matrix_and_texing <- function(vect, vect_t, vect_alpha, filename){
   print.xtable(xtable(matrix_, digits = c(3), align = "cccc"), type = "latex",
                file = filename, add.to.row = addtorow, include.colnames = FALSE)
 }
+
+#Create a matrix (for size and power table for example) and write them in the tex file
+output_matrix <- function(matrix_, filename){
+  addtorow     <- list()
+  addtorow$pos <- list(0, 0)
+  addtorow$command <- c("& \\multicolumn{3}{c}{nominal size $\\alpha$} \\\\\n",
+                        "$T$ & 0.01 & 0.05 & 0.1 \\\\\n") 
+  print.xtable(xtable(matrix_, digits = c(3), align = "cccc"), type = "latex",
+               file = filename, add.to.row = addtorow, include.colnames = FALSE)
+}

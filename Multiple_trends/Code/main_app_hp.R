@@ -256,12 +256,14 @@ for (j in 1:n_ts){
 
 #Calculating each sigma_i separately
 sigmahat_vector <- c()
+ahat_vector <- c()
 for (i in 1:n_ts){
   AR.struc        <- estimate_lrv(data = hp_log_augm[, i], q = q, r_bar = r,
                                   #p = order_results[i])  
                                   p = 1)
   sigma_hat_i     <- sqrt(AR.struc$lrv)
   sigmahat_vector <- c(sigmahat_vector, sigma_hat_i)
+  ahat_vector <- c(ahat_vector, AR.struc$ahat)
 }
 
 

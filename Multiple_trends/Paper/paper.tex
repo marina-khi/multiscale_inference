@@ -592,57 +592,57 @@ The statement of Proposition \ref{prop:clustering:2} remains to hold true when t
 \section{\textcolor{red}{Simulations}}\label{sec:sim}
 
 In this Section, we present the results for the simulation study for the testing method described in Section \ref{sec:test}. The simulation design is as follows. We generate data from the model $Y_{it} = m_i(\frac{t}{T}) + \varepsilon_{it}$, where the number of time series $i$ is set to $n = 15$ and we consider different time series lengths $T$. For each $i$, the errors $\varepsilon_{it}$ are drawn from the AR(1) model $\varepsilon_{it} = a \varepsilon_{i, t-1} + \eta_{it}$, where $a = 0.5$ and the innovations $\eta_{it}$ are i.i.d.\ normally distributed with mean $0$ and variance $0.25$. To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ without loss of generality. To produce data under the alternative, we define $m_1(u) = \beta \, (u - 0.5) $ with $\beta = 1, 2, 3$ and set $m_i = 0$ for all $i \ne 1$. Hence, all trend functions are the same except for $m_1$ which is an increasing linear function. We use a linear function as the normalisation constraint $\int_0^1 m_1(u) du = 0$ is directly satisfied in this case. 
-%
-%\addtocounter{table}{-1} 
-%\begin{table}[t]
-%\footnotesize{
-%\begin{center}
-%\caption{Size of the multiscale test from Section \ref{sec-test-equality} for $n=15$ time series, different sample sizes $T$ and nominal sizes $\alpha$.}
-%\label{tab:size_equality}
-%\renewcommand{\arraystretch}{1.2}
-%\input{Plots/15_stations_sizetable_method_ll}
-%\end{center}}
-%\footnotesize{
-%\begin{center}
-%\caption{Power of the multiscale test from Section \ref{sec-test-equality} for $n=15$ time series, different sample sizes $T$ and nominal sizes $\alpha$. Each panel corresponds to a different slope parameter $\beta$.}\label{tab:power_equality}
-%\begin{subtable}[b]{0.32\textwidth}
-%\centering
-%\caption{$\beta = 0.75$}\label{tab:power_75_equality}
-%\renewcommand{\arraystretch}{1.2}
-%\input{Plots/15_stations_powertable_method_ll_with_b_75}
-%\end{subtable}
-%\begin{subtable}[b]{0.32\textwidth}
-%\centering
-%\caption{$\beta = 1.00$}\label{tab:power_100_equality}
-%\renewcommand{\arraystretch}{1.2}
-%\input{Plots/15_stations_powertable_method_ll_with_b_100}
-%\end{subtable}
-%\begin{subtable}[b]{0.32\textwidth}
-%\centering
-%\caption{$\beta = 1.25$}\label{tab:power_125_equality}
-%\renewcommand{\arraystretch}{1.2}
-%\input{Plots/15_stations_powertable_method_ll_with_b_125}
-%\end{subtable}
-%\end{center}}
-%\vspace{-0.4cm}
-%\end{table}
+
+\begin{table}[t]
+\footnotesize{
+\begin{center}
+\caption{Size of the multiscale test for $n=15$ time series, different sample sizes $T$ and nominal sizes $\alpha$.}
+\label{tab:size}
+\renewcommand{\arraystretch}{1.2}
+\input{output/tables/15_ts_size}
+\end{center}}
+\footnotesize{
+\begin{center}
+\caption{Power of the multiscale test for $n=15$ time series, different sample sizes $T$ and nominal sizes $\alpha$. Each panel corresponds to a different slope parameter $\beta$.}\label{tab:power}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$\beta = 1.00$}\label{tab:power_100}
+\renewcommand{\arraystretch}{1.2}
+\input{output/tables/15_ts_power_beta_100}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$\beta = 2.00$}\label{tab:power_200}
+\renewcommand{\arraystretch}{1.2}
+\input{output/tables/15_ts_power_beta_200}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$\beta = 3.00$}\label{tab:power_300}
+\renewcommand{\arraystretch}{1.2}
+\input{output/tables/15_ts_power_beta_300}
+\end{subtable}
+\end{center}}
+\vspace{-0.4cm}
+\end{table}
 %
 The test is implemented as follows. We use an Epanechnikov kernel and we define the grid  as $\mathcal{G}_T = U_T \times H_T$ with 
 \begin{align*}
 U_T & = \big\{ u \in [0,1]: u = \textstyle{\frac{t}{T}} \text{ for some } t \in \naturals \big\} \\
 H_T & = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5 t -3}{T}} \text{ for some } t \in \naturals \big\}. 
 \end{align*}
-Hence, the number of data points in each interval $\mathcal{I}_{u, h} = [u-h, u+h]$ is equal to $5, 15, 25, \ldots$. Furthermore, since the errors follow an AR($1$) process, we estimate the long-run variances $\sigma_i^2$ using the difference-based estimator proposed in \cite{KhismatullinaVogt2020} setting the tuning parameters $q$ and $r$ to $10$ and $25$, respectively. In order to compute the critical values of the test, we simulate $1000$ values of the statistic $\Phi_{n,T}$ defined in Section \ref{subsec:test:test} in \eqref{eq:Phi} and compute their empirical $(1-\alpha)$ quantile $q_{n,T}(\alpha)$.
+Hence, each interval $\mathcal{I}_{u, h} = [u-h, u+h]$ contains $5, 15, 25, \ldots$ data points. Furthermore, since the errors follow an AR($1$) process, we estimate the long-run variances $\sigma_i^2$ using the difference-based estimator proposed in \cite{KhismatullinaVogt2020} setting the tuning parameters $q$ and $r$ to $10$ and $25$, respectively.
 
-Note that in general the statistic $\Phi_{n,T}$ depends on the long-run error variances $\sigma_i^2$. However, as stated in the Remark \ref{rem:simpl}, under the assumption that the long-run error variance is known to be the same across $i$ (that is, $\sigma_i^2 = \sigma^2$ for all $i$), we can simplify the formula for the kernel averages $\phi^0_{ij, T}(u, h)$ so that the distribution of $\Phi_{n, T}$ does not depend on any unknown quantities, including the value of the long-run variance $\sigma_i^2$. We employ this fact to (approximately) calculate the gaussian quantiles $q_{n, T}(\alpha)$ which are further used for testing.
+We then turn to the computation of the critical values for our test. Specifically, we simulate $1000$ values of the statistic $\Phi_{n,T}$ defined in \eqref{eq:Phi} and compute their empirical $(1-\alpha)$ quantile $\widehat{q}_{n,T}(\alpha)$. Note that in general the statistic $\Phi_{n,T}$ depends on the long-run error variances $\sigma_i^2$. However, as stated in the Remark \ref{rem:simpl}, under the assumption that the long-run error variance is known to be the same across $i$ (that is, $\sigma_i^2 = \sigma^2$ for all $i$), this is not the case. Under this assumption, we can simplify the formula for the kernel averages $\phi^0_{ij, T}(u, h)$ so that it involves no unknown parameters. Hence, the distribution of $\Phi_{n, T}$ does not depend on any unknown quantities, including the value of the long-run variance $\sigma_i^2$.
 
 %Under this assumption, we can estimate $\sigma^2$ by $\widehat{\sigma}^2 = (\sum_{i = 1}^n\widehat{\sigma_i}^2)/n$, and the Gaussian statistic $\Phi_{n,T}$ simplifies to $\Phi_{n,T} = \max_{1 \le i < j \le n} \Phi_{ij, T}$ with $\Phi_{ij, T} = \max_{(u, h) \in \mathcal{G}_T} \{ | \phi_{ij, T}(u, h)| - \lambda(h) \}$ and $\phi_{ij, T}(u, h) = \sum_{t=1}^T w_{t,T}(u, h) \{ (Z_{it} - \bar{Z}_i) - (Z_{jt} - \bar{Z}_j)\}$. This statistic does not depend on the estimators $\widehat{\sigma}_i^2$ anymore. We thus do not need to recompute the critical values for each simulated sample, which decreases the running time significantly.
 %
 %
-%The simulation results are reported in Tables \ref{tab:size} and \ref{tab:power}. The entries of the tables are computed as follows. Inspecting Table \ref{tab:size}, the actual size of the test can be seen to approximate the nominal target $\alpha$ quite well even for small values of $T$. Moreover, as can be seen from Table \ref{tab:power}, the test also has reasonable power against the alternatives considered. For the smallest slope $\beta=1$ and the smallest sample size $T = 250$, the power is only moderate, reflecting the fact that the alternative is not very far away from the null. However, as we increase the slope $\beta$ and the sample size $T$, the power quickly increases. For the largest slope $\beta = 3$ and $T=??$, we already reach a power of $1.00$.
+The simulation results are reported in Tables \ref{tab:size} and \ref{tab:power}. The entries of the tables are computed as the number of simulations in which our test rejects the global null $H_0$ divided by the total number of simulations. Inspecting Table \ref{tab:size}, the actual size of the test can be seen to approximate the nominal target $\alpha$ relatively well for moderate and large sample sizes $T = 500, 1000$. It is also evident that the approximation becomes more precise as the sample size grows. Moreover, as can be seen from Table \ref{tab:power}, the test also has reasonable power against the alternatives considered. For the smallest slope $\beta=1$ and small sample sizes $T = 250$ and $T = 500$, the power is only moderate, reflecting the fact that the alternative is not very far away from the null. However, as we increase the slope $\beta$ and the sample size $T$, the power quickly increases. Already for moderate values of $\beta = 2.00$, we reach a power of $1.00$ for $T = 500$.
 
-We finally investigate the finite sample performance of the clustering algorithm from Section \ref{sec:clustering}. To do so, we partition the $n = 15$ time series into $N=3$ groups, each containing $5$ time series. Specifically, we set $G_1 = \{1,\ldots, 5\}$, $G_2 = \{6,\ldots, 10\}$ and $G_3 =  \{11,\ldots, 15\}$. Moreover, we define the group-specific trend functions $g_1$, $g_2$ and $g_3$ by $g_1(u) = 0$, $g_2(u) = 1 \cdot (u - 0.5)$ and $g_3(u) =  (- 1) \cdot (u - 0.5)$. In order to compute our estimators of the groups $G_1$, $G_2$, $G_3$ and their number $N = 3$, we use the same implementation as before followed by the clustering procedure from Section \ref{sec:clustering}. The estimation results are reported in Table \ref{tab:clustering}. The entries in Table $\ref{tab:clustering:1}$ are computed as the number of simulations for which $\widehat{N} = N$ divided by the total number of simulations. They thus specify the empirical probabilities with which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$. Analogously, the entries of Table $\ref{tab:clustering:2}$ give the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$. 
+We finally investigate the finite sample performance of the clustering algorithm from Section \ref{sec:clustering}. To do so, we partition the $n = 15$ time series into $N=3$ groups, each containing $5$ time series. Specifically, we set $G_1 = \{1,\ldots, 5\}$, $G_2 = \{6,\ldots, 10\}$ and $G_3 =  \{11,\ldots, 15\}$. Moreover, we define the group-specific trend functions $f_1$, $f_2$ and $f_3$ by $f_1(u) = 0$, $f_2(u) = 1 \cdot (u - 0.5)$ and $f_3(u) =  (- 1) \cdot (u - 0.5)$. In order to compute our estimators of the groups $G_1$, $G_2$, $G_3$ and their number $N = 3$, we use the same implementation as before followed by the clustering procedure from Section \ref{sec:clustering}. The estimation results are reported in Table \ref{tab:clustering}. The entries in Table $\ref{tab:clustering:1}$ are computed as the number of simulations for which $\widehat{N} = N$ divided by the total number of simulations. They thus specify the empirical probabilities with which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$. Analogously, the entries of Table $\ref{tab:clustering:2}$ give the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$. 
 
+\addtocounter{table}{-1} 
 \begin{table}[t]
 \footnotesize{
 \begin{center}
@@ -651,20 +651,20 @@ We finally investigate the finite sample performance of the clustering algorithm
 \centering
 \caption{Empirical probabilities that \\ $\widehat{N} = N$}\label{tab:clustering:1}
 \renewcommand{\arraystretch}{1.2}
-\input{plots/15_ts_correct_group_number}
+\input{output/tables/15_ts_correct_group_number}
 \end{subtable}
 \begin{subtable}[b]{0.48\textwidth}
 \centering
 \caption{\centering Empirical probabilities that $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{ G_1,G_2,G_3\}$}\label{tab:clustering:2}
 \renewcommand{\arraystretch}{1.2}
-\input{Plots/15_ts_correct_group_structure}
+\input{output/tables/15_ts_correct_group_structure}
 \end{subtable}
 \end{center}}
 \vspace{-0.5cm}
 \end{table}
 
 The simulation results nicely illustrate the theoretical properties of our clustering algorithm. According to Proposition \ref{prop:clustering:1}, the probability that $\widehat{N} = N$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{G_1,G_2,G_3\}$ should be at least $(1-\alpha)$ asymptotically. For the sample size $T = 1000$, the empirical probabilities reported in Table \ref{tab:clustering} can indeed be seen to exceed the value $(1-\alpha)$ as predicted by Proposition \ref{prop:clustering:1}. %Only for $T = 500$ and $\alpha = 0.01$, the empirical probability is slightly below $(1-\alpha)$.
-For the smaller sample sizes $T=250$ and $T=500$, in contrast, some of the empirical probabilities are much smaller than $(1-\alpha)$. This reflects the asymptotic nature of Proposition \ref{prop:clustering:1} and is not very surprising. It simply mirrors the fact that for small sample sizes, the effective noise level in the simulated data is quite high. Even though some of the empirical probabilities for $T=250$ and $T=500$ are clearly below the target $(1-\alpha)$, they are still quite substantial. Hence, even for these small sample sizes, our estimates $\widehat{N}$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}} \}$ are equal to the true values in a large number of simulations. 
+For the smaller sample sizes $T=250$ and $T=500$, in contrast, some of the empirical probabilities are much smaller than $(1-\alpha)$. This reflects the asymptotic nature of Proposition \ref{prop:clustering:1} and is not very surprising. It simply mirrors the fact that for small and moderate sample sizes, the effective noise level in the simulated data is quite high. Even though some of the empirical probabilities for $T=250$ and $T=500$ are clearly below the target $(1-\alpha)$, they are still quite substantial. Hence, even for these sample sizes, our estimates $\widehat{N}$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}} \}$ are equal to the true values in a large number of simulations. 
 %
 
 
@@ -689,14 +689,14 @@ For all of the countries, the observations are given in thousands of persons.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.8\textwidth]{Plots/gdp/smoothed_gdp_data.pdf}
+\includegraphics[width=0.8\textwidth]{output/plots/gdp/smoothed_gdp_data.pdf}
 \vspace{0.2cm}
 \caption{Local linear kernel estimates of the $n=11$ original time trends from the application of Section \ref{subsec:app:gdp}. Each panel shows the estimates for a different bandwidth $h$.}\label{fig:app:gdp}
 \end{figure}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.8\textwidth]{Plots/gdp/smoothed_gdp_data_augmented.pdf}
+\includegraphics[width=0.8\textwidth]{output/plots/gdp/smoothed_gdp_data_augmented.pdf}
 \vspace{0.2cm}
 \caption{Local linear kernel estimates of the $n=11$ augmented time trends from the application of Section \ref{subsec:app:gdp}. Each panel shows the estimates for a different bandwidth $h$.}\label{fig:app:gdp_augm}
 \end{figure}
@@ -742,12 +742,12 @@ As can be seen in Figure \ref{fig:app:gdp}, in the original data on the GDP grow
 
 \begin{figure}[b!]
 \begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{Plots/gdp/AUS_vs_NOR}
+\includegraphics[width=\textwidth]{output/plots/gdp/AUS_vs_NOR}
 \caption{Test results for the comparison of Australia and Norway.}\label{fig:Australia:Norway}
 \end{minipage}
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{Plots/gdp/AUT_vs_NOR}
+\includegraphics[width=\textwidth]{output/plots/gdp/AUT_vs_NOR}
 \caption{Test results for the comparison of Austria and Norway.}\label{fig:Austria:Norway}
 \end{minipage}
 \caption*{Note: In each figure, panel (a) shows the two augmented time series, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i, j]}_{min}(\alpha)$ in black.}
@@ -755,12 +755,12 @@ As can be seen in Figure \ref{fig:app:gdp}, in the original data on the GDP grow
 
 \begin{figure}[t!]
 \begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{Plots/gdp/CAN_vs_NOR}
+\includegraphics[width=\textwidth]{output/plots/gdp/CAN_vs_NOR}
 \caption{Test results for the comparison of Canada and Norway.}\label{fig:Canada:Norway}
 \end{minipage}
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{Plots/gdp/CHE_vs_NOR}
+\includegraphics[width=\textwidth]{output/plots/gdp/CHE_vs_NOR}
 \caption{Test results for the comparison of Switzerland and Norway.}\label{fig:Switzerland:Norway}
 \end{minipage}
 \caption*{Note: In each figure, panel (a) shows the two augmented time series, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i, j]}_{min}(\alpha)$ in black.}
@@ -768,12 +768,12 @@ As can be seen in Figure \ref{fig:app:gdp}, in the original data on the GDP grow
 
 \begin{figure}[t!]
 \begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{Plots/gdp/DEU_vs_NOR}
+\includegraphics[width=\textwidth]{output/plots/gdp/DEU_vs_NOR}
 \caption{Test results for the comparison of Germany and Norway.}\label{fig:Germany:Norway}
 \end{minipage}
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{Plots/gdp/FIN_vs_NOR}
+\includegraphics[width=\textwidth]{output/plots/gdp/FIN_vs_NOR}
 \caption{Test results for the comparison of Finland and Norway.}\label{fig:Finland:Norway}
 \end{minipage}
 \caption*{Note: In each figure, panel (a) shows the two augmented time series, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i, j]}_{min}(\alpha)$ in black.}
@@ -781,12 +781,12 @@ As can be seen in Figure \ref{fig:app:gdp}, in the original data on the GDP grow
 
 \begin{figure}[t!]
 \begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{Plots/gdp/FRA_vs_NOR}
+\includegraphics[width=\textwidth]{output/plots/gdp/FRA_vs_NOR}
 \caption{Test results for the comparison of France and Norway.}\label{fig:France:Norway}
 \end{minipage}
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{Plots/gdp/USA_vs_NOR}
+\includegraphics[width=\textwidth]{output/plots/gdp/USA_vs_NOR}
 \caption{Test results for the comparison of the USA and Norway.}\label{fig:USA:Norway}
 \end{minipage}
 \caption*{Note: In each figure, panel (a) shows the two augmented time series, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i, j]}_{min}(\alpha)$ in black.}
@@ -795,7 +795,7 @@ As can be seen in Figure \ref{fig:app:gdp}, in the original data on the GDP grow
 \begin{figure}[p!]
 \begin{center}
 \begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{Plots/gdp/JPN_vs_NOR}
+\includegraphics[width=\textwidth]{output/plots/gdp/JPN_vs_NOR}
 \caption{Test results for the comparison of Japan and Norway.}\label{fig:Japan:Norway}
 \end{minipage}
 \end{center}
@@ -805,12 +805,12 @@ As can be seen in Figure \ref{fig:app:gdp}, in the original data on the GDP grow
 
 \begin{figure}[p!]
 \begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{Plots/gdp/USA_vs_FRA}
+\includegraphics[width=\textwidth]{output/plots/gdp/USA_vs_FRA}
 \caption{Test results for the comparison of the USA and France.}\label{fig:USA:France}
 \end{minipage}
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{Plots/gdp/AUS_vs_FRA}
+\includegraphics[width=\textwidth]{output/plots/gdp/AUS_vs_FRA}
 \caption{Test results for the comparison of Australia and France.}\label{fig:Australia:France}
 \end{minipage}
 \caption*{Note: In each figure, panel (a) shows the two augmented time series, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i, j]}_{min}(\alpha)$ in black.}
@@ -842,7 +842,7 @@ Data for CPI, real GDP, population size and long-term interest rate are taken fr
 
 \begin{figure}[t!]
 \centering
-\includegraphics[width=0.8\textwidth]{Plots/hp/smoothed_hp_data_augmented.pdf}
+\includegraphics[width=0.8\textwidth]{output/plots/hp/smoothed_hp_data_augmented.pdf}
 \vspace{0.2cm}
 \caption{Local linear kernel estimates of the $n=8$ augmented time trends from the application of Section \ref{subsec:app:hp}. Each panel shows the estimates for a different bandwidth $h$.}\label{fig:app:hp_augm}
 \end{figure}
@@ -859,12 +859,12 @@ for $1 \le t \le T$, where $\bfbeta_i = (\beta_{i, 1}, \beta_{i, 2}, \beta_{i, 3
 
 \begin{figure}[b!]
 \begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{Plots/hp/hp_AUS_vs_NLD}
+\includegraphics[width=\textwidth]{output/plots/hp/hp_AUS_vs_NLD}
 \caption{Test results for the comparison of the housing prices in Australia and the Netherlands.}\label{fig:hp:Australia:Netherlands}
 \end{minipage}
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{Plots/hp/hp_BEL_vs_DNK}
+\includegraphics[width=\textwidth]{output/plots/hp/hp_BEL_vs_DNK}
 \caption{Test results for the comparison of the housing prices in Belgium and Denmark.}\label{fig:hp:Belgium:Denmark}
 \end{minipage}
 \caption*{Note: In each figure, panel (a) shows the two augmented time series of the house prices, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i, j]}_{min}(\alpha)$ in black.}
@@ -872,12 +872,12 @@ for $1 \le t \le T$, where $\bfbeta_i = (\beta_{i, 1}, \beta_{i, 2}, \beta_{i, 3
 
 \begin{figure}[t!]
 \begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{Plots/hp/hp_BEL_vs_NLD}
+\includegraphics[width=\textwidth]{output/plots/hp/hp_BEL_vs_NLD}
 \caption{Test results for the comparison of the housing prices in Belgium and the Netherlands.}\label{fig:hp:Belgium:Netherlands}
 \end{minipage}
 \hspace{0.25cm}
 \begin{minipage}[t]{0.49\textwidth}
-\includegraphics[width=\textwidth]{Plots/hp/hp_BEL_vs_USA}
+\includegraphics[width=\textwidth]{output/plots/hp/hp_BEL_vs_USA}
 \caption{Test results for the comparison of the housing prices in Belgium and the USA.}\label{fig:hp:Belgium:USA}
 \end{minipage}
 \caption*{Note: In each figure, panel (a) shows the two augmented time series of the house prices, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i, j]}_{min}(\alpha)$ in black.}

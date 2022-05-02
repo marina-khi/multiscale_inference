@@ -16,7 +16,7 @@ source("functions/functions.R")
 ##############
 
 alpha     <- c(0.05, 0.1)
-sim_runs  <- 500
+sim_runs  <- 1000
 q         <- 25 #Parameters for the estimation of sigma
 r         <- 10
 
@@ -130,7 +130,7 @@ for (i in 1:(n_ts - 1)){
   }
 }
 
-pdf("output/plots/pearson_correlation.pdf", width = 30, height = 30,
+pdf("output/plots/pearson_correlation_10by10.pdf", width = 30, height = 30,
     paper = "special")
 #par(cex = 1, tck = -0.025)
 par(mar = c(0, 0, 0, 0)) #Margins for each plot
@@ -155,7 +155,7 @@ grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
 at_         <- seq(from = 1, to = t_len, by = 20)
 
 #Constructing the grid
-u_grid      <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
+u_grid      <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
 h_grid      <- seq(from = 2 / t_len, to = 1/ 4, by = 5 / t_len)
 h_grid      <- h_grid[h_grid > log(t_len) / t_len]
 
@@ -170,7 +170,7 @@ result <- statistics_full(data = temp_matrix, sigma_vec = sigmahat_vector,
                           sim_runs = sim_runs)
 format(Sys.time(), "%a %b %d %X %Y")
 save(result, file = "output/misc/result_10by10.RData")
-
+#
 # Calculating statistics together with the quantiles, most general way
 # format(Sys.time(), "%a %b %d %X %Y")
 # result <- multiscale_test(data = temp_matrix, sigma_vec = sigmahat_vector,
@@ -179,7 +179,7 @@ save(result, file = "output/misc/result_10by10.RData")
 # format(Sys.time(), "%a %b %d %X %Y")
 #
 # save(result, file = "output/misc/result.RData")
-# load(file = "output/misc/result.RData")
+# load(file = "output/misc/result_10by10.RData")
 
 #for the distance matrix we need a symmetrical one
 Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
@@ -207,10 +207,12 @@ par(cex = 1, tck = -0.025)
 par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
 plot(res, cex = 0.8, xlab = "", ylab = "",
-     main = paste0("Clusters obtained using ", 2 * h_grid * t_len + 1," years"))
+     main = paste0("Clusters obtained using ", 
+                   paste(2 * h_grid * t_len + 1, collapse = " ", sep = " "),
+                   " years"))
 abline(h = result$quant[alpha == 0.05], lty = 2, col = "red")
 abline(h = result$quant[alpha == 0.1], lty = 2, col = "blue")
-legend(x = "topright", inset = c(0.01, 0.10),
+legend(x = "topright", inset = c(0.01, 0.01),
        legend = c("alpha = 0.05", "alpha = 0.10"),
        lty = 2, col = c("red", "blue"))
 #rect.hclust(res, h = result$quant[alpha == 0.05], border = 2:(max(subgroups) + 1))
