@@ -383,7 +383,7 @@ produce_plots_talk <- function(results, l, data_i, data_j,
   plot(x = dates, y = data_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
        col = "#EB811B", ylab="", xlab="", mgp=c(1, 0.5, 0))
   lines(x = dates, y = data_j, col="#604c38")
-  title(main = "(a) observed daily exchange rates", font.main = 1, line = 0.5)
+  title(main = "(a) adjusted logarithm of house prices", font.main = 1, line = 0.5)
   legend("topright", inset = 0.02, legend=c(name_i, name_j),
          col = c("#EB811B", "#604c38"), lty = 1, cex = 0.95, ncol = 1)
   
