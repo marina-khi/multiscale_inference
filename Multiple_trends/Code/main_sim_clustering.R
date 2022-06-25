@@ -1,6 +1,7 @@
 rm(list=ls())
 
 library(car)
+library(ggplot2)
 library(multiscale)
 library(Matrix)
 library(foreach)
@@ -217,6 +218,7 @@ for (t_len in different_T){
     if (clustering_results[1, i] == 3) {
       correct_number_of_groups = correct_number_of_groups + 1
     }
+    if ((clustering_results[1, i] == 2) | (clustering_results[1, i] == 3))
     groups123  <- clustering_results[2:(n_ts + 1), i]
     groups132  <- recode(groups123, "2=3;3=2")
     groups213  <- recode(groups123, "1=2;2=1")
@@ -229,23 +231,103 @@ for (t_len in different_T){
                       sum(correct_specification != groups312),
                       sum(correct_specification != groups321),
                       sum(correct_specification != groups123))
+    if (clustering_results[1, i] == 4) {
+      groups1234  <- clustering_results[2:(n_ts + 1), i]
+      groups1243  <- recode(groups1234, "4=3;3=4")
+      groups1342  <- recode(groups1234, "2=3;3=4;4=2")
+      groups1324  <- recode(groups1234, "2=3;3=2")
+      groups1423  <- recode(groups1234, "2=4;3=2;4=3")
+      groups1432  <- recode(groups1234, "2=4;4=2")
+      
+      groups2134  <- recode(groups1234, "1=2;2=1")
+      groups2143  <- recode(groups1234, "1=2;2=1;3=4;4=3")
+      groups2314  <- recode(groups1234, "1=2;2=3;3=1")
+      groups2341  <- recode(groups1234, "1=2;2=3;3=4;4=1")
+      groups2413  <- recode(groups1234, "1=2;2=4;3=1;4=3")
+      groups2431  <- recode(groups1234, "1=2;2=4;4=1")
+      
+      groups3124  <- recode(groups1234, "1=3;2=1;3=2")
+      groups3142  <- recode(groups1234, "1=3;2=1;3=4;4=2")
+      groups3214  <- recode(groups1234, "1=3;3=1")
+      groups3241  <- recode(groups1234, "1=3;3=4;4=1")
+      groups3412  <- recode(groups1234, "1=3;2=4;3=1;4=2")
+      groups3421  <- recode(groups1234, "1=3;2=4;3=2;4=1")
+      
+      groups4123  <- recode(groups1234, "1=4;2=1;3=2;4=3")
+      groups4132  <- recode(groups1234, "1=4;2=1;4=2")
+      groups4213  <- recode(groups1234, "1=4;3=1;4=3")
+      groups4231  <- recode(groups1234, "1=4;4=1")
+      groups4312  <- recode(groups1234, "1=4;2=3;3=1;4=2")
+      groups4321  <- recode(groups1234, "1=4;2=3;3=2;4=1")
+      
+      difference <- min(sum(correct_specification != groups1234),
+                        sum(correct_specification != groups1243),
+                        sum(correct_specification != groups1342),
+                        sum(correct_specification != groups1324),
+                        sum(correct_specification != groups1423),
+                        sum(correct_specification != groups1432),
+                        
+                        sum(correct_specification != groups2134),
+                        sum(correct_specification != groups2143),
+                        sum(correct_specification != groups2314),
+                        sum(correct_specification != groups2341),
+                        sum(correct_specification != groups2413),
+                        sum(correct_specification != groups2431),
+                        
+                        sum(correct_specification != groups3124),
+                        sum(correct_specification != groups3142),
+                        sum(correct_specification != groups3214),
+                        sum(correct_specification != groups3241),
+                        sum(correct_specification != groups3412),
+                        sum(correct_specification != groups3421),
+                        
+                        sum(correct_specification != groups4123),
+                        sum(correct_specification != groups4132),
+                        sum(correct_specification != groups4213),
+                        sum(correct_specification != groups4231),
+                        sum(correct_specification != groups4312),
+                        sum(correct_specification != groups4321))
+    }
     if (difference == 0){
       correctly_specified_groups = correctly_specified_groups + 1
     }
     num_of_errors <- c(num_of_errors, difference)
   }
   
-  hist(clustering_results[1, ],
-       main = paste0("Histogram of the number of groups for T= ", t_len),
-       breaks = c(2, 3, 4, 5, 6))
-  hist(num_of_errors, main = paste0("Histogram of the number of errors for T= ", t_len))
+  group_count <- table(factor(clustering_results[1, ], levels = 1:5))
+  error_count <- table(factor(num_of_errors, levels = 0:8))
   
+  pdf(paste0("output/plots/histograms_T_", t_len, ".pdf"), width = 7, height = 10,
+      paper = "special")
+  par(mfrow = c(2, 1))
+  par(cex = 1, tck = -0.025)
+  par(mar = c(2.5, 3.5, 2, 0.2)) #Margins for each plot
+  par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
+  
+  bp1 <- barplot(group_count, ylim = c(0, 1.1 * max(group_count)), xlab = "",
+                 main = paste0("Histogram of the estimated number of groups for T = ", t_len),
+                 ylab = "", xaxt = 'n', space = 0)
+  text(x = bp1, y = group_count, label = group_count, cex = 0.8, pos = 3)
+  axis(1, at = bp1, labels = 1:5, tick=FALSE, line=-0.5, cex.axis=1)
+  title(xlab="estimated number of groups", mgp=c(1.5,1,0), cex.lab=0.8)
+  title(ylab="frequency", mgp=c(2.5,1,0), cex.lab=0.8)
+  
+  bp2 <- barplot(error_count, ylim = c(0, 1.1 * max(error_count)), xlab = "",
+                 main = paste0("Histogram of the number of errors made for T = ", t_len),
+                 ylab = "", xaxt = 'n', space = 0)
+  text(x = bp2, y = error_count, label = error_count, cex = 0.8, pos = 3)
+  axis(1, at = bp2, labels = 0:8, tick=FALSE, line=-0.5, cex.axis=1)
+  title(xlab="number of errors", mgp=c(1.5,1,0), cex.lab=0.8)
+  title(ylab="frequency", mgp=c(2.5,1,0), cex.lab=0.8)
+  dev.off()
+
   correct_groups    <- c(correct_groups, correct_number_of_groups/n_rep)
   correct_structure <- c(correct_structure, correctly_specified_groups/n_rep)
   cat("Percentage of detecting true number of clusters",
       correct_number_of_groups/n_rep, "with alpha = 0.05, T = ", t_len, "\n")
   cat("Percentage of detecting true clustering",
       correctly_specified_groups/n_rep, "with alpha = 0.05, T = ", t_len, "\n")
+  cat("Maximum number of errors is ", max(num_of_errors), "\n")
 }
 
 #######################
