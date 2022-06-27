@@ -15,10 +15,10 @@ source("functions/functions.R")
 ##############################
 
 n_ts     <- 15 #number of different time series for simulation
-n_rep    <- 1000 #number of simulations for calculating size and power
-sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
+n_rep    <- 5000 #number of simulations for calculating size and power
+sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
 
-different_T     <- c(100) #Different lengths of time series
+different_T     <- c(100, 250, 500) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
 different_b     <- c(0, 0.75, 1.00, 1.25) #Zero is for calculating the size
 
@@ -152,7 +152,7 @@ for (t_len in different_T){
 
 for (b in different_b){
   l   <- match(b, different_b)
-  tmp <- size_and_power_array[, l, ]
+  tmp <- as.matrix(size_and_power_array[, l, ])
   if (b == 0){
     filename = paste0("output/tables/", n_ts, "_ts_size.tex")
   } else {
