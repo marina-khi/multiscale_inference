@@ -591,7 +591,9 @@ The statement of Proposition \ref{prop:clustering:2} remains to hold true when t
 
 \section{\textcolor{red}{Simulations}}\label{sec:sim}
 
-In this Section, we present the results for the simulation study for the testing method described in Section \ref{sec:test}. The simulation design is as follows. We generate data from the model $Y_{it} = m_i(\frac{t}{T}) + \varepsilon_{it}$, where the number of time series $i$ is set to $n = 15$ and we consider different time series lengths $T$. For each $i$, the errors $\varepsilon_{it}$ are drawn from the AR(1) model $\varepsilon_{it} = a \varepsilon_{i, t-1} + \eta_{it}$, where $a = 0.5$ and the innovations $\eta_{it}$ are i.i.d.\ normally distributed with mean $0$ and variance $0.25$. To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ without loss of generality. To produce data under the alternative, we define $m_1(u) = \beta \, (u - 0.5) $ with $\beta = 1, 2, 3$ and set $m_i = 0$ for all $i \ne 1$. Hence, all trend functions are the same except for $m_1$ which is an increasing linear function. We use a linear function as the normalisation constraint $\int_0^1 m_1(u) du = 0$ is directly satisfied in this case. 
+In this Section, we present the results for the simulation study for the testing method described in Section \ref{sec:test}. The simulation design is as follows. We generate data from the model $Y_{it} = \alpha_i + m_i(\frac{t}{T}) + \beta_i X_{it} + \varepsilon_{it}$, where the number of time series $i$ is set to $n = 15$ and we consider different time series lengths $T$. We assume that the there is only one covariate $X_{it}$, and we set the unknown parameter $\beta_i = 1$ for all $i$. We also assume that the fixed--effect term $\alpha_i$ is equal to $0$ in all time series. For each $i$, the errors $\varepsilon_{it}$ are drawn from the AR(1) model $\varepsilon_{it} = a \varepsilon_{i, t-1} + \eta_{it}$, where $a = 0.25$ and the innovations $\eta_{it}$ are i.i.d.\ normally distributed with mean $0$ and variance $0.25$. Furthermore, the covariates $X_{it}$ also follow an AR($1$) process $X_{it} = a_x X_{i, t-1} + \zeta_{it}$, where $a_x = 0.25$ and the innovations $\zeta_{it}$ are i.i.d.\ normally distributed with mean $0$ and variance $0.25$. We assume that the covariates $X_{it}$ and the error terms $\varepsilon_{js}$ are independent from each other for all $1 \leq i,j \leq n$ and $1 \leq t, s \leq T$.
+
+To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ without loss of generality. To produce data under the alternative, we define $m_1(u) = b \, (u - 0.5) $ with $b = 0.75, 1, 1.25$ and set $m_i = 0$ for all $i \ne 1$. Hence, all trend functions are the same except for $m_1$ which is an increasing linear function. We use a linear function as the normalisation constraint $\int_0^1 m_1(u) du = 0$ is directly satisfied in this case. 
 
 \begin{table}[t]
 \footnotesize{
@@ -603,42 +605,44 @@ In this Section, we present the results for the simulation study for the testing
 \end{center}}
 \footnotesize{
 \begin{center}
-\caption{Power of the multiscale test for $n=15$ time series, different sample sizes $T$ and nominal sizes $\alpha$. Each panel corresponds to a different slope parameter $\beta$.}\label{tab:power}
+\caption{Power of the multiscale test for $n=15$ time series, different sample sizes $T$ and nominal sizes $\alpha$. Each panel corresponds to a different slope parameter $b$.}\label{tab:power}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
-\caption{$\beta = 1.00$}\label{tab:power_100}
+\caption{$b = 0.75$}\label{tab:power_075}
+\renewcommand{\arraystretch}{1.2}
+\input{output/tables/15_ts_power_beta_75}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 1.00$}\label{tab:power_100}
 \renewcommand{\arraystretch}{1.2}
 \input{output/tables/15_ts_power_beta_100}
 \end{subtable}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
-\caption{$\beta = 2.00$}\label{tab:power_200}
+\caption{$b = 1.25$}\label{tab:power_125}
 \renewcommand{\arraystretch}{1.2}
-\input{output/tables/15_ts_power_beta_200}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\centering
-\caption{$\beta = 3.00$}\label{tab:power_300}
-\renewcommand{\arraystretch}{1.2}
-\input{output/tables/15_ts_power_beta_300}
+\input{output/tables/15_ts_power_beta_125}
 \end{subtable}
 \end{center}}
 \vspace{-0.4cm}
 \end{table}
 %
-The test is implemented as follows. We use an Epanechnikov kernel and we define the grid  as $\mathcal{G}_T = U_T \times H_T$ with 
+The testing procedure is implemented as follows. First, for each $i$, we estimate the unknown parameter $\beta_i$ using the first-differencing method described in Section \ref{subsec:test:prep}. Afterwards, given $\widehat{\beta}_i$, we obtain an estimator $\widehat{\alpha}_i$ of the fixed-effect term $\alpha_i$ calculated as in \eqref{eq:alpha:est}. We then work with the augmented time series $Y_{it}^o = Y_{it} - \widehat{\alpha}_i - \widehat{\beta}_i X_{it}$.
+
+In order to construct the multiscale test statistics, we use an Epanechnikov kernel and we define the grid  as $\mathcal{G}_T = U_T \times H_T$ with 
 \begin{align*}
 U_T & = \big\{ u \in [0,1]: u = \textstyle{\frac{t}{T}} \text{ for some } t \in \naturals \big\} \\
 H_T & = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5 t -3}{T}} \text{ for some } t \in \naturals \big\}. 
 \end{align*}
 Hence, each interval $\mathcal{I}_{u, h} = [u-h, u+h]$ contains $5, 15, 25, \ldots$ data points. Furthermore, since the errors follow an AR($1$) process, we estimate the long-run variances $\sigma_i^2$ using the difference-based estimator proposed in \cite{KhismatullinaVogt2020} setting the tuning parameters $q$ and $r$ to $10$ and $25$, respectively.
 
-We then turn to the computation of the critical values for our test. Specifically, we simulate $1000$ values of the statistic $\Phi_{n,T}$ defined in \eqref{eq:Phi} and compute their empirical $(1-\alpha)$ quantile $\widehat{q}_{n,T}(\alpha)$. Note that in general the statistic $\Phi_{n,T}$ depends on the long-run error variances $\sigma_i^2$. However, as stated in the Remark \ref{rem:simpl}, under the assumption that the long-run error variance is known to be the same across $i$ (that is, $\sigma_i^2 = \sigma^2$ for all $i$), this is not the case. Under this assumption, we can simplify the formula for the kernel averages $\phi^0_{ij, T}(u, h)$ so that it involves no unknown parameters. Hence, the distribution of $\Phi_{n, T}$ does not depend on any unknown quantities, including the value of the long-run variance $\sigma_i^2$.
+We then turn to the computation of the critical values for our test. Specifically, we simulate $5000$ values of the statistic $\Phi_{n,T}$ defined in \eqref{eq:Phi} and compute their empirical $(1-\alpha)$ quantile $\widehat{q}_{n,T}(\alpha)$. Note that in general the statistic $\Phi_{n,T}$ depends on the long-run error variances $\sigma_i^2$. However, as stated in the Remark \ref{rem:simpl}, under the assumption that the long-run error variance is known to be the same across $i$ (that is, $\sigma_i^2 = \sigma^2$ for all $i$), this is not the case. Under this assumption, we can simplify the formula for the kernel averages $\phi^0_{ij, T}(u, h)$ so that it involves no unknown parameters. Hence, the distribution of $\Phi_{n, T}$ does not depend on any unknown quantities, including the value of the long-run variance $\sigma_i^2$.
 
 %Under this assumption, we can estimate $\sigma^2$ by $\widehat{\sigma}^2 = (\sum_{i = 1}^n\widehat{\sigma_i}^2)/n$, and the Gaussian statistic $\Phi_{n,T}$ simplifies to $\Phi_{n,T} = \max_{1 \le i < j \le n} \Phi_{ij, T}$ with $\Phi_{ij, T} = \max_{(u, h) \in \mathcal{G}_T} \{ | \phi_{ij, T}(u, h)| - \lambda(h) \}$ and $\phi_{ij, T}(u, h) = \sum_{t=1}^T w_{t,T}(u, h) \{ (Z_{it} - \bar{Z}_i) - (Z_{jt} - \bar{Z}_j)\}$. This statistic does not depend on the estimators $\widehat{\sigma}_i^2$ anymore. We thus do not need to recompute the critical values for each simulated sample, which decreases the running time significantly.
 %
 %
-The simulation results are reported in Tables \ref{tab:size} and \ref{tab:power}. The entries of the tables are computed as the number of simulations in which our test rejects the global null $H_0$ divided by the total number of simulations. Inspecting Table \ref{tab:size}, the actual size of the test can be seen to approximate the nominal target $\alpha$ relatively well for moderate and large sample sizes $T = 500, 1000$. It is also evident that the approximation becomes more precise as the sample size grows. Moreover, as can be seen from Table \ref{tab:power}, the test also has reasonable power against the alternatives considered. For the smallest slope $\beta=1$ and small sample sizes $T = 250$ and $T = 500$, the power is only moderate, reflecting the fact that the alternative is not very far away from the null. However, as we increase the slope $\beta$ and the sample size $T$, the power quickly increases. Already for moderate values of $\beta = 2.00$, we reach a power of $1.00$ for $T = 500$.
+The simulation results are reported in Tables \ref{tab:size} and \ref{tab:power}. The entries of the tables are computed as the number of simulations in which our test rejects the global null $H_0$ divided by the total number of simulations. Inspecting Table \ref{tab:size}, the actual size of the test can be seen to approximate the nominal target $\alpha$ relatively well for moderate sample size $T = 500$. It is also evident that the approximation becomes more precise as the sample size grows. Moreover, as can be seen from Table \ref{tab:power}, the test also has reasonable power against the alternatives considered. For slopes $b=0.75$ and small sample sizes $T = 100$ and $T = 250$, the power is only moderate, reflecting the fact that the alternative is not very far away from the null. However, as we increase the slope $b$ and the sample size $T$, the power quickly increases. Already for moderate values of $b = 1.00$, we reach a power of $0.99$ for $T = 500$.
 
 We finally investigate the finite sample performance of the clustering algorithm from Section \ref{sec:clustering}. To do so, we partition the $n = 15$ time series into $N=3$ groups, each containing $5$ time series. Specifically, we set $G_1 = \{1,\ldots, 5\}$, $G_2 = \{6,\ldots, 10\}$ and $G_3 =  \{11,\ldots, 15\}$. Moreover, we define the group-specific trend functions $f_1$, $f_2$ and $f_3$ by $f_1(u) = 0$, $f_2(u) = 1 \cdot (u - 0.5)$ and $f_3(u) =  (- 1) \cdot (u - 0.5)$. In order to compute our estimators of the groups $G_1$, $G_2$, $G_3$ and their number $N = 3$, we use the same implementation as before followed by the clustering procedure from Section \ref{sec:clustering}. The estimation results are reported in Table \ref{tab:clustering}. The entries in Table $\ref{tab:clustering:1}$ are computed as the number of simulations for which $\widehat{N} = N$ divided by the total number of simulations. They thus specify the empirical probabilities with which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$. Analogously, the entries of Table $\ref{tab:clustering:2}$ give the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$. 
 
@@ -662,6 +666,22 @@ We finally investigate the finite sample performance of the clustering algorithm
 \end{center}}
 \vspace{-0.5cm}
 \end{table}
+
+\begin{figure}[b!]
+\centering
+\includegraphics[width=\textwidth]{output/plots/sim/histograms_groups}
+\caption{Estimated number of groups for nominal size $\alpha = 0.05$ and different sample sizes $T$. Each panel corresponds to a different sample size $T$.}
+\label{fig:clustering:1}
+\end{figure}
+
+\begin{figure}[b!]
+\centering
+\includegraphics[width=\textwidth]{output/plots/sim/histograms_errors}
+\caption{Number of incorrectly clustered time series for nominal size $\alpha = 0.05$ and different sample sizes $T$. Each panel corresponds to a different sample size $T$.}\label{fig:clustering:2}
+\end{figure}
+
+
+
 
 The simulation results nicely illustrate the theoretical properties of our clustering algorithm. According to Proposition \ref{prop:clustering:1}, the probability that $\widehat{N} = N$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{G_1,G_2,G_3\}$ should be at least $(1-\alpha)$ asymptotically. For the sample size $T = 1000$, the empirical probabilities reported in Table \ref{tab:clustering} can indeed be seen to exceed the value $(1-\alpha)$ as predicted by Proposition \ref{prop:clustering:1}. %Only for $T = 500$ and $\alpha = 0.01$, the empirical probability is slightly below $(1-\alpha)$.
 For the smaller sample sizes $T=250$ and $T=500$, in contrast, some of the empirical probabilities are much smaller than $(1-\alpha)$. This reflects the asymptotic nature of Proposition \ref{prop:clustering:1} and is not very surprising. It simply mirrors the fact that for small and moderate sample sizes, the effective noise level in the simulated data is quite high. Even though some of the empirical probabilities for $T=250$ and $T=500$ are clearly below the target $(1-\alpha)$, they are still quite substantial. Hence, even for these sample sizes, our estimates $\widehat{N}$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}} \}$ are equal to the true values in a large number of simulations. 
