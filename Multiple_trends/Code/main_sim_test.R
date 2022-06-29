@@ -4,6 +4,9 @@ library(multiscale)
 library(car)
 library(dplyr)
 library(Matrix)
+library(foreach)
+library(parallel)
+library(doParallel)
 library(xtable)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
@@ -23,12 +26,12 @@ different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
 different_b     <- c(0, 0.75, 1.00, 1.25) #Zero is for calculating the size
 
 #For the error process
-a_hat <- 0.25 
+a     <- 0.25 
 sigma <- 0.5
 
 #For the covariate process
 beta    <- 1
-a_hat_x <- 0.5
+a_x     <- 0.5
 sigma_x <- 0.5
 
 #Parameters for the estimation of long-run-variance
@@ -67,63 +70,24 @@ for (t_len in different_T){
   quants <- as.vector(quantiles$quant[2, ])
   
   for (b in different_b){
-    y_matrix           <- matrix(NA, nrow = t_len, ncol = n_ts)
-    y_augm_matrix      <- matrix(NA, nrow = t_len, ncol = n_ts)
-    x_matrix           <- matrix(NA, nrow = t_len, ncol = n_ts)
-    error_matrix       <- matrix(NA, nrow = t_len, ncol = n_ts)
     m_matrix           <- matrix(0, nrow = t_len, ncol = n_ts)
     #Only the first trend function is non-zero:
     m_matrix[, 1]      <- (1:t_len - 0.5 * t_len) * (b / t_len)
-    colnames(y_matrix) <- 1:n_ts
-    
-    
-    simulated_statistic = replicate(n_rep, {
-      #First we simulate the data
-      for (i in 1:n_ts){
-        x_matrix[, i]     <- arima.sim(model = list(ar = a_hat_x),
-                                       innov = rnorm(t_len, 0, sigma_x),
-                                       n = t_len)
-        error_matrix[, i] <- arima.sim(model = list(ar = a_hat),
-                                       innov = rnorm(t_len, 0, sigma),
-                                       n = t_len)
-        y_matrix[, i]     <- m_matrix[, i] + beta * x_matrix[, i] + error_matrix[, i]
 
-      }
-      
-      sigmahat_vector <- c()
-      beta_hat        <- c()
-      alpha_hat       <- c()
-      
-      #Now we estimate the parameters
-      for (i in 1:n_ts){
-        #First differences
-        x_diff    <- x_matrix[, i]- dplyr::lag(x_matrix[, i], n = 1, default = NA)
-        y_diff    <- y_matrix[, i]- dplyr::lag(y_matrix[, i], n = 1, default = NA)
-        
-        #Estimating beta
-        x_diff_tmp <- as.matrix(x_diff)[-1, ]
-        y_diff_tmp <- as.matrix(y_diff)[-1, ]
-        
-        beta_hat_tmp  <- solve(t(x_diff_tmp) %*% x_diff_tmp) %*% t(x_diff_tmp) %*% y_diff_tmp
-        beta_hat      <- c(beta_hat, as.vector(beta_hat_tmp))
-        
-        #Estimating alpha_i
-        alpha_hat_tmp <- mean(y_matrix[, i] - x_matrix[, i] * as.vector(beta_hat_tmp))
-        alpha_hat     <- c(alpha_hat, alpha_hat_tmp)
-        
-        y_augm_matrix[, i]        <- y_matrix[, i] - x_matrix[, i] * as.vector(beta_hat_tmp) - alpha_hat_tmp
-        AR.struc            <- estimate_lrv(data = y_augm_matrix[, i], q = q,
-                                            r_bar = r, p = 1)
-        sigma_hat_i         <- sqrt(AR.struc$lrv)
-        sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)      
-      }
-      
-      psi     <- compute_statistics(data = y_augm_matrix,
-                                    sigma_vec = sigmahat_vector,
-                                    n_ts = n_ts, grid = grid)
-      results <- max(psi$stat_pairwise)
-      results
-    })
+    begin     <- Sys.time()
+    numCores  <- round(parallel::detectCores() * .70)
+    cl        <- makePSOCKcluster(numCores)
+    
+    registerDoParallel(cl)
+    foreach (val = 1:n_rep, .combine = "cbind") %dopar% { 
+      repl(val, t_len, n_ts, a, sigma, q, r, grid, m_matrix, beta_ = beta,
+           a_x_ = a_x, sigma_x_ = sigma_x) # Loop one-by-one using foreach
+    } -> simulated_pairwise_statistics
+    stopCluster(cl)
+    end <- Sys.time()
+    cat("Time needed for T= ", t_len, " is ", end - begin, "sec \n")
+    
+    simulated_statistic <- apply(simulated_pairwise_statistics, 2, max)
     
     size_and_power_vec <- c()
     for (alpha in different_alpha){
