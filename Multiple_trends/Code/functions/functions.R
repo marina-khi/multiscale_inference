@@ -657,7 +657,7 @@ output_matrix <- function(matrix_, filename){
 #the time series as y = beta_ %*% covariates + m_matrix_ + errors,
 #estimates the parameters, and then computes the test statistics
 repl <- function(rep, t_len_, n_ts_, a_, sigma_, q_, r_, grid_, m_matrix_,
-                 beta_ = 0, a_x_ = 0, sigma_x_ = 0){
+                 beta_ = 0, a_x_ = 0, sigma_x_ = 0, true_sigma_vec = NULL){
   library(multiscale)
   library(dplyr)
   
@@ -684,7 +684,7 @@ repl <- function(rep, t_len_, n_ts_, a_, sigma_, q_, r_, grid_, m_matrix_,
   #Now we estimate the parameters
   for (i in 1:n_ts){
     
-    if (beta == 0){
+    if (beta_ != 0){
       #First differences
       x_diff    <- x_matrix[, i]- dplyr::lag(x_matrix[, i], n = 1, default = NA)
       y_diff    <- y_matrix[, i]- dplyr::lag(y_matrix[, i], n = 1, default = NA)
@@ -715,9 +715,15 @@ repl <- function(rep, t_len_, n_ts_, a_, sigma_, q_, r_, grid_, m_matrix_,
     sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)      
   }
   
-  psi     <- compute_statistics(data = y_augm_matrix,
-                                sigma_vec = sigmahat_vector,
-                                n_ts = n_ts_, grid = grid_)
+  if (is.null(true_sigma_vec)){
+    psi     <- compute_statistics(data = y_augm_matrix,
+                                  sigma_vec = sigmahat_vector,
+                                  n_ts = n_ts_, grid = grid_)
+  } else {
+    psi     <- compute_statistics(data = y_augm_matrix,
+                                  sigma_vec = true_sigma_vec,
+                                  n_ts = n_ts_, grid = grid_)
+  }
   results <- as.vector(psi$stat_pairwise)
   return(results)
 }

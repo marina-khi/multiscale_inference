@@ -7,18 +7,21 @@ library(multiscale)
 library(dplyr)
 library(zoo)
 
-source("functions/functions.R")
+library(foreach)
+library(parallel)
+library(iterators)
+library(doParallel)
 
+source("functions/functions.R")
 
 ######################
 #Necessary parameters#
 ######################
 
 alpha     <- 0.05
-sim_runs  <- 5000
+sim_runs  <- 1000
 q         <- 15 #Parameters for the estimation of sigma
 r         <- 10
-
 
 ##############
 #Data loading#
@@ -89,7 +92,6 @@ for (j in 1:n_ts){
   #     max(criterion_matrix$SIC), " ", max(criterion_matrix$HQ), " \n")
 }
 
-#Calculating each sigma_i separately
 sigmahat_vector <- c()
 ahat_vector <- c()
 for (i in 1:n_ts){
@@ -101,7 +103,6 @@ for (i in 1:n_ts){
   ahat_vector <- c(ahat_vector, AR.struc$ahat)
 }
 
-
 #########
 #Testing#
 #########
@@ -111,6 +112,25 @@ u_grid      <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
 h_grid      <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
 h_grid      <- h_grid[h_grid > log(t_len) / t_len]
 grid        <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
+
+#Calculating the Gaussian quantiles in parallel
+m_matrix <- matrix(0, nrow = t_len, ncol = n_ts)
+
+begin     <- Sys.time()
+numCores  <- round(parallel::detectCores() * .70)
+cl        <- makePSOCKcluster(numCores)
+
+registerDoParallel(cl)
+foreach (val = 1:sim_runs, .combine = "cbind") %dopar% { 
+  repl(rep = val, t_len_ = t_len, n_ts_ = n_ts, a_ = 0, sigma_ = 1, q_ = 1,
+       r_ = 1, grid_ = grid, m_matrix_ = m_matrix, beta_ = 0,
+       a_x_ = 0, sigma_x_ = 0, true_sigma_vec = rep(1, n_ts))# Loop one-by-one using foreach
+} -> simulated_gaussian_statistics
+stopCluster(cl)
+end <- Sys.time()
+cat("Time needed for T= ", t_len, " is ", end - begin, "sec \n")
+
+
 
 result <- multiscale_test(data = y_augm, sigma_vec = sigmahat_vector,
                           alpha = alpha,  n_ts = n_ts, grid = grid,
