@@ -202,6 +202,12 @@ for (t_len in different_T){
 correct_groups   <- c()
 correct_structure <- c()
 
+different_alpha <- c(0.05)
+
+group_count <- list()
+error_count <- list()
+
+j <- 0
 
 for (t_len in different_T){
   for (alpha in different_alpha){
@@ -297,32 +303,9 @@ for (t_len in different_T){
     }
     
     if (alpha == 0.05){
-      group_count <- table(factor(clustering_results[1, ], levels = 1:5))
-      error_count <- table(factor(num_of_errors, levels = 0:8))
-      
-      pdf(paste0("output/plots/histograms_T_", t_len, ".pdf"), width = 7, height = 10,
-          paper = "special")
-      par(mfrow = c(2, 1))
-      par(cex = 1, tck = -0.025)
-      par(mar = c(2.5, 3.5, 2, 0.2)) #Margins for each plot
-      par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
-      
-      bp1 <- barplot(group_count, ylim = c(0, 1.1 * n_rep), xlab = "",
-                     main = paste0("Histogram of the estimated number of groups for T = ", t_len),
-                     ylab = "", xaxt = 'n', space = 0)
-      text(x = bp1, y = group_count, label = group_count, cex = 0.8, pos = 3)
-      axis(1, at = bp1, labels = 1:5, tick=FALSE, line=-0.5, cex.axis=1)
-      title(xlab="estimated number of groups", mgp=c(1.5,1,0), cex.lab=0.8)
-      title(ylab="frequency", mgp=c(2.5,1,0), cex.lab=0.8)
-      
-      bp2 <- barplot(error_count, ylim = c(0, 1.1 *  n_rep), xlab = "",
-                     main = paste0("Histogram of the number of errors made for T = ", t_len),
-                     ylab = "", xaxt = 'n', space = 0)
-      text(x = bp2, y = error_count, label = error_count, cex = 0.8, pos = 3)
-      axis(1, at = bp2, labels = 0:8, tick=FALSE, line=-0.5, cex.axis=1)
-      title(xlab="number of errors", mgp=c(1.5,1,0), cex.lab=0.8)
-      title(ylab="frequency", mgp=c(2.5,1,0), cex.lab=0.8)
-      dev.off()      
+      j <- j + 1
+      group_count[[j]] <- table(factor(clustering_results[1, ], levels = 1:5))
+      error_count[[j]] <- table(factor(num_of_errors, levels = 0:8))
     }
 
     correct_groups    <- c(correct_groups, correct_number_of_groups/n_rep)
@@ -340,6 +323,43 @@ for (t_len in different_T){
 #######################
 #Output of the results#
 #######################
+
+labels <- c("(a)", "(b)", "(c)")
+
+pdf(paste0("output/plots/histograms_groups.pdf"), width=8, height=2.9, paper="special")
+par(mfrow = c(1,3))
+par(mar = c(3, 2, 0.5, 1)) #Margins for each plot
+par(oma = c(1.5, 1.5, 0.5, 0.2)) #Outer margins
+
+for (j in 1:length(different_T)){
+  t_len <- different_T[j]
+  bp1 <- barplot(group_count[[j]], ylim = c(0, 1.05 * n_rep), xlab = "",
+                 main = "", ylab = "", xaxt = 'n', space = 0)
+  text(x = bp1, y = group_count[[j]], label = group_count[[j]], cex = 0.8, pos = 3)
+  axis(1, at = bp1, labels = 1:5, tick=FALSE, line=-0.5, cex.axis=1)
+  #title(main = "Estimated number of groups", line = -1, cex.main = 1.5)
+  mtext(side=1, text= paste0(labels[j], " T = ", t_len), line=2.9)
+  title(xlab="number of groups", mgp=c(1.5,1,0), cex.lab=0.8)
+  title(ylab="frequency", mgp=c(2.5,1,0), cex.lab=0.8)
+}
+dev.off()
+
+pdf(paste0("output/plots/histograms_errors.pdf"), width=8, height=2.9, paper="special")
+par(mfrow = c(1,3))
+par(mar = c(3, 2, 0.5, 1)) #Margins for each plot
+par(oma = c(1.5, 1.5, 0.5, 0.2)) #Outer margins
+
+for (j in 1:length(different_T)){
+  t_len <- different_T[j]
+  bp2 <- barplot(error_count[[j]], ylim = c(0, 1.05 *  n_rep), xlab = "",
+                 main = "", ylab = "", xaxt = 'n', space = 0)
+  text(x = bp2, y = error_count[[j]], label = error_count[[j]], cex = 0.8, pos = 3)
+  mtext(side=1, text= paste0(labels[j], " T = ", t_len), line=2.9)
+  axis(1, at = bp2, labels = 0:8, tick=FALSE, line=-0.5, cex.axis=1)
+  title(xlab="number of errors", mgp=c(1.5,1,0), cex.lab=0.8)
+  title(ylab="frequency", mgp=c(2.5,1,0), cex.lab=0.8)
+}
+dev.off()
 
 
 filename = paste0("output/tables/", n_ts, "_ts_correct_group_number.tex")
