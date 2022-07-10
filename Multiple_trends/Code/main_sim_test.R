@@ -7,6 +7,7 @@ library(Matrix)
 library(foreach)
 library(parallel)
 library(doParallel)
+library(tictoc)
 library(xtable)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
@@ -18,8 +19,8 @@ source("functions/functions.R")
 ##############################
 
 n_ts     <- 15 #number of different time series for simulation
-n_rep    <- 5000 #number of simulations for calculating size and power
-sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
+n_rep    <- 1000 #number of simulations for calculating size and power
+sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
 
 different_T     <- c(100, 250, 500) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
@@ -35,10 +36,11 @@ a_x     <- 0.5
 sigma_x <- 0.5
 
 #Parameters for the estimation of long-run-variance
-q     <- 25 
-r     <- 10
+q <- 25 
+r <- 10
 
-set.seed(123)
+numCores  <- round(parallel::detectCores() * .70)
+set.seed(1111)
 
 
 ################################
@@ -59,36 +61,52 @@ for (t_len in different_T){
   k <- match(t_len, different_T)
 
   #Constructing the grid
-  u_grid <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
+  u_grid <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
   h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
   h_grid <- h_grid[h_grid > log(t_len) / t_len]
   grid   <- construct_grid(t = t_len)
   
-  #Calculating Gaussian quantiles
-  quantiles <- compute_quantiles(t_len = t_len, grid = grid, n_ts = n_ts,
-                                 ijset = ijset, sim_runs = sim_runs,
-                                 correction = TRUE)
-  probs  <- as.vector(quantiles$quant[1, ])
-  quants <- as.vector(quantiles$quant[2, ])
+  #Calculating the Gaussian quantiles in parallel
+  tic()
+  cl <- makePSOCKcluster(numCores)
+  registerDoParallel(cl)
+  foreach (val = 1:sim_runs, .combine = "cbind") %dopar% { 
+    repl(rep = val, t_len_ = t_len, n_ts_ = n_ts, grid_ = grid, sigma_ = 1,
+         gaussian_sim = TRUE)
+    # Loop one-by-one using foreach
+  } -> simulated_pairwise_gaussian
+  stopCluster(cl)
+  toc()
+
+  simulated_gaussian <- apply(simulated_pairwise_gaussian, 2, max)
+  
+  probs      <- seq(0.5, 0.995, by = 0.005)
+  quantiles  <- as.vector(quantile(simulated_gaussian, probs = probs))
+  quantiles  <- rbind(probs, quantiles)
+  
+  colnames(quantiles) <- NULL
+  rownames(quantiles) <- NULL
+  
+  quants <- as.vector(quantiles[2, ])
   
   for (b in different_b){
-    m_matrix           <- matrix(0, nrow = t_len, ncol = n_ts)
+    m_matrix      <- matrix(0, nrow = t_len, ncol = n_ts)
     #Only the first trend function is non-zero:
-    m_matrix[, 1]      <- (1:t_len - 0.5 * t_len) * (b / t_len)
+    m_matrix[, 1] <- (1:t_len - 0.5 * t_len) * (b / t_len)
 
-    begin     <- Sys.time()
-    numCores  <- round(parallel::detectCores() * .70)
-    cl        <- makePSOCKcluster(numCores)
+    tic()
     
+    cl <- makePSOCKcluster(numCores)
     registerDoParallel(cl)
-    foreach (val = 1:n_rep, .combine = "cbind") %dopar% { 
-      repl(val, t_len, n_ts, a, sigma, q, r, grid, m_matrix, beta_ = beta,
-           a_x_ = a_x, sigma_x_ = sigma_x) # Loop one-by-one using foreach
+    foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
+      repl(rep = val, t_len_ = t_len, n_ts_ = n_ts, grid_ = grid, a_ = a,
+           sigma_ = sigma, beta_ = beta, a_x_ = a_x, sigma_x_ = sigma_x,
+           m_matrix_ = m_matrix, q_ = q, r_ = r)
+      # Loop one-by-one using foreach
     } -> simulated_pairwise_statistics
     stopCluster(cl)
-    end <- Sys.time()
-    cat("Time needed for T= ", t_len, " is ", end - begin, "sec \n")
-    
+    toc()
+        
     simulated_statistic <- apply(simulated_pairwise_statistics, 2, max)
     
     size_and_power_vec <- c()
