@@ -32,15 +32,14 @@ sigma <- 0.5
 
 #For the covariate process
 beta    <- 1
-a_x     <- 0.5
+a_x     <- 0.25
 sigma_x <- 0.5
 
 #Parameters for the estimation of long-run-variance
 q <- 25 
 r <- 10
 
-numCores  <- round(parallel::detectCores() * .70)
-set.seed(1111)
+numCores  <- round(parallel::detectCores() * .60)
 
 
 ################################
@@ -58,6 +57,7 @@ ijset <- expand.grid(i = 1:n_ts, j = 1:n_ts)
 ijset <- ijset[ijset$i < ijset$j, ]
 
 for (t_len in different_T){
+  set.seed(1111)
   k <- match(t_len, different_T)
 
   #Constructing the grid
