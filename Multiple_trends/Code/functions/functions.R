@@ -556,93 +556,6 @@ produce_plots_talk <- function(results, l, data_i, data_j,
 # dev.off()
 
 
-statistics <- function(data, sigma_vec = 1, n_ts = 2, grid = NULL,
-                       ijset = NULL, alpha = 0.05, sim_runs = 1000) {
-  
-  t_len <- nrow(data)
-
-  #If grid is not supplied, we construct it by default
-  if (is.null(grid)) {
-    grid <- construct_grid(t_len)
-  }
-  
-  #If ijset is not supplied, we compare all
-  #possible pairs of time series.
-  if (is.null(ijset)) {
-    ijset <- expand.grid(i = 1:n_ts, j = 1:n_ts)
-    ijset <- ijset[ijset$i < ijset$j, ]
-  }
-  
-  psi   <- compute_statistics(data = data, sigma = 1, sigma_vec = sigma_vec,
-                              n_ts = n_ts, grid = grid, deriv_order = 0,
-                              epidem = FALSE)
-  stat  <- psi$stat
-  gset_with_values <- psi$gset_with_values
-    
-  return(list(stat = stat, stat_pairwise = psi$stat_pairwise,
-              ijset = ijset, gset_with_values = gset_with_values))
-}
-
-statistics_full <- function(data, sigma_vec = 1, n_ts = 2, grid = NULL,
-                            ijset = NULL, alpha = c(0.05), sim_runs = 1000) {
-  
-  t_len <- nrow(data)
-
-  #If grid is not supplied, we construct it by default
-  if (is.null(grid)) {
-    grid <- construct_grid(t_len)
-  }
-  
-  #If ijset is not supplied, we compare all
-  #possible pairs of time series.
-  if (is.null(ijset)) {
-    ijset <- expand.grid(i = 1:n_ts, j = 1:n_ts)
-    ijset <- ijset[ijset$i < ijset$j, ]
-  }
-  
-  # Select (1-alpha) quantile of the multiscale statistic under the null
-  quantiles <- compute_quantiles(t_len = t_len, grid = grid, n_ts = n_ts,
-                                 ijset = ijset, sigma = 1,
-                                 sim_runs = sim_runs,
-                                 deriv_order = 0,
-                                 correction = TRUE, epidem = FALSE)
-  
-  probs <- as.vector(quantiles$quant[1, ])
-  quant <- as.vector(quantiles$quant[2, ])
-  
-  quant_vec <- c()
-  for (alpha_ind in alpha){
-    if (sum(probs == (1 - alpha_ind)) == 0)
-      pos <- which.min(abs(probs - (1 - alpha_ind)))
-    if (sum(probs == (1 - alpha_ind)) != 0)
-      pos <- which.max(probs == (1 - alpha_ind))    
-    quant_vec <- c(quant_vec, quant[pos])
-  }
-  
-  psi   <- compute_statistics(data = data, sigma = 1, 
-                              sigma_vec = sigma_vec, n_ts = n_ts,
-                              grid = grid, deriv_order = 0,
-                              epidem = FALSE)
-  stat  <- psi$stat
-  
-  return(list(quant = quant_vec, stat = stat, stat_pairwise = psi$stat_pairwise,
-              ijset = ijset, sim_runs = sim_runs, grid = grid))
-}
-
-#Create a matrix (for size and power table for example) and write them in the tex file
-creating_matrix_and_texing <- function(vect, vect_t, vect_alpha, filename){
-  matrix_ <- matrix(vect, nrow = length(vect_t), ncol = length(vect_alpha), byrow = TRUE)
-  rownames(matrix_) <- vect_t
-  colnames(matrix_) <- vect_alpha
-  
-  addtorow     <- list()
-  addtorow$pos <- list(0, 0)
-  addtorow$command <- c("& \\multicolumn{3}{c}{nominal size $\\alpha$} \\\\\n",
-                        "$T$ & 0.01 & 0.05 & 0.1 \\\\\n") 
-  print.xtable(xtable(matrix_, digits = c(3), align = "cccc"), type = "latex",
-               file = filename, add.to.row = addtorow, include.colnames = FALSE)
-}
-
 #Create a matrix (for size and power table for example) and write them in the tex file
 output_matrix <- function(matrix_, filename){
   addtorow     <- list()
@@ -656,68 +569,90 @@ output_matrix <- function(matrix_, filename){
 #Function that simulates the covariates as AR(1), the error terms as AR(1)
 #the time series as y = beta_ %*% covariates + m_matrix_ + errors,
 #estimates the parameters, and then computes the test statistics
-repl <- function(rep, t_len_, n_ts_, a_, sigma_, q_, r_, grid_, m_matrix_,
-                 beta_ = 0, a_x_ = 0, sigma_x_ = 0){
+repl <- function(rep, t_len_, n_ts_, grid_, gaussian_sim = FALSE,
+                 a_ = 0, sigma_ = 1, 
+                 beta_ = 0, a_x_ = 0, sigma_x_ = 1, m_matrix_ = NULL,
+                 q_ = 25, r_ = 10){
   library(multiscale)
   library(dplyr)
   
-  y_matrix           <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-  y_augm_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-  error_matrix       <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-  x_matrix           <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-  colnames(y_matrix) <- 1:n_ts_
+  # beta_hat        <- c()
+  # alpha_hat       <- c()
   
-  for (i in 1:n_ts_){
-    error_matrix[, i] <- arima.sim(model = list(ar = a_),
-                                   innov = rnorm(t_len_, 0, sigma_),
-                                   n = t_len_)
-    x_matrix[, i]     <- arima.sim(model = list(ar = a_x_),
-                                   innov = rnorm(t_len_, 0, sigma_x_),
-                                   n = t_len_)
-    y_matrix[, i]     <- m_matrix_[, i] + beta_ * x_matrix[, i] + error_matrix[, i]
-  }
-  
-  sigmahat_vector <- c()
-  beta_hat        <- c()
-  alpha_hat       <- c()
-  
-  #Now we estimate the parameters
-  for (i in 1:n_ts){
+  if (gaussian_sim){
+    z_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    z_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    sigma_vector  <- rep(1, n_ts_)
     
-    if (beta == 0){
-      #First differences
-      x_diff    <- x_matrix[, i]- dplyr::lag(x_matrix[, i], n = 1, default = NA)
-      y_diff    <- y_matrix[, i]- dplyr::lag(y_matrix[, i], n = 1, default = NA)
-      
-      #Estimating beta
-      x_diff_tmp <- as.matrix(x_diff)[-1, ]
-      y_diff_tmp <- as.matrix(y_diff)[-1, ]
-      
-      beta_hat_tmp  <- solve(t(x_diff_tmp) %*% x_diff_tmp) %*% t(x_diff_tmp) %*% y_diff_tmp
-      beta_hat      <- c(beta_hat, as.vector(beta_hat_tmp))
-      
-      #Estimating alpha_i
-      alpha_hat_tmp <- mean(y_matrix[, i] - x_matrix[, i] * as.vector(beta_hat_tmp))
-      alpha_hat     <- c(alpha_hat, alpha_hat_tmp)
-      
-      y_augm_matrix[, i]  <- y_matrix[, i] - x_matrix[, i] * as.vector(beta_hat_tmp) - alpha_hat_tmp
-    } else {
-      #Estimating alpha_i
-      alpha_hat_tmp <- mean(y_matrix[, i])
-      alpha_hat     <- c(alpha_hat, alpha_hat_tmp)
-      
-      y_augm_matrix[, i]  <- y_matrix[, i] - alpha_hat_tmp      
+    for (i in 1:n_ts_){
+      z_matrix[, i]      <- rnorm(t_len_, 0, sigma_)
+      z_augm_matrix[, i] <- z_matrix[, i] - mean(z_matrix[, i])
     }
-  
-    AR.struc            <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
-                                        r_bar = r_, p = 1)
-    sigma_hat_i         <- sqrt(AR.struc$lrv)
-    sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)      
+    
+    psi <- compute_statistics(data = z_augm_matrix,
+                              sigma_vec = sigma_vector,
+                              n_ts = n_ts_, grid = grid_)
+  } else {
+    y_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    y_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    error_matrix  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    
+    sigmahat_vector <- c()
+    
+    if (beta_ != 0){
+      x_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      for (i in 1:n_ts_){
+        error_matrix[, i] <- arima.sim(model = list(ar = a_),
+                                       innov = rnorm(t_len_, 0, sigma_),
+                                       n = t_len_)
+        x_matrix[, i]     <- arima.sim(model = list(ar = a_x_),
+                                       innov = rnorm(t_len_, 0, sigma_x_),
+                                       n = t_len_)
+        y_matrix[, i]     <- m_matrix_[, i] + beta_ * x_matrix[, i] + error_matrix[, i]
+        
+        #First differences
+        x_diff    <- x_matrix[, i]- dplyr::lag(x_matrix[, i], n = 1, default = NA)
+        y_diff    <- y_matrix[, i]- dplyr::lag(y_matrix[, i], n = 1, default = NA)
+        
+        #Estimating beta
+        x_diff_tmp <- as.matrix(x_diff)[-1, ]
+        y_diff_tmp <- as.matrix(y_diff)[-1, ]
+        
+        beta_hat_tmp  <- solve(t(x_diff_tmp) %*% x_diff_tmp) %*% t(x_diff_tmp) %*% y_diff_tmp
+        # beta_hat      <- c(beta_hat, as.vector(beta_hat_tmp))
+        
+        #Estimating alpha_i
+        alpha_hat_tmp <- mean(y_matrix[, i] - x_matrix[, i] * as.vector(beta_hat_tmp))
+        # alpha_hat     <- c(alpha_hat, alpha_hat_tmp)
+        
+        y_augm_matrix[, i] <- y_matrix[, i] - x_matrix[, i] * as.vector(beta_hat_tmp) - alpha_hat_tmp
+        AR.struc           <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
+                                           r_bar = r_, p = 1)
+        sigma_hat_i        <- sqrt(AR.struc$lrv)
+        sigmahat_vector    <- c(sigmahat_vector, sigma_hat_i) 
+      }
+    } else {
+      for (i in 1:n_ts_){
+        error_matrix[, i] <- arima.sim(model = list(ar = a_),
+                                       innov = rnorm(t_len_, 0, sigma_),
+                                       n = t_len_)
+        y_matrix[, i]     <- m_matrix_[, i] + error_matrix[, i]
+        
+        #Estimating alpha_i
+        alpha_hat_tmp <- mean(y_matrix[, i])
+        # alpha_hat     <- c(alpha_hat, alpha_hat_tmp)
+        
+        y_augm_matrix[, i]  <- y_matrix[, i] - alpha_hat_tmp
+        AR.struc            <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
+                                            r_bar = r_, p = 1)
+        sigma_hat_i         <- sqrt(AR.struc$lrv)
+        sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)   
+      }     
+    }
+    psi <- compute_statistics(data = y_augm_matrix,
+                              sigma_vec = sigmahat_vector,
+                              n_ts = n_ts_, grid = grid_)    
   }
-  
-  psi     <- compute_statistics(data = y_augm_matrix,
-                                sigma_vec = sigmahat_vector,
-                                n_ts = n_ts_, grid = grid_)
   results <- as.vector(psi$stat_pairwise)
   return(results)
 }

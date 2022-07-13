@@ -112,3 +112,96 @@ for (l in seq_len(nrow(result$ijset))){
                   name_j = countries[j], path = "output/plots/high_frequency/")
   }
 }
+
+############
+#CLUSTERING#
+############
+
+source("functions/functions.R")
+
+#for the distance matrix we need a symmetrical one
+Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
+for (i in 1:(n_ts - 1)){
+  for (j in (i + 1):n_ts){
+    Delta_hat[i, j] <- result$stat_pairwise[i, j]
+    Delta_hat[j, i] <- Delta_hat[i, j]
+  }
+}
+
+colnames(Delta_hat) <- countries
+rownames(Delta_hat) <- countries
+
+###########################################
+#CLustering based on the Gaussian quantile#
+###########################################
+
+delta_dist <- as.dist(Delta_hat)
+res        <- hclust(delta_dist)
+subgroups  <- cutree(res, h = result$quant)
+
+pdf("output/plots/gdp_dendrogram.pdf", width = 15, height = 6, paper = "special")
+par(cex = 1, tck = -0.025)
+par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
+par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
+plot(res, cex = 0.8, xlab = "", ylab = "",
+     main = "Clusters for GDP trends among the countries")
+rect.hclust(res, h = result$quant, border = 2:(max(subgroups) + 1))
+dev.off()
+
+n_cl <- max(subgroups)
+grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
+at_         <- seq(from = 1, to = t_len, by = 20)
+
+
+#Plotting all clusters on one plot
+pdf("output/plots/gdp_all_clusters.pdf", width = 7, height = 4,
+    paper="special")
+
+#Setting the layout of the graphs
+par(cex = 1, tck = -0.025)
+par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
+par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
+
+plot(NA, ylab = "", xlab = "", xlim = c(0, 1),
+     ylim = c(-0.12, 0.07), xaxt = 'n',
+     mgp = c(2, 0.5, 0), cex = 1.2, tck = -0.025)  
+
+for (cl in 1:max(subgroups)){
+  locations_cluster <- colnames(Delta_hat)[subgroups == cl]
+  
+  for (column in locations_cluster){
+    smoothed_curve <- mapply(local_linear_smoothing, grid_points,
+                             MoreArgs = list(data_p = gdp_mat_augm[, column],
+                                             grid_p = grid_points, bw = 0.1))
+    lines(grid_points, smoothed_curve, col = cl + 1)
+  }
+  axis(1, at = grid_points[at_], labels = dates[at_])
+}
+title(main = "All clusters", line = 1)
+dev.off()
+
+
+#Plotting the trend functions of each cluster on a separate graph
+for (cl in 1:max(subgroups)){
+  locations_cluster <- colnames(Delta_hat)[subgroups == cl]
+  pdf(paste0("output/plots/gdp_results_cluster_", cl, ".pdf"),
+      width = 7, height = 4, paper = "special")
+  
+  #Setting the layout of the graphs
+  par(cex = 1, tck = -0.025)
+  par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
+  par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
+  plot(NA, ylab = "", xlab = "", xlim = c(0, 1),
+       ylim = c(-0.12, 0.07), xaxt = 'n',
+       mgp = c(2, 0.5, 0), cex = 1.2, tck = -0.025)
+  
+  for (column in locations_cluster){
+    smoothed_curve <- mapply(local_linear_smoothing, grid_points,
+                             MoreArgs = list(data_p = gdp_mat_augm[, column],
+                                             grid_p = grid_points, bw = 0.1))
+    lines(grid_points, smoothed_curve, col = cl + 1)
+  }
+  axis(1, at = grid_points[at_], labels = dates[at_])
+  title(main = paste0("Cluster ", cl), line = 1)
+  dev.off()
+}
