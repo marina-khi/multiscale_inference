@@ -143,12 +143,12 @@ pdf("output/plots/gdp_dendrogram.pdf", width = 15, height = 6, paper = "special"
 par(cex = 1, tck = -0.025)
 par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
-plot(res, cex = 0.8, xlab = "", ylab = "",
-     main = "Clusters for GDP trends among the countries")
+plot(res, cex = 1.5, xlab = "", ylab = "", hang = 0.55,
+     main = "HAC dendrogram", cex.main = 2.2)
 rect.hclust(res, h = result$quant, border = 2:(max(subgroups) + 1))
 dev.off()
 
-n_cl <- max(subgroups)
+n_cl        <- max(subgroups)
 grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
 at_         <- seq(from = 1, to = t_len, by = 20)
 
@@ -163,8 +163,8 @@ par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
 
 plot(NA, ylab = "", xlab = "", xlim = c(0, 1),
-     ylim = c(-0.12, 0.07), xaxt = 'n',
-     mgp = c(2, 0.5, 0), cex = 1.2, tck = -0.025)  
+     ylim = c(-0.1, 0.07), xaxt = 'n',
+     mgp = c(2, 0.5, 0), cex = 0.8, tck = -0.025)  
 
 for (cl in 1:max(subgroups)){
   locations_cluster <- colnames(Delta_hat)[subgroups == cl]
@@ -172,12 +172,12 @@ for (cl in 1:max(subgroups)){
   for (column in locations_cluster){
     smoothed_curve <- mapply(local_linear_smoothing, grid_points,
                              MoreArgs = list(data_p = gdp_mat_augm[, column],
-                                             grid_p = grid_points, bw = 0.1))
+                                             grid_p = grid_points, bw = 0.05))
     lines(grid_points, smoothed_curve, col = cl + 1)
   }
-  axis(1, at = grid_points[at_], labels = dates[at_])
 }
-title(main = "All clusters", line = 1)
+axis(1, at = grid_points[at_], labels = dates[at_], cex = 0.7)
+title(main = "Estimated time trends", line = 1, cex.main = 1.1)
 dev.off()
 
 
@@ -192,13 +192,13 @@ for (cl in 1:max(subgroups)){
   par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
   par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
   plot(NA, ylab = "", xlab = "", xlim = c(0, 1),
-       ylim = c(-0.12, 0.07), xaxt = 'n',
+       ylim = c(-0.1, 0.07), xaxt = 'n',
        mgp = c(2, 0.5, 0), cex = 1.2, tck = -0.025)
   
   for (column in locations_cluster){
     smoothed_curve <- mapply(local_linear_smoothing, grid_points,
                              MoreArgs = list(data_p = gdp_mat_augm[, column],
-                                             grid_p = grid_points, bw = 0.1))
+                                             grid_p = grid_points, bw = 0.05))
     lines(grid_points, smoothed_curve, col = cl + 1)
   }
   axis(1, at = grid_points[at_], labels = dates[at_])
