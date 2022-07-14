@@ -19,12 +19,12 @@ source("functions/functions.R")
 ##############################
 
 n_ts     <- 15 #number of different time series for simulation
-n_rep    <- 1000 #number of simulations for calculating size and power
-sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
+n_rep    <- 5000 #number of simulations for calculating size and power
+sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
 
 different_T     <- c(100, 250, 500) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
-different_b     <- c(0) #Zero is for calculating the size
+different_b     <- c(0, 0.75, 1, 1.25) #Zero is for calculating the size
 
 #For the error process
 a     <- 0.25 
@@ -32,14 +32,14 @@ sigma <- 0.5
 
 #For the covariate process
 beta    <- 1
-a_x     <- 0.25
-sigma_x <- 0.5
+a_x     <- 0.5
+sigma_x <- 1
 
 #Parameters for the estimation of long-run-variance
 q <- 25 
 r <- 10
 
-numCores  <- round(parallel::detectCores() * .60)
+numCores  <- round(parallel::detectCores() * .70)
 
 
 ################################
