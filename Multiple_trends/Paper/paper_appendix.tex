@@ -723,13 +723,13 @@ Since $q_{n, T}(\alpha) = O(\sqrt{\log T})$ for any fixed $\alpha \in (0,1)$ and
 \subsection*{Proof of Proposition \ref{prop:test:fwer}}\label{subsec:app:fwer}
 
 
-Denote by $\mathcal{M}_0$ the set of quadruples $(i, j, u, h) \in \{1\ldots, n\}^2 \times \grid_T$ for which $H_0^{[i, j]}(u, h)$ is true. Then we can write the $\text{FWER}$ as
+Denote by $\mathcal{M}_0$ the set of quadruples $(i, j, u, h) \in \{1\ldots, n\}^2 \times \grid$ for which $H_0^{[i, j]}(u, h)$ is true. Then we can write the $\text{FWER}$ as
 \begin{align*}
 \text{FWER}(\alpha)
  & = \pr \Big( \exists (i,j,u, h) \in \mathcal{M}_0: \widehat{\psi}^0_{ij,T}(u, h) > q_{n, T}(\alpha) \Big) \\
  & = \pr \Big( \max_{(i, j, u, h) \in \mathcal{M}_0} \widehat{\psi}^0_{ij,T}(u, h) > q_{n, T}(\alpha) \Big) \\
  & = \pr \Big( \max_{(i,j,u, h) \in \mathcal{M}_0} \widehat{\phi}^0_{ij,T}(u, h) > q_{n, T}(\alpha) \Big) \\
- & \le \pr \Big( \max_{1 \le i < j \le n} \max_{(u, h) \in \grid_T} \widehat{\phi}_{ij,T}^0(u, h) > q_{n, T}(\alpha) \Big) \\
+ & \le \pr \Big( \max_{1 \le i < j \le n} \max_{(u, h) \in \grid} \widehat{\phi}_{ij,T}^0(u, h) > q_{n, T}(\alpha) \Big) \\
  & = \pr \big( \widehat{\Phi}_{n, T} > q_{n, T}(\alpha) \big) = \alpha + o(1),
 \end{align*}
 where the third equality uses that $\hat{\psi}^0_{ijk,T} = \hat{\phi}^0_{ijk,T}$ under $H_0^{[i, j]}(u, h)$.
@@ -745,7 +745,7 @@ By Proposition \ref{prop:test:fwer},
  & \le 1 - \textnormal{FWER}(\alpha) \\
  & = \pr \Big( \nexists (i,j,u, h) \in \mathcal{M}_0: \hat{\psi}^0_{ij,T}(u, h) > q_{n, T}(\alpha) \Big) \\
 & = \pr\Big( \forall (i,j,u, h) \in \mathcal{M}_0: \hat{\psi}^0_{ij,T}(u, h) \le q_{n, T}(\alpha) \Big)\\
-&=\pr\Big( \forall \, i,j \in \{1, \ldots, n\}, (u, h) \in \grid_T \text{ such that }\\
+&=\pr\Big( \forall \, i,j \in \{1, \ldots, n\}, (u, h) \in \grid \text{ such that }\\
 &\quad\quad \quad H_0^{[i, j]}(u, h) \text{ is true}: \hat{\psi}^0_{ij,T}(u, h) \le q_{n,T}(\alpha) \Big),
 \end{align*}
 which is the statement of Corollary \ref{corollary1}.
