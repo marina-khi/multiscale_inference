@@ -154,7 +154,6 @@ where $\widehat{\sigma}_i^2$ is the subseries variance estimate of $\sigma_i^2$ 
 
 
 \begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{lemmaA:lrv}}}]
-\textcolor{blue}{(Proof not double-checked yet.)}
 For notational convenience, we let $Y_{it}^* = Y_{it} - \bfbeta_i^\top \X_{it}$. Note that 
 \begin{align*}
 &Y_{i(t + ms_T)}^* - Y_{i(t + (m-1)s_T)}^* \\
@@ -203,7 +202,7 @@ To start with, we consider a simplified setting where the parameter vectors $\bf
 \[ \doublehattwo{\Phi}_{n,T} = \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T}\Bigg\{ \bigg| \frac{\doublehat{\phi}_{ij,T}(u,h)} {\{ \doublehattwo{\sigma}_i^2 + \doublehattwo{\sigma}_j^2 \}^{1/2}} \bigg| - \lambda(h)\Bigg\}, \]
 where
 \[ \doublehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) - (\varepsilon_{jt} - \bar{\varepsilon}_j)  \big\} \]
-and $\doublehattwo{\sigma}_i^2$ is computed in exactly the same way as $\widehat{\sigma}_i^2$ except that all occurrences of $\widehat{\bfbeta}_i$ are replaced by $\bfbeta_i$. By assumption, $\widehat{\sigma}_i^2 = \sigma^2_i + o_p(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$. \textcolor{blue}{(Double-check which rate is needed for $\widehat{\sigma}_i^2$.)} For most estimators of $\sigma_i^2$ including those discussed in Section \ref{sec:theo}, this assumption immediately implies that $\doublehattwo{\sigma}_i^2 = \sigma^2_i + o_p(\rho_T)$ as well. In the sequel, we thus take for granted that the estimator $\doublehattwo{\sigma}_i^2$ has this property.
+and $\doublehattwo{\sigma}_i^2$ is computed in exactly the same way as $\widehat{\sigma}_i^2$ except that all occurrences of $\widehat{\bfbeta}_i$ are replaced by $\bfbeta_i$. By assumption, $\widehat{\sigma}_i^2 = \sigma^2_i + o_p(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$. For most estimators of $\sigma_i^2$ including those discussed in Section \ref{sec:theo}, this assumption immediately implies that $\doublehattwo{\sigma}_i^2 = \sigma^2_i + o_p(\rho_T)$ as well. In the sequel, we thus take for granted that the estimator $\doublehattwo{\sigma}_i^2$ has this property.
 
 
 We now have a closer look at the statistic $\doublehattwo{\Phi}_{n,T}$. We in particular show that there exists an identically distributed version $\widetilde{\Phi}_{n, T}$ of $\doublehattwo{\Phi}_{n, T}$ which is close to the Gaussian statistic $\Phi_{n, T}$ from \eqref{eq:Phi}. More formally, we prove the following result.  
@@ -434,7 +433,7 @@ The proof is an application of anti-concentration bounds for Gaussian random vec
 \begin{lemmaA}\label{lemma-Nazarov}
 Let $\boldsymbol{Z} = (Z_1,\ldots,Z_p)^\top$ be a centred Gaussian random vector in $\reals^p$ such that $\ex[Z_j^2] \ge b$ for all $1 \le j \le p$ and some constant $b > 0$. Then for every $\boldsymbol{z} \in \reals^p$ and $a > 0$,
 \[ \pr(\boldsymbol{Z} \le \boldsymbol{z} + a) - \pr(\boldsymbol{Z} \le \boldsymbol{z}) \le C a \sqrt{\log p}, \]  
-where the constant $C$ only depends on $b$. \textcolor{blue}{(Add notation vector + scalar?)}
+where the constant $C$ only depends on $b$. %\textcolor{blue}{(Add notation vector + scalar?)}
 \end{lemmaA}
 To apply this result, we introduce the following notation: We write $x = (u,h)$ and $\mathcal{G}_T = \{ x : x \in \mathcal{G}_T \} = \{x_1,\ldots,x_p\}$, where $p := |\mathcal{G}_T| \le O(T^\theta)$ for some large but fixed $\theta > 0$ by our assumptions. For $k = 1,\ldots,p$ and $1 \le i < j \le n$, we further let 
 \[ Z_{ij, 2k-1} = \frac{\phi_{ij, T}(x_{k1},x_{k2})}{\{{\sigma}_i^2 + {\sigma}_j^2\}^{1/2}} \quad \text{and} \quad Z_{ij, 2k} = -\frac{\phi_{ij, T}(x_{k1},x_{k2})}{\{{\sigma}_i^2 + {\sigma}_j^2\}^{1/2}} \]  
