@@ -550,7 +550,7 @@ Next, we apply Proposition \ref{theo-wu2016} with the weights $a_t = \sqrt{D_{T,
  & \leq C_1 \frac{\big( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} |\sqrt{D_{T, u, h}}\cdot w_{t,T}(u,h)|^{q^\prime}\big) \| \X_{i \cdot}\|^{q^\prime}_{q^\prime, \alpha}}{ x^{q^\prime}} \nonumber \\
  & \qquad \qquad \qquad \qquad \qquad \qquad + C_2 \exp \left(-\frac{C_3  x^2}{D_{T, u, h}\| \X_{i\cdot}\|^{2}_{2, \alpha}}\right) \label{ineq-diff-8}
 \end{align}
-for any $x > 0$, where \textcolor{red}{$\| \X_{i\cdot}\|^{q^\prime}_{q^\prime, \alpha} = \sup_{t\geq 0} (t+1)^{\alpha} \sum_{s=t}^{\infty}\delta_{q^\prime}(\boldsymbol{h}_i, s)$} is the dependence adjusted norm introduced in Definition \ref{defA-DAN} and $\| \X_{i\cdot}\|^{q^\prime}_{q^\prime, \alpha} < \infty$ by Assumption \ref{C-reg3}. From \eqref{ineq-diff-8}, it follows that for any $\delta > 0$, 
+for any $x > 0$, where $\| \X_{i\cdot}\|^{q^\prime}_{q^\prime, \alpha} = \sup_{t\geq 0} (t+1)^{\alpha} \sum_{s=t}^{\infty}\delta_{q^\prime}(\boldsymbol{h}_i, s)$ is the dependence adjusted norm introduced in Definition \ref{defA-DAN} and $\| \X_{i\cdot}\|^{q^\prime}_{q^\prime, \alpha} < \infty$ by Assumption \ref{C-reg3}. From \eqref{ineq-diff-8}, it follows that for any $\delta > 0$, 
 \begin{align}
 &\pr\left(\max_{(u, h) \in \mathcal{G}_T} \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h) \X_{it}  \Big| \geq \delta T^{1/q} \right) \nonumber \\
 &\leq \sum_{(u, h) \in \mathcal{G}_T} \pr \left( \Big| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h) \X_{it}  \Big| \geq \delta T^{1/q} \right) \nonumber \\
@@ -733,23 +733,23 @@ Denote by $\mathcal{M}_0$ the set of quadruples $(i, j, u, h) \in \{1\ldots, n\}
  & = \pr \big( \widehat{\Phi}_{n, T} > q_{n, T}(\alpha) \big) = \alpha + o(1),
 \end{align*}
 where the third equality uses that $\hat{\psi}^0_{ijk,T} = \hat{\phi}^0_{ijk,T}$ under $H_0^{[i, j]}(u, h)$.
-
-
-
-\subsection*{Proof of Corollary \ref{corollary1}}\label{subsec:app:corollary}
-
-
-By Proposition \ref{prop:test:fwer}, 
-\begin{align*}
-1 - \alpha + o(1) 
- & \le 1 - \textnormal{FWER}(\alpha) \\
- & = \pr \Big( \nexists (i,j,u, h) \in \mathcal{M}_0: \hat{\psi}^0_{ij,T}(u, h) > q_{n, T}(\alpha) \Big) \\
-& = \pr\Big( \forall (i,j,u, h) \in \mathcal{M}_0: \hat{\psi}^0_{ij,T}(u, h) \le q_{n, T}(\alpha) \Big)\\
-&=\pr\Big( \forall \, i,j \in \{1, \ldots, n\}, (u, h) \in \grid \text{ such that }\\
-&\quad\quad \quad H_0^{[i, j]}(u, h) \text{ is true}: \hat{\psi}^0_{ij,T}(u, h) \le q_{n,T}(\alpha) \Big),
-\end{align*}
-which is the statement of Corollary \ref{corollary1}.
-
+%
+%
+%
+%\subsection*{Proof of Corollary \ref{corollary1}}\label{subsec:app:corollary}
+%
+%
+%By Proposition \ref{prop:test:fwer}, 
+%\begin{align*}
+%1 - \alpha + o(1) 
+% & \le 1 - \textnormal{FWER}(\alpha) \\
+% & = \pr \Big( \nexists (i,j,u, h) \in \mathcal{M}_0: \hat{\psi}^0_{ij,T}(u, h) > q_{n, T}(\alpha) \Big) \\
+%& = \pr\Big( \forall (i,j,u, h) \in \mathcal{M}_0: \hat{\psi}^0_{ij,T}(u, h) \le q_{n, T}(\alpha) \Big)\\
+%&=\pr\Big( \forall \, i,j \in \{1, \ldots, n\}, (u, h) \in \grid \text{ such that }\\
+%&\quad\quad \quad H_0^{[i, j]}(u, h) \text{ is true}: \hat{\psi}^0_{ij,T}(u, h) \le q_{n,T}(\alpha) \Big),
+%\end{align*}
+%which is the statement of Corollary \ref{corollary1}.
+%
 
 \subsection*{Proof of Proposition \ref{prop:clustering:1}}
 
@@ -807,7 +807,7 @@ We consider the event
 \[ D_{n,T} = \Big\{ \widehat{\Phi}_{n,T} \le q_{n,T}(\alpha) \, \text{ and } \,  \min_{1 \le \ell < \ell^\prime \le N} \min_{\substack{i \in G_\ell, \\ j \in G_{\ell^\prime}}} \widehat{\Psi}_{ij,T} > q_{n,T}(\alpha) \Big\}, \]
 where we write the statistic $\widehat{\Phi}_{n,T}$ as
 \[ \widehat{\Phi}_{n,T} = \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\psi}_{ij,T}(u,h)- \ex \widehat{\psi}_{ij,T}(u,h)} {(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}} \Big| - \lambda(h) \Big \}. \]
-The event $D_{n,T}$ can be analysed by the same arguments as those applied to the event $B_{n,T}$ in the proof of Proposition \ref{prop-clustering-1}. In particular, analogous to \eqref{eq2-prop-clustering-1} and statements (i) and (ii) in this proof, we can show that
+The event $D_{n,T}$ can be analysed by the same arguments as those applied to the event $B_{n,T}$ in the proof of Proposition \ref{prop:clustering:1}. In particular, analogous to \eqref{eq2-prop-clustering-1} and statements (i) and (ii) in this proof, we can show that
 \begin{equation}\label{eq1-prop-clustering-2}
 \pr \big( D_{n,T} \big) \ge (1-\alpha) + o(1)
 \end{equation}
