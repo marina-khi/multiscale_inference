@@ -22,9 +22,9 @@ n_ts     <- 15 #number of different time series for simulation
 n_rep    <- 5000 #number of simulations for calculating size and power
 sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
 
-different_T     <- c(100, 250, 500) #Different lengths of time series
+different_T     <- c(100) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
-different_b     <- c(0, 0.75, 1, 1.25) #Zero is for calculating the size
+different_b     <- c(0) #Zero is for calculating the size
 
 #For the error process
 a     <- 0.25 
@@ -57,7 +57,7 @@ ijset <- expand.grid(i = 1:n_ts, j = 1:n_ts)
 ijset <- ijset[ijset$i < ijset$j, ]
 
 for (t_len in different_T){
-  set.seed(1111)
+  set.seed(12345)
   k <- match(t_len, different_T)
 
   #Constructing the grid
