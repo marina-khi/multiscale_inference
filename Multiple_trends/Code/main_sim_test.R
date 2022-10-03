@@ -7,7 +7,6 @@ library(Matrix)
 library(foreach)
 library(parallel)
 library(doParallel)
-library(tictoc)
 library(xtable)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
@@ -22,9 +21,9 @@ n_ts     <- 15 #number of different time series for simulation
 n_rep    <- 5000 #number of simulations for calculating size and power
 sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
 
-different_T     <- c(100) #Different lengths of time series
+different_T     <- c(100, 250, 500) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
-different_b     <- c(0) #Zero is for calculating the size
+different_b     <- c(0, 0.75, 1.00, 1.25) #Zero is for calculating the size
 
 #For the error process
 a     <- 0.25 
@@ -39,6 +38,7 @@ sigma_x <- 1
 q <- 25 
 r <- 10
 
+#For parallel computation
 numCores  <- round(parallel::detectCores() * .70)
 
 
@@ -57,7 +57,6 @@ ijset <- expand.grid(i = 1:n_ts, j = 1:n_ts)
 ijset <- ijset[ijset$i < ijset$j, ]
 
 for (t_len in different_T){
-  set.seed(12345)
   k <- match(t_len, different_T)
 
   #Constructing the grid
@@ -71,7 +70,7 @@ for (t_len in different_T){
   cl <- makePSOCKcluster(numCores)
   registerDoParallel(cl)
   foreach (val = 1:sim_runs, .combine = "cbind") %dopar% { 
-    repl(rep = val, t_len_ = t_len, n_ts_ = n_ts, grid_ = grid, sigma_ = 1,
+    repl2(rep = val, t_len_ = t_len, n_ts_ = n_ts, grid_ = grid, sigma_ = 1,
          gaussian_sim = TRUE)
     # Loop one-by-one using foreach
   } -> simulated_pairwise_gaussian
@@ -99,7 +98,7 @@ for (t_len in different_T){
     cl <- makePSOCKcluster(numCores)
     registerDoParallel(cl)
     foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
-      repl(rep = val, t_len_ = t_len, n_ts_ = n_ts, grid_ = grid, a_ = a,
+      repl2(rep = val, t_len_ = t_len, n_ts_ = n_ts, grid_ = grid, a_ = a,
            sigma_ = sigma, beta_ = beta, a_x_ = a_x, sigma_x_ = sigma_x,
            m_matrix_ = m_matrix, q_ = q, r_ = r)
       # Loop one-by-one using foreach

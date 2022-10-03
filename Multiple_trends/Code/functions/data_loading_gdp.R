@@ -7,6 +7,9 @@ library(dplyr)
 library(seasonal)
 library(zoo)
 
+countries <- c("AUT", "AUS", "CAN", "CHE", "DEU", "FIN", "FRA", "GBR",
+               "JPN", "NOR", "USA") 
+
 ################################
 #Loading the human capital data#
 ################################
@@ -251,50 +254,5 @@ X_mat_filled <-
 
 #X_mat_filled$k_it <- X_mat_filled$stock_it
 X_mat_filled$k_it <- X_mat_filled$gfcf_it
-  
-rm(list=setdiff(ls(), c("X_mat_filled", "alpha", "sim_runs", "countries",
-                        "q", "r", "at")))
 
-# ###Additional checks
-# X_mat_filled <-
-#   X_mat %>%
-#   subset(date <= as.Date("30-09-2010", format = "%d-%m-%Y")) %>%
-#   subset(WBcode %in% c("AUT", "AUS", "CAN", "CHE", "DEU", "FIN", "FRA", "GBR",
-#                        "JPN", "NOR", "USA",
-#                        "ITA", "ESP", "PAN", "CYP", "CHN")) %>%
-#   group_by(WBcode)  %>%
-#   fill(h_it, .direction = 'down')  #Extrapolating educational attainment for the last two quarters
-# 
-# 
-# countries <- unique(X_mat_filled$WBcode)
-# n_ts      <- length(unique(X_mat_filled$WBcode))
-# t_len     <- nrow(X_mat_filled) / n_ts
-# 
-# gdp_mat_original           <- matrix(NA, ncol = n_ts, nrow = t_len)
-# colnames(gdp_mat_original) <- countries
-# 
-# l_mat_original           <- matrix(NA, ncol = n_ts, nrow = t_len)
-# colnames(l_mat_original) <- countries
-# 
-# kf_mat_original           <- matrix(NA, ncol = n_ts, nrow = t_len)
-# colnames(kf_mat_original) <- countries
-# 
-# h_mat_original           <- matrix(NA, ncol = n_ts, nrow = t_len)
-# colnames(h_mat_original) <- countries
-# 
-# i <- 1
-# 
-# for (country in countries){
-#   tmp <- X_mat_filled[X_mat_filled$WBcode == country, ]
-#   tmp <- tmp[order(tmp$date),]
-#   gdp_mat_original[, i] <- tmp$gdp_it
-#   l_mat_original[, i] <- tmp$l_it
-#   kf_mat_original[, i] <- tmp$kf_it
-#   h_mat_original[, i] <- tmp$h_it
-#   i = i + 1
-# }
-# 
-# colSums(is.na(gdp_mat_original))
-# colSums(is.na(l_mat_original))
-# colSums(is.na(h_mat_original))
-# colSums(is.na(kf_mat_original))
+save(X_mat_filled, countries, file = "data/gdp_data.RData")
