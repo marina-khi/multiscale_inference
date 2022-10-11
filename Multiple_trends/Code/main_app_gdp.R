@@ -15,15 +15,13 @@ alpha     <- 0.05
 sim_runs  <- 5000
 q         <- 20 #Parameters for the estimation of sigma
 r         <- 10
-countries <- c("AUT", "AUS", "CAN", "CHE", "DEU", "FIN", "FRA", "GBR",
-               "JPN", "NOR", "USA") #Necessary for loading the data
 at        <- seq(5, 125, by = 20) #Ticks and labels on the x-axis for plotting
 
 ##############
 #Data loading#
 ##############
-source("functions/data_loading_gdp.R")
-#Now matrix X_mat_filled contains all the data
+load(file = "data/gdp_data.RData")
+#Now matrix X_mat_filled contains all the necessary data
 
 #Variables
 dates <- unique(X_mat_filled$date)
@@ -82,7 +80,7 @@ for (l in seq_len(nrow(result$ijset))){
 }
 
 ############
-#CLUSTERING#
+#Clustering#
 ############
 #for the distance matrix we need a symmetrical one
 Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
@@ -118,8 +116,6 @@ colors      <- c(3, 4, 2)
 #Plotting all clusters on one plot
 pdf("output/plots/gdp/all_clusters.pdf", width = 7, height = 4,
     paper="special")
-
-#Setting the layout of the graphs
 par(cex = 1, tck = -0.025)
 par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
 par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins

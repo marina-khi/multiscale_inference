@@ -81,6 +81,43 @@ local_linear_smoothing <- function(x_, data_p, grid_p, bw){
   }
 }
 
+#Function used for simulated the three groups of time series and calculate 
+#the corresponding test statistics, needed for parallel computations
+repl <- function(rep, t_len_, n_ts_, sigma_, a_hat_, q_, r_, grid_, m1_, m2_){
+  library(multiscale)
+  
+  simulated_data           <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+  colnames(simulated_data) <- 1:n_ts_
+  
+  sigmahat_vector <- c()
+  for (i in 1:(floor(n_ts_ / 3))){
+    simulated_data[, i] <- arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
+    simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
+    AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
+    sigma_hat_i         <- sqrt(AR.struc$lrv)
+    sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
+  }
+  for (i in (floor(n_ts_ / 3) + 1):(floor(2 * n_ts_ / 3))){
+    simulated_data[, i] <- m1_ + arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
+    simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
+    AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
+    sigma_hat_i         <- sqrt(AR.struc$lrv)
+    sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
+  }
+  for (i in (floor(2 * n_ts_ / 3) + 1):n_ts_){
+    simulated_data[, i] <- m2_ + arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
+    simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
+    AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
+    sigma_hat_i         <- sqrt(AR.struc$lrv)
+    sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
+  }
+  psi     <- compute_statistics(data = simulated_data, sigma_vec = sigmahat_vector,
+                                n_ts = n_ts_, grid = grid_)
+  results <- as.vector(psi$stat_pairwise)
+  return(results)
+}
+
+
 produce_plots_gdp <- function(results, data_i, data_j, ticks_, labels_,
                               name_i, name_j){
   filename    <- paste0("output/plots/gdp/", name_i, "_vs_", name_j, ".pdf")
@@ -342,14 +379,11 @@ output_matrix <- function(matrix_, filename){
 #Function that simulates the covariates as AR(1), the error terms as AR(1)
 #the time series as y = beta_ %*% covariates + m_matrix_ + errors,
 #estimates the parameters, and then computes the test statistics
-repl <- function(rep, t_len_, n_ts_, grid_, gaussian_sim = FALSE,
-                 a_ = 0, sigma_ = 1, beta_ = 0, a_x_ = 0, sigma_x_ = 1,
-                 m_matrix_ = NULL, q_ = 25, r_ = 10){
+repl2 <- function(rep, t_len_, n_ts_, grid_, gaussian_sim = FALSE,
+                  a_ = 0, sigma_ = 1, beta_ = 0, a_x_ = 0, sigma_x_ = 1,
+                  m_matrix_ = NULL, q_ = 25, r_ = 10){
   library(multiscale)
   library(dplyr)
-  
-  # beta_hat        <- c()
-  # alpha_hat       <- c()
   
   if (gaussian_sim){
     z_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
@@ -391,12 +425,8 @@ repl <- function(rep, t_len_, n_ts_, grid_, gaussian_sim = FALSE,
         y_diff_tmp <- as.matrix(y_diff)[-1, ]
         
         beta_hat_tmp  <- solve(t(x_diff_tmp) %*% x_diff_tmp) %*% t(x_diff_tmp) %*% y_diff_tmp
-        # beta_hat      <- c(beta_hat, as.vector(beta_hat_tmp))
-        
-        #Estimating alpha_i
         alpha_hat_tmp <- mean(y_matrix[, i] - x_matrix[, i] * as.vector(beta_hat_tmp))
-        # alpha_hat     <- c(alpha_hat, alpha_hat_tmp)
-        
+
         y_augm_matrix[, i] <- y_matrix[, i] - x_matrix[, i] * as.vector(beta_hat_tmp) - alpha_hat_tmp
         AR.struc           <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
                                            r_bar = r_, p = 1)
@@ -411,9 +441,8 @@ repl <- function(rep, t_len_, n_ts_, grid_, gaussian_sim = FALSE,
         y_matrix[, i]     <- m_matrix_[, i] + error_matrix[, i]
         
         #Estimating alpha_i
-        alpha_hat_tmp <- mean(y_matrix[, i])
-        # alpha_hat     <- c(alpha_hat, alpha_hat_tmp)
-        
+        alpha_hat_tmp     <- mean(y_matrix[, i])
+
         y_augm_matrix[, i]  <- y_matrix[, i] - alpha_hat_tmp
         AR.struc            <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
                                             r_bar = r_, p = 1)

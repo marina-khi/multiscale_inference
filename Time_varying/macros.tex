@@ -21,6 +21,15 @@
 \newcommand{\wght}{W} % kernel weight
 \newcommand{\thres}{\pi} % threshold parameter
 
+\newcommand{\bfbeta}{\bm{\beta}} %bold beta coefficent
+\newcommand{\X}{\boldsymbol{X}} %bold X - vector of covariates
+\newcommand{\family}{\mathcal{F}} %family of intervals
+\newcommand{\grid}{\mathcal{G}_T} %grid
+\newcommand{\interval}{\mathcal{I}_{u, h}} %one interval
+
+\newcommand{\doublehat}[1]{\skew{5.5}\widehat{\widehat{#1}}}
+\newcommand{\doublehattwo}[1]{\widehat{\widehat{#1}}}
+
 
 % Convergence
 
@@ -38,14 +47,19 @@
 \newtheorem{prop}[theorem]{Proposition}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
 \newtheorem*{theo}{Theorem}
-\newtheorem{propA}{Proposition}[section]
-\newtheorem{lemmaA}[propA]{Lemma}
-\newtheorem{definition}{Definition}[section]
-\newtheorem{remark}{Remark}[section]
-\renewcommand{\thelemmaA}{A.\arabic{lemmaA}}
-\renewcommand{\thepropA}{A.\arabic{propA}}
-\newtheorem*{algo}{Clustering Algorithm}
+\newtheorem{definitionA}{Definition}[section]
+\newtheorem{theoremA}[definitionA]{Theorem}
+\newtheorem{propA}[definitionA]{Proposition}
+\newtheorem{lemmaA}[definitionA]{Lemma}
+\newtheorem{corollaryA}[definitionA]{Corollary}
+\renewcommand{\thetheoremA}{B.\arabic{theoremA}}
+\renewcommand{\thepropA}{B.\arabic{propA}}
+\renewcommand{\thelemmaA}{B.\arabic{lemmaA}}
+\renewcommand{\thecorollaryA}{B.\arabic{corollaryA}}
+\renewcommand{\thedefinitionA}{B.\arabic{definitionA}}
 
 
 % Theorem numbering to the left
@@ -65,7 +79,7 @@
    %\vspace{0.5cm}
 
    {\LARGE \textbf{#1}}
-   \vspace{0.5cm}
+   \vspace{0.35cm}
  
    {\LARGE \textbf{#2}}
    \end{center}
@@ -79,10 +93,10 @@
    %\vspace{0.5cm}
 
    {\LARGE \textbf{#1}}
-   \vspace{0.1cm}
+   \vspace{0.35cm}
 
    {\LARGE \textbf{#2}}
-   \vspace{0.25cm}
+   \vspace{0.35cm}
  
    {\LARGE \textbf{#3}}
    \end{center}
@@ -94,17 +108,19 @@
 \newcommand{\authors}[4]
 {  \parindent0pt
    \begin{center}
-      \begin{minipage}[c][2cm][c]{5.25cm}
+      \begin{minipage}[c][2cm][c]{6cm}
       \begin{center} 
       {\large #1} 
+      
       \vspace{0.125cm}
       
       #2 
       \end{center}
       \end{minipage}
-      \begin{minipage}[c][2cm][c]{5.25cm}
+      \begin{minipage}[c][2cm][c]{5cm}
       \begin{center} 
       {\large #3}
+      
       \vspace{0.125cm}
 
       #4 
@@ -112,16 +128,6 @@
       \end{minipage}
    \end{center}
 }
-
-%\newcommand{\authors}[2]
-%{  \parindent0pt
-%   \begin{center}
-%   {\large #1} 
-%   \vspace{0.1cm}
-%      
-%   #2 
-%   \end{center}  
-%}
 
 
 % Version
@@ -132,9 +138,3 @@
    \end{center}
    \vspace{3pt}
 } 
-
-
-
-
-
-

@@ -1,4 +1,3 @@
-\newpage
 \appendix
 
 
@@ -6,10 +5,11 @@
 \section{Appendix}\label{appendix}
 
 
-In what follows, we provide detailed proofs of the theoretical results from Section \ref{sec:theo}. We use the following notation: The symbol $C$ denotes a universal real constant which may take a different value on each occurrence. For $a,b \in \reals$, we write $a \vee b = \max\{a,b\}$. For $x \in \reals_{\geq 0}$, we let $\lfloor x \rfloor$ denote the integer value of $x$ and $\lceil x \rceil$ the smallest integer greater than or equal to $x$. For any set $A$, the symbol $|A|$ denotes the cardinality of $A$. The expression $X \stackrel{\mathcal{D}}{=} Y$ means that the two random variables $X$ and $Y$ have the same distribution. Finally, we sometimes use the notation $a_T \ll b_T$ to express that $a_T = o(b_T)$. 
+In what follows, we prove the theoretical results from Sections \ref{sec:theo} and \ref{sec:clustering}. We use the following notation: The symbol $C$ denotes a universal real constant which may take a different value on each occurrence. For $a,b \in \reals$, we write $a \vee b = \max\{a,b\}$. For $x \in \reals_{\geq 0}$, we let $\lfloor x \rfloor$ denote the integer value of $x$ and $\lceil x \rceil$ the smallest integer greater than or equal to $x$. For any set $A$, the symbol $|A|$ denotes the cardinality of $A$. The expression $X \stackrel{\mathcal{D}}{=} Y$ means that the two random variables $X$ and $Y$ have the same distribution. Finally, we sometimes use the notation $a_T \ll b_T$ to express that $a_T = o(b_T)$. 
 
 
 
+\enlargethispage{0.25cm}
 \subsection*{Auxiliary results}\label{subsec:appendix:aux}
 
 
@@ -39,7 +39,7 @@ Let $\sum_{s=t}^\infty \delta_{q}(g,s) = O(t^{-\alpha})$ for some $q > 2$ and $\
 
 
 \begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{lemma-wlln}.}}]
-Let $\eta > 0$ be a fixed number. We apply Proposition \ref{theo-wu2016} to the sum $S_T = \sum_{t=1}^T a_t Z_t$ with $a_t = 1$ for all $t$. The assumption $\sum_{s=t}^\infty \delta_{q}(g,s) = O(t^{-\alpha})$ implies that $\|Z.\|_{2, \alpha} \le \|Z.\|_{q, \alpha} \le C_Z < \infty$. Hence, for $w$ chosen sufficiently large, we obtain that
+Let $\eta > 0$ be a fixed number. We apply Proposition \ref{theo-wu2016} to the sum $S_T = \sum_{t=1}^T a_t Z_t$ with $a_t = 1$ for all $t$. The assumption $\sum_{s=t}^\infty \delta_{q}(g,s) = O(t^{-\alpha})$ implies that $\|Z.\|_{2, \alpha} \le \|Z.\|_{q, \alpha} \le C_Z < \infty$. Hence, for $w$ chosen sufficiently large, we get 
 \begin{align*}
 \pr\Big( \Big| \sum_{t=1}^T Z_t \Big| \geq \sqrt{T} w\Big) 
  & \leq C_1 \frac{T C_Z^q}{T^{q/2} w^q} + C_2 \exp \left( - \frac{C_3 T w^2} {T C_Z^2}\right) \\
@@ -54,7 +54,7 @@ Let $\Delta \varepsilon_{it} = \varepsilon_{it} - \varepsilon_{it-1}$ and $\Delt
 \boldsymbol{a}_{i}(\mathcal{H}_{it}) & := \Delta \boldsymbol{h}_{i}(\mathcal{G}_{it}) \Delta g_i(\mathcal{F}_{it})\phantom{^\top} = \Delta \X_{it} \Delta \varepsilon_{it} \\
 \boldsymbol{b}_{i}(\mathcal{G}_{it}) & := \Delta \boldsymbol{h}_{i}(\mathcal{G}_{it}) \Delta \boldsymbol{h}_{i}(\mathcal{G}_{it})^\top = \Delta \X_{it} \Delta \X_{it}^\top,
 \end{align*}
-where $\boldsymbol{a}_i = (a_{ij})_{j=1}^d$, $\boldsymbol{b}_i = (b_{ikl})_{k,l=1}^d$ and $\mathcal{H}_{it} = (\mathcal{H}_{it,1},\ldots,\mathcal{H}_{it,d})^\top$ with $\mathcal{H}_{it,j} = (\ldots, \nu_{it-1,j},\linebreak \nu_{it,j})$ and $\nu_{it,j} = (\eta_{it,j},\xi_{it,j})$. The next result gives bounds on the physical dependence measures of the processes $\{ \boldsymbol{a}_{i}(\mathcal{H}_{it}) \}_{t=-\infty}^\infty$ and $\{ \boldsymbol{b}_{i}(\mathcal{G}_{it}) \}_{t=-\infty}^\infty$. 
+where $\boldsymbol{a}_i = (a_{ij})_{j=1}^d$, $\boldsymbol{b}_i = (b_{ikl})_{k,l=1}^d$ and $\mathcal{H}_{it} = (\mathcal{H}_{it,1},\ldots,\mathcal{H}_{it,d})^\top$ with $\mathcal{H}_{it,j} = (\ldots, \nu_{it-1,j},\linebreak \nu_{it,j})$ and $\nu_{it,j} = (\eta_{it},\xi_{it,j})$. The next result gives bounds on the physical dependence measures of the processes $\{ \boldsymbol{a}_{i}(\mathcal{H}_{it}) \}_{t=-\infty}^\infty$ and $\{ \boldsymbol{b}_{i}(\mathcal{G}_{it}) \}_{t=-\infty}^\infty$. 
 
 
 \begin{lemmaA}\label{lemma-bounds-dep-measure}
@@ -70,16 +70,16 @@ Let Assumptions \ref{C-err1}, \ref{C-err3}, \ref{C-reg1} and \ref{C-reg3} be sat
 We only prove the first statement. The second one follows by analogous arguments. By the definition of the physical dependence measure and the Cauchy-Schwarz inequality, we have with $p = \min\{q,q^\prime\}/2$ that
 \begin{align*}
 \delta_p(a_{ij}, s) 
- & = \| a_{ij}(\mathcal{H}_{it,j}) - a_{ij}(\mathcal{H}_{it,j}^\prime) \| \\
- &= \| \Delta h_{ij}(\mathcal{G}_{it}) \Delta g_i(\mathcal{F}_{it}) -  \Delta h_{ij}(\mathcal{G}_{it}^\prime) \Delta g_i(\mathcal{F}_{it}^\prime) \| \\
- &\leq \| h_{ij}(\mathcal{G}_{it}) g_i(\mathcal{F}_{it}) - h_{ij}(\mathcal{G}_{it}^\prime) g_i(\mathcal{F}_{it}^\prime) \| \\
- &\quad + \| h_{ij}(\mathcal{G}_{it-1}) g_i(\mathcal{F}_{it-1}) - h_{ij}(\mathcal{G}_{it-1}^\prime) g_i(\mathcal{F}_{it-1}^\prime) \| \\
- &\quad + \| h_{ij}(\mathcal{G}_{it-1}) g_i(\mathcal{F}_{it}) - h_{ij}(\mathcal{G}_{it-1}^\prime) g_i(\mathcal{F}_{it}^\prime) \| \\
- &\quad + \| h_{ij}(\mathcal{G}_{it}) g_i(\mathcal{F}_{it-1}) - h_{ij}(\mathcal{G}_{it}^\prime) g_i(\mathcal{F}_{it-1}^\prime) \| \\
- & = \| \{ h_{ij}(\mathcal{G}_{it}) - h_{ij}(\mathcal{G}_{it}^\prime)\} g_i(\mathcal{F}_{it}) + h_{ij}(\mathcal{G}_{it}^\prime) \{g_i(\mathcal{F}_{it}) - g_i(\mathcal{F}_{it}^\prime)\} \| \\
- & \quad + \| \{ h_{ij}(\mathcal{G}_{it-1}) - h_{ij}(\mathcal{G}_{it-1}^\prime)\} g_i(\mathcal{F}_{it-1}) + h_{ij}(\mathcal{G}_{it-1}^\prime) \{g_i(\mathcal{F}_{it-1}) - g_i(\mathcal{F}_{it-1}^\prime)\} \| \\
- &\quad + \| \{ h_{ij}(\mathcal{G}_{it-1}) - h_{ij}(\mathcal{G}_{it-1}^\prime)\} g_i(\mathcal{F}_{it}) + h_{ij}(\mathcal{G}_{it-1}^\prime) \{g_i(\mathcal{F}_{it}) - g_i(\mathcal{F}_{it}^\prime)\} \| \\
- &\quad + \| \{ h_{ij}(\mathcal{G}_{it}) - h_{ij}(\mathcal{G}_{it}^\prime)\} g_i(\mathcal{F}_{it-1}) + h_{ij}(\mathcal{G}_{it}^\prime) \{g_i(\mathcal{F}_{it-1}) - g_i(\mathcal{F}_{it-1}^\prime)\} \| \\
+ & = \| a_{ij}(\mathcal{H}_{it,j}) - a_{ij}(\mathcal{H}_{it,j}^\prime) \|_p \\
+ &= \| \Delta h_{ij}(\mathcal{G}_{it}) \Delta g_i(\mathcal{F}_{it}) -  \Delta h_{ij}(\mathcal{G}_{it}^\prime) \Delta g_i(\mathcal{F}_{it}^\prime) \|_p \\
+ &\leq \| h_{ij}(\mathcal{G}_{it}) g_i(\mathcal{F}_{it}) - h_{ij}(\mathcal{G}_{it}^\prime) g_i(\mathcal{F}_{it}^\prime) \|_p \\
+ &\quad + \| h_{ij}(\mathcal{G}_{it-1}) g_i(\mathcal{F}_{it-1}) - h_{ij}(\mathcal{G}_{it-1}^\prime) g_i(\mathcal{F}_{it-1}^\prime) \|_p \\
+ &\quad + \| h_{ij}(\mathcal{G}_{it-1}) g_i(\mathcal{F}_{it}) - h_{ij}(\mathcal{G}_{it-1}^\prime) g_i(\mathcal{F}_{it}^\prime) \|_p \\
+ &\quad + \| h_{ij}(\mathcal{G}_{it}) g_i(\mathcal{F}_{it-1}) - h_{ij}(\mathcal{G}_{it}^\prime) g_i(\mathcal{F}_{it-1}^\prime) \|_p \\
+ & = \| \{ h_{ij}(\mathcal{G}_{it}) - h_{ij}(\mathcal{G}_{it}^\prime)\} g_i(\mathcal{F}_{it}) + h_{ij}(\mathcal{G}_{it}^\prime) \{g_i(\mathcal{F}_{it}) - g_i(\mathcal{F}_{it}^\prime)\} \|_p \\
+ & \quad + \| \{ h_{ij}(\mathcal{G}_{it-1}) - h_{ij}(\mathcal{G}_{it-1}^\prime)\} g_i(\mathcal{F}_{it-1}) + h_{ij}(\mathcal{G}_{it-1}^\prime) \{g_i(\mathcal{F}_{it-1}) - g_i(\mathcal{F}_{it-1}^\prime)\} \|_p \\
+ &\quad + \| \{ h_{ij}(\mathcal{G}_{it-1}) - h_{ij}(\mathcal{G}_{it-1}^\prime)\} g_i(\mathcal{F}_{it}) + h_{ij}(\mathcal{G}_{it-1}^\prime) \{g_i(\mathcal{F}_{it}) - g_i(\mathcal{F}_{it}^\prime)\} \|_p \\
+ &\quad + \| \{ h_{ij}(\mathcal{G}_{it}) - h_{ij}(\mathcal{G}_{it}^\prime)\} g_i(\mathcal{F}_{it-1}) + h_{ij}(\mathcal{G}_{it}^\prime) \{g_i(\mathcal{F}_{it-1}) - g_i(\mathcal{F}_{it-1}^\prime)\} \|_p \\
  &\leq \delta_{2p}(h_{ij}, t) \| g_i(\mathcal{F}_t) \|_{2p} + \delta_{2p} (g_i, t) \| h_{ij}(\mathcal{G}_{it}^\prime) \|_{2p} \\
 &\quad + \delta_{2p}(h_{ij}, t-1) \| g_i(\mathcal{F}_{t-1}) \|_{2p} + \delta_{2p} (g_i, t-1) \| h_{ij}(\mathcal{G}_{it-1}^\prime) \|_{2p} \\
 &\quad + \delta_{2p}(h_{ij}, t-1) \| g_i(\mathcal{F}_t) \|_{2p} + \delta_{2p} (g_i, t) \| h_{ij}(\mathcal{G}_{it-1}^\prime) \|_{2p} \\
@@ -119,72 +119,54 @@ In what follows, we show that
 Lemma \ref{lemma-beta-rate} follows from applying these three statements together with standard arguments to formula \eqref{theo:beta:proof1}.
 
 
-Since $\ex[\Delta \X_{it} \Delta \varepsilon_{it}] = 0$ by \ref{C-reg-err} and $\sum_{s=t}^\infty \delta_p(a_{ij}, s) = O(t^{-\alpha})$ for some $p > 2$ and all $j$ by Lemma \ref{lemma-bounds-dep-measure}, the claim \eqref{lemma-beta-rate-claim1} follows upon applying Lemma \ref{lemma-wlln}. Another application of Lemma \ref{lemma-wlln} yields that 
+Since $\ex[\Delta \X_{it} \Delta \varepsilon_{it}] = 0$ by \ref{C-reg-err} and $\sum_{s=t}^\infty \delta_p(a_{ij}, s) = O(t^{-\alpha})$ for some $p > 2$, $\alpha > 1/2 - 1/p$ and all $j$ by Lemma \ref{lemma-bounds-dep-measure}, the claim \eqref{lemma-beta-rate-claim1} follows upon applying Lemma \ref{lemma-wlln}. Another application of Lemma \ref{lemma-wlln} yields that 
 \[ \frac{1}{T}\sum_{t=2}^T \Big\{ \Delta \X_{it} \Delta \X_{it}^\top - \ex[\Delta \X_{it} \Delta \X_{it}^\top] \Big\} = O_p\Big(\frac{1}{\sqrt{T}}\Big). \]
 As $\ex[\Delta \X_{it} \Delta \X_{it}^\top]$ is invertible, we can invoke Slutsky's lemma to obtain \eqref{lemma-beta-rate-claim2}. By assumption, $m_i$ is Lipschitz continuous, which implies that $|\Delta m_{it}| = |m_i (\frac{t}{T}) - m_i (\frac{t-1}{T}) | \leq C/T$ for all $t \in \{1, \ldots, T\}$ and some constant $C > 0$. Hence, 
 \begin{align*}
 \Big| \frac{1}{\sqrt{T}}\sum_{t=2}^T \Delta X_{it,j} \Delta m_{it}\Big| &\leq \frac{1}{\sqrt{T}}\sum_{t=2}^T \big|\Delta X_{it,j} \big| \cdot \big| \Delta m_{it} \big| \\
 	& \leq \frac{C}{\sqrt{T}} \cdot \frac{1}{T} \sum_{t=2}^T \left|\Delta X_{it,j} \right| = O_p\Big(\frac{1}{\sqrt{T}}\Big),
 \end{align*}
-where we have used that $T^{-1} \sum_{t=2}^T |\Delta \X_{it,j}| = O_p(1)$ by Markov's inequality. This yields \eqref{lemma-beta-rate-claim3}.
+where we have used that $T^{-1} \sum_{t=2}^T |\Delta X_{it,j}| = O_p(1)$ by Markov's inequality. This yields \eqref{lemma-beta-rate-claim3}.
 \end{proof}
 
 
-%\begin{propA}[\cite{Wu2007}, Corollary 2]\label{theo-wu-2}
-%Let $\{\epsilon_t\}_{t\in\integers}$ be i.i.d.\ random variables, $\xi_t = (\ldots, \epsilon_{t-1}, \epsilon_t)$ and $g(\cdot)$ a measurable function such that $g(\xi_t) \in \mathcal{L}^q$ for some $q > 2$ and $\ex[g(\xi_t)] = 0$. Moreover, let $\mathit{l}$ be a positive, nondecreasing function which is slowly varying, that is, $\lim_{x \to \infty} \mathit{l}(\lambda x) / \mathit{l}(x) = 1$ for any $\lambda > 0$. Assume that 
-%\[ \sum_{k = m}^\infty \Big\| \ex [g(\xi_k)| \xi_0] - \ex [g(\xi_k)| \xi_{-1}]\Big\|_q =O\Big([\log m]^{-\beta}\Big) \] 
-%with $0 \leq \beta < 1/q$ and 
-%$\sum_{k=1}^\infty \{ k^{-\beta q} / [l(2^k)]^q \} < \infty$.	
-%Then 
-%\[ S_m = g(\xi_1) + \ldots + g(\xi_m) = o_{a.s.}\big(\sqrt{m}l(m)\big). \]
-%\end{propA}
-
-
-%\begin{propA}[\cite{Wu2007}, Proposition 3]\label{prop-wu}
-%Let $\{\epsilon_t\}_{t\in\integers}$ be i.i.d.\ random variables, $\xi_t = (\ldots, \epsilon_{t-1}, \epsilon_t)$ and $g(\cdot)$ a measurable function such that $g(\xi_t) \in \mathcal{L}^q$ for some $q > 1$ and $\ex[g(\xi_t)] = 0$. For $k \geq 0$, let $\xi_k^\prime = (\ldots, \epsilon_{-1}, \epsilon_0^\prime, \epsilon_1, \ldots, \epsilon_{k-1}, \epsilon_k)$, where $\epsilon_0^\prime$ is an i.i.d.\ copy of $\epsilon_0$. For any $t \geq 1$, it holds that
-%\[ \big\| \ex [g(\xi_t)| \xi_0] - \ex [g(\xi_t)| \xi_{-1}]\big\|_q \leq 2 \big\| g(\xi_t) - g(\xi_t^\prime)\big\|_q. \]
-%\end{propA}
-
-
 \begin{lemmaA}\label{lemmaA:lrv}
-Let $s_T \asymp T^{1/3}$. Under Assumptions \ref{C-err1}--\ref{C-reg-err}, for each $i \in \{1, \ldots, n\}$ we have
-$$\widehat{\sigma}_i^2 = \sigma_i^2 + O_p(T^{-1/3}).$$
-where $\widehat{\sigma}_i^2$ is the subseries variance estimate of $\sigma_i^2$ introduced by \eqref{eq:lrv}.
+Let $s_T \asymp T^{1/3}$. Under Assumptions \ref{C-err1}--\ref{C-reg-err}, 
+$$\widehat{\sigma}_i^2 = \sigma_i^2 + O_p(T^{-1/3})$$
+for each $i$, where $\widehat{\sigma}_i^2$ is the subseries variance estimator of $\sigma_i^2$ introduced in \eqref{eq:lrv}.
 \end{lemmaA}
 
 
 \begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{lemmaA:lrv}}}]
-For notational convenience, we let $Y_{it}^* = Y_{it} - \bfbeta_i^\top \X_{it}$. Note that 
-\begin{align*}
-&Y_{i(t + ms_T)}^* - Y_{i(t + (m-1)s_T)}^* \\
-&= \alpha_i + m_i\left(\frac{t+m s_T}{T}\right) + \varepsilon_{i(t + ms_T)} \\
-&\quad-  \alpha_i - m_i\left(\frac{t+(m-1) s_T}{T}\right) + \varepsilon_{i(t + (m-1)s_T)} \\
-&=m_i\left(\frac{t+m s_T}{T}\right) + \varepsilon_{i(t + ms_T)}  - m_i\left(\frac{t+(m-1) s_T}{T}\right) + \varepsilon_{i(t + (m-1)s_T)}\\
-& = Y_{i(t + ms_T)}^\circ - Y_{i(t + (m-1)s_T)}^\circ, 
-\end{align*}
-where $Y_{it}^\circ$ is the dependent variable in a well-studied standard nonparametric regression discussed in Section \ref{subsec:test:prep}.
-Now, using simple arithmetic calculations, we can rewrite $\widehat{\sigma}_i^2$ as
+%For notational convenience, we let $Y_{it}^* = Y_{it} - \bfbeta_i^\top \X_{it}$. Note that 
+%\begin{align*}
+%&Y_{i(t + ms_T)}^* - Y_{i(t + (m-1)s_T)}^* \\
+%&= \alpha_i + m_i\left(\frac{t+m s_T}{T}\right) + \varepsilon_{i(t + ms_T)} - \alpha_i - m_i\left(\frac{t+(m-1) s_T}{T}\right) - \varepsilon_{i(t + (m-1)s_T)} \\
+%&=m_i\left(\frac{t+m s_T}{T}\right) + \varepsilon_{i(t + ms_T)}  - m_i\left(\frac{t+(m-1) s_T}{T}\right) + \varepsilon_{i(t + (m-1)s_T)}\\
+%& = Y_{i(t + ms_T)}^\circ - Y_{i(t + (m-1)s_T)}^\circ, 
+%\end{align*}
+%where we use the shorthand $Y_{it}^\circ := m_i(t/T) + \varepsilon_{it}$. 
+Let $Y_{it}^\circ := m_i(t/T) + \varepsilon_{it}$. Using simple arithmetic calculations, we can rewrite $\widehat{\sigma}_i^2$ as $\widehat{\sigma}_i^2 = \widehat{\sigma}_{i,A}^2 + \widehat{\sigma}_{i,B}^2 - \widehat{\sigma}_{i,C}^2$, where
 \begin{align}
-\widehat{\sigma}_i^2  &= \frac{1}{2(M-1)s_T}\sum_{m=1}^M \left[\sum_{t = 1}^{s_T} \left(Y_{i(t + ms_T)}^\circ - Y_{i(t + (m-1)s_T)}^\circ\right)\right]^2 \nonumber\\
-&\quad + \frac{1}{2(M-1)s_T}\sum_{m=1}^M \left[\sum_{t = 1}^{s_T} (\widehat{\bfbeta}_i - \bfbeta_i)^\top\left(\X_{i(t+ms_T)} - \X_{i(t+(m-1)s_T)}\right) \right]^2 \nonumber \\
- &\quad - \frac{1}{(M-1)s_T}\sum_{m=1}^M \bigg[\sum_{t = 1}^{s_T}  \left(Y_{i(t + ms_T)}^\circ - Y_{i(t + (m-1)s_T)}^\circ\right) \nonumber \\ & \phantom{\quad - \frac{1}{(M-1)s_T}\sum_{m=1}^M \bigg[} \times \sum_{t = 1}^{s_T} (\widehat{\bfbeta}_i - \bfbeta_i)^\top\left(\X_{i(t+ms_T)} - \X_{i(t+(m-1)s_T)}\right) \bigg]. \label{eqA:lrv:proof1}
+\widehat{\sigma}_{i,A}^2 &= \frac{1}{2(M-1)s_T}\sum_{m=1}^M \left[\sum_{t = 1}^{s_T} \left(Y_{i(t + ms_T)}^\circ - Y_{i(t + (m-1)s_T)}^\circ\right)\right]^2 \nonumber\\
+\widehat{\sigma}_{i,B}^2 &= \frac{1}{2(M-1)s_T}\sum_{m=1}^M \left[\sum_{t = 1}^{s_T} (\widehat{\bfbeta}_i - \bfbeta_i)^\top\left(\X_{i(t+ms_T)} - \X_{i(t+(m-1)s_T)}\right) \right]^2 \nonumber \\
+\widehat{\sigma}_{i,C}^2 &= \frac{1}{(M-1)s_T}\sum_{m=1}^M \bigg[\sum_{t = 1}^{s_T}  \left(Y_{i(t + ms_T)}^\circ - Y_{i(t + (m-1)s_T)}^\circ\right) \nonumber \\ & \phantom{\quad - \frac{1}{(M-1)s_T}\sum_{m=1}^M \bigg[} \times \sum_{t = 1}^{s_T} (\widehat{\bfbeta}_i - \bfbeta_i)^\top\left(\X_{i(t+ms_T)} - \X_{i(t+(m-1)s_T)}\right) \bigg]. \nonumber
 \end{align}
-By \cite{Carlstein1986} and \cite{WuZhao2007}, we have
-\begin{align}\label{eqA:lrv:proof2}
-\frac{1}{2(M-1)s_T}\sum_{m=1}^M \left[\sum_{t = 1}^{s_T} \Big(Y_{i(t + ms_T)}^\circ - Y_{i(t + (m-1)s_T)}^\circ\Big)\right]^2  = \sigma_i^2 + O_p(T^{-1/3}).
-\end{align}
-Furthermore, by our assumption that $s_T \asymp T^{1/3}$, Assumption \ref{C-reg2} and Lemma \ref{lemma-beta-rate}, we have
-\begin{align}\label{eqA:lrv:proof3}
-\frac{1}{2(M-1)s_T}\sum_{m=1}^M \left[\sum_{t = 1}^{s_T} (\widehat{\bfbeta}_i - \bfbeta_i)^\top\Big(\X_{i(t+ms_T)} - \X_{i(t+(m-1)s_T)}\Big) \right]^2 = O_p(T^{-2/3}).
-\end{align}
-Finally, applying \eqref{eqA:lrv:proof2} and \eqref{eqA:lrv:proof3} together with the Cauchy-Schwarz inequality, we obtain
-\begin{align}\label{eqA:lrv:proof4}
-\frac{1}{(M-1)s_T}\sum_{m=1}^M \bigg[ & \sum_{t = 1}^{s_T}  \left(Y_{i(t + ms_T)}^\circ - Y_{i(t + (m-1)s_T)}^\circ\right) \nonumber \\
-& \times \sum_{t = 1}^{s_T} (\widehat{\bfbeta}_i - \bfbeta_i)^\top\left(\X_{i(t+ms_T)} - \X_{i(t+(m-1)s_T)}\right) \bigg] = O_p(T^{-1/3}).
-\end{align}
-
-
-Applying \eqref{eqA:lrv:proof2}--\eqref{eqA:lrv:proof4} to \eqref{eqA:lrv:proof1}, the lemma trivially follows.
+By \cite{Carlstein1986} and \cite{WuZhao2007}, we have $\widehat{\sigma}_{i,A}^2 = \sigma_i^2 + O_p(T^{-1/3})$. Moreover, under our assumptions, it is straightforward to see that $\widehat{\sigma}_{i,B}^2 = O_p(T^{-1/3})$ and $\widehat{\sigma}_{i,C}^2 = O_p(T^{-1/3})$.
+%By \cite{Carlstein1986} and \cite{WuZhao2007}, we have
+%\begin{align}\label{eqA:lrv:proof2}
+%\frac{1}{2(M-1)s_T}\sum_{m=1}^M \left[\sum_{t = 1}^{s_T} \Big(Y_{i(t + ms_T)}^\circ - Y_{i(t + (m-1)s_T)}^\circ\Big)\right]^2  = \sigma_i^2 + O_p(T^{-1/3}).
+%\end{align}
+%Furthermore, by our assumption that $s_T \asymp T^{1/3}$, Assumption \ref{C-reg1} and Lemma \ref{lemma-beta-rate}, we have
+%\begin{align}\label{eqA:lrv:proof3}
+%\frac{1}{2(M-1)s_T}\sum_{m=1}^M \left[\sum_{t = 1}^{s_T} (\widehat{\bfbeta}_i - \bfbeta_i)^\top\Big(\X_{i(t+ms_T)} - \X_{i(t+(m-1)s_T)}\Big) \right]^2 = O_p(T^{-2/3}).
+%\end{align}
+%Finally, applying \eqref{eqA:lrv:proof2} and \eqref{eqA:lrv:proof3} together with the Cauchy-Schwarz inequality, we obtain
+%\begin{align}\label{eqA:lrv:proof4}
+%\frac{1}{(M-1)s_T}\sum_{m=1}^M \bigg[ & \sum_{t = 1}^{s_T}  \left(Y_{i(t + ms_T)}^\circ - Y_{i(t + (m-1)s_T)}^\circ\right) \nonumber \\
+%& \times \sum_{t = 1}^{s_T} (\widehat{\bfbeta}_i - \bfbeta_i)^\top\left(\X_{i(t+ms_T)} - \X_{i(t+(m-1)s_T)}\right) \bigg] = O_p(T^{-1/3}).
+%\end{align}
+%Applying \eqref{eqA:lrv:proof2}--\eqref{eqA:lrv:proof4} to \eqref{eqA:lrv:proof1}, the lemma trivially follows.
 \end{proof}
 
 
@@ -192,7 +174,7 @@ Applying \eqref{eqA:lrv:proof2}--\eqref{eqA:lrv:proof4} to \eqref{eqA:lrv:proof1
 \subsection*{Proof of Theorem \ref{theo:stat:global}}\label{subsec-appendix-stat-equality}
 
 
-We first summarize the main proof strategy, which splits up into five steps, and then fill in the details. In particular, we defer the proofs of some intermediate results to the end of the section. 
+We first summarize the main proof strategy, which splits up into five steps, and then fill in the details. We in particular defer the proofs of some intermediate results to the end of the section. 
 
 
 \subsubsection*{Step 1}
@@ -202,7 +184,7 @@ To start with, we consider a simplified setting where the parameter vectors $\bf
 \[ \doublehattwo{\Phi}_{n,T} = \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T}\Bigg\{ \bigg| \frac{\doublehat{\phi}_{ij,T}(u,h)} {\{ \doublehattwo{\sigma}_i^2 + \doublehattwo{\sigma}_j^2 \}^{1/2}} \bigg| - \lambda(h)\Bigg\}, \]
 where
 \[ \doublehat{\phi}_{ij,T}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) - (\varepsilon_{jt} - \bar{\varepsilon}_j)  \big\} \]
-and $\doublehattwo{\sigma}_i^2$ is computed in exactly the same way as $\widehat{\sigma}_i^2$ except that all occurrences of $\widehat{\bfbeta}_i$ are replaced by $\bfbeta_i$. By assumption, $\widehat{\sigma}_i^2 = \sigma^2_i + o_p(\rho_T)$ with $\rho_T = o(\sqrt{h_{\min}}/\log T)$. For most estimators of $\sigma_i^2$ including those discussed in Section \ref{sec:theo}, this assumption immediately implies that $\doublehattwo{\sigma}_i^2 = \sigma^2_i + o_p(\rho_T)$ as well. In the sequel, we thus take for granted that the estimator $\doublehattwo{\sigma}_i^2$ has this property.
+and $\doublehattwo{\sigma}_i^2$ is computed in exactly the same way as $\widehat{\sigma}_i^2$ except that all occurrences of $\widehat{\bfbeta}_i$ are replaced by $\bfbeta_i$. By assumption, $\widehat{\sigma}_i^2 = \sigma^2_i + o_p(\rho_T)$ with $\rho_T = o(1/\log T)$. For most estimators of $\sigma_i^2$ including those discussed in Section \ref{sec:theo}, this assumption immediately implies that $\doublehattwo{\sigma}_i^2 = \sigma^2_i + o_p(\rho_T)$ as well. In the sequel, we thus take for granted that the estimator $\doublehattwo{\sigma}_i^2$ has this property.
 
 
 We now have a closer look at the statistic $\doublehattwo{\Phi}_{n,T}$. We in particular show that there exists an identically distributed version $\widetilde{\Phi}_{n, T}$ of $\doublehattwo{\Phi}_{n, T}$ which is close to the Gaussian statistic $\Phi_{n, T}$ from \eqref{eq:Phi}. More formally, we prove the following result.  
@@ -266,24 +248,8 @@ In this step, we show that the auxiliary statistic $\doublehattwo{\Phi}_{n,T}$ i
 It holds that 
 \[ \doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T} = o_p(\delta_T) \]
 with $\delta_T = T^{1/q}/\sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$.
-%Let $\gamma_{T} = C \delta_T$ with $\delta_T = T^{1/q}/\sqrt{T h_{\min}} + \rho_T \sqrt{\log T}$ and an arbitrary constant $C > 0$. Then 
-%\[ \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma_{T} \Big) = o(1). \]
-%that is, $\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T} = o_p(\delta_T)$.
 \end{propA}
 The proof can be found at the end of this section. 
-%The next lemma will turn out to be useful in the next step of the proof. 
-%\begin{lemmaA}\label{lemmaA:step1}
-%For any $x \in \reals$ and any $\gamma > 0$, 
-%\begin{align*}
-%\pr\Big( \doublehattwo{\Phi}_{n,T} \le x & - \gamma\Big) - \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma \Big) \\
-% & \le \pr\big(\widehat{\Phi}_{n, T} \le x\big) \le\pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma\Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma \Big).
-%\end{align*}
-%\end{lemmaA}
-%Combining this lemma with Proposition \ref{propA:step4} yields that 
-%\begin{equation}\label{eq:prop-lemma-step1}
-%\pr\Big( \doublehattwo{\Phi}_{n,T} \le x - \gamma_T\Big) - o(1) \le \pr(\widehat{\Phi}_{n, T} \le x) \le \pr\Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma_T\Big) + o(1),
-%\end{equation}
-%which relates the distribution functions of $\doublehattwo{\Phi}_{n,T}$ and $\widehat{\Phi}_{n,T}$ to each other. The proofs of Proposition \ref{propA:step4} and Lemma \ref{lemmaA:step1} can be found at the end of this section. 
 
 
 \subsubsection*{Step 5} 
@@ -335,7 +301,7 @@ Consequently,
  & \quad + \sup_{x \in \reals} \pr\big( | \Phi_{n,T} - x | \le \delta_T \big) \\
  & \quad + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \delta_{T} \Big). 
 \end{align*}
-Since the three terms on the right-hand side are all $o(1)$ by Steps 2--4, we arrive at \eqref{eq:claim:step5}. 
+Since the terms on the right-hand side are all $o(1)$ by Steps 2--4, we arrive at \eqref{eq:claim:step5}. 
 \end{proof}
 
 
@@ -407,14 +373,15 @@ Moreover, standard arguments show that $\max_{(u,h) \in \mathcal{G}_T} W_T(u,h) 
 which in view of \eqref{eqA:strong_approx:bound2} yields that $| \widetilde{\Phi}_{n, T} - \Phi_{n, T}^{\diamond} | = o_p( T^{1/q}/\sqrt{Th_{\min}})$. This completes the proof of \eqref{eq-strongapprox-bound-A}.
 
 
+\pagebreak
 Next consider $|\Phi_{n, T}^{\diamond} - \Phi_{n, T}|$. It holds that
 \begin{align}
- & \big| \Phi_{n, T}^{\diamond} - \Phi_{n, T} \big| \nonumber \\
+\big| \Phi_{n, T}^{\diamond} - \Phi_{n, T} \big| 
  & \le \max_{1\leq i< j \leq n}\max_{(u,h) \in \mathcal{G}_T} \Big|\frac{\phi_{ij, T}(u,h)}{\{\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \}^{1/2}} - \frac{\phi_{ij, T}(u,h)}{\{{\sigma}_i^2 + {\sigma}_j^2 \}^{1/2}}\Big| \nonumber \\
  & \le \max_{1 \le i < j \le n} \left\{ \Big|\big(\widetilde{\sigma}_i^2 + \widetilde{\sigma}_j^2 \big)^{-1/2} - \big(\sigma_i^2 + \sigma_j^2 \big)^{-1/2}\Big| \right\} \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \left|\phi_{ij,T}(u,h)\right| \nonumber \\
  & = o_p(\rho_T)  \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \left|\phi_{ij,T}(u,h)\right|, \label{eqA:strong_approx:bound5}
 \end{align}
-where the last line is due to the fact that $\widetilde{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$ and $\widehat{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$. We can write $\phi_{ij, T}(u,h) = \phi_{ij, T}^{(I)}(u,h) - \phi_{ij, T}^{(II)}(u,h)$, where
+where the last line is due to the fact that $\widetilde{\sigma}_i^2 = \sigma_i^2 + o_p(\rho_T)$. We can write $\phi_{ij, T}(u,h) = \phi_{ij, T}^{(I)}(u,h) - \phi_{ij, T}^{(II)}(u,h)$, where
 \begin{align*} 
 \phi_{ij, T}^{(I)}(u,h) & = \sum\limits_{t=1}^T w_{t,T}(u,h) \, (\sigma_i Z_{it} - \sigma_j Z_{jt}) \sim \normal(0,{\sigma}^2_i + {\sigma}^2_j) \\
 \phi_{ij, T}^{(II)}(u,h) & = \sum\limits_{t=1}^T w_{t,T}(u,h) \, ( \sigma_i \bar{Z}_i - \sigma_j \bar{Z}_j) \sim \normal\big(0, (\sigma_i^2 + \sigma_j^2) c_T(u,h)\big) 
@@ -433,9 +400,9 @@ The proof is an application of anti-concentration bounds for Gaussian random vec
 \begin{lemmaA}\label{lemma-Nazarov}
 Let $\boldsymbol{Z} = (Z_1,\ldots,Z_p)^\top$ be a centred Gaussian random vector in $\reals^p$ such that $\ex[Z_j^2] \ge b$ for all $1 \le j \le p$ and some constant $b > 0$. Then for every $\boldsymbol{z} \in \reals^p$ and $a > 0$,
 \[ \pr(\boldsymbol{Z} \le \boldsymbol{z} + a) - \pr(\boldsymbol{Z} \le \boldsymbol{z}) \le C a \sqrt{\log p}, \]  
-where the constant $C$ only depends on $b$. %\textcolor{blue}{(Add notation vector + scalar?)}
+where the constant $C$ only depends on $b$. 
 \end{lemmaA}
-To apply this result, we introduce the following notation: We write $x = (u,h)$ and $\mathcal{G}_T = \{ x : x \in \mathcal{G}_T \} = \{x_1,\ldots,x_p\}$, where $p := |\mathcal{G}_T| \le O(T^\theta)$ for some large but fixed $\theta > 0$ by our assumptions. For $k = 1,\ldots,p$ and $1 \le i < j \le n$, we further let 
+To apply this result, we introduce the following notation: We write $x = (u,h)$ and $\mathcal{G}_T = \{x_1,\ldots,x_p\}$, where $p := |\mathcal{G}_T| \le O(T^\theta)$ for some large but fixed $\theta > 0$ by our assumptions. For $k = 1,\ldots,p$ and $1 \le i < j \le n$, we further let 
 \[ Z_{ij, 2k-1} = \frac{\phi_{ij, T}(x_{k1},x_{k2})}{\{{\sigma}_i^2 + {\sigma}_j^2\}^{1/2}} \quad \text{and} \quad Z_{ij, 2k} = -\frac{\phi_{ij, T}(x_{k1},x_{k2})}{\{{\sigma}_i^2 + {\sigma}_j^2\}^{1/2}} \]  
 along with $\lambda_{ij,2k-1} = \lambda(x_{k2})$ and $\lambda_{ij,2k} = \lambda(x_{k2})$, where $x_k = (x_{k1},x_{k2})$. Under our assumptions, it holds that $\ex[Z_{ij,l}] = 0$ and $\ex[Z_{ij,l}^2] \ge b > 0$ for all $i$, $j$ and $l$. We next construct the random vector $\boldsymbol{Z} = ( Z_{ij,l} : 1 \le i < j \le n, 1 \le l \le 2p)$ by stacking the variables $Z_{ij, l}$ in a certain order (which can be chosen freely) and construct the vector $\boldsymbol{\lambda} = (\lambda_{ij,l}: 1 \le i < j \le n, 1 \le l \le 2p)$ in an analogous way. Since the variables $Z_{ij,l}$ are normally distributed, $\boldsymbol{Z}$ is a Gaussian random vector of length $(n-1)np$. 
 
@@ -498,7 +465,7 @@ A_{n,T} & = \max_{1 \le i< j \le n} \max_{(u,h) \in \mathcal{G}_T} \Big|\doubleh
 B_{n,T} & = \max_{1 \le i \le n} \max_{(u,h) \in \mathcal{G}_T} \Big| (\bfbeta_i - \widehat{\bfbeta}_i)^\top\sum_{t=1}^T w_{t,T}(u,h) \X_{it} \Big| \\
 C_{n,T} & = \max_{1 \le i \le n}\big|(\bfbeta_i - \widehat{\bfbeta}_i)^\top\bar{\X}_{i}\big| \max_{(u,h) \in \mathcal{G}_T}  \Big| \sum_{t=1}^T w_{t,T}(u,h)  \Big|. 
 \end{align*}
-We examine each of these three terms separately. 
+We examine these three terms separately. 
 
 
 We first prove that 
@@ -521,7 +488,7 @@ Since for any constant $c > 0$,
 &\leq \pr\left( \max_{i,j,(u,h)}\left|\widetilde{\phi}_{ij, T}(u, h)\right| \leq c \sqrt{\log T}\right) \\
 &\quad + \pr\left(\max_{i,j,(u,h)}\left|\widetilde{\phi}_{ij, T}(u, h)- \phi_{ij, T}(u, h)\right| > \frac{c\sqrt{\log T}}{2}\right)
 \end{align*}
-and $\pr(\max_{i,j,(u,h)}|\widetilde{\phi}_{ij, T}(u, h)- \phi_{ij, T}(u, h)| > c \sqrt{\log T}/2) = o(1)$ by \eqref{eq:result-from-propA-strong_approx}, we obtain that
+and $\pr(\max_{i,j,(u,h)}|\widetilde{\phi}_{ij, T}(u, h)- \phi_{ij, T}(u, h)| > c \sqrt{\log T}/2) = o(1)$ by \eqref{eq:result-from-propA-strong_approx}, we get that
 \begin{align} 
 \pr\bigg(\max_{i,j,(u,h)} & \left|\widetilde{\phi}_{ij, T}(u, h)\right| \leq c\sqrt{\log T} \bigg) \nonumber \\
  & \geq \pr\left( \max_{i,j,(u,h)}\left|\phi_{ij, T}(u, h)\right| \leq \frac{c\sqrt{\log T}}{2}\right) - o(1). \label{eq:Ant:intermediate}
@@ -529,9 +496,10 @@ and $\pr(\max_{i,j,(u,h)}|\widetilde{\phi}_{ij, T}(u, h)- \phi_{ij, T}(u, h)| > 
 Moreover, since $\max_{i,j,(u,h)}\left|\phi_{ij, T}(u, h)\right| = O_p(\sqrt{\log{T}})$ as already proven in \eqref{eq:phi-bound-max-Gaussians}, we can make the probability $\pr( \max_{i,j,(u,h)}|\phi_{ij, T}(u, h)| \leq c\sqrt{\log T}/2)$ on the right-hand side of \eqref{eq:Ant:intermediate} arbitrarily close to $1$ by choosing the constant $c$ sufficiently large. Hence, for any $\delta > 0$, we can find a constant $c > 0$ such that $\pr(\max_{i,j,(u,h)}|\widetilde{\phi}_{ij, T}(u, h)| \leq c\sqrt{\log T} ) \ge 1 - \delta$ for sufficiently large $T$. This proves \eqref{eq:Ant:2}, which in turn yields \eqref{eq:Ant:1}. 
 
 
+\pagebreak
 We next turn to $B_{n,T}$. Without loss of generality, we assume that $\X_{it}$ is real-valued. The vector-valued case can be handled analogously. To start with, we have a closer look at the term $\sum_{t=1}^T w_{t,T}(u,h) \X_{it}$. By construction, the kernel weights $w_{t, T}(u, h)$ are unequal to $0$ if and only if $T(u-h) \le t \le T(u+h)$. We can use this fact to write
 \begin{align*}
-\Big| \sum_{t=1}^T w_{t,T}(u,h) \X_{it}   \Big|  = \bigg| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h) \X_{it}   \bigg|.
+\Big| \sum_{t=1}^T w_{t,T}(u,h) \X_{it} \Big|  = \bigg| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h) \X_{it}   \bigg|.
 \end{align*}
 Note that
 \begin{align}\label{eq:sum_weights}
@@ -569,7 +537,7 @@ where the constant $C$ depends neither on $T$ nor on $\delta$. In the last equal
 \max_{(u, h) \in \mathcal{G}_T} \left( \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}^2(u,h)\right) =1.
 \end{align*}
 \end{enumerate}
-Since $\theta - q^\prime/q <0$ by Assumption \ref{C-reg3}, the bound in \eqref{eq:exp-bound-BnT} converges to $0$ as $T \to \infty$ for any fixed $\delta >0$. Consequently, we obtain that
+Since $\theta - q^\prime/q <0$ by Assumption \ref{C-reg1}, the bound in \eqref{eq:exp-bound-BnT} converges to $0$ as $T \to \infty$ for any fixed $\delta >0$. Consequently, we obtain that
 \begin{align}\label{ineq-diff-9}
 \max_{(u, h) \in \mathcal{G}_T} \bigg| \sum_{t=\lfloor T(u-h) \rfloor}^{\lceil T(u+h) \rceil} w_{t,T}(u,h)\X_{it}  \bigg| = o_p(T^{1/q}).
 \end{align}
@@ -599,23 +567,10 @@ To summarize, we have shown that
 \begin{align*}
 \big| \doublehattwo{\Phi}_{n, T} - \widehat{\Phi}_{n, T} \big| 
  & \le o_p( \rho_T) A_{n,T} + O_p(1) \big\{ 2B_{n,T} + 2C_{n,T} \} \\
- & = o_p( \rho_T) O_p(\sqrt{\log T}) + o_p \Big( \frac{T^{1/q}}{\sqrt{T}} \Big) + o_p \Big( \frac{1}{\sqrt{T}} \Big), \
+ & = o_p( \rho_T) O_p(\sqrt{\log T}) + o_p \Big( \frac{T^{1/q}}{\sqrt{T}} \Big) + o_p \Big( \frac{1}{\sqrt{T}} \Big).
 \end{align*}
-where $\{c_T\}$ is any sequence of positive real numbers with $\sqrt{\log T} \ll c_T$. This immediately implies the desired result. 
+This immediately implies the desired result. 
 \end{proof}
-
-
-%\begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{lemmaA:step1}}}] 
-%It holds that
-%\begin{align*} \pr(\widehat{\Phi}_{n, T} \le x) &= \pr \Big(\widehat{\Phi}_{n, T} \le x, \big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| \le \gamma \Big) + \pr \Big(\widehat{\Phi}_{n, T} \le x, \big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma \Big) \\
-%& \le  \pr \Big(\widehat{\Phi}_{n, T} \le x, \widehat{\Phi}_{n,T} - \gamma \le \doublehattwo{\Phi}_{n,T} \le \widehat{\Phi}_{n,T} + \gamma \Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma \Big) \\
-%& \le  \pr \Big(\doublehattwo{\Phi}_{n,T} \le x + \gamma \Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma \Big).
-%\end{align*}
-%Analogously, 
-%\begin{align*} \pr(\doublehattwo{\Phi}_{n, T} \le x - \gamma)  \le  \pr \Big(\widehat{\Phi}_{n,T} \le x \Big) + \pr \Big(\big|\doublehattwo{\Phi}_{n,T} - \widehat{\Phi}_{n,T}\big| > \gamma \Big).
-%\end{align*}
-%Combining these two inequalities, we arrive at the desired result.
-%\end{proof}
 
 
 
@@ -640,7 +595,7 @@ Hence,
 for $\delta > 0$ small enough. This contradicts the definition of the quantile $q_{n,T}(\alpha)$ according to which $q_{n,T}(\alpha) = \inf_{q \in \reals} \{ \pr(\Phi_{n,T} \le q) \ge 1-\alpha \}$. We thus arrive at \eqref{eq:quant-exact}. 
 
 
-Proposition \ref{prop:test} is a simple consequence of Theorem \ref{theo:stat:global} and Equation \eqref{eq:quant-exact}. Specifically, we obtain that under $H_0$, 
+Proposition \ref{prop:test} is a simple consequence of Theorem \ref{theo:stat:global} and equation \eqref{eq:quant-exact}. Specifically, we obtain that under $H_0$, 
 \begin{align*}
 \big| \pr(\widehat{\Psi}_{n, T} \le q_{n,T}(\alpha)) - (1-\alpha) \big| 
  & = \big| \pr(\widehat{\Phi}_{n, T} \le q_{n,T}(\alpha)) - (1-\alpha) \big| \\
@@ -650,7 +605,7 @@ Proposition \ref{prop:test} is a simple consequence of Theorem \ref{theo:stat:gl
 
 
 
-\subsection*{Proof of Proposition \ref{prop:test:power}}%\label{subsec:app:power}
+\subsection*{Proof of Proposition \ref{prop:test:power}}
 
 
 To start with, note that for some sufficiently large constant $C$ we have
@@ -659,8 +614,8 @@ To start with, note that for some sufficiently large constant $C$ we have
 \end{equation}
 Write $\widehat{\psi}_{ij, T}(u,h) = \widehat{\psi}_{ij, T}^A(u,h) + \widehat{\psi}_{ij, T}^B(u,h)$ with 
 \begin{align*}
-\widehat{\psi}^A_{ij,T}(u,h) &= \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) + (\bfbeta_i - \widehat{\bfbeta}_i)^\top (\X_{it} - \bar{\X}_{i}) - \bar{m}_{i, T} \\
-& \quad \quad - (\varepsilon_{jt} - \bar{\varepsilon}_j) -  (\bfbeta_j - \widehat{\bfbeta}_j)^\top (\X_{jt} - \bar{\X}_{j}) + \bar{m}_{j, T} \big\} \\
+\widehat{\psi}^A_{ij,T}(u,h) &= \sum_{t=1}^T w_{t,T}(u,h) \big\{ (\varepsilon_{it} - \bar{\varepsilon}_i) + (\bfbeta_i - \widehat{\bfbeta}_i)^\top (\X_{it} - \bar{\X}_{i}) - \bar{m}_{i, T} \\*[-0.2cm]
+& \qquad \qquad \qquad \quad \ - (\varepsilon_{jt} - \bar{\varepsilon}_j) -  (\bfbeta_j - \widehat{\bfbeta}_j)^\top (\X_{jt} - \bar{\X}_{j}) + \bar{m}_{j, T} \big\} \\
 \widehat{\psi}_{ij, T}^B(u,h) &= \sum\nolimits_{t=1}^T w_{t,T}(u,h) \bigg(m_{i, T}\Big(\frac{t}{T}\Big) - m_{j, T}\Big(\frac{t}{T}\Big) \bigg),
 \end{align*}
 where $\bar{m}_{i, T} = T^{-1} \sum_{t=1}^T m_{i, T} (t/T)$. Without loss of generality, consider the following scenario: there exists $(u_0,h_0) \in \mathcal{G}_T$ with $[u_0-h_0,u_0+h_0] \subseteq [0,1]$ such that \begin{align}\label{eqA:power2}
@@ -699,9 +654,6 @@ We next analyze $\widehat{\psi}^A_{ij,T}(u_0,h_0)$, which can be expressed as $\
 \begin{equation*}
 \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \Big| \widehat{\phi}_{ij, T}(u,h) \Big| = O_p(\sqrt{\log T}). 
 \end{equation*}
-%\[ \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \Big| \doublehat{\phi}_{ij, T}(u,h) - \widehat{\phi}_{ij, T}(u,h) \Big| = o_p(\frac{T^{1/q}}{\sqrt{T}} + \frac{\log^{2/{q^\prime}}(T)}{\sqrt{T}} \Big). \]
-%Moreover, by \eqref{eq:Ant:1},
-%\[ \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \Big| \doublehat{\phi}_{ij, T}(u,h) = o_p(c_T), \]
 Using this together with the bounds $\bar{m}_{i, T} \le C/T$ and $\sum_{t=1}^T w_{t, T}(u, h) \le C \sqrt{T}$, we can infer that 
 \begin{align} 
  & \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \Big| \widehat\psi_{ij,T}^A(u, h) \Big| \nonumber \\[-0.2cm]
@@ -713,7 +665,7 @@ With the help of \eqref{eqA:power:psiB}, \eqref{eqA:power:psiA}, \eqref{eqA:powe
  & \ge \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \frac{|\widehat{\psi}_{ij, T}^B(u,h)|}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} - \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \bigg\{ \frac{|\widehat{\psi}_{ij, T}^A(u,h)|}{\{\widehat{\sigma}^2_i + \widehat{\sigma}_j^2\}^{1/2}} + \lambda(h) \bigg\} \nonumber \\
  & = \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \frac{|\widehat{\psi}_{ij, T}^B(u,h)|}{\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{1/2}} + O_p(\sqrt{\log T}) \nonumber \\
  & \ge \frac{c_T \sqrt{\log T}}{2 \kappa} \min_{1 \le i < j \le n}\{\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2\}^{-1/2} + O_p(\sqrt{\log T}) \nonumber \\
- & \ge C\frac{c_T \sqrt{\log T}}{2 \kappa} + O_p(\sqrt{\log T}). \label{eq5-proof-prop-test-power}
+ & = \frac{c_T \sqrt{\log T}}{2 \kappa} \, O_p(1) + O_p(\sqrt{\log T}). \label{eq5-proof-prop-test-power}
 \end{align}
 Since $q_{n, T}(\alpha) = O(\sqrt{\log T})$ for any fixed $\alpha \in (0,1)$ and $c_T \to \infty$, \eqref{eq5-proof-prop-test-power} immediately implies that $\pr(\widehat{\Psi}_{n, T} \le q_{n, T}(\alpha)) = o(1)$. 
 
@@ -732,27 +684,12 @@ Denote by $\mathcal{M}_0$ the set of quadruples $(i, j, u, h) \in \{1\ldots, n\}
  & = \pr \big( \widehat{\Phi}_{n, T} > q_{n, T}(\alpha) \big) = \alpha + o(1),
 \end{align*}
 where the third equality uses that $\hat{\psi}^0_{ijk,T} = \hat{\phi}^0_{ijk,T}$ under $H_0^{[i, j]}(u, h)$.
-%
-%
-%
-%\subsection*{Proof of Corollary \ref{corollary1}}\label{subsec:app:corollary}
-%
-%
-%By Proposition \ref{prop:test:fwer}, 
-%\begin{align*}
-%1 - \alpha + o(1) 
-% & \le 1 - \textnormal{FWER}(\alpha) \\
-% & = \pr \Big( \nexists (i,j,u, h) \in \mathcal{M}_0: \hat{\psi}^0_{ij,T}(u, h) > q_{n, T}(\alpha) \Big) \\
-%& = \pr\Big( \forall (i,j,u, h) \in \mathcal{M}_0: \hat{\psi}^0_{ij,T}(u, h) \le q_{n, T}(\alpha) \Big)\\
-%&=\pr\Big( \forall \, i,j \in \{1, \ldots, n\}, (u, h) \in \grid \text{ such that }\\
-%&\quad\quad \quad H_0^{[i, j]}(u, h) \text{ is true}: \hat{\psi}^0_{ij,T}(u, h) \le q_{n,T}(\alpha) \Big),
-%\end{align*}
-%which is the statement of Corollary \ref{corollary1}.
-%
+
+
 
 \subsection*{Proof of Proposition \ref{prop:clustering:1}}
 
-For the sake of brevity, we introduce the following notation. For each $i$ and $j$, we define the statistics $\widehat{\Psi}_{ij,T} : = \max_{(u, h) \in \mathcal{G}_T}\hat{\psi}^0_{ij, T}(u, h)$ which can be interpreted as a distance measure between the two curves $m_i$ and $m_j$ on the whole interval $[0, 1]$. Using this notation, we can rewrite the dissimilarity measure defined in \eqref{dissimilarity} as 
+For the sake of brevity, we introduce the following notation. For each $i$ and $j$, we define the statistic $\widehat{\Psi}_{ij,T} : = \max_{(u, h) \in \mathcal{G}_T}\hat{\psi}^0_{ij, T}(u, h)$ which can be interpreted as a distance measure between the two curves $m_i$ and $m_j$ on the whole interval $[0, 1]$. Using this notation, we can rewrite the dissimilarity measure defined in \eqref{dissimilarity} as 
 \begin{equation*}
 \widehat{\Delta}(S,S^\prime) = \max_{\substack{i \in S, \\ j \in S^\prime}} \widehat{\Psi}_{ij,T}. 
 \end{equation*}
@@ -770,7 +707,7 @@ Taken together, these two statements imply that
 \begin{equation}\label{eq2-prop-clustering-1}
 \pr \big( B_{n,T} \big) \ge (1-\alpha) + o(1). 
 \end{equation}
-In what follows, we show that on the event $B_{n,T}$, (i) $\{ \widehat{G}_1^{[n-N]},\ldots,\widehat{G}_N^{[n-N]} \big\} = \big\{ G_1,\ldots$ $\ldots,G_N \}$ and (ii) $\widehat{N} = N$. From (i), (ii) and \eqref{eq2-prop-clustering-1}, the statements of Proposition \ref{prop:clustering:1} easily follow. 
+In what follows, we show that on the event $B_{n,T}$, (i) $\{ \widehat{G}_1^{[n-N]},\ldots,\widehat{G}_N^{[n-N]} \big\} = \big\{ G_1,\ldots$ $\ldots,G_N \}$ and (ii) $\widehat{N} = N$. From (i), (ii) and \eqref{eq2-prop-clustering-1}, the statements of Proposition \ref{prop:clustering:1} follow immediately. 
 
 
 \begin{proof}[\textnormal{\textbf{Proof of (i).}}]
@@ -790,7 +727,7 @@ The above induction argument shows the following: For any $r \le n - N$, the par
 \begin{proof}[\textnormal{\textbf{Proof of (ii).}}]
 To start with, consider any partition $\{ \widehat{G}_1^{[n-r]},\ldots,\widehat{G}_r^{[n-r]} \}$ with $r < N$ elements. Such a partition must contain at least one element $\widehat{G}_\ell^{[n-r]}$ with the following property: $\widehat{G}_\ell^{[n-r]} \cap G_k \ne \emptyset$ and $\widehat{G}_\ell^{[n-r]} \cap G_{k^\prime} \ne \emptyset$ for some $k \ne k^\prime$. On the event $B_{n,T}$, it obviously holds that $\widehat{\Delta}(S) > q_{n,T}(\alpha)$ for any $S$ with the property that $S \cap G_k \ne \emptyset$ and $S \cap G_{k^\prime} \ne \emptyset$ for some $k \ne k^\prime$. Hence, we can infer that on the event $B_{n,T}$, $\max_{1 \le \ell \le r} \widehat{\Delta} ( \widehat{G}_\ell^{[n-r]} ) > q_{n,T}(\alpha)$ for any $r < N$. 
 
-Next consider the partition $\{ \widehat{G}_1^{[n-r]},\ldots,\widehat{G}_r^{[n-r]} \}$ with $r = N$ and suppose we are on the event $B_{n,T}$. From (i), we already know that $\{ \widehat{G}_1^{[n-N]},\ldots,\widehat{G}_N^{[n-N]} \} =\{ G_1,\ldots,G_N \}$. Moreover, it is easy to see that $\widehat{\Delta}(G_\ell) \le q_{n,T}(\alpha)$ for any $\ell$. Hence, we obtain that $\max_{1 \le \ell \le N} \widehat{\Delta} ( \widehat{G}_\ell^{[n-N]} ) = \max_{1 \le \ell \le N} \widehat{\Delta} (G_\ell) \le q_{n,T}(\alpha)$.
+Next consider the partition $\{ \widehat{G}_1^{[n-r]},\ldots,\widehat{G}_r^{[n-r]} \}$ with $r = N$ and suppose we are on the event $B_{n,T}$. From (i), we already know that $\{ \widehat{G}_1^{[n-N]},\ldots,\widehat{G}_N^{[n-N]} \} =\{ G_1,\ldots,G_N \}$. Moreover, $\widehat{\Delta}(G_\ell) \le q_{n,T}(\alpha)$ for any $\ell$. Hence, we obtain that $\max_{1 \le \ell \le N} \widehat{\Delta} ( \widehat{G}_\ell^{[n-N]} ) = \max_{1 \le \ell \le N} \widehat{\Delta} (G_\ell) \le q_{n,T}(\alpha)$.
 
 Putting everything together, we can conclude that on the event $B_{n,T}$, 
 \[ \min \Big\{ r = 1,2,\ldots \Big| \max_{1 \le \ell \le r} \widehat{\Delta} \big( \widehat{G}_\ell^{[n-r]} \big) \le q_{n,T}(\alpha) \Big\} = N, \]
@@ -805,8 +742,8 @@ that is, $\widehat{N} = N$.
 We consider the event
 \[ D_{n,T} = \Big\{ \widehat{\Phi}_{n,T} \le q_{n,T}(\alpha) \, \text{ and } \,  \min_{1 \le \ell < \ell^\prime \le N} \min_{\substack{i \in G_\ell, \\ j \in G_{\ell^\prime}}} \widehat{\Psi}_{ij,T} > q_{n,T}(\alpha) \Big\}, \]
 where we write the statistic $\widehat{\Phi}_{n,T}$ as
-\[ \widehat{\Phi}_{n,T} = \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\psi}_{ij,T}(u,h)- \ex \widehat{\psi}_{ij,T}(u,h)} {(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}} \Big| - \lambda(h) \Big \}. \]
-The event $D_{n,T}$ can be analysed by the same arguments as those applied to the event $B_{n,T}$ in the proof of Proposition \ref{prop:clustering:1}. In particular, analogous to \eqref{eq2-prop-clustering-1} and statements (i) and (ii) in this proof, we can show that
+\[ \widehat{\Phi}_{n,T} = \max_{1 \le i < j \le n} \max_{(u,h) \in \mathcal{G}_T} \Big\{ \Big| \frac{\widehat{\psi}_{ij,T}(u,h)- \widehat{\psi}_{ij,T}^{\text{trend}}(u,h)} {(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}} \Big| - \lambda(h) \Big \} \]
+with $\widehat{\psi}_{ij,T}^{\text{trend}}(u,h) = \sum_{t=1}^T w_{t,T}(u,h) \{ (m_{i,T}(t/T) - \bar{m}_{i,T}) - (m_{j,T}(t/T) - \bar{m}_{j,T}) \}$ and $\bar{m}_{i,T} = T^{-1} \sum_{t=1}^T m_{i,T}(t/T)$. The event $D_{n,T}$ can be analysed by the same arguments as those applied to the event $B_{n,T}$ in the proof of Proposition \ref{prop:clustering:1}. In particular, analogous to \eqref{eq2-prop-clustering-1} and statements (i) and (ii) in this proof, we can show that
 \begin{equation}\label{eq1-prop-clustering-2}
 \pr \big( D_{n,T} \big) \ge (1-\alpha) + o(1)
 \end{equation}
@@ -816,164 +753,12 @@ D_{n,T} \subseteq \big\{ \widehat{N} = N \text{ and } \widehat{G}_\ell = G_\ell 
 \end{equation}
 Moreover, we have that
 \begin{equation}\label{eq3-prop-clustering-2}
-D_{n,T} \subseteq \bigcap_{1 \le \ell < \ell^\prime \le \widehat{N}} E_{n,T}(\ell,\ell^\prime),
+D_{n,T} \subseteq \bigcap_{1 \le \ell < \ell^\prime \le \widehat{N}} E_{n,T}^{[\ell,\ell^\prime]}(\alpha),
 \end{equation}
 which is a consequence of the following observation: For all $i$, $j$ and $(u,h) \in \mathcal{G}_T$ with 
-\[ \Big|\frac{\widehat{\psi}_{ij,T}(u,h) - \ex \widehat{\psi}_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \le q_{n,T}(\alpha) \quad \text{and} \quad \Big|\frac{\widehat{\psi}_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) > q_{n,T}(\alpha), \]
-it holds that $\ex[\widehat{\psi}_{ij,T}(u,h)] \ne 0$, which in turn implies that $m_i(v) - m_j(v) \ne 0$ for some $v \in I_{u,h}$. From \eqref{eq2-prop-clustering-2} and \eqref{eq3-prop-clustering-2}, we obtain that 
-\[ D_{n,T} \subseteq \Big\{ \bigcap_{1 \le \ell < \ell^\prime \le \widehat{N}} E_{n,T}(\ell,\ell^\prime) \Big\} \cap \big\{ \widehat{N} = N \text{ and } \widehat{G}_\ell = G_\ell \text{ for all } \ell \big\} = E_{n,T}. \] 
-This together with \eqref{eq1-prop-clustering-2} implies that $\pr(E_{n,T}) \ge (1-\alpha) + o(1)$, thus completing the proof. 
-
-
-
-%\subsection*{Proof of Proposition \ref{theo:beta}}
-
-
-%We first derive some auxiliary lemmas. To do so, we use the notation 
-%$\Delta \boldsymbol{X}_{it} :=\boldsymbol{H}_i(\mathcal{U}_{it}) - \boldsymbol{H}_i(\mathcal{U}_{it-1}) =: \Delta \boldsymbol{H}_i(\mathcal{U}_{it})$
-%and
-%$\Delta \varepsilon_{it} := \varepsilon_{it} - \varepsilon_{it-1} = G_i(\mathcal{J}_{it}) - G_i(\mathcal{J}_{it-1}) =: \Delta G_i(\mathcal{J}_{it})$. 
-%%\begin{propA}\label{propA:beta1}
-%%Under Assumptions \ref{C-reg1} and \ref{C-reg3}, $\| \Delta \boldsymbol{H}_i(\mathcal{U}_{it})\|_4 < \infty$.
-%%\end{propA}
-%%\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA:beta1}}}]
-%%By Assumption \ref{C-reg3} and the triangle inequality,
-%%\[ \| \Delta \boldsymbol{H}_i(\mathcal{U}_{it})\|_4 \leq  \|\boldsymbol{H}_i(\mathcal{U}_{it})\|_4 +  \| \boldsymbol{H}_i(\mathcal{U}_{it-1})\|_4 < \infty. \]
-%%\end{proof} 
-%%\begin{lemmaA}\label{propA-reg-2}
-%%Under Assumption \ref{C-reg-err1}, $\Delta \boldsymbol{X}_{it}$ (elementwise) and $\Delta \varepsilon_{it}$ are uncorrelated for each $t\in \{1, \ldots, T\}$.
-%%\end{lemmaA}
-%%\begin{proof}[\textnormal{\textbf{Proof of Proposition \ref{propA-reg-2}}}]
-%%By Assumption \ref{C-reg-err1},
-%%\begin{align*}
-%%\ex [\Delta \boldsymbol{X}_{it}\Delta \varepsilon_{it}] &= \ex \big[(\boldsymbol{X}_{it} - \boldsymbol{X}_{it-1}) (\varepsilon_{it} - \varepsilon_{it-1})\big] \\
-%%&=\ex[\boldsymbol{X}_{it}  \varepsilon_{it}] - \ex[\boldsymbol{X}_{it-1}  \varepsilon_{it}]- \ex[\boldsymbol{X}_{it}  \varepsilon_{it-1}] + \ex[\boldsymbol{X}_{it-1}  \varepsilon_{it-1}] \\
-%%&= \ex[\boldsymbol{X}_{it}]\ex[  \varepsilon_{it}] - \ex[\boldsymbol{X}_{it-1}]\ex[  \varepsilon_{it}]- \ex[\boldsymbol{X}_{it}]\ex[  \varepsilon_{it-1}] + \ex[\boldsymbol{X}_{it-1}]\ex[  \varepsilon_{it-1}] \\
-%%&= \big( \ex[\boldsymbol{X}_{it}] - \ex[\boldsymbol{X}_{it-1}]\big)\big(\ex[  \varepsilon_{it}]  - \ex[\varepsilon_{it-1}]\big) \\
-%%&= \ex [\Delta \boldsymbol{X}_{it}]\ex[\Delta \varepsilon_{it}]
-%%\end{align*}
-%%\end{proof} 
-
-
-%\begin{lemmaA}\label{propA-reg-3}
-%Define the process $\Delta \boldsymbol{V}_i$ by
-%\[ \Delta \boldsymbol{V}_i(\mathcal{I}_{it}) := \Delta \boldsymbol{H}_i(\mathcal{U}_{it}) \Delta G_i(\mathcal{J}_{it}).
-%\]
-%%where $\mathcal{I}_{it} = (\ldots, \zeta_{i, t-1}, \zeta_{it})$ with $\zeta_{it} = (u_{it}, \eta_{it})^\top$. 
-%Under Assumptions \ref{C-err2}, \ref{C-err3}, \ref{C-reg3}, \ref{C-reg4} and \ref{C-reg-err2}, it holds that $\sum_{s=1}^\infty \delta_2(\Delta \boldsymbol{V}_i, s) < \infty$.
-%\end{lemmaA}
-
-
-%\begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{propA-reg-3}}}]
-%By the triangle inequality and the definition of the physical dependence measure $\delta_2$, we have that
-%\begin{align*}
-%\delta_2(\Delta \boldsymbol{V}_i, t) 
-% & = \| \Delta\boldsymbol{V}_i(\mathcal{I}_{it}) - \Delta \boldsymbol{V}_i(\mathcal{I}_{it}^\prime) \| \\
-% &= \| \Delta \boldsymbol{H}_i(\mathcal{U}_{it}) \Delta G_i(\mathcal{J}_{it}) -  \Delta \boldsymbol{H}_i(\mathcal{U}_{it}^\prime) \Delta G_i(\mathcal{J}_{it}^\prime) \|\\
-%%  &= \|\boldsymbol{H}_i(\mathcal{U}_{it})G_i(\mathcal{J}_{it}) - \boldsymbol{H}_i(\mathcal{U}_{it-1})G_i(\mathcal{J}_{it}) - \boldsymbol{H}_i(\mathcal{U}_{it})G_i(\mathcal{J}_{it-1})  + \boldsymbol{H}_i(\mathcal{U}_{it-1})G_i(\mathcal{J}_{it-1})  \\
-%% &\quad - \boldsymbol{H}_i(\mathcal{U}_{it}^\prime)G_i(\mathcal{J}_{it}^\prime) + \boldsymbol{H}_i(\mathcal{U}_{it-1}^\prime)G_i(\mathcal{J}_{it}^\prime) + \boldsymbol{H}_i(\mathcal{U}_{it}^\prime)G_i(\mathcal{J}_{it-1}^\prime)  - \boldsymbol{H}_i(\mathcal{U}_{it-1}^\prime)G_i(\mathcal{J}_{it-1}^\prime) \| \\
-% &\leq \|\boldsymbol{H}_i(\mathcal{U}_{it})G_i(\mathcal{J}_{it}) - \boldsymbol{H}_i(\mathcal{U}_{it}^\prime)G_i(\mathcal{J}_{it}^\prime) \| \\
-% &\quad + \|\boldsymbol{H}_i(\mathcal{U}_{it-1})G_i(\mathcal{J}_{it-1}) -  \boldsymbol{H}_i(\mathcal{U}_{it-1}^\prime)G_i(\mathcal{J}_{it-1}^\prime)\|  \\
-% &\quad + \|\boldsymbol{H}_i(\mathcal{U}_{it-1})G_i(\mathcal{J}_{it}) -\boldsymbol{H}_i(\mathcal{U}_{it-1}^\prime)G_i(\mathcal{J}_{it}^\prime)    \| \\
-% &\quad + \|\boldsymbol{H}_i(\mathcal{U}_{it})G_i(\mathcal{J}_{it-1}) -  \boldsymbol{H}_i(\mathcal{U}_{it}^\prime)G_i(\mathcal{J}_{it-1}^\prime) \|  \\
-% & = \| \{ \boldsymbol{H}_i(\mathcal{U}_{it}) - \boldsymbol{H}_i(\mathcal{U}_{it}^\prime)\} G_i(\mathcal{J}_{it}) + \boldsymbol{H}_i(\mathcal{U}_{it}^\prime) \{G_i(\mathcal{J}_{it}) - G_i(\mathcal{J}_{it}^\prime)%\} \| \\
-% & \quad + \| \{ \boldsymbol{H}_i(\mathcal{U}_{it-1}) - \boldsymbol{H}_i(\mathcal{U}_{it-1}^\prime)\} G_i(\mathcal{J}_{it-1}) + \boldsymbol{H}_i(\mathcal{U}_{it-1}^\prime) \{G_i(\mathcal{J}_{it-1}) - G_i(\mathcal{J}_{it-1}^\prime)\} \| \\
-% &\quad + \| \{ \boldsymbol{H}_i(\mathcal{U}_{it-1}) - \boldsymbol{H}_i(\mathcal{U}_{it-1}^\prime)\} G_i(\mathcal{J}_{it}) + \boldsymbol{H}_i(\mathcal{U}_{it-1}^\prime) \{G_i(\mathcal{J}_{it}) - G_i(\mathcal{J}_{it}^\prime)\} \| \\
-% &\quad +  \| \{ \boldsymbol{H}_i(\mathcal{U}_{it}) - \boldsymbol{H}_i(\mathcal{U}_{it}^\prime)\} G_i(\mathcal{J}_{it-1}) + \boldsymbol{H}_i(\mathcal{U}_{it}^\prime) \{G_i(\mathcal{J}_{it-1}) - G_i(\mathcal{J}_{it-1}^\prime)\} \| \\
-% &\leq \delta_2(\boldsymbol{H}_i, t) \| G_i \| + \| \boldsymbol{H}_i \| \delta_2(G_i, t) \\
-% &\quad + \delta_2(\boldsymbol{H}_i, t-1) \| G_i \| + \| \boldsymbol{H}_i \| \delta_2(G_i, t-1) \\
-% &\quad + \delta_2(\boldsymbol{H}_i, t-1) \| G_i \| + \| \boldsymbol{H}_i \| \delta_2(G_i, t) \\
-% &\quad + \delta_2(\boldsymbol{H}_i, t) \| G_i \| + \| \boldsymbol{H}_i \| \delta_2(G_i, t-1), 
-%%  &\quad +\|\big(\boldsymbol{H}_i(\mathcal{U}_{it-1}) - \boldsymbol{H}_i(\mathcal{U}_{it-1}^\prime)\big) G_i(\mathcal{J}_{it})\| +  \|\boldsymbol{H}_i(\mathcal{U}_{it-1}^\prime)\big(G_i(\mathcal{J}_{it}) - G_i(\mathcal{J}_{it}^\prime)\big)    \|\\
-%% &\quad + \|\big(\boldsymbol{H}_i(\mathcal{U}_{it}) -\boldsymbol{H}_i(\mathcal{U}_{it}^\prime)\big)G_i(\mathcal{J}_{it-1})\| + \|\boldsymbol{H}_i(\mathcal{U}_{it}^\prime)\big(G_i(\mathcal{J}_{it-1}) -G_i(\mathcal{J}_{it-1}^\prime)\big) \|  \\
-%% &\leq \delta_2(\boldsymbol{V}_i, t) + \delta_2(\boldsymbol{V}_i, t-1)  \\
-%%&\quad + \big(\delta_2(\boldsymbol{H}_i, t-1) +  \delta_2(\boldsymbol{H}_i, t)\big) \|G_i \| + \big( \delta_2(G_i, t-1) +  \delta_2(G_i, t)\big)\|\boldsymbol{H}_i \|.
-%\end{align*}
-%where $\mathcal{U}_{it}^\prime  = (\ldots, u_{i(-1)}, u^\prime_{i0}, u_{i1}, \ldots, u_{it-1}, u_{it})$, $\mathcal{U}_{i(t-1)}^\prime  = (\ldots, u_{i(-1)}, u^\prime_{i0}, u_{i1}, \ldots, u_{it-1})$, $\mathcal{J}_{it}^\prime  = (\ldots, \eta_{i(-1)}, \eta^\prime_{i0}, \eta_{i1}, \ldots, \eta_{it-1}, \eta_{it})$, $\mathcal{J}_{i(t-1)}^\prime  = (\ldots, \eta_{i(-1)}, \eta^\prime_{i0}, \eta_{i1}, \ldots, \eta_{it-1})$ are coupled processes with $u_{i0}^\prime$ being an i.i.d.\ copy of $u_{i0}$ and $\eta_{i0}^\prime$ being an i.i.d.\ copy of $\eta_{i0}$. From this and Assumptions ??, it immediately follows that $\sum_{s=1}^\infty \delta_2(\Delta \boldsymbol{V}_i, s) \le C < \infty$. 
-%\end{proof}
-
-
-%\begin{lemmaA}\label{propA:beta4}
-%Under Assumptions \ref{C-err1}--\ref{C-reg-err2},
-%\[ \Big| \frac{1}{\sqrt{T}}\sum_{t=2}^T \Delta \boldsymbol{X}_{it}\Delta \varepsilon_{it} \Big| = O_p(1).
-%\]
-%\end{lemmaA}
-
-
-%\begin{proof}[\textnormal{\textbf{Proof of Lemma \ref{propA:beta4}.}}]
-%Let
-%\[ \kappa_{i, s}^{\mathcal{P}} = \frac{1}{T-1}\sum_{t=2}^T \mathcal{P}_{i,t-s}\big( \Delta \boldsymbol{X}_{it}\Delta \varepsilon_{it}\big) \quad \text{with} \quad \mathcal{P}_{i,t-s}(\cdot) = \ex[ \, \cdot \, |\mathcal{I}_{i(t-s)}] -\ex[ \, \cdot \, |\mathcal{I}_{i(t-s-1)}] \]
-%for $s \ge 0$. Since $\ex[ \Delta \boldsymbol{X}_{it}\Delta \varepsilon_{it}] = 0$ by Assumption \ref{C-reg-err1}, it holds that 
-%\begin{align*}
-%\frac{1}{T-1}\sum_{t=2}^T \Delta \boldsymbol{X}_{it}\Delta \varepsilon_{it} 
-%&= \frac{1}{T-1}\sum_{t=2}^T \big( \ex [ \Delta \boldsymbol{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{it} ] - \ex [ \Delta\boldsymbol{X}_{it}\Delta \varepsilon_{it}] \big) \\
-%&= \frac{1}{T-1}\sum_{t=2}^T \sum_{s=0}^\infty \big( \ex [ \Delta \boldsymbol{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i(t-s)} ] - \ex [ \Delta \boldsymbol{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i(t-s-1)} ] \big) \\
-%&= \frac{1}{T-1}\sum_{t=2}^T \sum_{s=0}^\infty \mathcal{P}_{i, t-s} (\Delta \boldsymbol{X}_{it}\Delta \varepsilon_{it}) \\
-%&= \sum_{s=0}^\infty \kappa_{i, s}^{\mathcal{P}}.
-%\end{align*}
-%In what follows, we show that 
-%\begin{equation}\label{propA:beta4:claim}
-%\Big\| \frac{1}{T-1}\sum_{t=2}^T \Delta \boldsymbol{X}_{it}\Delta \varepsilon_{it} \Big\| \le \sum_{s=0}^\infty \big\| \kappa_{i, s}^{\mathcal{P}} \big\| = O\Big(\frac{1}{\sqrt{T}}\Big), 
-%\end{equation}
-%which implies the statement of the lemma. 
-
-
-%To prove \eqref{propA:beta4:claim}, we derive an upper bound on $\| \kappa_{i, s}^{\mathcal{P}} \|^2$. As the projection operator $\mathcal{P}_{i, t}(\cdot)$ has the property that $\ex[ \mathcal{P}_{i, t-s}(\Delta \boldsymbol{X}_{it} \Delta \varepsilon_{it}) \mathcal{P}_{i, t^\prime-s}(\Delta \boldsymbol{X}_{it^\prime} \Delta \varepsilon_{it^\prime}) = 0$ for $t \ne t^\prime$, we get that 
-%\begin{align*}
-%\|\kappa_{i, s}^{\mathcal{P}}\|^2 
-%&\leq \frac{1}{(T-1)^2} \sum_{t=2}^T \Big\| \mathcal{P}_{i, t-s}\big( \Delta \boldsymbol{X}_{it}\Delta \varepsilon_{it}\big) \Big\|^2\\
-%&= \frac{1}{(T-1)^2} \sum_{t=2}^T \Big\| \ex \big(\Delta \boldsymbol{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i(t-s)}\big) -\ex \big(\Delta \boldsymbol{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i(t-s-1)}\big) \Big\|^2\\
-%&= \frac{1}{(T-1)^2} \sum_{t=2}^T \Big\| \ex \big(\Delta \boldsymbol{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i(t-s)}\big) -\ex \big(\Delta \boldsymbol{X}_{it, s}^\prime\Delta \varepsilon_{it, s}^\prime|\mathcal{I}_{i(t-s)}\big) \Big\|^2,
-%\end{align*}
-%where $\Delta \boldsymbol{X}_{it, s}^\prime\Delta \varepsilon_{it, s}^\prime$ denotes $\Delta \boldsymbol{X}_{it}\Delta \varepsilon_{it}$ with $\zeta_{i, t-s}$ replaced by an i.i.d.\ copy $\zeta_{i, t-s}^\prime$. By Jensen's inequality and the definition of the norm $\|\cdot\| = (\ex|\cdot|^2)^{1/2}$, it further follows that 
-%\begin{align*}
-%\|\kappa_{i, s}^{\mathcal{P}}\|^2 &\leq \frac{1}{(T-1)^2} \sum_{t=2}^T \Big\| \ex (\Delta \boldsymbol{X}_{it}\Delta \varepsilon_{it}|\mathcal{I}_{i(t-s)}) -\ex (\Delta \boldsymbol{X}_{it, s}^\prime\Delta \varepsilon_{it, s}^\prime|\mathcal{I}_{i(t-s)}) \Big\|^2 \\
-%%&\leq \frac{1}{(T-1)^2} \sum_{t=2}^T \ex \bigg[ \Big\| \Delta \boldsymbol{X}_{it}\Delta \varepsilon_{it} -\Delta \boldsymbol{X}_{it, s}^\prime\Delta \varepsilon_{it, s}^\prime\Big\|^2\bigg| |\mathcal{I}_{i(t-s)}\bigg] \\
-%&\le \frac{1}{(T-1)^2} \sum_{t=2}^T \Big\| \Delta \boldsymbol{X}_{it}\Delta \varepsilon_{it} -\Delta \boldsymbol{X}_{it, s}^\prime\Delta \varepsilon_{it, s}^\prime\Big\|^2 \\
-%%& = \frac{1}{(T-1)^2} \sum_{t=2}^T \Big\| \Delta \boldsymbol{H}_i(\mathcal{U}_{it})  \Delta G_i(\mathcal{J}_{it}) - \Delta \boldsymbol{H}_i(\mathcal{U}_{it, s}^\prime)  \Delta G_i(\mathcal{J}_{it, s}^\prime)\Big\|^2\\
-%& = \frac{1}{(T-1)^2} \sum_{t=2}^T \Big\| \Delta \boldsymbol{V}_i(\mathcal{I}_{it})  - \Delta \boldsymbol{V}_i(\mathcal{I}_{it, s}^\prime) \Big\|^2 \\
-%& \leq \frac{1}{(T-1)^2} \sum_{t=2}^T \delta_2^2(\Delta \boldsymbol{V}_i, s)
-% = \frac{1}{T-1}\delta_2^2(\Delta \boldsymbol{V}_i, s)
-%\end{align*}
-%%with $\mathcal{U}_{it, s}^\prime = (\ldots, u_{i(t-s-1)}, u^\prime_{i(t-s)}, u_{i(t-s+1)}, \ldots, u_{it})$, $u_{i(t-s)}^\prime$ being an i.i.d.\ copy of $u_{i(t-s)}$, $\mathcal{J}_{it, s}^\prime = (\ldots, \eta_{i(t-s-1)}, \eta^\prime_{i(t-s)}, \eta_{i(t-s+1)}, \ldots, \eta_{it})$, $\eta_{i(t-s)}^\prime$ being an i.i.d.\ copy of $\eta_{i(t-s)}$, and $\zeta^\prime_{it} = (u_{it}^\prime, \eta_{it}^\prime)^\top$ and 
-%with $\mathcal{I}_{it,s}^\prime =(\ldots, \zeta_{i(t-s-1)}, \zeta^\prime_{i(t-s)}, \zeta_{i(t-s+1)}, \ldots, \zeta_{it})$ and $\zeta^\prime_{it} = (u_{it}^\prime, \eta_{it}^\prime)^\top$an i.i.d.\ copy of $\zeta_{it} = (u_{it}, \eta_{it})^\top$. Together with Lemma \ref{propA-reg-3}, this yields that $\sum_{s=0}^\infty \| \kappa_{i, s}^{\mathcal{P}} \| = O(1/\sqrt{T})$, which completes the proof. 
-%\end{proof}
-
-
-%%Define $\Delta m_{it} = m_i \left( \frac{t}{T} \right) - m_i \left(\frac{t-1}{T}\right)$. Then, by Assumption \ref{C-reg1}, we can rewrite the first-differenced regressors $\Delta  \boldsymbol{X}_{it}$ as
-%%\[ \Delta \boldsymbol{X}_{it} =\boldsymbol{H}_i(\mathcal{U}_{it}) - \boldsymbol{H}_i(\mathcal{U}_{it-1}) := \Delta \boldsymbol{H}_i(\mathcal{U}_{it}) \]
-%%with $\Delta \boldsymbol{H}_i(\mathcal{U}_{it}) := (\Delta H_{i1}, \Delta H_{i2}, \ldots, \Delta H_{id})^\top$. Similarly, by Assumption \ref{C-err1}, we have
-%%\[\Delta \varepsilon_{it} = \varepsilon_{it} - \varepsilon_{it-1} = G_i(\mathcal{J}_{it}) - G_i(\mathcal{J}_{it-1}) = \Delta G_i(\mathcal{J}_{it}).\]
-
-
-%We now turn to the proof of Proposition \ref{theo:beta}. The estimator $\widehat{\bfbeta}_i$ can be written as
-%\begin{align*}
-%\widehat{\bfbeta}_i &= \Big( \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top \Big)^{-1} \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta Y_{it} \\
-%& =  \Big( \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top \Big)^{-1} \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \bigg(\Delta \boldsymbol{X}_{it}^\top \bfbeta_i +  \Delta m_{it}+ \Delta \varepsilon_{it} \bigg) \\
-%&= \bfbeta_i +   \Big( \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top \Big)^{-1} \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta m_{it} +  \Big( \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top \Big)^{-1} \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \varepsilon_{it}, 
-%\end{align*}
-%where $\Delta \boldsymbol{X}_{it} = X_{it} - X_{it-1}$, $\Delta \varepsilon_{it} = \varepsilon_{it} - \varepsilon_{it-1}$ and $\Delta m_{it} = m_i (\frac{t}{T}) - m_i(\frac{t-1}{T})$. Hence, 
-%\begin{align}
-% \sqrt{T}( \widehat{\bfbeta}_i - \bfbeta_i) = &\Big( \frac{1}{T}\sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top \Big)^{-1} \frac{1}{\sqrt{T}}\sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta m_{it} \nonumber \\
-%&\quad+  \Big(\frac{1}{T} \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top \Big)^{-1}\frac{1}{\sqrt{T}} \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \varepsilon_{it}. \label{theo:beta:proof1}
-%\end{align}
-%In what follows, we show that 
-%\begin{align}
-%\frac{1}{\sqrt{T}} \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \varepsilon_{it} & = O_p(1) \label{theo:beta:claim1} \\
-%\Big( \frac{1}{T}\sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top \Big)^{-1} & = O_p(1) \label{theo:beta:claim2} \\
-%\frac{1}{\sqrt{T}} \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta m_{it} & = O_p\Big(\frac{1}{\sqrt{T}}\Big). \label{theo:beta:claim3}
-%\end{align} 
-%Theorem \ref{theo:beta} follows from applying these three statements together with standard arguments to formula \eqref{theo:beta:proof1}.
-
-
-%It remains to prove \eqref{theo:beta:claim1}--\eqref{theo:beta:claim3}. Equation \eqref{theo:beta:claim1} has already been verified in Lemma \ref{propA:beta4}. By essentially the same arguments as those in the proof of Lemma \ref{propA:beta4}, we obtain that 
-%\[ \frac{1}{T}\sum_{t=2}^T \big\{ \Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top - \ex [\Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top] \big\} = o_p(1). \]
-%Since the matrix $\ex [\Delta \boldsymbol{X}_{it} \Delta \boldsymbol{X}_{it}^\top]$ is invertible by assumption, \eqref{theo:beta:claim1} follows from an application of Slutsky's lemma. We finally turn to the proof of \eqref{theo:beta:claim3}. We write $T^{-1/2} \sum_{t=2}^T \Delta \boldsymbol{X}_{it} \Delta m_{it} = (T^{-1/2} \sum_{t=2}^T \Delta \boldsymbol{X}_{it,j} \Delta m_{it})_{j=1,\ldots,d}$ and consider each component separately. By assumption, $m_i(\cdot)$ is Lipschitz continuous, which implies that $|\Delta m_{it}| = \left|m_i \left( \frac{t}{T} \right) - m_i \left(\frac{t-1}{T}\right) \right| \leq C \frac{1}{T}$ for all $t \in \{1, \ldots, T\}$ and some constant $C > 0$. Hence, 
-%\begin{align*}
-%\Big| \frac{1}{\sqrt{T}}\sum_{t=2}^T \Delta X_{it,j} \Delta m_{it}\Big| &\leq \frac{1}{\sqrt{T}}\sum_{t=2}^T \big|\Delta X_{it,j} \big| \cdot \big| \Delta m_{it} \big| \\%
-%	& \leq \frac{C}{\sqrt{T}} \cdot \frac{1}{T} \sum_{t=2}^T \left|\Delta X_{it,j} \right| = O_p\Big(\frac{1}{\sqrt{T}}\Big),
-%\end{align*}
-%where we have used that $T^{-1} \sum_{t=2}^T |\Delta \boldsymbol{X}_{it,j}| = O_p(1)$ by Markov's inequality.
-
+\[ \Big|\frac{\widehat{\psi}_{ij,T}(u,h) - \widehat{\psi}_{ij,T}^{\text{trend}}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) \le q_{n,T}(\alpha) \quad \text{and} \quad \Big|\frac{\widehat{\psi}_{ij,T}(u,h)}{(\widehat{\sigma}_i^2 + \widehat{\sigma}_j^2)^{1/2}}\Big| - \lambda(h) > q_{n,T}(\alpha), \]
+it holds that $\widehat{\psi}_{ij,T}^{\text{trend}}(u,h) \ne 0$, which in turn implies that $m_i(v) - m_j(v) \ne 0$ for some $v \in I_{u,h}$. From \eqref{eq2-prop-clustering-2} and \eqref{eq3-prop-clustering-2}, we obtain that 
+\[ D_{n,T} \subseteq \Big\{ \bigcap_{1 \le \ell < \ell^\prime \le \widehat{N}} E_{n,T}^{[\ell,\ell^\prime]}(\alpha) \Big\} \cap \big\{ \widehat{N} = N \text{ and } \widehat{G}_\ell = G_\ell \text{ for all } \ell \big\} = E_{n,T}(\alpha). \] 
+This together with \eqref{eq1-prop-clustering-2} implies that $\pr(E_{n,T}(\alpha)) \ge (1-\alpha) + o(1)$. 
 
 
