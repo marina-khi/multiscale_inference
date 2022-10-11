@@ -1,0 +1,133 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb,amsthm,graphicx}
+\usepackage{enumitem}
+\usepackage{color}
+\usepackage{epsfig}
+\usepackage{graphics}
+\usepackage{pdfpages}
+\usepackage{subcaption}
+\usepackage[font=small]{caption}
+\usepackage[hang,flushmargin]{footmisc} 
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage[mathscr]{euscript}
+\usepackage{natbib}
+\usepackage{setspace}
+\usepackage{mathrsfs}
+\usepackage[left=2.7cm,right=2.7cm,bottom=2.7cm,top=2.7cm]{geometry}
+\parindent0pt 
+
+\input{macros}
+
+
+
+\begin{document}
+\renewcommand{\baselinestretch}{1.2}\normalsize
+
+
+
+\section{Nonparametric inference for the time-varying regression model}
+
+Consider the time-varying regression model
+\begin{align}\label{model}
+Y_t = m_t(X_t) + e_t, \quad t = 1,\ldots, T,
+\end{align}
+where $Y_t$, $X_t$ and $e_t$ are the responses, the predictors and the errors, respectively, and $m_t(\cdot) = m(\cdot, t/T)$ is a time-varying regression function. Suppose that $X_t$ has compact support $\mathcal{X}\in \reals$. Here $m: \mathcal{X}\times [0, 1] \rightarrow \reals $ is a smooth function, and $t/T,\, t = 1,\ldots, T,$ represents the time rescaled to the unit interval.
+
+Let $K_X(\cdot)$ be a (potentially in the future $d$-dimensional) kernel function, and let $K_T(\cdot)$ be a temporal kernel function. Assumptions on the kernel functions are provided in Assumption \ref{C-kerX} and \ref{C-kerT}.
+
+Consider two bandwidths $h_x$ and $h_t$, a point $(u, s) \in \reals \times [0, 1]$ and the corresponding kernel average
+\begin{equation*}
+\widehat{\psi}_{h_x, h_t}(u, s) = \sum\limits_{t=1}^T w_{t, h_x, h_t}(u, s)  Y_{t}, 
+\end{equation*}
+where $w_{t, h_x, h_t}(u, s)$ is a kernel weight. In order to avoid boundary issues, we work with a local linear weighting scheme. We in particular set 
+\begin{equation}\label{weights}
+w_{t, h_x, h_t}(u, s) = \frac{\Lambda_{t,h_t}(s)K_X\big(\frac{X_t-u}{h_x}\big) }{\sum\nolimits_{t=1}^T \Lambda_{t,h_t}(s) K_X\big(\frac{X_t-u}{h_x}\big)  }, 
+\end{equation}
+where
+\[ \Lambda_{t,h_t}(s) = K_T\Big(\frac{\frac{t}{T}-s}{h_t}\Big) \bigg[ S_{2}(s) - \Big(\frac{\frac{t}{T}-s}{h_t}\Big) S_{1}(s) \bigg], \]
+and $S_{\ell}(s) = (Th_t)^{-1} \sum\nolimits_{t=1}^T K_T(\frac{\frac{t}{T}-s}{h_t}) (\frac{\frac{t}{T}-s}{h_t})^\ell$ for $\ell = 0,1,2$.
+
+The kernel average $\widehat{\psi}_{h_x, h_t}(u, s)$ is nothing else than a rescaled local linear estimator of the function $m(\cdot, \cdot)$.
+
+To allow nonstationary and dependent observations, we assume that the covariates $X_t$ have the following properties. 
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+\item \label{C-reg1} The variables $X_{t}$ allow for the representation $X_{t} = H(t/T; \mathcal{G}_{t})$, where $\mathcal{G}_{t} = (\ldots, \xi_{t-1}, \xi_{t})$, the random variables $\xi_{t}$ are i.i.d.\ and $H: [0, 1] \times \reals^\infty \rightarrow \mathcal{X}$ is a measurable function such that $H(t/T; \mathcal{G}_{t})$ is well-defined for each $t$.%We use the notation $\X_{it} = \boldsymbol{h}_{i}(\mathcal{G}_{it})$ with $\boldsymbol{h}_i = (h_{i1}, \ldots, h_{id})^\top$ and $\mathcal{G}_{it} = (\mathcal{G}_{it,1}, \ldots, \mathcal{G}_{it, d})^\top$. It holds that $\ex [X_{it, j}]=0$ and $\| X_{it, j} \|_{q^\prime} <\infty$ for all $i$ and $j$, where $q^\prime > \max \{ 4, \theta q \}$ with $q$ from \ref{C-err1} and $\theta$ specified in \ref{C-grid} below.
+\item \label{C-reg2} The value of $\ex[H^2 (t/T; \mathcal{G}_{0})]$ is bounded away from zero and infinity on $[0, 1]$.
+%\item \label{C-reg3} For each $i$ and $j$, it holds that $\sum_{s \ge 0} \delta_{q^\prime}(h_{ij}, s)$ is finite and $\sum_{s \ge t} \delta_{q^\prime}(h_{ij}, s)= O(t^{-\alpha})$ for some $\alpha > 1/2 - 1/{q^\prime}$ with $q^\prime$ from \ref{C-reg1}.
+\end{enumerate}
+%Assumption \ref{C-reg1} guarantees that the process $\{ X_{t}: 1 \le t \le T \}$ is stationary and causal. Assumption \ref{C-reg3} restricts the serial dependence of the process $\{ \X_{it}: 1 \le t \le T \}$ for each $i$ in terms of the physical dependence measure.
+
+
+
+For the error process, we assume that
+\begin{align*}
+e_t = \sigma_t(X_t)\eta_t = \sigma(X_t, t/T) \eta_t,
+\end{align*}
+where for now we consider i.i.d. $\eta_t$.
+
+
+In order for the theory to work, we need the following assumptions:
+
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+\setcounter{enumi}{2}
+\item \label{C-kerX} The kernel $K_X$ is non-negative, symmetric about zero and integrates to one. Moreover, it has compact support $[-1,1]$ and is Lipschitz continuous, that is, $|K_X(v) - K_X(w)| \le C |v-w|$ for any $v,w \in \reals$ and some constant $C > 0$. 
+\item \label{C-kerT} The kernel $K_T$ is non-negative, symmetric about zero and integrates to one. Moreover, it has compact support $[-1,1]$ and is Lipschitz continuous, that is, $|K_T(v) - K_T(w)| \le C |v-w|$ for any $v,w \in \reals$ and some constant $C > 0$. 
+\end{enumerate} 
+
+
+
+\section{Nonparametric inference for the time-varying regression model}
+
+Consider the time-varying regression model
+\begin{align}\label{model}
+Y_t = m_t(X_t) + e_t, \quad t = 1,\ldots, T,
+\end{align}
+where $Y_t$, $X_t$ and $e_t$ are the responses, the predictors and the errors, respectively, and $m_t(\cdot) = m(\cdot, t/T)$ is a time-varying regression function. Suppose that $X_t$ has compact support $\mathcal{X}\in \reals$. Here $m: \mathcal{X}\times [0, 1] \rightarrow \reals $ is a smooth function, and $t/T,\, t = 1,\ldots, T,$ represents the time rescaled to the unit interval.
+
+Let $K_X(\cdot)$ be a (potentially in the future $d$-dimensional) kernel function, and let $K_T(\cdot)$ be a temporal kernel function. Assumptions on the kernel functions are provided in Assumption \ref{C-kerX} and \ref{C-kerT}.
+
+Consider two bandwidths $h_x$ and $h_t$, a point $(u, s) \in \reals \times [0, 1]$ and the corresponding kernel average
+\begin{equation*}
+\widehat{\psi}_{h_x, h_t}(u, s) = \sum\limits_{t=1}^T w_{t, h_x, h_t}(u, s)  Y_{t}, 
+\end{equation*}
+where $w_{t, h_x, h_t}(u, s)$ is a kernel weight. In order to avoid boundary issues, we work with a local linear weighting scheme. We in particular set 
+\begin{equation}\label{weights}
+w_{t, h_x, h_t}(u, s) = \frac{\Lambda_{t,h_t}(s)K_X\big(\frac{X_t-u}{h_x}\big) }{\sum\nolimits_{t=1}^T \Lambda_{t,h_t}(s) K_X\big(\frac{X_t-u}{h_x}\big)  }, 
+\end{equation}
+where
+\[ \Lambda_{t,h_t}(s) = K_T\Big(\frac{\frac{t}{T}-s}{h_t}\Big) \bigg[ S_{2}(s) - \Big(\frac{\frac{t}{T}-s}{h_t}\Big) S_{1}(s) \bigg], \]
+and $S_{\ell}(s) = (Th_t)^{-1} \sum\nolimits_{t=1}^T K_T(\frac{\frac{t}{T}-s}{h_t}) (\frac{\frac{t}{T}-s}{h_t})^\ell$ for $\ell = 0,1,2$.
+
+The kernel average $\widehat{\psi}_{h_x, h_t}(u, s)$ is nothing else than a rescaled local linear estimator of the function $m(\cdot, \cdot)$.
+
+To allow nonstationary and dependent observations, we assume that the covariates $X_t$ have the following properties. 
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+\item \label{C-reg1} The variables $X_{t}$ allow for the representation $X_{t} = H(t/T; \mathcal{G}_{t})$, where $\mathcal{G}_{t} = (\ldots, \xi_{t-1}, \xi_{t})$, the random variables $\xi_{t}$ are i.i.d.\ and $H: [0, 1] \times \reals^\infty \rightarrow \mathcal{X}$ is a measurable function such that $H(t/T; \mathcal{G}_{t})$ is well-defined for each $t$.%We use the notation $\X_{it} = \boldsymbol{h}_{i}(\mathcal{G}_{it})$ with $\boldsymbol{h}_i = (h_{i1}, \ldots, h_{id})^\top$ and $\mathcal{G}_{it} = (\mathcal{G}_{it,1}, \ldots, \mathcal{G}_{it, d})^\top$. It holds that $\ex [X_{it, j}]=0$ and $\| X_{it, j} \|_{q^\prime} <\infty$ for all $i$ and $j$, where $q^\prime > \max \{ 4, \theta q \}$ with $q$ from \ref{C-err1} and $\theta$ specified in \ref{C-grid} below.
+\item \label{C-reg2} The value of $\ex[H^2 (t/T; \mathcal{G}_{0})]$ is bounded away from zero and infinity on $[0, 1]$.
+%\item \label{C-reg3} For each $i$ and $j$, it holds that $\sum_{s \ge 0} \delta_{q^\prime}(h_{ij}, s)$ is finite and $\sum_{s \ge t} \delta_{q^\prime}(h_{ij}, s)= O(t^{-\alpha})$ for some $\alpha > 1/2 - 1/{q^\prime}$ with $q^\prime$ from \ref{C-reg1}.
+\end{enumerate}
+%Assumption \ref{C-reg1} guarantees that the process $\{ X_{t}: 1 \le t \le T \}$ is stationary and causal. Assumption \ref{C-reg3} restricts the serial dependence of the process $\{ \X_{it}: 1 \le t \le T \}$ for each $i$ in terms of the physical dependence measure.
+
+
+
+For the error process, we assume that
+\begin{align*}
+e_t = \sigma_t(X_t)\eta_t = \sigma(X_t, t/T) \eta_t,
+\end{align*}
+where for now we consider i.i.d. $\eta_t$.
+
+
+In order for the theory to work, we need the following assumptions:
+
+\begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm]
+\setcounter{enumi}{2}
+\item \label{C-kerX} The kernel $K_X$ is non-negative, symmetric about zero and integrates to one. Moreover, it has compact support $[-1,1]$ and is Lipschitz continuous, that is, $|K_X(v) - K_X(w)| \le C |v-w|$ for any $v,w \in \reals$ and some constant $C > 0$. 
+\item \label{C-kerT} The kernel $K_T$ is non-negative, symmetric about zero and integrates to one. Moreover, it has compact support $[-1,1]$ and is Lipschitz continuous, that is, $|K_T(v) - K_T(w)| \le C |v-w|$ for any $v,w \in \reals$ and some constant $C > 0$. 
+\end{enumerate} 
+
+
+
+
+\end{document}
