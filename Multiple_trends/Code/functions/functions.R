@@ -218,8 +218,11 @@ produce_plots_gdp <- function(results, data_i, data_j, ticks_, labels_,
 }
 
 
-produce_plots_talk <- function(results, l, data_i, data_j,
+produce_plots_talk <- function(results, l, data_i, data_j, at_, labels_, dates_,
                                dates, name_i, name_j, filename){
+  filename    <- paste0("output/plots/talk/VOC/", name_i, "_vs_", name_j, ".pdf")
+  grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
+  
   Tlen <- length(data_i)
   gset <- results$gset_with_values[[l]]
   
@@ -232,9 +235,9 @@ produce_plots_talk <- function(results, l, data_i, data_j,
   par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
   par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
 
-  plot(x = dates, y = data_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
+  plot(x = dates_, y = data_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
        col = "#EB811B", ylab="", xlab="", mgp=c(1, 0.5, 0))
-  lines(x = dates, y = data_j, col="#604c38")
+  lines(x = dates_, y = data_j, col="#604c38")
   title(main = "(a) adjusted logarithm of house prices", font.main = 1, line = 0.5)
   legend("topright", inset = 0.02, legend=c(name_i, name_j),
          col = c("#EB811B", "#604c38"), lty = 1, cex = 0.95, ncol = 1)
@@ -264,7 +267,7 @@ produce_plots_talk <- function(results, l, data_i, data_j,
 
 
 produce_plots_hp <- function(results, data_i, data_j,
-                             at_, labels_, name_i, name_j){
+                             at_, labels_, name_i, name_j, l){
   filename    <- paste0("output/plots/hp/", name_i, "_vs_", name_j, ".pdf")
   t_len       <- length(data_i)
   grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
