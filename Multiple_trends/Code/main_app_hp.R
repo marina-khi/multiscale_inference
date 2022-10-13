@@ -160,10 +160,39 @@ axis(1, at = grid_points[at], labels = dates[at], cex = 0.7)
 title(main = "Estimated time trends", line = 1, cex.main = 1.1)
 dev.off()
 
+#Plotting all clusters on one plot
+pdf("output/plots/talk/VOC/all_time_series.pdf", width = 7, height = 4,
+    paper="special")
+
+#Setting the layout of the graphs
+par(cex = 1, tck = -0.025)
+par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
+par(oma = c(1.5, 1.5, 0.2, 0.2)) #Outer margins
+
+plot(NA, ylab = "", xlab = "", xlim = c(0, 1),
+     ylim = c(-1.2, 1.5), xaxt = 'n',
+     mgp = c(2, 0.5, 0), cex = 0.8, tck = -0.025)  
+
+for (cl in 1:max(subgroups)){
+  locations_cluster <- colnames(Delta_hat)[subgroups == cl]
+  for (column in locations_cluster){
+    smoothed_curve <- mapply(local_linear_smoothing, grid_points,
+                             MoreArgs = list(data_p = hp_log_augm[, column],
+                                             grid_p = grid_points, bw = 7/t_len))
+    lines(grid_points, smoothed_curve, col = "#604c38")
+  }
+}
+axis(1, at = grid_points[at], labels = dates[at], cex = 0.7)
+title(main = "Estimated time trends", line = 1, cex.main = 1.1)
+dev.off()
+
+
+cluster_labels <- c(3, 1, 2)
+
 #Plotting the trend functions of each cluster on a separate graph
 for (cl in 1:max(subgroups)){
   locations_cluster <- colnames(Delta_hat)[subgroups == cl]
-  pdf(paste0("output/plots/talk/VOC/cluster_", cl, ".pdf"),
+  pdf(paste0("output/plots/talk/VOC/cluster_", cluster_labels[cl], ".pdf"),
       width = 7, height = 4, paper = "special")
   #Setting the layout of the graphs
   par(cex = 1, tck = -0.025)
@@ -180,6 +209,6 @@ for (cl in 1:max(subgroups)){
     lines(grid_points, smoothed_curve, col = colors[cl])
   }
   axis(1, at = grid_points[at], labels = dates[at])
-  title(main = paste0("Cluster ", cl), line = 1)
+  title(main = paste0("Cluster ", cluster_labels[cl]), line = 1)
   dev.off()
 }
