@@ -26,7 +26,7 @@
 \metroset{block=fill}
 % \titlegraphic{\hfill\includegraphics[height=1.5cm]{logo.pdf}}
 
-\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\pr}{\mathbb{P}}        % probability
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\Eps}{\mathcal{E}}
 \newcommand{\eps}{\varepsilon}
@@ -272,6 +272,37 @@ Aggregated Gaussian test statistics:
 
 \section{Clustering}
 
+\begin{frame}{Dissimilarity measure}
+\textbf{Underlying group structure:} there exist groups of time series $G_1,\ldots, G_N$ with $\{1,\ldots, n\} = \mathbin{\dot{\bigcup}}_{\ell=1}^{N} G_\ell$ such that for each $1 \le \ell \le N$,
+\[ m_i = f_\ell \quad \text{for all } i \in G_\ell, \]
+where $f_\ell$ are group-specific trend functions.\pause
+
+\textbf{Dissimilarity measure:} let $S \subseteq \{1,\ldots, n\}$ and $S^\prime \subseteq \{1,\ldots, n\}$ be two sets of time series from our sample. We define a dissimilarity measure between $S$ and $S^\prime$ by setting 
+\begin{equation*}
+\widehat{\Delta}(S,S^\prime) = \max_{\substack{i \in S, \\ j \in S^\prime}} \Big({\color<4>{mLightBrown}\max_{(u, h) \in \mathcal{G}_T}}{\color<3-4>{mLightBrown}\hat{\psi}^0_{ij, T}(u, h)}\Big). 
+\end{equation*}
+\end{frame}
+
+\begin{frame}{Clustering algorithm}
+
+\begin{enumerate}
+	\item For each pair of time series $(i, j)$, calculate the dissimilarity measure $\max_{(u, h) \in \mathcal{G}_T}\hat{\psi}^0_{ij, T}(u, h)$.
+	\item Using the dissimilarity measure and the complete linkage method, perform HAC. The result is a tree of nested partitions:\linebreak  $\{\widehat{G}_1^{[r]},\ldots$ $\ldots,\widehat{G}_{n-r}^{[r]}\}$ for $r = 1,\ldots, n-1$.
+	\item Estimate the number of clusters $\widehat{N}$ using the $(1 - \alpha)$-quantile $q_{n, T} (\alpha)$ of the Gaussian test statistics $\Phi_{n,T}$:
+	\vspace{-2mm}\[ \widehat{N} = \min \Big\{ r = 1,2,\ldots \Big| \max_{1 \le \ell \le r} \widehat{\Delta} \big( \widehat{G}_\ell^{[n-r]},  \widehat{G}_\ell^{[n-r]} \big) \le q_{n,T}(\alpha) \Big\}. \]
+	\end{enumerate}\pause
+	
+\begin{block}{Proposition}
+Under certain assumptions, we have 
+\vspace{-2mm}
+\begin{align*}
+\pr \Big( \big\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}} \big\} = \{ G_1,\ldots, G_N \} \Big) \ge &\, (1-\alpha) + o(1)\\
+\text{and }\quad \pr \big( \widehat{N} = N \big) \ge (1-\alpha) &+ o(1).
+\end{align*}
+\vspace{-6mm}
+\end{block}
+\end{frame}
+
 
 
 %\begin{frame}{Theoretical properties}
@@ -500,12 +531,12 @@ for $\ell = 1,2$ and $K$ is a kernel function.
 where $\delta_T$ goes to $0$ as $T\to\infty$ sufficiently fast.\pause
 \item Using the anti-concentration results for Gaussian random vectors (Chernozhukov et al. 2015), prove that $\Phi_{n, T}$ does not concentrate too strongly in small regions of the form $[x-\delta_T,x+\delta_T]$, i.e.
 \begin{equation*}\label{eq-theo-stat-strategy-step2}
-\sup_{x \in \mathbb{R}} \Prob \big( |\Phi_{n, T} - x| \le \delta_T \big) = o(1).
+\sup_{x \in \mathbb{R}} \pr \big( |\Phi_{n, T} - x| \le \delta_T \big) = o(1).
 \end{equation*}\pause
 \vspace{-2mm}
 \item Show that 
 \begin{equation*}\label{eq-theo-stat-strategy-claim}
-\sup_{x \in \mathbb{R}} \big| \Prob(\widetilde{\Phi}_{n, T} \le x) - \Prob(\Phi_{n, T} \le x) \big| = o(1). 
+\sup_{x \in \mathbb{R}} \big| \pr(\widetilde{\Phi}_{n, T} \le x) - \pr(\Phi_{n, T} \le x) \big| = o(1). 
 \end{equation*}
 \end{itemize}
 \end{frame}
