@@ -69,22 +69,38 @@ options(xtable.timestamp = "")
 
 source("functions/functions.R")
 
+# #Producing plots with the final results
+# for (l in seq_len(nrow(result$ijset))){
+#   i <- result$ijset[l, 1]
+#   j <- result$ijset[l, 2]
+#   if (result$stat_pairwise[i, j] > result$quant){
+#     produce_plots_hp(results = result, data_i = hp_log_augm[, i],
+#                      data_j = hp_log_augm[, j], at_ = at,
+#                      labels_ = dates[at], name_i = countries[i],
+#                      name_j = countries[j], l = l)
+#   }
+# }
+
 #Producing plots with the final results
 for (l in seq_len(nrow(result$ijset))){
   i <- result$ijset[l, 1]
   j <- result$ijset[l, 2]
   if (result$stat_pairwise[i, j] > result$quant){
-    produce_plots_hp(results = result, data_i = hp_log_augm[, i],
-                     data_j = hp_log_augm[, j], at_ = at,
-                     labels_ = dates[at], name_i = countries[i],
+    produce_plots_talk(results = result, l = l, data_i = hp_log[, i],
+                     data_j = hp_log[, j], at_ = at,
+                     labels_ = dates[at], dates_ = dates, name_i = countries[i],
                      name_j = countries[j])
   }
 }
+
 
 ############
 #CLUSTERING#
 ############
 library(dendextend)
+
+colors <- c("#EB811B", "#604c38", "#14B03D")
+#colors <- c(2, 3, 4)
 
 #for the distance matrix we need a symmetrical one
 Delta_hat <- matrix(data = rep(0, n_ts * n_ts), nrow = n_ts, ncol = n_ts)
@@ -103,26 +119,23 @@ res        <- hclust(delta_dist)
 subgroups  <- cutree(res, h = result$quant)
 res_dend   <- as.dendrogram(res)
 
-pdf("output/plots/hp/dendrogram.pdf", width = 15, height = 6,
+pdf("output/plots/talk/VOC/dendrogram.pdf", width = 15, height = 6,
     paper = "special")
-#par(cex = 1, tck = -0.025)
-par(mar = c(1.5, 1, 2, 1)) #Margins for each plot
-par(oma = c(0.2, 0.5, 0.2, 0.5)) #Outer margins
-plot(res, cex = 1.5, xlab = "", ylab = "", yaxt = "n",
-     hang = 0.55,
-     main = "HAC dendrogram", xlim = c(-1, 10), cex.main = 2.2)
-#axis(2, line = 1)
+par(mar = c(1.5, 1, 3, 1)) #Margins for each plot
+par(oma = c(0.2, 0.5, 0.5, 0.5)) #Outer margins
+plot(res, cex = 2, xlab = "", ylab = "", yaxt = "n",
+     hang = 0.4, main = "")
+     #main = "HAC dendrogram", xlim = c(-1, 10), cex.main = 3)
+title("HAC dendrogram", cex.main = 3, line = 1)
 par(lwd = 2)
-rect.dendrogram(res_dend, k = 3, border = 2:(max(subgroups) + 1), lower_rect = -3.5)
-#rect.hclust(res, h = result$quant, border = 2:(max(subgroups) + 1))
+rect.dendrogram(res_dend, k = 3, border = colors, lower_rect = -3.5)
 dev.off()
 
 n_cl        <- max(subgroups)
 grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
-colors      <- c(2, 3, 4)
 
 #Plotting all clusters on one plot
-pdf("output/plots/hp/all_clusters.pdf", width = 7, height = 4,
+pdf("output/plots/talk/VOC/all_clusters.pdf", width = 7, height = 4,
     paper="special")
 
 #Setting the layout of the graphs
@@ -150,7 +163,7 @@ dev.off()
 #Plotting the trend functions of each cluster on a separate graph
 for (cl in 1:max(subgroups)){
   locations_cluster <- colnames(Delta_hat)[subgroups == cl]
-  pdf(paste0("output/plots/hp/cluster_", cl, ".pdf"),
+  pdf(paste0("output/plots/talk/VOC/cluster_", cl, ".pdf"),
       width = 7, height = 4, paper = "special")
   #Setting the layout of the graphs
   par(cex = 1, tck = -0.025)
