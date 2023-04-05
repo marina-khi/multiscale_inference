@@ -141,7 +141,27 @@ library(maps)
 library(mapdata)
 map("worldHires","Spain", xlim = c(-13.5, 8.5), ylim = c(34, 45), col="gray90", fill=TRUE)
 points(x = stations_df$lon, y = stations_df$lat, pch = 20, col = subgroups)
-  
+
+library(ggplot2)
+world_map <- map_data("world")
+world_map <- subset(world_map,
+                    (world_map$long > -20) & (world_map$long < 5) & (world_map$lat> 25) & (world_map$lat < 45))
+
+#Add map to base plot
+base_spain <- ggplot() +
+  coord_fixed() +
+  xlab("") +
+  ylab("") +
+  geom_polygon(data=world_map, aes(x=long, y=lat, group=group),
+               colour="light green", fill="light green")
+
+map_data_coloured <- 
+  base_spain +
+  geom_point(data=stations_df, 
+             aes(x = lon, y= lat, colour=cluster),
+             size=5, alpha=I(0.7))
+
+map_data_coloured
 
 n_cl        <- max(subgroups)
 grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
