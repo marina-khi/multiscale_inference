@@ -1,0 +1,80 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb,amsthm,graphicx}
+\usepackage{enumitem}
+\usepackage{color}
+\usepackage{epsfig}
+\usepackage{graphics}
+\usepackage{pdfpages}
+\usepackage{subcaption}
+\usepackage[font=small]{caption}
+\usepackage[hang,flushmargin]{footmisc} 
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage[mathscr]{euscript}
+\usepackage{natbib}
+\usepackage{setspace}
+\usepackage{mathrsfs}
+\usepackage{hyperref} 
+\usepackage[left=2.7cm,right=2.7cm,bottom=2.7cm,top=2.7cm]{geometry}
+\parindent0pt
+
+\begin{document}
+\renewcommand{\baselinestretch}{1.2}\normalsize
+
+
+
+\section{Code for "Nonparametric comparison of epidemic trends: The case of COVID-19"}
+
+The multiscale test proposed in \cite{KhismatullinaVogt2023} is implemented in the \verb|R| package \verb|MSinference|, freely available on CRAN (\url{https://cran.r-project.org/web/packages/MSinference/index.html}). The code that was used for the simulation study and the application in \cite{KhismatullinaVogt2023} is publicly available on GitHub (\url{https://github.com/marina-khi/epidemic_trends_code}). In order to run the code on your computer, you will need the \verb|R| package \verb|MSinference| as well as \verb|R| packages \verb|Rcpp|, \verb|tidyr|, \verb|xtable| and \verb|aweek|. The latter packages are also freely available on CRAN.
+
+
+The overall structure of the code is as follows. There are two main files each of which produces a specific part of the simulations and applications:
+
+\begin{itemize}
+\item \verb|main_simulations.r| produces the size and power simulations for the multiscale test reported in Section 4.1.
+\item \verb|main_covid.r| produces the application results from Section 4.2, where our multiscale test is applied to the data on new daily cases of COVID-19.
+\end{itemize}
+
+These main files read in a number of functions which are collected in file \linebreak \verb|.\functions\functions.r|. The simulation and application results are stored either as figures or as .tex files (for tables) in the folder \verb|.\plots|. The tables and figures are as in the paper up to the seed.
+
+The data on the new daily cases of COVID-19 ($\copyright$ ECDC [2005-2019]) together with the data on various policy responses to the pandemic of COVID-19 (OxCGRT) are stored in the folder \verb|.\data|. Description of the data with all of the relevant licensing information can be found in the file \verb|.\README\README.txt|.
+
+%The main file for size and power simulations (\verb|main_simulations.R|) is divided into several blocks, each block being responsible for one part of the calculations with either a table as a figure result. Each block has a title that shortly describes what it is responsible for. The blocks are separated by a series of hashes (\#) and are independent of each other. If you want to run only one specific part of the calculations, you need to run the code in the very beginning of the main file (that contains all the references to the libraries and auxiliary functions) and then the code of the corresponding block. You do not need to run previous blocks.
+
+All programs are written in R (with some function written in C). They are all quite self-explanatory and commented. The documentation for the \verb|R| package \verb|MSinference| can be found here: \url{https://cran.r-project.org/web/packages/MSinference/MSinference.pdf}. In the vignette (\url{https://cran.r-project.org/web/packages/MSinference/vignettes/MSinference.pdf}), it is also shown step by step how the multiscale test can be applied to analyse the COVID-19 dataset.
+
+\newpage
+\section{Code for "Multiscale Comparison of Nonparametric Trend Curves"}
+
+The multiscale test proposed in \cite{KhismatullinaVogt2022} is implemented in the \verb|R| package \verb|MSinference|, freely available on CRAN (\url{https://cran.r-project.org/web/packages/MSinference/index.html}). The code that was used for the simulation study and both applications in \cite{KhismatullinaVogt2022} is publicly available on GitHub (\url{https://github.com/marina-khi/multiple_trends_code}). In order to run the code on your computer, you will need the \verb|R| package \verb|MSinference| as well as other \verb|R| packages \verb|Rcpp|, \verb|dplyr|, \verb|tidyr|, \verb|zoo|, \verb|haven|, \verb|dendextend|, \verb|xtable|, \verb|car|, \verb|ggplot2|, \verb|Matrix|, \verb|foreach|, \verb|parallel|, \verb|iterators|, \verb|doParallel| and \verb|seasonal|. The latter packages are also freely available on CRAN.
+
+
+The overall structure of the code is as follows.  There are four main files each of which produces a specific part of the simulations and applications:
+
+\begin{itemize}
+\item \verb|main_sim_test.r| produces the size and power simulations for our multiscale test reported in Section 6.
+\item \verb|main_sim_clustering.r| produces the finite sample properties of the clustering algorithm reported in Section 6.
+\item \verb|main_app_gdp.r| produces the application results from Section 7.1, where our multiscale test and the clustering procedure are applied to compare the trends in the GDP time series.
+\item \verb|main_app_hp.r| produces the application results from Section 7.2, where our multiscale test and the clustering procedure are applied to compare the trends in the real house prices.
+\end{itemize}
+
+These main files read in a number of functions which are collected in folder \linebreak \verb|.\functions|. The simulation and application results are stored either as figures or as .tex files (for tables) in the folder \verb|.\output| and the subfolders therein. The tables and figures are as in the paper up to the seed.
+
+
+The data used in the comparison of the trends in the real house prices is stored in the folder \verb|.\data|. Description of the data with all of the relevant licensing information and necessary citations can be found in the file \verb|.\README\README.txt|.
+
+We do not provide the data that was used for the analysis of the GDP growth because it was collected from commercial databases (such as Refinitiv Datastream)
+
+%The main files are divided into several blocks, each block being responsible for one part of the calculations. Each block has a title that shortly describes what it is responsible for. The blocks are separated by a series of hashes ($#$).
+
+
+All programs are written in R (with some function written in C). They are all quite self-explanatory and commented. The documentation for the \verb|R| package \verb|MSinference| can be found here: \url{https://cran.r-project.org/web/packages/MSinference/MSinference.pdf}.
+
+\newpage
+\bibliographystyle{ims}
+{\small
+\setlength{\bibsep}{0.55em}
+\bibliography{bibliography}}
+
+\end{document}
