@@ -1,6 +1,7 @@
 rm(list=ls())
 
 library(MSinference)
+library(haven)
 library(car)
 library(dplyr)
 library(Matrix)
@@ -17,7 +18,7 @@ source("functions/functions.R")
 #Defining necessary constants#
 ##############################
 
-n_ts     <- 15 #number of different time series for simulation
+n_ts     <- 10 #number of different time series for simulation
 n_rep    <- 5000 #number of simulations for calculating size and power
 sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
 
@@ -40,6 +41,84 @@ r <- 10
 
 #For parallel computation
 numCores  <- round(parallel::detectCores() * .70)
+
+################################################
+#Estimating the parameters from the application#
+################################################
+
+source("functions/data_loading_hp.R") #Now matrix hp_data contains all data
+
+dates     <- unique(hp_data$year)
+n_ts      <- length(unique(hp_data$iso))
+t_len     <- nrow(hp_data) / n_ts
+countries <- unique(hp_data$iso)
+
+gdp_log           <- matrix(NA, ncol = n_ts, nrow = t_len)
+colnames(gdp_log) <- countries
+
+pop_log           <- matrix(NA, ncol = n_ts, nrow = t_len)
+colnames(pop_log) <- countries
+
+ltrate           <- matrix(NA, ncol = n_ts, nrow = t_len)
+colnames(ltrate) <- countries
+
+infl           <- matrix(NA, ncol = n_ts, nrow = t_len)
+colnames(infl) <- countries
+
+i <- 1 
+for (country in countries){
+  tmp <- hp_data[hp_data$iso == country, ]
+  tmp <- tmp[order(tmp$year), ]
+  gdp_log[, i] <- tmp$log_gdp
+  pop_log[, i] <- tmp$log_pop
+  ltrate[, i]  <- tmp$ltrate
+  infl[, i]    <- tmp$infl
+  i = i + 1
+}
+
+a_coef_matrix <- matrix(NA, ncol = 4, nrow = n_ts)
+colnames(a_coef_matrix) <- c("gdp_log", "pop_log", "ltrate", "infl")
+rownames(a_coef_matrix) <- countries
+
+variance_eta_matrix <- matrix(NA, ncol = 4, nrow = n_ts)
+colnames(variance_eta_matrix) <- c("gdp_log", "pop_log", "ltrate", "infl")
+rownames(variance_eta_matrix) <- countries
+
+#Estimating the coefficients for the GDP
+for (i in 1:n_ts){
+  AR.struc_gdp_log <- estimate_lrv(data = gdp_log[, i], q = q, r_bar = r, p = 1)
+  AR.struc_pop_log <- estimate_lrv(data = pop_log[, i], q = q, r_bar = r, p = 1)
+  AR.struc_ltrate  <- estimate_lrv(data = ltrate[, i], q = q, r_bar = r, p = 1)
+  AR.struc_infl    <- estimate_lrv(data = infl[, i], q = q, r_bar = r, p = 1)
+
+  a_coef_matrix[i, 1] <- AR.struc_gdp_log$ahat
+  a_coef_matrix[i, 2] <- AR.struc_pop_log$ahat
+  a_coef_matrix[i, 3] <- AR.struc_ltrate$ahat
+  a_coef_matrix[i, 4] <- AR.struc_infl$ahat
+  
+  variance_eta_matrix[i, 1] <- AR.struc_gdp_log$vareta
+  variance_eta_matrix[i, 2] <- AR.struc_pop_log$vareta
+  variance_eta_matrix[i, 3] <- AR.struc_ltrate$vareta
+  variance_eta_matrix[i, 4] <- AR.struc_infl$vareta
+  
+}
+
+
+filename = "output/tables/a_coefficients.tex"
+addtorow     <- list()
+addtorow$pos <- list(0, 0)
+addtorow$command <- c("& \\multicolumn{3}{c}{nominal size $\\alpha$} \\\\\n",
+                      "$T$ & 0.01 & 0.05 & 0.1 \\\\\n") 
+print.xtable(xtable(a_coef_matrix, digits = c(3), align = "cc
+                    
+                    ccc"), type = "latex",
+               file = filename, add.to.row = addtorow, include.colnames = FALSE)
+
+output_matrix(a_coef_matrix, filename)
+
+filename = "output/tables/variance_eta.tex"
+output_matrix(variance_eta_matrix, filename)
+
 
 
 ################################
