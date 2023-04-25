@@ -46,7 +46,10 @@ sigma <- function(matrix_, n_ts, q_ = 15, r_ = 10, procedure = "all_one"){
     maxim <- max(criterion_matrix[, 3:7])
     order_results <- c(order_results, maxim)
     order_results_BIC <- c(order_results_BIC, max(criterion_matrix$BIC))
-    cat("For the country ", colnames(matrix_)[j], " the results are as follows: ", max(criterion_matrix$FPE), " ", max(criterion_matrix$AIC), " ", max(criterion_matrix$AICC), " ", max(criterion_matrix$BIC), " ", max(criterion_matrix$HQ), " \n")
+    cat("For the country ", colnames(matrix_)[j], " the results are as follows: ",
+        max(criterion_matrix$FPE), " ", max(criterion_matrix$AIC), " ",
+        max(criterion_matrix$AICC), " ", max(criterion_matrix$BIC), " ",
+        max(criterion_matrix$HQ), " \n")
   }
   
   #Calculating each sigma_hat_i separately

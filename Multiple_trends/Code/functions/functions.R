@@ -385,7 +385,7 @@ output_matrix <- function(matrix_, filename){
 repl2 <- function(rep, t_len_, n_ts_, grid_, gaussian_sim = FALSE,
                   a_ = 0, sigma_ = 1, beta_ = 0, a_x_ = 0, sigma_x_ = 1,
                   m_matrix_ = NULL, q_ = 25, r_ = 10){
-  library(multiscale)
+  library(MSinference)
   library(dplyr)
   
   if (gaussian_sim){
@@ -459,4 +459,146 @@ repl2 <- function(rep, t_len_, n_ts_, grid_, gaussian_sim = FALSE,
   }
   results <- as.vector(psi$stat_pairwise)
   return(results)
+}
+
+#Function that simulates 4 covariates as AR(1) with the given
+#coefficients (a_x_vec_ and sigma_x_vec_),
+#the error terms as AR(1) also with the given coefficient a_ and sigma_,
+#the time series as y = beta_ %*% covariates + m_matrix_ + errors,
+#estimates the parameters, and then computes the test statistics
+repl_revision <- function(rep, t_len_, n_ts_, grid_, gaussian_sim = FALSE,
+                          a_ = 0, sigma_ = 1, beta_ = NULL,
+                          a_x_vec_ = c(0, 0, 0, 0),
+                          sigma_x_vec_ = c(1, 1, 1, 1),
+                          rho_ = 0, 
+                          m_matrix_ = NULL, q_ = 25, r_ = 10){
+
+  library(MSinference)
+  library(dplyr)
+  
+  if (gaussian_sim){
+    z_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    z_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    sigma_vector  <- rep(1, n_ts_)
+    
+    for (i in 1:n_ts_){
+      z_matrix[, i]      <- rnorm(t_len_, 0, sigma_)
+      z_augm_matrix[, i] <- z_matrix[, i] - mean(z_matrix[, i])
+    }
+    
+    psi <- compute_statistics(data = z_augm_matrix,
+                              sigma_vec = sigma_vector,
+                              n_ts = n_ts_, grid = grid_)
+  } else {
+    y_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    y_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    error_matrix  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    
+    beta_hat_matrix <- matrix(NA, nrow = 4, ncol = n_ts_)
+    
+    library(mvtnorm)
+    big_sigma_matrix       <- matrix(rho_, nrow = n_ts_, ncol = n_ts_)    
+    diag(big_sigma_matrix) <- 1
+    alpha_vec <- rmvnorm(1, mean = rep(0, n_ts_), sigma = big_sigma_matrix)
+    
+    sigmahat_vector <- c()
+    
+    if (!is.null(beta_)){
+      x_matrix_1 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      x_matrix_2 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      x_matrix_3 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      x_matrix_4 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      for (i in 1:n_ts_){
+        error_matrix[, i] <- arima.sim(model = list(ar = a_),
+                                       innov = rnorm(t_len_, 0, sigma_),
+                                       n = t_len_)
+        x_matrix_1[, i]   <- arima.sim(model = list(ar = a_x_vec_[1]),
+                                      innov = rnorm(t_len_, 0, sigma_x_vec_[1]),
+                                      n = t_len_)
+        x_matrix_2[, i]   <- arima.sim(model = list(ar = a_x_vec_[2]),
+                                       innov = rnorm(t_len_, 0, sigma_x_vec_[2]),
+                                       n = t_len_)
+        x_matrix_3[, i]   <- arima.sim(model = list(ar = a_x_vec_[3]),
+                                       innov = rnorm(t_len_, 0, sigma_x_vec_[3]),
+                                       n = t_len_)
+        x_matrix_4[, i]   <- arima.sim(model = list(ar = a_x_vec_[4]),
+                                       innov = rnorm(t_len_, 0, sigma_x_vec_[4]),
+                                       n = t_len_)
+        x_matrix          <- cbind(x_matrix_1[, i], x_matrix_2[, i], x_matrix_3[, i], x_matrix_4[, i])
+        
+        y_matrix[, i]     <- alpha_vec[i] + m_matrix_[, i] + beta_ %*% t(x_matrix) + error_matrix[, i]
+        
+        #First differences
+        x_diff_1  <- x_matrix_1[, i] - dplyr::lag(x_matrix_1[, i], n = 1, default = NA)
+        x_diff_2  <- x_matrix_2[, i] - dplyr::lag(x_matrix_2[, i], n = 1, default = NA)
+        x_diff_3  <- x_matrix_3[, i] - dplyr::lag(x_matrix_3[, i], n = 1, default = NA)
+        x_diff_4  <- x_matrix_4[, i] - dplyr::lag(x_matrix_4[, i], n = 1, default = NA)
+        y_diff    <- y_matrix[, i] - dplyr::lag(y_matrix[, i], n = 1, default = NA)
+        
+        #Estimating beta
+        x_diff_tmp <- as.matrix(cbind(x_diff_1, x_diff_2, x_diff_3, x_diff_4))[-1, ]
+        y_diff_tmp <- as.matrix(y_diff)[-1, ]
+        
+        beta_hat_tmp         <- solve(t(x_diff_tmp) %*% x_diff_tmp) %*% t(x_diff_tmp) %*% y_diff_tmp
+        beta_hat_matrix[, i] <- beta_hat_tmp
+        alpha_hat_tmp        <- mean(y_matrix[, i] - x_matrix %*% as.vector(beta_hat_tmp))
+        
+        y_augm_matrix[, i] <- y_matrix[, i] - x_matrix %*% as.vector(beta_hat_tmp) - alpha_hat_tmp
+        AR.struc           <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
+                                           r_bar = r_, p = 1)
+        sigma_hat_i        <- sqrt(AR.struc$lrv)
+        sigmahat_vector    <- c(sigmahat_vector, sigma_hat_i) 
+      }
+    } else {
+      for (i in 1:n_ts_){
+        error_matrix[, i]  <- arima.sim(model = list(ar = a_),
+                                        innov = rnorm(t_len_, 0, sigma_),
+                                        n = t_len_)
+        y_matrix[, i]      <- alpha_vec[i] + m_matrix_[, i] + error_matrix[, i]
+        
+        #Estimating alpha_i
+        alpha_hat_tmp      <- mean(y_matrix[, i])
+        
+        y_augm_matrix[, i] <- y_matrix[, i] - alpha_hat_tmp
+        AR.struc           <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
+                                           r_bar = r_, p = 1)
+        sigma_hat_i        <- sqrt(AR.struc$lrv)
+        sigmahat_vector    <- c(sigmahat_vector, sigma_hat_i)   
+      }     
+    }
+    psi <- compute_statistics(data = y_augm_matrix,
+                              sigma_vec = sigmahat_vector,
+                              n_ts = n_ts_, grid = grid_)    
+  }
+  results <- c(as.vector(psi$stat_pairwise), as.vector(beta_hat_matrix))
+  return(results)
+}
+
+#Function that plots the graphs with histograms
+plot_histogram <- function(pdfname, data_matrix, n_ts, names, star_value){
+  smallest_value <- floor(min(data_matrix)*5)/5
+  biggest_value  <- ceiling(max(data_matrix)*5)/5
+
+  if (biggest_value - smallest_value <= 0.6){
+    breaks_grid <- seq(smallest_value, biggest_value, by = 0.05)    
+  } else {
+    breaks_grid <- seq(smallest_value, biggest_value, by = 0.2)
+  }
+  breaks_grid[length(breaks_grid)] <- biggest_value
+
+  pdf(pdfname, width = 6, height = 9, paper="special")
+  par(mfrow = c(n_ts/2, 2))
+  par(mar = c(3, 3, 0.5, 0)) #Margins for each plot
+  par(oma = c(0.5, 0.5, 0.5, 0.2)) #Outer margins
+  for (i in 1:n_ts){
+    hist_ <- hist(data_matrix[, i], breaks = breaks_grid, plot = FALSE)
+    highestCount <- max(hist_$counts)
+    hist(data_matrix[, i], main = NULL, breaks = breaks_grid, freq=TRUE,
+         xlim = c(smallest_value, biggest_value), ylim = c(0,highestCount),
+         xlab = "", mgp = c(2, 0.5, 0), cex.lab = 1.1)
+    mtext(side = 1, text = names[i], line = 1.5, cex = 0.6)
+    segments(x0 = star_value, y0 = 0, x1 = star_value, y1 = highestCount,
+             col = "red", lwd = 1.5)
+  }
+  dev.off()
 }
