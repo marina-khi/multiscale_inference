@@ -1,6 +1,6 @@
 rm(list=ls())
 
-library(multiscale)
+library(MSinference)
 library(car)
 library(dplyr)
 library(Matrix)

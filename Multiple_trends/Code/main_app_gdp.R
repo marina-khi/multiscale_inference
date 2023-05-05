@@ -1,7 +1,7 @@
 rm(list=ls())
 
 library(tidyr)
-library(multiscale)
+library(MSinference)
 library(dplyr)
 library(xtable)
 options(xtable.floating = FALSE)
