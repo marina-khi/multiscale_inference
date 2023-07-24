@@ -13,103 +13,103 @@ library(tictoc)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
 
-################################################
-#Estimating the parameters from the application#
-################################################
-
-source("functions/data_loading_hp.R") #Now matrix hp_data contains all data
-
-dates     <- unique(hp_data$year)
-n_ts      <- length(unique(hp_data$iso))
-t_len     <- nrow(hp_data) / n_ts
-countries <- unique(hp_data$iso)
-
-q         <- 15 #Parameters for the estimation of sigma
-r         <- 10
-
-#Estimating alpha and beta (Needed only for getting rid of the covariates' effect)
-source("functions/parameters_estimation.R")
-estimated   <- parameters_hp(hp_data, n_ts, t_len, countries)
-hp_log      <- estimated$hp_log #Original time series
-hp_log_augm <- estimated$hp_log_augm   #Augmented time series
-
-gdp_log           <- matrix(NA, ncol = n_ts, nrow = t_len)
-colnames(gdp_log) <- countries
-
-pop_log           <- matrix(NA, ncol = n_ts, nrow = t_len)
-colnames(pop_log) <- countries
-
-ltrate            <- matrix(NA, ncol = n_ts, nrow = t_len)
-colnames(ltrate)  <- countries
-
-infl              <- matrix(NA, ncol = n_ts, nrow = t_len)
-colnames(infl)    <- countries
-
-i <- 1 
-for (country in countries){
-  tmp <- hp_data[hp_data$iso == country, ]
-  tmp <- tmp[order(tmp$year), ]
-  gdp_log[, i] <- tmp$log_gdp
-  pop_log[, i] <- tmp$log_pop
-  ltrate[, i]  <- tmp$ltrate
-  infl[, i]    <- tmp$infl
-  i = i + 1
-}
-
-a_coef_matrix <- matrix(NA, ncol = 5, nrow = n_ts)
-colnames(a_coef_matrix) <- c("gdp_log", "pop_log", "ltrate", "infl", "error_process")
-rownames(a_coef_matrix) <- countries
-
-innovation_var_matrix <- matrix(NA, ncol = 5, nrow = n_ts)
-colnames(innovation_var_matrix) <- c("gdp_log", "pop_log", "ltrate", "infl", "error_process")
-rownames(innovation_var_matrix) <- countries
-
-sigmahat_vector <- c()
-
-#Estimating coefficients for all covariates
-for (i in 1:n_ts){
-  AR.struc_gdp_log <- estimate_lrv(data = gdp_log[, i], q = q, r_bar = r, p = 1)
-  AR.struc_pop_log <- estimate_lrv(data = pop_log[, i], q = q, r_bar = r, p = 1)
-  AR.struc_ltrate  <- estimate_lrv(data = ltrate[, i], q = q, r_bar = r, p = 1)
-  AR.struc_infl    <- estimate_lrv(data = infl[, i], q = q, r_bar = r, p = 1)
-  AR.struc_errors  <- estimate_lrv(data = hp_log_augm[, i], q = q, r_bar = r, p = 1)
-  
-  a_coef_matrix[i, 1] <- AR.struc_gdp_log$ahat
-  a_coef_matrix[i, 2] <- AR.struc_pop_log$ahat
-  a_coef_matrix[i, 3] <- AR.struc_ltrate$ahat
-  a_coef_matrix[i, 4] <- AR.struc_infl$ahat
-  a_coef_matrix[i, 5] <- AR.struc_errors$ahat
-  
-  innovation_var_matrix[i, 1] <- AR.struc_gdp_log$vareta
-  innovation_var_matrix[i, 2] <- AR.struc_pop_log$vareta
-  innovation_var_matrix[i, 3] <- AR.struc_ltrate$vareta
-  innovation_var_matrix[i, 4] <- AR.struc_infl$vareta
-  innovation_var_matrix[i, 5] <- AR.struc_errors$vareta
-  
-  sigma_hat_i     <- sqrt(AR.struc_errors$lrv)
-  sigmahat_vector <- c(sigmahat_vector, sigma_hat_i)
-}
-
-a_coef_vector         <- colSums(a_coef_matrix)/length(countries)
-innovation_var_vector <- colSums(innovation_var_matrix)/length(countries)
-
-a_coef_matrix         <- rbind(a_coef_matrix, mean = a_coef_vector)
-innovation_var_matrix <- rbind(innovation_var_matrix, mean = innovation_var_vector)
-
-
-addtorow     <- list()
-addtorow$pos <- list(0)
-addtorow$command <- c("Country & GDP & Population & Long-term rate & Inflation & Error process\\\\\n") 
-print.xtable(xtable(a_coef_matrix, digits = c(3), align = "cccccc"),
-             type = "latex", file = "output/revision/a_coefficients.tex",
-             add.to.row = addtorow, include.colnames = FALSE)
-
-addtorow     <- list()
-addtorow$pos <- list(0)
-addtorow$command <- c("Country & GDP & Population & Long-term rate & Inflation & Error process\\\\\n") 
-print.xtable(xtable(sqrt(innovation_var_matrix), digits = c(3), align = "cccccc"),
-             type = "latex", file = "output/revision/innovation_sds.tex",
-             add.to.row = addtorow, include.colnames = FALSE)
+# ################################################
+# #Estimating the parameters from the application#
+# ################################################
+# 
+# source("functions/data_loading_hp.R") #Now matrix hp_data contains all data
+# 
+# dates     <- unique(hp_data$year)
+# n_ts      <- length(unique(hp_data$iso))
+# t_len     <- nrow(hp_data) / n_ts
+# countries <- unique(hp_data$iso)
+# 
+# q         <- 15 #Parameters for the estimation of sigma
+# r         <- 10
+# 
+# #Estimating alpha and beta (Needed only for getting rid of the covariates' effect)
+# source("functions/parameters_estimation.R")
+# estimated   <- parameters_hp(hp_data, n_ts, t_len, countries)
+# hp_log      <- estimated$hp_log #Original time series
+# hp_log_augm <- estimated$hp_log_augm   #Augmented time series
+# 
+# gdp_log           <- matrix(NA, ncol = n_ts, nrow = t_len)
+# colnames(gdp_log) <- countries
+# 
+# pop_log           <- matrix(NA, ncol = n_ts, nrow = t_len)
+# colnames(pop_log) <- countries
+# 
+# ltrate            <- matrix(NA, ncol = n_ts, nrow = t_len)
+# colnames(ltrate)  <- countries
+# 
+# infl              <- matrix(NA, ncol = n_ts, nrow = t_len)
+# colnames(infl)    <- countries
+# 
+# i <- 1 
+# for (country in countries){
+#   tmp <- hp_data[hp_data$iso == country, ]
+#   tmp <- tmp[order(tmp$year), ]
+#   gdp_log[, i] <- tmp$log_gdp
+#   pop_log[, i] <- tmp$log_pop
+#   ltrate[, i]  <- tmp$ltrate
+#   infl[, i]    <- tmp$infl
+#   i = i + 1
+# }
+# 
+# a_coef_matrix <- matrix(NA, ncol = 5, nrow = n_ts)
+# colnames(a_coef_matrix) <- c("gdp_log", "pop_log", "ltrate", "infl", "error_process")
+# rownames(a_coef_matrix) <- countries
+# 
+# innovation_var_matrix <- matrix(NA, ncol = 5, nrow = n_ts)
+# colnames(innovation_var_matrix) <- c("gdp_log", "pop_log", "ltrate", "infl", "error_process")
+# rownames(innovation_var_matrix) <- countries
+# 
+# sigmahat_vector <- c()
+# 
+# #Estimating coefficients for all covariates
+# for (i in 1:n_ts){
+#   AR.struc_gdp_log <- estimate_lrv(data = gdp_log[, i], q = q, r_bar = r, p = 1)
+#   AR.struc_pop_log <- estimate_lrv(data = pop_log[, i], q = q, r_bar = r, p = 1)
+#   AR.struc_ltrate  <- estimate_lrv(data = ltrate[, i], q = q, r_bar = r, p = 1)
+#   AR.struc_infl    <- estimate_lrv(data = infl[, i], q = q, r_bar = r, p = 1)
+#   AR.struc_errors  <- estimate_lrv(data = hp_log_augm[, i], q = q, r_bar = r, p = 1)
+#   
+#   a_coef_matrix[i, 1] <- AR.struc_gdp_log$ahat
+#   a_coef_matrix[i, 2] <- AR.struc_pop_log$ahat
+#   a_coef_matrix[i, 3] <- AR.struc_ltrate$ahat
+#   a_coef_matrix[i, 4] <- AR.struc_infl$ahat
+#   a_coef_matrix[i, 5] <- AR.struc_errors$ahat
+#   
+#   innovation_var_matrix[i, 1] <- AR.struc_gdp_log$vareta
+#   innovation_var_matrix[i, 2] <- AR.struc_pop_log$vareta
+#   innovation_var_matrix[i, 3] <- AR.struc_ltrate$vareta
+#   innovation_var_matrix[i, 4] <- AR.struc_infl$vareta
+#   innovation_var_matrix[i, 5] <- AR.struc_errors$vareta
+#   
+#   sigma_hat_i     <- sqrt(AR.struc_errors$lrv)
+#   sigmahat_vector <- c(sigmahat_vector, sigma_hat_i)
+# }
+# 
+# a_coef_vector         <- colSums(a_coef_matrix)/length(countries)
+# innovation_var_vector <- colSums(innovation_var_matrix)/length(countries)
+# 
+# a_coef_matrix         <- rbind(a_coef_matrix, mean = a_coef_vector)
+# innovation_var_matrix <- rbind(innovation_var_matrix, mean = innovation_var_vector)
+# 
+# 
+# addtorow     <- list()
+# addtorow$pos <- list(0)
+# addtorow$command <- c("Country & GDP & Population & Long-term rate & Inflation & Error process\\\\\n") 
+# print.xtable(xtable(a_coef_matrix, digits = c(3), align = "cccccc"),
+#              type = "latex", file = "output/revision/a_coefficients.tex",
+#              add.to.row = addtorow, include.colnames = FALSE)
+# 
+# addtorow     <- list()
+# addtorow$pos <- list(0)
+# addtorow$command <- c("Country & GDP & Population & Long-term rate & Inflation & Error process\\\\\n") 
+# print.xtable(xtable(sqrt(innovation_var_matrix), digits = c(3), align = "cccccc"),
+#              type = "latex", file = "output/revision/innovation_sds.tex",
+#              add.to.row = addtorow, include.colnames = FALSE)
 
 ##############################
 #Defining necessary constants#
@@ -126,10 +126,10 @@ different_b     <- c(0) #Zero is for calculating the size
 # different_b     <- c(0, 0.75, 1.00, 1.25) #Zero is for calculating the size
 
 #For the covariate process
-beta        <- c(1, 1, 1, 1)
-# a_x_vec     <- c(0.5, 0.5, 0.5, 0.5)
-# sigma_x_vec <- c(1, 1, 1, 1)
-a_x_vec     <- unname(a_coef_vector[1:4])
+beta        <- c(1, 1, 1)
+a_coef_vec  <- c(0.5, 0.5, 0.5)
+innovation_var_vector <- c(1, 1, 1, 1)
+a_x_vec     <- unname(a_coef_vector)
 sigma_x_vec <- unname(sqrt(innovation_var_vector[1:4]))
 
 #For the error process

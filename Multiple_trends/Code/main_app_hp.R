@@ -2,7 +2,7 @@ rm(list=ls())
 
 library(haven)
 library(tidyr)
-library(multiscale)
+library(MSinference)
 library(dplyr)
 library(zoo)
 
