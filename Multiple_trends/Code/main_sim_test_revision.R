@@ -118,25 +118,24 @@ options(xtable.timestamp = "")
 n_rep    <- 1000 #number of simulations for calculating size and power
 sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
 
+n_ts <- 15
+
 different_T     <- c(100, 250, 500) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
 different_b     <- c(0) #Zero is for calculating the size
 
-# different_T     <- c(100, 250, 500) #Different lengths of time series
 # different_b     <- c(0, 0.75, 1.00, 1.25) #Zero is for calculating the size
 
 #For the covariate process
 beta        <- c(1, 1, 1)
-a_coef_vec  <- c(0.5, 0.5, 0.5)
-innovation_var_vector <- c(1, 1, 1, 1)
-a_x_vec     <- unname(a_coef_vector)
-sigma_x_vec <- unname(sqrt(innovation_var_vector[1:4]))
+a_x_vec     <- c(0.5, 0.5, 0.5)
+phi         <- 0.1
 
 #For the error process
-# a     <- 0.25
-# sigma <- 0.5
-a     <- unname(a_coef_vector[5])
-sigma <- unname(sqrt(innovation_var_vector[5]))
+a <- 0.25
+
+#For the fixed effects
+rho <- 0.1 
 
 #Parameters for the estimation of long-run-variance
 q <- 15 
@@ -166,23 +165,19 @@ for (t_len in different_T){
   k <- match(t_len, different_T)
 
   #Constructing the grid according to the application
-  u_grid <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
+  u_grid <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
   h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
   h_grid <- h_grid[h_grid > log(t_len) / t_len]
   grid   <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
   
-  # u_grid <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
-  # h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
-  # h_grid <- h_grid[h_grid > log(t_len) / t_len]
-  # grid   <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
-  
+
   #Calculating the Gaussian quantiles in parallel
   tic()
   cl <- makePSOCKcluster(numCores)
   registerDoParallel(cl)
-  foreach (val = 1:sim_runs, .combine = "cbind") %dopar% { 
-    repl2(rep = val, t_len_ = t_len, n_ts_ = n_ts, grid_ = grid, sigma_ = 1,
-         gaussian_sim = TRUE)
+  foreach (val = 1:sim_runs, .combine = "cbind") %dopar% {
+    repl_revision2(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
+                               gaussian_sim = TRUE)
     # Loop one-by-one using foreach
   } -> simulated_pairwise_gaussian
   stopCluster(cl)
@@ -209,10 +204,9 @@ for (t_len in different_T){
     cl <- makePSOCKcluster(numCores)
     registerDoParallel(cl)
     foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
-      repl_revision(rep = val, t_len_ = t_len, n_ts_ = n_ts, grid_ = grid,
-                    a_ = a, sigma_ = sigma, beta_ = beta, a_x_vec_ = a_x_vec,
-                    sigma_x_vec_ = sigma_x_vec, m_matrix_ = m_matrix, q_ = q,
-                    r_ = r)
+      repl_revision2(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
+                     a_ = a, beta_ = beta, a_x_vec = a_x_vec, phi_ = phi,
+                     rho_ = rho, m_matrix_ = m_matrix, q_ = q, r_ = r)
       # Loop one-by-one using foreach
     } -> simulated_pairwise_statistics
     stopCluster(cl)
@@ -220,35 +214,6 @@ for (t_len in different_T){
         
     simulated_statistic <- apply(simulated_pairwise_statistics[1:(n_ts * n_ts), ], 2, max)
     
-    beta_gdp    <- matrix(NA, ncol = n_ts, nrow = n_rep)
-    beta_pop    <- matrix(NA, ncol = n_ts, nrow = n_rep)
-    beta_ltrate <- matrix(NA, ncol = n_ts, nrow = n_rep)
-    beta_infl   <- matrix(NA, ncol = n_ts, nrow = n_rep)
-    colnames(beta_gdp) <- countries
-    colnames(beta_pop) <- countries
-    colnames(beta_ltrate) <- countries
-    colnames(beta_infl) <- countries
-    for (j in 1:n_rep){
-      beta_matrix <- matrix(simulated_pairwise_statistics[((n_ts * n_ts) + 1):nrow(simulated_pairwise_statistics), j],
-                            nrow = 4, ncol = n_ts)
-      beta_gdp[j, ]    <- beta_matrix[1, ]
-      beta_pop[j, ]    <- beta_matrix[2, ]
-      beta_ltrate[j, ] <- beta_matrix[3, ]
-      beta_infl[j, ]   <- beta_matrix[4, ]
-    }
-    plot_histogram(pdfname = paste0("output/revision/beta_GDP_T_", t_len, ".pdf"),
-                   data_matrix = beta_gdp, n_ts = n_ts, names = countries,
-                   star_value = beta[1])
-    plot_histogram(pdfname = paste0("output/revision/beta_pop_T_", t_len, ".pdf"),
-                   data_matrix = beta_pop, n_ts = n_ts, names = countries,
-                   star_value = beta[2])
-    plot_histogram(pdfname = paste0("output/revision/beta_ltrate_T_", t_len, ".pdf"),
-                   data_matrix = beta_ltrate, n_ts = n_ts, names = countries,
-                   star_value = beta[3]) 
-    plot_histogram(pdfname = paste0("output/revision/beta_infl_T_", t_len, ".pdf"),
-                   data_matrix = beta_infl, n_ts = n_ts, names = countries,
-                   star_value = beta[4]) 
-        
     size_and_power_vec <- c()
     for (alpha in different_alpha){
       if (sum(probs == (1 - alpha)) == 0)

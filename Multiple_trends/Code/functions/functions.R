@@ -461,17 +461,132 @@ repl2 <- function(rep, t_len_, n_ts_, grid_, gaussian_sim = FALSE,
   return(results)
 }
 
-#Function that simulates 4 covariates as AR(1) with the given
-#coefficients (a_x_vec_ and sigma_x_vec_),
+# #Function that simulates 4 covariates as AR(1) with the given
+# #coefficients (a_x_vec_ and sigma_x_vec_),
+# #the error terms as AR(1) also with the given coefficient a_ and sigma_,
+# #the time series as y = beta_ %*% covariates + m_matrix_ + errors,
+# #estimates the parameters, and then computes the test statistics
+# repl_revision <- function(rep, t_len_, n_ts_, grid_, gaussian_sim = FALSE,
+#                           a_ = 0, sigma_ = 1, beta_ = NULL,
+#                           a_x_vec_ = c(0, 0, 0, 0),
+#                           sigma_x_vec_ = c(1, 1, 1, 1),
+#                           rho_ = 0, 
+#                           m_matrix_ = NULL, q_ = 25, r_ = 10){
+# 
+#   library(MSinference)
+#   library(dplyr)
+#   
+#   if (gaussian_sim){
+#     z_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+#     z_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+#     sigma_vector  <- rep(1, n_ts_)
+#     
+#     for (i in 1:n_ts_){
+#       z_matrix[, i]      <- rnorm(t_len_, 0, sigma_)
+#       z_augm_matrix[, i] <- z_matrix[, i] - mean(z_matrix[, i])
+#     }
+#     
+#     psi <- compute_statistics(data = z_augm_matrix,
+#                               sigma_vec = sigma_vector,
+#                               n_ts = n_ts_, grid = grid_)
+#   } else {
+#     y_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+#     y_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+#     error_matrix  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+#     
+#     beta_hat_matrix <- matrix(NA, nrow = 4, ncol = n_ts_)
+#     
+#     library(mvtnorm)
+#     big_sigma_matrix       <- matrix(rho_, nrow = n_ts_, ncol = n_ts_)    
+#     diag(big_sigma_matrix) <- 1
+#     alpha_vec <- rmvnorm(1, mean = rep(0, n_ts_), sigma = big_sigma_matrix)
+#     
+#     sigmahat_vector <- c()
+#     
+#     if (!is.null(beta_)){
+#       x_matrix_1 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+#       x_matrix_2 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+#       x_matrix_3 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+#       x_matrix_4 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+#       for (i in 1:n_ts_){
+#         error_matrix[, i] <- arima.sim(model = list(ar = a_),
+#                                        innov = rnorm(t_len_, 0, sigma_),
+#                                        n = t_len_)
+#         x_matrix_1[, i]   <- arima.sim(model = list(ar = a_x_vec_[1]),
+#                                       innov = rnorm(t_len_, 0, sigma_x_vec_[1]),
+#                                       n = t_len_)
+#         x_matrix_2[, i]   <- arima.sim(model = list(ar = a_x_vec_[2]),
+#                                        innov = rnorm(t_len_, 0, sigma_x_vec_[2]),
+#                                        n = t_len_)
+#         x_matrix_3[, i]   <- arima.sim(model = list(ar = a_x_vec_[3]),
+#                                        innov = rnorm(t_len_, 0, sigma_x_vec_[3]),
+#                                        n = t_len_)
+#         x_matrix_4[, i]   <- arima.sim(model = list(ar = a_x_vec_[4]),
+#                                        innov = rnorm(t_len_, 0, sigma_x_vec_[4]),
+#                                        n = t_len_)
+#         x_matrix          <- cbind(x_matrix_1[, i], x_matrix_2[, i], x_matrix_3[, i], x_matrix_4[, i])
+#         
+#         y_matrix[, i]     <- alpha_vec[i] + m_matrix_[, i] + beta_ %*% t(x_matrix) + error_matrix[, i]
+#         
+#         #First differences
+#         x_diff_1  <- x_matrix_1[, i] - dplyr::lag(x_matrix_1[, i], n = 1, default = NA)
+#         x_diff_2  <- x_matrix_2[, i] - dplyr::lag(x_matrix_2[, i], n = 1, default = NA)
+#         x_diff_3  <- x_matrix_3[, i] - dplyr::lag(x_matrix_3[, i], n = 1, default = NA)
+#         x_diff_4  <- x_matrix_4[, i] - dplyr::lag(x_matrix_4[, i], n = 1, default = NA)
+#         y_diff    <- y_matrix[, i] - dplyr::lag(y_matrix[, i], n = 1, default = NA)
+#         
+#         #Estimating beta
+#         x_diff_tmp <- as.matrix(cbind(x_diff_1, x_diff_2, x_diff_3, x_diff_4))[-1, ]
+#         y_diff_tmp <- as.matrix(y_diff)[-1, ]
+#         
+#         beta_hat_tmp         <- solve(t(x_diff_tmp) %*% x_diff_tmp) %*% t(x_diff_tmp) %*% y_diff_tmp
+#         beta_hat_matrix[, i] <- beta_hat_tmp
+#         alpha_hat_tmp        <- mean(y_matrix[, i] - x_matrix %*% as.vector(beta_hat_tmp))
+#         
+#         y_augm_matrix[, i] <- y_matrix[, i] - x_matrix %*% as.vector(beta_hat_tmp) - alpha_hat_tmp
+#         AR.struc           <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
+#                                            r_bar = r_, p = 1)
+#         sigma_hat_i        <- sqrt(AR.struc$lrv)
+#         sigmahat_vector    <- c(sigmahat_vector, sigma_hat_i) 
+#       }
+#     } else {
+#       for (i in 1:n_ts_){
+#         error_matrix[, i]  <- arima.sim(model = list(ar = a_),
+#                                         innov = rnorm(t_len_, 0, sigma_),
+#                                         n = t_len_)
+#         y_matrix[, i]      <- alpha_vec[i] + m_matrix_[, i] + error_matrix[, i]
+#         
+#         #Estimating alpha_i
+#         alpha_hat_tmp      <- mean(y_matrix[, i])
+#         
+#         y_augm_matrix[, i] <- y_matrix[, i] - alpha_hat_tmp
+#         AR.struc           <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
+#                                            r_bar = r_, p = 1)
+#         sigma_hat_i        <- sqrt(AR.struc$lrv)
+#         sigmahat_vector    <- c(sigmahat_vector, sigma_hat_i)   
+#       }     
+#     }
+#     psi <- compute_statistics(data = y_augm_matrix,
+#                               sigma_vec = sigmahat_vector,
+#                               n_ts = n_ts_, grid = grid_)    
+#   }
+#   results <- c(as.vector(psi$stat_pairwise), as.vector(beta_hat_matrix))
+#   return(results)
+# }
+
+#Function that simulates 3 covariates as VAR(3) process with the given
+#coefficients (a_x_mat_ and sigma_x_mat_),
 #the error terms as AR(1) also with the given coefficient a_ and sigma_,
-#the time series as y = beta_ %*% covariates + m_matrix_ + errors,
+#the fixed effect term alpha_ as a normally distributed random vector,
+#N(0, c_ * Sigma_a_mat_), the time series as
+#y = alpha_ + beta_ %*% covariates + m_matrix_ + errors,
 #estimates the parameters, and then computes the test statistics
-repl_revision <- function(rep, t_len_, n_ts_, grid_, gaussian_sim = FALSE,
-                          a_ = 0, sigma_ = 1, beta_ = NULL,
-                          a_x_vec_ = c(0, 0, 0, 0),
-                          sigma_x_vec_ = c(1, 1, 1, 1),
-                          rho_ = 0, 
-                          m_matrix_ = NULL, q_ = 25, r_ = 10){
+repl_revision2 <- function(rep_, n_ts_, t_len_, grid_, a_ = 0,
+                           beta_ = NULL,
+                           a_x_vec_ = c(0, 0, 0), phi_ = 0,
+                           rho_ = 0, m_matrix_ = NULL,
+                           q_ = 25, r_ = 10,
+                           gaussian_sim = FALSE){
 
   library(MSinference)
   library(dplyr)
@@ -480,63 +595,65 @@ repl_revision <- function(rep, t_len_, n_ts_, grid_, gaussian_sim = FALSE,
     z_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
     z_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
     sigma_vector  <- rep(1, n_ts_)
-    
+
     for (i in 1:n_ts_){
-      z_matrix[, i]      <- rnorm(t_len_, 0, sigma_)
+      z_matrix[, i]      <- rnorm(t_len_, 0, 1)
       z_augm_matrix[, i] <- z_matrix[, i] - mean(z_matrix[, i])
     }
-    
+
     psi <- compute_statistics(data = z_augm_matrix,
                               sigma_vec = sigma_vector,
                               n_ts = n_ts_, grid = grid_)
+    results <- c(as.vector(psi$stat_pairwise))
   } else {
+    library(mvtnorm)
     y_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
     y_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
     error_matrix  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    
-    beta_hat_matrix <- matrix(NA, nrow = 4, ncol = n_ts_)
-    
-    library(mvtnorm)
-    big_sigma_matrix       <- matrix(rho_, nrow = n_ts_, ncol = n_ts_)    
+
+    beta_hat_matrix <- matrix(NA, nrow = 3, ncol = n_ts_)
+
+    big_sigma_matrix       <- matrix(rho_, nrow = n_ts_, ncol = n_ts_)
     diag(big_sigma_matrix) <- 1
-    alpha_vec <- rmvnorm(1, mean = rep(0, n_ts_), sigma = big_sigma_matrix)
-    
+    alpha_vec              <- rmvnorm(1, mean = rep(0, n_ts_), sigma = big_sigma_matrix)
+
     sigmahat_vector <- c()
-    
+
     if (!is.null(beta_)){
       x_matrix_1 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
       x_matrix_2 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
       x_matrix_3 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-      x_matrix_4 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      
+      phi_matrix <- matrix(phi_, nrow = 3, ncol = 3)
+      diag(phi_matrix) <- 1
+      
       for (i in 1:n_ts_){
         error_matrix[, i] <- arima.sim(model = list(ar = a_),
-                                       innov = rnorm(t_len_, 0, sigma_),
+                                       innov = rnorm(t_len_, 0, 1),
                                        n = t_len_)
-        x_matrix_1[, i]   <- arima.sim(model = list(ar = a_x_vec_[1]),
-                                      innov = rnorm(t_len_, 0, sigma_x_vec_[1]),
-                                      n = t_len_)
-        x_matrix_2[, i]   <- arima.sim(model = list(ar = a_x_vec_[2]),
-                                       innov = rnorm(t_len_, 0, sigma_x_vec_[2]),
-                                       n = t_len_)
-        x_matrix_3[, i]   <- arima.sim(model = list(ar = a_x_vec_[3]),
-                                       innov = rnorm(t_len_, 0, sigma_x_vec_[3]),
-                                       n = t_len_)
-        x_matrix_4[, i]   <- arima.sim(model = list(ar = a_x_vec_[4]),
-                                       innov = rnorm(t_len_, 0, sigma_x_vec_[4]),
-                                       n = t_len_)
-        x_matrix          <- cbind(x_matrix_1[, i], x_matrix_2[, i], x_matrix_3[, i], x_matrix_4[, i])
         
-        y_matrix[, i]     <- alpha_vec[i] + m_matrix_[, i] + beta_ %*% t(x_matrix) + error_matrix[, i]
+        nu <- rmvnorm(t_len_, mean = rep(0, 3), sigma = phi_matrix)
+        
+        x_matrix_1[1, i]  <- nu[1, 1]
+        x_matrix_2[1, i]  <- nu[1, 2]
+        x_matrix_3[1, i]  <- nu[1, 3]
+        
+        for (t in 2:t_len_){
+          x_matrix_1[t, i] <- a_x_vec_[1] * x_matrix_1[t - 1, i] + nu[t - 1, 1] 
+          x_matrix_2[t, i] <- a_x_vec_[2] * x_matrix_2[t - 1, i] + nu[t - 1, 2]  
+          x_matrix_3[t, i] <- a_x_vec_[3] * x_matrix_3[t - 1, i] + nu[t - 1, 3]  
+        }
+        x_matrix <- cbind(x_matrix_1[, i], x_matrix_2[, i], x_matrix_3[, i])
+        y_matrix[, i] <- alpha_vec[i] + m_matrix_[, i] + beta_ %*% t(x_matrix) + error_matrix[, i]
         
         #First differences
         x_diff_1  <- x_matrix_1[, i] - dplyr::lag(x_matrix_1[, i], n = 1, default = NA)
         x_diff_2  <- x_matrix_2[, i] - dplyr::lag(x_matrix_2[, i], n = 1, default = NA)
         x_diff_3  <- x_matrix_3[, i] - dplyr::lag(x_matrix_3[, i], n = 1, default = NA)
-        x_diff_4  <- x_matrix_4[, i] - dplyr::lag(x_matrix_4[, i], n = 1, default = NA)
         y_diff    <- y_matrix[, i] - dplyr::lag(y_matrix[, i], n = 1, default = NA)
         
         #Estimating beta
-        x_diff_tmp <- as.matrix(cbind(x_diff_1, x_diff_2, x_diff_3, x_diff_4))[-1, ]
+        x_diff_tmp <- as.matrix(cbind(x_diff_1, x_diff_2, x_diff_3))[-1, ]
         y_diff_tmp <- as.matrix(y_diff)[-1, ]
         
         beta_hat_tmp         <- solve(t(x_diff_tmp) %*% x_diff_tmp) %*% t(x_diff_tmp) %*% y_diff_tmp
@@ -550,27 +667,35 @@ repl_revision <- function(rep, t_len_, n_ts_, grid_, gaussian_sim = FALSE,
         sigmahat_vector    <- c(sigmahat_vector, sigma_hat_i) 
       }
     } else {
+      x_matrix_1 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      x_matrix_2 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      x_matrix_3 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      
+      phi_matrix <- matrix(phi_, nrow = 3, ncol = 3)
+      diag(phi_matrix) <- 1
+      
       for (i in 1:n_ts_){
-        error_matrix[, i]  <- arima.sim(model = list(ar = a_),
-                                        innov = rnorm(t_len_, 0, sigma_),
-                                        n = t_len_)
-        y_matrix[, i]      <- alpha_vec[i] + m_matrix_[, i] + error_matrix[, i]
+        error_matrix[, i] <- arima.sim(model = list(ar = a_),
+                                       innov = rnorm(t_len_, 0, 1),
+                                       n = t_len_)
         
-        #Estimating alpha_i
-        alpha_hat_tmp      <- mean(y_matrix[, i])
+        y_matrix[, i] <- alpha_vec[i] + m_matrix_[, i] + error_matrix[, i]
+        
+        #First differences
+        alpha_hat_tmp        <- mean(y_matrix[, i])
         
         y_augm_matrix[, i] <- y_matrix[, i] - alpha_hat_tmp
         AR.struc           <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
                                            r_bar = r_, p = 1)
         sigma_hat_i        <- sqrt(AR.struc$lrv)
-        sigmahat_vector    <- c(sigmahat_vector, sigma_hat_i)   
+        sigmahat_vector    <- c(sigmahat_vector, sigma_hat_i) 
       }     
     }
     psi <- compute_statistics(data = y_augm_matrix,
                               sigma_vec = sigmahat_vector,
                               n_ts = n_ts_, grid = grid_)    
+    results <- c(as.vector(psi$stat_pairwise))
   }
-  results <- c(as.vector(psi$stat_pairwise), as.vector(beta_hat_matrix))
   return(results)
 }
 
