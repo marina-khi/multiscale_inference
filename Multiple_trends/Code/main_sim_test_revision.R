@@ -17,7 +17,7 @@ options(xtable.timestamp = "")
 ##############################
 #Defining necessary constants#
 ##############################
-set.seed(12321)
+set.seed(1234321)
 
 n_ts <- 15 #Number of time series
 
@@ -26,7 +26,7 @@ sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
 
 different_T     <- c(100, 250, 500) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
-different_b     <- c(0, 0.5, 1) #Zero is for calculating the size
+different_b     <- c(0, 0.25, 0.5) #Zero is for calculating the size
 
 #For the covariate process
 beta        <- c(1, 1, 1) 

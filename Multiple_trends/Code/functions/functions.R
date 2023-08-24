@@ -82,8 +82,8 @@ local_linear_smoothing <- function(x_, data_p, grid_p, bw){
 }
 #Simulating a bump function
 bump  <- function(u){
-  u.lower <- 0.25
-  u.upper <- 0.75
+  u.lower <- 0.3
+  u.upper <- 0.7
   arg <- (u - 0.5)/(u.upper - 0.5)
   return(as.double(u >= u.lower & u <= u.upper) * (1 - arg^2)^2)
 }
