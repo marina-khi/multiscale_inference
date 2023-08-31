@@ -12,7 +12,9 @@
 \usepackage[]{graphicx}
 \usepackage{graphics}
 \usepackage{hyperref}
+\usepackage[bb=dsserif]{mathalpha}
 \usepackage{bm}
+\usepackage{subcaption}
 
 \newcommand{\ex}{\mathbb{E}}        % expectation
 \newcommand{\bfbeta}{\bm{\beta}} %bold beta coefficent
@@ -108,13 +110,13 @@ In the simulation study, we need to take into account (i), (iii) and (iv). The p
   
 \item We include $3$ covariates and model them by a very simple VAR(3) process:
 \[ \underbrace{\begin{pmatrix} X_{it,1} \\ X_{it,2} \\ X_{it,3} \end{pmatrix}}_{=: \boldsymbol{X}_{it}} = \begin{pmatrix} a_1 & 0 & 0 \\ 0 & a_2 & 0 \\ 0 & 0 & a_3 \end{pmatrix} \begin{pmatrix} X_{it-1,1} \\ X_{it-1,2} \\ X_{it-1,3} \end{pmatrix} + \underbrace{\begin{pmatrix} \nu_{it,1} \\ \nu_{it,2} \\ \nu_{it,3} \end{pmatrix}}_{=: \boldsymbol{\nu}_{it}}. \] 
-We could choose $a_1 = a_2 = a_3 = 0.5$ (or 0.25) or we could have one process with a negative coefficient (e.g.\ $a_1=a_3=0.5$ and $a_2 = -0.5$). The innovations $\boldsymbol{\nu}_{it}$ are drawn i.i.d.\ from a multivariate normal $N(0,\Phi)$ with
+We choose $a_1 = a_2 = a_3 = 0.5$. The innovations $\boldsymbol{\nu}_{it}$ are drawn i.i.d.\ from a multivariate normal $N(0,\Phi)$ with
 \[ \Phi = \begin{pmatrix} 1 & \varphi & \varphi \\ \varphi & 1 & \varphi \\ \varphi & \varphi & 1 \end{pmatrix}, \]
-where $\varphi=0.1$, $\varphi=0.25$ or something similar. (If we want to make life even simpler, we could set $\varphi = 0$ and simulate 3 independent covariate processes. We could of course also use 4 instead of 3 covariates if you have already coded up things in this way, but I guess 3 is large enough.) 
+where $\varphi=0, 0.1, 0.25$ and setting $\varphi = 0$ results in simulating 3 independent covariate processes.
 
-\item I guess we can simply set $\boldsymbol{\beta}_i = (\beta_{i,1},\beta_{i,2},\beta_{i,3}) = (1,1,1)$ for all $i$.
+\item We set $\boldsymbol{\beta}_i = (\beta_{i,1},\beta_{i,2},\beta_{i,3}) = (1,1,1)$ for all $i$.
 
-\item As before, we assume that the errors $\varepsilon_{it}$ follow the AR(1) model $\varepsilon_{it} = a \varepsilon_{i, t-1} + \eta_{it}$, where $a=0.25$ and the innovations $\eta_{it}$ are i.i.d.\ standard normal. 
+\item As before, we assume that the errors $\varepsilon_{it}$ follow the AR(1) model $\varepsilon_{it} = a \varepsilon_{i(t-1)} + \eta_{it}$, where $a=0.25$ and the innovations $\eta_{it}$ are i.i.d.\ normal with zero mean $E[\eta_{it}]=0$ and variance $E[\eta_{it}^2]=0.25^2$ {\color{red}(setting higher variance results in lower signal-to-noise ratio and we are not hitting the size level)}. 
 
 \item We let $\alpha = (\alpha_1,\ldots,\alpha_n)$ be a normally distributed random vector. In particular, $\alpha \sim N(0,c \Sigma)$ with
 \[ \Sigma =
@@ -125,17 +127,93 @@ where $\varphi=0.1$, $\varphi=0.25$ or something similar. (If we want to make li
 \rho   & \cdots & \rho   & 1
 \end{pmatrix},
 \]
-where $\rho = 0.1$ (or a bit larger, e.g., $\rho = 0.25$) gives the correlation across time series $i$. To start with, we can set $c=1$ and then adjust it if needed.
+where $\rho = 0.1, 0.25$ {\color{red}(larger values do not seem to affect the size that much)} gives the correlation across time series $i$. To start with, we set $c=1$ and then adjust it if needed.
 
-\item To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ as before. To produce data under the alternative, we use some kind of bump function rather than a linear function as suggested by you. For the cluster analysis, it is presumably also better to use bump functions rather than linear maps. For example, we could use 3 groups with (scaled versions of) the functions $g_1$, $g_2$ and $g_4$ from Figure 2 in Vogt \& Linton (2020, Multiscale clustering of nonparametric regression curves).
+\item To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ as before. To produce data under the alternative, {\color{red}we use the bump functions $m_1(u) = b \cdot \mathbb{1}(u \in [0.3, 0.7]) \cdot \big(1 - \big\{\frac{u - 0.5}{0.2}\big\}^2\big)^2$ for $b = 0.25, 0.5, 1$ (depicted in Figure \ref{fig:bump_function}) and $m_i = 0$ for $i \neq 1$}. For the cluster analysis, it is presumably also better to use bump functions rather than linear maps. For example, we could use 3 groups with (scaled versions of) the functions $g_1$, $g_2$ and $g_4$ from Figure 2 in Vogt \& Linton (2020, Multiscale clustering of nonparametric regression curves).
+
+\begin{figure}[t!]
+\includegraphics[width=\textwidth]{output/bump_function.pdf}
+\caption{In black, the bump function $m_1(t/T)$ is plotted for different heights of the bump: $b = 0, 0.25, 0.5, 1$ ($b= 0$ corresponds to the data under the null $H_0$). In red, we depict the bump function plus the error term, $m_1(t/T) + \varepsilon_{it}$.}\label{fig:bump_function}
+\end{figure}
 
 \item We take the grid $\mathcal{G}_T$ to be the same as before: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{5t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{T}} \text{ for some } t \in \mathbb{N} \big\}$.
-  
+
 \end{itemize}
+
+{\color{red} The results of the simulation study are presented in Tables \ref{tab:size1} and \ref{tab:power1} for $\phi = 0.1$ and $\rho = 0.1$ and in Tables \ref{tab:size2} and \ref{tab:power2} for $\phi = 0.25$ and $\rho = 0.25$.}
+
+\begin{table}[t]
+\footnotesize{
+\begin{center}
+\caption{Size of the multiscale test for $\phi = 0.1$ and $\rho = 0.1$ for different sample sizes $T$ and nominal sizes $\alpha$.}
+\label{tab:size1}
+\renewcommand{\arraystretch}{1.2}
+\input{output/15_ts_10_10_small_error_var_size}
+\end{center}}
+\footnotesize{
+\begin{center}
+\caption{Power of the multiscale test for $\phi = 0.1$ and $\rho = 0.1$ for different sample sizes $T$ and nominal sizes $\alpha$. Each panel corresponds to a different height parameter $b$ of the bump function.}\label{tab:power1}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 0.25$}\label{tab:power1_025}
+\renewcommand{\arraystretch}{1.2}
+\input{output/15_ts_10_10_small_error_var_power_b_25}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 0.50$}\label{tab:power1_050}
+\renewcommand{\arraystretch}{1.2}
+\input{output/15_ts_10_10_small_error_var_power_b_50}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 1.00$}\label{tab:power1_100}
+\renewcommand{\arraystretch}{1.2}
+\input{output/15_ts_10_10_small_error_var_power_b_100}
+\end{subtable}
+\end{center}}
+\vspace{-0.4cm}
+\end{table}
+
+\addtocounter{table}{-1} 
+\begin{table}[t]
+\footnotesize{
+\begin{center}
+\caption{Size of the multiscale test for $\phi = 0.25$ and $\rho = 0.25$ for different sample sizes $T$ and nominal sizes $\alpha$.}
+\label{tab:size2}
+\renewcommand{\arraystretch}{1.2}
+\input{output/15_ts_25_25_small_error_var_size}
+\end{center}}
+\footnotesize{
+\begin{center}
+\caption{Power of the multiscale test for $\phi = 0.25$ and $\rho = 0.25$ for different sample sizes $T$ and nominal sizes $\alpha$. Each panel corresponds to a different height parameter $b$ of the bump function.}\label{tab:power2}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 0.25$}\label{tab:power2_025}
+\renewcommand{\arraystretch}{1.2}
+\input{output/15_ts_25_25_small_error_var_power_b_25}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 0.50$}\label{tab:power2_050}
+\renewcommand{\arraystretch}{1.2}
+\input{output/15_ts_25_25_small_error_var_power_b_50}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+%\caption{$b = 1.00$}\label{tab:power2_100}
+%\renewcommand{\arraystretch}{1.2}
+%\input{output/15_ts_10_10_small_error_var_power_b_100}
+\end{subtable}
+\end{center}}
+\vspace{-0.4cm}
+\end{table}
+
+
 
 \item[(iii)] As suggested by you, we compare with the Sizer method of Park et al.\ (2009). For the comparison, we could consider the design proposed in (i) without covariates and fixed effects (as these are not part of the model in Park et al.). I'd suggest to add the comparison to the supplement rather than to the main body of the text. 
 
-\item[(iv)] We could re-run the simulations from (i) with a much smaller grid. This hopefully allows us to deal not only with $n=15$ but also with larger values of $n$ (say $n=25$, $n=50$ or even $n=100$). As a suggestion, we may take the grid $\mathcal{G}_T$ to be a dyadic scheme (as in Wavelet analysis) with scales in the set 
+\item[(iv)] We rerun the simulations from (i) with a much smaller grid. This allows us to deal not only with $n=15$ but also with larger values of $n$: $n=25, 50, 100$. Specifically, we take the grid $\mathcal{G}_T$ to be a dyadic scheme (as in Wavelet analysis) with scales in the set 
 \[ \mathcal{H}_T = \big\{ h = 2^k h_{\min} \text{ for } k=0,\ldots,K \big\}, \]  
 where 
 \[ h_{\min} = \frac{\lceil \log T \rceil}{T} \]
@@ -145,9 +223,147 @@ and
 \begin{align*}
 \mathcal{G}_T = \big\{ (u,h) \subseteq [0,1]: & \ (u,h) = ((2s+1) h, h) \text{ for } s = 0,\ldots,\Big\lfloor \frac{h^ {-1}-1}{2} \Big\rfloor \\ & \ \text{and } h \in \mathcal{H}_T \big\}.
 \end{align*}
-I think it would be enough to re-run the simulations with $T=100$ and different values of $n$, say, $n=15$, $n=25$, $n=50$ (and maybe even $n=100$). With $T=100$ and $n=50$, we would get
-\[ \# \Big( \mathcal{G}_T \cup \{(i,j): 1 \le i < j \le n \} \Big) \approx 22000 \]
-(provided that I did not make any errors in my calculation \dots). Is this still feasible for the simulations???
+{\color{red} We rerun the simulations for the case $\phi = 0.1$ and $\rho = 0.1$ with $T=100, 250, 500$ and different values of $n$: $n=15, 25, 50, 100$. (This is very feasible, even with $n = 100$ and $T = 500$ the running time is around 45 minutes for all size and power calculations). The results are presented in Tables \ref{tab:size:dyadic:15} - \ref{tab:power:dyadic:100}.}
+
+\addtocounter{table}{-1} 
+\begin{table}[t]
+\footnotesize{
+\begin{center}
+\caption{Size of the multiscale test for $n = 15$ for different sample sizes $T$ and nominal sizes $\alpha$ ($\phi = 0.1$ and $\rho = 0.1$).}
+\label{tab:size:dyadic:15}
+\renewcommand{\arraystretch}{1.2}
+\input{output/15_ts_10_10_dyadic_grid_size}
+\end{center}}
+\footnotesize{
+\begin{center}
+\caption{Power of the multiscale test for $n = 15$ for different sample sizes $T$ and nominal sizes $\alpha$  ($\phi = 0.1$ and $\rho = 0.1$). Each panel corresponds to a different height parameter $b$ of the bump function.}\label{tab:power:dyadic:15}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 0.25$}%\label{tab:power1_025}
+\renewcommand{\arraystretch}{1.2}
+\input{output/15_ts_10_10_dyadic_grid_power_b_25}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 0.50$}%\label{tab:power1_050}
+\renewcommand{\arraystretch}{1.2}
+\input{output/15_ts_10_10_dyadic_grid_power_b_50}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 1.00$}%\label{tab:power1_100}
+\renewcommand{\arraystretch}{1.2}
+\input{output/15_ts_10_10_dyadic_grid_power_b_100}
+\end{subtable}
+\end{center}}
+\vspace{-0.4cm}
+\end{table}
+
+\addtocounter{table}{-1} 
+\begin{table}[h!]
+\footnotesize{
+\begin{center}
+\caption{Size of the multiscale test for $n = 25$ for different sample sizes $T$ and nominal sizes $\alpha$ ($\phi = 0.1$ and $\rho = 0.1$).}
+\label{tab:size:dyadic:25}
+\renewcommand{\arraystretch}{1.2}
+\input{output/25_ts_10_10_dyadic_grid_size}
+\end{center}}
+\footnotesize{
+\begin{center}
+\caption{Power of the multiscale test for $n = 25$ for different sample sizes $T$ and nominal sizes $\alpha$  ($\phi = 0.1$ and $\rho = 0.1$). Each panel corresponds to a different height parameter $b$ of the bump function.}\label{tab:power:dyadic:25}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 0.25$}%\label{tab:power1_025}
+\renewcommand{\arraystretch}{1.2}
+\input{output/25_ts_10_10_dyadic_grid_power_b_25}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 0.50$}%\label{tab:power1_050}
+\renewcommand{\arraystretch}{1.2}
+\input{output/25_ts_10_10_dyadic_grid_power_b_50}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 1.00$}%\label{tab:power1_100}
+\renewcommand{\arraystretch}{1.2}
+\input{output/25_ts_10_10_dyadic_grid_power_b_100}
+\end{subtable}
+\end{center}}
+\vspace{-0.4cm}
+\end{table}
+
+\addtocounter{table}{-1} 
+\begin{table}[h]
+\footnotesize{
+\begin{center}
+\caption{Size of the multiscale test for $n = 50$ for different sample sizes $T$ and nominal sizes $\alpha$ ($\phi = 0.1$ and $\rho = 0.1$).}
+\label{tab:size:dyadic:50}
+\renewcommand{\arraystretch}{1.2}
+\input{output/50_ts_10_10_dyadic_grid_size}
+\end{center}}
+\footnotesize{
+\begin{center}
+\caption{Power of the multiscale test for $n = 50$ for different sample sizes $T$ and nominal sizes $\alpha$  ($\phi = 0.1$ and $\rho = 0.1$). Each panel corresponds to a different height parameter $b$ of the bump function.}\label{tab:power:dyadic:50}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 0.25$}%\label{tab:power1_025}
+\renewcommand{\arraystretch}{1.2}
+\input{output/50_ts_10_10_dyadic_grid_power_b_25}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 0.50$}%\label{tab:power1_050}
+\renewcommand{\arraystretch}{1.2}
+\input{output/50_ts_10_10_dyadic_grid_power_b_50}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 1.00$}%\label{tab:power1_100}
+\renewcommand{\arraystretch}{1.2}
+\input{output/50_ts_10_10_dyadic_grid_power_b_100}
+\end{subtable}
+\end{center}}
+\vspace{-0.4cm}
+\end{table}
+
+\addtocounter{table}{-1} 
+\begin{table}[h!]
+\footnotesize{
+\begin{center}
+\caption{Size of the multiscale test for $n = 100$ for different sample sizes $T$ and nominal sizes $\alpha$ ($\phi = 0.1$ and $\rho = 0.1$).}
+\label{tab:size:dyadic:100}
+\renewcommand{\arraystretch}{1.2}
+\input{output/100_ts_10_10_dyadic_grid_size}
+\end{center}}
+\footnotesize{
+\begin{center}
+\caption{Power of the multiscale test for $n = 100$ for different sample sizes $T$ and nominal sizes $\alpha$  ($\phi = 0.1$ and $\rho = 0.1$). Each panel corresponds to a different height parameter $b$ of the bump function.}\label{tab:power:dyadic:100}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 0.25$}%\label{tab:power1_025}
+\renewcommand{\arraystretch}{1.2}
+\input{output/100_ts_10_10_dyadic_grid_power_b_25}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 0.50$}%\label{tab:power1_050}
+\renewcommand{\arraystretch}{1.2}
+\input{output/100_ts_10_10_dyadic_grid_power_b_50}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 1.00$}%\label{tab:power1_100}
+\renewcommand{\arraystretch}{1.2}
+\input{output/100_ts_10_10_dyadic_grid_power_b_100}
+\end{subtable}
+\end{center}}
+\vspace{-0.4cm}
+\end{table}
+
+%With $T=100$ and $n=50$, we would get
+%\[ \# \Big( \mathcal{G}_T \cup \{(i,j): 1 \le i < j \le n \} \Big) \approx 22000 \]
+%(provided that I did not make any errors in my calculation \dots). Is this still feasible for the simulations???
 %(The problem is that we consider all pairwise comparisons $(i,j)$. We could also cut down on this. One may also point out the following: spp there are different groups of time series (e.g. European and Asian countries). Then one may not be interested in comparing all of them but one may only compare the time series of different groups (e.g. European with Asian countries), which reduces the number of comparisons.) 
 
 %T <- 100
@@ -160,6 +376,7 @@ I think it would be enough to re-run the simulations with $T=100$ and different 
   
 \end{itemize}
 }
+
 
 
 \item \textit{Similarly, there are many related clustering methods, including (Bayesian and non-Bayesian) methods for clustering functional data. The proposed approach is reasonable, yet should be placed in a broader context and evaluated against appropriate competitors.}

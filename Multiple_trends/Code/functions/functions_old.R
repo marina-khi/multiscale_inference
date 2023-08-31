@@ -213,3 +213,32 @@
 #   results <- c(as.vector(psi$stat_pairwise), as.vector(beta_hat_matrix))
 #   return(results)
 # }
+# #Function that plots the graphs with histograms
+# plot_histogram <- function(pdfname, data_matrix, n_ts, names, star_value){
+#   smallest_value <- floor(min(data_matrix)*5)/5
+#   biggest_value  <- ceiling(max(data_matrix)*5)/5
+#   
+#   if (biggest_value - smallest_value <= 0.6){
+#     breaks_grid <- seq(smallest_value, biggest_value, by = 0.05)    
+#   } else {
+#     breaks_grid <- seq(smallest_value, biggest_value, by = 0.2)
+#   }
+#   breaks_grid[length(breaks_grid)] <- biggest_value
+#   
+#   pdf(pdfname, width = 6, height = 9, paper="special")
+#   par(mfrow = c(n_ts/2, 2))
+#   par(mar = c(3, 3, 0.5, 0)) #Margins for each plot
+#   par(oma = c(0.5, 0.5, 0.5, 0.2)) #Outer margins
+#   for (i in 1:n_ts){
+#     hist_ <- hist(data_matrix[, i], breaks = breaks_grid, plot = FALSE)
+#     highestCount <- max(hist_$counts)
+#     hist(data_matrix[, i], main = NULL, breaks = breaks_grid, freq=TRUE,
+#          xlim = c(smallest_value, biggest_value), ylim = c(0,highestCount),
+#          xlab = "", mgp = c(2, 0.5, 0), cex.lab = 1.1)
+#     mtext(side = 1, text = names[i], line = 1.5, cex = 0.6)
+#     segments(x0 = star_value, y0 = 0, x1 = star_value, y1 = highestCount,
+#              col = "red", lwd = 1.5)
+#   }
+#   dev.off()
+# }
+
