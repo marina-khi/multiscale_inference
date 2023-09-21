@@ -17,7 +17,7 @@ options(xtable.timestamp = "")
 ##############################
 #Defining necessary constants#
 ##############################
-set.seed(1234321)
+#set.seed(12321)
 
 n_ts <- 15 #Number of time series
 
@@ -26,23 +26,23 @@ sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
 
 different_T     <- c(100, 250, 500) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
-different_b     <- c(0, 0.25, 0.5, 1) #Zero is for calculating the size
+different_b     <- c(0) #Zero is for calculating the size
 
 #For the covariate process
 beta        <- c(1, 1, 1) 
 a_x_vec     <- c(0.5, 0.5, 0.5) #VAR(1) coefficients
-phi         <- 0.25              #dependence between the innovations
+phi         <- 0.1              #dependence between the innovations
 
 #For the error process
 a     <- 0.25
 sigma <- 0.25
 
 #For the fixed effects
-rho <- 0.25 #covariance between the fixed effects
+rho <- 0 #covariance between the fixed effects
 
 #Parameters for the estimation of long-run-variance
 q <- 25 
-r <- 10
+r <- 15
 
 #For parallel computation
 numCores  <- round(parallel::detectCores() * .70)
@@ -103,10 +103,7 @@ for (t_len in different_T){
     #m_matrix[, 1] <- (1:t_len - 0.5 * t_len) * (b / t_len)
 
     #trend function which is a bump
-
-    m_matrix[, 1] <- bump((1:t_len)/t_len) * b    
-    # int.plus  <- c(u.lower, 0.5)
-    # int.minus <- c(0.5, u.upper)
+    m_matrix[, 1] <- bump((1:t_len)/t_len) * b
     
     tic()
     cl <- makePSOCKcluster(numCores)
@@ -114,7 +111,8 @@ for (t_len in different_T){
     foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
       repl_revision2(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
                      a_ = a, sigma_ = sigma,
-                     beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
+                     #beta_ = beta,
+                     a_x_vec_ = a_x_vec, phi_ = phi,
                      rho_ = rho, m_matrix_ = m_matrix, q_ = q, r_ = r)
       # Loop one-by-one using foreach
     } -> simulated_pairwise_statistics
@@ -172,9 +170,9 @@ for (b in different_b){
   l   <- match(b, different_b)
   tmp <- as.matrix(size_and_power_array[, l, ])
   if (b == 0){
-    filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_small_error_var_size.tex")
+    filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_no_covariates_size.tex")
   } else {
-    filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_small_error_var_power_b_",
+    filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_no_covariates_power_b_",
                       b * 100, ".tex")
   }
   output_matrix(tmp, filename)

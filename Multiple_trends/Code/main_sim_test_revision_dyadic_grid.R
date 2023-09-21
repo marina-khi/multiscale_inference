@@ -172,9 +172,9 @@ for (n_ts in c(15, 25, 50, 100)){
     l   <- match(b, different_b)
     tmp <- as.matrix(size_and_power_array[, l, ])
     if (b == 0){
-      filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_dyadic_grid.tex")
+      filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_dyadic_grid_size.tex")
     } else {
-      filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_dyadic_grid_b_",
+      filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_dyadic_grid_power_b_",
                         b * 100, ".tex")
     }
     output_matrix(tmp, filename)
