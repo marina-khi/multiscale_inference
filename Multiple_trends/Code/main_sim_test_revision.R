@@ -21,24 +21,24 @@ options(xtable.timestamp = "")
 
 n_ts <- 15 #Number of time series
 
-n_rep    <- 1000 #number of simulations for calculating size and power
+n_rep    <- 5000 #number of simulations for calculating size and power
 sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
 
-different_T     <- c(100, 250, 500) #Different lengths of time series
+different_T     <- c(100, 200, 350, 500, 1000) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
 different_b     <- c(0) #Zero is for calculating the size
 
 #For the covariate process
-beta        <- c(1, 1, 1) 
-a_x_vec     <- c(0.5, 0.5, 0.5) #VAR(1) coefficients
-phi         <- 0.1              #dependence between the innovations
+#beta    <- c(1, 1, 1) 
+#a_x_vec <- c(0.25, 0.25, 0.25) #VAR(1) coefficients
+phi     <- 0              #dependence between the innovations
 
 #For the error process
 a     <- 0.25
 sigma <- 0.25
 
 #For the fixed effects
-rho <- 0 #covariance between the fixed effects
+rho <- 0.25 #covariance between the fixed effects
 
 #Parameters for the estimation of long-run-variance
 q <- 25 
@@ -68,18 +68,20 @@ for (t_len in different_T){
   k <- match(t_len, different_T)
 
   #Constructing the grid according to the application
-  u_grid <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
+  #u_grid <- seq(from = 5 / t_len, to = 1, length.out = 20)
+  #h_grid <- seq(from = 2 / 100, to = 1 / 4, by = 5 / 100)
+  
+  u_grid <- seq(from = 10 / t_len, to = 1, by = 10 / t_len)
   h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
   h_grid <- h_grid[h_grid > log(t_len) / t_len]
   grid   <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
-  
 
   #Calculating the Gaussian quantiles in parallel
   tic()
   cl <- makePSOCKcluster(numCores)
   registerDoParallel(cl)
   foreach (val = 1:sim_runs, .combine = "cbind") %dopar% {
-    repl_revision2(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
+    repl_revision(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
                    gaussian_sim = TRUE)
     # Loop one-by-one using foreach
   } -> simulated_pairwise_gaussian
@@ -98,21 +100,27 @@ for (t_len in different_T){
   quants <- as.vector(quantiles[2, ])
   
   for (b in different_b){
+    
     m_matrix      <- matrix(0, nrow = t_len, ncol = n_ts)
-    #Only the first trend function is non-zero:
-    #m_matrix[, 1] <- (1:t_len - 0.5 * t_len) * (b / t_len)
-
-    #trend function which is a bump
-    m_matrix[, 1] <- bump((1:t_len)/t_len) * b
+    if (b == 0) {
+      cat("SIZE SIMULATIONS\n")
+    } else {
+      cat("POWER SIMULATIONS WITH b = ", b, "\n")
+      
+      #Only the first trend function is non-zero:
+      m_matrix[, 1] <- (1:t_len - 0.5 * t_len) * (b / t_len)
+      #trend function which is a bump
+      #m_matrix[, 1] <- bump((1:t_len)/t_len) * b
+    }
     
     tic()
     cl <- makePSOCKcluster(numCores)
     registerDoParallel(cl)
     foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
-      repl_revision2(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
+      repl_revision(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
                      a_ = a, sigma_ = sigma,
                      #beta_ = beta,
-                     a_x_vec_ = a_x_vec, phi_ = phi,
+                     #a_x_vec_ = a_x_vec, phi_ = phi,
                      rho_ = rho, m_matrix_ = m_matrix, q_ = q, r_ = r)
       # Loop one-by-one using foreach
     } -> simulated_pairwise_statistics
@@ -150,21 +158,21 @@ pdf(paste0("output/revision/bump_function.pdf"),
 par(mfrow = c(2, 2))
 par(mar = c(4, 3, 0.5, 0)) #Margins for each plot
 par(oma = c(0.5, 0.5, 0.5, 0.2)) #Outer margins
-
-for (b in different_b){
-  errors <- arima.sim(model = list(ar = a),
-                      innov = rnorm(t_len, 0, sigma),
-                      n = t_len)
-  plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-       y = (bump((1:t_len)/t_len) * b), ylim = c(-1, 1.6),
-       xlab = "", ylab = "", main = NULL,
-       type = 'l', cex = 0.8)
-  lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-        y = (bump((1:t_len)/t_len) * b) + errors, type = "l",
-        col = "red")
-  mtext(side = 1, text = paste0("b = ", b), line = 2.3, cex = 1)
-}
-dev.off()
+# 
+# for (b in different_b){
+#   errors <- arima.sim(model = list(ar = a),
+#                       innov = rnorm(t_len, 0, sigma),
+#                       n = t_len)
+#   plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+#        y = (bump((1:t_len)/t_len) * b), ylim = c(-1, 1.6),
+#        xlab = "", ylab = "", main = NULL,
+#        type = 'l', cex = 0.8)
+#   lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+#         y = (bump((1:t_len)/t_len) * b) + errors, type = "l",
+#         col = "red")
+#   mtext(side = 1, text = paste0("b = ", b), line = 2.3, cex = 1)
+# }
+# dev.off()
 
 for (b in different_b){
   l   <- match(b, different_b)
@@ -176,4 +184,10 @@ for (b in different_b){
                       b * 100, ".tex")
   }
   output_matrix(tmp, filename)
+  line <- paste0("%This simulation was done for the following values of the parameters: n_ts = ", n_ts,
+                 ", with ", n_rep, " simulations for calculating size and power and ", sim_runs,
+                 " simulations to calculate the Gaussian quantiles. Furthermore, for the error process we have a = ",
+                 a, " and sigma = ", sigma, ". For the fixed effect, we have rho = ", rho,
+                 ". The grid is fine (growing with the sample size)")
+  write(line, file = filename, append = TRUE)
 }

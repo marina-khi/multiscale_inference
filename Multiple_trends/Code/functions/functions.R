@@ -387,88 +387,6 @@ output_matrix <- function(matrix_, filename){
                file = filename, add.to.row = addtorow, include.colnames = FALSE)
 }
 
-#Function that simulates the covariates as AR(1), the error terms as AR(1)
-#the time series as y = beta_ %*% covariates + m_matrix_ + errors,
-#estimates the parameters, and then computes the test statistics
-repl2 <- function(rep, t_len_, n_ts_, grid_, gaussian_sim = FALSE,
-                  a_ = 0, sigma_ = 1, beta_ = 0, a_x_ = 0, sigma_x_ = 1,
-                  m_matrix_ = NULL, q_ = 25, r_ = 10){
-  library(MSinference)
-  library(dplyr)
-  
-  if (gaussian_sim){
-    z_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    z_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    sigma_vector  <- rep(1, n_ts_)
-    
-    for (i in 1:n_ts_){
-      z_matrix[, i]      <- rnorm(t_len_, 0, sigma_)
-      z_augm_matrix[, i] <- z_matrix[, i] - mean(z_matrix[, i])
-    }
-    
-    psi <- compute_statistics(data = z_augm_matrix,
-                              sigma_vec = sigma_vector,
-                              n_ts = n_ts_, grid = grid_)
-  } else {
-    y_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    y_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    error_matrix  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    
-    sigmahat_vector <- c()
-    
-    if (beta_ != 0){
-      x_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-      for (i in 1:n_ts_){
-        error_matrix[, i] <- arima.sim(model = list(ar = a_),
-                                       innov = rnorm(t_len_, 0, sigma_),
-                                       n = t_len_)
-        x_matrix[, i]     <- arima.sim(model = list(ar = a_x_),
-                                       innov = rnorm(t_len_, 0, sigma_x_),
-                                       n = t_len_)
-        y_matrix[, i]     <- m_matrix_[, i] + beta_ * x_matrix[, i] + error_matrix[, i]
-        
-        #First differences
-        x_diff    <- x_matrix[, i]- dplyr::lag(x_matrix[, i], n = 1, default = NA)
-        y_diff    <- y_matrix[, i]- dplyr::lag(y_matrix[, i], n = 1, default = NA)
-        
-        #Estimating beta
-        x_diff_tmp <- as.matrix(x_diff)[-1, ]
-        y_diff_tmp <- as.matrix(y_diff)[-1, ]
-        
-        beta_hat_tmp  <- solve(t(x_diff_tmp) %*% x_diff_tmp) %*% t(x_diff_tmp) %*% y_diff_tmp
-        alpha_hat_tmp <- mean(y_matrix[, i] - x_matrix[, i] * as.vector(beta_hat_tmp))
-
-        y_augm_matrix[, i] <- y_matrix[, i] - x_matrix[, i] * as.vector(beta_hat_tmp) - alpha_hat_tmp
-        AR.struc           <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
-                                           r_bar = r_, p = 1)
-        sigma_hat_i        <- sqrt(AR.struc$lrv)
-        sigmahat_vector    <- c(sigmahat_vector, sigma_hat_i) 
-      }
-    } else {
-      for (i in 1:n_ts_){
-        error_matrix[, i] <- arima.sim(model = list(ar = a_),
-                                       innov = rnorm(t_len_, 0, sigma_),
-                                       n = t_len_)
-        y_matrix[, i]     <- m_matrix_[, i] + error_matrix[, i]
-        
-        #Estimating alpha_i
-        alpha_hat_tmp     <- mean(y_matrix[, i])
-
-        y_augm_matrix[, i]  <- y_matrix[, i] - alpha_hat_tmp
-        AR.struc            <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
-                                            r_bar = r_, p = 1)
-        sigma_hat_i         <- sqrt(AR.struc$lrv)
-        sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)   
-      }     
-    }
-    psi <- compute_statistics(data = y_augm_matrix,
-                              sigma_vec = sigmahat_vector,
-                              n_ts = n_ts_, grid = grid_)    
-  }
-  results <- as.vector(psi$stat_pairwise)
-  return(results)
-}
-
 
 #Function that simulates 3 covariates as VAR(3) process with the given
 #coefficients (a_x_mat_ and sigma_x_mat_),
@@ -477,7 +395,7 @@ repl2 <- function(rep, t_len_, n_ts_, grid_, gaussian_sim = FALSE,
 #N(0, c_ * Sigma_a_mat_), the time series as
 #y = alpha_ + beta_ %*% covariates + m_matrix_ + errors,
 #estimates the parameters, and then computes the test statistics
-repl_revision2 <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
+repl_revision <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
                            beta_ = NULL,
                            a_x_vec_ = c(0, 0, 0), phi_ = 0,
                            rho_ = 0, m_matrix_ = NULL,
@@ -532,7 +450,7 @@ repl_revision2 <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
         x_matrix <- matrix(0, 3, t_len_ + 10)
 
         for (t in 2:(t_len_ + 10)){
-          x_matrix[, t] <- a_matrix %*% x_matrix[, t-1] + nu[t, ]
+          x_matrix[, t] <- a_matrix %*% x_matrix[, t - 1] + nu[t, ]
         }
         x_matrix <- t(x_matrix[, -(1:10)])
         
