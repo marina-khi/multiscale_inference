@@ -17,14 +17,14 @@ options(xtable.timestamp = "")
 ##############################
 #Defining necessary constants#
 ##############################
-#set.seed(12321)
+set.seed(23546)
 
 n_ts <- 15 #Number of time series
 
 n_rep    <- 5000 #number of simulations for calculating size and power
 sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
 
-different_T     <- c(100, 200, 350, 500, 1000) #Different lengths of time series
+different_T     <- c(100, 250, 500, 750, 1000) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
 different_b     <- c(0) #Zero is for calculating the size
 
@@ -42,7 +42,7 @@ rho <- 0.25 #covariance between the fixed effects
 
 #Parameters for the estimation of long-run-variance
 q <- 25 
-r <- 15
+r <- 10
 
 #For parallel computation
 numCores  <- round(parallel::detectCores() * .70)
@@ -69,10 +69,10 @@ for (t_len in different_T){
 
   #Constructing the grid according to the application
   #u_grid <- seq(from = 5 / t_len, to = 1, length.out = 20)
-  #h_grid <- seq(from = 2 / 100, to = 1 / 4, by = 5 / 100)
+  h_grid <- seq(from = 2 / 100, to = 1 / 4, by = 5 / 100)
   
   u_grid <- seq(from = 10 / t_len, to = 1, by = 10 / t_len)
-  h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
+  #h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
   h_grid <- h_grid[h_grid > log(t_len) / t_len]
   grid   <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
 
@@ -153,26 +153,6 @@ for (t_len in different_T){
 #######################
 #Output of the results#
 #######################
-pdf(paste0("output/revision/bump_function.pdf"),
-    width = 12, height = 8, paper="special")
-par(mfrow = c(2, 2))
-par(mar = c(4, 3, 0.5, 0)) #Margins for each plot
-par(oma = c(0.5, 0.5, 0.5, 0.2)) #Outer margins
-# 
-# for (b in different_b){
-#   errors <- arima.sim(model = list(ar = a),
-#                       innov = rnorm(t_len, 0, sigma),
-#                       n = t_len)
-#   plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-#        y = (bump((1:t_len)/t_len) * b), ylim = c(-1, 1.6),
-#        xlab = "", ylab = "", main = NULL,
-#        type = 'l', cex = 0.8)
-#   lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-#         y = (bump((1:t_len)/t_len) * b) + errors, type = "l",
-#         col = "red")
-#   mtext(side = 1, text = paste0("b = ", b), line = 2.3, cex = 1)
-# }
-# dev.off()
 
 for (b in different_b){
   l   <- match(b, different_b)
