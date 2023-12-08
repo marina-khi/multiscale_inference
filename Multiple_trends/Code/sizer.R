@@ -5,6 +5,10 @@ library(xtable)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
 library(Rcpp)
+library(tictoc)
+library(foreach)
+library(parallel)
+library(doParallel)
 
 #Load necessary functions  
 source("functions/functions.r")
@@ -64,8 +68,8 @@ q <- 25
 r <- 10
 
 #For parallel computation
-numCores  <- round(parallel::detectCores() * .70)
-
+#numCores  <- round(parallel::detectCores() * .70)
+numcores   <- 1
 
 ################################
 #Calculating the size and power#
@@ -123,11 +127,11 @@ for (t_len in different_T){
   quants <- as.vector(quantiles[2, ])
   
   #Calculating the SiZer quantiles
-  autocov <- (sigma_^2/(1 - a_^2)) * (a_^seq(0, t_len - 1, by = 1))
+  autocov <- (sigma^2/(1 - a^2)) * (a^seq(0, t_len - 1, by = 1))
   
   sizer.quants <- vector("list", length(different_alpha))
   for (j in 1:length(different_alpha)){
-    sizer.quants[[k]] <- SiZer_quantiles(alpha = different_alpha[j],
+    sizer.quants[[j]] <- SiZer_quantiles(alpha = different_alpha[j],
                                          t_len = t_len,
                                          grid = grid, autocov1 = autocov,
                                          autocov2 = autocov)
