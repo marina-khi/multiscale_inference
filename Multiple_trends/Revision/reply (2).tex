@@ -116,7 +116,7 @@ where $\varphi=0, 0.1, 0.25$ and setting $\varphi = 0$ results in simulating 3 i
 
 \item We set $\boldsymbol{\beta}_i = (\beta_{i,1},\beta_{i,2},\beta_{i,3}) = (1,1,1)$ for all $i$.
 
-{\color{red}\item We calculate the Gaussian quantiles based on $5000$ samples, and the size and power calculations are also done with $5000$ samples.}
+{\color{red}\item We calculate the Gaussian quantiles based on $5000$ samples, and the size and power calculations are done based on $5000$ repetitions.}
 
 \item As before, we assume that the errors $\varepsilon_{it}$ follow the AR(1) model $\varepsilon_{it} = a \varepsilon_{i(t-1)} + \eta_{it}$, where $a=0.25$ and the innovations $\eta_{it}$ are i.i.d.\ normal with zero mean $E[\eta_{it}]=0$ and variance $E[\eta_{it}^2]=0.25^2$ {\color{red}(setting higher variance results in lower signal-to-noise ratio and we are not hitting the size level)}. 
 
@@ -138,11 +138,14 @@ where $\rho = 0.1, 0.25$ {\color{red}(larger values do not seem to affect the si
 \caption{In black, the bump function $m_1(t/T)$ is plotted for different heights of the bump: $b = 0, 0.25, 0.5, 1$ ($b= 0$ corresponds to the data under the null $H_0$). In red, we depict the bump function plus the error term, $m_1(t/T) + \varepsilon_{it}$.}\label{fig:bump_function}
 \end{figure}
 
-\item We take the grid $\mathcal{G}_T$ to be the same as before: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{5t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{T}} \text{ for some } t \in \mathbb{N} \big\}$ {\color{red} (the grid is sparser for the DGP without any covariates: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{10t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{100}} \text{ for some } t \in \mathbb{N} \big\}$. Hence, the grid is not really growing with the sample size, because with the growing grid the actual size is a bit higher than the nominal size. I guess this is because of the fact that with the growing sample size, the problem becomes much more complicated...)}
+\item We take the grid $\mathcal{G}_T$ to be the same as before: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{5t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{T}} \text{ for some } t \in \mathbb{N} \big\}$ {\color{red} (the grid is sparser for the DGP without any covariates: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{10t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{100}} \text{ for some } t \in \mathbb{N} \big\}$. Hence, the grid is growing only a bit with the sample size, because with the usual grid the actual size is still a bit higher than the nominal size even though the problem should be ``easy''. I guess this is because of the fact that with the growing sample size, the multiple testing problem becomes much more complicated... Moreover, the computational time is not feasible anymore for large values of $T$. )
+
+\item In order to estimate the long-run variance $\sigma_i^2$, we follow the procedure described in \citet{KhismatullinaVogt2020} with the following tuning parameters: $q = 25$ and $r = 10$.
+}
 
 \end{itemize}
 
-{\color{red} The results of the simulation study with the covariates are presented in Tables \ref{tab:size1} and \ref{tab:power1} for $\phi = 0.1$ and $\rho = 0.1$ and in Tables \ref{tab:size2} and \ref{tab:power2} for $\phi = 0.25$ and $\rho = 0.25$. The results of the size simulation study without any covariates and for $\rho = 0.25$ are presented in Table \ref{tab:size3} (no power computations since this is more of a robustness check). There is a ``bump'' in the actual size for moderate sample sizes ($T = 250, 500$) which is present under a lot specifications (even without dependence in the fixed effect), I guess this is due to the grid specifications: for small sample sizes the grid is a bit too sparse to detect anything spurious whereas for $T=250$ the grid becomes more sensitive to the noise. I have checked with different grid specification and this ``bump'' is always present but occurs at different sample sizes.}
+{\color{red} The results of the simulation study with the covariates are presented in Tables \ref{tab:size1} and \ref{tab:power1} for $\phi = 0.1$ and $\rho = 0.1$ and in Tables \ref{tab:size2} and \ref{tab:power2} for $\phi = 0.25$ and $\rho = 0.25$. We are a bit more liberal with higher values of $\phi$ and $\rho$, but not overly so. The results of the size simulation study without any covariates and for $\rho = 0.25$ are presented in Table \ref{tab:size3} (no power computations since this is more of a robustness check). There is a ``bump'' in the actual size for moderate sample sizes ($T = 250, 500$) which is present under a lot specifications (even without dependence in the fixed effect), I guess this is due to the grid specifications: for small sample size ($T = 100$) the grid is a bit too sparse to detect anything spurious, whereas starting from $T=250$ the grid becomes more sensitive to the noise which stabilizes with larger values of the sample size. I have checked with different grid specification and this ``bump'' is always present but occurs at different sample sizes.}
 
 \begin{table}[t]
 \footnotesize{
@@ -150,7 +153,7 @@ where $\rho = 0.1, 0.25$ {\color{red}(larger values do not seem to affect the si
 \caption{Size of the multiscale test for $\phi = 0.1$ and $\rho = 0.1$ for different sample sizes $T$ and nominal sizes $\alpha$.}
 \label{tab:size1}
 \renewcommand{\arraystretch}{1.2}
-\input{output/15_ts_10_10_small_error_var_size}
+\input{output/15_ts_10_10_size}
 \end{center}}
 \footnotesize{
 \begin{center}
@@ -159,19 +162,19 @@ where $\rho = 0.1, 0.25$ {\color{red}(larger values do not seem to affect the si
 \centering
 \caption{$b = 0.25$}\label{tab:power1_025}
 \renewcommand{\arraystretch}{1.2}
-\input{output/15_ts_10_10_small_error_var_power_b_25}
+\input{output/15_ts_10_10_power_b_25}
 \end{subtable}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$b = 0.50$}\label{tab:power1_050}
 \renewcommand{\arraystretch}{1.2}
-\input{output/15_ts_10_10_small_error_var_power_b_50}
+\input{output/15_ts_10_10_power_b_50}
 \end{subtable}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$b = 1.00$}\label{tab:power1_100}
 \renewcommand{\arraystretch}{1.2}
-\input{output/15_ts_10_10_small_error_var_power_b_100}
+\input{output/15_ts_10_10_power_b_100}
 \end{subtable}
 \end{center}}
 \vspace{-0.4cm}
@@ -184,7 +187,7 @@ where $\rho = 0.1, 0.25$ {\color{red}(larger values do not seem to affect the si
 \caption{Size of the multiscale test for $\phi = 0.25$ and $\rho = 0.25$ for different sample sizes $T$ and nominal sizes $\alpha$.}
 \label{tab:size2}
 \renewcommand{\arraystretch}{1.2}
-\input{output/15_ts_25_25_small_error_var_size}
+\input{output/15_ts_25_25_size}
 \end{center}}
 \footnotesize{
 \begin{center}
@@ -193,13 +196,13 @@ where $\rho = 0.1, 0.25$ {\color{red}(larger values do not seem to affect the si
 \centering
 \caption{$b = 0.25$}\label{tab:power2_025}
 \renewcommand{\arraystretch}{1.2}
-\input{output/15_ts_25_25_small_error_var_power_b_25}
+\input{output/15_ts_25_25_power_b_25}
 \end{subtable}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$b = 0.50$}\label{tab:power2_050}
 \renewcommand{\arraystretch}{1.2}
-\input{output/15_ts_25_25_small_error_var_power_b_50}
+\input{output/15_ts_25_25_power_b_50}
 \end{subtable}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
@@ -218,13 +221,15 @@ where $\rho = 0.1, 0.25$ {\color{red}(larger values do not seem to affect the si
 \caption{Size of the multiscale test for the case without any covariates and $\rho = 0.25$ for different sample sizes $T$ and nominal sizes $\alpha$.}
 \label{tab:size3}
 \renewcommand{\arraystretch}{1.2}
-\input{output/15_ts_0_25_no_covariates_size}
+\input{output/15_ts_no_covariates_25_size}
 \end{center}}
 \vspace{-0.4cm}
 \end{table}
 
 
-\item[(iii)] As suggested by you, we compare with the Sizer method of Park et al.\ (2009). For the comparison, we could consider the design proposed in (i) without covariates and fixed effects (as these are not part of the model in Park et al.). I'd suggest to add the comparison to the supplement rather than to the main body of the text. 
+\item[(iii)] As suggested by you, we compare with the Sizer method of Park et al.\ (2009). For the comparison, we could consider the design proposed in (i) without covariates and fixed effects (as these are not part of the model in Park et al.). I'd suggest to add the comparison to the supplement rather than to the main body of the text.
+
+{\color{red}Currently running. Do I understand correctly that we are comparing both in terms of size and power?}
 
 \item[(iv)] We rerun the simulations from (i) with a much smaller grid. This allows us to deal not only with $n=15$ but also with larger values of $n$: $n=25, 50, 100$. Specifically, we take the grid $\mathcal{G}_T$ to be a dyadic scheme (as in Wavelet analysis) with scales in the set 
 \[ \mathcal{H}_T = \big\{ h = 2^k h_{\min} \text{ for } k=0,\ldots,K \big\}, \]  
@@ -236,20 +241,20 @@ and
 \begin{align*}
 \mathcal{G}_T = \big\{ (u,h) \subseteq [0,1]: & \ (u,h) = ((2s+1) h, h) \text{ for } s = 0,\ldots,\Big\lfloor \frac{h^ {-1}-1}{2} \Big\rfloor \\ & \ \text{and } h \in \mathcal{H}_T \big\}.
 \end{align*}
-{\color{red} We rerun the simulations for the case $\phi = 0.1$ and $\rho = 0.1$ with $T=100, 250, 500$ and different values of $n$: $n=15, 25, 50, 100$. (This is very feasible, even with $n = 100$ and $T = 500$ the running time is around 45 minutes for all size and power calculations). The results are presented in Tables \ref{tab:size:dyadic:15} - \ref{tab:power:dyadic:100}. The results are not very different from using the full grid: we are a bit less liberal with the actual size and the power for small sample sizes is very small, but I would not expect anything different with such a sparse grid.}
+{\color{red} We rerun the simulations as specified in (i) (with the exception of the grid) for the case $\phi = 0.1$ and $\rho = 0.1$ with $T=100, 250, 500$ and different values of $n$: $n=15, 25, 50, 100$. (This is very feasible, even with $n = 100$ and $T = 500$ the running time is around 45 minutes for all size and power calculations). The results are presented in Tables \ref{tab:size:dyadic:15} - \ref{tab:power:dyadic:100}. The results are not very different from using the full grid: we are not even much more liberal. I attribute it to the ``simplicity'' of the problem: not that many multiple comparisons.}
 
 %\addtocounter{table}{-1} 
 \begin{table}[t]
 \footnotesize{
 \begin{center}
-\caption{Size of the multiscale test for $n = 15$ for different sample sizes $T$ and nominal sizes $\alpha$ ($\phi = 0.1$ and $\rho = 0.1$).}
+\caption{Size of the multiscale test for $n = 15$ for different sample sizes $T$ and nominal sizes $\alpha$ for the dyadic grid ($\phi = 0.1$ and $\rho = 0.1$).}
 \label{tab:size:dyadic:15}
 \renewcommand{\arraystretch}{1.2}
-\input{output/15_ts_10_10_dyadic_grid_size}
+\input{output/15_ts_10_10_dyadic_grid_larger_samples_size}
 \end{center}}
 \footnotesize{
 \begin{center}
-\caption{Power of the multiscale test for $n = 15$ for different sample sizes $T$ and nominal sizes $\alpha$  ($\phi = 0.1$ and $\rho = 0.1$). Each panel corresponds to a different height parameter $b$ of the bump function.}\label{tab:power:dyadic:15}
+\caption{Power of the multiscale test for $n = 15$ for different sample sizes $T$ and nominal sizes $\alpha$ for the dyadic grid ($\phi = 0.1$ and $\rho = 0.1$). Each panel corresponds to a different height parameter $b$ of the bump function.}\label{tab:power:dyadic:15}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$b = 0.25$}%\label{tab:power1_025}
@@ -276,14 +281,14 @@ and
 \begin{table}[h!]
 \footnotesize{
 \begin{center}
-\caption{Size of the multiscale test for $n = 25$ for different sample sizes $T$ and nominal sizes $\alpha$ ($\phi = 0.1$ and $\rho = 0.1$).}
+\caption{Size of the multiscale test for $n = 25$ for different sample sizes $T$ and nominal sizes $\alpha$ for the dyadic grid ($\phi = 0.1$ and $\rho = 0.1$).}
 \label{tab:size:dyadic:25}
 \renewcommand{\arraystretch}{1.2}
 \input{output/25_ts_10_10_dyadic_grid_size}
 \end{center}}
 \footnotesize{
 \begin{center}
-\caption{Power of the multiscale test for $n = 25$ for different sample sizes $T$ and nominal sizes $\alpha$  ($\phi = 0.1$ and $\rho = 0.1$). Each panel corresponds to a different height parameter $b$ of the bump function.}\label{tab:power:dyadic:25}
+\caption{Power of the multiscale test for $n = 25$ for different sample sizes $T$ and nominal sizes $\alpha$ for the dyadic grid ($\phi = 0.1$ and $\rho = 0.1$). Each panel corresponds to a different height parameter $b$ of the bump function.}\label{tab:power:dyadic:25}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$b = 0.25$}%\label{tab:power1_025}
@@ -310,14 +315,14 @@ and
 \begin{table}[h]
 \footnotesize{
 \begin{center}
-\caption{Size of the multiscale test for $n = 50$ for different sample sizes $T$ and nominal sizes $\alpha$ ($\phi = 0.1$ and $\rho = 0.1$).}
+\caption{Size of the multiscale test for $n = 50$ for different sample sizes $T$ and nominal sizes $\alpha$ for the dyadic grid ($\phi = 0.1$ and $\rho = 0.1$).}
 \label{tab:size:dyadic:50}
 \renewcommand{\arraystretch}{1.2}
 \input{output/50_ts_10_10_dyadic_grid_size}
 \end{center}}
 \footnotesize{
 \begin{center}
-\caption{Power of the multiscale test for $n = 50$ for different sample sizes $T$ and nominal sizes $\alpha$  ($\phi = 0.1$ and $\rho = 0.1$). Each panel corresponds to a different height parameter $b$ of the bump function.}\label{tab:power:dyadic:50}
+\caption{Power of the multiscale test for $n = 50$ for different sample sizes $T$ and nominal sizes $\alpha$ for the dyadic grid ($\phi = 0.1$ and $\rho = 0.1$). Each panel corresponds to a different height parameter $b$ of the bump function.}\label{tab:power:dyadic:50}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$b = 0.25$}%\label{tab:power1_025}
@@ -344,14 +349,14 @@ and
 \begin{table}[h!]
 \footnotesize{
 \begin{center}
-\caption{Size of the multiscale test for $n = 100$ for different sample sizes $T$ and nominal sizes $\alpha$ ($\phi = 0.1$ and $\rho = 0.1$).}
+\caption{Size of the multiscale test for $n = 100$ for different sample sizes $T$ and nominal sizes $\alpha$ for the dyadic grid ($\phi = 0.1$ and $\rho = 0.1$).}
 \label{tab:size:dyadic:100}
 \renewcommand{\arraystretch}{1.2}
 \input{output/100_ts_10_10_dyadic_grid_size}
 \end{center}}
 \footnotesize{
 \begin{center}
-\caption{Power of the multiscale test for $n = 100$ for different sample sizes $T$ and nominal sizes $\alpha$  ($\phi = 0.1$ and $\rho = 0.1$). Each panel corresponds to a different height parameter $b$ of the bump function.}\label{tab:power:dyadic:100}
+\caption{Power of the multiscale test for $n = 100$ for different sample sizes $T$ and nominal sizes $\alpha$ for the dyadic grid ($\phi = 0.1$ and $\rho = 0.1$). Each panel corresponds to a different height parameter $b$ of the bump function.}\label{tab:power:dyadic:100}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$b = 0.25$}%\label{tab:power1_025}
@@ -530,23 +535,28 @@ covariates, and also discuss some of the aforementioned points on Bootstrap alte
 \end{enumerate}
 
 
-
 \vspace{10pt}
+\bibliographystyle{ims}
+{\small
+\setlength{\bibsep}{0.55em}
+\bibliography{bib}}
 
-\large\textbf{{Bibliography}}
-\renewcommand\refname{}
-\vspace{-40pt}
-
-\normalsize
-\begin{thebibliography}{10}
-%\bibitem[Bickel et~el.(1993)]{Bickel1993} Bickel, P., Klaassen, C., Ritov, Y.\ \& Wellner, J.\ (1993). \textit{Efficient and adaptive estimation for semiparametric models.} Johns Hopkins University Press.
-%\bibitem[Fan et~al.(2005)]{Fan2005} Fan, J.\ \& Jiang, J.\ (2005). Nonparametric inferences for additive models. \textit{Journal of the American Statistical Association} \textbf{100} 890--907. 
-%\bibitem[Fengler et~al.(2015)]{Fengler2015} Fengler, M.~R., Mammen, E.\ \& Vogt, M.\ (2015). Specification and structural break tests for additive models with applications to realized variance data. \textit{Journal of Econometrics} \textbf{188} 196--218. 
-%\bibitem[Hafner \& Linton(2010)]{Hafner2009} Hafner, C.\ \& Linton, O.\ (2010). Efficient estimation of a multivariate multiplicative volatility model. \textit{Journal of Econometrics} \textbf{159} 55-73.
-%\bibitem[Huang et~al.(2010)]{Huang2010} Huang, J., Horowitz, J.~L.\ \& Wei, F.\ (2010). Variable selection in nonparametric additive models. \textit{Annals of Statistics} \textbf{38} 2282--2313.
-%\bibitem[Ravikumar et~al.(2009)]{Ravikumar2009} Ravikumar, P., Lafferty, J., Liu H. \& Wasserman, L.\ (2009). Sparse additive models. \textit{Journal of the Royal Statistical Society: Series B} \textbf{71} 905--1054.
-%\bibitem[Vogt \& Walsh(2019)]{VogtWalsh2019} Vogt, M.\ \& Walsh, C.\ (2019). Estimating nonlinear additive models with nonstationarities and correlated errors. \textit{Scandinavian Journal of Statistics} \textbf{46} 160-199.
-\end{thebibliography}
+%
+%
+%\large\textbf{{Bibliography}}
+%\renewcommand\refname{}
+%\vspace{-40pt}
+%
+%\normalsize
+%\begin{thebibliography}{10}
+%%\bibitem[Bickel et~el.(1993)]{Bickel1993} Bickel, P., Klaassen, C., Ritov, Y.\ \& Wellner, J.\ (1993). \textit{Efficient and adaptive estimation for semiparametric models.} Johns Hopkins University Press.
+%%\bibitem[Fan et~al.(2005)]{Fan2005} Fan, J.\ \& Jiang, J.\ (2005). Nonparametric inferences for additive models. \textit{Journal of the American Statistical Association} \textbf{100} 890--907. 
+%%\bibitem[Fengler et~al.(2015)]{Fengler2015} Fengler, M.~R., Mammen, E.\ \& Vogt, M.\ (2015). Specification and structural break tests for additive models with applications to realized variance data. \textit{Journal of Econometrics} \textbf{188} 196--218. 
+%%\bibitem[Hafner \& Linton(2010)]{Hafner2009} Hafner, C.\ \& Linton, O.\ (2010). Efficient estimation of a multivariate multiplicative volatility model. \textit{Journal of Econometrics} \textbf{159} 55-73.
+%%\bibitem[Huang et~al.(2010)]{Huang2010} Huang, J., Horowitz, J.~L.\ \& Wei, F.\ (2010). Variable selection in nonparametric additive models. \textit{Annals of Statistics} \textbf{38} 2282--2313.
+%%\bibitem[Ravikumar et~al.(2009)]{Ravikumar2009} Ravikumar, P., Lafferty, J., Liu H. \& Wasserman, L.\ (2009). Sparse additive models. \textit{Journal of the Royal Statistical Society: Series B} \textbf{71} 905--1054.
+%%\bibitem[Vogt \& Walsh(2019)]{VogtWalsh2019} Vogt, M.\ \& Walsh, C.\ (2019). Estimating nonlinear additive models with nonstationarities and correlated errors. \textit{Scandinavian Journal of Statistics} \textbf{46} 160-199.
+%\end{thebibliography}
 
 
 

@@ -19,18 +19,17 @@ sourceCpp("functions/SiZer_functions.cpp")
 ##############################
 #Defining necessary constants#
 ##############################
-#set.seed(12321)
 
 n_ts  <- 2 #Number of time series
 
 n_rep    <- 1000 #number of simulations for calculating size and power
 sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
 
-#different_T     <- c(100, 200, 350, 500, 1000) #Different lengths of time series
 different_T     <- c(100) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
-#different_b     <- c(0, 0.25, 0.5, 1) #Zero is for calculating the size
 different_b     <- c(0) #Zero is for calculating the size
+
+beta <- NULL
 
 #For the error process
 a     <- 0.25
@@ -41,41 +40,12 @@ q <- 25
 r <- 15
 
 #For parallel computation
-numCores  <- round(parallel::detectCores() * .70)
-
-#################
-#The simulations#
-#################
-
-set.seed(23546)
-
-n_ts <- 15 #Number of time series
-
-n_rep    <- 5000 #number of simulations for calculating size and power
-sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
-
-different_T     <- c(100, 250, 500, 750, 1000) #Different lengths of time series
-different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
-different_b     <- c(0) #Zero is for calculating the size
-
-#For the error process
-a     <- 0.25
-sigma <- 0.25
-
-
-#Parameters for the estimation of long-run-variance
-q <- 25 
-r <- 10
-
-#For parallel computation
-#numCores  <- round(parallel::detectCores() * .70)
-numcores   <- 1
+numCores  <- 1
+seed      <- 2468022
 
 ################################
 #Calculating the size and power#
 ################################
-
-source("functions/functions.R")
 
 size_and_power_array <- array(NA, dim = c(length(different_T),
                                           length(different_b),
@@ -95,6 +65,7 @@ ijset <- expand.grid(i = 1:n_ts, j = 1:n_ts)
 ijset <- ijset[ijset$i < ijset$j, ]
 
 for (t_len in different_T){
+  set.seed(seed)
   k <- match(t_len, different_T)
   
   #Constructing the grid according to the application
@@ -108,7 +79,7 @@ for (t_len in different_T){
   cl <- makePSOCKcluster(numCores)
   registerDoParallel(cl)
   foreach (val = 1:sim_runs, .combine = "cbind") %dopar% {
-    repl_revision2(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
+    repl_revision(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
                   gaussian_sim = TRUE)
     # Loop one-by-one using foreach
   } -> simulated_pairwise_gaussian
@@ -145,18 +116,19 @@ for (t_len in different_T){
       cat("POWER SIMULATIONS WITH b = ", b, "\n")
       
       #Only the first trend function is non-zero:
-      m_matrix[, 1] <- (1:t_len - 0.5 * t_len) * (b / t_len)
+      #m_matrix[, 1] <- (1:t_len - 0.5 * t_len) * (b / t_len)
       #trend function which is a bump
-      #m_matrix[, 1] <- bump((1:t_len)/t_len) * b
+      m_matrix[, 1] <- bump((1:t_len)/t_len) * b
     }
     
     tic()
     cl <- makePSOCKcluster(numCores)
     registerDoParallel(cl)
     foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
-      repl_revision2(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
+      repl_revision(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
                     a_ = a, sigma_ = sigma,
-                    m_matrix_ = m_matrix, q_ = q, r_ = r)
+                    beta_ = beta,
+                    rho_ = rho, m_matrix_ = m_matrix, q_ = q, r_ = r)
       # Loop one-by-one using foreach
     } -> simulated_pairwise_statistics
     stopCluster(cl)
