@@ -22,9 +22,9 @@
 \usepackage{xspace}
 
 \title{Estimation of the Long-run Error Variance in Nonparametric Regression with Time Series Errors}
-\date{CFE-CMStatistics 2019}
-\author{Marina Khismatullina \inst{1} \and Michael Vogt \inst{1}}
-\institute{\inst{1} University of Bonn}
+\date{EcoSta 2023}
+\author{Marina Khismatullina \inst{1} \and Michael Vogt \inst{2}}
+\institute{\inst{1} Erasmus University Rotterdam \\ \inst{2} Ulm University}
 \setbeamertemplate{frame footer}{Estimation of the Long-run Error Variance}
 \metroset{block=fill}
 % \titlegraphic{\hfill\includegraphics[height=1.5cm]{logo.pdf}}
@@ -145,7 +145,7 @@ where $m(\cdot)$ is Lipshitz and $\{\varepsilon_t\}$ is an AR($p^\star$) process
 \begin{frame}{Setting}
 We assume that 
 \begin{equation*}
-A(z) := 1 - \sum_{j=1}^\infty a_j z^j \neq 0
+A(z) := 1 - \sum_{j=1}^{p^\star} a_j z^j \neq 0
 \end{equation*}
 for all complex numbers $|z|\leq 1+ \delta$ with some small $\delta >0$.\pause
 
@@ -188,9 +188,11 @@ where
 \end{itemize}\pause
 \begin{block}{In vector notation}
 \begin{equation*}\label{YU-eq}
-\boldsymbol{\Gamma}_q \boldsymbol{a} = \boldsymbol{\gamma}_q + \nu^2 \boldsymbol{c}_q  
+\boldsymbol{\Gamma}_q \boldsymbol{a} = \boldsymbol{\gamma}_q + \nu^2{\color<3>{mLightBrown} \boldsymbol{c}_q}  -  {\color<3>{mLightBrown}\boldsymbol{\rho}_q}
 \end{equation*}
 \end{block}
+\vspace{-2mm}
+where $\boldsymbol{\rho}_q = (\rho_q(1), \ldots, \rho_q(p))$ with $\rho_q(\ell) = \sum_{j=p+1}^{p^\star} a_j \gamma_q(\ell - j)$.
 \end{frame}
 
 \begin{frame}{Estimator, first stage}
@@ -209,7 +211,23 @@ We construct the first-stage estimator by
 where $\widehat{\boldsymbol{\Gamma}}_q$ and $\widehat{\boldsymbol{\gamma}}_q$ are constructed from the sample autocovariances $$\widehat{\gamma}_q(\ell) = (T-q)^{-1} \sum_{t=q+\ell+1}^T \Delta_q Y_{t} \Delta_q Y_{t-\ell}.$$ 
 \end{frame}
 
+\begin{frame}{Tuning parameter}
+\begin{equation*}
+\widetilde{\boldsymbol{a}}_q = \widehat{\boldsymbol{\Gamma}}_q^{-1} \widehat{\boldsymbol{\gamma}}_q 
+\end{equation*}
+\vspace{-3mm}
+\begin{block}{Problem}
+How to choose $q$?
+\end{block}\pause
+\vspace{-2mm}
+\begin{itemize}
+	\item[(i)] $q$ should be large enough so that $\boldsymbol{c}_q = (c_{q-1},\dots,c_{q-p})^\top$ is close to zero;\pause
+	\item[(ii)] $q$ should not be too large to sufficiently eliminate the trend.
+\end{itemize}\pause
+In case of AR($1$), $q= 20$ is enough.\pause
 
+For the consistency, we need $\log T \ll q \ll \sqrt{T}$.
+\end{frame}
 
 \begin{frame}{Estimator, second stage}
 \begin{block}{Problem}
@@ -232,25 +250,9 @@ Solution:
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Tuning parameters}
-\begin{equation*}
-\widetilde{\boldsymbol{a}}_q = \widehat{\boldsymbol{\Gamma}}_q^{-1} \widehat{\boldsymbol{\gamma}}_q 
-\end{equation*}
-\vspace{-3mm}
-\begin{block}{Problem}
-How to choose $q$?
-\end{block}\pause
-\vspace{-2mm}
-\begin{itemize}
-	\item[(i)] $q$ should be large enough so that $\boldsymbol{c}_q = (c_{q-1},\dots,c_{q-p})^\top$ is close to zero;\pause
-	\item[(ii)] $q$ should not be too large to sufficiently eliminate the trend.
-\end{itemize}\pause
-In case of AR($1$), $q= 20$ is enough.\pause
 
-For the consistency, we need $\log T \ll q \ll \sqrt{T}$.
-\end{frame}
 
-\begin{frame}{Tuning parameters}
+\begin{frame}{Tuning parameter}
 \begin{equation*}\label{est-AR-SS} 
 \widehat{\boldsymbol{a}}_r = \widehat{\boldsymbol{\Gamma}}_r^{-1} (\widehat{\boldsymbol{\gamma}}_r + \widetilde{\nu}^2 \widetilde{\boldsymbol{c}}_{\color<2-3>{mLightBrown}r})
 \end{equation*}\pause
@@ -275,7 +277,7 @@ We choose them to be fixed (small) natural numbers. Simulations in the paper.
 Performance:
 \begin{itemize}
 \item Our estimator $\widehat{\boldsymbol{a}}$ produces accurate estimation results even when the AR polynomial $A(z) = 1 - \sum_{j=1}^{p^\star} a_j z^j$ has a root close to the unit circle.\pause
-\item Our pilot estimator $\widetilde{\boldsymbol{a}}_q$ tends to have a substantial bias when the trend $m$ is pronounced. Our estimator $\widehat{\boldsymbol{a}}$ reduces this bias considerably.\pause
+\item Our pilot estimator $\widetilde{\boldsymbol{a}}_q$ tends to have a substantial bias when the trend $m$ is pronounced. The second-stage estimator $\widehat{\boldsymbol{a}}$ reduces this bias considerably.\pause
 \end{itemize}
 \begin{prop}{}
 Our estimators $\widetilde{\boldsymbol{a}}_q$, $\widehat{\boldsymbol{a}}$ and $\widehat{\sigma}^2$ are $\sqrt{T}$-consistent. 
@@ -290,8 +292,8 @@ Setting:
 \item data from the model $Y_t = m(t/T) + \varepsilon_t$, where $\varepsilon_t$ is an AR($1$) process of the form $\varepsilon_t = a_1 \varepsilon_{t-1} + \eta_t$;
 \item $a_1 \in \{ -0.95, -0.75, -0.5, -0.25, 0.25, 0.5, 0.75, 0.95\}$;
 \item sample size $T$ is $500$;
-\item the trend function is linear $m(u) = \beta u$;
-\item we generate $S = 1000$ data samples;
+\item the trend function is linear $m(u) = \beta u$ with two different $\beta$ depending on $Var(\varepsilon_t)$;
+\item we generate $1000$ data samples;
 \item $q=25, \underline{r} = 1, \overline{r} = 10$;
 \item tuning parameters for the estimators from Hall and Van Keilegom (2003) are $m_1 = 20$ and $m_2 = 30$. 
 \end{itemize}
@@ -360,7 +362,7 @@ Setting:
 \section{Conclusion}
 \begin{frame}{Conclusion}
 \begin{itemize}
-\item We constructed the long-run variance estimator for a wide range of error procesess.
+\item We constructed the long-run variance estimator for a wide range of error processes.
 \item We proved the $\sqrt{T}$-consistency for our estimators.
 \item Our estimator produces accurate estimation results even when the AR polynomial has a root close to the unit circle.
 \item In the simulations our estimators tend to perform well even in the presence of a strong trend.
@@ -374,7 +376,7 @@ Setting:
   \bibitem{KhismatullinaVogt2019}
     Khismatullina, M., Vogt, M. (2020)
     \newblock Multiscale inference and long-run variance estimation in nonparametric regression with time series errors.
-    \newblock {\em Journal of the Royal Statistical Society: Series B}, forthcoming.
+    \newblock {\em Journal of the Royal Statistical Society: Series B}, 82 5-37.
   %\beamertemplatearticlebibitems
   \bibitem{Hall2003}
   Hall, P. and Van Keilegom, I. (2003).
