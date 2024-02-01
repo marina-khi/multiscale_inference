@@ -37,7 +37,7 @@ sigma <- 0.25
 
 #Parameters for the estimation of long-run-variance
 q <- 25 
-r <- 15
+r <- 10
 
 #For parallel computation
 numCores  <- 1

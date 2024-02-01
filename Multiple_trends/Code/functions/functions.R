@@ -504,8 +504,7 @@ repl_revision <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
 #a_ and sigma_, the time series as y = m_matrix_ + errors,
 #and then computes both the multiscale test statistics and the sizer test statistics
 repl_revision2 <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
-                           m_matrix_ = NULL,
-                           q_ = 25, r_ = 10,
+                           m_matrix_ = NULL, true_lrv_ = 1, 
                            gaussian_sim = FALSE){
   library(MSinference)
   library(dplyr)
@@ -534,8 +533,6 @@ repl_revision2 <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
     y_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
     error_matrix  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
     
-    sigmahat_vector <- c()
-     
     for (i in 1:n_ts_){
       error_matrix[, i] <- arima.sim(model = list(ar = a_),
                                      innov = rnorm(t_len_, 0, sigma_),
@@ -546,45 +543,42 @@ repl_revision2 <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
       #Estimating the fixed effects
       alpha_hat_tmp      <- mean(y_matrix[, i])
       y_augm_matrix[, i] <- y_matrix[, i] - alpha_hat_tmp
-      AR.struc           <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
-                                         r_bar = r_, p = 1)
-      sigma_hat_i        <- sqrt(AR.struc$lrv)
-      sigmahat_vector    <- c(sigmahat_vector, sigma_hat_i)
     }
     psi <- compute_statistics(data = y_augm_matrix,
-                              sigma_vec = sigmahat_vector,
+                              sigma_vec = rep(sqrt(true_lrv_), n_ts_),
                               n_ts = n_ts_, grid = grid_) 
     
-    gset       <- grid$gset
-    u.grid     <- sort(unique(gset[,1]))
-    h.grid     <- sort(unique(gset[,2]))
-    N          <- as.integer(dim(gset)[1])
-    h.grid.new <- sort(unique(grid$gset[,2]))
-    
-    autocov     <- (sigma_^2/(1 - a_^2)) * (a_^seq(0, t_len - 1, by = 1))
-    sizer.wghts <- SiZer_weights(T = t_len, grid = grid)
-    sizer.std   <- SiZer_std(weights = sizer.wghts,
-                             autocov1 = autocov, autocov2 = autocov,
-                             t_len = t_len)
-    
-    #Values of SiZer
-    values1     <- sizer.wghts %*% y_matrix[, 1]
-    sizer.vals1 <- as.vector(values1)
-    values2     <- sizer.wghts %*% y_matrix[, 2]
-    sizer.vals2 <- as.vector(values2)
-    
-    #Based on the same values of the test statistic, perform the test at different significance levels
-    for (j in 1:length(different_alpha)){
-      alpha         <- different_alpha[j]
-      
-      SiZer_results <- SiZer_test(values1 = sizer.vals1, values2 = sizer.vals2,
-                                  std.devs = sizer.std, quants = sizer.quants[[j]],
-                                  grid = grid)
-    }
-    
-    results <- c(list("test.ms" = as.vector(psi$stat_pairwise),
-                 "test.sizer1" = sizer.vals1,
-                 "test.sizer2" = sizer.vals2))
+    # gset       <- grid$gset
+    # u.grid     <- sort(unique(gset[,1]))
+    # h.grid     <- sort(unique(gset[,2]))
+    # N          <- as.integer(dim(gset)[1])
+    # h.grid.new <- sort(unique(grid$gset[,2]))
+    # 
+    # autocov     <- (sigma_^2/(1 - a_^2)) * (a_^seq(0, t_len - 1, by = 1))
+    # sizer.wghts <- SiZer_weights(T = t_len, grid = grid)
+    # sizer.std   <- SiZer_std(weights = sizer.wghts,
+    #                          autocov1 = autocov, autocov2 = autocov,
+    #                          t_len = t_len)
+    # 
+    # #Values of SiZer
+    # values1     <- sizer.wghts %*% y_matrix[, 1]
+    # sizer.vals1 <- as.vector(values1)
+    # values2     <- sizer.wghts %*% y_matrix[, 2]
+    # sizer.vals2 <- as.vector(values2)
+    # 
+    # #Based on the same values of the test statistic, perform the test at different significance levels
+    # for (j in 1:length(different_alpha)){
+    #   alpha         <- different_alpha[j]
+    #   
+    #   SiZer_results <- SiZer_test(values1 = sizer.vals1, values2 = sizer.vals2,
+    #                               std.devs = sizer.std, quants = sizer.quants[[j]],
+    #                               grid = grid)
+    # }
+    # 
+    # results <- c(list("test.ms" = as.vector(psi$stat_pairwise),
+    #              "test.sizer1" = sizer.vals1,
+    #              "test.sizer2" = sizer.vals2))
+    results <- c(as.vector(psi$stat_pairwise))
   }
   return(results)
 }

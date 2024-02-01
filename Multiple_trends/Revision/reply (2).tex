@@ -99,28 +99,25 @@ Thank you very much for the careful reading of our manuscript and the interestin
 (iv) only a small number of series is considered. How does the approach perform when $n$ is large? }  
 
 {\color{blue}  
-In the simulation study, we need to take into account (i), (iii) and (iv). The point (ii) is not correct and can be taken care of by verbal argument.
 \begin{itemize}[topsep=0pt]
  
-\item[(i)] As we cannot use the estimated AR(1) values from the application, let's take the old simulation setup and modify it a bit {\color{red} (for the `robustness' check we also consider a case without any covariates, see the end of this section)}: 
+\item[(i)] We have taken your suggestions into account and consider the following, more challenging setup for the simulation study. We also perform several robustness checks that are described further.
 
 \begin{itemize}[label=--,leftmargin=0.45cm,itemsep=0pt]
 
-\item As before, we choose $n=15$ and $T=100,250,500$ {\color{red} (for an easy DGP without any covariates we use $T=100,250, 500, 750, 1000$. We also use this for comparison with SiZer in (iii).)}.
+\item As before, we choose $n=15$ and $T=100,250,500$. Simulation scenario with $n=15$ and $T=150$ reflects well both of the applications.
   
-\item We include $3$ covariates and model them by a very simple VAR(3) process:
+\item We include $3$ covariates and model them by a following VAR(3) process:
 \[ \underbrace{\begin{pmatrix} X_{it,1} \\ X_{it,2} \\ X_{it,3} \end{pmatrix}}_{=: \boldsymbol{X}_{it}} = \begin{pmatrix} a_1 & 0 & 0 \\ 0 & a_2 & 0 \\ 0 & 0 & a_3 \end{pmatrix} \begin{pmatrix} X_{it-1,1} \\ X_{it-1,2} \\ X_{it-1,3} \end{pmatrix} + \underbrace{\begin{pmatrix} \nu_{it,1} \\ \nu_{it,2} \\ \nu_{it,3} \end{pmatrix}}_{=: \boldsymbol{\nu}_{it}}. \] 
-We choose {\color{red} $a_1 = a_2 = a_3 = 0.25$}. The innovations $\boldsymbol{\nu}_{it}$ are drawn i.i.d.\ from a multivariate normal $N(0,\Phi)$ with
+We choose $a_1 = a_2 = a_3 = 0.25$. The innovations $\boldsymbol{\nu}_{it}$ are drawn i.i.d.\ from a multivariate normal $N(0,\Phi)$ with
 \[ \Phi = \begin{pmatrix} 1 & \varphi & \varphi \\ \varphi & 1 & \varphi \\ \varphi & \varphi & 1 \end{pmatrix}, \]
-where $\varphi=0, 0.1, 0.25$ and setting $\varphi = 0$ results in simulating 3 independent covariate processes {\color{red}(case $\varphi = 0$ is not reported)}. 
+where $\varphi=0.1, 0.25$. Note that setting $\varphi = 0$ results in simulating 3 independent covariate processes. 
 
 \item We set $\boldsymbol{\beta}_i = (\beta_{i,1},\beta_{i,2},\beta_{i,3}) = (1,1,1)$ for all $i$.
 
-{\color{red}\item We calculate the Gaussian quantiles based on $5000$ samples, and the size and power calculations are done based on $5000$ repetitions.}
+\item We assume that the errors $\varepsilon_{it}$ follow the AR(1) model $\varepsilon_{it} = a \varepsilon_{i(t-1)} + \eta_{it}$, where $a=0.25$ and the innovations $\eta_{it}$ are i.i.d.\ normal with zero mean $E[\eta_{it}]=0$ and variance $E[\eta_{it}^2]=0.25^2$. 
 
-\item As before, we assume that the errors $\varepsilon_{it}$ follow the AR(1) model $\varepsilon_{it} = a \varepsilon_{i(t-1)} + \eta_{it}$, where $a=0.25$ and the innovations $\eta_{it}$ are i.i.d.\ normal with zero mean $E[\eta_{it}]=0$ and variance $E[\eta_{it}^2]=0.25^2$ {\color{red}(setting higher variance results in lower signal-to-noise ratio and we are not hitting the size level)}. 
-
-\item We let $\alpha = (\alpha_1,\ldots,\alpha_n)$ be a normally distributed random vector. In particular, $\alpha \sim N(0,c \Sigma)$ with
+\item We let $\alpha = (\alpha_1,\ldots,\alpha_n)$ be a normally distributed random vector. In particular, $\alpha \sim N(0,\Sigma)$ with
 \[ \Sigma =
 \begin{pmatrix}
 1      & \rho   & \cdots & \rho   \\
@@ -129,24 +126,27 @@ where $\varphi=0, 0.1, 0.25$ and setting $\varphi = 0$ results in simulating 3 i
 \rho   & \cdots & \rho   & 1
 \end{pmatrix},
 \]
-where $\rho = 0.1, 0.25$ {\color{red}(larger values do not seem to affect the size that much)} gives the correlation across time series $i$. To start with, we set $c=1$ and then adjust it if needed.
+where $\rho = 0.1, 0.25$ gives the correlation across time series $i$.
 
-\item To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ as before. To produce data under the alternative, {\color{red}we use the bump functions $m_1(u) = b \cdot \mathbb{1}(u \in [0.3, 0.7]) \cdot \big(1 - \big\{\frac{u - 0.5}{0.2}\big\}^2\big)^2$ for $b = 0.25, 0.5, 1$ (depicted in Figure \ref{fig:bump_function}) and $m_i = 0$ for $i \neq 1$}. For the cluster analysis, it is presumably also better to use bump functions rather than linear maps. For example, we could use 3 groups with (scaled versions of) the functions $g_1$, $g_2$ and $g_4$ from Figure 2 in Vogt \& Linton (2020, Multiscale clustering of nonparametric regression curves).
+\item To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ as before. To produce data under the alternative, we use the bump functions $m_1(u) = b \cdot \mathbb{1}(u \in [0.3, 0.7]) \cdot \big(1 - \big\{\frac{u - 0.5}{0.2}\big\}^2\big)^2$ for $b = 0.25, 0.5, 1$ (depicted in Figure \ref{fig:bump_function}) and $m_i = 0$ for $i \neq 1$.
 
 \begin{figure}[t!]
 \includegraphics[width=\textwidth]{output/bump_function.pdf}
-\caption{In black, the bump function $m_1(t/T)$ is plotted for different heights of the bump: $b = 0, 0.25, 0.5, 1$ ($b= 0$ corresponds to the data under the null $H_0$). In red, we depict the bump function plus the error term, $m_1(t/T) + \varepsilon_{it}$.}\label{fig:bump_function}
+\caption{In black, the bump function $m_1(t/T)$ is plotted for different heights of the bump: $b = 0, 0.25, 0.5, 1$ ($b= 0$ corresponds to the data under the null $H_0$). In red, we depict the one specific instance of a bump function plus the error term, $m_1(t/T) + \varepsilon_{it}$ for $T=500$.}\label{fig:bump_function}
 \end{figure}
 
-\item We take the grid $\mathcal{G}_T$ to be the same as before: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{5t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{T}} \text{ for some } t \in \mathbb{N} \big\}$ {\color{red} (the grid is sparser for the DGP without any covariates: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{10t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{100}} \text{ for some } t \in \mathbb{N} \big\}$. Hence, the grid is growing only a bit with the sample size, because with the usual grid the actual size is still a bit higher than the nominal size even though the problem should be ``easy''. I guess this is because of the fact that with the growing sample size, the multiple testing problem becomes much more complicated... Moreover, the computational time is not feasible anymore for large values of $T$. )
+\item We take the grid $\mathcal{G}_T$ to be the same as before: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{5t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{T}} \text{ for some } t \in \mathbb{N} \big\}$.
 
-\item In order to estimate the long-run variance $\sigma_i^2$, we follow the procedure described in \citet{KhismatullinaVogt2020} with the following tuning parameters: $q = 25$ and $r = 10$.
-}
+\item As before, in order to estimate the long-run variance $\sigma_i^2$, we follow the procedure described in \citet{KhismatullinaVogt2020} with the following tuning parameters: $q = 25$ and $r = 10$.
+
+\item As before, we calculate the Gaussian quantiles based on $5000$ samples, and the size and power calculations are done based on $5000$ repetitions.
 
 \end{itemize}
 
-{\color{red} The results of the simulation study with the covariates are presented in Tables \ref{tab:size1} and \ref{tab:power1} for $\phi = 0.1$ and $\rho = 0.1$ and in Tables \ref{tab:size2} and \ref{tab:power2} for $\phi = 0.25$ and $\rho = 0.25$. We are a bit more liberal with higher values of $\phi$ and $\rho$, but not overly so. The results of the size simulation study without any covariates and for $\rho = 0.25$ are presented in Table \ref{tab:size3} (no power computations since this is more of a robustness check). There is a ``bump'' in the actual size for moderate sample sizes ($T = 250, 500$) which is present under a lot specifications (even without dependence in the fixed effect), I guess this is due to the grid specifications: for small sample size ($T = 100$) the grid is a bit too sparse to detect anything spurious, whereas starting from $T=250$ the grid becomes more sensitive to the noise which stabilizes with larger values of the sample size. I have checked with different grid specification and this ``bump'' is always present but occurs at different sample sizes.}
+The results of the simulation study with the covariates are presented in Tables \ref{tab:size1} and \ref{tab:power1} for $\phi = 0.1$ and $\rho = 0.1$ and in Tables \ref{tab:size2} and \ref{tab:power2} for $\phi = 0.25$ and $\rho = 0.25$. As can be seen, the empirical size gives a reasonable approximation to the target $\alpha$ in all scenarios under investigation, even though the size numbers have a slight upward bias. This bias gets smaller as the sample size $T$ increases, which reflects the fact that we get more and more information for each of the tests that we need to carry out. We can also see that the upward bias become slightly more pronounced in case of stronger degrees of correlation across the covariates and the time series, i.e., with higher values of $\phi$ and $\rho$, but the change in test performance is almost negligible and can be attributed to random sampling. To summarize, even though slightly liberal, the test controls the FWER quite accurately in the simulation setting that we consider.
 
+As for the empirical power calculations, the test has substantial power in all the considered simulation settings as can be seen in \ref{tab:power2}.
+ 
 \begin{table}[t]
 \footnotesize{
 \begin{center}
@@ -214,24 +214,45 @@ where $\rho = 0.1, 0.25$ {\color{red}(larger values do not seem to affect the si
 \vspace{-0.4cm}
 \end{table}
 
+As a robustness check, we calculate the actual size values within a slightly simplified simulation context, without any covariates but in the presence of fixed effects with $\rho = 0.1$. Additionally, we explore larger sample sizes ($T=100, 250, 500, 750, 1000$), albeit with a sparser grid $\mathcal{G}_T$ for computational efficiency. Specifically, we define the grid as $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{10t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{10t - 3}{T}} \text{ for some } t \in \mathbb{N} \big\}$. The findings are reported in Table \ref{tab:size:no_covariates}. Notably, the results exhibit minimal deviation from the primary simulation scenarios. One thing that is potentially worth mentioning is that we can see a discernible ``bump'' in the actual size values for moderate sample sizes ($T = 250, 500$). This phenomenon persists across various specifications tested, including scenarios with $\rho = 0$ which indicates no dependence between the time series. This specific pattern can be explained by the trade-off between the sample size and the dimensionality of the problem, i.e., the number of tests we carry out simultaneously. For moderate value of the sample sizes ($T =250, 500$) the number of comparisons is already quite large (\textcolor{red}{insert the number here}), while the effective sample size for testing individual null hypothesis remains relatively modest. However, empirical evidence suggests that the size values stabilize for larger sample sizes ($T = 750, 1000$) suggesting robust test performance even in the face of significant high dimensionality of the problem (\textcolor{red}{insert the number here}).
+
 \addtocounter{table}{-1} 
 \begin{table}[t]
 \footnotesize{
 \begin{center}
-\caption{Size of the multiscale test for the case without any covariates and $\rho = 0.25$ for different sample sizes $T$ and nominal sizes $\alpha$.}
-\label{tab:size3}
+\caption{Size of the multiscale test for the case without any covariates and $\rho = 0.1$ for different sample sizes $T$ and nominal sizes $\alpha$.}
+\label{tab:size:no_covariates}
 \renewcommand{\arraystretch}{1.2}
-\input{output/15_ts_no_covariates_25_size}
+\input{output/15_ts_no_covariates_10_size}
 \end{center}}
 \vspace{-0.4cm}
 \end{table}
 
 
-\item[(iii)] As suggested by you, we compare with the Sizer method of Park et al.\ (2009). For the comparison, we could consider the design proposed in (i) without covariates and fixed effects (as these are not part of the model in Park et al.). I'd suggest to add the comparison to the supplement rather than to the main body of the text.
+\item[(ii)] \textcolor{red}{Verbal argument.}
 
-{\color{red}Currently running. Do I understand correctly that we are comparing both in terms of size and power?}
+\item[(iii)] To the best of our knowledge, the only other test for comparing trend curves with similar properties has been developed in \cite{Park2009} (SiZer). We have added comparison of our method with SiZer to the Appendix. However, we would like to note that their analysis is mainly methodological and the theory was developed only for the case of $n=2$ time series. Furthermore, their model does not include neither the covariates, nor the fixed effects. Hence, in order to allow for fair comparison between two methods, we consider a simplified version of the simulation setup from (i). In particular, we do the following.
 
-\item[(iv)] We rerun the simulations from (i) with a much smaller grid. This allows us to deal not only with $n=15$ but also with larger values of $n$: $n=25, 50, 100$. Specifically, we take the grid $\mathcal{G}_T$ to be a dyadic scheme (as in Wavelet analysis) with scales in the set 
+\begin{itemize}[label=--,leftmargin=0.45cm,itemsep=0pt]
+
+\item We choose $n=2$ and $T=100,250,500, 750, 1000$.
+
+\item We consider a simplified model $Y_{it} = m_i\big(\frac{t}{T}\big) + \varepsilon_{it}$ that does not include the covariates or the fixed effects as they are not part of the model in \cite{Park2009}.
+\item As before, we assume that the errors $\varepsilon_{it}$ follow the AR(1) model $\varepsilon_{it} = a \varepsilon_{i(t-1)} + \eta_{it}$, where $a=0.25$ and the innovations $\eta_{it}$ are i.i.d.\ normal with zero mean $E[\eta_{it}]=0$ and variance $E[\eta_{it}^2]=0.25^2$. 
+
+\item To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ as before. To produce data under the alternative, we use the bump functions $m_1(u) = b \cdot \mathbb{1}(u \in [0.3, 0.7]) \cdot \big(1 - \big\{\frac{u - 0.5}{0.2}\big\}^2\big)^2$ for $b = 0.25, 0.5, 1$ (depicted in Figure \ref{fig:bump_function}) and $m_i = 0$ for $i \neq 1$.
+
+\item We take the grid $\mathcal{G}_T$ as before: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{5t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{T}} \text{ for some } t \in \mathbb{N} \big\}$.
+
+\item In order to make the comparison between the methods as fair as possible, we do not estimate the long-run variance $\sigma_i^2$ from the data but consider $\sigma_i^2$ as known. Specifically, we use the theoretical value of the long-run variance calculated based on the true parameter values: $$\sigma_i^2 = \frac{E[\eta_{it}^2]}{(1 - a)^2} = \frac{1}{9}.$$
+
+\item As before, we calculate the Gaussian quantiles based on $5000$ samples, and the size and power calculations are done based on $5000$ repetitions.
+
+\end{itemize}
+
+The results of the size and power simulation studies that compare the proposed method and SiZer (\cite{Park2009}) are presented in Tables \ref{tab:size:sizer} and \ref{tab:power:sizer} respectively.
+
+\item[(iv)] In order to illustrate the performance of the test with larger number of time series, we rerun the simulations from (i) with a smaller grid. This allows us to deal not only with $n=15$ but also with larger values of $n$: $n=25, 50, 100$. Specifically, we take the grid $\mathcal{G}_T$ to be a dyadic scheme (as in Wavelet analysis) with scales in the set 
 \[ \mathcal{H}_T = \big\{ h = 2^k h_{\min} \text{ for } k=0,\ldots,K \big\}, \]  
 where 
 \[ h_{\min} = \frac{\lceil \log T \rceil}{T} \]
@@ -241,7 +262,7 @@ and
 \begin{align*}
 \mathcal{G}_T = \big\{ (u,h) \subseteq [0,1]: & \ (u,h) = ((2s+1) h, h) \text{ for } s = 0,\ldots,\Big\lfloor \frac{h^ {-1}-1}{2} \Big\rfloor \\ & \ \text{and } h \in \mathcal{H}_T \big\}.
 \end{align*}
-{\color{red} We rerun the simulations as specified in (i) (with the exception of the grid) for the case $\phi = 0.1$ and $\rho = 0.1$ with $T=100, 250, 500$ and different values of $n$: $n=15, 25, 50, 100$. (This is very feasible, even with $n = 100$ and $T = 500$ the running time is around 45 minutes for all size and power calculations). The results are presented in Tables \ref{tab:size:dyadic:15} - \ref{tab:power:dyadic:100}. The results are not very different from using the full grid: we are not even much more liberal. I attribute it to the ``simplicity'' of the problem: not that many multiple comparisons.}
+We rerun the simulations precisely as specified in (i), deviating solely in the grid specification and focusing on the scenario where $\phi = 0.1$ and $\rho = 0.1$ across varying sample sizes: $T=100, 250, 500$, and diverse number of time series $n=15, 25, 50, 100$. The results are presented in Tables \ref{tab:size:dyadic:15} - \ref{tab:power:dyadic:100}. Evidently, the empirical size provides an appropriate approximation to the target alpha across all scenarios under consideration.
 
 %\addtocounter{table}{-1} 
 \begin{table}[t]
@@ -414,6 +435,7 @@ Our procedure can be regarded as a further development of this very simple and n
 
 As the benchmark procedure does not provide an estimate of the number of clusters $K$, it is presumably best to compare our procedure with the benchmark for known $K$. 
 
+Additionally, it is presumably also better to use bump functions rather than linear maps. For example, we could use 3 groups with (scaled versions of) the functions $g_1$, $g_2$ and $g_4$ from Figure 2 in Vogt \& Linton (2020, Multiscale clustering of nonparametric regression curves)
 }
   
 
