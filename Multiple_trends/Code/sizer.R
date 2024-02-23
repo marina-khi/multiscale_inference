@@ -34,10 +34,7 @@ beta <- NULL
 #For the error process
 a     <- 0.25
 sigma <- 0.25
-
-#Parameters for the estimation of long-run-variance
-q <- 25 
-r <- 10
+lrv   <- sigma^2/((1 - a)^2)
 
 #For parallel computation
 numCores  <- 1
@@ -73,19 +70,31 @@ for (t_len in different_T){
   h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
   h_grid <- h_grid[h_grid > log(t_len) / t_len]
   grid   <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
+
+  sigma_vector  <- rep(sqrt(lrv), n_ts)
+  ####################################
+  #Everything for our multiscale test#
+  ####################################
   
-  #Calculating the Gaussian quantiles in parallel
-  tic()
-  cl <- makePSOCKcluster(numCores)
-  registerDoParallel(cl)
-  foreach (val = 1:sim_runs, .combine = "cbind") %dopar% {
-    repl_revision(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
-                  gaussian_sim = TRUE)
-    # Loop one-by-one using foreach
-  } -> simulated_pairwise_gaussian
-  stopCluster(cl)
-  toc()
+  #Calculating the Gaussian quantiles
   
+  simulated_pairwise_gaussian <- matrix(NA, nrow = n_ts * n_ts, ncol = sim_runs)
+
+  for (val in 1:sim_runs){
+    z_matrix      <- matrix(NA, nrow = t_len, ncol = n_ts)
+    z_augm_matrix <- matrix(NA, nrow = t_len, ncol = n_ts)
+    
+    for (i in 1:n_ts){
+      z_matrix[, i]      <- rnorm(t_len, 0, sqrt(lrv))
+      z_augm_matrix[, i] <- z_matrix[, i] - mean(z_matrix[, i])
+    }
+    
+    psi <- compute_statistics(data = z_augm_matrix,
+                              sigma_vec = sigma_vector,
+                              n_ts = n_ts, grid = grid)
+    simulated_pairwise_gaussian[, val] <- as.vector(psi$stat_pairwise)
+  }
+
   simulated_gaussian <- apply(simulated_pairwise_gaussian, 2, max)
   
   probs      <- seq(0.5, 0.995, by = 0.005)
@@ -96,19 +105,10 @@ for (t_len in different_T){
   rownames(quantiles) <- NULL
   
   quants <- as.vector(quantiles[2, ])
-  
-  #Calculating the SiZer quantiles
-  autocov <- (sigma^2/(1 - a^2)) * (a^seq(0, t_len - 1, by = 1))
-  
-  sizer.quants <- vector("list", length(different_alpha))
-  for (j in 1:length(different_alpha)){
-    sizer.quants[[j]] <- SiZer_quantiles(alpha = different_alpha[j],
-                                         t_len = t_len,
-                                         grid = grid, autocov1 = autocov,
-                                         autocov2 = autocov)
-  }
-  
+
   for (b in different_b){
+    simulated_pairwise_statistics <- matrix(NA, nrow = n_ts * n_ts, ncol = sim_runs)
+    
     m_matrix      <- matrix(0, nrow = t_len, ncol = n_ts)
     if (b == 0) {
       cat("SIZE SIMULATIONS\n")
@@ -116,24 +116,31 @@ for (t_len in different_T){
       cat("POWER SIMULATIONS WITH b = ", b, "\n")
       
       #Only the first trend function is non-zero:
-      #m_matrix[, 1] <- (1:t_len - 0.5 * t_len) * (b / t_len)
       #trend function which is a bump
       m_matrix[, 1] <- bump((1:t_len)/t_len) * b
     }
     
-    tic()
-    cl <- makePSOCKcluster(numCores)
-    registerDoParallel(cl)
-    foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
-      repl_revision(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
-                    a_ = a, sigma_ = sigma,
-                    beta_ = beta,
-                    rho_ = rho, m_matrix_ = m_matrix, q_ = q, r_ = r)
-      # Loop one-by-one using foreach
-    } -> simulated_pairwise_statistics
-    stopCluster(cl)
-    toc()
+    for (val in 1:n_rep){
+      y_matrix      <- matrix(NA, nrow = t_len, ncol = n_ts)
+      y_augm_matrix <- matrix(NA, nrow = t_len, ncol = n_ts)
+      error_matrix  <- matrix(NA, nrow = t_len, ncol = n_ts)
     
+      for (i in 1:n_ts){
+        error_matrix[, i] <- arima.sim(model = list(ar = a),
+                                       innov = rnorm(t_len, 0, sigma),
+                                       n = t_len)
+        
+        y_matrix[, i]     <- m_matrix[, i] + error_matrix[, i]
+        
+        #Estimating the fixed effects
+        alpha_hat_tmp      <- mean(y_matrix[, i])
+        y_augm_matrix[, i] <- y_matrix[, i] - alpha_hat_tmp
+      }     
+      psi <- compute_statistics(data = y_augm_matrix,
+                                sigma_vec = sigma_vector,
+                                n_ts = n_ts, grid = grid)    
+      simulated_pairwise_statistics[, val] <- as.vector(psi$stat_pairwise)
+    }
     simulated_statistic <- apply(simulated_pairwise_statistics[1:(n_ts * n_ts), ], 2, max)
     
     size_and_power_vec <- c()
@@ -155,7 +162,23 @@ for (t_len in different_T){
     l <- match(b, different_b)
     size_and_power_array[k, l, ] <- size_and_power_vec
   }
-}
+  
+  ###############################
+  #Everything for the Sizer test#
+  ###############################  
+  #Calculating the SiZer quantiles
+  autocov <- (sigma^2/(1 - a)^2) * (a^seq(0, t_len - 1, by = 1))
+  
+  sizer.quants <- vector("list", length(different_alpha))
+  for (j in 1:length(different_alpha)){
+    sizer.quants[[j]] <- SiZer_quantiles(alpha = different_alpha[j],
+                                         t_len = t_len,
+                                         grid = grid, autocov1 = autocov,
+                                         autocov2 = autocov) 
+  }
+} 
+  
+
 
 #######################
 #Output of the results#

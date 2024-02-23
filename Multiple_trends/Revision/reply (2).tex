@@ -101,17 +101,17 @@ Thank you very much for the careful reading of our manuscript and the interestin
 {\color{blue}  
 \begin{itemize}[topsep=0pt]
  
-\item[(i)] We have taken your suggestions into account and consider the following, more challenging setup for the simulation study. We also perform several robustness checks that are described further.
+\item[(i)] We have taken your suggestions into account and consider the following, more challenging setup for the simulation study. In addition to the described setup, we also perform several robustness checks that are described further.
 
 \begin{itemize}[label=--,leftmargin=0.45cm,itemsep=0pt]
 
-\item As before, we choose $n=15$ and $T=100,250,500$. Simulation scenario with $n=15$ and $T=150$ reflects well both of the applications.
+\item As before, we choose $n=15$ and $T=100,250,500$. Simulation scenario with $n=15$ and $T=150$ reflects well both applications.
   
 \item We include $3$ covariates and model them by a following VAR(3) process:
 \[ \underbrace{\begin{pmatrix} X_{it,1} \\ X_{it,2} \\ X_{it,3} \end{pmatrix}}_{=: \boldsymbol{X}_{it}} = \begin{pmatrix} a_1 & 0 & 0 \\ 0 & a_2 & 0 \\ 0 & 0 & a_3 \end{pmatrix} \begin{pmatrix} X_{it-1,1} \\ X_{it-1,2} \\ X_{it-1,3} \end{pmatrix} + \underbrace{\begin{pmatrix} \nu_{it,1} \\ \nu_{it,2} \\ \nu_{it,3} \end{pmatrix}}_{=: \boldsymbol{\nu}_{it}}. \] 
 We choose $a_1 = a_2 = a_3 = 0.25$. The innovations $\boldsymbol{\nu}_{it}$ are drawn i.i.d.\ from a multivariate normal $N(0,\Phi)$ with
 \[ \Phi = \begin{pmatrix} 1 & \varphi & \varphi \\ \varphi & 1 & \varphi \\ \varphi & \varphi & 1 \end{pmatrix}, \]
-where $\varphi=0.1, 0.25$. Note that setting $\varphi = 0$ results in simulating 3 independent covariate processes. 
+where $\varphi=0.1, 0.25$. We can also set $\varphi = 0$ which will result in simulating 3 independent covariate processes. 
 
 \item We set $\boldsymbol{\beta}_i = (\beta_{i,1},\beta_{i,2},\beta_{i,3}) = (1,1,1)$ for all $i$.
 
@@ -143,9 +143,9 @@ where $\rho = 0.1, 0.25$ gives the correlation across time series $i$.
 
 \end{itemize}
 
-The results of the simulation study with the covariates are presented in Tables \ref{tab:size1} and \ref{tab:power1} for $\phi = 0.1$ and $\rho = 0.1$ and in Tables \ref{tab:size2} and \ref{tab:power2} for $\phi = 0.25$ and $\rho = 0.25$. As can be seen, the empirical size gives a reasonable approximation to the target $\alpha$ in all scenarios under investigation, even though the size numbers have a slight upward bias. This bias gets smaller as the sample size $T$ increases, which reflects the fact that we get more and more information for each of the tests that we need to carry out. We can also see that the upward bias become slightly more pronounced in case of stronger degrees of correlation across the covariates and the time series, i.e., with higher values of $\phi$ and $\rho$, but the change in test performance is almost negligible and can be attributed to random sampling. To summarize, even though slightly liberal, the test controls the FWER quite accurately in the simulation setting that we consider.
+The results of the simulation study with the covariates are presented in Tables \ref{tab:size1} and \ref{tab:power1} for $\phi = 0.1$ and $\rho = 0.1$ and in Tables \ref{tab:size2} and \ref{tab:power2} for $\phi = 0.25$ and $\rho = 0.25$. As can be seen, the empirical size gives a reasonable approximation to the target $\alpha$ in all scenarios under investigation, even though the size numbers have a slight upward bias. This bias gets smaller as the sample size $T$ increases, which reflects the fact that we get more and more information for each of the tests that we need to carry out. We can also see that the upward bias become slightly more pronounced in case of stronger degrees of correlation across the covariates and the time series, i.e., with higher values of $\phi$ and $\rho$, but the change in test performance is almost negligible and can be attributed to random sampling. To summarize, even though slightly liberal, the test controls the FWER quite accurately in the simulation settings that we consider.
 
-As for the empirical power calculations, the test has substantial power in all the considered simulation settings as can be seen in \ref{tab:power2}.
+As for the empirical power calculations, the test has substantial power in all the considered simulation settings as can be seen in \ref{tab:power2}. For the smallest height of the bump function $b = 0.25$ and the smallest time series length $T = 100$, the power is only moderate, reflecting the fact that the alternative with $b = 0.25$ is not very far away from the null. However, as we increase the height $b$ and the sample size $T$, the power increases quickly. Already for the height value $b = 0.5$, we reach a power of $0.98$ for $T = 250$ and for all nominal sizes $\alpha$.
  
 \begin{table}[t]
 \footnotesize{
@@ -214,7 +214,7 @@ As for the empirical power calculations, the test has substantial power in all t
 \vspace{-0.4cm}
 \end{table}
 
-As a robustness check, we calculate the actual size values within a slightly simplified simulation context, without any covariates but in the presence of fixed effects with $\rho = 0.1$. Additionally, we explore larger sample sizes ($T=100, 250, 500, 750, 1000$), albeit with a sparser grid $\mathcal{G}_T$ for computational efficiency. Specifically, we define the grid as $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{10t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{10t - 3}{T}} \text{ for some } t \in \mathbb{N} \big\}$. The findings are reported in Table \ref{tab:size:no_covariates}. Notably, the results exhibit minimal deviation from the primary simulation scenarios. One thing that is potentially worth mentioning is that we can see a discernible ``bump'' in the actual size values for moderate sample sizes ($T = 250, 500$). This phenomenon persists across various specifications tested, including scenarios with $\rho = 0$ which indicates no dependence between the time series. This specific pattern can be explained by the trade-off between the sample size and the dimensionality of the problem, i.e., the number of tests we carry out simultaneously. For moderate value of the sample sizes ($T =250, 500$) the number of comparisons is already quite large (\textcolor{red}{insert the number here}), while the effective sample size for testing individual null hypothesis remains relatively modest. However, empirical evidence suggests that the size values stabilize for larger sample sizes ($T = 750, 1000$) suggesting robust test performance even in the face of significant high dimensionality of the problem (\textcolor{red}{insert the number here}).
+As a robustness check, we calculate the actual size values within a slightly simplified simulation context. Specifically, we do not include any covariates in the model but only the fixed effects $\alpha_i$ with $\rho = 0.1$. Additionally, we explore larger sample sizes ($T=100, 250, 500, 750, 1000$), albeit with a sparser grid $\mathcal{G}_T$ for computational efficiency: we define the grid as $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{10t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{10t - 3}{T}} \text{ for some } t \in \mathbb{N} \big\}$. The findings are reported in Table \ref{tab:size:no_covariates}. Notably, the results exhibit minimal deviation from the primary simulation scenarios. One thing that is potentially worth mentioning is that we can see a discernible ``bump'' in the actual size values for moderate sample sizes ($T = 250, 500$). This phenomenon persists across various specifications tested, including scenarios with $\rho = 0$ which indicates no dependence between the time series. This specific pattern can be explained by the trade-off between the sample size and the dimensionality of the problem, i.e., the number of tests we carry out simultaneously. For moderate value of the sample sizes ($T =250, 500$) the number of comparisons is already quite large ($15750$ and $63000$ simultaneous comparisons, respectively), while the effective sample size for testing individual null hypothesis remains relatively modest. However, empirical evidence suggests that the size values stabilize for larger sample sizes ($T = 750, 1000$) suggesting robust test performance even in the face of significant high dimensionality of the problem ($149625 $ and $262500$ simultaneous comparisons, respectively).
 
 \addtocounter{table}{-1} 
 \begin{table}[t]
@@ -244,7 +244,7 @@ As a robustness check, we calculate the actual size values within a slightly sim
 
 \item We take the grid $\mathcal{G}_T$ as before: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{5t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{T}} \text{ for some } t \in \mathbb{N} \big\}$.
 
-\item In order to make the comparison between the methods as fair as possible, we do not estimate the long-run variance $\sigma_i^2$ from the data but consider $\sigma_i^2$ as known. Specifically, we use the theoretical value of the long-run variance calculated based on the true parameter values: $$\sigma_i^2 = \frac{E[\eta_{it}^2]}{(1 - a)^2} = \frac{1}{9}.$$
+\item In order to make the comparison between the methods as fair as possible, we do not estimate the long-run variance $\sigma_i^2$ from the data but consider $\sigma_i^2$ as known. Specifically, we use the theoretical value of the long-run variance calculated based on the true parameter values: $$\sigma_i^2 = \frac{E[\eta_{it}^2]}{(1 - a)^2} = \frac{1}{9} \text{ for all }i.$$
 
 \item As before, we calculate the Gaussian quantiles based on $5000$ samples, and the size and power calculations are done based on $5000$ repetitions.
 
