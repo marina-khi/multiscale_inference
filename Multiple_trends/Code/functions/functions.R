@@ -783,7 +783,7 @@ SiZer_quantiles <- function(alpha, t_len, grid, autocov1, autocov2)
     I.gamma   <- int1/int2
     
     #Clustering coefficient
-    theta     <- 2 * pnorm( sqrt(I.gamma) * sqrt(log(gg)) * Delta.tilde/h.vec[i] ) - 1
+    theta     <- 2 * pnorm(sqrt(I.gamma) * sqrt(log(gg)) * Delta.tilde/h.vec[i]) - 1
     x         <- (1-alpha/2)^(1/(theta*gg))
     quants[i] <- qnorm(x)
   }

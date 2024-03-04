@@ -32,7 +32,7 @@ different_b     <- c(0) #Zero is for calculating the size
 
 #For the error process
 a     <- 0.25
-sigma <- 0.25
+sigma <- 1
 lrv   <- sigma^2/((1 - a)^2)
 
 #For parallel computation
