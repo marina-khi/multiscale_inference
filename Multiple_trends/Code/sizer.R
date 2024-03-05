@@ -22,22 +22,20 @@ sourceCpp("functions/SiZer_functions.cpp")
 
 n_ts  <- 2 #Number of time series
 
-n_rep    <- 1000 #number of simulations for calculating size and power
-sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
+n_rep    <- 5000 #number of simulations for calculating size and power
+sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles for MS test
 
-different_T     <- c(100, 250) #Different lengths of time series
+different_T     <- c(100, 250, 500) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
-different_b     <- c(0) #Zero is for calculating the size
-
+different_b     <- c(0, 0.25, 0.5) #Zero is for calculating the size
 
 #For the error process
-a     <- 0.25
-sigma <- 1
-lrv   <- sigma^2/((1 - a)^2)
+a            <- 0.25
+sigma        <- 0.25
+lrv          <- sigma^2/((1 - a)^2)
+sigma_vector <- rep(sqrt(lrv), n_ts)
 
-#For parallel computation
-numCores  <- 1
-seed      <- 2468022
+seed <- 246802468
 
 ################################
 #Calculating the size and power#
@@ -61,7 +59,7 @@ ijset <- expand.grid(i = 1:n_ts, j = 1:n_ts)
 ijset <- ijset[ijset$i < ijset$j, ]
 
 for (t_len in different_T){
-#  set.seed(seed)
+  set.seed(seed)
   k <- match(t_len, different_T)
   
   #Constructing the grid
@@ -70,15 +68,13 @@ for (t_len in different_T){
   h_grid <- h_grid[h_grid > log(t_len) / t_len]
   grid   <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
 
-  sigma_vector  <- rep(sqrt(lrv), n_ts)
-  
   
   #################################
   #Calculating the SiZer quantiles#
   #################################
   
   cat("Calculating the SiZer quantiles\n")
-  autocov <- (sigma^2/(1 - a)^2) * (a^seq(0, t_len - 1, by = 1))
+  autocov <- (sigma^2/(1 - a^2)) * (a^seq(0, t_len - 1, by = 1))
   
   sizer.quants <- vector("list", length(different_alpha))
   for (j in 1:length(different_alpha)){
@@ -87,10 +83,13 @@ for (t_len in different_T){
                                          grid = grid, autocov1 = autocov,
                                          autocov2 = autocov)
   }
-  sizer.wghts  <- SiZer_weights(T = t_len, grid = grid)
+  sizer.wghts <- SiZer_weights(t_len = t_len, grid = grid)
   sizer.std    <- SiZer_std(weights = sizer.wghts, autocov1 = autocov,
                             autocov2 = autocov, t_len = t_len)
+  #sizer.std1  <- SiZer_std(sigma = sigma, weights_ = sizer.wghts, autocov = autocov, t_len = t_len)
+  #sizer.std   <- sqrt(2) * sizer.std1
   
+    
   ####################################
   #Calculating the Gaussian quantiles#
   ####################################
@@ -129,8 +128,8 @@ for (t_len in different_T){
   #################################
   
   for (b in different_b){
-    simulated_pairwise_statistics <- matrix(NA, nrow = n_ts * n_ts, ncol = sim_runs)
-    sizer_results_matrix          <- matrix(NA, nrow = length(different_alpha), ncol = sim_runs)
+    simulated_pairwise_statistics <- matrix(NA, nrow = n_ts * n_ts, ncol = n_rep)
+    sizer_results_matrix          <- matrix(NA, nrow = length(different_alpha), ncol = n_rep)
         
     m_matrix      <- matrix(0, nrow = t_len, ncol = n_ts)
     if (b == 0) {
@@ -146,6 +145,8 @@ for (t_len in different_T){
       y_matrix      <- matrix(NA, nrow = t_len, ncol = n_ts)
       y_augm_matrix <- matrix(NA, nrow = t_len, ncol = n_ts)
       error_matrix  <- matrix(NA, nrow = t_len, ncol = n_ts)
+      
+      y_sizer_matrix <- matrix(NA, nrow = t_len * n_ts, ncol = 2)
     
       for (i in 1:n_ts){
         error_matrix[, i] <- arima.sim(model = list(ar = a),
@@ -203,7 +204,7 @@ for (t_len in different_T){
       cat("Ratio of rejection is ", num_of_rej, "with b = ", b,
           ", alpha = ", alpha, "and T = ", t_len, "\n")
       
-      num_of_rej_sizer         <- sum(sizer_results_matrix[, j])/n_rep
+      num_of_rej_sizer         <- sum(sizer_results_matrix[j, ])/n_rep
       size_and_power_sizer_vec <- c(size_and_power_sizer_vec, num_of_rej_sizer) 
       
       cat("Ratio of rejection for SiZer is ", num_of_rej_sizer, "with b = ", b,

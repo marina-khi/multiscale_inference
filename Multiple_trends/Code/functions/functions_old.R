@@ -468,3 +468,33 @@ CalculateSize <- function(timeseries1, timeseries2, T, different_alpha, Nsim = 1
   return(list(size.ms = size_ms, size.SiZer = size_SiZer,
               h.grid = h.grid.new))
 }
+
+##################
+#SIZER COMPARISON#
+##################
+SiZermap <- function(u.grid, h.grid, test.results, plot.title = NA){
+  # computes SiZer map from the test results 
+  
+  col.vec <- c("red", "purple", "blue", "gray") 
+  #col.vec <- c("#F7F7F7", "#969696", "#525252", "#636363") 
+  temp    <- sort(unique(as.vector(test.results))) + 2
+  temp    <- seq(min(temp),max(temp),by=1)
+  col.vec <- col.vec[temp]
+  
+  image(x = u.grid, y = log(h.grid,10), z = t(test.results), col = col.vec,
+        xlab = '', ylab = expression(log[10](h)), main = plot.title, xaxt = 'n',
+        mgp = c(1,0.5,0))
+}
+
+# #For smoothing
+# grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
+# y_aggregated_vec <- rowMeans(y_matrix)
+# smoothed         <- mapply(local_linear_smoothing, grid_points,
+#                            MoreArgs = list(y_aggregated_vec, grid_points, bw = 7/t_len))
+# 
+# y_sizer_matrix[, 1] <- rep(y_aggregated_vec - smoothed, n_ts)
+
+# #Local linear estimates for each of the ts
+# smoothed_i  <- mapply(local_linear_smoothing, grid_points,
+#                       MoreArgs = list(y_matrix[, i], grid_points, bw = 7/t_len))
+# y_sizer_matrix[((i - 1) * t_len + 1):(i * t_len), 2] <- y_augm_matrix[, i] - smoothed_i
