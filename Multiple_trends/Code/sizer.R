@@ -25,7 +25,7 @@ n_ts  <- 2 #Number of time series
 n_rep    <- 5000 #number of simulations for calculating size and power
 sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles for MS test
 
-different_T     <- c(100, 250, 500) #Different lengths of time series
+different_T     <- c(100, 250, 500, 750, 1000) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
 different_b     <- c(0, 0.25, 0.5) #Zero is for calculating the size
 
@@ -226,18 +226,28 @@ for (t_len in different_T){
 
 for (b in different_b){
   l   <- match(b, different_b)
-  tmp <- as.matrix(size_and_power_array[, l, ])
+  tmp <- matrix(NA, nrow = length(different_T), ncol = 2 * length(different_alpha))
+  for (i in 1:length(different_alpha)){
+    tmp[, 2 * i - 1] <- as.vector(size_and_power_array[, l, i])
+    tmp[, 2 * i]     <- as.vector(size_and_power_sizer_array[, l, i])
+  }
+  
+  row.names(tmp) <- paste0("$T = ", row.names(as.matrix(size_and_power_array[, l, ])), "$")
+  
+  tmp2 <- as.matrix(size_and_power_array[, l, ])
+  tmp3 <- as.matrix(size_and_power_sizer_array[, l, ])
+  
   if (b == 0){
     filename = paste0("output/revision/", n_ts, "_ts_size_sizer_comparison.tex")
   } else {
     filename = paste0("output/revision/", n_ts, "_ts_power_b_",
                       b * 100, "_sizer_comparison.tex")
   }
-  output_matrix(tmp, filename)
+  output_matrix2(tmp, filename)
   line <- paste0("%This simulation was done for the following values of the parameters: n_ts = ", n_ts,
                  ", with ", n_rep, " simulations for calculating size and power and ", sim_runs,
                  " simulations to calculate the Gaussian quantiles. Furthermore, for the error process we have a = ",
                  a, " and sigma = ", sigma,
-                 ". There are no fixed effects. The grid is fine (growing with the sample size)")
+                 ". There are no fixed effects. The grid is standard.")
   write(line, file = filename, append = TRUE)
 }

@@ -387,6 +387,15 @@ output_matrix <- function(matrix_, filename){
                file = filename, add.to.row = addtorow, include.colnames = FALSE)
 }
 
+output_matrix2 <- function(matrix_, filename){
+  addtorow     <- list()
+  addtorow$pos <- list(0, 0)
+  addtorow$command <- c("& \\multicolumn{6}{c}{nominal size $\\alpha$} \\\\\n",
+                        "$T$ & 0.01 & 0.05 & 0.1 & 0.01 & 0.05 & 0.1 \\\\\n") 
+  print.xtable(xtable(matrix_, digits = c(3), align = "ccccccc"), type = "latex",
+               file = filename, add.to.row = addtorow, include.colnames = FALSE)
+}
+
 
 #Function that simulates 3 covariates as VAR(3) process with the given
 #coefficients (a_x_mat_ and sigma_x_mat_),
