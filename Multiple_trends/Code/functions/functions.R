@@ -80,12 +80,19 @@ local_linear_smoothing <- function(x_, data_p, grid_p, bw){
     return(result/norm)
   }
 }
+
 #Simulating a bump function
 bump  <- function(u){
   u.lower <- 0.3
   u.upper <- 0.7
   arg <- (u - 0.5)/(u.upper - 0.5)
   return(as.double(u >= u.lower & u <= u.upper) * (1 - arg^2)^2)
+}
+
+#Simulating a kind of a bump function for clustering
+b_function <- function(u, x_0, h){
+  arg <- (u - x_0)/h
+  return(as.double((abs(arg) <= 1) * (1 - arg^2)^2))
 }
 
 
