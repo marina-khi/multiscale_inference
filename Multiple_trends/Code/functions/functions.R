@@ -99,7 +99,7 @@ b_function <- function(u, x_0, h){
 #Function used for simulated the three groups of time series and calculate 
 #the corresponding test statistics, needed for parallel computations
 repl <- function(rep, t_len_, n_ts_, sigma_, a_hat_, q_, r_, grid_, m1_, m2_){
-  library(multiscale)
+  library(MSinference)
   
   simulated_data           <- matrix(NA, nrow = t_len_, ncol = n_ts_)
   colnames(simulated_data) <- 1:n_ts_
@@ -129,6 +129,67 @@ repl <- function(rep, t_len_, n_ts_, sigma_, a_hat_, q_, r_, grid_, m1_, m2_){
   psi     <- compute_statistics(data = simulated_data, sigma_vec = sigmahat_vector,
                                 n_ts = n_ts_, grid = grid_)
   results <- as.vector(psi$stat_pairwise)
+  return(results)
+}
+
+#Function used for simulated the three groups of time series and calculate 
+#the corresponding test statistics, needed for parallel computations
+repl_clustering_revision <- function(rep, t_len_, n_ts_, sigma_, a_hat_, q_, r_, grid_, m1_, m2_, h_){
+  library(MSinference)
+  
+  simulated_data           <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+  colnames(simulated_data) <- 1:n_ts_
+
+
+  
+  sigmahat_vector <- c()
+  for (i in 1:(floor(n_ts_ / 3))){
+    simulated_data[, i] <- arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
+    simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
+    AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
+    sigma_hat_i         <- sqrt(AR.struc$lrv)
+    sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
+  }
+  for (i in (floor(n_ts_ / 3) + 1):(floor(2 * n_ts_ / 3))){
+    simulated_data[, i] <- m1_ + arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
+    simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
+    AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
+    sigma_hat_i         <- sqrt(AR.struc$lrv)
+    sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
+  }
+  for (i in (floor(2 * n_ts_ / 3) + 1):n_ts_){
+    simulated_data[, i] <- m2_ + arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
+    simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
+    AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
+    sigma_hat_i         <- sqrt(AR.struc$lrv)
+    sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
+  }
+  psi <- compute_statistics(data = simulated_data, sigma_vec = sigmahat_vector,
+                            n_ts = n_ts_, grid = grid_)
+  
+  
+  grid_points             <- seq(1/t_len_, 1, by = 1/t_len_)
+  grid_points_2           <- seq(1/(2 * t_len_), 1, by = 1/t_len_)
+  smoothed_data           <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+  colnames(smoothed_data) <- 1:n_ts_
+  
+  for (i in 1:n_ts_){
+    smoothed_data[, i] <- mapply(local_linear_smoothing, grid_points_2, MoreArgs = list(simulated_data[, i], grid_points, h_))
+  }
+  
+  #Calculating the benchmark model
+ 
+  benchmark_results <- matrix(0, nrow = n_ts_, ncol = n_ts_)
+  for (i in 1:(n_ts_ - 1)){
+    for (j in (i + 1):n_ts_){
+#      integrand <- function(w, bw){
+#        (mapply(local_linear_smoothing, w, MoreArgs = list(simulated_data[, i], grid_points, bw)) -  mapply(local_linear_smoothing, w, MoreArgs = list(simulated_data[, j], grid_points, bw)))^2
+#      }
+#      benchmark_results[i, j] <- integrate(integrand, lower = 0, upper = 1, bw = h_, subdivisions = 500)[[1]]
+      benchmark_results[i, j] <- sum((smoothed_data[, i] - smoothed_data[, j])^2) * (1/t_len_)
+    }
+  }
+  results <- c(as.vector(psi$stat_pairwise), as.vector(benchmark_results))
   return(results)
 }
 

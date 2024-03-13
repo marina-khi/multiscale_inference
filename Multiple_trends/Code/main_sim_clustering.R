@@ -8,6 +8,7 @@ library(foreach)
 library(parallel)
 library(iterators)
 library(doParallel)
+library(tictoc)
 library(xtable)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
@@ -19,8 +20,8 @@ source("functions/functions.R")
 ##############################
 
 n_ts     <- 15 #number of different time series for simulation
-n_rep    <- 1000 #number of simulations for calculating size and power
-sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
+n_rep    <- 5000 #number of simulations for calculating size and power
+sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
 
 different_T     <- c(100, 250, 500) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
@@ -30,6 +31,7 @@ sigma <- 0.25
 q     <- 25 #Parameters for the estimation of long-run-variance
 r     <- 10
 
+numCores  = round(parallel::detectCores() * .70)
 
 ###################################################
 #Simulating the data and performing the clustering#
@@ -50,15 +52,18 @@ for (t_len in different_T){
   m2 <- numeric(t_len)
   m1 <- 0.35 * b_function((1:t_len)/t_len, 0.25, 0.25)
   m2 <- 2 * b_function((1:t_len)/t_len, 0.25, 0.025)
-  
-  numCores  = round(parallel::detectCores() * .70)
+
+  cat("Calculating the clustering results for t = ", t_len,"\n")
+  tic()
   cl <- makePSOCKcluster(numCores)
   registerDoParallel(cl)
   foreach (val = 1:n_rep, .combine = "cbind") %dopar% { 
-    repl(val, t_len, n_ts, sigma, a_hat, q, r, grid, m1, m2) # Loop one-by-one using foreach
+    repl_clustering_revision(val, t_len, n_ts, sigma, a_hat, q, r, grid, m1, m2, h_grid[1]) # Loop one-by-one using foreach
   } -> simulated_statistic
   stopCluster(cl)
+  toc()
 
+  cat("Calculating the Gaussian quantiles\n")
   quantiles <- compute_quantiles(t_len = t_len, grid = grid, n_ts = n_ts,
                                  ijset = ijset, sigma = 1,
                                  sim_runs = sim_runs,
@@ -66,6 +71,8 @@ for (t_len in different_T){
                                  correction = TRUE, epidem = FALSE)
   probs  <- as.vector(quantiles$quant[1, ])
   quants <- as.vector(quantiles$quant[2, ])
+
+  cat("Assesing the results\n")
   
   for (alpha in different_alpha){
     if (sum(probs == (1 - alpha)) == 0)
@@ -77,9 +84,15 @@ for (t_len in different_T){
     groups_mat <- matrix(NA, ncol = n_rep, nrow = n_ts)
     colnames(groups_mat) <- paste0("rep_", 1:n_rep)
     rownames(groups_mat) <- paste0("ts_", 1:n_ts)
+    
+    groups_benchmark_mat <- matrix(NA, ncol = n_rep, nrow = n_ts)
+    colnames(groups_benchmark_mat) <- paste0("rep_", 1:n_rep)
+    rownames(groups_benchmark_mat) <- paste0("ts_", 1:n_ts)
+    
     number_of_groups_vec <- c()
     for (i in 1:n_rep){
-      statistic_vector <- simulated_statistic[, i]
+      #Multiscale method
+      statistic_vector <- simulated_statistic[1:(nrow(simulated_statistic)/2), i]
       statistic_value  <- max(statistic_vector)
       if (statistic_value > quant) {
         statistic_matrix  <- matrix(statistic_vector, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
@@ -94,10 +107,23 @@ for (t_len in different_T){
       }
       groups_mat[, i]      <- groups
       number_of_groups_vec <- c(number_of_groups_vec, number_of_groups)
+      
+      #Benchmark method
+      statistic_vector_benchmark <- simulated_statistic[(nrow(simulated_statistic)/2 + 1):nrow(simulated_statistic), i]
+      statistic_matrix_benchmark <- matrix(statistic_vector_benchmark, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
+      statistic_matrix_benchmark <- forceSymmetric(statistic_matrix_benchmark, uplo = "U")
+      statistic_matrix_benchmark <- as.dist(statistic_matrix_benchmark)
+      clustering_benchmark       <- hclust(statistic_matrix_benchmark, method = "complete")
+      groups_benchmark           <- cutree(clustering_benchmark, k = 3)
+      groups_benchmark_mat[, i]  <- groups_benchmark
     }
     clustering_results <- rbind(number_of_groups_vec, groups_mat)
-    filename = paste0("output/misc/results_for_T_", t_len, "_and_alpha_", alpha * 100, "_revision.RData")
-    save(clustering_results, file = filename)      
+    clustering_results_benchmark <- rbind(rep(3, n_rep), groups_benchmark_mat)
+    
+    filename = paste0("output/revision/misc/results_for_T_", t_len, "_and_alpha_", alpha * 100, ".RData")
+    save(clustering_results, file = filename)
+    filename_benchmark = paste0("output/revision/misc/results_for_T_", t_len, "_and_alpha_", alpha * 100, "_benchmark.RData")
+    save(clustering_results_benchmark, file = filename_benchmark)  
   }
 }
 
@@ -118,7 +144,7 @@ j <- 0
 
 for (t_len in different_T){
   filename = paste0("output/misc/results_for_T_", t_len, "_and_alpha_",
-                    alpha*100, ".RData")
+                    alpha*100, "_revision.RData")
   load(file = filename)
   correct_specification      <- c(rep(1, (floor(n_ts / 3))),
                                   rep(2, (floor(2 * n_ts / 3) - floor(n_ts / 3))),
