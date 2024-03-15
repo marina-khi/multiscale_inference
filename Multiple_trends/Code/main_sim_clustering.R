@@ -20,11 +20,12 @@ source("functions/functions.R")
 ##############################
 
 n_ts     <- 15 #number of different time series for simulation
-n_rep    <- 1000 #number of simulations for calculating size and power
-sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
+n_rep    <- 5000 #number of simulations for calculating size and power
+sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
 
-different_T     <- c(100, 250, 500) #Different lengths of time series
-different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
+different_T <- c(100, 250, 500) #Different lengths of time series
+alpha       <- 0.05
+#different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
 
 a_hat <- 0.25 
 sigma <- 0.25
@@ -39,7 +40,7 @@ numCores  = round(parallel::detectCores() * .70)
 
 for (t_len in different_T){
   #Constructing the grid
-  u_grid <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
+  u_grid <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
   h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
   h_grid <- h_grid[h_grid > log(t_len) / t_len]
   grid   <- construct_grid(t = t_len)
@@ -85,57 +86,55 @@ for (t_len in different_T){
   
   cat("Assesing the results\n")
   
-  for (alpha in different_alpha){
-    if (sum(probs == (1 - alpha)) == 0)
-      pos <- which.min(abs(probs - (1 - alpha)))
-    if (sum(probs == (1 - alpha)) != 0)
-      pos <- which.max(probs == (1 - alpha))    
-    quant <- quants[pos]
-    
-    groups_mat <- matrix(NA, ncol = n_rep, nrow = n_ts)
-    colnames(groups_mat) <- paste0("rep_", 1:n_rep)
-    rownames(groups_mat) <- paste0("ts_", 1:n_ts)
-    
-    groups_benchmark_mat <- matrix(NA, ncol = n_rep, nrow = n_ts)
-    colnames(groups_benchmark_mat) <- paste0("rep_", 1:n_rep)
-    rownames(groups_benchmark_mat) <- paste0("ts_", 1:n_ts)
-    
-    number_of_groups_vec <- c()
-    for (i in 1:n_rep){
-      #Multiscale method
-      statistic_vector <- simulated_statistic[1:(nrow(simulated_statistic)/2), i]
-      statistic_value  <- max(statistic_vector)
-      if (statistic_value > quant) {
-        statistic_matrix  <- matrix(statistic_vector, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
-        statistic_matrix  <- forceSymmetric(statistic_matrix, uplo = "U")
-        statistic_matrix  <- as.dist(statistic_matrix)
-        clustering        <- hclust(statistic_matrix, method = "complete")
-        groups            <- cutree(clustering, h = quant)
-        number_of_groups  <- max(groups)
-      } else {
-        number_of_groups <- 1
-        groups           <- rep(1, n_ts)
-      }
-      groups_mat[, i]      <- groups
-      number_of_groups_vec <- c(number_of_groups_vec, number_of_groups)
-      
-      #Benchmark method
-      statistic_vector_benchmark <- simulated_statistic[(nrow(simulated_statistic)/2 + 1):nrow(simulated_statistic), i]
-      statistic_matrix_benchmark <- matrix(statistic_vector_benchmark, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
-      statistic_matrix_benchmark <- forceSymmetric(statistic_matrix_benchmark, uplo = "U")
-      statistic_matrix_benchmark <- as.dist(statistic_matrix_benchmark)
-      clustering_benchmark       <- hclust(statistic_matrix_benchmark, method = "complete")
-      groups_benchmark           <- cutree(clustering_benchmark, k = 3)
-      groups_benchmark_mat[, i]  <- groups_benchmark
+  if (sum(probs == (1 - alpha)) == 0)
+    pos <- which.min(abs(probs - (1 - alpha)))
+  if (sum(probs == (1 - alpha)) != 0)
+    pos <- which.max(probs == (1 - alpha))    
+  quant <- quants[pos]
+  
+  groups_mat <- matrix(NA, ncol = n_rep, nrow = n_ts)
+  colnames(groups_mat) <- paste0("rep_", 1:n_rep)
+  rownames(groups_mat) <- paste0("ts_", 1:n_ts)
+  
+  groups_benchmark_mat <- matrix(NA, ncol = n_rep, nrow = n_ts)
+  colnames(groups_benchmark_mat) <- paste0("rep_", 1:n_rep)
+  rownames(groups_benchmark_mat) <- paste0("ts_", 1:n_ts)
+  
+  number_of_groups_vec <- c()
+  for (i in 1:n_rep){
+    #Multiscale method
+    statistic_vector <- simulated_statistic[1:(nrow(simulated_statistic)/2), i]
+    statistic_value  <- max(statistic_vector)
+    if (statistic_value > quant) {
+      statistic_matrix  <- matrix(statistic_vector, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
+      statistic_matrix  <- forceSymmetric(statistic_matrix, uplo = "U")
+      statistic_matrix  <- as.dist(statistic_matrix)
+      clustering        <- hclust(statistic_matrix, method = "complete")
+      groups            <- cutree(clustering, h = quant)
+      number_of_groups  <- max(groups)
+    } else {
+      number_of_groups <- 1
+      groups           <- rep(1, n_ts)
     }
-    clustering_results <- rbind(number_of_groups_vec, groups_mat)
-    clustering_results_benchmark <- rbind(rep(3, n_rep), groups_benchmark_mat)
+    groups_mat[, i]      <- groups
+    number_of_groups_vec <- c(number_of_groups_vec, number_of_groups)
     
-    filename = paste0("output/revision/misc/results_for_T_", t_len, "_and_alpha_", alpha * 100, ".RData")
-    save(clustering_results, file = filename)
-    filename_benchmark = paste0("output/revision/misc/results_for_T_", t_len, "_and_alpha_", alpha * 100, "_benchmark.RData")
-    save(clustering_results_benchmark, file = filename_benchmark)  
+    #Benchmark method
+    statistic_vector_benchmark <- simulated_statistic[(nrow(simulated_statistic)/2 + 1):nrow(simulated_statistic), i]
+    statistic_matrix_benchmark <- matrix(statistic_vector_benchmark, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
+    statistic_matrix_benchmark <- forceSymmetric(statistic_matrix_benchmark, uplo = "U")
+    statistic_matrix_benchmark <- as.dist(statistic_matrix_benchmark)
+    clustering_benchmark       <- hclust(statistic_matrix_benchmark, method = "complete")
+    groups_benchmark           <- cutree(clustering_benchmark, k = 3)
+    groups_benchmark_mat[, i]  <- groups_benchmark
   }
+  clustering_results <- rbind(number_of_groups_vec, groups_mat)
+  clustering_results_benchmark <- rbind(rep(3, n_rep), groups_benchmark_mat)
+  
+  filename = paste0("output/revision/misc/results_for_T_", t_len, ".RData")
+  save(clustering_results, file = filename)
+  filename_benchmark = paste0("output/revision/misc/results_for_T_", t_len, "_benchmark.RData")
+  save(clustering_results_benchmark, file = filename_benchmark)
 }
 
 
@@ -146,16 +145,13 @@ for (t_len in different_T){
 correct_groups   <- c()
 correct_structure <- c()
 
-alpha <- 0.05
-
 group_count <- list()
 error_count <- list()
 
 j <- 0
 
 for (t_len in different_T){
-  filename = paste0("output/revision/misc/results_for_T_", t_len, "_and_alpha_",
-                    alpha*100, ".RData")
+  filename = paste0("output/revision/misc/results_for_T_", t_len, ".RData")
   load(file = filename)
   correct_specification      <- c(rep(1, (floor(n_ts / 3))),
                                   rep(2, (floor(2 * n_ts / 3) - floor(n_ts / 3))),
