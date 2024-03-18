@@ -80,6 +80,14 @@ local_linear_smoothing <- function(x_, data_p, grid_p, bw){
     return(result/norm)
   }
 }
+#Simulating a bump function
+bump  <- function(u){
+  u.lower <- 0.3
+  u.upper <- 0.7
+  arg <- (u - 0.5)/(u.upper - 0.5)
+  return(as.double(u >= u.lower & u <= u.upper) * (1 - arg^2)^2)
+}
+
 
 #Function used for simulated the three groups of time series and calculate 
 #the corresponding test statistics, needed for parallel computations
@@ -379,99 +387,20 @@ output_matrix <- function(matrix_, filename){
                file = filename, add.to.row = addtorow, include.colnames = FALSE)
 }
 
-#Function that simulates the covariates as AR(1), the error terms as AR(1)
-#the time series as y = beta_ %*% covariates + m_matrix_ + errors,
-#estimates the parameters, and then computes the test statistics
-repl2 <- function(rep, t_len_, n_ts_, grid_, gaussian_sim = FALSE,
-                  a_ = 0, sigma_ = 1, beta_ = 0, a_x_ = 0, sigma_x_ = 1,
-                  m_matrix_ = NULL, q_ = 25, r_ = 10){
-  library(MSinference)
-  library(dplyr)
-  
-  if (gaussian_sim){
-    z_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    z_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    sigma_vector  <- rep(1, n_ts_)
-    
-    for (i in 1:n_ts_){
-      z_matrix[, i]      <- rnorm(t_len_, 0, sigma_)
-      z_augm_matrix[, i] <- z_matrix[, i] - mean(z_matrix[, i])
-    }
-    
-    psi <- compute_statistics(data = z_augm_matrix,
-                              sigma_vec = sigma_vector,
-                              n_ts = n_ts_, grid = grid_)
-  } else {
-    y_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    y_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    error_matrix  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    
-    sigmahat_vector <- c()
-    
-    if (beta_ != 0){
-      x_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-      for (i in 1:n_ts_){
-        error_matrix[, i] <- arima.sim(model = list(ar = a_),
-                                       innov = rnorm(t_len_, 0, sigma_),
-                                       n = t_len_)
-        x_matrix[, i]     <- arima.sim(model = list(ar = a_x_),
-                                       innov = rnorm(t_len_, 0, sigma_x_),
-                                       n = t_len_)
-        y_matrix[, i]     <- m_matrix_[, i] + beta_ * x_matrix[, i] + error_matrix[, i]
-        
-        #First differences
-        x_diff    <- x_matrix[, i]- dplyr::lag(x_matrix[, i], n = 1, default = NA)
-        y_diff    <- y_matrix[, i]- dplyr::lag(y_matrix[, i], n = 1, default = NA)
-        
-        #Estimating beta
-        x_diff_tmp <- as.matrix(x_diff)[-1, ]
-        y_diff_tmp <- as.matrix(y_diff)[-1, ]
-        
-        beta_hat_tmp  <- solve(t(x_diff_tmp) %*% x_diff_tmp) %*% t(x_diff_tmp) %*% y_diff_tmp
-        alpha_hat_tmp <- mean(y_matrix[, i] - x_matrix[, i] * as.vector(beta_hat_tmp))
 
-        y_augm_matrix[, i] <- y_matrix[, i] - x_matrix[, i] * as.vector(beta_hat_tmp) - alpha_hat_tmp
-        AR.struc           <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
-                                           r_bar = r_, p = 1)
-        sigma_hat_i        <- sqrt(AR.struc$lrv)
-        sigmahat_vector    <- c(sigmahat_vector, sigma_hat_i) 
-      }
-    } else {
-      for (i in 1:n_ts_){
-        error_matrix[, i] <- arima.sim(model = list(ar = a_),
-                                       innov = rnorm(t_len_, 0, sigma_),
-                                       n = t_len_)
-        y_matrix[, i]     <- m_matrix_[, i] + error_matrix[, i]
-        
-        #Estimating alpha_i
-        alpha_hat_tmp     <- mean(y_matrix[, i])
-
-        y_augm_matrix[, i]  <- y_matrix[, i] - alpha_hat_tmp
-        AR.struc            <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
-                                            r_bar = r_, p = 1)
-        sigma_hat_i         <- sqrt(AR.struc$lrv)
-        sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)   
-      }     
-    }
-    psi <- compute_statistics(data = y_augm_matrix,
-                              sigma_vec = sigmahat_vector,
-                              n_ts = n_ts_, grid = grid_)    
-  }
-  results <- as.vector(psi$stat_pairwise)
-  return(results)
-}
-
-#Function that simulates 4 covariates as AR(1) with the given
-#coefficients (a_x_vec_ and sigma_x_vec_),
+#Function that simulates 3 covariates as VAR(3) process with the given
+#coefficients (a_x_mat_ and sigma_x_mat_),
 #the error terms as AR(1) also with the given coefficient a_ and sigma_,
-#the time series as y = beta_ %*% covariates + m_matrix_ + errors,
+#the fixed effect term alpha_ as a normally distributed random vector,
+#N(0, c_ * Sigma_a_mat_), the time series as
+#y = alpha_ + beta_ %*% covariates + m_matrix_ + errors,
 #estimates the parameters, and then computes the test statistics
-repl_revision <- function(rep, t_len_, n_ts_, grid_, gaussian_sim = FALSE,
-                          a_ = 0, sigma_ = 1, beta_ = NULL,
-                          a_x_vec_ = c(0, 0, 0, 0),
-                          sigma_x_vec_ = c(1, 1, 1, 1),
-                          rho_ = 0, 
-                          m_matrix_ = NULL, q_ = 25, r_ = 10){
+repl_revision <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
+                           beta_ = NULL,
+                           a_x_vec_ = c(0, 0, 0), phi_ = 0,
+                           rho_ = 0, m_matrix_ = NULL,
+                           q_ = 25, r_ = 10,
+                           gaussian_sim = FALSE){
 
   library(MSinference)
   library(dplyr)
@@ -479,69 +408,66 @@ repl_revision <- function(rep, t_len_, n_ts_, grid_, gaussian_sim = FALSE,
   if (gaussian_sim){
     z_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
     z_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    sigma_vector  <- rep(1, n_ts_)
-    
+    sigma_vector  <- rep(sigma_, n_ts_)
+
     for (i in 1:n_ts_){
       z_matrix[, i]      <- rnorm(t_len_, 0, sigma_)
       z_augm_matrix[, i] <- z_matrix[, i] - mean(z_matrix[, i])
     }
-    
+
     psi <- compute_statistics(data = z_augm_matrix,
                               sigma_vec = sigma_vector,
                               n_ts = n_ts_, grid = grid_)
+    results <- c(as.vector(psi$stat_pairwise))
   } else {
-    y_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    y_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    error_matrix  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
     
-    beta_hat_matrix <- matrix(NA, nrow = 4, ncol = n_ts_)
+    if (is.null(m_matrix_)){
+      m_matrix_ <- matrix(0, nrow = t_len_, ncol = n_ts_)
+    }
     
     library(mvtnorm)
-    big_sigma_matrix       <- matrix(rho_, nrow = n_ts_, ncol = n_ts_)    
+    y_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    y_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    error_matrix  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+
+    big_sigma_matrix       <- matrix(rho_, nrow = n_ts_, ncol = n_ts_)
     diag(big_sigma_matrix) <- 1
-    alpha_vec <- rmvnorm(1, mean = rep(0, n_ts_), sigma = big_sigma_matrix)
-    
+    alpha_vec              <- rmvnorm(1, mean = rep(0, n_ts_), sigma = big_sigma_matrix)
+
     sigmahat_vector <- c()
-    
+
     if (!is.null(beta_)){
-      x_matrix_1 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-      x_matrix_2 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-      x_matrix_3 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-      x_matrix_4 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      phi_matrix       <- matrix(phi_, nrow = 3, ncol = 3)
+      diag(phi_matrix) <- 1
+      
       for (i in 1:n_ts_){
         error_matrix[, i] <- arima.sim(model = list(ar = a_),
                                        innov = rnorm(t_len_, 0, sigma_),
                                        n = t_len_)
-        x_matrix_1[, i]   <- arima.sim(model = list(ar = a_x_vec_[1]),
-                                      innov = rnorm(t_len_, 0, sigma_x_vec_[1]),
-                                      n = t_len_)
-        x_matrix_2[, i]   <- arima.sim(model = list(ar = a_x_vec_[2]),
-                                       innov = rnorm(t_len_, 0, sigma_x_vec_[2]),
-                                       n = t_len_)
-        x_matrix_3[, i]   <- arima.sim(model = list(ar = a_x_vec_[3]),
-                                       innov = rnorm(t_len_, 0, sigma_x_vec_[3]),
-                                       n = t_len_)
-        x_matrix_4[, i]   <- arima.sim(model = list(ar = a_x_vec_[4]),
-                                       innov = rnorm(t_len_, 0, sigma_x_vec_[4]),
-                                       n = t_len_)
-        x_matrix          <- cbind(x_matrix_1[, i], x_matrix_2[, i], x_matrix_3[, i], x_matrix_4[, i])
         
-        y_matrix[, i]     <- alpha_vec[i] + m_matrix_[, i] + beta_ %*% t(x_matrix) + error_matrix[, i]
+        nu       <- rmvnorm(t_len_ + 10, mean = c(0, 0, 0), sigma = phi_matrix)
+        a_matrix <- diag(a_x_vec_)
+        x_matrix <- matrix(0, 3, t_len_ + 10)
+
+        for (t in 2:(t_len_ + 10)){
+          x_matrix[, t] <- a_matrix %*% x_matrix[, t - 1] + nu[t, ]
+        }
+        x_matrix <- t(x_matrix[, -(1:10)])
+        
+        y_matrix[, i] <- alpha_vec[i] + m_matrix_[, i] + beta_ %*% t(x_matrix) + error_matrix[, i]
         
         #First differences
-        x_diff_1  <- x_matrix_1[, i] - dplyr::lag(x_matrix_1[, i], n = 1, default = NA)
-        x_diff_2  <- x_matrix_2[, i] - dplyr::lag(x_matrix_2[, i], n = 1, default = NA)
-        x_diff_3  <- x_matrix_3[, i] - dplyr::lag(x_matrix_3[, i], n = 1, default = NA)
-        x_diff_4  <- x_matrix_4[, i] - dplyr::lag(x_matrix_4[, i], n = 1, default = NA)
+        x_diff_1  <- x_matrix[, 1] - dplyr::lag(x_matrix[, 1], n = 1, default = NA)
+        x_diff_2  <- x_matrix[, 2] - dplyr::lag(x_matrix[, 2], n = 1, default = NA)
+        x_diff_3  <- x_matrix[, 3] - dplyr::lag(x_matrix[, 3], n = 1, default = NA)
         y_diff    <- y_matrix[, i] - dplyr::lag(y_matrix[, i], n = 1, default = NA)
         
         #Estimating beta
-        x_diff_tmp <- as.matrix(cbind(x_diff_1, x_diff_2, x_diff_3, x_diff_4))[-1, ]
+        x_diff_tmp <- as.matrix(cbind(x_diff_1, x_diff_2, x_diff_3))[-1, ]
         y_diff_tmp <- as.matrix(y_diff)[-1, ]
         
-        beta_hat_tmp         <- solve(t(x_diff_tmp) %*% x_diff_tmp) %*% t(x_diff_tmp) %*% y_diff_tmp
-        beta_hat_matrix[, i] <- beta_hat_tmp
-        alpha_hat_tmp        <- mean(y_matrix[, i] - x_matrix %*% as.vector(beta_hat_tmp))
+        beta_hat_tmp       <- solve(t(x_diff_tmp) %*% x_diff_tmp) %*% t(x_diff_tmp) %*% y_diff_tmp
+        alpha_hat_tmp      <- mean(y_matrix[, i] - x_matrix %*% as.vector(beta_hat_tmp))
         
         y_augm_matrix[, i] <- y_matrix[, i] - x_matrix %*% as.vector(beta_hat_tmp) - alpha_hat_tmp
         AR.struc           <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
@@ -551,54 +477,389 @@ repl_revision <- function(rep, t_len_, n_ts_, grid_, gaussian_sim = FALSE,
       }
     } else {
       for (i in 1:n_ts_){
-        error_matrix[, i]  <- arima.sim(model = list(ar = a_),
-                                        innov = rnorm(t_len_, 0, sigma_),
-                                        n = t_len_)
-        y_matrix[, i]      <- alpha_vec[i] + m_matrix_[, i] + error_matrix[, i]
+        error_matrix[, i] <- arima.sim(model = list(ar = a_),
+                                       innov = rnorm(t_len_, 0, sigma_),
+                                       n = t_len_)
         
-        #Estimating alpha_i
+        y_matrix[, i]     <- alpha_vec[i] + m_matrix_[, i] + error_matrix[, i]
+        
+        #Estimating the fixed effects
         alpha_hat_tmp      <- mean(y_matrix[, i])
-        
         y_augm_matrix[, i] <- y_matrix[, i] - alpha_hat_tmp
         AR.struc           <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
                                            r_bar = r_, p = 1)
         sigma_hat_i        <- sqrt(AR.struc$lrv)
-        sigmahat_vector    <- c(sigmahat_vector, sigma_hat_i)   
+        sigmahat_vector    <- c(sigmahat_vector, sigma_hat_i) 
       }     
     }
     psi <- compute_statistics(data = y_augm_matrix,
                               sigma_vec = sigmahat_vector,
                               n_ts = n_ts_, grid = grid_)    
+    results <- c(as.vector(psi$stat_pairwise))
   }
-  results <- c(as.vector(psi$stat_pairwise), as.vector(beta_hat_matrix))
   return(results)
 }
 
-#Function that plots the graphs with histograms
-plot_histogram <- function(pdfname, data_matrix, n_ts, names, star_value){
-  smallest_value <- floor(min(data_matrix)*5)/5
-  biggest_value  <- ceiling(max(data_matrix)*5)/5
-
-  if (biggest_value - smallest_value <= 0.6){
-    breaks_grid <- seq(smallest_value, biggest_value, by = 0.05)    
+#Function that the error terms as AR(1) also with the given coefficient
+#a_ and sigma_, the time series as y = m_matrix_ + errors,
+#and then computes both the multiscale test statistics and the sizer test statistics
+repl_revision2 <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
+                           m_matrix_ = NULL,
+                           q_ = 25, r_ = 10,
+                           gaussian_sim = FALSE){
+  library(MSinference)
+  library(dplyr)
+  
+  if (gaussian_sim){
+    z_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    z_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    sigma_vector  <- rep(sigma_, n_ts_)
+    
+    for (i in 1:n_ts_){
+      z_matrix[, i]      <- rnorm(t_len_, 0, sigma_)
+      z_augm_matrix[, i] <- z_matrix[, i] - mean(z_matrix[, i])
+    }
+    
+    psi <- compute_statistics(data = z_augm_matrix,
+                              sigma_vec = sigma_vector,
+                              n_ts = n_ts_, grid = grid_)
+    results <- c(as.vector(psi$stat_pairwise))
   } else {
-    breaks_grid <- seq(smallest_value, biggest_value, by = 0.2)
+    
+    if (is.null(m_matrix_)){
+      m_matrix_ <- matrix(0, nrow = t_len_, ncol = n_ts_)
+    }
+    
+    y_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    y_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    error_matrix  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    
+    sigmahat_vector <- c()
+     
+    for (i in 1:n_ts_){
+      error_matrix[, i] <- arima.sim(model = list(ar = a_),
+                                     innov = rnorm(t_len_, 0, sigma_),
+                                     n = t_len_)
+      
+      y_matrix[, i]     <- m_matrix_[, i] + error_matrix[, i]
+      
+      #Estimating the fixed effects
+      alpha_hat_tmp      <- mean(y_matrix[, i])
+      y_augm_matrix[, i] <- y_matrix[, i] - alpha_hat_tmp
+      AR.struc           <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
+                                         r_bar = r_, p = 1)
+      sigma_hat_i        <- sqrt(AR.struc$lrv)
+      sigmahat_vector    <- c(sigmahat_vector, sigma_hat_i)
+    }
+    psi <- compute_statistics(data = y_augm_matrix,
+                              sigma_vec = sigmahat_vector,
+                              n_ts = n_ts_, grid = grid_) 
+    
+    gset       <- grid$gset
+    u.grid     <- sort(unique(gset[,1]))
+    h.grid     <- sort(unique(gset[,2]))
+    N          <- as.integer(dim(gset)[1])
+    h.grid.new <- sort(unique(grid$gset[,2]))
+    
+    autocov     <- (sigma_^2/(1 - a_^2)) * (a_^seq(0, t_len - 1, by = 1))
+    sizer.wghts <- SiZer_weights(T = t_len, grid = grid)
+    sizer.std   <- SiZer_std(weights = sizer.wghts,
+                             autocov1 = autocov, autocov2 = autocov,
+                             t_len = t_len)
+    
+    #Values of SiZer
+    values1     <- sizer.wghts %*% y_matrix[, 1]
+    sizer.vals1 <- as.vector(values1)
+    values2     <- sizer.wghts %*% y_matrix[, 2]
+    sizer.vals2 <- as.vector(values2)
+    
+    #Based on the same values of the test statistic, perform the test at different significance levels
+    for (j in 1:length(different_alpha)){
+      alpha         <- different_alpha[j]
+      
+      SiZer_results <- SiZer_test(values1 = sizer.vals1, values2 = sizer.vals2,
+                                  std.devs = sizer.std, quants = sizer.quants[[j]],
+                                  grid = grid)
+    }
+    
+    results <- c(list("test.ms" = as.vector(psi$stat_pairwise),
+                 "test.sizer1" = sizer.vals1,
+                 "test.sizer2" = sizer.vals2))
   }
-  breaks_grid[length(breaks_grid)] <- biggest_value
-
-  pdf(pdfname, width = 6, height = 9, paper="special")
-  par(mfrow = c(n_ts/2, 2))
-  par(mar = c(3, 3, 0.5, 0)) #Margins for each plot
-  par(oma = c(0.5, 0.5, 0.5, 0.2)) #Outer margins
-  for (i in 1:n_ts){
-    hist_ <- hist(data_matrix[, i], breaks = breaks_grid, plot = FALSE)
-    highestCount <- max(hist_$counts)
-    hist(data_matrix[, i], main = NULL, breaks = breaks_grid, freq=TRUE,
-         xlim = c(smallest_value, biggest_value), ylim = c(0,highestCount),
-         xlab = "", mgp = c(2, 0.5, 0), cex.lab = 1.1)
-    mtext(side = 1, text = names[i], line = 1.5, cex = 0.6)
-    segments(x0 = star_value, y0 = 0, x1 = star_value, y1 = highestCount,
-             col = "red", lwd = 1.5)
-  }
-  dev.off()
+  return(results)
 }
+
+# pdf(paste0("output/revision/bump_function.pdf"),
+#     width = 12, height = 8, paper="special")
+# par(mfrow = c(2, 2))
+# par(mar = c(4, 3, 0.5, 0)) #Margins for each plot
+# par(oma = c(0.5, 0.5, 0.5, 0.2)) #Outer margins
+# 
+# for (b in different_b){
+#   errors <- arima.sim(model = list(ar = a),
+#                       innov = rnorm(t_len, 0, sigma),
+#                       n = t_len)
+#   plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+#        y = (bump((1:t_len)/t_len) * b), ylim = c(-1, 1.6),
+#        xlab = "", ylab = "", main = NULL,
+#        type = 'l', cex = 0.8)
+#   lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+#         y = (bump((1:t_len)/t_len) * b) + errors, type = "l",
+#         col = "red")
+#   mtext(side = 1, text = paste0("b = ", b), line = 2.3, cex = 1)
+# }
+# dev.off()
+
+
+#################
+#SIZER FUNCTIONS#
+#################
+
+
+#' Epanechnikov kernel function.
+#' @param x A number.
+#' @return 3/4(1-x^2) for |x|<=1 and 0 elsewhere.
+#' @example 
+#' epanechnikov_kernel(1)
+epanechnikov_kernel <- function(x)
+{
+  if (abs(x)<=1)
+  {
+    result = 3/4 * (1 - x*x)
+  } else {
+    result = 0
+  }
+  return(result)
+}
+
+
+ESS.star <- function(u.grid, h.grid, T, autocov)
+  
+{ # compute the effective sample size ESS.star
+  #
+  # Arguments:
+  # u.grid       grid of locations
+  # h.grid       grid of bandwidths
+  # T            time series length
+  # autocov      vector of (estimated) error autocovariances 
+  # 
+  # Outputs:
+  # ess          matrix with length(u.grid) columns and length(h.grid) rows
+  #              specifying ESS for each point (u,h)
+  # ess.star     matrix with length(u.grid) columns and length(h.grid) rows
+  #              specifying ESS.star for each point (u,h)
+  # deletions    vector of length length(u.grid)*length(h.grid) with NA elements
+  #              in places where ESS.star<5
+  
+  N.u <- length(u.grid)
+  N.h <- length(h.grid)
+  
+  ess      <- matrix(NA,ncol=N.u,nrow=N.h)
+  ess.star <- matrix(NA,ncol=N.u,nrow=N.h)
+  
+  for(i in 1:N.h){
+    bw <- h.grid[i]
+    
+    pos.int <- 1:N.u     
+    temp    <- ( u.grid - bw >= 0 & u.grid + bw <= 1 )
+    if(sum(temp) > 0){
+      pos.int <- pos.int[temp]
+      u       <- u.grid[pos.int[1]]
+      arg     <- ((1:T)/T - u)/bw
+      ess[i,pos.int] <- sum(epanechnikov_kernel(arg)) / 0.75
+    }
+    
+    pos.bnd <- 1:N.u
+    temp    <- ( u.grid - bw < 0 | u.grid + bw > 1 )
+    if(sum(temp) > 0){
+      pos.bnd <- pos.bnd[temp]
+      for(j in 1:length(pos.bnd)){
+        u   <- u.grid[pos.bnd[j]]
+        arg <- ((1:T)/T - u)/bw
+        ess[i,pos.bnd[j]] <- sum(epanechnikov_kernel(arg)) / 0.75
+      }
+    }
+  }
+  
+  cov.wghts <- 1 - (1:(T-1))/T
+  V.bar     <- autocov[1]/T + (2/T) * sum(cov.wghts * autocov[2:T])
+  T.star    <- autocov[1] / V.bar
+  ess.star  <- (T.star/T) * ess
+  
+  deletions <- 1:(N.u*N.h)
+  temp      <- as.vector(t(ess.star))
+  deletions[temp < 5] <- NA
+  
+  return(list(ess = ess, ess.star=ess.star,del=deletions))
+}
+
+SiZer_weights <- function(T, grid)
+  
+{ # calculate the kernel weights for SiZer 
+  #
+  # Arguments:
+  # T            sample size 
+  # grid         grid of location-bandwidth points as produced by the function 'grid_construction',
+  #              list with the element 'gset' (and possibly others)
+  #
+  # Outputs: 
+  # weights      matrix of kernel weights
+  #              w_1(u_1,h_1), ..., w_T(u_1,h_1)
+  #              w_1(u_2,h_2), ..., w_T(u_2,h_2)
+  #                          ...
+  #              w_1(u_N,h_N), ..., w_T(u_N,h_N)
+  
+  T     <- as.integer(T) 
+  gset  <- grid$gset
+  N     <- as.integer(dim(gset)[1])
+  gset  <- as.matrix(gset)
+  gset  <- as.vector(gset) 
+  
+  storage.mode(gset) <- "double"
+  
+  wghts <- vector(mode = "double", length = N*T)
+  
+  result <- sizer_weights(T, gset, N)
+  
+  return(matrix(result,ncol=T,byrow=TRUE))
+}
+
+
+SiZer_std <- function(weights, autocov1, autocov2, t_len)
+  
+{ # compute local linear derivative estimator and its standard deviation on the
+  # location-bandwidth grid.
+  #
+  # Arguments:
+  # data      time series of length T
+  # weights   kernel weights matrix produced by the function 'SiZer_weights'
+  # autocov   vector of error autocovariances (gamma[0],...,gamma[T-1])  
+  # 
+  # Outputs:
+  # values    vector of local linear derivative estimators (length = number of 
+  #           location-bandwidth points in the grid) 
+  # std       vector of standard deviations (length = number of location-bandwidth
+  #           points in the grid)
+  
+  autocov.mat1 <- matrix(NA, ncol=t_len, nrow=t_len)
+  autocov.mat2 <- matrix(NA, ncol=t_len, nrow=t_len)
+  
+  for(ell in 1:(t_len-1)){
+    autocov.mat1[ell,] <- c(autocov1[ell:1],autocov1[2:(t_len-ell+1)])
+    autocov.mat2[ell,] <- c(autocov2[ell:1],autocov2[2:(t_len-ell+1)])
+  }    
+  autocov.mat1[t_len,] <- autocov1[t_len:1]
+  autocov.mat2[t_len,] <- autocov2[t_len:1]
+  
+  temp1     <- autocov.mat1 %*% t(weights)
+  temp1     <- t(temp1)
+  temp1     <- weights * temp1
+  temp1     <- temp1 %*% rep(1,dim(temp1)[2])
+  temp2     <- autocov.mat2 %*% t(weights)
+  temp2     <- t(temp2)
+  temp2     <- weights * temp2
+  temp2     <- temp2 %*% rep(1,dim(temp2)[2])
+  
+  std.devs <- sqrt(temp1 + temp2)
+  std.devs <- as.vector(std.devs)
+  
+  return(std=std.devs)
+}
+
+
+SiZer_quantiles <- function(alpha, t_len, grid, autocov1, autocov2)
+  
+{ # compute quantiles for SiZer as described in Park et al. (2009), 
+  # 'Improved SiZer for time series' 
+  
+  gset  <- grid$gset
+  u.vec <- sort(unique(gset[,1]))
+  h.vec <- sort(unique(gset[,2]))
+  
+  Delta.tilde <- u.vec[2] - u.vec[1]
+  quants      <- rep(0,length(h.vec))
+  
+  for(i in 1:length(h.vec)){
+    gg        <- sum(gset[,2] == h.vec[i])
+    arg       <- seq(-(t_len-1),(t_len-2), by = 1)/(t_len * h.vec[i])
+    autocovs1 <- c(autocov1[t_len:2],autocov1[1:(t_len-1)])
+    autocovs2 <- c(autocov1[t_len:2],autocov1[1:(t_len-1)])
+    int1      <- sum((autocovs1 + autocovs2) * exp(-arg^2/4) * (2 - arg^2) / 8) 
+    int2      <- sum((autocovs1 + autocovs2) * exp(-arg^2/4))
+    I.gamma   <- int1/int2
+    
+    #Clustering coefficient
+    theta     <- 2 * pnorm( sqrt(I.gamma) * sqrt(log(gg)) * Delta.tilde/h.vec[i] ) - 1
+    x         <- (1-alpha/2)^(1/(theta*gg))
+    quants[i] <- qnorm(x)
+  }
+  return(quants)
+}
+
+
+SiZer_test <- function(values1, values2, std.devs, quants, grid){ 
+  
+  # carry out row-wise SiZer test
+  #
+  # Arguments:
+  # values1     vector of local linear derivative estimators of the first time series
+  #             (length = number of location-bandwidth points in grid)
+  # values2     vector of local linear derivative estimators of the second time series
+  #             (length = number of location-bandwidth points in grid)
+  # std.devs    vector of standard deviations of the local linear derivative estimators
+  #             (length = number of location-bandwidth points in grid)
+  # quants      vector of quantiles (length = number of bandwidth levels)
+  # grid        grid of location-bandwidth points as produced by the function 'grid_construction'
+  #
+  # Outputs: 
+  # test_sizer  matrix of SiZer test results 
+  #             test_sizer[i,j] = -1: test rejects the null for the j-th location u and the 
+  #                                   i-th bandwidth h and indicates a decrease in the trend
+  #             test_sizer[i,j] = 0:  test does not reject the null for the j-th location u  
+  #                                   and the i-th bandwidth h 
+  #             test_sizer[i,j] = 1:  test rejects the null for the j-th location u and the 
+  #                                   i-th bandwidth h and indicates an increase in the trend
+  #             test_sizer[i,j] = 2:  no test is carried out at j-th location u and i-th 
+  #                                   bandwidth h (because the point (u,h) is excluded from  
+  #                                   the grid as specified by the 'deletions'-option in the
+  #                                   function 'grid_construction')  
+  
+  gset    <- grid$gset
+  h.vec   <- grid$bws   
+  N       <- dim(gset)[1]
+  N.h     <- length(h.vec)
+  N.u     <- grid$lens
+  
+  quants   <- rep(quants,N.u)
+  critvals <- std.devs * quants
+  
+  test.sizer <- rep(0,N)
+  test.sizer[values1 - values2 > critvals]  <- 1
+  test.sizer[values1 - values2 < -critvals] <- -1
+  
+  gset.full   <- grid$gset_full
+  u.grid.full <- unique(gset.full[,1])
+  h.grid.full <- unique(gset.full[,2])  
+  pos.full    <- grid$pos_full
+  
+  test.full  <- rep(2,length(pos.full))  
+  test.full[!is.na(pos.full)] <- test.sizer
+  test.sizer <- matrix(test.full, ncol=length(u.grid.full), byrow=TRUE)
+  
+  return(list(ugrid=u.grid.full, hgrid=h.grid.full, test=test.sizer))
+}
+
+SiZermap <- function(u.grid, h.grid, test.results, plot.title = NA){
+  # computes SiZer map from the test results 
+  
+  col.vec <- c("red", "purple", "blue", "gray") 
+  #col.vec <- c("#F7F7F7", "#969696", "#525252", "#636363") 
+  temp    <- sort(unique(as.vector(test.results))) + 2
+  temp    <- seq(min(temp),max(temp),by=1)
+  col.vec <- col.vec[temp]
+  
+  image(x = u.grid, y = log(h.grid,10), z = t(test.results), col = col.vec,
+        xlab = '', ylab = expression(log[10](h)), main = plot.title, xaxt = 'n',
+        mgp = c(1,0.5,0))
+}
+
