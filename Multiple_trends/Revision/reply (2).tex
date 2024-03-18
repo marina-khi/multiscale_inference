@@ -15,8 +15,11 @@
 \usepackage[bb=dsserif]{mathalpha}
 \usepackage{bm}
 \usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{rotating,tabularx}
 
 \newcommand{\ex}{\mathbb{E}}        % expectation
+\newcommand{\ind}{\mathbb{1}}
 \newcommand{\bfbeta}{\bm{\beta}} %bold beta coefficent
 
 \setlength\parindent{0pt}
@@ -99,28 +102,25 @@ Thank you very much for the careful reading of our manuscript and the interestin
 (iv) only a small number of series is considered. How does the approach perform when $n$ is large? }  
 
 {\color{blue}  
-In the simulation study, we need to take into account (i), (iii) and (iv). The point (ii) is not correct and can be taken care of by verbal argument.
 \begin{itemize}[topsep=0pt]
  
-\item[(i)] As we cannot use the estimated AR(1) values from the application, let's take the old simulation setup and modify it a bit {\color{red} (for the `robustness' check we also consider a case without any covariates, see the end of this section)}: 
+\item[(i)] We have taken your suggestions into account and consider the following, more challenging setup for the simulation study. In addition to the described setup, we also perform several robustness checks that are described further.
 
 \begin{itemize}[label=--,leftmargin=0.45cm,itemsep=0pt]
 
-\item As before, we choose $n=15$ and $T=100,250,500$ {\color{red} (for an easy DGP without any covariates we use $T=100,250, 500, 750, 1000$. We also use this for comparison with SiZer in (iii).)}.
+\item As before, we choose $n=15$ and $T=100,250,500$. Simulation scenario with $n=15$ and $T=150$ reflects well both applications.
   
-\item We include $3$ covariates and model them by a very simple VAR(3) process:
+\item We include $3$ covariates and model them by a following VAR(3) process:
 \[ \underbrace{\begin{pmatrix} X_{it,1} \\ X_{it,2} \\ X_{it,3} \end{pmatrix}}_{=: \boldsymbol{X}_{it}} = \begin{pmatrix} a_1 & 0 & 0 \\ 0 & a_2 & 0 \\ 0 & 0 & a_3 \end{pmatrix} \begin{pmatrix} X_{it-1,1} \\ X_{it-1,2} \\ X_{it-1,3} \end{pmatrix} + \underbrace{\begin{pmatrix} \nu_{it,1} \\ \nu_{it,2} \\ \nu_{it,3} \end{pmatrix}}_{=: \boldsymbol{\nu}_{it}}. \] 
-We choose {\color{red} $a_1 = a_2 = a_3 = 0.25$}. The innovations $\boldsymbol{\nu}_{it}$ are drawn i.i.d.\ from a multivariate normal $N(0,\Phi)$ with
+We choose $a_1 = a_2 = a_3 = 0.25$. The innovations $\boldsymbol{\nu}_{it}$ are drawn i.i.d.\ from a multivariate normal $N(0,\Phi)$ with
 \[ \Phi = \begin{pmatrix} 1 & \varphi & \varphi \\ \varphi & 1 & \varphi \\ \varphi & \varphi & 1 \end{pmatrix}, \]
-where $\varphi=0, 0.1, 0.25$ and setting $\varphi = 0$ results in simulating 3 independent covariate processes {\color{red}(case $\varphi = 0$ is not reported)}. 
+where $\varphi=0.1, 0.25$. We can also set $\varphi = 0$ which will result in simulating 3 independent covariate processes. 
 
 \item We set $\boldsymbol{\beta}_i = (\beta_{i,1},\beta_{i,2},\beta_{i,3}) = (1,1,1)$ for all $i$.
 
-{\color{red}\item We calculate the Gaussian quantiles based on $5000$ samples, and the size and power calculations are done based on $5000$ repetitions.}
+\item We assume that the errors $\varepsilon_{it}$ follow the AR(1) model $\varepsilon_{it} = a \varepsilon_{i(t-1)} + \eta_{it}$, where $a=0.25$ and the innovations $\eta_{it}$ are i.i.d.\ normal with zero mean $E[\eta_{it}]=0$ and variance $E[\eta_{it}^2]=0.25^2$. 
 
-\item As before, we assume that the errors $\varepsilon_{it}$ follow the AR(1) model $\varepsilon_{it} = a \varepsilon_{i(t-1)} + \eta_{it}$, where $a=0.25$ and the innovations $\eta_{it}$ are i.i.d.\ normal with zero mean $E[\eta_{it}]=0$ and variance $E[\eta_{it}^2]=0.25^2$ {\color{red}(setting higher variance results in lower signal-to-noise ratio and we are not hitting the size level)}. 
-
-\item We let $\alpha = (\alpha_1,\ldots,\alpha_n)$ be a normally distributed random vector. In particular, $\alpha \sim N(0,c \Sigma)$ with
+\item We let $\alpha = (\alpha_1,\ldots,\alpha_n)$ be a normally distributed random vector. In particular, $\alpha \sim N(0,\Sigma)$ with
 \[ \Sigma =
 \begin{pmatrix}
 1      & \rho   & \cdots & \rho   \\
@@ -129,24 +129,27 @@ where $\varphi=0, 0.1, 0.25$ and setting $\varphi = 0$ results in simulating 3 i
 \rho   & \cdots & \rho   & 1
 \end{pmatrix},
 \]
-where $\rho = 0.1, 0.25$ {\color{red}(larger values do not seem to affect the size that much)} gives the correlation across time series $i$. To start with, we set $c=1$ and then adjust it if needed.
+where $\rho = 0.1, 0.25$ gives the correlation across time series $i$.
 
-\item To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ as before. To produce data under the alternative, {\color{red}we use the bump functions $m_1(u) = b \cdot \mathbb{1}(u \in [0.3, 0.7]) \cdot \big(1 - \big\{\frac{u - 0.5}{0.2}\big\}^2\big)^2$ for $b = 0.25, 0.5, 1$ (depicted in Figure \ref{fig:bump_function}) and $m_i = 0$ for $i \neq 1$}. For the cluster analysis, it is presumably also better to use bump functions rather than linear maps. For example, we could use 3 groups with (scaled versions of) the functions $g_1$, $g_2$ and $g_4$ from Figure 2 in Vogt \& Linton (2020, Multiscale clustering of nonparametric regression curves).
+\item To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ as before. To produce data under the alternative, we use the bump functions $m_1(u) = b \cdot \mathbb{1}(u \in [0.3, 0.7]) \cdot \big(1 - \big\{\frac{u - 0.5}{0.2}\big\}^2\big)^2$ for $b = 0.25, 0.5, 1$ (depicted in Figure \ref{fig:bump_function}) and $m_i = 0$ for $i \neq 1$.
 
 \begin{figure}[t!]
 \includegraphics[width=\textwidth]{output/bump_function.pdf}
-\caption{In black, the bump function $m_1(t/T)$ is plotted for different heights of the bump: $b = 0, 0.25, 0.5, 1$ ($b= 0$ corresponds to the data under the null $H_0$). In red, we depict the bump function plus the error term, $m_1(t/T) + \varepsilon_{it}$.}\label{fig:bump_function}
+\caption{In black, the bump function $m_1(t/T)$ is plotted for different heights of the bump: $b = 0, 0.25, 0.5, 1$ ($b= 0$ corresponds to the data under the null $H_0$). In red, we depict the one specific instance of a bump function plus the error term, $m_1(t/T) + \varepsilon_{it}$ for $T=500$.}\label{fig:bump_function}
 \end{figure}
 
-\item We take the grid $\mathcal{G}_T$ to be the same as before: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{5t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{T}} \text{ for some } t \in \mathbb{N} \big\}$ {\color{red} (the grid is sparser for the DGP without any covariates: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{10t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{100}} \text{ for some } t \in \mathbb{N} \big\}$. Hence, the grid is growing only a bit with the sample size, because with the usual grid the actual size is still a bit higher than the nominal size even though the problem should be ``easy''. I guess this is because of the fact that with the growing sample size, the multiple testing problem becomes much more complicated... Moreover, the computational time is not feasible anymore for large values of $T$. )
+\item We take the grid $\mathcal{G}_T$ to be the same as before: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{5t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{T}} \text{ for some } t \in \mathbb{N} \big\}$.
 
-\item In order to estimate the long-run variance $\sigma_i^2$, we follow the procedure described in \citet{KhismatullinaVogt2020} with the following tuning parameters: $q = 25$ and $r = 10$.
-}
+\item As before, in order to estimate the long-run variance $\sigma_i^2$, we follow the procedure described in \citet{KhismatullinaVogt2020} with the following tuning parameters: $q = 25$ and $r = 10$.
+
+\item As before, we calculate the Gaussian quantiles based on $5000$ samples, and the size and power calculations are done based on $5000$ repetitions.
 
 \end{itemize}
 
-{\color{red} The results of the simulation study with the covariates are presented in Tables \ref{tab:size1} and \ref{tab:power1} for $\phi = 0.1$ and $\rho = 0.1$ and in Tables \ref{tab:size2} and \ref{tab:power2} for $\phi = 0.25$ and $\rho = 0.25$. We are a bit more liberal with higher values of $\phi$ and $\rho$, but not overly so. The results of the size simulation study without any covariates and for $\rho = 0.25$ are presented in Table \ref{tab:size3} (no power computations since this is more of a robustness check). There is a ``bump'' in the actual size for moderate sample sizes ($T = 250, 500$) which is present under a lot specifications (even without dependence in the fixed effect), I guess this is due to the grid specifications: for small sample size ($T = 100$) the grid is a bit too sparse to detect anything spurious, whereas starting from $T=250$ the grid becomes more sensitive to the noise which stabilizes with larger values of the sample size. I have checked with different grid specification and this ``bump'' is always present but occurs at different sample sizes.}
+The results of the simulation study with the covariates are presented in Tables \ref{tab:size1} and \ref{tab:power1} for $\phi = 0.1$ and $\rho = 0.1$ and in Tables \ref{tab:size2} and \ref{tab:power2} for $\phi = 0.25$ and $\rho = 0.25$. As can be seen, the empirical size gives a reasonable approximation to the target $\alpha$ in all scenarios under investigation, even though the size numbers have a slight upward bias. This bias gets smaller as the sample size $T$ increases, which reflects the fact that we get more and more information for each of the tests that we need to carry out. We can also see that the upward bias become slightly more pronounced in case of stronger degrees of correlation across the covariates and the time series, i.e., with higher values of $\phi$ and $\rho$, but the change in test performance is almost negligible and can be attributed to random sampling. To summarize, even though slightly liberal, the test controls the FWER quite accurately in the simulation settings that we consider.
 
+As for the empirical power calculations, the test has substantial power in all the considered simulation settings as can be seen in \ref{tab:power2}. For the smallest height of the bump function $b = 0.25$ and the smallest time series length $T = 100$, the power is only moderate, reflecting the fact that the alternative with $b = 0.25$ is not very far away from the null. However, as we increase the height $b$ and the sample size $T$, the power increases quickly. Already for the height value $b = 0.5$, we reach a power of $0.98$ for $T = 250$ and for all nominal sizes $\alpha$.
+ 
 \begin{table}[t]
 \footnotesize{
 \begin{center}
@@ -214,24 +217,115 @@ where $\rho = 0.1, 0.25$ {\color{red}(larger values do not seem to affect the si
 \vspace{-0.4cm}
 \end{table}
 
+As a robustness check, we calculate the actual size values within a slightly simplified simulation context. Specifically, we do not include any covariates in the model but only the fixed effects $\alpha_i$ with $\rho = 0.1$. Additionally, we explore larger sample sizes ($T=100, 250, 500, 750, 1000$), albeit with a sparser grid $\mathcal{G}_T$ for computational efficiency: we define the grid as $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{10t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{10t - 3}{T}} \text{ for some } t \in \mathbb{N} \big\}$. The findings are reported in Table \ref{tab:size:no_covariates}. Notably, the results exhibit minimal deviation from the primary simulation scenarios. One thing that is potentially worth mentioning is that we can see a discernible ``bump'' in the actual size values for moderate sample sizes ($T = 250, 500$). This phenomenon persists across various specifications tested, including scenarios with $\rho = 0$ which indicates no dependence between the time series. This specific pattern can be explained by the trade-off between the sample size and the dimensionality of the problem, i.e., the number of tests we carry out simultaneously. For moderate value of the sample sizes ($T =250, 500$) the number of comparisons is already quite large ($15750$ and $63000$ simultaneous comparisons, respectively), while the effective sample size for testing individual null hypothesis remains relatively modest. However, empirical evidence suggests that the size values stabilize for larger sample sizes ($T = 750, 1000$) suggesting robust test performance even in the face of significant high dimensionality of the problem ($149625 $ and $262500$ simultaneous comparisons, respectively).
+
 \addtocounter{table}{-1} 
 \begin{table}[t]
 \footnotesize{
 \begin{center}
-\caption{Size of the multiscale test for the case without any covariates and $\rho = 0.25$ for different sample sizes $T$ and nominal sizes $\alpha$.}
-\label{tab:size3}
+\caption{Size of the multiscale test for the case without any covariates and $\rho = 0.1$ for different sample sizes $T$ and nominal sizes $\alpha$.}
+\label{tab:size:no_covariates}
 \renewcommand{\arraystretch}{1.2}
-\input{output/15_ts_no_covariates_25_size}
+\input{output/15_ts_no_covariates_10_size}
 \end{center}}
 \vspace{-0.4cm}
 \end{table}
 
 
-\item[(iii)] As suggested by you, we compare with the Sizer method of Park et al.\ (2009). For the comparison, we could consider the design proposed in (i) without covariates and fixed effects (as these are not part of the model in Park et al.). I'd suggest to add the comparison to the supplement rather than to the main body of the text.
+\item[(ii)] \textcolor{red}{Verbal argument.}
 
-{\color{red}Currently running. Do I understand correctly that we are comparing both in terms of size and power?}
+\item[(iii)] To the best of our knowledge, the only other test for comparing trend curves with similar properties has been developed in \cite{Park2009} (SiZer). We have added comparison of our method with SiZer to the Appendix. However, we would like to note that their analysis is mainly methodological and the theory was developed only for the case of $n=2$ time series. In \cite{Park2009}, the authors propose a possible extension to their approach in case of more than $2$ time series, but the extension does not allow for pairwise comparison of the time series. Moreover, it is not clear how to calculate the actual size and power in that case.
 
-\item[(iv)] We rerun the simulations from (i) with a much smaller grid. This allows us to deal not only with $n=15$ but also with larger values of $n$: $n=25, 50, 100$. Specifically, we take the grid $\mathcal{G}_T$ to be a dyadic scheme (as in Wavelet analysis) with scales in the set 
+Furthermore, the model considered in \cite{Park2009} is much simpler than ours: it does not include neither the covariates, nor the fixed effects. Hence, in order to allow for fair comparison between two methods, we consider a simplified version of the simulation setup from (i). In particular, we do the following.
+
+\begin{itemize}[label=--,leftmargin=0.45cm,itemsep=0pt]
+
+\item We choose $n=2$ and $T=100,250,500, 750, 1000$.
+
+\item We consider a simplified model $Y_{it} = m_i\big(\frac{t}{T}\big) + \varepsilon_{it}$ that does not include the covariates or the fixed effects as they are not part of the model in \cite{Park2009}.
+\item As before, we assume that the errors $\varepsilon_{it}$ follow the AR(1) model $\varepsilon_{it} = a \varepsilon_{i(t-1)} + \eta_{it}$, where $a=0.25$ and the innovations $\eta_{it}$ are i.i.d.\ normal with zero mean $E[\eta_{it}]=0$ and variance $E[\eta_{it}^2]=0.25^2$. 
+
+\item To generate data under the null $H_0: m_1 = m_2$, we let $m_i = 0$ for $i=1, 2$ as before. To produce data under the alternative, we use the bump functions $m_1(u) = b \cdot \mathbb{1}(u \in [0.3, 0.7]) \cdot \big(1 - \big\{\frac{u - 0.5}{0.2}\big\}^2\big)^2$ for $b = 0.25, 0.5$ (depicted in Figure \ref{fig:bump_function}) and $m_2 = 0$.
+
+\item We take the grid $\mathcal{G}_T$ as before: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{5t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{T}} \text{ for some } t \in \mathbb{N} \big\}$.
+
+\item In order to make the comparison between the methods as fair as possible, we do not estimate the long-run variance $\sigma_i^2$ from the data but consider $\sigma_i^2$ as known. Specifically, we use the theoretical value of the long-run variance calculated based on the true parameter values: $$\sigma_i^2 = \frac{E[\eta_{it}^2]}{(1 - a)^2} = \frac{1}{9} \text{ for all }i.$$ Furthermore, since SiZer depends not on the long-run variance, but on the autocovariance functions of the time series $\gamma_i(\cdot)$ for $i=1, 2$, in the calculation of the critical values of SiZer we use the following formula for the autocovariance function:
+
+$$\gamma_{i}(k) = \frac{E[\eta_{it}^2] a^{|k|}}{1 - a^2} = \frac{0.25^{|k|}}{15}.$$
+
+\item As before, we calculate the Gaussian quantiles based on $5000$ samples, and the size and power calculations are done based on $5000$ repetitions.
+\item All of the details of the exact implementation of SiZer can be found in the Appendix in \cite{KhismatullinaVogt2020}.
+
+\end{itemize}
+
+\begin{table}[t!]
+\footnotesize{
+\caption{Size comparison of the proposed multiscale test ($\mathcal{T}_{\text{MS}}$) and SiZer ($\mathcal{T}_{\text{SiZer}}$, \cite{Park2009}) for different sample sizes $T$ and various significance levels $\alpha$.}\label{tab:size:compare}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l@{\hskip 20pt} Z@{\hskip 6pt}Z@{\hskip 20pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 20pt}Z}
+\toprule
+ & \multicolumn{2}{c}{$\alpha = 0.01$} & \multicolumn{2}{c}{$\alpha = 0.05$} & \multicolumn{2}{c}{$\alpha = 0.1$}\\
+\cmidrule[0.4pt]{2-7} 
+ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{SiZer}}$   & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{SiZer}}$ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{SiZer}}$\\
+\cmidrule[0.4pt]{1-7} 
+  $T = 100$ & 0.010 & 0.099 & 0.047 & 0.332 & 0.106 & 0.524 \\ 
+  $T = 250$ & 0.008 & 0.162 & 0.041 & 0.510 & 0.102 & 0.699 \\ 
+  $T = 500$ & 0.009 & 0.214 & 0.044 & 0.598 & 0.089 & 0.787 \\ 
+  $T = 750$ & 0.008 & 0.252 & 0.045 & 0.657 & 0.095 & 0.844 \\ 
+  $T = 1000$ & 0.012 & 0.271 & 0.053 & 0.691 & 0.102 & 0.873 \\ 
+\bottomrule
+\end{tabularx}}
+\vspace{0.2cm}
+\end{table}
+
+\begin{table}[t!]
+\footnotesize{
+\caption{Power comparison of the proposed multiscale test ($\mathcal{T}_{\text{MS}}$) and SiZer ($\mathcal{T}_{\text{SiZer}}$, \cite{Park2009}) for different sample sizes $T$ and various significance levels $\alpha$ for the bump function with $b = 0.25$.}\label{tab:power:compare1}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l@{\hskip 20pt} Z@{\hskip 6pt}Z@{\hskip 20pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 20pt}Z}
+\toprule
+ & \multicolumn{2}{c}{$\alpha = 0.01$} & \multicolumn{2}{c}{$\alpha = 0.05$} & \multicolumn{2}{c}{$\alpha = 0.1$}\\
+\cmidrule[0.4pt]{2-7} 
+ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{SiZer}}$   & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{SiZer}}$ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{SiZer}}$\\
+\cmidrule[0.4pt]{1-7} 
+$T = 100$ & 0.075 & 0.251 & 0.193 & 0.551 & 0.317 & 0.714 \\ 
+  $T = 250$ & 0.253 & 0.629 & 0.486 & 0.876 & 0.633 & 0.951 \\ 
+  $T = 500$ & 0.640 & 0.905 & 0.817 & 0.985 & 0.887 & 0.996 \\ 
+  $T = 750$ & 0.867 & 0.982 & 0.957 & 0.998 & 0.981 & 1.000 \\ 
+  $T = 1000$ & 0.970 & 0.998 & 0.993 & 1.000 & 0.997 & 1.000 \\ 
+\bottomrule
+\end{tabularx}}
+\vspace{0.2cm}
+\end{table}
+
+\begin{table}[t!]
+\footnotesize{
+\caption{Power comparison of the proposed multiscale test ($\mathcal{T}_{\text{MS}}$) and SiZer ($\mathcal{T}_{\text{SiZer}}$, \cite{Park2009}) for different sample sizes $T$ and various significance levels $\alpha$ for the bump function with $b = 0.5$.}\label{tab:power:compare2}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+\begin{tabularx}{\textwidth}{l@{\hskip 20pt} Z@{\hskip 6pt}Z@{\hskip 20pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 20pt}Z}
+\toprule
+ & \multicolumn{2}{c}{$\alpha = 0.01$} & \multicolumn{2}{c}{$\alpha = 0.05$} & \multicolumn{2}{c}{$\alpha = 0.1$}\\
+\cmidrule[0.4pt]{2-7} 
+ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{SiZer}}$   & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{SiZer}}$ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{SiZer}}$\\
+\cmidrule[0.4pt]{1-7} 
+$T = 100$ & 0.482 & 0.733 & 0.703 & 0.922 & 0.815 & 0.967 \\ 
+  $T = 250$ & 0.966 & 0.998 & 0.994 & 1.000 & 0.998 & 1.000 \\ 
+  $T = 500$ & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
+  $T = 750$ & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
+  $T = 1000$ & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
+\bottomrule
+\end{tabularx}}
+\vspace{0.2cm}
+\end{table}
+
+In what follows, we denote the proposed multiscale procedure and SiZer (\cite{Park2009}) by $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{SiZer}}$, respectively.
+
+The results of the size and power simulation studies that compare $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{SiZer}}$ are presented in Tables \ref{tab:size:compare} and Tables \ref{tab:power:compare1}, \ref{tab:power:compare2} respectively. There is an important difference between $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{SiZer}}$ to be noticed: $\mathcal{T}_{\text{MS}}$ is a \textit{global} test procedures while $\mathcal{T}_{\text{SiZer}}$ is a scale-wise in its essence. This means that $\mathcal{T}_{\text{MS}}$ tests $H_0(u,h)$ simultaneously for all locations $u \in U_T$ and scales $h \in H_T$ and controls the size simultaneously over both locations $u$ and scales $h$, whereas $\mathcal{T}_{\text{SiZer}}$ tests the hypothesis $H_0(u,h)$ simultaneously for all $u \in U_T$ but separately for each scale $h \in H_T$ and, hence, controls the size for each scale $h \in H_T$ separately. This results in a much more liberal nature of $\mathcal{T}_{\text{SiZer}}$ as can be seen in Table \ref{tab:size:compare}. Specifically, the size numbers of the multiscale test $\mathcal{T}_{\text{MS}}$ are reasonably close to the target nominal size levels $\alpha$. Contrarily, the actual size numbers of $\mathcal{T}_{\text{SiZer}}$ are much larger than the target $\alpha$. Since the number of scales $h$ in the grid $\mathcal{G}_T$ increases with $T$, they even move away from $\alpha$ as the sample size $T$ increases. To summarize, as expected, the global test $\mathcal{T}_{\text{MS}}$ holds the size reasonably well, whereas the row-wise method $\mathcal{T}_{\text{SiZer}}$ is much too liberal. 
+
+As for the power simulation studies that are presented  in Tables \ref{tab:power:compare1} and \ref{tab:power:compare2}, we can note that in all simulation scenarios, $\mathcal{T}_{\text{SiZer}}$ is more powerful than $\mathcal{T}_{\text{MS}}$. This gain of power is presumably due to the fact that $\mathcal{T}_{\text{SiZer}}$ is in general too liberal in terms of size as observed in Table \ref{tab:size:compare}.
+
+
+\item[(iv)] In order to illustrate the performance of the test with larger number of time series, we rerun the simulations from (i) with a smaller grid. This allows us to deal not only with $n=15$ but also with larger values of $n$: $n=25, 50, 100$. Specifically, we take the grid $\mathcal{G}_T$ to be a dyadic scheme (as in Wavelet analysis) with scales in the set 
 \[ \mathcal{H}_T = \big\{ h = 2^k h_{\min} \text{ for } k=0,\ldots,K \big\}, \]  
 where 
 \[ h_{\min} = \frac{\lceil \log T \rceil}{T} \]
@@ -241,7 +335,7 @@ and
 \begin{align*}
 \mathcal{G}_T = \big\{ (u,h) \subseteq [0,1]: & \ (u,h) = ((2s+1) h, h) \text{ for } s = 0,\ldots,\Big\lfloor \frac{h^ {-1}-1}{2} \Big\rfloor \\ & \ \text{and } h \in \mathcal{H}_T \big\}.
 \end{align*}
-{\color{red} We rerun the simulations as specified in (i) (with the exception of the grid) for the case $\phi = 0.1$ and $\rho = 0.1$ with $T=100, 250, 500$ and different values of $n$: $n=15, 25, 50, 100$. (This is very feasible, even with $n = 100$ and $T = 500$ the running time is around 45 minutes for all size and power calculations). The results are presented in Tables \ref{tab:size:dyadic:15} - \ref{tab:power:dyadic:100}. The results are not very different from using the full grid: we are not even much more liberal. I attribute it to the ``simplicity'' of the problem: not that many multiple comparisons.}
+We rerun the simulations precisely as specified in (i), deviating solely in the grid specification and focusing on the scenario where $\phi = 0.1$ and $\rho = 0.1$ across varying sample sizes: $T=100, 250, 500$, and diverse number of time series $n=15, 25, 50, 100$. The results are presented in Tables \ref{tab:size:dyadic:15} - \ref{tab:power:dyadic:100}. As can be seen in Tables \ref{tab:size:dyadic:15}, \ref{tab:size:dyadic:25}, \ref{tab:size:dyadic:50} and \ref{tab:size:dyadic:100}, the empirical size provides an appropriate approximation to the target alpha across all scenarios under consideration. In regards to the empirical power calculations, the test demonstrates significant power across all simulated scenarios, as illustrated in Tables \ref{tab:power:dyadic:15}, \ref{tab:power:dyadic:25}, \ref{tab:power:dyadic:50} and \ref{tab:power:dyadic:100}. Notably, despite slight variations from the benchmark model, the observed changes are not substantial which affirms the robustness of the proposed test across different specifications of the grid.
 
 %\addtocounter{table}{-1} 
 \begin{table}[t]
@@ -250,7 +344,7 @@ and
 \caption{Size of the multiscale test for $n = 15$ for different sample sizes $T$ and nominal sizes $\alpha$ for the dyadic grid ($\phi = 0.1$ and $\rho = 0.1$).}
 \label{tab:size:dyadic:15}
 \renewcommand{\arraystretch}{1.2}
-\input{output/15_ts_10_10_dyadic_grid_larger_samples_size}
+\input{output/15_ts_10_10_dyadic_grid_size}
 \end{center}}
 \footnotesize{
 \begin{center}
@@ -399,10 +493,14 @@ and
 
 \item \textit{Similarly, there are many related clustering methods, including (Bayesian and non-Bayesian) methods for clustering functional data. The proposed approach is reasonable, yet should be placed in a broader context and evaluated against appropriate competitors.}
 
-{\color{blue}  
-I think we could use the following clustering procedure as a benchmark:
+{\color{blue} We next investigate the finite sample performance of the clustering algorithm.% from Section \ref{sec:clustering}.
+To do so, we consider a very simple scenario: we generate data from the model $Y_{it} = m_i(\frac{t}{T}) + \varepsilon_{it}$, that is, we assume that there are no fixed effects and no covariates. The error terms $\varepsilon_{it}$ are specified as before. Moreover, as before, we set the number of time series to $n = 15$ and we consider different time series lengths $T$. We partition the $n = 15$ time series into $N=3$ groups, each containing $5$ time series. Specifically, we set $G_1 = \{1,\ldots, 5\}$, $G_2 = \{6,\ldots, 10\}$ and $G_3 =  \{11,\ldots, 15\}$, and we assume that $m_i = f_l$ for all $i \in G_l$ and all $l = 1, 2, 3$. The group-specific trend functions $f_1$, $f_2$ and $f_3$ are defined as $f_1(u) = 0$, $f_2(u) = \ind\Big\{\frac{|u - 0.25|}{0.25}\leq 1\Big\} \big(1 - \frac{(u - 0.25)^2}{0.25^2}\big)^2$ and $f_3(u) = \ind\Big\{\frac{|u - 0.75|}{0.125}\leq 1\Big\} \big(1 - \frac{(u - 0.75)^2}{0.125^2}\big)^2$ \textcolor{red}{(these functions are not normalised so effectively we do have fixed-effects in our model)}. In order to estimate the groups $G_1$, $G_2$, $G_3$ and their number $N = 3$, we use the same implementation as before followed by the clustering procedure.% from Section \ref{sec:clustering}. 
+
+We implement the procedure as before with one difference. Specifically, we take the finer grid $\mathcal{G}_T$: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{T}} \text{ for some } t \in \mathbb{N} \big\}$.
+
+As a benchmark, we use the following clustering procedure:
 \begin{itemize}[label=--,leftmargin=0.45cm,itemsep=0pt,topsep=0pt]
-\item Estimate the trends $m_i$ by a local linear estimator $\hat{m}_i$ with a fixed bandwidth (chosen adhoc).
+\item Estimate the trends $m_i$ by a local linear estimator $\hat{m}_i$ with a fixed bandwidth (chosen as the smallest bandwidth from $H_T$).
 \item Compute a simple distance measure $d_{ij}$ between $\hat{m}_i$ and $\hat{m}_j$, e.g.
 \[ d_{ij} = \int_0^1 (\hat{m}_i(w) - \hat{m}_j(w))^2 dw. \]
 \item Construct the following dissimilarity measure from these distances:
@@ -412,8 +510,56 @@ I think we could use the following clustering procedure as a benchmark:
 
 Our procedure can be regarded as a further development of this very simple and natural benchmark procedure. In particular: our procedure replaces the simple distance measure $d_{ij}$ by a more advanced multiscale distance measure and provides a way to estimate the number of clusters, which is not part of the simple benchmark procedure.
 
+%\addtocounter{table}{-1} 
+%\begin{table}[t]
+%\footnotesize{
+%\begin{center}
+%\caption{Clustering results for different sample sizes $T$ and nominal sizes $\alpha$.}\label{tab:clustering}
+%\begin{subtable}[b]{0.48\textwidth}
+%\centering
+%\caption{Empirical probabilities that \\ $\widehat{N} = N$}\label{tab:clustering:1}
+%\renewcommand{\arraystretch}{1.2}
+%\input{output/tables/15_ts_correct_group_number}
+%\end{subtable}
+%\begin{subtable}[b]{0.48\textwidth}
+%\centering
+%\caption{\centering Empirical probabilities that $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{ G_1,G_2,G_3\}$}\label{tab:clustering:2}
+%\renewcommand{\arraystretch}{1.2}
+%\input{output/tables/15_ts_correct_group_structure}
+%\end{subtable}
+%\end{center}}
+%\vspace{-0.5cm}
+%\end{table}
+%
+%
+%\begin{figure}[t!]
+%\centering
+%\includegraphics[width=0.95\textwidth]{output/plots/sim/histograms_groups}
+%\caption{Estimated number of groups $\widehat{N}$ for nominal size $\alpha = 0.05$. 
+%%Each panel corresponds to a different sample size $T$.
+%}\label{fig:clustering:1}
+%\vspace{0.25cm}
+%
+%\includegraphics[width=0.95\textwidth]{output/plots/sim/histograms_errors}
+%\caption{Number of classification errors for nominal size $\alpha = 0.05$. 
+%%Each panel corresponds to a different sample size $T$.
+%}\label{fig:clustering:2}
+%\end{figure}
+
+
+The simulation results are reported in Table \ref{tab:clustering}. The entries in Table \ref{tab:clustering:1} are computed as the number of simulations for which $\widehat{N} = N$ divided by the total number of simulations. They thus specify the empirical probabilities with which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$. Analogously, the entries of Table \ref{tab:clustering:2} give the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$. The results in Table \ref{tab:clustering} nicely illustrate the theoretical properties of our clustering algorithm. According to Proposition \ref{prop:clustering:1}, the probability that $\widehat{N} = N$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{G_1,G_2,G_3\}$ should be at least $(1-\alpha)$ asymptotically. For the largest sample size $T = 500$, the empirical probabilities reported in Table \ref{tab:clustering} can indeed be seen to exceed the value $(1-\alpha)$ as predicted by Proposition \ref{prop:clustering:1}. For the smaller sample sizes $T=100$ and $T=250$, in contrast, the empirical probabilities are substantially smaller than $(1-\alpha)$. This reflects the asymptotic nature of Proposition \ref{prop:clustering:1} and is not very surprising. It simply mirrors the fact that for the smaller sample sizes $T=100$ and $T=250$, the effective noise level in the simulated data is quite high.
+
+
+Figures \ref{fig:clustering:1} and \ref{fig:clustering:2} give more insight into what happens for $T=100$ and $T=250$. Figure \ref{fig:clustering:1} shows histograms of the $5000$ simulated values of $\widehat{N}$, while Figure \ref{fig:clustering:2} depicts histograms of the number of classification errors produced by our algorithm. By the number of classification errors, we simply mean the number of incorrectly classified time series, which is formally calculated as 
+$\min_{\pi \in S_{\hat{N}}} \big\{ |G_1 \setminus \widehat{G}_{\pi(1)}| +|G_2 \setminus \widehat{G}_{\pi(2)}| + |G_3 \setminus \widehat{G}_{\pi(3)}| \big\}$
+with $S_{\widehat{N}}$ being the set of all permutations of $\{1, 2, \ldots, \widehat{N}\}$. The histogram of Figure \ref{fig:clustering:1} for $T=100$ clearly shows that our method underestimates the number of groups ($\widehat{N} = 2$ in $4055$ cases out of $5000$). In particular, it fails to detect the difference between two out of three groups in a large number of simulations. This is reflected in the corresponding histogram of Figure \ref{fig:clustering:2} which shows that there are exactly $5$ classification errors in $3924$ of the $5000$ simulation runs. In most of these cases, the estimated group structure $\{ \widehat{G}_1, \widehat{G}_{2}\}$ coincides with either $\{ G_1 \cup G_2,G_3\}$,  $\{ G_1, G_2\cup G_3\}$ or $ \{ G_1 \cup G_3,G_2\}$. In summary, we can conclude that the small empirical probabilities for $T=100$ in Table \ref{tab:clustering} are due to the algorithm underestimating the number of groups. Inspecting the histograms for $T=250$, one can see that the performance of the estimators $\widehat{N}$ and $\{ \widehat{G}_1,\ldots, \widehat{G}_{\widehat{N}} \}$ improves significantly, even though the corresponding empirical probabilities in Table \ref{tab:clustering} are still somewhat below the target $(1-\alpha)$.  
+
+
+
+
 As the benchmark procedure does not provide an estimate of the number of clusters $K$, it is presumably best to compare our procedure with the benchmark for known $K$. 
 
+Additionally, it is presumably also better to use bump functions rather than linear maps. For example, we could use 3 groups with (scaled versions of) the functions $g_1$, $g_2$ and $g_4$ from Figure 2 in Vogt \& Linton (2020, Multiscale clustering of nonparametric regression curves)
 }
   
 

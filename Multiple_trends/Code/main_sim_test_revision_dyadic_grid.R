@@ -17,8 +17,9 @@ options(xtable.timestamp = "")
 ##############################
 #Defining necessary constants#
 ##############################
-n_ts <- 15 #Number of time series
 seed <- 13579135
+
+different_n_ts <- c(15, 25, 50, 100) #Number of time series
 
 #For the covariate process
 beta    <- c(1, 1, 1)
@@ -35,16 +36,12 @@ rho      <- 0.1 #covariance between the fixed effects
 n_rep    <- 5000 #number of simulations for calculating size and power
 sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
 
-if (is.null(beta)){
-  different_T     <- c(100, 250, 500, 750, 1000) #Different lengths of time series
-} else {
-  different_T     <- c(100, 250, 500, 750, 1000) #Different lengths of time series
-#  different_T     <- c(100, 250, 500) #Different lengths of time series  
-}
+
+different_T     <- c(100, 250, 500) #Different lengths of time series
+
 
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
-different_b     <- c(0) #Zero is for calculating the size
-#different_b     <- c(0, 0.25, 0.5, 1.0) #Zero is for calculating the size
+different_b     <- c(0, 0.25, 0.5, 1.0) #Zero is for calculating the size
 
 
 #Parameters for the estimation of long-run-variance
@@ -61,9 +58,7 @@ numCores  <- round(parallel::detectCores() * .70)
 
 source("functions/functions.R")
 
-#for (n_ts in c(15, 25, 50, 100)){
-for (n_ts in c(15)){
-
+for (n_ts in different_n_ts){
   size_and_power_array <- array(NA, dim = c(length(different_T),
                                             length(different_b),
                                             length(different_alpha)),
@@ -184,7 +179,7 @@ for (n_ts in c(15)){
     l   <- match(b, different_b)
     tmp <- as.matrix(size_and_power_array[, l, ])
     if (b == 0){
-      filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_dyadic_grid_larger_samples_size.tex")
+      filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_dyadic_grid_size.tex")
     } else {
       filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_dyadic_grid_power_b_",
                         b * 100, ".tex")

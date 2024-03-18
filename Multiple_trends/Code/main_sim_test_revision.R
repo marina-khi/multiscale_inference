@@ -22,8 +22,8 @@ options(xtable.timestamp = "")
 n_ts <- 15 #Number of time series
 
 #For the covariate process
-beta    <- c(1, 1, 1)
-#beta    <- NULL
+#beta    <- c(1, 1, 1)
+beta    <- NULL
 a_x_vec <- c(0.25, 0.25, 0.25) #VAR(1) coefficients
 phi     <- 0.1                 #dependence between the innovations
 
@@ -38,10 +38,10 @@ sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
 
 if (is.null(beta)){
   different_T     <- c(100, 250, 500, 750, 1000) #Different lengths of time series
-  seed <- 1357913579
+  seed <- 113355
 } else {
   different_T     <- c(100, 250, 500) #Different lengths of time series  
-  seed <- 1357913579
+  seed <- 111333555
 }
 
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
@@ -81,8 +81,8 @@ for (t_len in different_T){
   #Constructing the grid according to the application
   
   if (is.null(beta)){
-    h_grid <- seq(from = 7 / t_len, to = 1 / 4, by = 10 / t_len)
     u_grid <- seq(from = 10 / t_len, to = 1, by = 10 / t_len)
+    h_grid <- seq(from = 7 / t_len, to = 1 / 4, by = 10 / t_len)
   } else {
     u_grid <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
     h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
