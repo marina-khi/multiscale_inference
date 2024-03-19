@@ -20,8 +20,8 @@ source("functions/functions.R")
 ##############################
 
 n_ts     <- 15 #number of different time series for simulation
-n_rep    <- 5000 #number of simulations for calculating size and power
-sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
+n_rep    <- 1000 #number of simulations for calculating size and power
+sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
 
 different_T <- c(100, 250, 500) #Different lengths of time series
 alpha       <- 0.05
@@ -37,23 +37,71 @@ numCores  = round(parallel::detectCores() * .70)
 seed <- 135792468
 set.seed(seed)
 
+correct_specification <- c(rep(1, (floor(n_ts / 3))),
+                           rep(2, (floor(2 * n_ts / 3) - floor(n_ts / 3))),
+                           rep(3, n_ts - floor(2 * n_ts / 3)))
+
+
+###################################
+#This is how time series look like#
+###################################
+
+
+#Plotting the trend functions
+t_len <- 100
+
+m1 <- numeric(t_len)
+m2 <- numeric(t_len)
+m1 <- 0.5 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.5 * b_function((1:t_len)/t_len, 0.75, 0.25)
+m2 <- 2 * b_function((1:t_len)/t_len, 0.75, 0.025) - 2 * b_function((1:t_len)/t_len, 0.25, 0.025)
+
+pdf(paste0("output/revision/clustering_functions.pdf"),
+    width = 12, height = 8, paper="special")
+par(mfrow = c(2, 1))
+par(mar = c(4, 3, 0.5, 0)) #Margins for each plot
+par(oma = c(0.5, 0.5, 0.5, 0.2)) #Outer margins
+
+errors <- arima.sim(model = list(ar = a_hat),
+                    innov = rnorm(t_len, 0, sigma),
+                    n = t_len)
+plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+     y = m1, ylim = c(-2.5, 2.5),
+     xlab = "", ylab = "", main = NULL,
+     type = 'l', cex = 0.8)
+lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+      y = m1 + errors, type = "l", col = "red")
+#mtext(side = 1, text = paste0("b = ", b), line = 2.3, cex = 1)
+
+errors <- arima.sim(model = list(ar = a_hat),
+                    innov = rnorm(t_len, 0, sigma),
+                    n = t_len)
+plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+     y = m2, ylim = c(-2.5, 2.5),
+     xlab = "", ylab = "", main = NULL,
+     type = 'l', cex = 0.8)
+lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+      y = m2 + errors, type = "l", col = "red")
+#mtext(side = 1, text = paste0("b = ", b), line = 2.3, cex = 1)
+
+dev.off()
+
 ###################################################
 #Simulating the data and performing the clustering#
 ###################################################
 
 for (t_len in different_T){
   #Constructing the grid
-  u_grid <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
+  u_grid <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
   h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
   h_grid <- h_grid[h_grid > log(t_len) / t_len]
   grid   <- construct_grid(t = t_len)
   
   m1 <- numeric(t_len)
   m2 <- numeric(t_len)
-  m1 <- b_function((1:t_len)/t_len, 0.25, 0.25)
-  m2 <- 8 * b_function((1:t_len)/t_len, 0.75, 0.125)
-
-  cat("Calculating the clustering results for t = ", t_len,"\n")
+  m1 <- 0.5 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.5 * b_function((1:t_len)/t_len, 0.75, 0.25)
+  m2 <- 2 * b_function((1:t_len)/t_len, 0.75, 0.025) - 2 * b_function((1:t_len)/t_len, 0.25, 0.025)
+  
+  cat("Calculating the clustering results for T = ", t_len,"\n")
   tic()
   cl <- makePSOCKcluster(numCores)
   registerDoParallel(cl)
@@ -99,22 +147,30 @@ for (t_len in different_T){
   colnames(groups_mat) <- paste0("rep_", 1:n_rep)
   rownames(groups_mat) <- paste0("ts_", 1:n_ts)
   
+  groups_mat2 <- matrix(NA, ncol = n_rep, nrow = n_ts)
+  colnames(groups_mat2) <- paste0("rep_", 1:n_rep)
+  rownames(groups_mat2) <- paste0("ts_", 1:n_ts)
+  
   groups_benchmark_mat <- matrix(NA, ncol = n_rep, nrow = n_ts)
   colnames(groups_benchmark_mat) <- paste0("rep_", 1:n_rep)
   rownames(groups_benchmark_mat) <- paste0("ts_", 1:n_ts)
-  
+
+  groups_benchmark2_mat <- matrix(NA, ncol = n_rep, nrow = n_ts)
+  colnames(groups_benchmark2_mat) <- paste0("rep_", 1:n_rep)
+  rownames(groups_benchmark2_mat) <- paste0("ts_", 1:n_ts)
+    
   number_of_groups_vec <- c()
+  number_of_groups_vec2 <- c()
   for (i in 1:n_rep){
-    #Multiscale method
-    statistic_vector <- simulated_statistic[1:(nrow(simulated_statistic)/2), i]
+    #Multiscale method with unknown number of clusters
+    statistic_vector <- simulated_statistic[1:(nrow(simulated_statistic)/3), i]
     statistic_value  <- max(statistic_vector)
     if (statistic_value > quant) {
       statistic_matrix  <- matrix(statistic_vector, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
       statistic_matrix  <- forceSymmetric(statistic_matrix, uplo = "U")
       statistic_matrix  <- as.dist(statistic_matrix)
       clustering        <- hclust(statistic_matrix, method = "complete")
-      groups            <- cutree(clustering, k = 3)
-#      groups            <- cutree(clustering, h = quant)
+      groups            <- cutree(clustering, h = quant)
       number_of_groups  <- max(groups)
     } else {
       number_of_groups <- 1
@@ -123,28 +179,55 @@ for (t_len in different_T){
     groups_mat[, i]      <- groups
     number_of_groups_vec <- c(number_of_groups_vec, number_of_groups)
     
+    #Multiscale method with fixed number of clusters
+    number_of_groups2  <- 3
+    statistic_matrix2  <- matrix(statistic_vector, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
+    statistic_matrix2  <- forceSymmetric(statistic_matrix2, uplo = "U")
+    statistic_matrix2  <- as.dist(statistic_matrix2)
+    clustering2        <- hclust(statistic_matrix2, method = "complete")
+    groups2            <- cutree(clustering2, k = 3)
+
+    groups_mat2[, i]      <- groups2
+    number_of_groups_vec2 <- c(number_of_groups_vec2, number_of_groups2)
+    
     #Benchmark method
-    statistic_vector_benchmark <- simulated_statistic[(nrow(simulated_statistic)/2 + 1):nrow(simulated_statistic), i]
+    statistic_vector_benchmark <- simulated_statistic[(nrow(simulated_statistic)/3 + 1):(2 * nrow(simulated_statistic) / 3), i]
     statistic_matrix_benchmark <- matrix(statistic_vector_benchmark, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
     statistic_matrix_benchmark <- forceSymmetric(statistic_matrix_benchmark, uplo = "U")
     statistic_matrix_benchmark <- as.dist(statistic_matrix_benchmark)
     clustering_benchmark       <- hclust(statistic_matrix_benchmark, method = "complete")
     groups_benchmark           <- cutree(clustering_benchmark, k = 3)
     groups_benchmark_mat[, i]  <- groups_benchmark
+    
+    #Benchmark method
+    statistic_vector_benchmark2 <- simulated_statistic[(2 * nrow(simulated_statistic)/3 + 1):nrow(simulated_statistic), i]
+    statistic_matrix_benchmark2 <- matrix(statistic_vector_benchmark2, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
+    statistic_matrix_benchmark2 <- forceSymmetric(statistic_matrix_benchmark2, uplo = "U")
+    statistic_matrix_benchmark2 <- as.dist(statistic_matrix_benchmark2)
+    clustering_benchmark2       <- hclust(statistic_matrix_benchmark2, method = "complete")
+    groups_benchmark2           <- cutree(clustering_benchmark2, k = 3)
+    groups_benchmark2_mat[, i]  <- groups_benchmark2
+    
   }
   clustering_results <- rbind(number_of_groups_vec, groups_mat)
+  clustering_results2 <- rbind(number_of_groups_vec2, groups_mat2)
   clustering_results_benchmark <- rbind(rep(3, n_rep), groups_benchmark_mat)
+  clustering_results_benchmark2 <- rbind(rep(3, n_rep), groups_benchmark2_mat)
   
-  filename = paste0("output/revision/misc/results_for_T_", t_len, "_3clusters.RData")
+  filename = paste0("output/revision/misc/results_for_T_", t_len, ".RData")
   save(clustering_results, file = filename)
+  filename2 = paste0("output/revision/misc/results_for_T_", t_len, "_3clusters.RData")
+  save(clustering_results2, file = filename2)
   filename_benchmark = paste0("output/revision/misc/results_for_T_", t_len, "_benchmark.RData")
   save(clustering_results_benchmark, file = filename_benchmark)
+  filename_benchmark2 = paste0("output/revision/misc/results_for_T_", t_len, "_benchmark2.RData")
+  save(clustering_results_benchmark2, file = filename_benchmark2)
 }
 
 
-####################################
-#Analysis of the clustering results#
-####################################
+######################################################
+#Analysis of the clustering results for our procedure#
+######################################################
 
 correct_groups   <- c()
 correct_structure <- c()
@@ -155,11 +238,9 @@ error_count <- list()
 j <- 0
 
 for (t_len in different_T){
-  filename = paste0("output/revision/misc/results_for_T_", t_len, ".RData")
+  filename = paste0("output/revision/misc/results_for_T_", t_len, "_3clusters.RData")
   load(file = filename)
-  correct_specification      <- c(rep(1, (floor(n_ts / 3))),
-                                  rep(2, (floor(2 * n_ts / 3) - floor(n_ts / 3))),
-                                  rep(3, n_ts - floor(2 * n_ts / 3)))
+
   correct_number_of_groups   <- 0 #Starting the counter from zero
   correctly_specified_groups <- 0
   
@@ -169,19 +250,23 @@ for (t_len in different_T){
     if (clustering_results[1, i] == 3) {
       correct_number_of_groups = correct_number_of_groups + 1
     }
-    if ((clustering_results[1, i] == 2) | (clustering_results[1, i] == 3))
+    if ((clustering_results[1, i] == 2) | (clustering_results[1, i] == 3)){
       groups123  <- clustering_results[2:(n_ts + 1), i]
-    groups132  <- recode(groups123, "2=3;3=2")
-    groups213  <- recode(groups123, "1=2;2=1")
-    groups231  <- recode(groups123, "1=2;2=3;3=1")
-    groups312  <- recode(groups123, "1=3;2=1;3=2")
-    groups321  <- recode(groups123, "1=3;3=1")
-    difference <- min(sum(correct_specification != groups132),
-                      sum(correct_specification != groups213),
-                      sum(correct_specification != groups231),
-                      sum(correct_specification != groups312),
-                      sum(correct_specification != groups321),
-                      sum(correct_specification != groups123))
+      groups132  <- recode(groups123, "2=3;3=2")
+      groups213  <- recode(groups123, "1=2;2=1")
+      groups231  <- recode(groups123, "1=2;2=3;3=1")
+      groups312  <- recode(groups123, "1=3;2=1;3=2")
+      groups321  <- recode(groups123, "1=3;3=1")
+      difference <- min(sum(correct_specification != groups132),
+                        sum(correct_specification != groups213),
+                        sum(correct_specification != groups231),
+                        sum(correct_specification != groups312),
+                        sum(correct_specification != groups321),
+                        sum(correct_specification != groups123))
+    }
+    if ((clustering_results[1, i] == 1) | (clustering_results[1, i] > 4)){
+      difference <- 10
+    }
     if (clustering_results[1, i] == 4) {
       groups1234  <- clustering_results[2:(n_ts + 1), i]
       groups1243  <- recode(groups1234, "4=3;3=4")
@@ -260,7 +345,10 @@ for (t_len in different_T){
   cat("Maximum number of errors is ", max(num_of_errors), "\n")
 }
 
-#For the benchmark procedure
+
+################################################################
+#Analysis of the clustering results for the benchmark procedure#
+################################################################
 
 correct_groups_benchmark   <- c()
 correct_structure_benchmark <- c()
@@ -273,9 +361,7 @@ j <- 0
 for (t_len in different_T){
   filename = paste0("output/revision/misc/results_for_T_", t_len, "_benchmark.RData")
   load(file = filename)
-  correct_specification      <- c(rep(1, (floor(n_ts / 3))),
-                                  rep(2, (floor(2 * n_ts / 3) - floor(n_ts / 3))),
-                                  rep(3, n_ts - floor(2 * n_ts / 3)))
+
   correct_number_of_groups   <- 0 #Starting the counter from zero
   correctly_specified_groups <- 0
   
@@ -316,6 +402,62 @@ for (t_len in different_T){
   cat("Maximum number of errors is ", max(num_of_errors), "\n")
 }
 
+#######################################################################
+#Analysis of the clustering results for the second benchmark procedure#
+#######################################################################
+
+correct_groups_benchmark2   <- c()
+correct_structure_benchmark2 <- c()
+
+group_count_benchmark2 <- list()
+error_count_benchmark2 <- list()
+
+j <- 0
+
+for (t_len in different_T){
+  filename = paste0("output/revision/misc/results_for_T_", t_len, "_benchmark2.RData")
+  load(file = filename)
+  
+  correct_number_of_groups   <- 0 #Starting the counter from zero
+  correctly_specified_groups <- 0
+  
+  num_of_errors     <- c()
+  
+  for (i in 1:n_rep){
+    correct_number_of_groups = correct_number_of_groups + 1
+    groups123  <- clustering_results_benchmark2[2:(n_ts + 1), i]
+    groups132  <- recode(groups123, "2=3;3=2")
+    groups213  <- recode(groups123, "1=2;2=1")
+    groups231  <- recode(groups123, "1=2;2=3;3=1")
+    groups312  <- recode(groups123, "1=3;2=1;3=2")
+    groups321  <- recode(groups123, "1=3;3=1")
+    difference <- min(sum(correct_specification != groups132),
+                      sum(correct_specification != groups213),
+                      sum(correct_specification != groups231),
+                      sum(correct_specification != groups312),
+                      sum(correct_specification != groups321),
+                      sum(correct_specification != groups123))
+    if (difference == 0){
+      correctly_specified_groups = correctly_specified_groups + 1
+    }
+    num_of_errors <- c(num_of_errors, difference)
+  }
+  
+  j <- j + 1
+  group_count_benchmark2[[j]] <- table(factor(clustering_results_benchmark2[1, ], levels = 1:5))
+  error_count_benchmark2[[j]] <- table(factor(num_of_errors, levels = 0:8))
+  
+  correct_groups_benchmark2    <- c(correct_groups_benchmark2, correct_number_of_groups/n_rep)
+  correct_structure_benchmark2 <- c(correct_structure_benchmark2, correctly_specified_groups/n_rep)
+  cat("Percentage of detecting true number of clusters for the second benchmark procedure (max)",
+      correct_number_of_groups/n_rep, "with alpha = ", alpha,
+      ", T = ", t_len, "\n")
+  cat("Percentage of detecting true clustering for the second benchmark procedure (max)",
+      correctly_specified_groups/n_rep, "with alpha = ", alpha,
+      ", T = ", t_len, "\n")
+  cat("Maximum number of errors is ", max(num_of_errors), "\n")
+}
+
 #######################
 #Output of the results#
 #######################
@@ -323,7 +465,7 @@ for (t_len in different_T){
 labels_ <- c("(a)", "(b)", "(c)")
 
 pdf(paste0("output/revision/histograms_groups.pdf"), width=8, height=2.9, paper="special")
-par(mfrow = c(1,3))
+par(mfrow = c(1,2))
 par(mar = c(3, 2, 0.5, 1)) #Margins for each plot
 par(oma = c(1.4, 1.5, 0.5, 0.2)) #Outer margins
 
@@ -339,7 +481,7 @@ for (j in 1:length(different_T)){
 dev.off()
 
 pdf(paste0("output/revision/histograms_errors.pdf"), width=8, height=2.9, paper="special")
-par(mfrow = c(1,3))
+par(mfrow = c(1,2))
 par(mar = c(3, 2, 0.5, 1)) #Margins for each plot
 par(oma = c(1.4, 1.5, 0.5, 0.2)) #Outer margins
 
@@ -356,14 +498,17 @@ dev.off()
 
 
 filename = paste0("output/tables/", n_ts, "_ts_correct_group_number.tex")
-creating_matrix_and_texing(correct_groups, different_T, different_alpha, filename)
-filename2 = paste0("output/tables/", n_ts, "_ts_correct_group_structure.tex")
-creating_matrix_and_texing(correct_structure, different_T, different_alpha, filename2)
+rownames(correct_groups) <- different_T
+output_matrix(correct_groups, filename)
 
+filename2 = paste0("output/tables/", n_ts, "_ts_correct_group_structure.tex")
+rownames(correct_structure) <- different_T
+output_matrix(correct_structure, filename2)
+ 
 
 
 pdf(paste0("output/revision/histograms_groups_benchmark.pdf"), width=8, height=2.9, paper="special")
-par(mfrow = c(1,3))
+par(mfrow = c(1,2))
 par(mar = c(3, 2, 0.5, 1)) #Margins for each plot
 par(oma = c(1.4, 1.5, 0.5, 0.2)) #Outer margins
 
@@ -379,7 +524,7 @@ for (j in 1:length(different_T)){
 dev.off()
 
 pdf(paste0("output/revision/histograms_errors_benchmark.pdf"), width=8, height=2.9, paper="special")
-par(mfrow = c(1,3))
+par(mfrow = c(1,2))
 par(mar = c(3, 2, 0.5, 1)) #Margins for each plot
 par(oma = c(1.4, 1.5, 0.5, 0.2)) #Outer margins
 
@@ -394,8 +539,10 @@ for (j in 1:length(different_T)){
 }
 dev.off()
 
-
 filename = paste0("output/tables/", n_ts, "_ts_correct_group_number_benchmark.tex")
-creating_matrix_and_texing(correct_groups_benchmark, different_T, different_alpha, filename)
+rownames(correct_groups_benchmark) <- different_T
+output_matrix(correct_groups_benchmark, filename)
+
 filename2 = paste0("output/tables/", n_ts, "_ts_correct_group_structure_benchmark.tex")
-creating_matrix_and_texing(correct_structure_benchmark, different_T, different_alpha, filename2)
+rownames(correct_structure_benchmark) <- different_T
+output_matrix(correct_structure_benchmark, filename)

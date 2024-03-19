@@ -201,7 +201,15 @@ repl_clustering_revision <- function(rep, t_len_, n_ts_, grid_,
         benchmark_results[i, j] <- sum((smoothed_data[, i] - smoothed_data[, j])^2) * (1/t_len_)
       }
     }
-    results <- c(as.vector(psi$stat_pairwise), as.vector(benchmark_results))
+    
+    #Calculating the benchmark model
+    benchmark_results2 <- matrix(0, nrow = n_ts_, ncol = n_ts_)
+    for (i in 1:(n_ts_ - 1)){
+      for (j in (i + 1):n_ts_){
+        benchmark_results2[i, j] <- max(abs(smoothed_data[, i] - smoothed_data[, j]))
+      }
+    }
+    results <- c(as.vector(psi$stat_pairwise), as.vector(benchmark_results), as.vector(benchmark_results2))
   }
   return(results)
 }
