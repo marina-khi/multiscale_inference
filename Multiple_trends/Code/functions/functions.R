@@ -157,26 +157,26 @@ repl_clustering_revision <- function(rep, t_len_, n_ts_, grid_,
     results <- c(as.vector(psi$stat_pairwise))
   } else {
     simulated_data           <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    colnames(simulated_data) <- 1:n_ts_
+    #colnames(simulated_data) <- 1:n_ts_
   
     sigmahat_vector <- c()
     for (i in 1:(floor(n_ts_ / 3))){
       simulated_data[, i] <- arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
-      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
+      #simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
       AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
       sigma_hat_i         <- sqrt(AR.struc$lrv)
       sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
     }
     for (i in (floor(n_ts_ / 3) + 1):(floor(2 * n_ts_ / 3))){
       simulated_data[, i] <- m1_ + arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
-      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
+      #simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
       AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
       sigma_hat_i         <- sqrt(AR.struc$lrv)
       sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
     }
     for (i in (floor(2 * n_ts_ / 3) + 1):n_ts_){
       simulated_data[, i] <- m2_ + arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
-      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
+      #simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
       AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
       sigma_hat_i         <- sqrt(AR.struc$lrv)
       sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
@@ -184,11 +184,10 @@ repl_clustering_revision <- function(rep, t_len_, n_ts_, grid_,
     psi <- compute_statistics(data = simulated_data, sigma_vec = sigmahat_vector,
                               n_ts = n_ts_, grid = grid_)
     
-    
     grid_points             <- seq(1/t_len_, 1, by = 1/t_len_)
     grid_points_2           <- seq(1/(2 * t_len_), 1, by = 1/t_len_)
     smoothed_data           <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    colnames(smoothed_data) <- 1:n_ts_
+    #colnames(smoothed_data) <- 1:n_ts_
     
     for (i in 1:n_ts_){
       smoothed_data[, i] <- mapply(local_linear_smoothing, grid_points_2, MoreArgs = list(simulated_data[, i], grid_points, h_))
@@ -874,4 +873,106 @@ SiZer_test <- function(values1, values2, std.devs, quants, grid){
   test.sizer <- matrix(test.full, ncol=length(u.grid.full), byrow=TRUE)
   
   return(list(ugrid=u.grid.full, hgrid=h.grid.full, test=test.sizer))
+}
+
+cluster_analysis <- function(t_len_, n_rep_, alpha_, results_matrix_){
+  correct_number_of_groups   <- 0 #Starting the counter from zero
+  correctly_specified_groups <- 0
+  
+  num_of_errors     <- c()
+  
+  for (i in 1:n_rep_){
+    if (results_matrix_[1, i] == 3) {
+      correct_number_of_groups = correct_number_of_groups + 1
+    }
+    if ((results_matrix_[1, i] == 2) | (results_matrix_[1, i] == 3)){
+      groups123  <- clustering_results[2:(n_ts + 1), i]
+      groups132  <- recode(groups123, "2=3;3=2")
+      groups213  <- recode(groups123, "1=2;2=1")
+      groups231  <- recode(groups123, "1=2;2=3;3=1")
+      groups312  <- recode(groups123, "1=3;2=1;3=2")
+      groups321  <- recode(groups123, "1=3;3=1")
+      difference <- min(sum(correct_specification != groups132),
+                        sum(correct_specification != groups213),
+                        sum(correct_specification != groups231),
+                        sum(correct_specification != groups312),
+                        sum(correct_specification != groups321),
+                        sum(correct_specification != groups123))
+    }
+    if ((results_matrix_[1, i] == 1) | (results_matrix_[1, i] > 4)){
+      difference <- 10
+    }
+    if (results_matrix_[1, i] == 4) {
+      groups1234  <- results_matrix_[2:(n_ts + 1), i]
+      groups1243  <- recode(groups1234, "4=3;3=4")
+      groups1342  <- recode(groups1234, "2=3;3=4;4=2")
+      groups1324  <- recode(groups1234, "2=3;3=2")
+      groups1423  <- recode(groups1234, "2=4;3=2;4=3")
+      groups1432  <- recode(groups1234, "2=4;4=2")
+      
+      groups2134  <- recode(groups1234, "1=2;2=1")
+      groups2143  <- recode(groups1234, "1=2;2=1;3=4;4=3")
+      groups2314  <- recode(groups1234, "1=2;2=3;3=1")
+      groups2341  <- recode(groups1234, "1=2;2=3;3=4;4=1")
+      groups2413  <- recode(groups1234, "1=2;2=4;3=1;4=3")
+      groups2431  <- recode(groups1234, "1=2;2=4;4=1")
+      
+      groups3124  <- recode(groups1234, "1=3;2=1;3=2")
+      groups3142  <- recode(groups1234, "1=3;2=1;3=4;4=2")
+      groups3214  <- recode(groups1234, "1=3;3=1")
+      groups3241  <- recode(groups1234, "1=3;3=4;4=1")
+      groups3412  <- recode(groups1234, "1=3;2=4;3=1;4=2")
+      groups3421  <- recode(groups1234, "1=3;2=4;3=2;4=1")
+      
+      groups4123  <- recode(groups1234, "1=4;2=1;3=2;4=3")
+      groups4132  <- recode(groups1234, "1=4;2=1;4=2")
+      groups4213  <- recode(groups1234, "1=4;3=1;4=3")
+      groups4231  <- recode(groups1234, "1=4;4=1")
+      groups4312  <- recode(groups1234, "1=4;2=3;3=1;4=2")
+      groups4321  <- recode(groups1234, "1=4;2=3;3=2;4=1")
+      
+      difference <- min(sum(correct_specification != groups1234),
+                        sum(correct_specification != groups1243),
+                        sum(correct_specification != groups1342),
+                        sum(correct_specification != groups1324),
+                        sum(correct_specification != groups1423),
+                        sum(correct_specification != groups1432),
+                        
+                        sum(correct_specification != groups2134),
+                        sum(correct_specification != groups2143),
+                        sum(correct_specification != groups2314),
+                        sum(correct_specification != groups2341),
+                        sum(correct_specification != groups2413),
+                        sum(correct_specification != groups2431),
+                        
+                        sum(correct_specification != groups3124),
+                        sum(correct_specification != groups3142),
+                        sum(correct_specification != groups3214),
+                        sum(correct_specification != groups3241),
+                        sum(correct_specification != groups3412),
+                        sum(correct_specification != groups3421),
+                        
+                        sum(correct_specification != groups4123),
+                        sum(correct_specification != groups4132),
+                        sum(correct_specification != groups4213),
+                        sum(correct_specification != groups4231),
+                        sum(correct_specification != groups4312),
+                        sum(correct_specification != groups4321))
+    }
+    if (difference == 0){
+      correctly_specified_groups = correctly_specified_groups + 1
+    }
+    num_of_errors <- c(num_of_errors, difference)
+  }
+  
+  cat("Percentage of detecting true number of clusters",
+      correct_number_of_groups/n_rep_, "with alpha = ", alpha_,
+      ", T = ", t_len_, "\n")
+  cat("Percentage of detecting true clustering",
+      correctly_specified_groups/n_rep_, "with alpha = ", alpha_,
+      ", T = ", t_len_, "\n")
+  cat("Maximum number of errors is ", max(num_of_errors), "\n")
+  return(list(num_of_errors = num_of_errors,
+              correct_number_of_groups = correct_number_of_groups,
+              correctly_specified_groups = correctly_specified_groups))
 }
