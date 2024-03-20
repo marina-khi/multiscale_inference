@@ -557,7 +557,7 @@ As a benchmark, we use the following clustering procedure:
 
 Our procedure can be regarded as a further development of this very simple and natural benchmark procedure. In particular: our procedure replaces the simple distance measure $d_{ij}$ by a more advanced multiscale distance measure and provides a way to estimate the number of clusters, which is not part of the simple benchmark procedure.
 
-The simulation results are as follows. For our multiscale method, the empirical probabilities with which which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$ for the significance level $\alpha=0.05$ for $T=100, 250$ and $500$ are $0.028, 0.117$ and $0.9678$, respectively. Furthermore, the  empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$ for the significance level $\alpha=0.05$ for $T=100, 250$ and $500$ are $0, 0.1112$ and $0.9674$, respectively. The benchmark procedure is able to detect the difference between the groups in all possible case for all of the sample sizes.}
+The simulation results are as follows. For our multiscale method, the empirical probabilities with which which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$ for the significance level $\alpha=0.05$ for $T=100, 250$ and $500$ are $?, ?$ and $?$, respectively. Furthermore, the  empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$ for the significance level $\alpha=0.05$ for $T=100, 250$ and $500$ are $?, ?$ and $?$, respectively. The benchmark procedure is able to detect the difference between the groups in all possible case for all of the sample sizes.}
 
 %\addtocounter{table}{-1} 
 %\begin{table}[t]
@@ -597,9 +597,10 @@ The simulation results are as follows. For our multiscale method, the empirical 
 
 {\color{red} So this is what I have tried so far:
 \begin{itemize}
-	\item For the benchmark procedure, instead of $\mathcal{L}^2$ distance, I have calculated the following distance: $d_{ij} = \max_{1\leq t\leq T} |\hat{m}_i(t/T) - \hat{m}_j(t/T)|$, where the local linear estimates $\hat{m}_i$ are calculated using the smallest bandwidth from $H_T$. The results are also pretty good, not as for $\mathcal{L}^2$ distance, but still better than our method.
-	\item Raised the variance of the innovations in the error term: $\ex[\eta_{it}^2] = 1$. None of the procedures could not detect anything (even for $T=500$). Too strong noise. 
-	\item Played a bit with the shape of the function.
+	\item For the benchmark procedure, instead of $\mathcal{L}^2$ distance calculated the following distance: $d_{ij} = \max_{1\leq t\leq T} |\hat{m}_i(t/T) - \hat{m}_j(t/T)|$, where the local linear estimates $\hat{m}_i$ are calculated using the smallest bandwidth from $H_T$. The results are also pretty good, not as good as for $\mathcal{L}^2$ distance, but still better than our method.
+	\item Raised the variance of the innovations in the error term: $\ex[\eta_{it}^2] = 1$. None of the procedures could detect anything (even for $T=500$). Too strong noise. 
+	\item Played a bit with the shape of the functions: with smaller scales and smaller bumps for the third function, neither our procedure, not the benchmarks can recognize anything.
+	\item I have also compared the results for the multiscale procedure with the known number of clusters ($N=3$) for $T=100, 250$ and the results are only marginally better. I guess the idea here is that if we are able to detect the true number of clusters, then the grouping is also pretty good. But in most cases (in almost all cases for small sample sizes), we just do not reject the null. Something to do with the incorrect long-run variance estimation? I was thinking of maybe having a look at clustering results with a true theoretical value for lrv, what do you think?
 \end{itemize}}
 
 
@@ -609,10 +610,6 @@ The simulation results are as follows. For our multiscale method, the empirical 
 
 %Figures \ref{fig:clustering:1} and \ref{fig:clustering:2} give more insight into what happens for $T=100$ and $T=250$. Figure \ref{fig:clustering:1} shows histograms of the $5000$ simulated values of $\widehat{N}$, while Figure \ref{fig:clustering:2} depicts histograms of the number of classification errors produced by our algorithm. By the number of classification errors, we simply mean the number of incorrectly classified time series, which is formally calculated as $\min_{\pi \in S_{\hat{N}}} \big\{ |G_1 \setminus \widehat{G}_{\pi(1)}| +|G_2 \setminus \widehat{G}_{\pi(2)}| + |G_3 \setminus \widehat{G}_{\pi(3)}| \big\}$ with $S_{\widehat{N}}$ being the set of all permutations of $\{1, 2, \ldots, \widehat{N}\}$. The histogram of Figure \ref{fig:clustering:1} for $T=100$ clearly shows that our method underestimates the number of groups ($\widehat{N} = 2$ in $4055$ cases out of $5000$). In particular, it fails to detect the difference between two out of three groups in a large number of simulations. This is reflected in the corresponding histogram of Figure \ref{fig:clustering:2} which shows that there are exactly $5$ classification errors in $3924$ of the $5000$ simulation runs. In most of these cases, the estimated group structure $\{ \widehat{G}_1, \widehat{G}_{2}\}$ coincides with either $\{ G_1 \cup G_2,G_3\}$,  $\{ G_1, G_2\cup G_3\}$ or $ \{ G_1 \cup G_3,G_2\}$. In summary, we can conclude that the small empirical probabilities for $T=100$ in Table \ref{tab:clustering} are due to the algorithm underestimating the number of groups.  Inspecting the histograms for $T=250$, one can see that the performance of the estimators $\widehat{N}$ and $\{ \widehat{G}_1,\ldots, \widehat{G}_{\widehat{N}} \}$ improves significantly, even though the corresponding empirical probabilities in Table \ref{tab:clustering} are still somewhat below the target $(1-\alpha)$.  
 
-
-
-
-\textcolor{red}{As the benchmark procedure does not provide an estimate of the number of clusters $K$, I have also compared the results for the known number of clusters ($K=3$) for $T=100$ and the results are not better... We almost never detect the true grouping anyway.}
 
 %Additionally, it is presumably also better to use bump functions rather than linear maps. For example, we could use 3 groups with (scaled versions of) the functions $g_1$, $g_2$ and $g_4$ from Figure 2 in Vogt \& Linton (2020, Multiscale clustering of nonparametric regression curves)
 

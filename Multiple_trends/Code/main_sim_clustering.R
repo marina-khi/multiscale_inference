@@ -53,7 +53,7 @@ t_len <- 100
 m1 <- numeric(t_len)
 m2 <- numeric(t_len)
 m1 <- b_function((1:t_len)/t_len, 0.25, 0.25) - b_function((1:t_len)/t_len, 0.75, 0.25)
-m2 <- 2 * b_function((1:t_len)/t_len, 0.75, 0.075) - 2 * b_function((1:t_len)/t_len, 0.25, 0.075)
+m2 <- 4 * b_function((1:t_len)/t_len, 0.75, 0.075) - 4 * b_function((1:t_len)/t_len, 0.25, 0.075)
 
 pdf(paste0("output/revision/clustering_functions.pdf"),
     width = 12, height = 8, paper="special")
@@ -99,7 +99,7 @@ for (t_len in different_T){
   m1 <- numeric(t_len)
   m2 <- numeric(t_len)
   m1 <- 0.5 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.5 * b_function((1:t_len)/t_len, 0.75, 0.25)
-  m2 <- 2 * b_function((1:t_len)/t_len, 0.75, 0.075) - 2 * b_function((1:t_len)/t_len, 0.25, 0.075)
+  m2 <- 4 * b_function((1:t_len)/t_len, 0.75, 0.075) - 4 * b_function((1:t_len)/t_len, 0.25, 0.075)
   
   cat("Calculating the distance measures for T = ", t_len,"\n")
   tic()
