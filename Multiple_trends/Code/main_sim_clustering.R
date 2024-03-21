@@ -32,7 +32,7 @@ sigma <- 0.25
 q     <- 25 #Parameters for the estimation of long-run-variance
 r     <- 10
 
-numCores  = round(parallel::detectCores() * .70)
+numCores = round(parallel::detectCores() * .70)
 
 seed <- 135792468
 set.seed(seed)
@@ -65,7 +65,7 @@ errors <- arima.sim(model = list(ar = a_hat),
                     innov = rnorm(t_len, 0, sigma),
                     n = t_len)
 plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-     y = m1, ylim = c(-4.5, 4.5),
+     y = m1, ylim = c(-8.5, 8.5),
      xlab = "", ylab = "", main = NULL,
      type = 'l', cex = 0.8)
 lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
@@ -76,7 +76,7 @@ errors <- arima.sim(model = list(ar = a_hat),
                     innov = rnorm(t_len, 0, sigma),
                     n = t_len)
 plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-     y = m2, ylim = c(-4.5, 4.5),
+     y = m2, ylim = c(-8.5, 8.5),
      xlab = "", ylab = "", main = NULL,
      type = 'l', cex = 0.8)
 lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
@@ -98,8 +98,8 @@ for (t_len in different_T){
   
   m1 <- numeric(t_len)
   m2 <- numeric(t_len)
-  m1 <- 0.5 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.5 * b_function((1:t_len)/t_len, 0.75, 0.25)
-  m2 <- 4 * b_function((1:t_len)/t_len, 0.75, 0.075) - 4 * b_function((1:t_len)/t_len, 0.25, 0.075)
+  m1 <- b_function((1:t_len)/t_len, 0.25, 0.25) - b_function((1:t_len)/t_len, 0.75, 0.25)
+  m2 <- 4 * b_function((1:t_len)/t_len, 0.75, 0.125) - 4 * b_function((1:t_len)/t_len, 0.25, 0.125)
   
   cat("Calculating the distance measures for T = ", t_len,"\n")
   tic()

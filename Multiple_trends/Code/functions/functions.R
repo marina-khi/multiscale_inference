@@ -162,25 +162,27 @@ repl_clustering_revision <- function(rep, t_len_, n_ts_, grid_,
     sigmahat_vector <- c()
     for (i in 1:(floor(n_ts_ / 3))){
       simulated_data[, i] <- arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
-      #simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
+      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
       AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
       sigma_hat_i         <- sqrt(AR.struc$lrv)
       sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
     }
     for (i in (floor(n_ts_ / 3) + 1):(floor(2 * n_ts_ / 3))){
       simulated_data[, i] <- m1_ + arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
-      #simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
-      AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
-      sigma_hat_i         <- sqrt(AR.struc$lrv)
-      sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
+      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
+      #AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
+      #sigma_hat_i         <- sqrt(AR.struc$lrv)
+      #sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
     }
     for (i in (floor(2 * n_ts_ / 3) + 1):n_ts_){
       simulated_data[, i] <- m2_ + arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
-      #simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
-      AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
-      sigma_hat_i         <- sqrt(AR.struc$lrv)
-      sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
+      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
+      #AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
+      #sigma_hat_i         <- sqrt(AR.struc$lrv)
+      #sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
     }
+    
+    sigmahat_vector <- rep(sqrt(sigma_^2/((1 - a_hat_)^2)), n_ts_)
     psi <- compute_statistics(data = simulated_data, sigma_vec = sigmahat_vector,
                               n_ts = n_ts_, grid = grid_)
     
@@ -886,7 +888,7 @@ cluster_analysis <- function(t_len_, n_rep_, alpha_, results_matrix_){
       correct_number_of_groups = correct_number_of_groups + 1
     }
     if ((results_matrix_[1, i] == 2) | (results_matrix_[1, i] == 3)){
-      groups123  <- clustering_results[2:(n_ts + 1), i]
+      groups123  <- results_matrix_[2:(n_ts + 1), i]
       groups132  <- recode(groups123, "2=3;3=2")
       groups213  <- recode(groups123, "1=2;2=1")
       groups231  <- recode(groups123, "1=2;2=3;3=1")
