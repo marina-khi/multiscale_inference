@@ -541,15 +541,23 @@ We rerun the simulations precisely as specified in (i), deviating solely in the 
 \item \textit{Similarly, there are many related clustering methods, including (Bayesian and non-Bayesian) methods for clustering functional data. The proposed approach is reasonable, yet should be placed in a broader context and evaluated against appropriate competitors.}
 
 {\color{blue} We next investigate the finite sample performance of the clustering algorithm.% from Section \ref{sec:clustering}.
-To do so, we consider a very simple scenario: we generate data from the model $Y_{it} = m_i(\frac{t}{T}) + \varepsilon_{it}$, that is, we assume that there are no fixed effects and no covariates. The error terms $\varepsilon_{it}$ are specified as before. Moreover, as before, we set the number of time series to $n = 15$ and we consider different time series lengths $T$. We partition the $n = 15$ time series into $N=3$ groups, each containing $5$ time series. Specifically, we set $G_1 = \{1,\ldots, 5\}$, $G_2 = \{6,\ldots, 10\}$ and $G_3 =  \{11,\ldots, 15\}$, and we assume that $m_i = f_l$ for all $i \in G_l$ and all $l = 1, 2, 3$. The group-specific trend functions $f_1$, $f_2$ and $f_3$ are defined as $f_1(u) = 0$, $f_2(u) = 0.5 \cdot \ind\Big\{\frac{|u - 0.25|}{0.25}\leq 1\Big\} \big(1 - \frac{(u - 0.25)^2}{0.25^2}\big)^2 - 0.5 \cdot \ind\Big\{\frac{|u - 0.75|}{0.25}\leq 1\Big\} \big(1 - \frac{(u - 0.75)^2}{0.25^2}\big)^2$ and $f_3(u) = 2 \cdot \ind\Big\{\frac{|u - 0.75|}{0.025}\leq 1\Big\} \big(1 - \frac{(u - 0.75)^2}{0.025^2}\big)^2 - 2 \cdot \ind\Big\{\frac{|u - 0.25|}{0.025}\leq 1\Big\} \big(1 - \frac{(u - 0.25)^2}{0.025^2}\big)^2$. In order to estimate the groups $G_1$, $G_2$, $G_3$ and their number $N = 3$, we use the same implementation as before followed by the clustering procedure.% from Section \ref{sec:clustering}. 
+To do so, we consider a very simple scenario: we generate data from the model $Y_{it} = m_i(\frac{t}{T}) + \varepsilon_{it}$, that is, we assume that there are no fixed effects and no covariates. The error terms $\varepsilon_{it}$ are specified as before. Moreover, as before, we set the number of time series to $n = 15$ and we consider different time series lengths $T$. We partition the $n = 15$ time series into $N=3$ groups, each containing $5$ time series. Specifically, we set $G_1 = \{1,\ldots, 5\}$, $G_2 = \{6,\ldots, 10\}$ and $G_3 =  \{11,\ldots, 15\}$, and we assume that $m_i = f_l$ for all $i \in G_l$ and all $l = 1, 2, 3$. The group-specific trend functions $f_1$, $f_2$ and $f_3$ are defined as $f_1(u) = 0$, $f_2(u) = 0.5 \cdot \ind\Big\{\frac{|u - 0.25|}{0.25}\leq 1\Big\} \big(1 - \frac{(u - 0.25)^2}{0.25^2}\big)^2 - 0.5 \cdot \ind\Big\{\frac{|u - 0.75|}{0.25}\leq 1\Big\} \big(1 - \frac{(u - 0.75)^2}{0.25^2}\big)^2$ and $f_3(u) = 2 \cdot \ind\Big\{\frac{|u - 0.75|}{0.025}\leq 1\Big\} \big(1 - \frac{(u - 0.75)^2}{0.025^2}\big)^2 - 2 \cdot \ind\Big\{\frac{|u - 0.25|}{0.025}\leq 1\Big\} \big(1 - \frac{(u - 0.25)^2}{0.025^2}\big)^2$. The examples of the resulting time series with the corresponding trend functions for $T=250$ are presented in Figure \ref{fig:clustering_fcts}. In order to estimate the groups $G_1$, $G_2$, $G_3$ and their number $N = 3$, we use the same implementation as before followed by the clustering procedure.% from Section \ref{sec:clustering}.
+}
 
+{\color{red}Note: we do not estimate the long-run variance $\sigma_i^2$ from the data but consider $\sigma_i^2$ as known. Specifically, we use the theoretical value of the long-run variance calculated based on the true parameter values: $$\sigma_i^2 = \frac{E[\eta_{it}^2]}{(1 - a)^2} = \frac{1}{9} \text{ for all }i.$$}
+\begin{figure}[t!]
+\includegraphics[width=\textwidth]{output/clustering_functions.pdf}
+\caption{In black, the trend functions $f_1, f_2$ and $f_3$ are plotted. In red, we depict the one specific instance of a trend function plus the error term, $f_j(t/T) + \varepsilon_{it}$ for $T=250$ for $j=1,2, 3$.}\label{fig:clustering_fcts}
+\end{figure}
 %We implement the procedure as before with one difference. Specifically, we take the finer grid $\mathcal{G}_T$: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{T}} \text{ for some } t \in \mathbb{N} \big\}$. \textcolor{red}{(I decided to have a look at the finer grid hoping that the procedure would work better with small sample sizes but it does not really help to be honest.)}
-
-As a benchmark, we use the following clustering procedure:
+{\color{blue} As a benchmark, we use the following two clustering procedures:
 \begin{itemize}[label=--,leftmargin=0.45cm,itemsep=0pt,topsep=0pt]
 \item Estimate the trends $m_i$ by a local linear estimator $\hat{m}_i$ with a fixed bandwidth chosen as the smallest bandwidth from $H_T$.
-\item Compute a $\mathcal{L}^2$ distance measure $d_{ij}$ between $\hat{m}_i$ and $\hat{m}_j$:
-\[ d_{ij} = \int_0^1 (\hat{m}_i(w) - \hat{m}_j(w))^2 dw. \]
+\item Compute a distance measure $d_{ij}$ between $\hat{m}_i$ and $\hat{m}_j$ using two approaches:
+\begin{itemize}[label=$\circ$]
+\item $\mathcal{L}^2$ distance measure: $d_{ij} = \int_0^1 (\hat{m}_i(w) - \hat{m}_j(w))^2 dw$ (Benchmark 1);
+\item $\max$ distance measure: $d_{ij} = \max_{1\leq t\leq T} |\hat{m}_i(t/T) - \hat{m}_j(t/T)|$ (Benchmark 2).
+\end{itemize}
 \item Construct the following dissimilarity measure from these distances:
 \[ \hat{\Delta}(S,S') = \max_{i \in S,j \in S'} d_{ij}. \]
 \item Run a HAC algorithm with the computed dissimilarities. 
@@ -557,7 +565,14 @@ As a benchmark, we use the following clustering procedure:
 
 Our procedure can be regarded as a further development of this very simple and natural benchmark procedure. In particular: our procedure replaces the simple distance measure $d_{ij}$ by a more advanced multiscale distance measure and provides a way to estimate the number of clusters, which is not part of the simple benchmark procedure.
 
-%The simulation results are as follows. For our multiscale method, the empirical probabilities with which which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$ for the significance level $\alpha=0.05$ for $T=100, 250$ and $500$ are $?, ?$ and $?$, respectively. Furthermore, the  empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$ for the significance level $\alpha=0.05$ for $T=100, 250$ and $500$ are $?, ?$ and $?$, respectively. The benchmark procedure is able to detect the difference between the groups in all possible case for all of the sample sizes.
+The simulation results are as follows. For our multiscale method with unknown number of clusters, the empirical probabilities with which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$ for the significance level $\alpha=0.05$ for $T=100$ and $250$ are $0.973$ and $0.987$, respectively. Furthermore, the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$ for the significance level $\alpha=0.05$ for $T=100$ and $250$ are $0.958$ and $0.987$, respectively.
+
+For our multiscale method with known number of clusters, the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$ for the significance level $\alpha=0.05$ for $T=100$ and 
+$250$ are $0.983$ and $1$, respectively.
+
+For the Benchmark 1, the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$ for the significance level $\alpha=0.05$ for $T=100$ and $250$ are $0.983$ and $1$, respectively.
+
+For Benchmark 2, the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$ for the significance level $\alpha=0.05$ for $T=100$ and $250$ are $0.152$ and $0.335$, respectively.
 }
 
 %\addtocounter{table}{-1} 

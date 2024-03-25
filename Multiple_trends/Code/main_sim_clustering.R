@@ -23,7 +23,7 @@ n_ts     <- 15 #number of different time series for simulation
 n_rep    <- 1000 #number of simulations for calculating size and power
 sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
 
-different_T <- c(100, 250) #Different lengths of time series
+different_T <- c(100, 250, 500) #Different lengths of time series
 alpha       <- 0.05
 #different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
 
@@ -48,16 +48,16 @@ correct_specification <- c(rep(1, (floor(n_ts / 3))),
 
 
 #Plotting the trend functions
-t_len <- 100
+t_len <- 250
 
 m1 <- numeric(t_len)
 m2 <- numeric(t_len)
-m1 <- b_function((1:t_len)/t_len, 0.25, 0.25) - b_function((1:t_len)/t_len, 0.75, 0.25)
-m2 <- 4 * b_function((1:t_len)/t_len, 0.75, 0.075) - 4 * b_function((1:t_len)/t_len, 0.25, 0.075)
+m1 <- 0.5 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.5 * b_function((1:t_len)/t_len, 0.75, 0.25)
+m2 <- b_function((1:t_len)/t_len, 0.75, 0.025) - b_function((1:t_len)/t_len, 0.25, 0.025)
 
 pdf(paste0("output/revision/clustering_functions.pdf"),
-    width = 12, height = 8, paper="special")
-par(mfrow = c(2, 1))
+    width = 12, height = 12, paper="special")
+par(mfrow = c(3, 1))
 par(mar = c(4, 3, 0.5, 0)) #Margins for each plot
 par(oma = c(0.5, 0.5, 0.5, 0.2)) #Outer margins
 
@@ -65,23 +65,35 @@ errors <- arima.sim(model = list(ar = a_hat),
                     innov = rnorm(t_len, 0, sigma),
                     n = t_len)
 plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-     y = m1, ylim = c(-8.5, 8.5),
+     y = rep(0, t_len), ylim = c(-2.5, 2.5),
      xlab = "", ylab = "", main = NULL,
      type = 'l', cex = 0.8)
 lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-      y = m1 + errors, type = "l", col = "red")
-#mtext(side = 1, text = paste0("b = ", b), line = 2.3, cex = 1)
+      y = errors, type = "l", col = "red")
+mtext(side = 1, text = paste0("Example of one time series from Cluster 1"), line = 2.3, cex = 1)
+
 
 errors <- arima.sim(model = list(ar = a_hat),
                     innov = rnorm(t_len, 0, sigma),
                     n = t_len)
 plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-     y = m2, ylim = c(-8.5, 8.5),
+     y = m1, ylim = c(-2.5, 2.5),
+     xlab = "", ylab = "", main = NULL,
+     type = 'l', cex = 0.8)
+lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+      y = m1 + errors, type = "l", col = "red")
+mtext(side = 1, text = paste0("Example of one time series from Cluster 2"), line = 2.3, cex = 1)
+
+errors <- arima.sim(model = list(ar = a_hat),
+                    innov = rnorm(t_len, 0, sigma),
+                    n = t_len)
+plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+     y = m2, ylim = c(-2.5, 2.5),
      xlab = "", ylab = "", main = NULL,
      type = 'l', cex = 0.8)
 lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
       y = m2 + errors, type = "l", col = "red")
-#mtext(side = 1, text = paste0("b = ", b), line = 2.3, cex = 1)
+mtext(side = 1, text = paste0("Example of one time series from Cluster 3"), line = 2.3, cex = 1)
 
 dev.off()
 
@@ -98,8 +110,8 @@ for (t_len in different_T){
   
   m1 <- numeric(t_len)
   m2 <- numeric(t_len)
-  m1 <- b_function((1:t_len)/t_len, 0.25, 0.25) - b_function((1:t_len)/t_len, 0.75, 0.25)
-  m2 <- 4 * b_function((1:t_len)/t_len, 0.75, 0.125) - 4 * b_function((1:t_len)/t_len, 0.25, 0.125)
+  m1 <- 0.5 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.5 * b_function((1:t_len)/t_len, 0.75, 0.25)
+  m2 <- 2 * b_function((1:t_len)/t_len, 0.75, 0.025) - 2 * b_function((1:t_len)/t_len, 0.25, 0.025)
   
   cat("Calculating the distance measures for T = ", t_len,"\n")
   tic()
@@ -256,7 +268,7 @@ for (t_len in different_T){
 }
 
 cat("Analysis of the results for the multiscale method with known number of clusters (N = 3)\n")
-correct_groups2   <- c()
+correct_groups2    <- c()
 correct_structure2 <- c()
 
 group_count2 <- list()
@@ -335,39 +347,22 @@ for (t_len in different_T){
 #Output of the results#
 #######################
 
-labels_ <- c("(a)", "(b)", "(c)")
+produce_hist_plots(file_extension_ = "", different_T_ = different_T,
+                   n_rep_ = n_rep, group_count_ = group_count,
+                   error_count_ = error_count)
 
-pdf(paste0("output/revision/histograms_groups.pdf"), width=8, height=2.9, paper="special")
-par(mfrow = c(1,2))
-par(mar = c(3, 2, 0.5, 1)) #Margins for each plot
-par(oma = c(1.4, 1.5, 0.5, 0.2)) #Outer margins
+produce_hist_plots(file_extension_ = "_3clusters", different_T_ = different_T,
+                   n_rep_ = n_rep, group_count_ = group_count2,
+                   error_count_ = error_count2)
 
-for (j in 1:length(different_T)){
-  t_len <- different_T[j]
-  bp1 <- barplot(group_count[[j]], ylim = c(0, 1.05 * n_rep), xlab = "",
-                 main = "", ylab = "", xaxt = 'n', space = 0)
-  text(x = bp1, y = group_count[[j]], label = group_count[[j]], cex = 0.8, pos = 3)
-  axis(1, at = bp1, labels = 1:5, tick=FALSE, line=-0.5, cex.axis=1)
-  mtext(side=1, text= paste0(labels_[j], " T = ", t_len), line=3.4)
-  title(xlab="number of groups", mgp=c(1.5,1,0), cex.lab=1)
-}
-dev.off()
+produce_hist_plots(file_extension_ = "_benchmark_L2", different_T_ = different_T,
+                   n_rep_ = n_rep, group_count_ = group_count_benchmark,
+                   error_count_ = error_count_benchmark)
 
-pdf(paste0("output/revision/histograms_errors.pdf"), width=8, height=2.9, paper="special")
-par(mfrow = c(1,2))
-par(mar = c(3, 2, 0.5, 1)) #Margins for each plot
-par(oma = c(1.4, 1.5, 0.5, 0.2)) #Outer margins
+produce_hist_plots(file_extension_ = "_benchmark_abs", different_T_ = different_T,
+                   n_rep_ = n_rep, group_count_ = group_count_benchmark2,
+                   error_count_ = error_count_benchmark2)
 
-for (j in 1:length(different_T)){
-  t_len <- different_T[j]
-  bp2 <- barplot(error_count[[j]], ylim = c(0, 1.05 *  n_rep), xlab = "",
-                 main = "", ylab = "", xaxt = 'n', space = 0)
-  text(x = bp2, y = error_count[[j]], label = error_count[[j]], cex = 0.8, pos = 3)
-  mtext(side=1, text= paste0(labels_[j], " T = ", t_len), line=3.4)
-  axis(1, at = bp2, labels = 0:8, tick=FALSE, line=-0.5, cex.axis=1)
-  title(xlab="number of errors", mgp=c(1.5,1,0), cex.lab=1)
-}
-dev.off()
 
 
 # filename = paste0("output/tables/", n_ts, "_ts_correct_group_number.tex")
@@ -379,38 +374,6 @@ dev.off()
 # output_matrix(correct_structure, filename2)
  
 
-
-pdf(paste0("output/revision/histograms_groups_benchmark.pdf"), width=8, height=2.9, paper="special")
-par(mfrow = c(1,2))
-par(mar = c(3, 2, 0.5, 1)) #Margins for each plot
-par(oma = c(1.4, 1.5, 0.5, 0.2)) #Outer margins
-
-for (j in 1:length(different_T)){
-  t_len <- different_T[j]
-  bp1 <- barplot(group_count_benchmark[[j]], ylim = c(0, 1.05 * n_rep), xlab = "",
-                 main = "", ylab = "", xaxt = 'n', space = 0)
-  text(x = bp1, y = group_count_benchmark[[j]], label = group_count_benchmark[[j]], cex = 0.8, pos = 3)
-  axis(1, at = bp1, labels = 1:5, tick=FALSE, line=-0.5, cex.axis=1)
-  mtext(side=1, text= paste0(labels_[j], " T = ", t_len), line=3.4)
-  title(xlab="number of groups for the benchmark", mgp=c(1.5,1,0), cex.lab=1)
-}
-dev.off()
-
-pdf(paste0("output/revision/histograms_errors_benchmark.pdf"), width=8, height=2.9, paper="special")
-par(mfrow = c(1,2))
-par(mar = c(3, 2, 0.5, 1)) #Margins for each plot
-par(oma = c(1.4, 1.5, 0.5, 0.2)) #Outer margins
-
-for (j in 1:length(different_T)){
-  t_len <- different_T[j]
-  bp2 <- barplot(error_count_benchmark[[j]], ylim = c(0, 1.05 *  n_rep), xlab = "",
-                 main = "", ylab = "", xaxt = 'n', space = 0)
-  text(x = bp2, y = error_count_benchmark[[j]], label = error_count_benchmark[[j]], cex = 0.8, pos = 3)
-  mtext(side=1, text= paste0(labels_[j], " T = ", t_len), line=3.4)
-  axis(1, at = bp2, labels = 0:8, tick=FALSE, line=-0.5, cex.axis=1)
-  title(xlab="number of errors for the benchmark", mgp=c(1.5,1,0), cex.lab=1)
-}
-dev.off()
 
 # filename = paste0("output/tables/", n_ts, "_ts_correct_group_number_benchmark.tex")
 # rownames(correct_groups_benchmark) <- different_T

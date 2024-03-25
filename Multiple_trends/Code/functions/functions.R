@@ -978,3 +978,40 @@ cluster_analysis <- function(t_len_, n_rep_, alpha_, results_matrix_){
               correct_number_of_groups = correct_number_of_groups,
               correctly_specified_groups = correctly_specified_groups))
 }
+
+produce_hist_plots <- function(file_extension_, different_T_, n_rep_,
+                               group_count_, error_count_){ 
+  labels_ <- c("(a)", "(b)", "(c)")
+  
+  pdf(paste0("output/revision/hist_groups", file_extension_, ".pdf"), width = 8, height = 2.9, paper="special")
+  par(mfrow = c(1,2))
+  par(mar = c(3, 2, 0.5, 1)) #Margins for each plot
+  par(oma = c(1.4, 1.5, 0.5, 0.2)) #Outer margins
+  
+  for (j in 1:length(different_T_)){
+    t_len <- different_T_[j]
+    bp1 <- barplot(group_count_[[j]], ylim = c(0, 1.1 * n_rep_), xlab = "",
+                   main = "", ylab = "", xaxt = 'n', space = 0)
+    text(x = bp1, y = group_count_[[j]], label = group_count_[[j]], cex = 0.8, pos = 3)
+    axis(1, at = bp1, labels = 1:5, tick = FALSE, line = -0.5, cex.axis = 1)
+    mtext(side = 1, text= paste0(labels_[j], " T = ", t_len), line = 3.4)
+    title(xlab="number of groups", mgp=c(1.5,1,0), cex.lab=1)
+  }
+  dev.off()
+  
+  pdf(paste0("output/revision/hist_errors", file_extension_, ".pdf"), width = 8, height = 2.9, paper="special")
+  par(mfrow = c(1,2))
+  par(mar = c(3, 2, 0.5, 1)) #Margins for each plot
+  par(oma = c(1.4, 1.5, 0.5, 0.2)) #Outer margins
+  
+  for (j in 1:length(different_T_)){
+    t_len <- different_T_[j]
+    bp2 <- barplot(error_count_[[j]], ylim = c(0, 1.1 *  n_rep_), xlab = "",
+                   main = "", ylab = "", xaxt = 'n', space = 0)
+    text(x = bp2, y = error_count_[[j]], label = error_count_[[j]], cex = 0.8, pos = 3)
+    mtext(side = 1, text = paste0(labels_[j], " T = ", t_len), line = 3.4)
+    axis(1, at = bp2, labels = 0:8, tick = FALSE, line = -0.5, cex.axis = 1)
+    title(xlab = "number of errors", mgp = c(1.5,1,0), cex.lab = 1)
+  }
+  dev.off() 
+}
