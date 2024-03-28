@@ -163,9 +163,9 @@ repl_clustering_revision <- function(rep, t_len_, n_ts_, grid_,
     for (i in 1:(floor(n_ts_ / 3))){
       simulated_data[, i] <- arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
       simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
-      AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
-      sigma_hat_i         <- sqrt(AR.struc$lrv)
-      sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
+      #AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
+      #sigma_hat_i         <- sqrt(AR.struc$lrv)
+      #sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
     }
     for (i in (floor(n_ts_ / 3) + 1):(floor(2 * n_ts_ / 3))){
       simulated_data[, i] <- m1_ + arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
@@ -186,13 +186,14 @@ repl_clustering_revision <- function(rep, t_len_, n_ts_, grid_,
     psi <- compute_statistics(data = simulated_data, sigma_vec = sigmahat_vector,
                               n_ts = n_ts_, grid = grid_)
     
-    grid_points             <- seq(1/t_len_, 1, by = 1/t_len_)
-    grid_points_2           <- seq(1/(2 * t_len_), 1, by = 1/t_len_)
-    smoothed_data           <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    #colnames(smoothed_data) <- 1:n_ts_
-    
+    grid_points    <- seq(1/t_len_, 1, by = 1/t_len_)
+    grid_points_2  <- seq(1/(2 * t_len_), 1, by = 1/t_len_)
+    smoothed_data  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    smoothed_data2 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+
     for (i in 1:n_ts_){
       smoothed_data[, i] <- mapply(local_linear_smoothing, grid_points_2, MoreArgs = list(simulated_data[, i], grid_points, h_))
+      smoothed_data2[, i] <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(simulated_data[, i], grid_points, h_))
     }
     
     #Calculating the benchmark model
@@ -207,7 +208,7 @@ repl_clustering_revision <- function(rep, t_len_, n_ts_, grid_,
     benchmark_results2 <- matrix(0, nrow = n_ts_, ncol = n_ts_)
     for (i in 1:(n_ts_ - 1)){
       for (j in (i + 1):n_ts_){
-        benchmark_results2[i, j] <- max(abs(smoothed_data[, i] - smoothed_data[, j]))
+        benchmark_results2[i, j] <- max(abs(smoothed_data2[, i] - smoothed_data2[, j]))
       }
     }
     results <- c(as.vector(psi$stat_pairwise), as.vector(benchmark_results), as.vector(benchmark_results2))

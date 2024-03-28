@@ -565,14 +565,13 @@ To do so, we consider a very simple scenario: we generate data from the model $Y
 
 Our procedure can be regarded as a further development of this very simple and natural benchmark procedure. In particular: our procedure replaces the simple distance measure $d_{ij}$ by a more advanced multiscale distance measure and provides a way to estimate the number of clusters, which is not part of the simple benchmark procedure.
 
-The simulation results are as follows. For our multiscale method with unknown number of clusters, the empirical probabilities with which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$ for the significance level $\alpha=0.05$ for $T=100$ and $250$ are $0.973$ and $0.987$, respectively. Furthermore, the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$ for the significance level $\alpha=0.05$ for $T=100$ and $250$ are $0.958$ and $0.987$, respectively.
+The simulation results are as follows. For our multiscale method with unknown number of clusters, the empirical probabilities with which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$ for the significance level $\alpha=0.05$ for $T=100, 250$ and $500$ are $0.969, 0.982$ and $0.988$, respectively. Furthermore, the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$ for the significance level $\alpha=0.05$ for $T=100, 250$ and $500$ are $0.955, 0.982$ and $0.988$, respectively.
 
-For our multiscale method with known number of clusters, the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$ for the significance level $\alpha=0.05$ for $T=100$ and 
-$250$ are $0.983$ and $1$, respectively.
+For our multiscale method with known number of clusters, the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$ for the significance level $\alpha=0.05$ for $T=100, 250$ and $500$ are $0.981, 1.000$ and $1.000$, respectively.
 
-For the Benchmark 1, the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$ for the significance level $\alpha=0.05$ for $T=100$ and $250$ are $0.983$ and $1$, respectively.
+For the Benchmark 1, the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$ for the significance level $\alpha=0.05$ for $T=100, 250$ and $500$ are $0.987, 1.000$ and $1.000$, respectively.
 
-For Benchmark 2, the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$ for the significance level $\alpha=0.05$ for $T=100$ and $250$ are $0.152$ and $0.335$, respectively.
+For Benchmark 2, the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$ for the significance level $\alpha=0.05$ for $T=100, 250$ and $500$ are $0.137, 0.348$ and $0.41$, respectively.
 }
 
 %\addtocounter{table}{-1} 
@@ -739,6 +738,24 @@ covariates, and also discuss some of the aforementioned points on Bootstrap alte
 
 
 \item \textit{Develop more to which extent the second data application (in the Supplement) brings insights beyond the one of the first (and why you chose to present the first and not the second in the main body of the text).}
+
+To address how the second data application provides insights beyond those of the first, and to explain the rationale behind selecting the first for the main body of the text, we first briefly describe the contribution of the first empirical application.
+
+%The first empirical application, detailed in the main paper, focuses on comparing housing price trends across different countries. This example is particularly illustrative of the practical utility of the developed methods in real-world economic analysis. It provides a compelling case for how the multiscale test and clustering algorithm can uncover complex time trend relationships within global housing markets, a subject of broad interest to economists, policymakers, and the public alike​.
+
+The second data application, discussed in the supplement, extends the insights of the first by explicitly revisiting and comparing the hypothesis of a common trend in the GDP growth time series of several OECD countries to the established method by Zhang et al. (2012). While the primary study in the main paper focuses on a novel multiscale comparison of nonparametric trend curves, the supplementary analysis serves a dual purpose. First, this application aims to explore a different facet of economic analysis by examining macroeconomic indicators across a set of economically developed countries. While this also demonstrates the versatility and applicability of the method developed in the paper, it inherently addresses a question of economic convergence or divergence among OECD countries, which may be seen as a more nuanced economic question in need of a substantial additional analysis. Secondly, this application provides a direct comparison to a previously established method, thus positioning the new approach within the existing literature of the comparison of time series.
+
+The decision to present the first application in the main body of the paper and relegate the second to the supplement can be attributed to several factors, one of them being the  restriction on the page limit. Unfortunately, including both applications in the main text would have exceeded the permissible length for the publication. We have decided to present only one application that best showcases the methodological novelty and breadth of the proposed approach (comparison of the housing price data), while still offering the second application as a robust supplement. Furthermore, we also consider the analysis of the housing time trends 
+
+The choice to present the first application over the second in the main body of the paper mostly reflects a strategic consideration of the broader and more immediate appeal of housing market trends to a wider audience, including economists, policymakers, and the general public. Housing markets are a direct concern for a significant portion of the population, and the insights provided by the first application have immediate practical implications for understanding global economic health, policy making, and investment decisions. In contrast, the examination of GDP growth trends among OECD countries, while undeniably valuable for macroeconomic analysis and policy formulation, may appeal to a more specialized audience primarily concerned with macroeconomic stability and economic policy.
+
+In summary, the second data application in the Supplement enriches the discourse initiated in the main paper by applying the developed methods to a different but equally important economic phenomenon. The choice to feature the housing market analysis in the main body underscores a prioritization of broader interest and applicability. However, both applications collectively highlight the versatility and the significant potential of the newly developed econometric methods for enhancing our understanding of complex economic trends across different contexts.
+
+
+ Firstly, it applies the developed methodology to a real-world dataset, thereby illustrating its practical utility beyond the initial example. 
+
+
+Furthermore, the choice underscores a prioritization of content that, while demonstrating the utility of the proposed methods in a real-world context, also maintains a focus on the theoretical innovation and methodological advancements introduced in the paper. The supplementary application not only reinforces the main paper's findings but also enriches the reader's understanding by offering a comparative analysis with an established method, thereby highlighting the new method's significance and applicability in a broader context. This strategic organization of content ensures that the main narrative remains focused and accessible while still providing comprehensive insights into the method's practical implications and advantages over existing approaches.
 
 
 \item \textit{Supplement section page 15, line 49 -- a notational detail: should the first $o_p$ be $O_p$ if the $\rho_T = o(1/ \log(T))$ or vice versa?}  

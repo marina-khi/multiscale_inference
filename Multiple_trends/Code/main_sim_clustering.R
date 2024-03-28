@@ -52,7 +52,7 @@ t_len <- 250
 
 m1 <- numeric(t_len)
 m2 <- numeric(t_len)
-m1 <- 0.5 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.5 * b_function((1:t_len)/t_len, 0.75, 0.25)
+m1 <- 0.35 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.35 * b_function((1:t_len)/t_len, 0.75, 0.25)
 m2 <- b_function((1:t_len)/t_len, 0.75, 0.025) - b_function((1:t_len)/t_len, 0.25, 0.025)
 
 pdf(paste0("output/revision/clustering_functions.pdf"),
@@ -65,7 +65,7 @@ errors <- arima.sim(model = list(ar = a_hat),
                     innov = rnorm(t_len, 0, sigma),
                     n = t_len)
 plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-     y = rep(0, t_len), ylim = c(-2.5, 2.5),
+     y = rep(0, t_len), ylim = c(-1.5, 1.5),
      xlab = "", ylab = "", main = NULL,
      type = 'l', cex = 0.8)
 lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
@@ -77,7 +77,7 @@ errors <- arima.sim(model = list(ar = a_hat),
                     innov = rnorm(t_len, 0, sigma),
                     n = t_len)
 plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-     y = m1, ylim = c(-2.5, 2.5),
+     y = m1, ylim = c(-1.5, 1.5),
      xlab = "", ylab = "", main = NULL,
      type = 'l', cex = 0.8)
 lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
