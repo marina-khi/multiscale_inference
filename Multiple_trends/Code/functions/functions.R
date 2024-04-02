@@ -316,6 +316,104 @@ produce_plots_gdp <- function(results, data_i, data_j, ticks_, labels_,
   }
 }
 
+produce_plots_gdp2 <- function(results, data_i, data_j, ticks_, labels_,
+                              name_i, name_j){
+  filename    <- paste0("output/revision/gdp/", name_i, "_vs_", name_j, ".pdf")
+  t_len       <- length(data_i)
+  grid_points <- seq(1/t_len, 1, by = 1/t_len)
+  
+  pdf(filename, width = 5.5, height = 10.5, paper = "special")
+  layout(matrix(c(1, 2, 3),ncol = 1), widths = c(2.2, 2.2, 2.2),
+         heights = c(1.5, 1.5, 1.8), TRUE)
+  
+  #Setting the layout of the graphs
+  par(cex = 1, tck = -0.025)
+  par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
+  par(oma = c(0.2, 1.5, 2, 0.2)) #Outer margins
+  
+  #if ((name_i %in% c("FRA", "USA")) & (name_j %in% c("FRA", "USA")))
+  plot(data_i, ylim = c(-0.07, 0.06), type="l", col = "black", ylab = "",
+       xlab = "", xaxt = "n", yaxt = "n", mgp = c(1, 0.5, 0))
+  
+  lines(data_j, col = "red")
+  axis(side = 1, at = ticks_, cex.axis = 0.95, mgp = c(1, 0.5, 0), 
+       labels = labels_)
+  axis(side = 2, at = c(-0.05, 0, 0.05), mgp = c(1, 0.5, 0), cex.axis = 0.9)    
+  title(main = "(a) adjusted GDP growth rate", font.main = 1, line = 0.5)
+  legend("topright", inset = 0.01, legend=c(name_i, name_j),
+         col = c("black", "red"), lty = 1, cex = 0.95, ncol = 2)
+  
+  par(mar = c(0.5, 0.5, 3, 0)) #Margins for each plot
+  
+  #Plotting the smoothed version of the time series that we have
+  smoothed_i  <- mapply(local_linear_smoothing, grid_points,
+                        MoreArgs = list(data_i, grid_points, bw = 0.1))
+  smoothed_j  <- mapply(local_linear_smoothing, grid_points,
+                        MoreArgs = list(data_j, grid_points, bw = 0.1))
+  
+  plot(smoothed_i, ylim = c(-0.027, 0.015), type = "l", col = "black", ylab = "",
+       xlab = "", xaxt = "n", mgp = c(1,0.5,0), cex.axis = 0.9)
+  axis(side = 1, at = ticks_, labels = labels_, cex.axis = 0.95,
+       mgp = c(1, 0.5, 0))
+  title(main = "(b) smoothed curves from (a)", font.main = 1, line = 0.5)
+  lines(smoothed_j, col = "red")
+  
+  par(mar = c(2.7, 0.5, 3, 0)) #Margins for each plot
+  gset    <- results$gset_with_values[[l]]
+  a_t_set <- subset(gset, test == TRUE, select = c(u, h))
+  if (nrow(a_t_set) > 0){
+    p_t_set <- data.frame('startpoint' = (a_t_set$u - a_t_set$h) * t_len,
+                          'endpoint' = (a_t_set$u + a_t_set$h) * t_len,
+                          'values' = 0)
+    p_t_set$values <- (1:nrow(p_t_set))/nrow(p_t_set)
+    
+    #Produce minimal intervals
+    p_t_set2  <- compute_minimal_intervals(p_t_set)
+    
+    plot(NA, xlim=c(0, t_len),  ylim = c(0, 1 + 1 / nrow(p_t_set)), xlab = "",
+         xaxt = "n", mgp=c(2, 0.5, 0), yaxt = "n")
+    axis(side = 1, at = ticks_, labels = labels_, cex.axis = 0.95,
+         mgp = c(1, 0.5, 0))
+    title(main = "(c) (minimal) intervals produced by our test", font.main = 1, line = 0.5)
+    #title(xlab = "quarter", line = 1.7, cex.lab = 0.9)
+    segments(p_t_set2$startpoint, p_t_set2$values, p_t_set2$endpoint,
+             p_t_set2$values, lwd = 2)
+    segments(p_t_set$startpoint, p_t_set$values, p_t_set$endpoint,
+             p_t_set$values, col = "gray")
+    mtext(paste0("Comparison of ", name_i, " and ", name_j), side = 3,
+          line = 0, outer = TRUE, font = 1, cex = 1.2)
+    dev.off()
+    
+    p_t_set_tex <- data.frame("from" = as.character(as.Date(sapply((p_t_set$startpoint + 0.5), add.quarters,
+                                                                   date_ = as.Date('01-10-1975', format = "%d-%m-%Y")))),
+                              "to" = as.character(as.Date(sapply((p_t_set$endpoint - 0.5), add.quarters,
+                                                                 date_ = as.Date('01-10-1975', format = "%d-%m-%Y")))))
+    p_t_set2_tex <- data.frame("from" = as.character(as.Date(sapply((p_t_set2$startpoint + 0.5), add.quarters,
+                                                                    date_ = as.Date('01-10-1975', format = "%d-%m-%Y")))),
+                               "to" = as.character(as.Date(sapply((p_t_set2$endpoint - 0.5), add.quarters,
+                                                                  date_ = as.Date('01-10-1975', format = "%d-%m-%Y")))))
+    print.xtable(xtable(p_t_set_tex[order(p_t_set_tex$from), ], digits = c(0),
+                        align = paste(replicate(3, "c"), collapse = "")),
+                 file = paste0("output/tables/gdp/", name_i, "_vs_", name_j, ".tex"),
+                 type = "latex", include.colnames = FALSE)
+    print.xtable(xtable(p_t_set2_tex[order(p_t_set2_tex$from), ], digits = c(0),
+                        align = paste(replicate(3, "c"), collapse = "")),
+                 file = paste0("output/tables/gdp/", name_i, "_vs_", name_j, "_min_intervals.tex"),
+                 type = "latex", include.colnames = FALSE)
+    
+  } else {
+    #If there are no intervals where the test rejects, we produce empty plots
+    plot(NA, xlim=c(0, t_len),  ylim = c(0, 1), xlab="", ylab = "", xaxt = "n",
+         mgp=c(2,0.5,0), yaxt = "n")
+    axis(side = 1, at = ticks_, labels = labels_, cex.axis = 0.95,
+         mgp = c(1, 0.5, 0))
+    title(main = "(c) (minimal) intervals produced by our test", font.main = 1,
+          line = 0.5)
+    mtext(paste0("Comparison of ", name_i, " and ", name_j), side = 3,
+          line = 0, outer = TRUE, font = 1, cex = 1.2)
+    dev.off()
+  }
+}
 
 produce_plots_talk <- function(results, l, data_i, data_j, at_, labels_, dates_,
                                dates, name_i, name_j, filename){
@@ -466,6 +564,97 @@ produce_plots_hp <- function(results, data_i, data_j,
     dev.off()
   }
 }
+
+produce_plots_hp2 <- function(results, data_i, data_j,
+                             at_, labels_, name_i, name_j, l){
+  filename    <- paste0("output/revision/hp/", name_i, "_vs_", name_j, ".pdf")
+  t_len       <- length(data_i)
+  grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
+  
+  pdf(filename, width = 5.5, height = 10.5, paper="special")
+  layout(matrix(c(1, 2, 3),ncol=1), widths=c(2.2, 2.2, 2.2),
+         heights = c(1.5, 1.5, 1.8), TRUE)
+  
+  #Setting the layout of the graphs
+  par(cex = 1, tck = -0.025)
+  par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
+  par(oma = c(0.2, 1.5, 2, 0.2)) #Outer margins
+  
+  if ((name_i %in% c("AUS", "NLD")) & (name_j %in% c("AUS", "NLD"))) {
+    shift <- 0.4
+  } else {
+    shift <- 0
+  }
+  
+  plot(data_i, ylim = c(-0.9, 1.5),
+       #ylim = c(min(data_i, data_j), max(data_i, data_j) + shift),
+       type = "l", col = "black", ylab = "", xlab = "", xaxt = "n",
+       mgp = c(1, 0.5, 0))
+  lines(data_j, col="red")
+  axis(side = 1, at = at_, labels = labels_,
+       cex.axis = 0.95, mgp=c(1, 0.5, 0))
+  
+  title(main = "(a) adjusted log of housing prices", font.main = 1, line = 0.5)
+  legend("topright", inset = 0.02, legend = c(name_i, name_j),
+         col = c("black", "red"), lty = 1, cex = 0.95, ncol = 2)
+  
+  par(mar = c(0.5, 0.5, 3, 0)) #Margins for each plot
+  
+  #Plotting the smoothed version of the time series that we have
+  smoothed_i  <- mapply(local_linear_smoothing, grid_points,
+                        MoreArgs = list(data_i, grid_points, bw = 7/t_len))
+  smoothed_j  <- mapply(local_linear_smoothing, grid_points,
+                        MoreArgs = list(data_j, grid_points, bw = 7/t_len))
+  
+  plot(smoothed_i, ylim = c(-0.9, 1.5),
+       #ylim = c(min(data_i, data_j), max(data_i, data_j)),
+       type = "l",
+       col="black", ylab = "", xlab = "", xaxt = "n", mgp = c(1,0.5,0))
+  axis(side = 1, at = at_, labels = labels_, cex.axis = 0.95,
+       mgp = c(1, 0.5, 0))
+  title(main = "(b) smoothed curves from (a)", font.main = 1, line = 0.5)
+  lines(smoothed_j, col="red")
+  
+  par(mar = c(2.7, 0.5, 3, 0)) #Margins for each plot
+  gset    <- results$gset_with_values[[l]]
+  a_t_set <- subset(gset, test == TRUE, select = c(u, h))
+  if (nrow(a_t_set) > 0){
+    p_t_set <- data.frame('startpoint' = (a_t_set$u - a_t_set$h) * t_len + 0.5,
+                          'endpoint' = (a_t_set$u + a_t_set$h) * t_len - 0.5,
+                          'values' = 0)
+    p_t_set$values <- (1:nrow(p_t_set))/nrow(p_t_set)
+    
+    #Produce minimal intervals
+    p_t_set2  <- compute_minimal_intervals(p_t_set)
+    
+    plot(NA, xlim=c(0, t_len),  ylim = c(0, 1 + 1 / nrow(p_t_set)), xlab = "",
+         xaxt = "n", mgp = c(2, 0.5, 0), yaxt = "n")
+    axis(side = 1, at = at_, labels = labels_, cex.axis = 0.95,
+         mgp = c(1, 0.5, 0))
+    title(main = "(c) (minimal) intervals produced by our test", font.main = 1,
+          line = 0.5)
+    segments(p_t_set2$startpoint, p_t_set2$values, p_t_set2$endpoint,
+             p_t_set2$values, lwd = 2)
+    segments(p_t_set$startpoint, p_t_set$values, p_t_set$endpoint,
+             p_t_set$values, col = "gray")
+    
+    mtext(paste0("Comparison of ", name_i, " and ", name_j), side = 3, line = 0,
+          outer = TRUE, font = 1, cex = 1.2)
+    dev.off()
+  } else {
+    #If there are no intervals where the test rejects, we produce empty plots
+    plot(NA, xlim = c(0, t_len),  ylim = c(0, 1), xlab = "", ylab = "",
+         xaxt = "n", mgp = c(2,0.5,0), yaxt = "n")
+    axis(side = 1, at = at_, labels = labels_, cex.axis = 0.95,
+         mgp = c(1, 0.5, 0))
+    title(main = "(c) (minimal) intervals produced by our test", font.main = 1,
+          line = 0.5)
+    mtext(paste0("Comparison of ", name_i, " and ", name_j), side = 3, line = 0,
+          outer = TRUE, font = 1, cex = 1.2)
+    dev.off()
+  }
+}
+
 
 
 #Create a matrix (for size and power table for example) and write them in the tex file

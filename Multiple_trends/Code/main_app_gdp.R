@@ -43,6 +43,7 @@ gdp_mat_augm   <- estimated$gdp_mat_augm   #Augmented time series
 source("functions/sigma_estimation.R")
 sigma_vec <- sigma(gdp_mat_augm, n_ts = n_ts, q_ = q, r_ = r,
                    procedure = "BIC")
+sigma_vec2 <- rep(mean(sigma_vec), n_ts)
 
 
 #########
@@ -54,7 +55,7 @@ h_grid <- seq(from = 4 / t_len, to = 1 / 4, by = 4 / t_len)
 h_grid <- h_grid[h_grid > log(t_len) / t_len]
 grid   <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
 
-result <- multiscale_test(data = gdp_mat_augm, sigma_vec = sigma_vec,
+result <- multiscale_test(data = gdp_mat_augm, sigma_vec = sigma_vec2,
                           alpha = alpha,  n_ts = n_ts, grid = grid,
                           sim_runs = sim_runs)
 
@@ -72,7 +73,7 @@ for (l in seq_len(nrow(result$ijset))){
       i <- result$ijset[l, 2]
       j <- result$ijset[l, 1]
     }
-    produce_plots_gdp(results = result, data_i = gdp_mat_augm[, i],
+    produce_plots_gdp2(results = result, data_i = gdp_mat_augm[, i],
                       data_j = gdp_mat_augm[, j], ticks_ = at,
                       labels_ = dates[at], name_i = countries[i],
                       name_j = countries[j])
