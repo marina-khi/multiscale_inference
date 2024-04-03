@@ -1,3 +1,7 @@
+#####################
+#AUXILIARY FUNCTIONS#
+#####################
+
 add.quarters <- function(n, date_) {
   seq(date_, by = paste (3 * n, "months"), length = 2)[2]
 }
@@ -95,230 +99,13 @@ b_function <- function(u, x_0, h){
   return(as.double((abs(arg) <= 1) * (1 - arg^2)^2))
 }
 
-
-#Function used for simulated the three groups of time series and calculate 
-#the corresponding test statistics, needed for parallel computations
-repl <- function(rep, t_len_, n_ts_, sigma_, a_hat_, q_, r_, grid_, m1_, m2_){
-  library(MSinference)
-  
-  simulated_data           <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-  colnames(simulated_data) <- 1:n_ts_
-  
-  sigmahat_vector <- c()
-  for (i in 1:(floor(n_ts_ / 3))){
-    simulated_data[, i] <- arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
-    simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
-    AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
-    sigma_hat_i         <- sqrt(AR.struc$lrv)
-    sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
-  }
-  for (i in (floor(n_ts_ / 3) + 1):(floor(2 * n_ts_ / 3))){
-    simulated_data[, i] <- m1_ + arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
-    simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
-    AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
-    sigma_hat_i         <- sqrt(AR.struc$lrv)
-    sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
-  }
-  for (i in (floor(2 * n_ts_ / 3) + 1):n_ts_){
-    simulated_data[, i] <- m2_ + arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
-    simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
-    AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
-    sigma_hat_i         <- sqrt(AR.struc$lrv)
-    sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
-  }
-  psi     <- compute_statistics(data = simulated_data, sigma_vec = sigmahat_vector,
-                                n_ts = n_ts_, grid = grid_)
-  results <- as.vector(psi$stat_pairwise)
-  return(results)
-}
-
-#Function used for simulated the three groups of time series and calculate 
-#the corresponding test statistics, needed for parallel computations
-repl_clustering_revision <- function(rep, t_len_, n_ts_, grid_,
-                                     m1_ = NULL, m2_ = NULL, 
-                                     a_hat_ = 0, sigma_ = 1,
-                                     q_ = 25, r_ = 10, h_ = 0.05,
-                                     gaussian_sim = FALSE){
-  library(MSinference)
-
-  if (gaussian_sim){
-    z_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    z_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    sigma_vector  <- rep(sigma_, n_ts_)
-    
-    for (i in 1:n_ts_){
-      z_matrix[, i]      <- rnorm(t_len_, 0, sigma_)
-      z_augm_matrix[, i] <- z_matrix[, i] - mean(z_matrix[, i])
-    }
-    
-    psi <- compute_statistics(data = z_augm_matrix,
-                              sigma_vec = sigma_vector,
-                              n_ts = n_ts_, grid = grid_)
-    results <- c(as.vector(psi$stat_pairwise))
-  } else {
-    simulated_data           <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    #colnames(simulated_data) <- 1:n_ts_
-  
-    sigmahat_vector <- c()
-    for (i in 1:(floor(n_ts_ / 3))){
-      simulated_data[, i] <- arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
-      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
-      #AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
-      #sigma_hat_i         <- sqrt(AR.struc$lrv)
-      #sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
-    }
-    for (i in (floor(n_ts_ / 3) + 1):(floor(2 * n_ts_ / 3))){
-      simulated_data[, i] <- m1_ + arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
-      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
-      #AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
-      #sigma_hat_i         <- sqrt(AR.struc$lrv)
-      #sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
-    }
-    for (i in (floor(2 * n_ts_ / 3) + 1):n_ts_){
-      simulated_data[, i] <- m2_ + arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
-      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
-      #AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
-      #sigma_hat_i         <- sqrt(AR.struc$lrv)
-      #sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
-    }
-    
-    sigmahat_vector <- rep(sqrt(sigma_^2/((1 - a_hat_)^2)), n_ts_)
-    psi <- compute_statistics(data = simulated_data, sigma_vec = sigmahat_vector,
-                              n_ts = n_ts_, grid = grid_)
-    
-    grid_points    <- seq(1/t_len_, 1, by = 1/t_len_)
-    grid_points_2  <- seq(1/(2 * t_len_), 1, by = 1/t_len_)
-    smoothed_data  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    smoothed_data2 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-
-    for (i in 1:n_ts_){
-      smoothed_data[, i] <- mapply(local_linear_smoothing, grid_points_2, MoreArgs = list(simulated_data[, i], grid_points, h_))
-      smoothed_data2[, i] <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(simulated_data[, i], grid_points, h_))
-    }
-    
-    #Calculating the benchmark model
-    benchmark_results <- matrix(0, nrow = n_ts_, ncol = n_ts_)
-    for (i in 1:(n_ts_ - 1)){
-      for (j in (i + 1):n_ts_){
-        benchmark_results[i, j] <- sum((smoothed_data[, i] - smoothed_data[, j])^2) * (1/t_len_)
-      }
-    }
-    
-    #Calculating the benchmark model
-    benchmark_results2 <- matrix(0, nrow = n_ts_, ncol = n_ts_)
-    for (i in 1:(n_ts_ - 1)){
-      for (j in (i + 1):n_ts_){
-        benchmark_results2[i, j] <- max(abs(smoothed_data2[, i] - smoothed_data2[, j]))
-      }
-    }
-    results <- c(as.vector(psi$stat_pairwise), as.vector(benchmark_results), as.vector(benchmark_results2))
-  }
-  return(results)
-}
-
+################################
+#FUNCTIONS FOR THE APPLICATIONS#
+################################
 
 produce_plots_gdp <- function(results, data_i, data_j, ticks_, labels_,
-                              name_i, name_j){
-  filename    <- paste0("output/plots/gdp/", name_i, "_vs_", name_j, ".pdf")
-  t_len       <- length(data_i)
-  grid_points <- seq(1/t_len, 1, by = 1/t_len)
-  
-  pdf(filename, width = 5.5, height = 10.5, paper = "special")
-  layout(matrix(c(1, 2, 3),ncol = 1), widths = c(2.2, 2.2, 2.2),
-         heights = c(1.5, 1.5, 1.8), TRUE)
-    
-  #Setting the layout of the graphs
-  par(cex = 1, tck = -0.025)
-  par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
-  par(oma = c(0.2, 1.5, 2, 0.2)) #Outer margins
-  
-  #if ((name_i %in% c("FRA", "USA")) & (name_j %in% c("FRA", "USA")))
-  plot(data_i, ylim = c(-0.07, 0.06), type="l", col = "black", ylab = "",
-       xlab = "", xaxt = "n", yaxt = "n", mgp = c(1, 0.5, 0))
-
-  lines(data_j, col = "red")
-  axis(side = 1, at = ticks_, cex.axis = 0.95, mgp = c(1, 0.5, 0), 
-       labels = labels_)
-  axis(side = 2, at = c(-0.05, 0, 0.05), mgp = c(1, 0.5, 0), cex.axis = 0.9)    
-  title(main = "(a) adjusted GDP growth rate", font.main = 1, line = 0.5)
-  legend("topright", inset = 0.01, legend=c(name_i, name_j),
-         col = c("black", "red"), lty = 1, cex = 0.95, ncol = 2)
-    
-  par(mar = c(0.5, 0.5, 3, 0)) #Margins for each plot
-    
-  #Plotting the smoothed version of the time series that we have
-  smoothed_i  <- mapply(local_linear_smoothing, grid_points,
-                        MoreArgs = list(data_i, grid_points, bw = 0.1))
-  smoothed_j  <- mapply(local_linear_smoothing, grid_points,
-                        MoreArgs = list(data_j, grid_points, bw = 0.1))
-
-  plot(smoothed_i, ylim = c(-0.027, 0.015), type = "l", col = "black", ylab = "",
-       xlab = "", xaxt = "n", mgp = c(1,0.5,0), cex.axis = 0.9)
-  axis(side = 1, at = ticks_, labels = labels_, cex.axis = 0.95,
-       mgp = c(1, 0.5, 0))
-  title(main = "(b) smoothed curves from (a)", font.main = 1, line = 0.5)
-  lines(smoothed_j, col = "red")
-    
-  par(mar = c(2.7, 0.5, 3, 0)) #Margins for each plot
-  gset    <- results$gset_with_values[[l]]
-  a_t_set <- subset(gset, test == TRUE, select = c(u, h))
-  if (nrow(a_t_set) > 0){
-    p_t_set <- data.frame('startpoint' = (a_t_set$u - a_t_set$h) * t_len,
-                          'endpoint' = (a_t_set$u + a_t_set$h) * t_len,
-                          'values' = 0)
-    p_t_set$values <- (1:nrow(p_t_set))/nrow(p_t_set)
-      
-    #Produce minimal intervals
-    p_t_set2  <- compute_minimal_intervals(p_t_set)
-      
-    plot(NA, xlim=c(0, t_len),  ylim = c(0, 1 + 1 / nrow(p_t_set)), xlab = "",
-         xaxt = "n", mgp=c(2, 0.5, 0), yaxt = "n")
-    axis(side = 1, at = ticks_, labels = labels_, cex.axis = 0.95,
-         mgp = c(1, 0.5, 0))
-    title(main = "(c) (minimal) intervals produced by our test", font.main = 1, line = 0.5)
-      #title(xlab = "quarter", line = 1.7, cex.lab = 0.9)
-    segments(p_t_set2$startpoint, p_t_set2$values, p_t_set2$endpoint,
-             p_t_set2$values, lwd = 2)
-    segments(p_t_set$startpoint, p_t_set$values, p_t_set$endpoint,
-             p_t_set$values, col = "gray")
-    mtext(paste0("Comparison of ", name_i, " and ", name_j), side = 3,
-          line = 0, outer = TRUE, font = 1, cex = 1.2)
-    dev.off()
-    
-    p_t_set_tex <- data.frame("from" = as.character(as.Date(sapply((p_t_set$startpoint + 0.5), add.quarters,
-                                                      date_ = as.Date('01-10-1975', format = "%d-%m-%Y")))),
-                              "to" = as.character(as.Date(sapply((p_t_set$endpoint - 0.5), add.quarters,
-                                            date_ = as.Date('01-10-1975', format = "%d-%m-%Y")))))
-    p_t_set2_tex <- data.frame("from" = as.character(as.Date(sapply((p_t_set2$startpoint + 0.5), add.quarters,
-                                              date_ = as.Date('01-10-1975', format = "%d-%m-%Y")))),
-                              "to" = as.character(as.Date(sapply((p_t_set2$endpoint - 0.5), add.quarters,
-                                            date_ = as.Date('01-10-1975', format = "%d-%m-%Y")))))
-    print.xtable(xtable(p_t_set_tex[order(p_t_set_tex$from), ], digits = c(0),
-                        align = paste(replicate(3, "c"), collapse = "")),
-                 file = paste0("output/tables/gdp/", name_i, "_vs_", name_j, ".tex"),
-                 type = "latex", include.colnames = FALSE)
-    print.xtable(xtable(p_t_set2_tex[order(p_t_set2_tex$from), ], digits = c(0),
-                        align = paste(replicate(3, "c"), collapse = "")),
-                 file = paste0("output/tables/gdp/", name_i, "_vs_", name_j, "_min_intervals.tex"),
-                 type = "latex", include.colnames = FALSE)
-    
-  } else {
-    #If there are no intervals where the test rejects, we produce empty plots
-    plot(NA, xlim=c(0, t_len),  ylim = c(0, 1), xlab="", ylab = "", xaxt = "n",
-         mgp=c(2,0.5,0), yaxt = "n")
-    axis(side = 1, at = ticks_, labels = labels_, cex.axis = 0.95,
-         mgp = c(1, 0.5, 0))
-    title(main = "(c) (minimal) intervals produced by our test", font.main = 1,
-          line = 0.5)
-    mtext(paste0("Comparison of ", name_i, " and ", name_j), side = 3,
-          line = 0, outer = TRUE, font = 1, cex = 1.2)
-    dev.off()
-  }
-}
-
-produce_plots_gdp2 <- function(results, data_i, data_j, ticks_, labels_,
-                              name_i, name_j){
-  filename    <- paste0("output/revision/gdp/", name_i, "_vs_", name_j, ".pdf")
+                              name_i, name_j, folder){
+  filename    <- paste0(folder, name_i, "_vs_", name_j, ".pdf")
   t_len       <- length(data_i)
   grid_points <- seq(1/t_len, 1, by = 1/t_len)
   
@@ -431,7 +218,7 @@ produce_plots_talk <- function(results, l, data_i, data_j, at_, labels_, dates_,
   par(cex = 1, tck = -0.025)
   par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
   par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
-
+  
   plot(x = dates_, y = data_i, ylim=c(min(data_i, data_j), max(data_i, data_j)), type="l",
        col = "#EB811B", ylab="", xlab="", mgp=c(1, 0.5, 0))
   lines(x = dates_, y = data_j, col="#604c38")
@@ -539,7 +326,7 @@ produce_plots_hp <- function(results, data_i, data_j,
     p_t_set_tex <- data.frame("from" = as.character((p_t_set$startpoint - 0.5) + dates[1] - 1),
                               "to" = as.character((p_t_set$endpoint + 0.5) + dates[1] - 1))
     p_t_set2_tex <- data.frame("from" = as.character((p_t_set2$startpoint - 0.5) + dates[1] - 1),
-                              "to" = as.character((p_t_set2$endpoint + 0.5) + dates[1] - 1))
+                               "to" = as.character((p_t_set2$endpoint + 0.5) + dates[1] - 1))
     print.xtable(xtable(p_t_set_tex[order(p_t_set_tex$from), ], digits = c(0),
                         align = paste(replicate(3, "c"), collapse = "")),
                  file = paste0("output/tables/hp/", name_i, "_vs_", name_j, ".tex"),
@@ -565,38 +352,22 @@ produce_plots_hp <- function(results, data_i, data_j,
   }
 }
 
-#Create a matrix (for size and power table for example) and write them in the tex file
-output_matrix <- function(matrix_, filename){
-  addtorow     <- list()
-  addtorow$pos <- list(0, 0)
-  addtorow$command <- c("& \\multicolumn{3}{c}{nominal size $\\alpha$} \\\\\n",
-                        "$T$ & 0.01 & 0.05 & 0.1 \\\\\n") 
-  print.xtable(xtable(matrix_, digits = c(3), align = "cccc"), type = "latex",
-               file = filename, add.to.row = addtorow, include.colnames = FALSE)
-}
-
-output_matrix2 <- function(matrix_, filename){
-  addtorow     <- list()
-  addtorow$pos <- list(0, 0)
-  addtorow$command <- c("& \\multicolumn{6}{c}{nominal size $\\alpha$} \\\\\n",
-                        "$T$ & 0.01 & 0.05 & 0.1 & 0.01 & 0.05 & 0.1 \\\\\n") 
-  print.xtable(xtable(matrix_, digits = c(3), align = "ccccccc"), type = "latex",
-               file = filename, add.to.row = addtorow, include.colnames = FALSE)
-}
-
+###############################
+#FUNCTIONS FOR THE SIMULATIONS#
+###############################
 
 #Function that simulates 3 covariates as VAR(3) process with the given
 #coefficients (a_x_mat_ and sigma_x_mat_),
 #the error terms as AR(1) also with the given coefficient a_ and sigma_,
 #the fixed effect term alpha_ as a normally distributed random vector,
-#N(0, c_ * Sigma_a_mat_), the time series as
+#N(0, Sigma_a_mat_), the time series as
 #y = alpha_ + beta_ %*% covariates + m_matrix_ + errors,
 #estimates the parameters, and then computes the test statistics
 repl <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
                  beta_ = NULL, a_x_vec_ = c(0, 0, 0), phi_ = 0,
                  rho_ = 0, m_matrix_ = NULL, q_ = 25, r_ = 10,
                  gaussian_sim = FALSE){
-
+  
   library(MSinference)
   library(dplyr)
   
@@ -604,12 +375,12 @@ repl <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
     z_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
     z_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
     sigma_vector  <- rep(sigma_, n_ts_)
-
+    
     for (i in 1:n_ts_){
       z_matrix[, i]      <- rnorm(t_len_, 0, sigma_)
       z_augm_matrix[, i] <- z_matrix[, i] - mean(z_matrix[, i])
     }
-
+    
     psi <- compute_statistics(data = z_augm_matrix,
                               sigma_vec = sigma_vector,
                               n_ts = n_ts_, grid = grid_)
@@ -624,13 +395,13 @@ repl <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
     y_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
     y_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
     error_matrix  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-
+    
     big_sigma_matrix       <- matrix(rho_, nrow = n_ts_, ncol = n_ts_)
     diag(big_sigma_matrix) <- 1
     alpha_vec              <- rmvnorm(1, mean = rep(0, n_ts_), sigma = big_sigma_matrix)
-
+    
     sigmahat_vector <- c()
-
+    
     if (!is.null(beta_)){
       phi_matrix       <- matrix(phi_, nrow = 3, ncol = 3)
       diag(phi_matrix) <- 1
@@ -643,7 +414,7 @@ repl <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
         nu       <- rmvnorm(t_len_ + 10, mean = c(0, 0, 0), sigma = phi_matrix)
         a_matrix <- diag(a_x_vec_)
         x_matrix <- matrix(0, 3, t_len_ + 10)
-
+        
         for (t in 2:(t_len_ + 10)){
           x_matrix[, t] <- a_matrix %*% x_matrix[, t - 1] + nu[t, ]
         }
@@ -691,6 +462,85 @@ repl <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
                               sigma_vec = sigmahat_vector,
                               n_ts = n_ts_, grid = grid_)    
     results <- c(as.vector(psi$stat_pairwise))
+  }
+  return(results)
+}
+
+
+#Function used for simulated the three groups of time series and calculate 
+#the corresponding test statistics, needed for parallel computations
+repl_clustering <- function(rep, t_len_, n_ts_, grid_,
+                            m1_ = NULL, m2_ = NULL, 
+                            a_hat_ = 0, sigma_ = 1,
+                            q_ = 25, r_ = 10, h_ = 0.05,
+                            gaussian_sim = FALSE){
+  library(MSinference)
+
+  if (gaussian_sim){
+    z_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    z_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    sigma_vector  <- rep(sigma_, n_ts_)
+    
+    for (i in 1:n_ts_){
+      z_matrix[, i]      <- rnorm(t_len_, 0, sigma_)
+      z_augm_matrix[, i] <- z_matrix[, i] - mean(z_matrix[, i])
+    }
+    
+    psi <- compute_statistics(data = z_augm_matrix,
+                              sigma_vec = sigma_vector,
+                              n_ts = n_ts_, grid = grid_)
+    results <- c(as.vector(psi$stat_pairwise))
+  } else {
+    
+    simulated_data  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    sigmahat_vector <- c()
+    
+    for (i in 1:(floor(n_ts_ / 3))){
+      simulated_data[, i] <- arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
+      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
+      #AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
+      #sigma_hat_i         <- sqrt(AR.struc$lrv)
+      #sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
+    }
+    for (i in (floor(n_ts_ / 3) + 1):(floor(2 * n_ts_ / 3))){
+      simulated_data[, i] <- m1_ + arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
+      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
+      #AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
+      #sigma_hat_i         <- sqrt(AR.struc$lrv)
+      #sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
+    }
+    for (i in (floor(2 * n_ts_ / 3) + 1):n_ts_){
+      simulated_data[, i] <- m2_ + arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
+      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
+      #AR.struc            <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
+      #sigma_hat_i         <- sqrt(AR.struc$lrv)
+      #sigmahat_vector     <- c(sigmahat_vector, sigma_hat_i)
+    }
+    
+    #True long-run variance
+    sigmahat_vector <- rep(sqrt(sigma_^2/((1 - a_hat_)^2)), n_ts_)
+    psi <- compute_statistics(data = simulated_data, sigma_vec = sigmahat_vector,
+                              n_ts = n_ts_, grid = grid_)
+    
+    grid_points    <- seq(1/t_len_, 1, by = 1/t_len_)
+    grid_points_2  <- seq(1/(2 * t_len_), 1, by = 1/t_len_)
+    smoothed_data  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    smoothed_data2 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+
+    for (i in 1:n_ts_){
+      smoothed_data[, i]  <- mapply(local_linear_smoothing, grid_points_2, MoreArgs = list(simulated_data[, i], grid_points, h_))
+      smoothed_data2[, i] <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(simulated_data[, i], grid_points, h_))
+    }
+    
+    #Calculating the benchmark model
+    benchmark_results <- matrix(0, nrow = n_ts_, ncol = n_ts_)
+    benchmark_results2 <- matrix(0, nrow = n_ts_, ncol = n_ts_)
+    for (i in 1:(n_ts_ - 1)){
+      for (j in (i + 1):n_ts_){
+        benchmark_results[i, j]  <- sum((smoothed_data[, i] - smoothed_data[, j])^2) * (1/t_len_)
+        benchmark_results2[i, j] <- max(abs(smoothed_data2[, i] - smoothed_data2[, j]))      }
+    }
+    results <- c(as.vector(psi$stat_pairwise), as.vector(benchmark_results), as.vector(benchmark_results2))
   }
   return(results)
 }
@@ -797,6 +647,26 @@ cluster_analysis <- function(t_len_, n_rep_, alpha_, results_matrix_){
               correctly_specified_groups = correctly_specified_groups))
 }
 
+
+#Create a matrix (for size and power table for example) and write them in the tex file
+output_matrix <- function(matrix_, filename){
+  addtorow     <- list()
+  addtorow$pos <- list(0, 0)
+  addtorow$command <- c("& \\multicolumn{3}{c}{nominal size $\\alpha$} \\\\\n",
+                        "$T$ & 0.01 & 0.05 & 0.1 \\\\\n") 
+  print.xtable(xtable(matrix_, digits = c(3), align = "cccc"), type = "latex",
+               file = filename, add.to.row = addtorow, include.colnames = FALSE)
+}
+
+output_matrix2 <- function(matrix_, filename){
+  addtorow     <- list()
+  addtorow$pos <- list(0, 0)
+  addtorow$command <- c("& \\multicolumn{6}{c}{nominal size $\\alpha$} \\\\\n",
+                        "$T$ & 0.01 & 0.05 & 0.1 & 0.01 & 0.05 & 0.1 \\\\\n") 
+  print.xtable(xtable(matrix_, digits = c(3), align = "ccccccc"), type = "latex",
+               file = filename, add.to.row = addtorow, include.colnames = FALSE)
+}
+
 produce_hist_plots <- function(file_extension_, different_T_, n_rep_,
                                group_count_, error_count_){ 
   labels_ <- c("(a)", "(b)", "(c)")
@@ -838,8 +708,6 @@ produce_hist_plots <- function(file_extension_, different_T_, n_rep_,
 #################
 #SIZER FUNCTIONS#
 #################
-
-
 #' Epanechnikov kernel function.
 #' @param x A number.
 #' @return 3/4(1-x^2) for |x|<=1 and 0 elsewhere.

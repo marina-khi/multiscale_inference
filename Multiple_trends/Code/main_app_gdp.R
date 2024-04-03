@@ -43,7 +43,6 @@ gdp_mat_augm   <- estimated$gdp_mat_augm   #Augmented time series
 source("functions/sigma_estimation.R")
 sigma_vec <- sigma(gdp_mat_augm, n_ts = n_ts, q_ = q, r_ = r,
                    procedure = "BIC")
-sigma_vec2 <- rep(mean(sigma_vec), n_ts)
 
 
 #########
@@ -73,10 +72,10 @@ for (l in seq_len(nrow(result$ijset))){
       i <- result$ijset[l, 2]
       j <- result$ijset[l, 1]
     }
-    produce_plots_gdp2(results = result, data_i = gdp_mat_augm[, i],
+    produce_plots_gdp(results = result, data_i = gdp_mat_augm[, i],
                       data_j = gdp_mat_augm[, j], ticks_ = at,
                       labels_ = dates[at], name_i = countries[i],
-                      name_j = countries[j])
+                      name_j = countries[j], folder = "output/plots/gdp/")
   }
 }
 
