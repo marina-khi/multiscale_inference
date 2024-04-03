@@ -565,98 +565,6 @@ produce_plots_hp <- function(results, data_i, data_j,
   }
 }
 
-produce_plots_hp2 <- function(results, data_i, data_j,
-                             at_, labels_, name_i, name_j, l){
-  filename    <- paste0("output/revision/hp/", name_i, "_vs_", name_j, ".pdf")
-  t_len       <- length(data_i)
-  grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
-  
-  pdf(filename, width = 5.5, height = 10.5, paper="special")
-  layout(matrix(c(1, 2, 3),ncol=1), widths=c(2.2, 2.2, 2.2),
-         heights = c(1.5, 1.5, 1.8), TRUE)
-  
-  #Setting the layout of the graphs
-  par(cex = 1, tck = -0.025)
-  par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
-  par(oma = c(0.2, 1.5, 2, 0.2)) #Outer margins
-  
-  if ((name_i %in% c("AUS", "NLD")) & (name_j %in% c("AUS", "NLD"))) {
-    shift <- 0.4
-  } else {
-    shift <- 0
-  }
-  
-  plot(data_i, ylim = c(-0.9, 1.5),
-       #ylim = c(min(data_i, data_j), max(data_i, data_j) + shift),
-       type = "l", col = "black", ylab = "", xlab = "", xaxt = "n",
-       mgp = c(1, 0.5, 0))
-  lines(data_j, col="red")
-  axis(side = 1, at = at_, labels = labels_,
-       cex.axis = 0.95, mgp=c(1, 0.5, 0))
-  
-  title(main = "(a) adjusted log of housing prices", font.main = 1, line = 0.5)
-  legend("topright", inset = 0.02, legend = c(name_i, name_j),
-         col = c("black", "red"), lty = 1, cex = 0.95, ncol = 2)
-  
-  par(mar = c(0.5, 0.5, 3, 0)) #Margins for each plot
-  
-  #Plotting the smoothed version of the time series that we have
-  smoothed_i  <- mapply(local_linear_smoothing, grid_points,
-                        MoreArgs = list(data_i, grid_points, bw = 7/t_len))
-  smoothed_j  <- mapply(local_linear_smoothing, grid_points,
-                        MoreArgs = list(data_j, grid_points, bw = 7/t_len))
-  
-  plot(smoothed_i, ylim = c(-0.9, 1.5),
-       #ylim = c(min(data_i, data_j), max(data_i, data_j)),
-       type = "l",
-       col="black", ylab = "", xlab = "", xaxt = "n", mgp = c(1,0.5,0))
-  axis(side = 1, at = at_, labels = labels_, cex.axis = 0.95,
-       mgp = c(1, 0.5, 0))
-  title(main = "(b) smoothed curves from (a)", font.main = 1, line = 0.5)
-  lines(smoothed_j, col="red")
-  
-  par(mar = c(2.7, 0.5, 3, 0)) #Margins for each plot
-  gset    <- results$gset_with_values[[l]]
-  a_t_set <- subset(gset, test == TRUE, select = c(u, h))
-  if (nrow(a_t_set) > 0){
-    p_t_set <- data.frame('startpoint' = (a_t_set$u - a_t_set$h) * t_len + 0.5,
-                          'endpoint' = (a_t_set$u + a_t_set$h) * t_len - 0.5,
-                          'values' = 0)
-    p_t_set$values <- (1:nrow(p_t_set))/nrow(p_t_set)
-    
-    #Produce minimal intervals
-    p_t_set2  <- compute_minimal_intervals(p_t_set)
-    
-    plot(NA, xlim=c(0, t_len),  ylim = c(0, 1 + 1 / nrow(p_t_set)), xlab = "",
-         xaxt = "n", mgp = c(2, 0.5, 0), yaxt = "n")
-    axis(side = 1, at = at_, labels = labels_, cex.axis = 0.95,
-         mgp = c(1, 0.5, 0))
-    title(main = "(c) (minimal) intervals produced by our test", font.main = 1,
-          line = 0.5)
-    segments(p_t_set2$startpoint, p_t_set2$values, p_t_set2$endpoint,
-             p_t_set2$values, lwd = 2)
-    segments(p_t_set$startpoint, p_t_set$values, p_t_set$endpoint,
-             p_t_set$values, col = "gray")
-    
-    mtext(paste0("Comparison of ", name_i, " and ", name_j), side = 3, line = 0,
-          outer = TRUE, font = 1, cex = 1.2)
-    dev.off()
-  } else {
-    #If there are no intervals where the test rejects, we produce empty plots
-    plot(NA, xlim = c(0, t_len),  ylim = c(0, 1), xlab = "", ylab = "",
-         xaxt = "n", mgp = c(2,0.5,0), yaxt = "n")
-    axis(side = 1, at = at_, labels = labels_, cex.axis = 0.95,
-         mgp = c(1, 0.5, 0))
-    title(main = "(c) (minimal) intervals produced by our test", font.main = 1,
-          line = 0.5)
-    mtext(paste0("Comparison of ", name_i, " and ", name_j), side = 3, line = 0,
-          outer = TRUE, font = 1, cex = 1.2)
-    dev.off()
-  }
-}
-
-
-
 #Create a matrix (for size and power table for example) and write them in the tex file
 output_matrix <- function(matrix_, filename){
   addtorow     <- list()
@@ -684,12 +592,10 @@ output_matrix2 <- function(matrix_, filename){
 #N(0, c_ * Sigma_a_mat_), the time series as
 #y = alpha_ + beta_ %*% covariates + m_matrix_ + errors,
 #estimates the parameters, and then computes the test statistics
-repl_revision <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
-                          beta_ = NULL,
-                          a_x_vec_ = c(0, 0, 0), phi_ = 0,
-                          rho_ = 0, m_matrix_ = NULL,
-                          q_ = 25, r_ = 10,
-                          gaussian_sim = FALSE){
+repl <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
+                 beta_ = NULL, a_x_vec_ = c(0, 0, 0), phi_ = 0,
+                 rho_ = 0, m_matrix_ = NULL, q_ = 25, r_ = 10,
+                 gaussian_sim = FALSE){
 
   library(MSinference)
   library(dplyr)
@@ -789,27 +695,144 @@ repl_revision <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
   return(results)
 }
 
+cluster_analysis <- function(t_len_, n_rep_, alpha_, results_matrix_){
+  correct_number_of_groups   <- 0 #Starting the counter from zero
+  correctly_specified_groups <- 0
+  
+  num_of_errors     <- c()
+  
+  for (i in 1:n_rep_){
+    if (results_matrix_[1, i] == 3) {
+      correct_number_of_groups = correct_number_of_groups + 1
+    }
+    if ((results_matrix_[1, i] == 2) | (results_matrix_[1, i] == 3)){
+      groups123  <- results_matrix_[2:(n_ts + 1), i]
+      groups132  <- recode(groups123, "2=3;3=2")
+      groups213  <- recode(groups123, "1=2;2=1")
+      groups231  <- recode(groups123, "1=2;2=3;3=1")
+      groups312  <- recode(groups123, "1=3;2=1;3=2")
+      groups321  <- recode(groups123, "1=3;3=1")
+      difference <- min(sum(correct_specification != groups132),
+                        sum(correct_specification != groups213),
+                        sum(correct_specification != groups231),
+                        sum(correct_specification != groups312),
+                        sum(correct_specification != groups321),
+                        sum(correct_specification != groups123))
+    }
+    if ((results_matrix_[1, i] == 1) | (results_matrix_[1, i] > 4)){
+      difference <- 10
+    }
+    if (results_matrix_[1, i] == 4) {
+      groups1234  <- results_matrix_[2:(n_ts + 1), i]
+      groups1243  <- recode(groups1234, "4=3;3=4")
+      groups1342  <- recode(groups1234, "2=3;3=4;4=2")
+      groups1324  <- recode(groups1234, "2=3;3=2")
+      groups1423  <- recode(groups1234, "2=4;3=2;4=3")
+      groups1432  <- recode(groups1234, "2=4;4=2")
+      
+      groups2134  <- recode(groups1234, "1=2;2=1")
+      groups2143  <- recode(groups1234, "1=2;2=1;3=4;4=3")
+      groups2314  <- recode(groups1234, "1=2;2=3;3=1")
+      groups2341  <- recode(groups1234, "1=2;2=3;3=4;4=1")
+      groups2413  <- recode(groups1234, "1=2;2=4;3=1;4=3")
+      groups2431  <- recode(groups1234, "1=2;2=4;4=1")
+      
+      groups3124  <- recode(groups1234, "1=3;2=1;3=2")
+      groups3142  <- recode(groups1234, "1=3;2=1;3=4;4=2")
+      groups3214  <- recode(groups1234, "1=3;3=1")
+      groups3241  <- recode(groups1234, "1=3;3=4;4=1")
+      groups3412  <- recode(groups1234, "1=3;2=4;3=1;4=2")
+      groups3421  <- recode(groups1234, "1=3;2=4;3=2;4=1")
+      
+      groups4123  <- recode(groups1234, "1=4;2=1;3=2;4=3")
+      groups4132  <- recode(groups1234, "1=4;2=1;4=2")
+      groups4213  <- recode(groups1234, "1=4;3=1;4=3")
+      groups4231  <- recode(groups1234, "1=4;4=1")
+      groups4312  <- recode(groups1234, "1=4;2=3;3=1;4=2")
+      groups4321  <- recode(groups1234, "1=4;2=3;3=2;4=1")
+      
+      difference <- min(sum(correct_specification != groups1234),
+                        sum(correct_specification != groups1243),
+                        sum(correct_specification != groups1342),
+                        sum(correct_specification != groups1324),
+                        sum(correct_specification != groups1423),
+                        sum(correct_specification != groups1432),
+                        
+                        sum(correct_specification != groups2134),
+                        sum(correct_specification != groups2143),
+                        sum(correct_specification != groups2314),
+                        sum(correct_specification != groups2341),
+                        sum(correct_specification != groups2413),
+                        sum(correct_specification != groups2431),
+                        
+                        sum(correct_specification != groups3124),
+                        sum(correct_specification != groups3142),
+                        sum(correct_specification != groups3214),
+                        sum(correct_specification != groups3241),
+                        sum(correct_specification != groups3412),
+                        sum(correct_specification != groups3421),
+                        
+                        sum(correct_specification != groups4123),
+                        sum(correct_specification != groups4132),
+                        sum(correct_specification != groups4213),
+                        sum(correct_specification != groups4231),
+                        sum(correct_specification != groups4312),
+                        sum(correct_specification != groups4321))
+    }
+    if (difference == 0){
+      correctly_specified_groups = correctly_specified_groups + 1
+    }
+    num_of_errors <- c(num_of_errors, difference)
+  }
+  
+  cat("Percentage of detecting true number of clusters",
+      correct_number_of_groups/n_rep_, "with alpha = ", alpha_,
+      ", T = ", t_len_, "\n")
+  cat("Percentage of detecting true clustering",
+      correctly_specified_groups/n_rep_, "with alpha = ", alpha_,
+      ", T = ", t_len_, "\n")
+  cat("Maximum number of errors is ", max(num_of_errors), "\n")
+  return(list(num_of_errors = num_of_errors,
+              correct_number_of_groups = correct_number_of_groups,
+              correctly_specified_groups = correctly_specified_groups))
+}
 
-# pdf(paste0("output/revision/bump_function.pdf"),
-#     width = 12, height = 8, paper="special")
-# par(mfrow = c(2, 2))
-# par(mar = c(4, 3, 0.5, 0)) #Margins for each plot
-# par(oma = c(0.5, 0.5, 0.5, 0.2)) #Outer margins
-# 
-# for (b in different_b){
-#   errors <- arima.sim(model = list(ar = a),
-#                       innov = rnorm(t_len, 0, sigma),
-#                       n = t_len)
-#   plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-#        y = (bump((1:t_len)/t_len) * b), ylim = c(-1, 1.6),
-#        xlab = "", ylab = "", main = NULL,
-#        type = 'l', cex = 0.8)
-#   lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-#         y = (bump((1:t_len)/t_len) * b) + errors, type = "l",
-#         col = "red")
-#   mtext(side = 1, text = paste0("b = ", b), line = 2.3, cex = 1)
-# }
-# dev.off()
+produce_hist_plots <- function(file_extension_, different_T_, n_rep_,
+                               group_count_, error_count_){ 
+  labels_ <- c("(a)", "(b)", "(c)")
+  
+  pdf(paste0("output/revision/hist_groups", file_extension_, ".pdf"), width = 8, height = 2.9, paper="special")
+  par(mfrow = c(1,2))
+  par(mar = c(3, 2, 0.5, 1)) #Margins for each plot
+  par(oma = c(1.4, 1.5, 0.5, 0.2)) #Outer margins
+  
+  for (j in 1:length(different_T_)){
+    t_len <- different_T_[j]
+    bp1 <- barplot(group_count_[[j]], ylim = c(0, 1.1 * n_rep_), xlab = "",
+                   main = "", ylab = "", xaxt = 'n', space = 0)
+    text(x = bp1, y = group_count_[[j]], label = group_count_[[j]], cex = 0.8, pos = 3)
+    axis(1, at = bp1, labels = 1:5, tick = FALSE, line = -0.5, cex.axis = 1)
+    mtext(side = 1, text= paste0(labels_[j], " T = ", t_len), line = 3.4)
+    title(xlab="number of groups", mgp=c(1.5,1,0), cex.lab=1)
+  }
+  dev.off()
+  
+  pdf(paste0("output/revision/hist_errors", file_extension_, ".pdf"), width = 8, height = 2.9, paper="special")
+  par(mfrow = c(1,2))
+  par(mar = c(3, 2, 0.5, 1)) #Margins for each plot
+  par(oma = c(1.4, 1.5, 0.5, 0.2)) #Outer margins
+  
+  for (j in 1:length(different_T_)){
+    t_len <- different_T_[j]
+    bp2 <- barplot(error_count_[[j]], ylim = c(0, 1.1 *  n_rep_), xlab = "",
+                   main = "", ylab = "", xaxt = 'n', space = 0)
+    text(x = bp2, y = error_count_[[j]], label = error_count_[[j]], cex = 0.8, pos = 3)
+    mtext(side = 1, text = paste0(labels_[j], " T = ", t_len), line = 3.4)
+    axis(1, at = bp2, labels = 0:8, tick = FALSE, line = -0.5, cex.axis = 1)
+    title(xlab = "number of errors", mgp = c(1.5,1,0), cex.lab = 1)
+  }
+  dev.off() 
+}
 
 
 #################
@@ -1065,143 +1088,4 @@ SiZer_test <- function(values1, values2, std.devs, quants, grid){
   test.sizer <- matrix(test.full, ncol=length(u.grid.full), byrow=TRUE)
   
   return(list(ugrid=u.grid.full, hgrid=h.grid.full, test=test.sizer))
-}
-
-cluster_analysis <- function(t_len_, n_rep_, alpha_, results_matrix_){
-  correct_number_of_groups   <- 0 #Starting the counter from zero
-  correctly_specified_groups <- 0
-  
-  num_of_errors     <- c()
-  
-  for (i in 1:n_rep_){
-    if (results_matrix_[1, i] == 3) {
-      correct_number_of_groups = correct_number_of_groups + 1
-    }
-    if ((results_matrix_[1, i] == 2) | (results_matrix_[1, i] == 3)){
-      groups123  <- results_matrix_[2:(n_ts + 1), i]
-      groups132  <- recode(groups123, "2=3;3=2")
-      groups213  <- recode(groups123, "1=2;2=1")
-      groups231  <- recode(groups123, "1=2;2=3;3=1")
-      groups312  <- recode(groups123, "1=3;2=1;3=2")
-      groups321  <- recode(groups123, "1=3;3=1")
-      difference <- min(sum(correct_specification != groups132),
-                        sum(correct_specification != groups213),
-                        sum(correct_specification != groups231),
-                        sum(correct_specification != groups312),
-                        sum(correct_specification != groups321),
-                        sum(correct_specification != groups123))
-    }
-    if ((results_matrix_[1, i] == 1) | (results_matrix_[1, i] > 4)){
-      difference <- 10
-    }
-    if (results_matrix_[1, i] == 4) {
-      groups1234  <- results_matrix_[2:(n_ts + 1), i]
-      groups1243  <- recode(groups1234, "4=3;3=4")
-      groups1342  <- recode(groups1234, "2=3;3=4;4=2")
-      groups1324  <- recode(groups1234, "2=3;3=2")
-      groups1423  <- recode(groups1234, "2=4;3=2;4=3")
-      groups1432  <- recode(groups1234, "2=4;4=2")
-      
-      groups2134  <- recode(groups1234, "1=2;2=1")
-      groups2143  <- recode(groups1234, "1=2;2=1;3=4;4=3")
-      groups2314  <- recode(groups1234, "1=2;2=3;3=1")
-      groups2341  <- recode(groups1234, "1=2;2=3;3=4;4=1")
-      groups2413  <- recode(groups1234, "1=2;2=4;3=1;4=3")
-      groups2431  <- recode(groups1234, "1=2;2=4;4=1")
-      
-      groups3124  <- recode(groups1234, "1=3;2=1;3=2")
-      groups3142  <- recode(groups1234, "1=3;2=1;3=4;4=2")
-      groups3214  <- recode(groups1234, "1=3;3=1")
-      groups3241  <- recode(groups1234, "1=3;3=4;4=1")
-      groups3412  <- recode(groups1234, "1=3;2=4;3=1;4=2")
-      groups3421  <- recode(groups1234, "1=3;2=4;3=2;4=1")
-      
-      groups4123  <- recode(groups1234, "1=4;2=1;3=2;4=3")
-      groups4132  <- recode(groups1234, "1=4;2=1;4=2")
-      groups4213  <- recode(groups1234, "1=4;3=1;4=3")
-      groups4231  <- recode(groups1234, "1=4;4=1")
-      groups4312  <- recode(groups1234, "1=4;2=3;3=1;4=2")
-      groups4321  <- recode(groups1234, "1=4;2=3;3=2;4=1")
-      
-      difference <- min(sum(correct_specification != groups1234),
-                        sum(correct_specification != groups1243),
-                        sum(correct_specification != groups1342),
-                        sum(correct_specification != groups1324),
-                        sum(correct_specification != groups1423),
-                        sum(correct_specification != groups1432),
-                        
-                        sum(correct_specification != groups2134),
-                        sum(correct_specification != groups2143),
-                        sum(correct_specification != groups2314),
-                        sum(correct_specification != groups2341),
-                        sum(correct_specification != groups2413),
-                        sum(correct_specification != groups2431),
-                        
-                        sum(correct_specification != groups3124),
-                        sum(correct_specification != groups3142),
-                        sum(correct_specification != groups3214),
-                        sum(correct_specification != groups3241),
-                        sum(correct_specification != groups3412),
-                        sum(correct_specification != groups3421),
-                        
-                        sum(correct_specification != groups4123),
-                        sum(correct_specification != groups4132),
-                        sum(correct_specification != groups4213),
-                        sum(correct_specification != groups4231),
-                        sum(correct_specification != groups4312),
-                        sum(correct_specification != groups4321))
-    }
-    if (difference == 0){
-      correctly_specified_groups = correctly_specified_groups + 1
-    }
-    num_of_errors <- c(num_of_errors, difference)
-  }
-  
-  cat("Percentage of detecting true number of clusters",
-      correct_number_of_groups/n_rep_, "with alpha = ", alpha_,
-      ", T = ", t_len_, "\n")
-  cat("Percentage of detecting true clustering",
-      correctly_specified_groups/n_rep_, "with alpha = ", alpha_,
-      ", T = ", t_len_, "\n")
-  cat("Maximum number of errors is ", max(num_of_errors), "\n")
-  return(list(num_of_errors = num_of_errors,
-              correct_number_of_groups = correct_number_of_groups,
-              correctly_specified_groups = correctly_specified_groups))
-}
-
-produce_hist_plots <- function(file_extension_, different_T_, n_rep_,
-                               group_count_, error_count_){ 
-  labels_ <- c("(a)", "(b)", "(c)")
-  
-  pdf(paste0("output/revision/hist_groups", file_extension_, ".pdf"), width = 8, height = 2.9, paper="special")
-  par(mfrow = c(1,2))
-  par(mar = c(3, 2, 0.5, 1)) #Margins for each plot
-  par(oma = c(1.4, 1.5, 0.5, 0.2)) #Outer margins
-  
-  for (j in 1:length(different_T_)){
-    t_len <- different_T_[j]
-    bp1 <- barplot(group_count_[[j]], ylim = c(0, 1.1 * n_rep_), xlab = "",
-                   main = "", ylab = "", xaxt = 'n', space = 0)
-    text(x = bp1, y = group_count_[[j]], label = group_count_[[j]], cex = 0.8, pos = 3)
-    axis(1, at = bp1, labels = 1:5, tick = FALSE, line = -0.5, cex.axis = 1)
-    mtext(side = 1, text= paste0(labels_[j], " T = ", t_len), line = 3.4)
-    title(xlab="number of groups", mgp=c(1.5,1,0), cex.lab=1)
-  }
-  dev.off()
-  
-  pdf(paste0("output/revision/hist_errors", file_extension_, ".pdf"), width = 8, height = 2.9, paper="special")
-  par(mfrow = c(1,2))
-  par(mar = c(3, 2, 0.5, 1)) #Margins for each plot
-  par(oma = c(1.4, 1.5, 0.5, 0.2)) #Outer margins
-  
-  for (j in 1:length(different_T_)){
-    t_len <- different_T_[j]
-    bp2 <- barplot(error_count_[[j]], ylim = c(0, 1.1 *  n_rep_), xlab = "",
-                   main = "", ylab = "", xaxt = 'n', space = 0)
-    text(x = bp2, y = error_count_[[j]], label = error_count_[[j]], cex = 0.8, pos = 3)
-    mtext(side = 1, text = paste0(labels_[j], " T = ", t_len), line = 3.4)
-    axis(1, at = bp2, labels = 0:8, tick = FALSE, line = -0.5, cex.axis = 1)
-    title(xlab = "number of errors", mgp = c(1.5,1,0), cex.lab = 1)
-  }
-  dev.off() 
 }
