@@ -86,7 +86,7 @@ errors <- arima.sim(model = list(ar = a_hat),
                     innov = rnorm(t_len, 0, sigma),
                     n = t_len)
 plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-     y = m2, ylim = c(-2.5, 2.5),
+     y = m2, ylim = c(-1.5, 1.5),
      xlab = "", ylab = "", main = NULL,
      type = 'l', cex = 0.8)
 lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
