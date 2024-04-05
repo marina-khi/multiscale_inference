@@ -89,7 +89,12 @@ where $\varphi \in \{0.1, 0.25\}$ specifies the correlation between the 3 covari
 where $\rho \in \{0.1, 0.25\}$ gives the correlation across $i$.
 
 For each $i$, the errors $\varepsilon_{it}$ follow the AR(1) model $\varepsilon_{it} = a \varepsilon_{i, t-1} + \eta_{it}$, where $a = 0.25$ and the innovations $\eta_{it}$ are i.i.d.\ normally distributed with mean $0$ and standard deviation $0.25$. We assume that the covariates $\X_{it}$ and the error terms $\varepsilon_{js}$ are independent from each other for all $1 \leq i,j \leq n$ and $1 \leq t, s \leq T$. 
-To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ without loss of generality. To produce data under the alternative, we use the bump functions $m_1(u) = b \cdot \mathbbm{1}(u \in [0.3, 0.7]) \cdot \big(1 - \big\{\frac{u - 0.5}{0.2}\big\}^2\big)^2$ for $b \in \{ 0.25, 0.5, 0.75 \}$ (depicted in Figure \ref{fig:bump_function}) and $m_i = 0$ for $i \neq 1$. \textcolor{magenta}{Note that the normalisation constraint $\int_0^1 m_1(u) du = 0$ is directly satisfied in this case - no, it's not!} For each simulation exercise, we simulate $5000$ samples. 
+To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ without loss of generality. To produce data under the alternative, we use the bump functions
+\begin{align*}
+m_1(u) =  b \,\cdot &\,\mathbbm{1}(u \in [0.2, 0.4]) \cdot \left(1 - \left\{\frac{u - 0.3}{0.1}\right\}^2\right)^2 \\
+&- b \cdot\mathbbm{1}(u \in [0.6, 0.8]) \cdot \left(1 - \left\{\frac{u - 0.7}{0.1}\right\}^2\right)^2 
+\end{align*}
+for $b \in \{ 0.25, 0.5, 0.75 \}$ (depicted in Figure \ref{fig:bump_function}) and $m_i = 0$ for $i \neq 1$. Note that the normalisation constraint $\int_0^1 m_1(u) du = 0$ is directly satisfied in this case. For each simulation exercise, we simulate $5000$ samples. 
 
 
 Our multiscale test is implemented as follows: The estimators $\widehat{\bfbeta}_i$ and $\widehat{\alpha}_i$ of the unknown parameters $\bfbeta_i$ and $\alpha_i$ are computed as described in Section~\ref{subsec:test:prep}. Since the errors $\varepsilon_{it}$ follow an AR($1$) process, we estimate the long-run error variance $\sigma_i^2$ by the difference-based estimator proposed in \cite{KhismatullinaVogt2020}, setting the tuning parameters $q$ and $r$ to $25$ and $10$, respectively. In order to construct our test statistics, we use an Epanechnikov kernel and the grid $\mathcal{G}_T = U_T \times H_T$ with 

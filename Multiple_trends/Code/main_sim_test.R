@@ -64,7 +64,7 @@ for (b in different_b){
                       innov = rnorm(t_len, 0, sigma),
                       n = t_len)
   plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-       y = (bump((1:t_len)/t_len) * b), ylim = c(-1, 1.6),
+       y = (bump((1:t_len)/t_len) * b), ylim = c(-1.6, 1.6),
        xlab = "", ylab = "", main = NULL,
        type = 'l', cex = 0.8)
   lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
