@@ -17,31 +17,28 @@ options(xtable.timestamp = "")
 ##############################
 #Defining necessary constants#
 ##############################
-seed <- 13579135
+seed <- 543212345
 
 different_n_ts <- c(15, 25, 50, 100) #Number of time series
 
 #For the covariate process
 beta    <- c(1, 1, 1)
 a_x_vec <- c(0.25, 0.25, 0.25) #VAR(1) coefficients
-phi     <- 0.1                 #dependence between the innovations
+phi     <- 0.25                 #dependence between the innovations
 
 #For the error process
 a     <- 0.25
 sigma <- 0.25
 
 #For the fixed effects
-rho      <- 0.1 #covariance between the fixed effects
+rho      <- 0.25 #covariance between the fixed effects
 
 n_rep    <- 5000 #number of simulations for calculating size and power
 sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
 
-
 different_T     <- c(100, 250, 500) #Different lengths of time series
-
-
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
-different_b     <- c(0, 0.25, 0.5, 1.0) #Zero is for calculating the size
+different_b     <- c(0, 0.25, 0.5, 0.75) #Zero is for calculating the size
 
 
 #Parameters for the estimation of long-run-variance
@@ -59,6 +56,7 @@ numCores  <- round(parallel::detectCores() * .70)
 source("functions/functions.R")
 
 for (n_ts in different_n_ts){
+  set.seed(seed)
   size_and_power_array <- array(NA, dim = c(length(different_T),
                                             length(different_b),
                                             length(different_alpha)),
@@ -70,7 +68,7 @@ for (n_ts in different_n_ts){
   ijset <- ijset[ijset$i < ijset$j, ]
   
   for (t_len in different_T){
-    set.seed(seed)    
+
     k <- match(t_len, different_T)
     
     #Constructing the very fine grid
@@ -106,8 +104,8 @@ for (n_ts in different_n_ts){
     cl <- makePSOCKcluster(numCores)
     registerDoParallel(cl)
     foreach (val = 1:sim_runs, .combine = "cbind") %dopar% {
-      repl_revision(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
-                    gaussian_sim = TRUE)
+      repl(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
+           gaussian_sim = TRUE)
       # Loop one-by-one using foreach
     } -> simulated_pairwise_gaussian
     stopCluster(cl)
@@ -125,7 +123,7 @@ for (n_ts in different_n_ts){
     quants <- as.vector(quantiles[2, ])
     
     for (b in different_b){
-      m_matrix      <- matrix(0, nrow = t_len, ncol = n_ts)
+      m_matrix <- matrix(0, nrow = t_len, ncol = n_ts)
       if (b == 0) {
         cat("SIZE SIMULATIONS FOR n_ts = ", n_ts, "\n")
       } else {
@@ -138,11 +136,10 @@ for (n_ts in different_n_ts){
       cl <- makePSOCKcluster(numCores)
       registerDoParallel(cl)
       foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
-        repl_revision(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
-                      a_ = a, sigma_ = sigma,
-                      beta_ = beta,
-                      a_x_vec_ = a_x_vec, phi_ = phi,
-                      rho_ = rho, m_matrix_ = m_matrix, q_ = q, r_ = r)
+        repl(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
+             a_ = a, sigma_ = sigma, beta_ = beta,
+             a_x_vec_ = a_x_vec, phi_ = phi, rho_ = rho, m_matrix_ = m_matrix,
+             q_ = q, r_ = r)
         # Loop one-by-one using foreach
       } -> simulated_pairwise_statistics
       stopCluster(cl)
@@ -173,7 +170,7 @@ for (n_ts in different_n_ts){
   
   #######################
   #Output of the results#
-  ########################
+  #######################
   
   for (b in different_b){
     l   <- match(b, different_b)
