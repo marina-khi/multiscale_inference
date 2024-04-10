@@ -19,7 +19,7 @@ options(xtable.timestamp = "")
 ##############################
 seed <- 543212345
 
-different_n_ts <- c(15, 25, 50, 100) #Number of time series
+different_n_ts <- c(100) #Number of time series
 
 #For the covariate process
 beta    <- c(1, 1, 1)
@@ -68,11 +68,9 @@ for (n_ts in different_n_ts){
   ijset <- ijset[ijset$i < ijset$j, ]
   
   for (t_len in different_T){
-
     k <- match(t_len, different_T)
     
-    #Constructing the very fine grid
-  
+    #Constructing the very sparse grid
     h_min  <- ceiling(log(t_len))/t_len
     K_seq  <- seq(from = 0, to = t_len, by = 1)
     K_seq  <- K_seq[2^K_seq * h_min < 0.25]
@@ -127,7 +125,7 @@ for (n_ts in different_n_ts){
       if (b == 0) {
         cat("SIZE SIMULATIONS FOR n_ts = ", n_ts, "\n")
       } else {
-        cat("POWER SIMULATIONS fOR n_ts = ", n_ts, ", WITH b = ", b, "\n")
+        cat("POWER SIMULATIONS FOR n_ts = ", n_ts, ", WITH b = ", b, "\n")
         #trend function which is a bump
         m_matrix[, 1] <- bump((1:t_len)/t_len) * b    
       }

@@ -1,0 +1,122 @@
+%%%%%%%%%%%%%%%%%%%% author.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% sample root file for your "abstract" to the IFCS 2024 Conference
+%
+% Use this file as a template for your own input.
+%
+%%%%%%%%%%%%%%%% Springer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% RECOMMENDED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[graybox]{IFCS2024}
+
+
+\usepackage{type1cm}        % activate if the above 3 fonts are
+                            % not available on your system
+%
+\usepackage{makeidx}         % allows index generation
+\usepackage{multicol}        % used for the two-column index
+\usepackage[bottom]{footmisc}% places footnotes at page bottom
+
+
+\usepackage{newtxtext}       % 
+\usepackage[varvw]{newtxmath}       % selects Times Roman as basic font
+
+% DO NOT USE OTHER COMMANDS OR MACROS
+
+
+\makeindex             % used for the subject index
+                       % please use the style svind.ist with
+                       % your makeindex program
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\title*{Guidelines for Authors of Abstracts \protect\linebreak
+		Submitted to IFCS 2024 Book of Abstracts}
+\titlerunning{Short Title} %for an abbreviated version of your contribution title if the original one is too long
+\author{Name of First Author and Name of Second Author}
+\authorrunning{Name of First Author and Name of Second Author} %If there are more than two authors, please, abbreviate the authors' list using 'et al'
+
+\institute{Name of First Author \at Name of Institute, Address of Institute, \email{name@email.address}
+\and Name of Second Author \at Name of Institute, Address of Institute \email{name@email.address}}
+%
+% Use the package "url.sty" to avoid
+% problems with special characters
+% used in your e-mail or web address
+%
+\maketitle
+
+
+\abstract{
+This template for submitting an abstract to the International Federation of Classification Societies (IFCS) 2024 Conference, that will take place in San Jos\'e, Costa Rica.
+Since all texts should be compiled together, files that do not comply with this format will not be accepted.
+Please, use only the \texttt{IFCS2024.cls} style file and standard fonts.
+\textbf{DO NOT} include any user-defined commands and macros.
+No figures nor tables should be included in the abstract.
+}
+
+\keywords{aaa, bbb, ccc}
+
+
+%%%%%%% END OF ABSTRACT
+%%%%%%% FURTHER INSTRUCTIONS
+
+\medskip
+
+For the heading, specify the following items:
+\begin{itemize}
+\item \verb@\title*@ to specify the title of your manuscript,
+\item \verb@\titlerunning@ to specify the title in the running head (odd page numbers),  use an abbreviated version of your contribution title if the original one is too long.
+\item \verb@\author@ to specify the authors. Authors are
+separated by the \verb@\and@ command. Use the \verb@\inst{1}@,
+\verb@\inst{2}@, \ldots\ commands to define the reference mark to your affiliation.
+\item \verb@\authorrunning@ to specify the author names in the running heads (even page numbers).
+If there are more than two authors, please, abbreviate the authors' list
+(e.g., Brito et al.).
+\item \verb@\institute@ to specify your affiliation, address and e-mail address.
+Separate two or more different affiliations by the
+\verb@\and@ command.
+\end{itemize}
+
+Specify 3 to 5 \textbf{keywords} in your abstract, using the command \verb@\keywords@.
+
+
+Use \verb@\cite{<label>}@ for bibliographic references, in case you use them. 
+	 References should be \textit{cited} in the text by number.  
+The reference list should be arranged in ascending order.
+Make sure that all references from the list are cited in the text. 
+The \textbf{styling} of references is depicted in 
+~\cite{science-contrib, science-online, science-mono, science-journal, science-DOI}, for, respectively, a Chapter in an edited book, an Online Document, a Book/Monograph, a Journal paper, a Journal paper by DOI. \\
+Please pay attention to the \textbf{capitalization style} for each
+type of reference.\\
+Always use the standard abbreviation of a journal's name according to the ISSN \textit{List of Title Word Abbreviations}, see \url{http://www.issn.org/en/node/344}.\\ See examples below.
+
+
+\begin{thebibliography}{99.}%
+	%
+	%
+	% Use \bibitem to create references.
+	%
+	% Chapter in an edited book 
+	\bibitem{science-contrib} Broy, M.: Software engineering --- from auxiliary to key technologies. In: Broy, M., Dener, E. (eds.) Software Pioneers, pp. 10-13. Springer, Heidelberg (2002)
+	%
+	% Online Document
+	\bibitem{science-online} Dod, J.: Effective substances. In: The Dictionary of Substances and Their Effects. Royal Society of Chemistry (1999) Available via DIALOG. \\
+	\url{http://www.rsc.org/dose/title of subordinate document. Cited 15 Jan 1999}
+	%
+	% Book/Monograph
+	\bibitem{science-mono} Geddes, K.O., Czapor, S.R., Labahn, G.: Algorithms for Computer Algebra. Kluwer, Boston (1992) 
+	%
+	% Journal paper
+	\bibitem{science-journal} Hamburger, C.: Quasimonotonicity, regularity and duality for nonlinear systems of partial differential equations. Ann. Mat. Pura. Appl. \textbf{169}, 321--354 (1995)
+	%
+	% Journal paper by DOI
+	\bibitem{science-DOI} Slifka, M.K., Whitton, J.L.: Clinical implications of dysregulated cytokine production. J. Mol. Med. (2000) doi: 10.1007/s001090000086 
+	
+	
+\end{thebibliography}
+
+
+\end{document}

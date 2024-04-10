@@ -238,7 +238,6 @@ Figures \ref{fig:clustering:1} and \ref{fig:clustering:2} give more insight into
 $\min_{\pi \in S_{\hat{N}}} \big\{ |G_1 \setminus \widehat{G}_{\pi(1)}| +|G_2 \setminus \widehat{G}_{\pi(2)}| + |G_3 \setminus \widehat{G}_{\pi(3)}| \big\}$
 with $S_{\widehat{N}}$ being the set of all permutations of $\{1, 2, \ldots, \widehat{N}\}$. The histogram of Figure \ref{fig:clustering:1} for $T=100$ clearly shows that our method underestimates the number of groups ($\widehat{N} = 2$ in $4055$ cases out of $5000$). In particular, it fails to detect the difference between two out of three groups in a large number of simulations. This is reflected in the corresponding histogram of Figure \ref{fig:clustering:2} which shows that there are exactly $5$ classification errors in $3924$ of the $5000$ simulation runs. In most of these cases, the estimated group structure $\{ \widehat{G}_1, \widehat{G}_{2}\}$ coincides with either $\{ G_1 \cup G_2,G_3\}$,  $\{ G_1, G_2\cup G_3\}$ or $ \{ G_1 \cup G_3,G_2\}$. In summary, we can conclude that the small empirical probabilities for $T=100$ in Table \ref{tab:clustering} are due to the algorithm underestimating the number of groups. Inspecting the histograms for $T=250$, one can see that the performance of the estimators $\widehat{N}$ and $\{ \widehat{G}_1,\ldots, \widehat{G}_{\widehat{N}} \}$ improves significantly, even though the corresponding empirical probabilities in Table \ref{tab:clustering} are still somewhat below the target $(1-\alpha)$.  
 
-{\color{red}
 \subsection{Results for larger $\boldsymbol{n}$}\label{subsec:sim:large_n}
 
 In order to examine the performance of our method for larger $n$, we rerun our simulation exercises from Section \ref{subsec:sim:main} for $n \in \{25,50,100\}$ and $T$ as before, i.e., $T \in \{100,250,500\}$. We work with precisely the same simulation setup as specified in (i) except for the fact that we use a smaller grid $\mathcal{G}_T$ to decrease the computational burden a bit. Specifically, we take the grid 
@@ -249,7 +248,7 @@ that is, we work with a dyadic scheme (as in Wavelet analysis) with scales in th
 \[ \mathcal{H}_T = \big\{ h = 2^k h_{\min} \text{ for } k=0,\ldots,K \big\}, \]  
 where $h_{\min} = \frac{\lceil \log T \rceil}{T}$ and $K$ is such that $2^K h_{\min} \le \frac{1}{4}$, i.e.,
 \[ K \le \Big\lfloor \log\Big(\frac{T}{4 \lceil \log T \rceil }\Big) \Big\rfloor \frac{1}{\log(2)}. \]
-Overall, the simulation results show that the method performs well for larger $n$. The results are presented in Tables \ref{tab:size:dyadic} - \ref{tab:power:dyadic:100} (we report the results for the case $\phi = \rho = 0.25$ since the results for the other values of $\phi$ and $\rho$ are fairly similar). As can be seen in Tables \ref{tab:size:dyadic:15} - \ref{tab:size:dyadic:100}, the empirical size provides an appropriate approximation to the target alpha across all scenarios under consideration. In regards to the empirical power calculations, the test demonstrates significant power across all simulated scenarios, as illustrated in Tables \ref{tab:power:dyadic:15} - \ref{tab:power:dyadic:100}. Notably, despite slight variations from the original simulated scenario discussed in Section \ref{subsec:sim:main}, the observed changes are not substantial which affirms the good performance of the proposed test in case of large number of time series $n$.
+Overall, the simulation results show that the method performs well for larger $n$. The results are presented in Tables \ref{tab:size:dyadic} - \ref{tab:power:dyadic:100} (we report the results for the case $\phi = \rho = 0.25$ since the results for other values of $\phi$ and $\rho$ are fairly similar). As can be seen in Table \ref{tab:size:dyadic}, the empirical size provides an appropriate approximation to the target alpha across all scenarios under consideration. In regards to the empirical power calculations, the test demonstrates significant power across all simulated scenarios, as illustrated in \linebreak Tables \ref{tab:power:dyadic:15} - \ref{tab:power:dyadic:100}. Notably, despite slight variations from the original simulated scenario discussed in Section \ref{subsec:sim:main}, the observed changes are not substantial which affirms the good performance of the proposed test in case of large number of time series $n$.
 
 %\addtocounter{table}{-1} 
 
@@ -257,18 +256,18 @@ Overall, the simulation results show that the method performs well for larger $n
 \begin{table}[t]
 \footnotesize{
 \begin{center}
-\caption{Size of the multiscale test for different number of time series $n$, sample sizes $T$ and nominal sizes $\alpha$ for the dyadic grid. Each panel corresponds to a differentnumber of time series $n$.}\label{tab:size:dyadic}
+\caption{Size of the multiscale test for different number of time series $n$, sample sizes $T$ and nominal sizes $\alpha$ for the dyadic grid. Each panel corresponds to a different number of time series $n$.}\label{tab:size:dyadic}
 \begin{subtable}[b]{0.48\textwidth}
 \centering
 \caption{$n = 15$}\label{tab:size:dyadic:15}
 \renewcommand{\arraystretch}{1.2}
-\input{output/15_ts_10_10_dyadic_grid_size}
+\input{../output/15_ts_25_25_dyadic_grid_size}
 \end{subtable}
 \begin{subtable}[b]{0.48\textwidth}
 \centering
 \caption{\centering $n = 25$}\label{tab:size:dyadic:25}
 \renewcommand{\arraystretch}{1.2}
-\input{output/25_ts_10_10_dyadic_grid_size}
+\input{../output/25_ts_25_25_dyadic_grid_size}
 \end{subtable}
 \end{center}}
 \vspace{-0.5cm}
@@ -279,13 +278,13 @@ Overall, the simulation results show that the method performs well for larger $n
 \centering
 \caption{$n = 50$}\label{tab:size:dyadic:50}
 \renewcommand{\arraystretch}{1.2}
-\input{output/50_ts_10_10_dyadic_grid_size}
+\input{../output/50_ts_25_25_dyadic_grid_size}
 \end{subtable}
 \begin{subtable}[b]{0.48\textwidth}
 \centering
 \caption{\centering $n = 100$}\label{tab:size:dyadic:100}
 \renewcommand{\arraystretch}{1.2}
-\input{output/100_ts_10_10_dyadic_grid_size}
+\input{../output/100_ts_25_25_dyadic_grid_size}
 \end{subtable}
 \end{center}}
 \vspace{-0.5cm}
@@ -300,19 +299,19 @@ Overall, the simulation results show that the method performs well for larger $n
 \centering
 \caption{$b = 0.25$}%\label{tab:power1_025}
 \renewcommand{\arraystretch}{1.2}
-\input{output/15_ts_10_10_dyadic_grid_power_b_25}
+\input{../output/15_ts_25_25_dyadic_grid_power_b_25}
 \end{subtable}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$b = 0.50$}%\label{tab:power1_050}
 \renewcommand{\arraystretch}{1.2}
-\input{output/15_ts_10_10_dyadic_grid_power_b_50}
+\input{../output/15_ts_25_25_dyadic_grid_power_b_50}
 \end{subtable}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$b = 0.75$}%\label{tab:power1_100}
 \renewcommand{\arraystretch}{1.2}
-\input{output/15_ts_10_10_dyadic_grid_power_b_100}
+\input{../output/15_ts_25_25_dyadic_grid_power_b_75}
 \end{subtable}
 \end{center}}
 \vspace{-0.4cm}
@@ -324,19 +323,19 @@ Overall, the simulation results show that the method performs well for larger $n
 \centering
 \caption{$b = 0.25$}%\label{tab:power1_025}
 \renewcommand{\arraystretch}{1.2}
-\input{output/25_ts_10_10_dyadic_grid_power_b_25}
+\input{../output/25_ts_25_25_dyadic_grid_power_b_25}
 \end{subtable}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$b = 0.50$}%\label{tab:power1_050}
 \renewcommand{\arraystretch}{1.2}
-\input{output/25_ts_10_10_dyadic_grid_power_b_50}
+\input{../output/25_ts_25_25_dyadic_grid_power_b_50}
 \end{subtable}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$b = 0.75$}%\label{tab:power1_100}
 \renewcommand{\arraystretch}{1.2}
-\input{output/25_ts_10_10_dyadic_grid_power_b_100}
+\input{../output/25_ts_25_25_dyadic_grid_power_b_75}
 \end{subtable}
 \end{center}}
 \vspace{-0.4cm}
@@ -348,19 +347,19 @@ Overall, the simulation results show that the method performs well for larger $n
 \centering
 \caption{$b = 0.25$}%\label{tab:power1_025}
 \renewcommand{\arraystretch}{1.2}
-\input{output/50_ts_10_10_dyadic_grid_power_b_25}
+\input{../output/50_ts_25_25_dyadic_grid_power_b_25}
 \end{subtable}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$b = 0.50$}%\label{tab:power1_050}
 \renewcommand{\arraystretch}{1.2}
-\input{output/50_ts_10_10_dyadic_grid_power_b_50}
+\input{../output/50_ts_25_25_dyadic_grid_power_b_50}
 \end{subtable}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$b = 0.75$}%\label{tab:power1_100}
 \renewcommand{\arraystretch}{1.2}
-\input{output/50_ts_10_10_dyadic_grid_power_b_100}
+\input{../output/50_ts_25_25_dyadic_grid_power_b_75}
 \end{subtable}
 \end{center}}
 \vspace{-0.4cm}
@@ -372,25 +371,25 @@ Overall, the simulation results show that the method performs well for larger $n
 \centering
 \caption{$b = 0.25$}%\label{tab:power1_025}
 \renewcommand{\arraystretch}{1.2}
-\input{output/100_ts_10_10_dyadic_grid_power_b_25}
+\input{../output/100_ts_25_25_dyadic_grid_power_b_25}
 \end{subtable}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$b = 0.50$}%\label{tab:power1_050}
 \renewcommand{\arraystretch}{1.2}
-\input{output/100_ts_10_10_dyadic_grid_power_b_50}
+\input{../output/100_ts_25_25_dyadic_grid_power_b_50}
 \end{subtable}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$b = 0.75$}%\label{tab:power1_100}
 \renewcommand{\arraystretch}{1.2}
-\input{output/100_ts_10_10_dyadic_grid_power_b_100}
+\input{../output/100_ts_25_25_dyadic_grid_power_b_75}
 \end{subtable}
 \end{center}}
 \vspace{-0.4cm}
 \end{table}
 
-
+{\color{red}
 \subsection{Robustness checks on the choice of tuning parameters}\label{subsec:sim:grid}
 
 In order to asses the robustness of the proposed multiscale test with respect to the grid, we repeat the analysis from Section \ref{subsec:sim:main} with a different choice of a grid. Specifically, we make the grid finer: $\mathcal{G}_T^{\text{fine}} = U_T^{\text{fine}} \times H_T^{\text{fine}}$ with 
