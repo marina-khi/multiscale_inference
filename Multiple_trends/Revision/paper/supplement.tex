@@ -1,8 +1,9 @@
 \documentclass[12pt]{article}
+\usepackage[table]{xcolor}
 \usepackage{amsmath, bm, bbm}
 \usepackage{amssymb, amsthm, graphicx}
 \usepackage{enumitem}
-\usepackage{color}
+%\usepackage{color}
 \usepackage{float}
 \usepackage[small]{caption}
 \usepackage{subcaption}
@@ -89,7 +90,7 @@ where $\varphi \in \{0.1, 0.25\}$ specifies the correlation between the 3 covari
 where $\rho \in \{0.1, 0.25\}$ gives the correlation across $i$.
 
 For each $i$, the errors $\varepsilon_{it}$ follow the AR(1) model $\varepsilon_{it} = a \varepsilon_{i, t-1} + \eta_{it}$, where $a = 0.25$ and the innovations $\eta_{it}$ are i.i.d.\ normally distributed with mean $0$ and standard deviation $0.25$. We assume that the covariates $\X_{it}$ and the error terms $\varepsilon_{js}$ are independent from each other for all $1 \leq i,j \leq n$ and $1 \leq t, s \leq T$. 
-To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ without loss of generality. To produce data under the alternative, we use the bump functions
+To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ without loss of generality. To produce data under the alternative, we use the bump function
 \begin{align*}
 m_1(u) =  b \,\cdot &\,\mathbbm{1}(u \in [0.2, 0.4]) \cdot \left(1 - \left\{\frac{u - 0.3}{0.1}\right\}^2\right)^2 \\
 &- b \cdot\mathbbm{1}(u \in [0.6, 0.8]) \cdot \left(1 - \left\{\frac{u - 0.7}{0.1}\right\}^2\right)^2 
@@ -118,7 +119,7 @@ We thus consider intervals $\mathcal{I}_{u, h} = [u-h, u+h]$ which contain $5, 1
 \caption{Size of the multiscale test for $\phi = 0.1$ and $\rho = 0.1$ for different sample sizes $T$ and nominal sizes $\alpha$.}
 \label{tab:size1}
 \renewcommand{\arraystretch}{1.2}
-\input{../output/15_ts_10_10_size}
+{\color{red}\input{../output/15_ts_10_10_size}}
 \end{center}}
 \footnotesize{
 \begin{center}
@@ -127,32 +128,31 @@ We thus consider intervals $\mathcal{I}_{u, h} = [u-h, u+h]$ which contain $5, 1
 \centering
 \caption{$b = 0.25$}\label{tab:power1_025}
 \renewcommand{\arraystretch}{1.2}
-\input{../output/15_ts_10_10_power_b_25}
+{\color{red}\input{../output/15_ts_10_10_power_b_25}}
 \end{subtable}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$b = 0.50$}\label{tab:power1_050}
 \renewcommand{\arraystretch}{1.2}
-\input{../output/15_ts_10_10_power_b_50}
+{\color{red}\input{../output/15_ts_10_10_power_b_50}}
 \end{subtable}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$b = 0.75$}\label{tab:power1_075}
 \renewcommand{\arraystretch}{1.2}
-\input{../output/15_ts_10_10_power_b_75}
+{\color{red}\input{../output/15_ts_10_10_power_b_75}}
 \end{subtable}
 \end{center}}
 \vspace{-0.4cm}
 \end{table}
 
-\addtocounter{table}{-1} 
 \begin{table}[h!]
 \footnotesize{
 \begin{center}
 \caption{Size of the multiscale test for $\phi = 0.25$ and $\rho = 0.25$ for different sample sizes $T$ and nominal sizes $\alpha$.}
 \label{tab:size2}
 \renewcommand{\arraystretch}{1.2}
-\input{../output/15_ts_25_25_size}
+{\color{red}\input{../output/15_ts_25_25_size}}
 \end{center}}
 \footnotesize{
 \begin{center}
@@ -161,40 +161,39 @@ We thus consider intervals $\mathcal{I}_{u, h} = [u-h, u+h]$ which contain $5, 1
 \centering
 \caption{$b = 0.25$}\label{tab:power2_025}
 \renewcommand{\arraystretch}{1.2}
-\input{../output/15_ts_25_25_power_b_25}
+{\color{red}\input{../output/15_ts_25_25_power_b_25}}
 \end{subtable}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$b = 0.50$}\label{tab:power2_050}
 \renewcommand{\arraystretch}{1.2}
-\input{../output/15_ts_25_25_power_b_50}
+{\color{red}\input{../output/15_ts_25_25_power_b_50}}
 \end{subtable}
 \begin{subtable}[b]{0.32\textwidth}
 \centering
 \caption{$b = 0.75$}\label{tab:power2_075}
 \renewcommand{\arraystretch}{1.2}
-\input{../output/15_ts_25_25_power_b_75}
+{\color{red}\input{../output/15_ts_25_25_power_b_75}}
 \end{subtable}
 \end{center}}
 \vspace{-0.4cm}
 \end{table}
 
 
-The results of the simulation study are presented in Tables \ref{tab:size1} and \ref{tab:power1} for $\phi = 0.1$ and $\rho = 0.1$ and in Tables \ref{tab:size2} and \ref{tab:power2} for $\phi = 0.25$ and $\rho = 0.25$. We do not present the results for $\phi = 0.1, \rho = 0.25$ and $\phi = 0.25, \rho = 0.1$ as they are fairly similar and do not bring additional insight. The actual size of the mutliscale test is reported in Tables \ref{tab:size1} and \ref{tab:size2}, while Tables \ref{tab:power1} and \ref{tab:power2} report its power against different alternatives. Both the actual size and the power are computed as the number of simulations in which the test rejects the global null $H_0$ divided by the total number of simulations.
+{\color{red}The results of the simulation study are presented in Tables \ref{tab:size1} and \ref{tab:power1} for $\phi = 0.1$ and $\rho = 0.1$ and in Tables \ref{tab:size2} and \ref{tab:power2} for $\phi = 0.25$ and $\rho = 0.25$.} We do not present the results for $\phi = 0.1, \rho = 0.25$ and $\phi = 0.25, \rho = 0.1$ as they are fairly similar and do not bring additional insights. The actual size of the mutliscale test is reported in Tables \ref{tab:size1} and \ref{tab:size2}, while Tables \ref{tab:power1} and \ref{tab:power2} report its power against different alternatives. Both the actual size and the power are computed as the number of simulations in which the test rejects the global null $H_0$ divided by the total number of simulations.
 
-Inspecting Tables \ref{tab:size1} and \ref{tab:size2}, one can see that the empirical size gives a reasonable approximation to the target $\alpha$ in all scenarios under investigation, even though the size numbers have a slight upward bias. This bias gets smaller as the sample size $T$ increases, which reflects the fact that we get more and more information for each of the tests that we need to carry out. We can also see that the upward bias become slightly more pronounced in case of stronger degrees of correlation across the covariates and the time series, i.e., with higher values of $\phi$ and $\rho$, but the change in test performance is almost negligible and can be attributed to random sampling. To summarize, even though slightly liberal, the test controls the FWER quite accurately in the simulation settings that we consider.
+Inspecting Tables \ref{tab:size1} and \ref{tab:size2}, one can see that the empirical size gives a reasonable approximation to the target $\alpha$ in all scenarios under investigation, even though the size numbers have a slight upward bias. {\color{red}This bias gets smaller as the sample size $T$ increases, which reflects the fact that we get more and more information for each of the tests that we need to carry out.} We can also see that the upward bias become slightly more pronounced in case of stronger degrees of correlation across the covariates and the time series, i.e., with higher values of $\phi$ and $\rho$, but the change in test performance is almost negligible and can be attributed to random sampling. To summarize, even though slightly liberal, the test controls the FWER quite accurately in the simulation settings that we consider.
  
-Inspecting Tables \ref{tab:power1} and \ref{tab:power2}, one can further see that the test has reasonable power properties. For the smallest height of the bump function $b = 0.25$ and the smallest time series length $T = 100$, the power is only moderate, reflecting the fact that the alternative with $b = 0.25$ is not very far away from the null. However, as we increase the height $b$ and the sample size $T$, the power increases quickly. Already for the height value $b = 0.5$ in all simulation scenarios, we reach a power of $0.98$ for $T = 250$ and for all nominal sizes $\alpha$.
+Inspecting Tables \ref{tab:power1} and \ref{tab:power2}, one can further see that the test has reasonable power properties. For the smallest height of the bump function $b = 0.25$ and the smallest time series length $T = 100$, the power is only moderate, reflecting the fact that the alternative with $b = 0.25$ is not very far away from the null. However, as we increase the height $b$ and the sample size $T$, the power increases quickly. {\color{red}Already for the height value $b = 0.5$ in all simulation scenarios, we reach a power of $0.98$ for $T = 250$ and for all nominal sizes $\alpha$.}
 
 \subsection{Clustering algorithm}\label{subsec:sim:clustering}
 
 We next investigate the finite sample performance of the clustering algorithm from Section \ref{sec:clustering}. To do so, we consider a very simple scenario: we generate data from the model $Y_{it} = m_i(\frac{t}{T}) + \varepsilon_{it}$, i.e., we assume that there are no fixed effects and no covariates. The error terms $\varepsilon_{it}$ are specified as above. Moreover, as before, we set the number of time series to $n = 15$ and we consider different time series lengths $T$. We partition the $n = 15$ time series into $N=3$ groups, each containing $5$ time series. Specifically, we set $G_1 = \{1,\ldots, 5\}$, $G_2 = \{6,\ldots, 10\}$ and $G_3 =  \{11,\ldots, 15\}$, and we assume that $m_i = f_l$ for all $i \in G_l$ and all $l = 1, 2, 3$. The group-specific trend functions $f_1$, $f_2$ and $f_3$ are defined as $f_1(u) = 0$, $f_2(u) = 0.35 \cdot \ind\Big\{\frac{|u - 0.25|}{0.25}\leq 1\Big\} \big(1 - \frac{(u - 0.25)^2}{0.25^2}\big)^2 - 0.35 \cdot \ind\Big\{\frac{|u - 0.75|}{0.25}\leq 1\Big\} \big(1 - \frac{(u - 0.75)^2}{0.25^2}\big)^2$ and $f_3(u) = \ind\Big\{\frac{|u - 0.75|}{0.025}\leq 1\Big\} \big(1 - \frac{(u - 0.75)^2}{0.025^2}\big)^2 - \ind\Big\{\frac{|u - 0.25|}{0.025}\leq 1\Big\} \big(1 - \frac{(u - 0.25)^2}{0.025^2}\big)^2$ (depicted in Figure \ref{fig:clustering_fcts}). In order to estimate the groups $G_1$, $G_2$, $G_3$ and their number $N = 3$, we use the same implementation as before followed by the clustering procedure from Section \ref{sec:clustering}. 
 \begin{figure}[t!]
 \includegraphics[width=\textwidth]{../output/clustering_functions.pdf}
-\caption{In black, the group-specific trend functions $f_1, f_2$ and $f_3$ are plotted. In red, we depict the time series $\{f_l(t/T) + \varepsilon_{it}: 1 \le t \le T\}$ for $l = 1, 2, 3$ for one simulation run and $T=250$.}\label{fig:clustering_fcts}
+\caption{In black, the group-specific trend functions $f_1, f_2$ and $f_3$ are plotted. In red, we depict the time series $\{f_l(t/T) + \varepsilon_{it}: 1 \le t \le T\}$ for $l = 1, 2, 3$ for one simulation run and $T=500$.}\label{fig:clustering_fcts}
 \end{figure}
 
-\addtocounter{table}{-1} 
 \begin{table}[t]
 \footnotesize{
 \begin{center}
@@ -203,13 +202,13 @@ We next investigate the finite sample performance of the clustering algorithm fr
 \centering
 \caption{Empirical probabilities that \\ $\widehat{N} = N$}\label{tab:clustering:1}
 \renewcommand{\arraystretch}{1.2}
-\input{output/tables/15_ts_correct_group_number}
+{\color{red}\input{output/tables/15_ts_correct_group_number}}
 \end{subtable}
 \begin{subtable}[b]{0.48\textwidth}
 \centering
 \caption{\centering Empirical probabilities that $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{ G_1,G_2,G_3\}$}\label{tab:clustering:2}
 \renewcommand{\arraystretch}{1.2}
-\input{output/tables/15_ts_correct_group_structure}
+{\color{red}\input{output/tables/15_ts_correct_group_structure}}
 \end{subtable}
 \end{center}}
 \vspace{-0.5cm}
@@ -219,36 +218,36 @@ We next investigate the finite sample performance of the clustering algorithm fr
 \begin{figure}[t!]
 \centering
 \includegraphics[width=0.95\textwidth]{output/plots/sim/histograms_groups}
-\caption{Estimated number of groups $\widehat{N}$ for nominal size $\alpha = 0.05$. 
+\caption{{\color{red}Estimated number of groups $\widehat{N}$ for nominal size $\alpha = 0.05$. }
 %Each panel corresponds to a different sample size $T$.
 }\label{fig:clustering:1}
 \vspace{0.25cm}
 
 \includegraphics[width=0.95\textwidth]{output/plots/sim/histograms_errors}
-\caption{Number of classification errors for nominal size $\alpha = 0.05$. 
+\caption{{\color{red}Number of classification errors for nominal size $\alpha = 0.05$. }
 %Each panel corresponds to a different sample size $T$.
 }\label{fig:clustering:2}
 \end{figure}
 
 
-The simulation results are reported in Table \ref{tab:clustering}. The entries in Table \ref{tab:clustering:1} are computed as the number of simulations for which $\widehat{N} = N$ divided by the total number of simulations. They thus specify the empirical probabilities with which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$. Analogously, the entries of Table \ref{tab:clustering:2} give the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$. The results in Table \ref{tab:clustering} nicely illustrate the theoretical properties of our clustering algorithm. According to Proposition \ref{prop:clustering:1}, the probability that $\widehat{N} = N$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{G_1,G_2,G_3\}$ should be at least $(1-\alpha)$ asymptotically. For the largest sample size $T = 500$, the empirical probabilities reported in Table \ref{tab:clustering} can indeed be seen to exceed the value $(1-\alpha)$ as predicted by Proposition \ref{prop:clustering:1}. For the smaller sample sizes $T=100$ and $T=250$, in contrast, the empirical probabilities are substantially smaller than $(1-\alpha)$. This reflects the asymptotic nature of Proposition \ref{prop:clustering:1} and is not very surprising. It simply mirrors the fact that for the smaller sample sizes $T=100$ and $T=250$, the effective noise level in the simulated data is quite high.
+{\color{red}The simulation results are reported in Table \ref{tab:clustering}.} The entries in Table \ref{tab:clustering:1} are computed as the number of simulations for which $\widehat{N} = N$ divided by the total number of simulations. They thus specify the empirical probabilities with which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$. Analogously, the entries of Table \ref{tab:clustering:2} give the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$. The results in Table \ref{tab:clustering} nicely illustrate the theoretical properties of our clustering algorithm. According to Proposition \ref{prop:clustering:1}, the probability that $\widehat{N} = N$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{G_1,G_2,G_3\}$ should be at least $(1-\alpha)$ asymptotically. {\color{red}For the largest sample size $T = 500$, the empirical probabilities reported in Table \ref{tab:clustering} can indeed be seen to exceed the value $(1-\alpha)$ as predicted by Proposition \ref{prop:clustering:1}. For the smaller sample sizes $T=100$ and $T=250$, in contrast, the empirical probabilities are substantially smaller than $(1-\alpha)$. This reflects the asymptotic nature of Proposition \ref{prop:clustering:1} and is not very surprising. It simply mirrors the fact that for the smaller sample sizes $T=100$ and $T=250$, the effective noise level in the simulated data is quite high.}
 
 
-Figures \ref{fig:clustering:1} and \ref{fig:clustering:2} give more insight into what happens for $T=100$ and $T=250$. Figure \ref{fig:clustering:1} shows histograms of the $5000$ simulated values of $\widehat{N}$, while Figure \ref{fig:clustering:2} depicts histograms of the number of classification errors produced by our algorithm. By the number of classification errors, we simply mean the number of incorrectly classified time series, which is formally calculated as 
+{\color{red}Figures \ref{fig:clustering:1} and \ref{fig:clustering:2} give more insight into what happens for $T=100$ and $T=250$.} Figure \ref{fig:clustering:1} shows histograms of the $5000$ simulated values of $\widehat{N}$, while Figure \ref{fig:clustering:2} depicts histograms of the number of classification errors produced by our algorithm. By the number of classification errors, we simply mean the number of incorrectly classified time series, which is formally calculated as 
 $\min_{\pi \in S_{\hat{N}}} \big\{ |G_1 \setminus \widehat{G}_{\pi(1)}| +|G_2 \setminus \widehat{G}_{\pi(2)}| + |G_3 \setminus \widehat{G}_{\pi(3)}| \big\}$
-with $S_{\widehat{N}}$ being the set of all permutations of $\{1, 2, \ldots, \widehat{N}\}$. The histogram of Figure \ref{fig:clustering:1} for $T=100$ clearly shows that our method underestimates the number of groups ($\widehat{N} = 2$ in $4055$ cases out of $5000$). In particular, it fails to detect the difference between two out of three groups in a large number of simulations. This is reflected in the corresponding histogram of Figure \ref{fig:clustering:2} which shows that there are exactly $5$ classification errors in $3924$ of the $5000$ simulation runs. In most of these cases, the estimated group structure $\{ \widehat{G}_1, \widehat{G}_{2}\}$ coincides with either $\{ G_1 \cup G_2,G_3\}$,  $\{ G_1, G_2\cup G_3\}$ or $ \{ G_1 \cup G_3,G_2\}$. In summary, we can conclude that the small empirical probabilities for $T=100$ in Table \ref{tab:clustering} are due to the algorithm underestimating the number of groups. Inspecting the histograms for $T=250$, one can see that the performance of the estimators $\widehat{N}$ and $\{ \widehat{G}_1,\ldots, \widehat{G}_{\widehat{N}} \}$ improves significantly, even though the corresponding empirical probabilities in Table \ref{tab:clustering} are still somewhat below the target $(1-\alpha)$.  
+with $S_{\widehat{N}}$ being the set of all permutations of $\{1, 2, \ldots, \widehat{N}\}$. {\color{red}The histogram of Figure \ref{fig:clustering:1} for $T=100$ clearly shows that our method underestimates the number of groups ($\widehat{N} = 2$ in $4055$ cases out of $5000$). In particular, it fails to detect the difference between two out of three groups in a large number of simulations. This is reflected in the corresponding histogram of Figure \ref{fig:clustering:2} which shows that there are exactly $5$ classification errors in $3924$ of the $5000$ simulation runs. In most of these cases, the estimated group structure $\{ \widehat{G}_1, \widehat{G}_{2}\}$ coincides with either $\{ G_1 \cup G_2,G_3\}$,  $\{ G_1, G_2\cup G_3\}$ or $ \{ G_1 \cup G_3,G_2\}$. In summary, we can conclude that the small empirical probabilities for $T=100$ in Table \ref{tab:clustering} are due to the algorithm underestimating the number of groups. Inspecting the histograms for $T=250$, one can see that the performance of the estimators $\widehat{N}$ and $\{ \widehat{G}_1,\ldots, \widehat{G}_{\widehat{N}} \}$ improves significantly, even though the corresponding empirical probabilities in Table \ref{tab:clustering} are still somewhat below the target $(1-\alpha)$.}
 
 \subsection{Results for larger $\boldsymbol{n}$}\label{subsec:sim:large_n}
 
-In order to examine the performance of our method for larger $n$, we rerun our simulation exercises from Section \ref{subsec:sim:main} for $n \in \{25,50,100\}$ and $T$ as before, i.e., $T \in \{100,250,500\}$. We work with precisely the same simulation setup as specified in (i) except for the fact that we use a smaller grid $\mathcal{G}_T$ to decrease the computational burden a bit. Specifically, we take the grid 
+In order to examine the performance of our method for larger $n$, we rerun our simulation exercises from Section \ref{subsec:sim:main} for $n \in \{25,50,100\}$ and $T$ as before, i.e., $T \in \{100,250,500\}$. We work with precisely the same simulation setup as specified in Section \ref{subsec:sim:main} except for the fact that we use a smaller grid $\mathcal{G}_T^{\text{sparse}}$ to decrease the computational burden. Specifically, we take the grid 
 \begin{align*}
-\mathcal{G}_T = \big\{ (u,h) \subseteq [0,1]: & \ (u,h) = ((2s+1) h, h) \text{ for } s = 0,\ldots,\Big\lfloor \frac{h^ {-1}-1}{2} \Big\rfloor \\ & \ \text{and } h \in \mathcal{H}_T \big\},  
+\mathcal{G}_T^{\text{sparse}} = \big\{ (u,h) \subseteq [0,1]: & \ (u,h) = ((2s+1) h, h) \text{ for } s = 0,\ldots,\Big\lfloor \frac{h^ {-1}-1}{2} \Big\rfloor \\ & \ \text{and } h \in H_T^{\text{sparse}} \big\},  
 \end{align*}
 that is, we work with a dyadic scheme (as in Wavelet analysis) with scales in the set 
-\[ \mathcal{H}_T = \big\{ h = 2^k h_{\min} \text{ for } k=0,\ldots,K \big\}, \]  
+\[ H_T^{\text{sparse}} = \big\{ h = 2^k h_{\min} \text{ for } k=0,\ldots,K \big\}, \]  
 where $h_{\min} = \frac{\lceil \log T \rceil}{T}$ and $K$ is such that $2^K h_{\min} \le \frac{1}{4}$, i.e.,
 \[ K \le \Big\lfloor \log\Big(\frac{T}{4 \lceil \log T \rceil }\Big) \Big\rfloor \frac{1}{\log(2)}. \]
-Overall, the simulation results show that the method performs well for larger $n$. The results are presented in Tables \ref{tab:size:dyadic} - \ref{tab:power:dyadic:100} (we report the results for the case $\phi = \rho = 0.25$ since the results for other values of $\phi$ and $\rho$ are fairly similar). As can be seen in Table \ref{tab:size:dyadic}, the empirical size provides an appropriate approximation to the target alpha across all scenarios under consideration. In regards to the empirical power calculations, the test demonstrates significant power across all simulated scenarios, as illustrated in \linebreak Tables \ref{tab:power:dyadic:15} - \ref{tab:power:dyadic:100}. Notably, despite slight variations from the original simulated scenario discussed in Section \ref{subsec:sim:main}, the observed changes are not substantial which affirms the good performance of the proposed test in case of large number of time series $n$.
+Overall, the simulation results show that the method performs well for larger $n$. The results are presented in Tables \ref{tab:size:dyadic} - \ref{tab:power:dyadic:100} (we report the results for the case $\phi =0.25$ and $\rho = 0.25$ since the results for other combination of values of $\phi$ and $\rho$ are fairly similar). As can be seen in Table \ref{tab:size:dyadic}, the empirical size provides an appropriate approximation to the target alpha across all scenarios under consideration. As in Section \ref{subsec:sim:main}, we observe a slight upward bias for $T = 250$ and $T= 500$ which becomes somewhat more pronounced with larger values of $n$. In regards to the empirical power calculations, the test demonstrates significant power across all simulated scenarios, as illustrated in Tables \ref{tab:power:dyadic:15} - \ref{tab:power:dyadic:100}. Notably, despite slight variations from the original simulated scenario discussed in Section \ref{subsec:sim:main}, the observed changes are not substantial which affirms the good performance of the proposed test in case of large number of time series $n$.
 
 %\addtocounter{table}{-1} 
 
@@ -389,55 +388,43 @@ Overall, the simulation results show that the method performs well for larger $n
 \vspace{-0.4cm}
 \end{table}
 
-{\color{red}
 \subsection{Robustness checks on the choice of tuning parameters}\label{subsec:sim:grid}
 
-In order to asses the robustness of the proposed multiscale test with respect to the grid, we repeat the analysis from Section \ref{subsec:sim:main} with a different choice of a grid. Specifically, we make the grid finer: $\mathcal{G}_T^{\text{fine}} = U_T^{\text{fine}} \times H_T^{\text{fine}}$ with 
-$U_T^{\text{fine}}  = \big\{ u \in [0,1]: u = \textstyle{\frac{t}{T}} \text{ for some } t \in \naturals \big\}$
+The main tuning parameter of our method is the grid $\mathcal{G}_T$ which in particular specifies the bandwidths that are taken into account by the procedure. In order to asses the robustness of the proposed multiscale test with respect to the grid, we repeat the analysis from Section \ref{subsec:sim:main} with a different choice of a grid. Specifically, we make the grid denser: $\mathcal{G}_T^{\text{dense}} = U_T^{\text{dense}} \times H_T^{\text{dense}}$ with 
+$U_T^{\text{dense}}  = \big\{ u \in [0,1]: u = \textstyle{\frac{t}{T}} \text{ for some } t \in \naturals \big\}$
 and
-$H_T^{\text{fine}} = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{2t}{T}} \text{ for some } t \in \naturals \big\}$.
+$H_T^{\text{dense}} = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{2t}{T}} \text{ for some } t \in \naturals \big\}$. We thus consider intervals $\mathcal{I}_{u, h} = [u-h, u+h] = [t/T - h, t/T + h]$ for all possible $t \in \{1, \ldots, T-1\}$ which contain $5, 9, 13, \ldots$ data points. Other than the grid, we work precisely with the same simulation setup as in Section \ref{subsec:sim:main}.
 
-We report the results only for the simulation scenario with stronger degrees of correlation across the time series and between the covariates, i.e., with $\rho = 0.25$ and $\phi = 0.25$, since this scenario is less favourable for our multiscale procedure and the results with different values of $\rho$ and $\phi$ are fairly similar.
+{\color{red} The results of the simulation study with a finer grid are presented in Tables \ref{tab:size:fine} and \ref{tab:power:fine} (in Tables \ref{tab:size:sparse} and \ref{tab:power:sparse}).} We report the results for the simulation scenario with stronger degrees of correlation across the time series and between the covariates, i.e., with $\rho = 0.25$ and $\phi = 0.25$, since this scenario is less favourable for our multiscale procedure and the results with different values of $\rho$ and $\phi$ are fairly similar. Although there are minor deviations from the results for the original simulated scenario presented in Section A.1, these variations are not substantial which confirms the robust performance of the proposed test when applied to a finer grid.
 
-The results of the simulation study with a finer grid are presented in Tables \ref{tab:size:fine} and \ref{tab:power:fine} (in Tables \ref{tab:size:sparse} and \ref{tab:power:sparse}).
+Furthermore, as we have seen in Section \ref{subsec:sim:large_n}, the behaviour of our test does not substantially change in case of a much sparser grid $\mathcal{G}_T^{\text{sparse}}$. Hence, we can make a conclusion that as long as the set of pairs of location-bandwidths is chosen sufficiently rich (in the sense of including a variety of bandwidth values ranging from very small to very large), the particular choice of a grid can be expected to have a negligible effect on the procedure. 
 
-Furthemore, as we have seen in Section \ref{subsec:sim:large_n}, the behaviour of our test does not substantially change in case of a much sparser grid. Hence, we can make a conclusion that the  The results for a sparser grid ()
+Apart from the grid, our method depends on (i) the number of bootstrap samples $L$ to compute the Gaussian quantile, (ii) the kernel $K$, and (iii) secondary tuning parameters for the computation of the long-run error variance. 
+As long as $L$ is chosen large enough (say $L \ge 1000$), the exact value of $L$ should have a negligible effect. We use $L = 5000$ throughout the paper. As a robustness check, we have rerun everything with $L=1000$, which (as expected) yields almost identical results.
 
-Robustness w.r.t.\ other tuning parameters can be dealt with verbally.  
+Furthermore, classical nonparametric theory suggests that the choice of kernel is significantly less critical than the choice of bandwidth. Thus, we have not carried out robustness checks with respect to the choice of kernel.
+
+For the estimation of the long-run error variance, we work with the estimator from \cite{KhismatullinaVogt2020} where extensive robustness checks with respect to the choice of tuning parameters have been carried out. Therefore, we did not conduct additional robustness checks concerning the secondary tuning parameters for computing the long-run error variance.
+
 
 
 \subsection{Comparison of our test with SiZer} 
 
 
- To the best of our knowledge, the only other test for comparing trend curves with similar properties has been developed in \cite{Park2009} (SiZer). We have added comparison of our method with SiZer to the Appendix. However, we would like to note that their analysis is mainly methodological and the theory was developed only for the case of $n=2$ time series. In \cite{Park2009}, the authors propose a possible extension to their approach in case of more than $2$ time series, but the extension does not allow for pairwise comparison of the time series. Moreover, it is not clear how to calculate the actual size and power in that case.
+To the best of our knowledge, the only other test for comparing trend curves with similar properties has been developed in \cite{Park2009} (SiZer). In this section, we compare our method with SiZer. However, we would like to note that their analysis is mainly methodological and the theory was developed only for the case of $n=2$ time series. In \cite{Park2009}, the authors propose a possible extension to their approach in case of more than $2$ time series, but the extension does not allow for the pairwise comparison of the time series. Moreover, it is not clear how to calculate the actual size and power in the case of more than $n=2$ time series. Furthermore, the model considered in \cite{Park2009} is much simpler than ours: it does not include neither the covariates, nor the fixed effects. Hence, in order to allow for fair comparison between two methods, we consider a simplified version of the simulation setup from (i). In particular, we do the following. We consider a model $Y_{it} = m_i\big(\frac{t}{T}\big) + \varepsilon_{it}$ that does not include neither the covariates, nor the fixed effects as they are not part of the model in \cite{Park2009}. We choose the number of time series to be equal to $n=2$ and consider different time series lengths $T=100,250,500, 750, 1000$. The error terms $\varepsilon_{it}$ are specified as in Section \ref{subsec:sim:main}. To generate data under the null $H_0: m_1 = m_2$, we let $m_i = 0$ for $i=1, 2$ as before. As before, to produce data under the alternative, we use the bump function
+\begin{align*}
+m_1(u) =  b \,\cdot &\,\mathbbm{1}(u \in [0.2, 0.4]) \cdot \left(1 - \left\{\frac{u - 0.3}{0.1}\right\}^2\right)^2 \\
+&- b \cdot\mathbbm{1}(u \in [0.6, 0.8]) \cdot \left(1 - \left\{\frac{u - 0.7}{0.1}\right\}^2\right)^2 
+\end{align*}
+for $b \in \{ 0.25, 0.5 \}$ (depicted in Figure \ref{fig:bump_function}) and $m_2 = 0$. We implement our multiscale procedure as in Section \ref{subsec:sim:main} with one important change. In order to make the comparison between the methods as fair as possible, we do not estimate the long-run variance $\sigma_i^2$ from the data but consider $\sigma_i^2$ as known. Specifically, we use the theoretical value of the long-run variance calculated based on the true parameter values: $$\sigma_i^2 = \frac{E[\eta_{it}^2]}{(1 - a)^2} = \frac{1}{9} \text{ for }i=1, 2.$$ Furthermore, since SiZer depends not on the long-run variance, but on the autocovariance functions of the time series $\gamma_i(\cdot)$ for $i=1, 2$, in the calculation of the critical values of SiZer we use the following formula for the autocovariance function:
+$$\gamma_{i}(k) = \frac{E[\eta_{it}^2] a^{|k|}}{1 - a^2} = \frac{0.25^{|k|}}{15}.$$ All of the details of the exact implementation of SiZer can be found in the Appendix in \cite{KhismatullinaVogt2020}.
 
-Furthermore, the model considered in \cite{Park2009} is much simpler than ours: it does not include neither the covariates, nor the fixed effects. Hence, in order to allow for fair comparison between two methods, we consider a simplified version of the simulation setup from (i). In particular, we do the following.
-
-\begin{itemize}[label=--,leftmargin=0.45cm,itemsep=0pt]
-
-\item We choose $n=2$ and $T=100,250,500, 750, 1000$.
-
-\item We consider a simplified model $Y_{it} = m_i\big(\frac{t}{T}\big) + \varepsilon_{it}$ that does not include the covariates or the fixed effects as they are not part of the model in \cite{Park2009}.
-\item As before, we assume that the errors $\varepsilon_{it}$ follow the AR(1) model $\varepsilon_{it} = a \varepsilon_{i(t-1)} + \eta_{it}$, where $a=0.25$ and the innovations $\eta_{it}$ are i.i.d.\ normal with zero mean $E[\eta_{it}]=0$ and variance $E[\eta_{it}^2]=0.25^2$. 
-
-\item To generate data under the null $H_0: m_1 = m_2$, we let $m_i = 0$ for $i=1, 2$ as before. To produce data under the alternative, we use the bump functions $m_1(u) = b \cdot \mathbb{1}(u \in [0.3, 0.7]) \cdot \big(1 - \big\{\frac{u - 0.5}{0.2}\big\}^2\big)^2$ for $b = 0.25, 0.5$ (depicted in Figure \ref{fig:bump_function}) and $m_2 = 0$.
-
-\item We take the grid $\mathcal{G}_T$ as before: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{5t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{T}} \text{ for some } t \in \mathbb{N} \big\}$.
-
-\item In order to make the comparison between the methods as fair as possible, we do not estimate the long-run variance $\sigma_i^2$ from the data but consider $\sigma_i^2$ as known. Specifically, we use the theoretical value of the long-run variance calculated based on the true parameter values: $$\sigma_i^2 = \frac{E[\eta_{it}^2]}{(1 - a)^2} = \frac{1}{9} \text{ for all }i.$$ Furthermore, since SiZer depends not on the long-run variance, but on the autocovariance functions of the time series $\gamma_i(\cdot)$ for $i=1, 2$, in the calculation of the critical values of SiZer we use the following formula for the autocovariance function:
-
-$$\gamma_{i}(k) = \frac{E[\eta_{it}^2] a^{|k|}}{1 - a^2} = \frac{0.25^{|k|}}{15}.$$
-
-\item As before, we calculate the Gaussian quantiles based on $5000$ samples, and the size and power calculations are done based on $5000$ repetitions.
-\item All of the details of the exact implementation of SiZer can be found in the Appendix in \cite{KhismatullinaVogt2020}.
-
-\end{itemize}
 
 \begin{table}[t!]
 \footnotesize{
 \caption{Size comparison of the proposed multiscale test ($\mathcal{T}_{\text{MS}}$) and SiZer ($\mathcal{T}_{\text{SiZer}}$, \cite{Park2009}) for different sample sizes $T$ and various significance levels $\alpha$.}\label{tab:size:compare}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l@{\hskip 20pt} Z@{\hskip 6pt}Z@{\hskip 20pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 20pt}Z}
+{\color{red}\begin{tabularx}{\textwidth}{l@{\hskip 20pt} Z@{\hskip 6pt}Z@{\hskip 20pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 20pt}Z}
 \toprule
  & \multicolumn{2}{c}{$\alpha = 0.01$} & \multicolumn{2}{c}{$\alpha = 0.05$} & \multicolumn{2}{c}{$\alpha = 0.1$}\\
 \cmidrule[0.4pt]{2-7} 
@@ -449,7 +436,7 @@ $$\gamma_{i}(k) = \frac{E[\eta_{it}^2] a^{|k|}}{1 - a^2} = \frac{0.25^{|k|}}{15}
   $T = 750$ & 0.008 & 0.252 & 0.045 & 0.657 & 0.095 & 0.844 \\ 
   $T = 1000$ & 0.012 & 0.271 & 0.053 & 0.691 & 0.102 & 0.873 \\ 
 \bottomrule
-\end{tabularx}}
+\end{tabularx}}}
 \vspace{0.2cm}
 \end{table}
 
@@ -457,7 +444,7 @@ $$\gamma_{i}(k) = \frac{E[\eta_{it}^2] a^{|k|}}{1 - a^2} = \frac{0.25^{|k|}}{15}
 \footnotesize{
 \caption{Power comparison of the proposed multiscale test ($\mathcal{T}_{\text{MS}}$) and SiZer ($\mathcal{T}_{\text{SiZer}}$, \cite{Park2009}) for different sample sizes $T$ and various significance levels $\alpha$ for the bump function with $b = 0.25$.}\label{tab:power:compare1}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l@{\hskip 20pt} Z@{\hskip 6pt}Z@{\hskip 20pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 20pt}Z}
+{\color{red}\begin{tabularx}{\textwidth}{l@{\hskip 20pt} Z@{\hskip 6pt}Z@{\hskip 20pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 20pt}Z}
 \toprule
  & \multicolumn{2}{c}{$\alpha = 0.01$} & \multicolumn{2}{c}{$\alpha = 0.05$} & \multicolumn{2}{c}{$\alpha = 0.1$}\\
 \cmidrule[0.4pt]{2-7} 
@@ -469,7 +456,7 @@ $T = 100$ & 0.075 & 0.251 & 0.193 & 0.551 & 0.317 & 0.714 \\
   $T = 750$ & 0.867 & 0.982 & 0.957 & 0.998 & 0.981 & 1.000 \\ 
   $T = 1000$ & 0.970 & 0.998 & 0.993 & 1.000 & 0.997 & 1.000 \\ 
 \bottomrule
-\end{tabularx}}
+\end{tabularx}}}
 \vspace{0.2cm}
 \end{table}
 
@@ -477,7 +464,7 @@ $T = 100$ & 0.075 & 0.251 & 0.193 & 0.551 & 0.317 & 0.714 \\
 \footnotesize{
 \caption{Power comparison of the proposed multiscale test ($\mathcal{T}_{\text{MS}}$) and SiZer ($\mathcal{T}_{\text{SiZer}}$, \cite{Park2009}) for different sample sizes $T$ and various significance levels $\alpha$ for the bump function with $b = 0.5$.}\label{tab:power:compare2}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{l@{\hskip 20pt} Z@{\hskip 6pt}Z@{\hskip 20pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 20pt}Z}
+{\color{red}\begin{tabularx}{\textwidth}{l@{\hskip 20pt} Z@{\hskip 6pt}Z@{\hskip 20pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 20pt}Z}
 \toprule
  & \multicolumn{2}{c}{$\alpha = 0.01$} & \multicolumn{2}{c}{$\alpha = 0.05$} & \multicolumn{2}{c}{$\alpha = 0.1$}\\
 \cmidrule[0.4pt]{2-7} 
@@ -489,36 +476,50 @@ $T = 100$ & 0.482 & 0.733 & 0.703 & 0.922 & 0.815 & 0.967 \\
   $T = 750$ & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
   $T = 1000$ & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
 \bottomrule
-\end{tabularx}}
+\end{tabularx}}}
 \vspace{0.2cm}
 \end{table}
 
-In what follows, we denote the proposed multiscale procedure and SiZer (\cite{Park2009}) by $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{SiZer}}$, respectively.
+In what follows, we denote the proposed multiscale procedure and SiZer (\cite{Park2009}) by $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{SiZer}}$, respectively. The results of the size and power simulation studies comparing $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{SiZer}}$ are presented in Tables \ref{tab:size:compare} and Tables \ref{tab:power:compare1}, \ref{tab:power:compare2} respectively. There is an important difference between $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{SiZer}}$ to be noticed: $\mathcal{T}_{\text{MS}}$ is a \textit{global} test procedures, whereas $\mathcal{T}_{\text{SiZer}}$ is a scale-wise in essence. This means that $\mathcal{T}_{\text{MS}}$ tests $H_0(u,h)$ simultaneously for all locations $u \in U_T$ and scales $h \in H_T$ and controls the size simultaneously over both locations $u$ and scales $h$, whereas $\mathcal{T}_{\text{SiZer}}$ tests the hypothesis $H_0(u,h)$ simultaneously for all $u \in U_T$ but separately for each scale $h \in H_T$ and, hence, controls the size for each scale $h \in H_T$ separately. This results in $\mathcal{T}_{\text{SiZer}}$ exhibiting a much more liberal nature, as Table \ref{tab:size:compare} illustrates. Specifically, the size numbers of the multiscale test $\mathcal{T}_{\text{MS}}$ closely align with the target nominal size levels $\alpha$. Contrarily, the actual size numbers of $\mathcal{T}_{\text{SiZer}}$ are much larger than the target $\alpha$. Since the number of scales $h$ in the grid $\mathcal{G}_T$ increases with $T$, the actual sizes significantly deviate from the target $\alpha$ as the sample size $T$ increases. To summarize, as expected, the global test $\mathcal{T}_{\text{MS}}$ holds the size reasonably well, whereas the row-wise method $\mathcal{T}_{\text{SiZer}}$ is much too liberal. 
 
-The results of the size and power simulation studies that compare $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{SiZer}}$ are presented in Tables \ref{tab:size:compare} and Tables \ref{tab:power:compare1}, \ref{tab:power:compare2} respectively. There is an important difference between $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{SiZer}}$ to be noticed: $\mathcal{T}_{\text{MS}}$ is a \textit{global} test procedures while $\mathcal{T}_{\text{SiZer}}$ is a scale-wise in its essence. This means that $\mathcal{T}_{\text{MS}}$ tests $H_0(u,h)$ simultaneously for all locations $u \in U_T$ and scales $h \in H_T$ and controls the size simultaneously over both locations $u$ and scales $h$, whereas $\mathcal{T}_{\text{SiZer}}$ tests the hypothesis $H_0(u,h)$ simultaneously for all $u \in U_T$ but separately for each scale $h \in H_T$ and, hence, controls the size for each scale $h \in H_T$ separately. This results in a much more liberal nature of $\mathcal{T}_{\text{SiZer}}$ as can be seen in Table \ref{tab:size:compare}. Specifically, the size numbers of the multiscale test $\mathcal{T}_{\text{MS}}$ are reasonably close to the target nominal size levels $\alpha$. Contrarily, the actual size numbers of $\mathcal{T}_{\text{SiZer}}$ are much larger than the target $\alpha$. Since the number of scales $h$ in the grid $\mathcal{G}_T$ increases with $T$, they even move away from $\alpha$ as the sample size $T$ increases. To summarize, as expected, the global test $\mathcal{T}_{\text{MS}}$ holds the size reasonably well, whereas the row-wise method $\mathcal{T}_{\text{SiZer}}$ is much too liberal. 
+Regarding the power simulation studies presented in Tables \ref{tab:power:compare1} and \ref{tab:power:compare2}, it is worth mentioning that in all simulation scenarios, $\mathcal{T}_{\text{SiZer}}$ is more powerful than $\mathcal{T}_{\text{MS}}$. This gain of power is presumably due to the fact that $\mathcal{T}_{\text{SiZer}}$ is in general too liberal in terms of size as observed in Table \ref{tab:size:compare}.
 
-As for the power simulation studies that are presented  in Tables \ref{tab:power:compare1} and \ref{tab:power:compare2}, we can note that in all simulation scenarios, $\mathcal{T}_{\text{SiZer}}$ is more powerful than $\mathcal{T}_{\text{MS}}$. This gain of power is presumably due to the fact that $\mathcal{T}_{\text{SiZer}}$ is in general too liberal in terms of size as observed in Table \ref{tab:size:compare}.
+{\color{red}
+Mentioning other competitors?}
 
 \subsection{Comparison of our clustering algorithm with a benchmark}
 
 
-We next compare the benchmark investigate the finite sample performance of the clustering algorithm.% from Section \ref{sec:clustering}.
-To do so, we consider a very simple scenario: we generate data from the model $Y_{it} = m_i(\frac{t}{T}) + \varepsilon_{it}$, that is, we assume that there are no fixed effects and no covariates. The error terms $\varepsilon_{it}$ are specified as before. Moreover, as before, we set the number of time series to $n = 15$ and we consider different time series lengths $T$. We partition the $n = 15$ time series into $N=3$ groups, each containing $5$ time series. Specifically, we set $G_1 = \{1,\ldots, 5\}$, $G_2 = \{6,\ldots, 10\}$ and $G_3 =  \{11,\ldots, 15\}$, and we assume that $m_i = f_l$ for all $i \in G_l$ and all $l = 1, 2, 3$. The group-specific trend functions $f_1$, $f_2$ and $f_3$ are defined as $f_1(u) = 0$, $f_2(u) = \ind\Big\{\frac{|u - 0.25|}{0.25}\leq 1\Big\} \big(1 - \frac{(u - 0.25)^2}{0.25^2}\big)^2$ and $f_3(u) = 8 \ind\Big\{\frac{|u - 0.75|}{0.125}\leq 1\Big\} \big(1 - \frac{(u - 0.75)^2}{0.125^2}\big)^2$ \textcolor{red}{(Here we use the scaled functions from Vogt \& Linton (2020, Multiscale clustering of nonparametric regression curves), but these functions are not normalised with respect to $\int_0^1 m(u)du =0$ so effectively we do have fixed-effects in our model)}. In order to estimate the groups $G_1$, $G_2$, $G_3$ and their number $N = 3$, we use the same implementation as before followed by the clustering procedure.% from Section \ref{sec:clustering}. 
 
-We implement the procedure as before with one difference. Specifically, we take the finer grid $\mathcal{G}_T$: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{t}{T}} \text{ for some } t \in \mathbb{N} \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{T}} \text{ for some } t \in \mathbb{N} \big\}$. \textcolor{red}{(I decided to have a look at the finer grid hoping that the procedure would work better with small sample sizes but it does not really help to be honest.)}
-
-As a benchmark, we use the following clustering procedure:
-\begin{itemize}[label=--,leftmargin=0.45cm,itemsep=0pt,topsep=0pt]
-\item Estimate the trends $m_i$ by a local linear estimator $\hat{m}_i$ with a fixed bandwidth (chosen as the smallest bandwidth from $H_T$).
-\item Compute a simple distance measure $d_{ij}$ between $\hat{m}_i$ and $\hat{m}_j$, e.g.
+In this section, we compare the performance of our clustering algorithm against a natural benchmark using the simulation setup described in Section \ref{subsec:sim:clustering}. Specifically, for the benchmark procedure we do the following. 
+\begin{enumerate}
+\item Estimate the trends $m_i$ by a local linear estimator $\hat{m}_i$ with a fixed bandwidth. We consider two choices for the bandwidth: $h_1 = \min \{h\in H_t\}$ and $h_2 = \max\{h \in H_T\}$. As we will see further, the choice of bandwidth significantly affects the results.
+\item Compute a simple $\mathcal{L}_2$ distance measure $d_{ij}$ between $\hat{m}_i$ and $\hat{m}_j$, e.g.
 \[ d_{ij} = \int_0^1 (\hat{m}_i(w) - \hat{m}_j(w))^2 dw. \]
 \item Construct the following dissimilarity measure from these distances:
 \[ \hat{\Delta}(S,S') = \max_{i \in S,j \in S'} d_{ij}. \]
 \item Run a HAC algorithm with the computed dissimilarities. 
-\end{itemize}
+\end{enumerate}
 
-Our procedure can be regarded as a further development of this very simple and natural benchmark procedure. In particular: our procedure replaces the simple distance measure $d_{ij}$ by a more advanced multiscale distance measure and provides a way to estimate the number of clusters, which is not part of the simple benchmark procedure.
+This procedure serves as a straightforward and intuitive benchmark, with our approach being a refinement of it. In particular, our approach replaces the simple distance measure $d_{ij}$ by a more advanced multiscale distance measure and provides a way to estimate the number of clusters—a feature not included in the benchmark procedure. For the sake of fair comparison, we assume that the number of clusters $N=3$ is known, and thus, do not provide an estimate of the number of groups $\hat{N}$.
 
+We implement the clustering algorithm as in Section \ref{subsec:sim:clustering} with one small difference. Computational time of the benchmark procedure exceeds significantly the computational time needed for our method (presumably, due to the lack of the discretization of the grid), hence, in order to lighten the computational burden, instead of $5000$ samples, we simulate $1000$ samples for this simulation exercise.
+
+\begin{table}[t!]
+\centering
+\caption{Empirical probabilities that $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{ G_1,G_2,G_3\}$ for the proposed clustering approach with estimated number of clusters ($\mathcal{T}_{\text{MS}}$) for $\alpha = 0.05$, the proposed clustering approach with known number of clusters ($\mathcal{T}_{\text{MS, known } N}$), the benchmark procedure with small bandwidth $h_1$ ($\mathcal{T}_{\text{bm, }1}$), and the benchmark procedure with large bandwidth $h_2$ ($\mathcal{T}_{\text{bm, }2}$) for different sample sizes $T$.}\label{tab:clustering:comparison}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+{\color{red}
+\begin{tabular}{ccccc}
+  \hline
+  & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{MS, known } N}$ & $\mathcal{T}_{\text{bm, }1}$ & $\mathcal{T}_{\text{bm, }2}$ \\
+ \hline
+$T= 100$ & 0.007 & 0.029 & 0.066& 0.066 \\ 
+$T=  250$ & 0.742 & 0.903 & 0.943 & 0.066\\ 
+$T=  500$ & 1.000 & 1.000 & 1.000 & 0.066\\ 
+   \hline
+\end{tabular}}
+\end{table}
 
 %\addtocounter{table}{-1} 
 %\begin{table}[t]
@@ -556,16 +557,13 @@ Our procedure can be regarded as a further development of this very simple and n
 %}\label{fig:clustering:2}
 %\end{figure}
 
-\textcolor{red}{Here we have a problem: the benchmark procedure is actually pretty good, much better than our method. It is very slow though. Discuss during the next call?}
-
-The simulation results are reported as follows. For our multiscale method, the empirical probabilities with which which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$ for the significance level $\alpha=0.05$ for $T=100, 250$ and $500$ are $0.028, 0.117$ and $0.9678$, respectively. Furthermore, the  empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$ for the significance level $\alpha=0.05$ for $T=100, 250$ and $500$ are $0, 0.1112$ and $0.9674$, respectively. The benchmark procedure is able to detect the difference between the groups in all possible case for all of the sample sizes. \textcolor{red}{There must be something wrong here, no?}
-
-%in Table \ref{tab:clustering}. The entries in Table \ref{tab:clustering:1} are computed as the number of simulations for which $\widehat{N} = N$ divided by the total number of simulations. They thus specify the empirical probabilities with . Analogously, the entries of Table \ref{tab:clustering:2} give the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$. The results in Table \ref{tab:clustering} nicely illustrate the theoretical properties of our clustering algorithm. According to Proposition \ref{prop:clustering:1}, the probability that $\widehat{N} = N$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{G_1,G_2,G_3\}$ should be at least $(1-\alpha)$ asymptotically. For the largest sample size $T = 500$, the empirical probabilities reported in Table \ref{tab:clustering} can indeed be seen to exceed the value $(1-\alpha)$ as predicted.% by Proposition \ref{prop:clustering:1}.For the smaller sample sizes $T=100$ and $T=250$, in contrast, the empirical probabilities are substantially smaller than $(1-\alpha)$. This reflects the asymptotic nature of our results %Proposition \ref{prop:clustering:1} and is not very surprising. It simply mirrors the fact that for the smaller sample sizes $T=100$ and $T=250$, the effective noise level in the simulated data is quite high.
 
 
-%Figures \ref{fig:clustering:1} and \ref{fig:clustering:2} give more insight into what happens for $T=100$ and $T=250$. Figure \ref{fig:clustering:1} shows histograms of the $5000$ simulated values of $\widehat{N}$, while Figure \ref{fig:clustering:2} depicts histograms of the number of classification errors produced by our algorithm. By the number of classification errors, we simply mean the number of incorrectly classified time series, which is formally calculated as $\min_{\pi \in S_{\hat{N}}} \big\{ |G_1 \setminus \widehat{G}_{\pi(1)}| +|G_2 \setminus \widehat{G}_{\pi(2)}| + |G_3 \setminus \widehat{G}_{\pi(3)}| \big\}$ with $S_{\widehat{N}}$ being the set of all permutations of $\{1, 2, \ldots, \widehat{N}\}$. The histogram of Figure \ref{fig:clustering:1} for $T=100$ clearly shows that our method underestimates the number of groups ($\widehat{N} = 2$ in $4055$ cases out of $5000$). In particular, it fails to detect the difference between two out of three groups in a large number of simulations. This is reflected in the corresponding histogram of Figure \ref{fig:clustering:2} which shows that there are exactly $5$ classification errors in $3924$ of the $5000$ simulation runs. In most of these cases, the estimated group structure $\{ \widehat{G}_1, \widehat{G}_{2}\}$ coincides with either $\{ G_1 \cup G_2,G_3\}$,  $\{ G_1, G_2\cup G_3\}$ or $ \{ G_1 \cup G_3,G_2\}$. In summary, we can conclude that the small empirical probabilities for $T=100$ in Table \ref{tab:clustering} are due to the algorithm underestimating the number of groups.  Inspecting the histograms for $T=250$, one can see that the performance of the estimators $\widehat{N}$ and $\{ \widehat{G}_1,\ldots, \widehat{G}_{\widehat{N}} \}$ improves significantly, even though the corresponding empirical probabilities in Table \ref{tab:clustering} are still somewhat below the target $(1-\alpha)$.  
+The simulation results are reported in Table \ref{tab:clustering:comparison}. As before, the entries in Table \ref{tab:clustering:comparison} present the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$. {\color{red} The results highlight a significant distinction: the benchmark procedure's outcomes are heavily influenced by the selection of bandwidth, a limitation not observed in our clustering approach. Furthermore, with large sample sizes, the empirical probabilities of success using our clustering approach—even with an estimated number of clusters—are quite high. In contrast, the benchmark procedure lacks a method for estimating the number of clusters. Finally, our procedure, which relies on simple arithmetic averages instead of integrals, is computationally much more efficient, offering a significant advantage for practitioners.
 
-As the benchmark procedure does not provide an estimate of the number of clusters $K$, I have also compared the results for the known number of clusters ($K=3$) for $T=100$ and the results are not better... We almost never detect the true grouping anyway.
+%Most importantly, it demonstrates that our method provides robust results whereas the benchmark depends very strongly on the choice of bandwidth.
+}
+
 
 %\subsection*{Simulation results}
 %
@@ -582,7 +580,6 @@ As the benchmark procedure does not provide an estimate of the number of cluster
 %\vspace{-0.4cm}
 %\end{table}
   
-}
 
 
 
