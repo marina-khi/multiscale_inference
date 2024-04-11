@@ -1,0 +1,42 @@
+\documentclass[graybox]{IFCS2024}
+
+
+\usepackage{type1cm}        % activate if the above 3 fonts are
+                            % not available on your system
+\usepackage{makeidx}         % allows index generation
+\usepackage{multicol}        % used for the two-column index
+\usepackage[bottom]{footmisc}% places footnotes at page bottom
+
+
+\usepackage{newtxtext}       
+\usepackage[varvw]{newtxmath}       % selects Times Roman as basic font
+
+% DO NOT USE OTHER COMMANDS OR MACROS
+\makeindex            
+\begin{document}
+
+\title*{Multivariate Clustering of Nonparametric Time Trends \protect\linebreak}
+%\titlerunning{Short Title} %for an abbreviated version of your contribution title if the original one is too long
+\author{Marina Khismatullina}
+\authorrunning{Marina Khismatullina} 
+
+\institute{Marina Khismatullina \at Erasmus University Rotterdam, Burgemeester Oudlaan 50, 3062 PA Rotterdam,\\ \email{khismatullina@ese.eur.nl}}
+
+%
+% Use the package "url.sty" to avoid
+% problems with special characters
+% used in your e-mail or web address
+%
+\maketitle
+
+
+\abstract{%Clustering time series data involves grouping similar time series according to various criteria such as their shapes, trends, or patterns.
+In this paper, we propose a new clustering procedure for uncovering hidden group structure in multivariate time series based on the trends they exhibit. While clustering methodologies for univariate time series have been extensively studied, relatively few rigorous statistical methods have been developed for clustering multivariate time series data. However, the increasing volume of temporal data presents an opportunity to reveal meaningful hidden structures by clustering entities across multiple time series recorded simultaneously for each of the entities. The proposed clustering procedure is based on a new dissimilarity measure that stems from a recently developed multiscale testing method for comparison of univariate nonparametric trends \cite{KhismatullinaVogt2022}. Building on this method, we extend the methodology to accommodate multivariate time series and propose a new distance measure that is able to capture the difference between the trends. We show that the clustering algorithm has the desired asymptotic properties and complement the project with a simulation study. For illustration purposes, we conduct an empirical study on the dataset that comprises information for 73 weather stations across Spain. We observe substantial differences when applying univariate versus multivariate clustering techniques, a finding that %suggests each variable contributes differently to the overall clustering pattern. Such distinctions
+underscores the importance of adopting multivariate techniques to fully capture the complex dynamics inherent in multivariate time series data.}
+\keywords{multivariate time series, time series clustering, nonparametric statistics}
+\begin{thebibliography}{99.}%
+	% Journal paper
+	\bibitem{KhismatullinaVogt2022} Khismatullina, M., Vogt, M.: Multiscale comparison of nonparametric trend curves. arXiv preprint (2022) doi: 10.48550/arXiv.2209.10841
+\end{thebibliography}
+\end{document}
+
