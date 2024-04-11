@@ -110,74 +110,73 @@ We thus consider intervals $\mathcal{I}_{u, h} = [u-h, u+h]$ which contain $5, 1
 \begin{figure}[t!]
 \includegraphics[width=\textwidth]{../output/bump_function.pdf}
 \caption{In black, the bump function $m_1$ is plotted for different heights of the bump: $b \in \{0, 0.25, 0.5, 0.75\}$ with $b=0$ corresponding to the null $H_0$. In red, we depict the time series $\{m_1(t/T) + \varepsilon_{1t}: 1 \le t \le T\}$ for one simulation run and $T=500$.}\label{fig:bump_function}
-
 \end{figure}
 
-\begin{table}[t]
-\footnotesize{
-\begin{center}
-\caption{Size of the multiscale test for $\phi = 0.1$ and $\rho = 0.1$ for different sample sizes $T$ and nominal sizes $\alpha$.}
-\label{tab:size1}
-\renewcommand{\arraystretch}{1.2}
-{\color{red}\input{../output/15_ts_10_10_size}}
-\end{center}}
-\footnotesize{
-\begin{center}
-\caption{Power of the multiscale test for $\phi = 0.1$ and $\rho = 0.1$ for different sample sizes $T$ and nominal sizes $\alpha$. Each panel corresponds to a different height parameter $b$ of the bump function.}\label{tab:power1}
-\begin{subtable}[b]{0.32\textwidth}
-\centering
-\caption{$b = 0.25$}\label{tab:power1_025}
-\renewcommand{\arraystretch}{1.2}
-{\color{red}\input{../output/15_ts_10_10_power_b_25}}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\centering
-\caption{$b = 0.50$}\label{tab:power1_050}
-\renewcommand{\arraystretch}{1.2}
-{\color{red}\input{../output/15_ts_10_10_power_b_50}}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\centering
-\caption{$b = 0.75$}\label{tab:power1_075}
-\renewcommand{\arraystretch}{1.2}
-{\color{red}\input{../output/15_ts_10_10_power_b_75}}
-\end{subtable}
-\end{center}}
-\vspace{-0.4cm}
-\end{table}
-
-\begin{table}[h!]
-\footnotesize{
-\begin{center}
-\caption{Size of the multiscale test for $\phi = 0.25$ and $\rho = 0.25$ for different sample sizes $T$ and nominal sizes $\alpha$.}
-\label{tab:size2}
-\renewcommand{\arraystretch}{1.2}
-{\color{red}\input{../output/15_ts_25_25_size}}
-\end{center}}
-\footnotesize{
-\begin{center}
-\caption{Power of the multiscale test for $\phi = 0.25$ and $\rho = 0.25$ for different sample sizes $T$ and nominal sizes $\alpha$. Each panel corresponds to a different height parameter $b$ of the bump function.}\label{tab:power2}
-\begin{subtable}[b]{0.32\textwidth}
-\centering
-\caption{$b = 0.25$}\label{tab:power2_025}
-\renewcommand{\arraystretch}{1.2}
-{\color{red}\input{../output/15_ts_25_25_power_b_25}}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\centering
-\caption{$b = 0.50$}\label{tab:power2_050}
-\renewcommand{\arraystretch}{1.2}
-{\color{red}\input{../output/15_ts_25_25_power_b_50}}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\centering
-\caption{$b = 0.75$}\label{tab:power2_075}
-\renewcommand{\arraystretch}{1.2}
-{\color{red}\input{../output/15_ts_25_25_power_b_75}}
-\end{subtable}
-\end{center}}
-\vspace{-0.4cm}
-\end{table}
+%\begin{table}[t]
+%\footnotesize{
+%\begin{center}
+%\caption{Size of the multiscale test for $\phi = 0.1$ and $\rho = 0.1$ for different sample sizes $T$ and nominal sizes $\alpha$.}
+%\label{tab:size1}
+%\renewcommand{\arraystretch}{1.2}
+%{\color{red}\input{../output/15_ts_10_10_size}}
+%\end{center}}
+%\footnotesize{
+%\begin{center}
+%\caption{Power of the multiscale test for $\phi = 0.1$ and $\rho = 0.1$ for different sample sizes $T$ and nominal sizes $\alpha$. Each panel corresponds to a different height parameter $b$ of the bump function.}\label{tab:power1}
+%\begin{subtable}[b]{0.32\textwidth}
+%\centering
+%\caption{$b = 0.25$}\label{tab:power1_025}
+%\renewcommand{\arraystretch}{1.2}
+%{\color{red}\input{../output/15_ts_10_10_power_b_25}}
+%\end{subtable}
+%\begin{subtable}[b]{0.32\textwidth}
+%\centering
+%\caption{$b = 0.50$}\label{tab:power1_050}
+%\renewcommand{\arraystretch}{1.2}
+%{\color{red}\input{../output/15_ts_10_10_power_b_50}}
+%\end{subtable}
+%\begin{subtable}[b]{0.32\textwidth}
+%\centering
+%\caption{$b = 0.75$}\label{tab:power1_075}
+%\renewcommand{\arraystretch}{1.2}
+%{\color{red}\input{../output/15_ts_10_10_power_b_75}}
+%\end{subtable}
+%\end{center}}
+%\vspace{-0.4cm}
+%\end{table}
+%
+%\begin{table}[h!]
+%\footnotesize{
+%\begin{center}
+%\caption{Size of the multiscale test for $\phi = 0.25$ and $\rho = 0.25$ for different sample sizes $T$ and nominal sizes $\alpha$.}
+%\label{tab:size2}
+%\renewcommand{\arraystretch}{1.2}
+%{\color{red}\input{../output/15_ts_25_25_size}}
+%\end{center}}
+%\footnotesize{
+%\begin{center}
+%\caption{Power of the multiscale test for $\phi = 0.25$ and $\rho = 0.25$ for different sample sizes $T$ and nominal sizes $\alpha$. Each panel corresponds to a different height parameter $b$ of the bump function.}\label{tab:power2}
+%\begin{subtable}[b]{0.32\textwidth}
+%\centering
+%\caption{$b = 0.25$}\label{tab:power2_025}
+%\renewcommand{\arraystretch}{1.2}
+%{\color{red}\input{../output/15_ts_25_25_power_b_25}}
+%\end{subtable}
+%\begin{subtable}[b]{0.32\textwidth}
+%\centering
+%\caption{$b = 0.50$}\label{tab:power2_050}
+%\renewcommand{\arraystretch}{1.2}
+%{\color{red}\input{../output/15_ts_25_25_power_b_50}}
+%\end{subtable}
+%\begin{subtable}[b]{0.32\textwidth}
+%\centering
+%\caption{$b = 0.75$}\label{tab:power2_075}
+%\renewcommand{\arraystretch}{1.2}
+%{\color{red}\input{../output/15_ts_25_25_power_b_75}}
+%\end{subtable}
+%\end{center}}
+%\vspace{-0.4cm}
+%\end{table}
 
 
 {\color{red}The results of the simulation study are presented in Tables \ref{tab:size1} and \ref{tab:power1} for $\phi = 0.1$ and $\rho = 0.1$ and in Tables \ref{tab:size2} and \ref{tab:power2} for $\phi = 0.25$ and $\rho = 0.25$.} We do not present the results for $\phi = 0.1, \rho = 0.25$ and $\phi = 0.25, \rho = 0.1$ as they are fairly similar and do not bring additional insights. The actual size of the mutliscale test is reported in Tables \ref{tab:size1} and \ref{tab:size2}, while Tables \ref{tab:power1} and \ref{tab:power2} report its power against different alternatives. Both the actual size and the power are computed as the number of simulations in which the test rejects the global null $H_0$ divided by the total number of simulations.
@@ -411,7 +410,7 @@ For the estimation of the long-run error variance, we work with the estimator fr
 \subsection{Comparison of our test with SiZer} 
 
 
-To the best of our knowledge, the only other test for comparing trend curves with similar properties has been developed in \cite{Park2009} (SiZer). In this section, we compare our method with SiZer. However, we would like to note that their analysis is mainly methodological and the theory was developed only for the case of $n=2$ time series. In \cite{Park2009}, the authors propose a possible extension to their approach in case of more than $2$ time series, but the extension does not allow for the pairwise comparison of the time series. Moreover, it is not clear how to calculate the actual size and power in the case of more than $n=2$ time series. Furthermore, the model considered in \cite{Park2009} is much simpler than ours: it does not include neither the covariates, nor the fixed effects. Hence, in order to allow for fair comparison between two methods, we consider a simplified version of the simulation setup from (i). In particular, we do the following. We consider a model $Y_{it} = m_i\big(\frac{t}{T}\big) + \varepsilon_{it}$ that does not include neither the covariates, nor the fixed effects as they are not part of the model in \cite{Park2009}. We choose the number of time series to be equal to $n=2$ and consider different time series lengths $T=100,250,500, 750, 1000$. The error terms $\varepsilon_{it}$ are specified as in Section \ref{subsec:sim:main}. To generate data under the null $H_0: m_1 = m_2$, we let $m_i = 0$ for $i=1, 2$ as before. As before, to produce data under the alternative, we use the bump function
+To the best of our knowledge, the only other test for comparing trend curves with similar properties has been developed in \cite{Park2009} (SiZer). In this section, we compare our method with SiZer. However, we would like to note that the analysis in \cite{Park2009} is mainly methodological and the theory is developed only for the case of $n=2$ time series. In \cite{Park2009}, the authors propose a possible extension to their approach in case of more than $2$ time series, but the extension does not allow for pairwise comparison of the time series. Moreover, it is not clear how to calculate the actual size and power in this case. Furthermore, the model considered in \cite{Park2009} is much simpler than ours: it does not include neither the covariates, nor the fixed effects. Hence, in order to allow for fair comparison between two methods, we consider a simplified version of the simulation setup from Section \ref{subsec:sim:main}. In particular, we do the following. We consider a model $Y_{it} = m_i\big(\frac{t}{T}\big) + \varepsilon_{it}$ that does not include neither the covariates, nor the fixed effects as they are not part of the model in \cite{Park2009}. We choose the number of time series to be equal to $n=2$ and consider different time series lengths $T=100,250,500, 750, 1000$. The error terms $\varepsilon_{it}$ are specified as in Section \ref{subsec:sim:main}. To generate data under the null $H_0: m_1 = m_2$, we let $m_i = 0$ for $i=1, 2$ as before. As before, to produce data under the alternative, we use the bump function
 \begin{align*}
 m_1(u) =  b \,\cdot &\,\mathbbm{1}(u \in [0.2, 0.4]) \cdot \left(1 - \left\{\frac{u - 0.3}{0.1}\right\}^2\right)^2 \\
 &- b \cdot\mathbbm{1}(u \in [0.6, 0.8]) \cdot \left(1 - \left\{\frac{u - 0.7}{0.1}\right\}^2\right)^2 
@@ -422,61 +421,61 @@ $$\gamma_{i}(k) = \frac{E[\eta_{it}^2] a^{|k|}}{1 - a^2} = \frac{0.25^{|k|}}{15}
 
 \begin{table}[t!]
 \footnotesize{
-\caption{Size comparison of the proposed multiscale test ($\mathcal{T}_{\text{MS}}$) and SiZer ($\mathcal{T}_{\text{SiZer}}$, \cite{Park2009}) for different sample sizes $T$ and various significance levels $\alpha$.}\label{tab:size:compare}
+\caption{Size comparison of the proposed multiscale test ($\mathcal{T}_{\text{MS}}$) and SiZer ($\mathcal{T}_{\text{SiZer}}$) for different sample sizes $T$ and various significance levels $\alpha$.}\label{tab:size:compare}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
-{\color{red}\begin{tabularx}{\textwidth}{l@{\hskip 20pt} Z@{\hskip 6pt}Z@{\hskip 20pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 20pt}Z}
+\begin{tabularx}{\textwidth}{l@{\hskip 20pt} Z@{\hskip 6pt}Z@{\hskip 20pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 20pt}Z}
 \toprule
  & \multicolumn{2}{c}{$\alpha = 0.01$} & \multicolumn{2}{c}{$\alpha = 0.05$} & \multicolumn{2}{c}{$\alpha = 0.1$}\\
 \cmidrule[0.4pt]{2-7} 
  & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{SiZer}}$   & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{SiZer}}$ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{SiZer}}$\\
 \cmidrule[0.4pt]{1-7} 
-  $T = 100$ & 0.010 & 0.099 & 0.047 & 0.332 & 0.106 & 0.524 \\ 
+ $T = 100$ & 0.010 & 0.099 & 0.047 & 0.332 & 0.106 & 0.524 \\ 
   $T = 250$ & 0.008 & 0.162 & 0.041 & 0.510 & 0.102 & 0.699 \\ 
   $T = 500$ & 0.009 & 0.214 & 0.044 & 0.598 & 0.089 & 0.787 \\ 
   $T = 750$ & 0.008 & 0.252 & 0.045 & 0.657 & 0.095 & 0.844 \\ 
   $T = 1000$ & 0.012 & 0.271 & 0.053 & 0.691 & 0.102 & 0.873 \\ 
-\bottomrule
-\end{tabularx}}}
+bottomrule
+\end{tabularx}}
 \vspace{0.2cm}
 \end{table}
 
 \begin{table}[t!]
 \footnotesize{
-\caption{Power comparison of the proposed multiscale test ($\mathcal{T}_{\text{MS}}$) and SiZer ($\mathcal{T}_{\text{SiZer}}$, \cite{Park2009}) for different sample sizes $T$ and various significance levels $\alpha$ for the bump function with $b = 0.25$.}\label{tab:power:compare1}
+\caption{Power comparison of the proposed multiscale test ($\mathcal{T}_{\text{MS}}$) and SiZer ($\mathcal{T}_{\text{SiZer}}$) for different sample sizes $T$ and various significance levels $\alpha$ for the bump function with $b = 0.25$.}\label{tab:power:compare1}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
-{\color{red}\begin{tabularx}{\textwidth}{l@{\hskip 20pt} Z@{\hskip 6pt}Z@{\hskip 20pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 20pt}Z}
+\begin{tabularx}{\textwidth}{l@{\hskip 20pt} Z@{\hskip 6pt}Z@{\hskip 20pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 20pt}Z}
 \toprule
  & \multicolumn{2}{c}{$\alpha = 0.01$} & \multicolumn{2}{c}{$\alpha = 0.05$} & \multicolumn{2}{c}{$\alpha = 0.1$}\\
 \cmidrule[0.4pt]{2-7} 
  & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{SiZer}}$   & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{SiZer}}$ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{SiZer}}$\\
 \cmidrule[0.4pt]{1-7} 
-$T = 100$ & 0.075 & 0.251 & 0.193 & 0.551 & 0.317 & 0.714 \\ 
-  $T = 250$ & 0.253 & 0.629 & 0.486 & 0.876 & 0.633 & 0.951 \\ 
-  $T = 500$ & 0.640 & 0.905 & 0.817 & 0.985 & 0.887 & 0.996 \\ 
-  $T = 750$ & 0.867 & 0.982 & 0.957 & 0.998 & 0.981 & 1.000 \\ 
-  $T = 1000$ & 0.970 & 0.998 & 0.993 & 1.000 & 0.997 & 1.000 \\ 
+$T = 100$ & 0.061 & 0.279 & 0.172 & 0.592 & 0.300 & 0.762 \\ 
+$T = 250$ & 0.213 & 0.655 & 0.451 & 0.906 & 0.608 & 0.964 \\ 
+  $T = 500$ & 0.577 & 0.925 & 0.804 & 0.992 & 0.884 & 0.998 \\ 
+  $T = 750$ & 0.830 & 0.988 & 0.955 & 0.999 & 0.981 & 1.000 \\ 
+  $T = 1000$ & 0.960 & 0.999 & 0.993 & 1.000 & 0.998 & 1.000 \\ 
 \bottomrule
-\end{tabularx}}}
+\end{tabularx}}
 \vspace{0.2cm}
 \end{table}
 
 \begin{table}[t!]
 \footnotesize{
-\caption{Power comparison of the proposed multiscale test ($\mathcal{T}_{\text{MS}}$) and SiZer ($\mathcal{T}_{\text{SiZer}}$, \cite{Park2009}) for different sample sizes $T$ and various significance levels $\alpha$ for the bump function with $b = 0.5$.}\label{tab:power:compare2}
+\caption{Power comparison of the proposed multiscale test ($\mathcal{T}_{\text{MS}}$) and SiZer ($\mathcal{T}_{\text{SiZer}}$) for different sample sizes $T$ and various significance levels $\alpha$ for the bump function with $b = 0.5$.}\label{tab:power:compare2}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
-{\color{red}\begin{tabularx}{\textwidth}{l@{\hskip 20pt} Z@{\hskip 6pt}Z@{\hskip 20pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 20pt}Z}
+\begin{tabularx}{\textwidth}{l@{\hskip 20pt} Z@{\hskip 6pt}Z@{\hskip 20pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 6pt}Z@{\hskip 20pt}Z}
 \toprule
  & \multicolumn{2}{c}{$\alpha = 0.01$} & \multicolumn{2}{c}{$\alpha = 0.05$} & \multicolumn{2}{c}{$\alpha = 0.1$}\\
 \cmidrule[0.4pt]{2-7} 
  & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{SiZer}}$   & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{SiZer}}$ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{SiZer}}$\\
 \cmidrule[0.4pt]{1-7} 
-$T = 100$ & 0.482 & 0.733 & 0.703 & 0.922 & 0.815 & 0.967 \\ 
-  $T = 250$ & 0.966 & 0.998 & 0.994 & 1.000 & 0.998 & 1.000 \\ 
+$T = 100$ & 0.380 & 0.759 & 0.653 & 0.939 & 0.795 & 0.977 \\ 
+  $T = 250$ & 0.954 & 0.999 & 0.993 & 1.000 & 0.999 & 1.000 \\ 
   $T = 500$ & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
   $T = 750$ & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
   $T = 1000$ & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
 \bottomrule
-\end{tabularx}}}
+\end{tabularx}}
 \vspace{0.2cm}
 \end{table}
 
