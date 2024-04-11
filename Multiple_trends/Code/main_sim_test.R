@@ -18,7 +18,7 @@ source("functions/functions.R")
 ##############################
 #Defining necessary constants#
 ##############################
-seed <- 135791111
+seed <- 22446688
 
 n_ts <- 15 #Number of time series
 
@@ -210,8 +210,8 @@ size_and_power_array <- array(NA, dim = c(length(different_T),
 ijset <- expand.grid(i = 1:n_ts, j = 1:n_ts)
 ijset <- ijset[ijset$i < ijset$j, ]
 
-set.seed(seed)
 for (t_len in different_T){
+  set.seed(seed)
   k <- match(t_len, different_T)
   #Constructing the grid
   u_grid <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
@@ -328,8 +328,8 @@ size_and_power_array <- array(NA, dim = c(length(different_T),
 ijset <- expand.grid(i = 1:n_ts, j = 1:n_ts)
 ijset <- ijset[ijset$i < ijset$j, ]
 
-set.seed(seed)
 for (t_len in different_T){
+  set.seed(seed)
   k <- match(t_len, different_T)
   #Constructing the grid
   u_grid <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
