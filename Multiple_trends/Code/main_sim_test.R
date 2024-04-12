@@ -311,11 +311,16 @@ for (b in different_b){
   write(line, file = filename, append = TRUE)
 }
 
-##############################
-#Once more for different grid#
-##############################
+##########################
+#Once more for dense grid#
+##########################
+
 phi <- 0.25 #dependence between the innovations
 rho <- 0.25 #covariance between the fixed effects
+
+n_rep    <- 1000 #number of simulations for calculating size and power
+sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
+
 
 #Calculating the size and power
 size_and_power_array <- array(NA, dim = c(length(different_T),
