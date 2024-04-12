@@ -142,7 +142,7 @@ for (t_len in different_T){
     repl_clustering(rep = val, t_len_ = t_len, n_ts_ = n_ts,
                     grid_ = grid, m1_ = m1, m2_ = m2, a_hat_ = a_hat,
                     sigma_ = sigma, q_ = q, r_ = r,
-                    h_ = h_grid[1], lrv_ = "estimated") #Loop one-by-one using foreach
+                    h_ = h_grid[1], lrv_ = "true") #Loop one-by-one using foreach
   } -> simulated_statistic
   stopCluster(cl)
   toc()
@@ -211,17 +211,10 @@ for (t_len in different_T){
     if (alpha == 0.05){
       j <- j + 1
       group_count[[j]] <- table(factor(clustering_results[1, ], levels = 1:5))
-      error_count[[j]] <- table(factor(num_of_errors, levels = 0:8))
+      error_count[[j]] <- table(factor(results$num_of_errors, levels = 0:8))
     }
     correct_groups    <- c(correct_groups, results$correct_number_of_groups/n_rep)
     correct_structure <- c(correct_structure, results$correctly_specified_groups/n_rep)
-    cat("Percentage of detecting true number of clusters",
-        correct_number_of_groups/n_rep, "with alpha = ", alpha,
-        ", T = ", t_len, "\n")
-    cat("Percentage of detecting true clustering",
-        correctly_specified_groups/n_rep, "with alpha = ", alpha,
-        ", T = ", t_len, "\n")
-    cat("Maximum number of errors is ", max(num_of_errors), "\n")
   }
 }
 
