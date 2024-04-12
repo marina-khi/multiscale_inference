@@ -475,7 +475,7 @@ repl <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
 repl_clustering <- function(rep, t_len_, n_ts_, grid_,
                             m1_ = NULL, m2_ = NULL, 
                             a_hat_ = 0, sigma_ = 1,
-                            q_ = 25, r_ = 10, h_ = 0.05,
+                            q_ = 25, r_ = 10, h1_ = 0.05, h2_ = 0.25,
                             gaussian_sim = FALSE, comparison = FALSE,
                             lrv_ = "true"){
   library(MSinference)
@@ -535,17 +535,20 @@ repl_clustering <- function(rep, t_len_, n_ts_, grid_,
       smoothed_data2 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
   
       for (i in 1:n_ts_){
-        smoothed_data[, i]  <- mapply(local_linear_smoothing, grid_points_2, MoreArgs = list(simulated_data[, i], grid_points, h_))
-        smoothed_data2[, i] <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(simulated_data[, i], grid_points, h_))
+        smoothed_data[, i]  <- mapply(local_linear_smoothing, grid_points_2, MoreArgs = list(simulated_data[, i], grid_points, h1_))
+        smoothed_data2[, i] <- mapply(local_linear_smoothing, grid_points_2, MoreArgs = list(simulated_data[, i], grid_points, h2_))
+        #smoothed_data2[, i] <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(simulated_data[, i], grid_points, h1_))
       }
       
       #Calculating the benchmark model
-      benchmark_results <- matrix(0, nrow = n_ts_, ncol = n_ts_)
+      benchmark_results  <- matrix(0, nrow = n_ts_, ncol = n_ts_)
       benchmark_results2 <- matrix(0, nrow = n_ts_, ncol = n_ts_)
       for (i in 1:(n_ts_ - 1)){
         for (j in (i + 1):n_ts_){
           benchmark_results[i, j]  <- sum((smoothed_data[, i] - smoothed_data[, j])^2) * (1/t_len_)
-          benchmark_results2[i, j] <- max(abs(smoothed_data2[, i] - smoothed_data2[, j]))      }
+          benchmark_results2[i, j] <- sum((smoothed_data2[, i] - smoothed_data2[, j])^2) * (1/t_len_)
+          #benchmark_results2[i, j] <- max(abs(smoothed_data2[, i] - smoothed_data2[, j]))
+        }
       }
       results <- c(as.vector(psi$stat_pairwise), as.vector(benchmark_results), as.vector(benchmark_results2))      
     } else {
