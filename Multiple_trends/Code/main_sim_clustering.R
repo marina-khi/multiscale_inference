@@ -142,7 +142,7 @@ for (t_len in different_T){
     repl_clustering(rep = val, t_len_ = t_len, n_ts_ = n_ts,
                     grid_ = grid, m1_ = m1, m2_ = m2, a_hat_ = a_hat,
                     sigma_ = sigma, q_ = q, r_ = r,
-                    h_ = h_grid[1], lrv_ = "true") #Loop one-by-one using foreach
+                    lrv_ = "true") #Loop one-by-one using foreach
   } -> simulated_statistic
   stopCluster(cl)
   toc()
@@ -164,7 +164,7 @@ for (t_len in different_T){
     number_of_groups_vec <- c()
     for (i in 1:n_rep){
       #Multiscale method with unknown number of clusters
-      statistic_vector <- simulated_statistic[1:(nrow(simulated_statistic)/3), i]
+      statistic_vector <- simulated_statistic[, i]
       statistic_value  <- max(statistic_vector)
       if (statistic_value > quant) {
         statistic_matrix  <- matrix(statistic_vector, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
@@ -200,8 +200,7 @@ correct_structure <- c()
 group_count <- list()
 error_count <- list()
 
-j     <- 0
-
+j <- 0
 for (t_len in different_T){
   for (alpha in different_alpha){
     filename = paste0("output/revision/misc/results_for_T_", t_len, "_and_alpha_", alpha * 100, ".RData")
