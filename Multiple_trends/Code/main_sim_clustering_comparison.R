@@ -194,6 +194,33 @@ for (t_len in different_T){
 #Output of the results#
 #######################
 
+
+
+tmp <- matrix(NA, nrow = length(different_T), ncol = 3)
+tmp[, 1] <- as.vector(correct_structure)
+tmp[, 2] <- as.vector(correct_structure_benchmark)
+tmp[, 3] <- as.vector(correct_structure_benchmark2)
+row.names(tmp) <- paste0("$T = ", different_T, "$")
+
+filename = paste0("output/revision/clustering_comparison.tex")
+output_matrix(tmp, filename)
+
+addtorow     <- list()
+addtorow$pos <- list(0, 0)
+addtorow$command <- c("& \\multicolumn{6}{c}{nominal size $\\alpha$} \\\\\n",
+                        "$T$ & 0.01 & 0.05 & 0.1 & 0.01 & 0.05 & 0.1 \\\\\n") 
+  print.xtable(xtable(matrix_, digits = c(3), align = "ccccccc"), type = "latex",
+               file = filename, add.to.row = addtorow, include.colnames = FALSE)
+}
+
+
+line <- paste0("%This simulation was done for the following values of the parameters: n_ts = ", n_ts,
+               ", with ", n_rep, " simulations for calculating size and power and ", sim_runs,
+               " simulations to calculate the Gaussian quantiles. Furthermore, for the error process we have a = ",
+               a, " and sigma = ", sigma,
+               ". There are no fixed effects. The grid is standard.")
+write(line, file = filename, append = TRUE)
+
 # filename = paste0("output/tables/", n_ts, "_ts_correct_group_number.tex")
 # rownames(correct_groups) <- different_T
 # output_matrix(correct_groups, filename)
