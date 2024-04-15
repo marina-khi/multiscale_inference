@@ -558,11 +558,12 @@ repl_clustering <- function(rep, t_len_, n_ts_, grid_,
   return(results)
 }
 
-cluster_analysis <- function(t_len_, n_rep_, alpha_, results_matrix_){
+cluster_analysis <- function(t_len_, n_rep_, alpha_, results_matrix_,
+                             correct_specification_){
+  library(car)
   correct_number_of_groups   <- 0 #Starting the counter from zero
   correctly_specified_groups <- 0
-  
-  num_of_errors     <- c()
+  num_of_errors              <- c()
   
   for (i in 1:n_rep_){
     if (results_matrix_[1, i] == 3) {
@@ -570,77 +571,77 @@ cluster_analysis <- function(t_len_, n_rep_, alpha_, results_matrix_){
     }
     if ((results_matrix_[1, i] == 2) | (results_matrix_[1, i] == 3)){
       groups123  <- results_matrix_[2:(n_ts + 1), i]
-      groups132  <- recode(groups123, "2=3;3=2")
-      groups213  <- recode(groups123, "1=2;2=1")
-      groups231  <- recode(groups123, "1=2;2=3;3=1")
-      groups312  <- recode(groups123, "1=3;2=1;3=2")
-      groups321  <- recode(groups123, "1=3;3=1")
-      difference <- min(sum(correct_specification != groups132),
-                        sum(correct_specification != groups213),
-                        sum(correct_specification != groups231),
-                        sum(correct_specification != groups312),
-                        sum(correct_specification != groups321),
-                        sum(correct_specification != groups123))
+      groups132  <- car::recode(groups123, "2=3;3=2")
+      groups213  <- car::recode(groups123, "1=2;2=1")
+      groups231  <- car::recode(groups123, "1=2;2=3;3=1")
+      groups312  <- car::recode(groups123, "1=3;2=1;3=2")
+      groups321  <- car::recode(groups123, "1=3;3=1")
+      difference <- min(sum(correct_specification_ != groups132),
+                        sum(correct_specification_ != groups213),
+                        sum(correct_specification_ != groups231),
+                        sum(correct_specification_ != groups312),
+                        sum(correct_specification_ != groups321),
+                        sum(correct_specification_ != groups123))
     }
     if ((results_matrix_[1, i] == 1) | (results_matrix_[1, i] > 4)){
       difference <- 10
     }
     if (results_matrix_[1, i] == 4) {
       groups1234  <- results_matrix_[2:(n_ts + 1), i]
-      groups1243  <- recode(groups1234, "4=3;3=4")
-      groups1342  <- recode(groups1234, "2=3;3=4;4=2")
-      groups1324  <- recode(groups1234, "2=3;3=2")
-      groups1423  <- recode(groups1234, "2=4;3=2;4=3")
-      groups1432  <- recode(groups1234, "2=4;4=2")
+      groups1243  <- car::recode(groups1234, "4=3;3=4")
+      groups1342  <- car::recode(groups1234, "2=3;3=4;4=2")
+      groups1324  <- car::recode(groups1234, "2=3;3=2")
+      groups1423  <- car::recode(groups1234, "2=4;3=2;4=3")
+      groups1432  <- car::recode(groups1234, "2=4;4=2")
       
-      groups2134  <- recode(groups1234, "1=2;2=1")
-      groups2143  <- recode(groups1234, "1=2;2=1;3=4;4=3")
-      groups2314  <- recode(groups1234, "1=2;2=3;3=1")
-      groups2341  <- recode(groups1234, "1=2;2=3;3=4;4=1")
-      groups2413  <- recode(groups1234, "1=2;2=4;3=1;4=3")
-      groups2431  <- recode(groups1234, "1=2;2=4;4=1")
+      groups2134  <- car::recode(groups1234, "1=2;2=1")
+      groups2143  <- car::recode(groups1234, "1=2;2=1;3=4;4=3")
+      groups2314  <- car::recode(groups1234, "1=2;2=3;3=1")
+      groups2341  <- car::recode(groups1234, "1=2;2=3;3=4;4=1")
+      groups2413  <- car::recode(groups1234, "1=2;2=4;3=1;4=3")
+      groups2431  <- car::recode(groups1234, "1=2;2=4;4=1")
       
-      groups3124  <- recode(groups1234, "1=3;2=1;3=2")
-      groups3142  <- recode(groups1234, "1=3;2=1;3=4;4=2")
-      groups3214  <- recode(groups1234, "1=3;3=1")
-      groups3241  <- recode(groups1234, "1=3;3=4;4=1")
-      groups3412  <- recode(groups1234, "1=3;2=4;3=1;4=2")
-      groups3421  <- recode(groups1234, "1=3;2=4;3=2;4=1")
+      groups3124  <- car::recode(groups1234, "1=3;2=1;3=2")
+      groups3142  <- car::recode(groups1234, "1=3;2=1;3=4;4=2")
+      groups3214  <- car::recode(groups1234, "1=3;3=1")
+      groups3241  <- car::recode(groups1234, "1=3;3=4;4=1")
+      groups3412  <- car::recode(groups1234, "1=3;2=4;3=1;4=2")
+      groups3421  <- car::recode(groups1234, "1=3;2=4;3=2;4=1")
       
-      groups4123  <- recode(groups1234, "1=4;2=1;3=2;4=3")
-      groups4132  <- recode(groups1234, "1=4;2=1;4=2")
-      groups4213  <- recode(groups1234, "1=4;3=1;4=3")
-      groups4231  <- recode(groups1234, "1=4;4=1")
-      groups4312  <- recode(groups1234, "1=4;2=3;3=1;4=2")
-      groups4321  <- recode(groups1234, "1=4;2=3;3=2;4=1")
+      groups4123  <- car::recode(groups1234, "1=4;2=1;3=2;4=3")
+      groups4132  <- car::recode(groups1234, "1=4;2=1;4=2")
+      groups4213  <- car::recode(groups1234, "1=4;3=1;4=3")
+      groups4231  <- car::recode(groups1234, "1=4;4=1")
+      groups4312  <- car::recode(groups1234, "1=4;2=3;3=1;4=2")
+      groups4321  <- car::recode(groups1234, "1=4;2=3;3=2;4=1")
       
-      difference <- min(sum(correct_specification != groups1234),
-                        sum(correct_specification != groups1243),
-                        sum(correct_specification != groups1342),
-                        sum(correct_specification != groups1324),
-                        sum(correct_specification != groups1423),
-                        sum(correct_specification != groups1432),
+      difference <- min(sum(correct_specification_ != groups1234),
+                        sum(correct_specification_ != groups1243),
+                        sum(correct_specification_ != groups1342),
+                        sum(correct_specification_ != groups1324),
+                        sum(correct_specification_ != groups1423),
+                        sum(correct_specification_ != groups1432),
                         
-                        sum(correct_specification != groups2134),
-                        sum(correct_specification != groups2143),
-                        sum(correct_specification != groups2314),
-                        sum(correct_specification != groups2341),
-                        sum(correct_specification != groups2413),
-                        sum(correct_specification != groups2431),
+                        sum(correct_specification_ != groups2134),
+                        sum(correct_specification_ != groups2143),
+                        sum(correct_specification_ != groups2314),
+                        sum(correct_specification_ != groups2341),
+                        sum(correct_specification_ != groups2413),
+                        sum(correct_specification_ != groups2431),
                         
-                        sum(correct_specification != groups3124),
-                        sum(correct_specification != groups3142),
-                        sum(correct_specification != groups3214),
-                        sum(correct_specification != groups3241),
-                        sum(correct_specification != groups3412),
-                        sum(correct_specification != groups3421),
+                        sum(correct_specification_ != groups3124),
+                        sum(correct_specification_ != groups3142),
+                        sum(correct_specification_ != groups3214),
+                        sum(correct_specification_ != groups3241),
+                        sum(correct_specification_ != groups3412),
+                        sum(correct_specification_ != groups3421),
                         
-                        sum(correct_specification != groups4123),
-                        sum(correct_specification != groups4132),
-                        sum(correct_specification != groups4213),
-                        sum(correct_specification != groups4231),
-                        sum(correct_specification != groups4312),
-                        sum(correct_specification != groups4321))
+                        sum(correct_specification_ != groups4123),
+                        sum(correct_specification_ != groups4132),
+                        sum(correct_specification_ != groups4213),
+                        sum(correct_specification_ != groups4231),
+                        sum(correct_specification_ != groups4312),
+                        sum(correct_specification_ != groups4321))
     }
     if (difference == 0){
       correctly_specified_groups = correctly_specified_groups + 1

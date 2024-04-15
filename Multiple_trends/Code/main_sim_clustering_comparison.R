@@ -187,7 +187,8 @@ for (t_len in different_T){
   load(file = filename)
   cat("Analysis of the results for the multiscale method with known number of clusters\n")
   results <- cluster_analysis(t_len_ = t_len, n_rep_ = n_rep, alpha_ = alpha,
-                              results_matrix_ = clustering_results)
+                              results_matrix_ = clustering_results,
+                              correct_specification_ = correct_specification)
   
   group_count[[j]] <- table(factor(clustering_results[1, ], levels = 1:5))
   error_count[[j]] <- table(factor(results$num_of_errors, levels = 0:8))
@@ -195,9 +196,10 @@ for (t_len in different_T){
   correct_groups    <- c(correct_groups, results$correct_number_of_groups/n_rep)
   correct_structure <- c(correct_structure, results$correctly_specified_groups/n_rep)
   
-  cat("Analysis of the results for the benchmark method with L2 distance\n")
+  cat("Analysis of the results for the benchmark method with L2 distance and small bandwidth\n")
   results_benchmark <- cluster_analysis(t_len_ = t_len, n_rep_ = n_rep, alpha_ = alpha,
-                                        results_matrix_ = clustering_results_benchmark)
+                                        results_matrix_ = clustering_results_benchmark,
+                                        correct_specification_ = correct_specification)
   
   group_count_benchmark[[j]] <- table(factor(clustering_results_benchmark[1, ], levels = 1:5))
   error_count_benchmark[[j]] <- table(factor(results_benchmark$num_of_errors, levels = 0:8))
@@ -205,9 +207,10 @@ for (t_len in different_T){
   correct_groups_benchmark    <- c(correct_groups_benchmark, results_benchmark$correct_number_of_groups/n_rep)
   correct_structure_benchmark <- c(correct_structure_benchmark, results_benchmark$correctly_specified_groups/n_rep)
 
-  cat("Analysis of the results for the benchmark method with max distance\n")
+  cat("Analysis of the results for the benchmark method with L2 distance and large bandwidth\n")
   results_benchmark2 <- cluster_analysis(t_len_ = t_len, n_rep_ = n_rep, alpha_ = alpha,
-                                         results_matrix_ = clustering_results_benchmark2)
+                                         results_matrix_ = clustering_results_benchmark2,
+                                         correct_specification_ = correct_specification)
   
   group_count_benchmark2[[j]] <- table(factor(clustering_results_benchmark2[1, ], levels = 1:5))
   error_count_benchmark2[[j]] <- table(factor(results_benchmark2$num_of_errors, levels = 0:8))
