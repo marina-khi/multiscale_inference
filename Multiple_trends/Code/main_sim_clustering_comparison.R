@@ -54,30 +54,6 @@ for (t_len in different_T){
   m1 <- 0.35 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.35 * b_function((1:t_len)/t_len, 0.75, 0.25)
   m2 <- b_function((1:t_len)/t_len, 0.75, 0.025) - b_function((1:t_len)/t_len, 0.25, 0.025)
   
-  # cat("Calculating the Gaussian quantiles\n")
-  # tic()
-  # cl <- makePSOCKcluster(numCores)
-  # registerDoParallel(cl)
-  # foreach (val = 1:n_rep, .combine = "cbind") %dopar% { 
-  #   repl_clustering(rep = val, t_len_ = t_len, n_ts_ = n_ts,
-  #                   grid_ = grid, sigma_ = 1,
-  #                   gaussian_sim = TRUE) #Loop one-by-one using foreach
-  # } -> simulated_pairwise_gaussian
-  # stopCluster(cl)
-  # toc()
-  # 
-  # simulated_gaussian <- apply(simulated_pairwise_gaussian, 2, max)
-  # 
-  # probs      <- seq(0.5, 0.995, by = 0.005)
-  # quantiles  <- as.vector(quantile(simulated_gaussian, probs = probs))
-  # quantiles  <- rbind(probs, quantiles)
-  # 
-  # colnames(quantiles) <- NULL
-  # rownames(quantiles) <- NULL
-  # 
-  # quants <- as.vector(quantiles[2, ])
-  
-  
   cat("Calculating the distance measures for T = ", t_len,"\n")
   tic()
   cl <- makePSOCKcluster(numCores)
@@ -95,12 +71,6 @@ for (t_len in different_T){
   cat("Performing HAC\n")
   
   tic()
-  # if (sum(probs == (1 - alpha)) == 0)
-  #   pos <- which.min(abs(probs - (1 - alpha)))
-  # if (sum(probs == (1 - alpha)) != 0)
-  #   pos <- which.max(probs == (1 - alpha))    
-  # quant <- quants[pos]
-    
   groups_mat <- matrix(NA, ncol = n_rep, nrow = n_ts)
   colnames(groups_mat) <- paste0("rep_", 1:n_rep)
   rownames(groups_mat) <- paste0("ts_", 1:n_ts)
