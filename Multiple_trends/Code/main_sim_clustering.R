@@ -26,10 +26,18 @@ sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
 different_T     <- c(100, 250, 500) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
 
-a_hat <- 0.25 
+a     <- 0.25 
 sigma <- 0.25
 q     <- 25 #Parameters for the estimation of long-run-variance
 r     <- 10
+
+#For the covariate process
+beta    <- c(1, 1, 1)
+a_x_vec <- c(0.25, 0.25, 0.25) #VAR(1) coefficients
+phi     <- 0.25                 #dependence between the innovations
+
+#For the fixed effects
+rho     <- 0.25 #covariance between the fixed effects
 
 numCores = round(parallel::detectCores() * .80)
 
@@ -46,7 +54,7 @@ correct_specification <- c(rep(1, (floor(n_ts / 3))),
 ###################################
 
 #Plotting the trend functions
-t_len <- 500
+t_len <- 250
 
 m1 <- numeric(t_len)
 m2 <- numeric(t_len)
@@ -59,7 +67,7 @@ par(mfrow = c(3, 1))
 par(mar = c(4, 3, 0.5, 0)) #Margins for each plot
 par(oma = c(0.5, 0.5, 0.5, 0.2)) #Outer margins
 
-errors <- arima.sim(model = list(ar = a_hat),
+errors <- arima.sim(model = list(ar = a),
                     innov = rnorm(t_len, 0, sigma),
                     n = t_len)
 plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
@@ -71,7 +79,7 @@ lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
 mtext(side = 1, text = paste0("Example of one time series from Cluster 1"), line = 2.3, cex = 1)
 
 
-errors <- arima.sim(model = list(ar = a_hat),
+errors <- arima.sim(model = list(ar = a),
                     innov = rnorm(t_len, 0, sigma),
                     n = t_len)
 plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
@@ -82,7 +90,7 @@ lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
       y = m1 + errors, type = "l", col = "red")
 mtext(side = 1, text = paste0("Example of one time series from Cluster 2"), line = 2.3, cex = 1)
 
-errors <- arima.sim(model = list(ar = a_hat),
+errors <- arima.sim(model = list(ar = a),
                     innov = rnorm(t_len, 0, sigma),
                     n = t_len)
 plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
@@ -106,10 +114,13 @@ for (t_len in different_T){
   h_grid <- h_grid[h_grid > log(t_len) / t_len]
   grid   <- construct_grid(t = t_len)
   
-  m1 <- numeric(t_len)
-  m2 <- numeric(t_len)
-  m1 <- 0.35 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.35 * b_function((1:t_len)/t_len, 0.75, 0.25)
-  m2 <- b_function((1:t_len)/t_len, 0.75, 0.025) - b_function((1:t_len)/t_len, 0.25, 0.025)
+  m_matrix <- matrix(0, nrow = t_len, ncol = n_ts)
+  for (i in (floor(n_ts / 3) + 1):(floor(2 * n_ts / 3))){
+    m_matrix[, i] <- 0.35 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.35 * b_function((1:t_len)/t_len, 0.75, 0.25)
+  }
+  for (i in (floor(2 * n_ts / 3) + 1):n_ts){
+    m_matrix[, i] <- b_function((1:t_len)/t_len, 0.75, 0.025) - b_function((1:t_len)/t_len, 0.25, 0.025)
+  }
   
   cat("Calculating the Gaussian quantiles\n")
   tic()
@@ -140,9 +151,13 @@ for (t_len in different_T){
   registerDoParallel(cl)
   foreach (val = 1:n_rep, .combine = "cbind") %dopar% { 
     repl_clustering(rep = val, t_len_ = t_len, n_ts_ = n_ts,
-                    grid_ = grid, m1_ = m1, m2_ = m2, a_hat_ = a_hat,
-                    sigma_ = sigma, q_ = q, r_ = r,
-                    lrv_ = "true") #Loop one-by-one using foreach
+                    grid_ = grid,
+                    m_matrix_ = m_matrix, 
+                    a_ = a, sigma_ = sigma,
+                    beta_ = beta, a_x_vec_ = a_x_vec,
+                    phi_ = phi,  rho_ = rho,
+                    q_ = q, r_ = r, 
+                    gaussian_sim = FALSE, comparison = FALSE) #Loop one-by-one using foreach
   } -> simulated_statistic
   stopCluster(cl)
   toc()

@@ -389,7 +389,6 @@ repl <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
                               n_ts = n_ts_, grid = grid_)
     results <- c(as.vector(psi$stat_pairwise))
   } else {
-    
     if (is.null(m_matrix_)){
       m_matrix_ <- matrix(0, nrow = t_len_, ncol = n_ts_)
     }
@@ -473,11 +472,12 @@ repl <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
 #Function used for simulated the three groups of time series and calculate 
 #the corresponding test statistics, needed for parallel computations
 repl_clustering <- function(rep, t_len_, n_ts_, grid_,
-                            m1_ = NULL, m2_ = NULL, 
-                            a_hat_ = 0, sigma_ = 1,
-                            q_ = 25, r_ = 10, h1_ = 0.05, h2_ = 0.25,
-                            gaussian_sim = FALSE, comparison = FALSE,
-                            lrv_ = "true"){
+                            m_matrix_ = NULL, 
+                            a_ = 0, sigma_ = 1,
+                            beta_ = NULL, a_x_vec_ = c(0, 0, 0),
+                            phi_ = 0,  rho_ = 0,
+                            q_ = 25, r_ = 10, 
+                            gaussian_sim = FALSE, comparison = FALSE){
   library(MSinference)
 
   if (gaussian_sim){
@@ -495,64 +495,127 @@ repl_clustering <- function(rep, t_len_, n_ts_, grid_,
                               n_ts = n_ts_, grid = grid_)
     results <- c(as.vector(psi$stat_pairwise))
   } else {
-    simulated_data  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-
+    library(mvtnorm)
+    y_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    y_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    error_matrix  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
     
-    for (i in 1:(floor(n_ts_ / 3))){
-      simulated_data[, i] <- arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
-      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
-    }
-    for (i in (floor(n_ts_ / 3) + 1):(floor(2 * n_ts_ / 3))){
-      simulated_data[, i] <- m1_ + arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
-      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
-    }
-    for (i in (floor(2 * n_ts_ / 3) + 1):n_ts_){
-      simulated_data[, i] <- m2_ + arima.sim(model = list(ar = a_hat_), innov = rnorm(t_len_, 0, sigma_), n = t_len_)
-      simulated_data[, i] <- simulated_data[, i] - mean(simulated_data[, i])
-    }
+    big_sigma_matrix       <- matrix(rho_, nrow = n_ts_, ncol = n_ts_)
+    diag(big_sigma_matrix) <- 1
+    alpha_vec              <- rmvnorm(1, mean = rep(0, n_ts_), sigma = big_sigma_matrix)
     
-    if (lrv_ == "estimated"){
-      sigmahat_vector <- c()
+    sigmahat_vector <- c()
+    
+    if (!is.null(beta_)){    
+      phi_matrix       <- matrix(phi_, nrow = 3, ncol = 3)
+      diag(phi_matrix) <- 1
+      
       for (i in 1:n_ts_){
-        AR.struc        <- estimate_lrv(data = simulated_data[, i], q = q_, r_bar = r_, p = 1)
-        sigma_hat_i     <- sqrt(AR.struc$lrv)
-        sigmahat_vector <- c(sigmahat_vector, sigma_hat_i)
+        error_matrix[, i] <- arima.sim(model = list(ar = a_),
+                                       innov = rnorm(t_len_, 0, sigma_),
+                                       n = t_len_)
+        
+        nu       <- rmvnorm(t_len_ + 10, mean = c(0, 0, 0), sigma = phi_matrix)
+        a_matrix <- diag(a_x_vec_)
+        x_matrix <- matrix(0, 3, t_len_ + 10)
+        
+        for (t in 2:(t_len_ + 10)){
+          x_matrix[, t] <- a_matrix %*% x_matrix[, t - 1] + nu[t, ]
+        }
+        x_matrix <- t(x_matrix[, -(1:10)])
+        
+        y_matrix[, i] <- alpha_vec[i] + m_matrix_[, i] + beta_ %*% t(x_matrix) + error_matrix[, i]
+        
+        #First differences
+        x_diff_1  <- x_matrix[, 1] - dplyr::lag(x_matrix[, 1], n = 1, default = NA)
+        x_diff_2  <- x_matrix[, 2] - dplyr::lag(x_matrix[, 2], n = 1, default = NA)
+        x_diff_3  <- x_matrix[, 3] - dplyr::lag(x_matrix[, 3], n = 1, default = NA)
+        y_diff    <- y_matrix[, i] - dplyr::lag(y_matrix[, i], n = 1, default = NA)
+        
+        #Estimating beta
+        x_diff_tmp <- as.matrix(cbind(x_diff_1, x_diff_2, x_diff_3))[-1, ]
+        y_diff_tmp <- as.matrix(y_diff)[-1, ]
+        
+        beta_hat_tmp       <- solve(t(x_diff_tmp) %*% x_diff_tmp) %*% t(x_diff_tmp) %*% y_diff_tmp
+        alpha_hat_tmp      <- mean(y_matrix[, i] - x_matrix %*% as.vector(beta_hat_tmp))
+        
+        y_augm_matrix[, i] <- y_matrix[, i] - x_matrix %*% as.vector(beta_hat_tmp) - alpha_hat_tmp
+        AR.struc           <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
+                                           r_bar = r_, p = 1)
+        sigma_hat_i        <- sqrt(AR.struc$lrv)
+        sigmahat_vector    <- c(sigmahat_vector, sigma_hat_i) 
       }
-    } else if (lrv_ == "true"){
-      sigmahat_vector <- rep(sqrt(sigma_^2/((1 - a_hat_)^2)), n_ts_)      
     } else {
-      cat("Unknown type of the estimation of the long-run variance\n")
-    }
-    
-    psi <- compute_statistics(data = simulated_data,
-                              sigma_vec = sigmahat_vector,
-                              n_ts = n_ts_, grid = grid_)
+      for (i in 1:n_ts_){
+        error_matrix[, i] <- arima.sim(model = list(ar = a_),
+                                       innov = rnorm(t_len_, 0, sigma_),
+                                       n = t_len_)
+        
+        y_matrix[, i]     <- alpha_vec[i] + m_matrix_[, i] + error_matrix[, i]
+        
+        #Estimating the fixed effects
+        alpha_hat_tmp      <- mean(y_matrix[, i])
+        y_augm_matrix[, i] <- y_matrix[, i] - alpha_hat_tmp
+        AR.struc           <- estimate_lrv(data = y_augm_matrix[, i], q = q_,
+                                           r_bar = r_, p = 1)
+        sigma_hat_i        <- sqrt(AR.struc$lrv)
+        sigmahat_vector    <- c(sigmahat_vector, sigma_hat_i) 
+      }
+    }    
+    sigma_vector <- rep(sqrt(sigma_^2/((1 - a_)^2)), n_ts_)      
+    psi_estimated <- compute_statistics(data = simulated_data,
+                                        sigma_vec = rep(mean(sigmahat_vector), n_ts_),
+                                        n_ts = n_ts_, grid = grid_)
+    psi_true <- compute_statistics(data = simulated_data,
+                                   sigma_vec = sigma_vector,
+                                   n_ts = n_ts_, grid = grid_)
     
     if (comparison){
       grid_points    <- seq(1/t_len_, 1, by = 1/t_len_)
-      grid_points_2  <- seq(1/(2 * t_len_), 1, by = 1/t_len_)
       smoothed_data  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
       smoothed_data2 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-  
+      smoothed_data3 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      smoothed_data4 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      smoothed_data5 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      smoothed_data6 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      
       for (i in 1:n_ts_){
-        smoothed_data[, i]  <- mapply(local_linear_smoothing, grid_points_2, MoreArgs = list(simulated_data[, i], grid_points, h1_))
-        smoothed_data2[, i] <- mapply(local_linear_smoothing, grid_points_2, MoreArgs = list(simulated_data[, i], grid_points, h2_))
-        #smoothed_data2[, i] <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(simulated_data[, i], grid_points, h1_))
+        h_min <- min(grid_$bws)
+        h_max <- max(grid_$bws)
+        smoothed_data[, i]   <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(simulated_data[, i], grid_points, h_min))
+        smoothed_data2[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(simulated_data[, i], grid_points, h_min + 0.2 * (h_max - h_min)))
+        smoothed_data3[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(simulated_data[, i], grid_points, h_min + 0.4 * (h_max - h_min)))
+        smoothed_data4[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(simulated_data[, i], grid_points, h_min + 0.6 * (h_max - h_min)))
+        smoothed_data5[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(simulated_data[, i], grid_points, h_min + 0.8 * (h_max - h_min)))
+        smoothed_data6[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(simulated_data[, i], grid_points, h_max))
       }
       
       #Calculating the benchmark model
       benchmark_results  <- matrix(0, nrow = n_ts_, ncol = n_ts_)
       benchmark_results2 <- matrix(0, nrow = n_ts_, ncol = n_ts_)
+      benchmark_results3 <- matrix(0, nrow = n_ts_, ncol = n_ts_)
+      benchmark_results4 <- matrix(0, nrow = n_ts_, ncol = n_ts_)
+      benchmark_results5 <- matrix(0, nrow = n_ts_, ncol = n_ts_)
+      benchmark_results6 <- matrix(0, nrow = n_ts_, ncol = n_ts_)
       for (i in 1:(n_ts_ - 1)){
         for (j in (i + 1):n_ts_){
-          benchmark_results[i, j]  <- sum((smoothed_data[, i] - smoothed_data[, j])^2) * (1/t_len_)
-          benchmark_results2[i, j] <- sum((smoothed_data2[, i] - smoothed_data2[, j])^2) * (1/t_len_)
-          #benchmark_results2[i, j] <- max(abs(smoothed_data2[, i] - smoothed_data2[, j]))
+          #benchmark_results[i, j]  <- sum((smoothed_data[, i] - smoothed_data[, j])^2) * (1/t_len_)
+          #benchmark_results2[i, j] <- sum((smoothed_data2[, i] - smoothed_data2[, j])^2) * (1/t_len_)
+          benchmark_results[i, j]  <- max(abs(smoothed_data[, i] - smoothed_data[, j]))
+          benchmark_results2[i, j] <- max(abs(smoothed_data2[, i] - smoothed_data2[, j]))
+          benchmark_results3[i, j] <- max(abs(smoothed_data3[, i] - smoothed_data3[, j]))
+          benchmark_results4[i, j] <- max(abs(smoothed_data4[, i] - smoothed_data4[, j]))
+          benchmark_results5[i, j] <- max(abs(smoothed_data5[, i] - smoothed_data5[, j]))
+          benchmark_results6[i, j] <- max(abs(smoothed_data6[, i] - smoothed_data6[, j]))
         }
       }
-      results <- c(as.vector(psi$stat_pairwise), as.vector(benchmark_results), as.vector(benchmark_results2))      
+      results <- c(as.vector(psi$stat_pairwise), as.vector(benchmark_results),
+                   as.vector(benchmark_results2), as.vector(benchmark_results3),
+                   as.vector(benchmark_results4), as.vector(benchmark_results5),
+                   as.vector(benchmark_results6))
     } else {
-      results <- as.vector(psi$stat_pairwise)
+      results <- c(as.vector(psi_estimated$stat_pairwise),
+                   as.vector(psi_true$stat_pairwise))
     }
   }
   return(results)
