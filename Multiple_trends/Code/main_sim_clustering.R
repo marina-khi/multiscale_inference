@@ -206,7 +206,8 @@ for (t_len in different_T){
     filename = paste0("output/revision/misc/results_for_T_", t_len, "_and_alpha_", alpha * 100, ".RData")
     load(file = filename)
     results <- cluster_analysis(t_len_ = t_len, n_rep_ = n_rep, alpha_ = alpha,
-                                results_matrix_ = clustering_results)
+                                results_matrix_ = clustering_results,
+                                correct_specification_ = correct_specification)
     if (alpha == 0.05){
       j <- j + 1
       group_count[[j]] <- table(factor(clustering_results[1, ], levels = 1:5))

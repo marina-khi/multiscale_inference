@@ -686,7 +686,7 @@ produce_hist_plots <- function(file_extension_, different_T_, n_rep_,
   labels_ <- c("(a)", "(b)", "(c)")
   
   pdf(paste0("output/revision/hist_groups", file_extension_, ".pdf"), width = 8, height = 2.9, paper="special")
-  par(mfrow = c(1,2))
+  par(mfrow = c(1,3))
   par(mar = c(3, 2, 0.5, 1)) #Margins for each plot
   par(oma = c(1.4, 1.5, 0.5, 0.2)) #Outer margins
   
@@ -702,7 +702,7 @@ produce_hist_plots <- function(file_extension_, different_T_, n_rep_,
   dev.off()
   
   pdf(paste0("output/revision/hist_errors", file_extension_, ".pdf"), width = 8, height = 2.9, paper="special")
-  par(mfrow = c(1,2))
+  par(mfrow = c(1,3))
   par(mar = c(3, 2, 0.5, 1)) #Margins for each plot
   par(oma = c(1.4, 1.5, 0.5, 0.2)) #Outer margins
   

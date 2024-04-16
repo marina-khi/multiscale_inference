@@ -201,13 +201,13 @@ We next investigate the finite sample performance of the clustering algorithm fr
 \centering
 \caption{Empirical probabilities that \\ $\widehat{N} = N$}\label{tab:clustering:1}
 \renewcommand{\arraystretch}{1.2}
-{\color{red}\input{output/tables/15_ts_correct_group_number}}
+\input{../output/15_ts_correct_group_number}
 \end{subtable}
 \begin{subtable}[b]{0.48\textwidth}
 \centering
 \caption{\centering Empirical probabilities that $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{ G_1,G_2,G_3\}$}\label{tab:clustering:2}
 \renewcommand{\arraystretch}{1.2}
-{\color{red}\input{output/tables/15_ts_correct_group_structure}}
+\input{../output/15_ts_correct_group_structure}
 \end{subtable}
 \end{center}}
 \vspace{-0.5cm}
@@ -216,25 +216,23 @@ We next investigate the finite sample performance of the clustering algorithm fr
 
 \begin{figure}[t!]
 \centering
-\includegraphics[width=0.95\textwidth]{output/plots/sim/histograms_groups}
-\caption{{\color{red}Estimated number of groups $\widehat{N}$ for nominal size $\alpha = 0.05$. }
-%Each panel corresponds to a different sample size $T$.
+\includegraphics[width=0.95\textwidth]{../output/hist_groups}
+\caption{Estimated number of groups $\widehat{N}$ for nominal size $\alpha = 0.05$. Each panel corresponds to a different sample size $T$.
 }\label{fig:clustering:1}
 \vspace{0.25cm}
 
-\includegraphics[width=0.95\textwidth]{output/plots/sim/histograms_errors}
-\caption{{\color{red}Number of classification errors for nominal size $\alpha = 0.05$. }
-%Each panel corresponds to a different sample size $T$.
+\includegraphics[width=0.95\textwidth]{../output/hist_errors}
+\caption{Number of classification errors for nominal size $\alpha = 0.05$. Each panel corresponds to a different sample size $T$.
 }\label{fig:clustering:2}
 \end{figure}
 
 
-{\color{red}The simulation results are reported in Table \ref{tab:clustering}.} The entries in Table \ref{tab:clustering:1} are computed as the number of simulations for which $\widehat{N} = N$ divided by the total number of simulations. They thus specify the empirical probabilities with which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$. Analogously, the entries of Table \ref{tab:clustering:2} give the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$. The results in Table \ref{tab:clustering} nicely illustrate the theoretical properties of our clustering algorithm. According to Proposition \ref{prop:clustering:1}, the probability that $\widehat{N} = N$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{G_1,G_2,G_3\}$ should be at least $(1-\alpha)$ asymptotically. {\color{red}For the largest sample size $T = 500$, the empirical probabilities reported in Table \ref{tab:clustering} can indeed be seen to exceed the value $(1-\alpha)$ as predicted by Proposition \ref{prop:clustering:1}. For the smaller sample sizes $T=100$ and $T=250$, in contrast, the empirical probabilities are substantially smaller than $(1-\alpha)$. This reflects the asymptotic nature of Proposition \ref{prop:clustering:1} and is not very surprising. It simply mirrors the fact that for the smaller sample sizes $T=100$ and $T=250$, the effective noise level in the simulated data is quite high.}
+The simulation results are reported in Table \ref{tab:clustering}. The entries in Table \ref{tab:clustering:1} are computed as the number of simulations for which $\widehat{N} = N$ divided by the total number of simulations. They thus specify the empirical probabilities with which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$. Analogously, the entries of Table \ref{tab:clustering:2} give the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$. The results in Table \ref{tab:clustering} nicely illustrate the theoretical properties of our clustering algorithm. According to Proposition \ref{prop:clustering:1}, the probability that $\widehat{N} = N$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{G_1,G_2,G_3\}$ should be at least $(1-\alpha)$ asymptotically. For the largest sample size $T = 500$, the empirical probabilities reported in Table \ref{tab:clustering} can indeed be seen to exceed the value $(1-\alpha)$ as predicted by Proposition \ref{prop:clustering:1}. For the smaller sample sizes $T=100$ and $T=250$, in contrast, the empirical probabilities are substantially smaller than $(1-\alpha)$. This reflects the asymptotic nature of Proposition \ref{prop:clustering:1} and is not very surprising. It simply mirrors the fact that for the smaller sample sizes $T=100$ and $T=250$, the effective noise level in the simulated data is quite high.
 
 
-{\color{red}Figures \ref{fig:clustering:1} and \ref{fig:clustering:2} give more insight into what happens for $T=100$ and $T=250$.} Figure \ref{fig:clustering:1} shows histograms of the $5000$ simulated values of $\widehat{N}$, while Figure \ref{fig:clustering:2} depicts histograms of the number of classification errors produced by our algorithm. By the number of classification errors, we simply mean the number of incorrectly classified time series, which is formally calculated as 
+Figures \ref{fig:clustering:1} and \ref{fig:clustering:2} give more insight into what happens for $T=100$ and $T=250$. Figure \ref{fig:clustering:1} shows histograms of the $5000$ simulated values of $\widehat{N}$, while Figure \ref{fig:clustering:2} depicts histograms of the number of classification errors produced by our algorithm. By the number of classification errors, we simply mean the number of incorrectly classified time series, which is formally calculated as 
 $\min_{\pi \in S_{\hat{N}}} \big\{ |G_1 \setminus \widehat{G}_{\pi(1)}| +|G_2 \setminus \widehat{G}_{\pi(2)}| + |G_3 \setminus \widehat{G}_{\pi(3)}| \big\}$
-with $S_{\widehat{N}}$ being the set of all permutations of $\{1, 2, \ldots, \widehat{N}\}$. {\color{red}The histogram of Figure \ref{fig:clustering:1} for $T=100$ clearly shows that our method underestimates the number of groups ($\widehat{N} = 2$ in $4055$ cases out of $5000$). In particular, it fails to detect the difference between two out of three groups in a large number of simulations. This is reflected in the corresponding histogram of Figure \ref{fig:clustering:2} which shows that there are exactly $5$ classification errors in $3924$ of the $5000$ simulation runs. In most of these cases, the estimated group structure $\{ \widehat{G}_1, \widehat{G}_{2}\}$ coincides with either $\{ G_1 \cup G_2,G_3\}$,  $\{ G_1, G_2\cup G_3\}$ or $ \{ G_1 \cup G_3,G_2\}$. In summary, we can conclude that the small empirical probabilities for $T=100$ in Table \ref{tab:clustering} are due to the algorithm underestimating the number of groups. Inspecting the histograms for $T=250$, one can see that the performance of the estimators $\widehat{N}$ and $\{ \widehat{G}_1,\ldots, \widehat{G}_{\widehat{N}} \}$ improves significantly, even though the corresponding empirical probabilities in Table \ref{tab:clustering} are still somewhat below the target $(1-\alpha)$.}
+with $S_{\widehat{N}}$ being the set of all permutations of $\{1, 2, \ldots, \widehat{N}\}$. The histogram of Figure \ref{fig:clustering:1} for $T=100$ clearly shows that our method underestimates the number of groups ($\widehat{N} = 2$ in $4000$ cases out of $5000$). In particular, it fails to detect the difference between two out of three groups in a large number of simulations. This is reflected in the corresponding histogram of Figure \ref{fig:clustering:2} which shows that there are exactly $5$ classification errors in $4024$ of the $5000$ simulation runs. In most of these cases, the estimated group structure $\{ \widehat{G}_1, \widehat{G}_{2}\}$ coincides with either $\{ G_1 \cup G_2,G_3\}$,  $\{ G_1, G_2\cup G_3\}$ or $ \{ G_1 \cup G_3,G_2\}$. In summary, we can conclude that the small empirical probabilities for $T=100$ in Table \ref{tab:clustering} are due to the algorithm underestimating the number of groups. Inspecting the histograms for $T=250$, one can see that the performance of the estimators $\widehat{N}$ and $\{ \widehat{G}_1,\ldots, \widehat{G}_{\widehat{N}} \}$ improves significantly, even though the corresponding empirical probabilities in Table \ref{tab:clustering} are still somewhat below the target $(1-\alpha)$.
 
 \subsection{Results for larger $\boldsymbol{n}$}\label{subsec:sim:large_n}
 
@@ -396,7 +394,40 @@ $U_T^{\text{dense}}  = \big\{ u \in [0,1]: u = \textstyle{\frac{t}{T}} \text{ fo
 and
 $H_T^{\text{dense}} = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{2t}{T}} \text{ for some } t \in \naturals \big\}$. We thus consider intervals $\mathcal{I}_{u, h} = [u-h, u+h] = [t/T - h, t/T + h]$ for all possible $t \in \{1, \ldots, T-1\}$ which contain $5, 9, 13, \ldots$ data points. Furthermore, to decrease the computational time, we calculate the Gaussian quantile based on $L=1000$ bootstrap samples and we simulate $1000$ samples for each simulation scenario. Other than the grid and the numbers of samples, we work precisely with the same simulation setup as in Section \ref{subsec:sim:main}.
 
-{\color{red} The results of the simulation study with a dense grid are presented in Tables \ref{tab:size:dense} and \ref{tab:power:dense}.} We report the results for the simulation scenario with relatively strong degrees of correlation across the time series and between the covariates, i.e., with $\rho = 0.25$ and $\phi = 0.25$, since this scenario is less favourable for our multiscale procedure and the results with different values of $\rho$ and $\phi$ are fairly similar. Inspecting Tables \ref{tab:size:dense} and \ref{tab:power:dense}, we can say that although there are minor deviations from the results for the original simulated scenario presented in Section A.1, these variations are not substantial which confirms the robust performance of the proposed test when applied to a denser grid.
+The results of the simulation study with a dense grid are presented in Tables \ref{tab:size:dense} and \ref{tab:power:dense}. We report the results for the simulation scenario with relatively strong degrees of correlation across the time series and between the covariates, i.e., with $\rho = 0.25$ and $\phi = 0.25$, since this scenario is less favourable for our multiscale procedure and the results with different values of $\rho$ and $\phi$ are fairly similar. Inspecting Tables \ref{tab:size:dense} and \ref{tab:power:dense}, we can say that although there are minor deviations from the results for the original simulated scenario presented in Section A.1, these variations are not substantial which confirms the robust performance of the proposed test when applied to a denser grid.
+
+\begin{table}[t]
+\footnotesize{
+\begin{center}
+\caption{Size of the multiscale test for $\phi = 0.25$ and $\rho = 0.25$ for a dense grid $\mathcal{G}_T^{\text{dense}}$ for different sample sizes $T$ and nominal sizes $\alpha$.}
+\label{tab:size:dense}
+\renewcommand{\arraystretch}{1.2}
+\input{../output/15_ts_25_25_size_fine_grid}
+\end{center}}
+\footnotesize{
+\begin{center}
+\caption{Power of the multiscale test for $\phi = 0.25$ and $\rho = 0.25$ for a dense grid $\mathcal{G}_T^{\text{dense}}$ for different sample sizes $T$ and nominal sizes $\alpha$. Each panel corresponds to a different height parameter $b$ of the bump function.}\label{tab:power:dense}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 0.25$}\label{tab:power_025:dense}
+\renewcommand{\arraystretch}{1.2}
+\input{../output/15_ts_25_25_power_b_25_fine_grid}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 0.50$}\label{tab:power_050:dense}
+\renewcommand{\arraystretch}{1.2}
+\input{../output/15_ts_25_25_power_b_50_fine_grid}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering
+\caption{$b = 0.75$}\label{tab:power_075:dense}
+\renewcommand{\arraystretch}{1.2}
+\input{../output/15_ts_25_25_power_b_75_fine_grid}
+\end{subtable}
+\end{center}}
+\vspace{-0.4cm}
+\end{table}
 
 Furthermore, as we have seen in Section \ref{subsec:sim:large_n}, the behaviour of our test does not substantially change in case of a much sparser grid $\mathcal{G}_T^{\text{sparse}}$. Hence, we can make a conclusion that as long as the set of pairs of location-bandwidths is chosen sufficiently rich (in the sense of including a variety of bandwidth values ranging from very small to very large), the particular choice of a grid can be expected to have a negligible effect on the procedure. 
 
@@ -508,18 +539,18 @@ We implement the clustering algorithm as in Section \ref{subsec:sim:clustering} 
 
 \begin{table}[t!]
 \centering
-\caption{Empirical probabilities that $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{ G_1,G_2,G_3\}$ for the proposed clustering approach with estimated number of clusters ($\mathcal{T}_{\text{MS}}$) for $\alpha = 0.05$, the proposed clustering approach with known number of clusters ($\mathcal{T}_{\text{MS, known } N}$), the benchmark procedure with small bandwidth $h_1$ ($\mathcal{T}_{\text{bm, }1}$), and the benchmark procedure with large bandwidth $h_2$ ($\mathcal{T}_{\text{bm, }2}$) for different sample sizes $T$.}\label{tab:clustering:comparison}
+\caption{Empirical probabilities that $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{ G_1,G_2,G_3\}$ %for the proposed clustering approach with estimated number of clusters ($\mathcal{T}_{\text{MS}}$) for $\alpha = 0.05$,
+for the proposed clustering approach with known number of clusters ($\mathcal{T}_{\text{MS}}$), the benchmark procedure with small bandwidth $h_1$ ($\mathcal{T}_{\text{bm, }1}$), and the benchmark procedure with large bandwidth $h_2$ ($\mathcal{T}_{\text{bm, }2}$) for different sample sizes $T$.}\label{tab:clustering:comparison}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
-{\color{red}
-\begin{tabular}{ccccc}
+\begin{tabular}{cccc}
   \hline
-  & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{MS, known } N}$ & $\mathcal{T}_{\text{bm, }1}$ & $\mathcal{T}_{\text{bm, }2}$ \\
+  & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{bm, }1}$ & $\mathcal{T}_{\text{bm, }2}$ \\
  \hline
-$T= 100$ & 0.007 & 0.029 & 0.066& 0.066 \\ 
-$T=  250$ & 0.742 & 0.903 & 0.943 & 0.066\\ 
-$T=  500$ & 1.000 & 1.000 & 1.000 & 0.066\\ 
+$T = 100$ & 0.258 & 0.297 & 0.054 \\ 
+$T = 250$ & 0.955 & 0.988 & 0.362 \\ 
+ $T = 500$ & 1.000 & 1.000 & 0.802 \\ 
    \hline
-\end{tabular}}
+\end{tabular}
 \end{table}
 
 %\addtocounter{table}{-1} 
@@ -560,10 +591,9 @@ $T=  500$ & 1.000 & 1.000 & 1.000 & 0.066\\
 
 
 
-The simulation results are reported in Table \ref{tab:clustering:comparison}. As before, the entries in Table \ref{tab:clustering:comparison} present the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$. {\color{red} The results highlight a significant distinction: the benchmark procedure's outcomes are heavily influenced by the selection of bandwidth, a limitation not observed in our clustering approach. Furthermore, with large sample sizes, the empirical probabilities of success using our clustering approach—even with an estimated number of clusters—are quite high. In contrast, the benchmark procedure lacks a method for estimating the number of clusters. Finally, our procedure, which relies on simple arithmetic averages instead of integrals, is computationally much more efficient, offering a significant advantage for practitioners.
+The simulation results are reported in Table \ref{tab:clustering:comparison}. As before, the entries in Table \ref{tab:clustering:comparison} present the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$. The results highlight a significant distinction: the benchmark procedure's outcomes are heavily influenced by the selection of bandwidth, a limitation not observed in our clustering approach. Furthermore, with large sample sizes, the empirical probabilities of success using our clustering approach are quite high (see Section \ref{subsec:sim:clustering}). In contrast, the benchmark procedure lacks a method for estimating the number of clusters. Finally, our procedure, which relies on simple arithmetic averages instead of integrals, is computationally much more efficient, offering a significant advantage for practitioners.
 
 %Most importantly, it demonstrates that our method provides robust results whereas the benchmark depends very strongly on the choice of bandwidth.
-}
 
 
 %\subsection*{Simulation results}
