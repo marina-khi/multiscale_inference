@@ -211,7 +211,6 @@ addtorow$command <- c("& \\multicolumn{6}{c}{nominal size $\\alpha$} \\\\\n",
                         "$T$ & 0.01 & 0.05 & 0.1 & 0.01 & 0.05 & 0.1 \\\\\n") 
   print.xtable(xtable(matrix_, digits = c(3), align = "ccccccc"), type = "latex",
                file = filename, add.to.row = addtorow, include.colnames = FALSE)
-}
 
 
 line <- paste0("%This simulation was done for the following values of the parameters: n_ts = ", n_ts,

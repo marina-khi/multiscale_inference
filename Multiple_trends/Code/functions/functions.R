@@ -563,10 +563,10 @@ repl_clustering <- function(rep, t_len_, n_ts_, grid_,
       }
     }    
     sigma_vector <- rep(sqrt(sigma_^2/((1 - a_)^2)), n_ts_)      
-    psi_estimated <- compute_statistics(data = simulated_data,
+    psi_estimated <- compute_statistics(data = y_augm_matrix,
                                         sigma_vec = rep(mean(sigmahat_vector), n_ts_),
                                         n_ts = n_ts_, grid = grid_)
-    psi_true <- compute_statistics(data = simulated_data,
+    psi_true <- compute_statistics(data = y_augm_matrix,
                                    sigma_vec = sigma_vector,
                                    n_ts = n_ts_, grid = grid_)
     
@@ -582,12 +582,12 @@ repl_clustering <- function(rep, t_len_, n_ts_, grid_,
       for (i in 1:n_ts_){
         h_min <- min(grid_$bws)
         h_max <- max(grid_$bws)
-        smoothed_data[, i]   <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(simulated_data[, i], grid_points, h_min))
-        smoothed_data2[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(simulated_data[, i], grid_points, h_min + 0.2 * (h_max - h_min)))
-        smoothed_data3[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(simulated_data[, i], grid_points, h_min + 0.4 * (h_max - h_min)))
-        smoothed_data4[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(simulated_data[, i], grid_points, h_min + 0.6 * (h_max - h_min)))
-        smoothed_data5[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(simulated_data[, i], grid_points, h_min + 0.8 * (h_max - h_min)))
-        smoothed_data6[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(simulated_data[, i], grid_points, h_max))
+        smoothed_data[, i]   <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(y_augm_matrix[, i], grid_points, h_min))
+        smoothed_data2[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(y_augm_matrix[, i], grid_points, h_min + 0.2 * (h_max - h_min)))
+        smoothed_data3[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(y_augm_matrix[, i], grid_points, h_min + 0.4 * (h_max - h_min)))
+        smoothed_data4[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(y_augm_matrix[, i], grid_points, h_min + 0.6 * (h_max - h_min)))
+        smoothed_data5[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(y_augm_matrix[, i], grid_points, h_min + 0.8 * (h_max - h_min)))
+        smoothed_data6[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(y_augm_matrix[, i], grid_points, h_max))
       }
       
       #Calculating the benchmark model
