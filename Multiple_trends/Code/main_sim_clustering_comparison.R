@@ -26,7 +26,7 @@ sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
 different_T <- c(100, 250, 500) #Different lengths of time series
 alpha       <- 0.05 #Different confidence levels
 
-a_hat <- 0.25 
+a     <- 0.25 
 sigma <- 0.25
 
 numCores = round(parallel::detectCores() * .80)
@@ -49,10 +49,14 @@ for (t_len in different_T){
   h_grid <- h_grid[h_grid > log(t_len) / t_len]
   grid   <- construct_grid(t = t_len)
   
-  m1 <- numeric(t_len)
-  m2 <- numeric(t_len)
-  m1 <- 0.35 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.35 * b_function((1:t_len)/t_len, 0.75, 0.25)
-  m2 <- b_function((1:t_len)/t_len, 0.75, 0.025) - b_function((1:t_len)/t_len, 0.25, 0.025)
+
+  m_matrix <- matrix(0, nrow = t_len, ncol = n_ts)
+  for (i in (floor(n_ts / 3) + 1):(floor(2 * n_ts / 3))){
+    m_matrix[, i] <- 0.35 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.35 * b_function((1:t_len)/t_len, 0.75, 0.25)
+  }
+  for (i in (floor(2 * n_ts / 3) + 1):n_ts){
+    m_matrix[, i] <- b_function((1:t_len)/t_len, 0.75, 0.025) - b_function((1:t_len)/t_len, 0.25, 0.025)
+  }
   
   cat("Calculating the distance measures for T = ", t_len,"\n")
   tic()
@@ -60,10 +64,9 @@ for (t_len in different_T){
   registerDoParallel(cl)
   foreach (val = 1:n_rep, .combine = "cbind") %dopar% { 
     repl_clustering(rep = val, t_len_ = t_len, n_ts_ = n_ts,
-                    grid_ = grid, m1_ = m1, m2_ = m2, a_hat_ = a_hat,
-                    sigma_ = sigma, h1_ = min(h_grid), h2_ = max(h_grid),
-                    comparison = TRUE,
-                    lrv = "true") #Loop one-by-one using foreach
+                    grid_ = grid, m_matrix_ = m_matrix,
+                    a_ = a, sigma_ = sigma, beta_ = NULL, q_ = 25, r_ = 10, 
+                    gaussian_sim = FALSE, comparison = TRUE)#Loop one-by-one using foreach
   } -> simulated_statistic
   stopCluster(cl)
   toc()
@@ -74,27 +77,56 @@ for (t_len in different_T){
   groups_mat <- matrix(NA, ncol = n_rep, nrow = n_ts)
   colnames(groups_mat) <- paste0("rep_", 1:n_rep)
   rownames(groups_mat) <- paste0("ts_", 1:n_ts)
+  
+  groups_mat2 <- matrix(NA, ncol = n_rep, nrow = n_ts)
+  colnames(groups_mat2) <- paste0("rep_", 1:n_rep)
+  rownames(groups_mat2) <- paste0("ts_", 1:n_ts)
 
   groups_benchmark_mat <- matrix(NA, ncol = n_rep, nrow = n_ts)
   colnames(groups_benchmark_mat) <- paste0("rep_", 1:n_rep)
   rownames(groups_benchmark_mat) <- paste0("ts_", 1:n_ts)
   
-  groups_benchmark2_mat <- matrix(NA, ncol = n_rep, nrow = n_ts)
-  colnames(groups_benchmark2_mat) <- paste0("rep_", 1:n_rep)
-  rownames(groups_benchmark2_mat) <- paste0("ts_", 1:n_ts)
+  groups_benchmark_mat2 <- matrix(NA, ncol = n_rep, nrow = n_ts)
+  colnames(groups_benchmark_mat2) <- paste0("rep_", 1:n_rep)
+  rownames(groups_benchmark_mat2) <- paste0("ts_", 1:n_ts)
+
+  groups_benchmark_mat3 <- matrix(NA, ncol = n_rep, nrow = n_ts)
+  colnames(groups_benchmark_mat3) <- paste0("rep_", 1:n_rep)
+  rownames(groups_benchmark_mat3) <- paste0("ts_", 1:n_ts)
+  
+  groups_benchmark_mat4 <- matrix(NA, ncol = n_rep, nrow = n_ts)
+  colnames(groups_benchmark_mat4) <- paste0("rep_", 1:n_rep)
+  rownames(groups_benchmark_mat4) <- paste0("ts_", 1:n_ts)
+
+  groups_benchmark_mat5 <- matrix(NA, ncol = n_rep, nrow = n_ts)
+  colnames(groups_benchmark_mat5) <- paste0("rep_", 1:n_rep)
+  rownames(groups_benchmark_mat5) <- paste0("ts_", 1:n_ts)
+  
+  groups_benchmark_ma6t <- matrix(NA, ncol = n_rep, nrow = n_ts)
+  colnames(groups_benchmark_mat6) <- paste0("rep_", 1:n_rep)
+  rownames(groups_benchmark_mat6) <- paste0("ts_", 1:n_ts)
   
   for (i in 1:n_rep){
-    #Multiscale method with fixed number of clusters
-    statistic_vector <- simulated_statistic[1:(nrow(simulated_statistic)/3), i]
+    #Multiscale method with estimated lrv
+    statistic_vector <- simulated_statistic[1:(nrow(simulated_statistic)/8), i]
     statistic_matrix <- matrix(statistic_vector, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
-    statistic_matrix  <- forceSymmetric(statistic_matrix, uplo = "U")
-    statistic_matrix  <- as.dist(statistic_matrix)
-    clustering        <- hclust(statistic_matrix, method = "complete")
-    groups            <- cutree(clustering, k = 3)
-    groups_mat[, i]   <- groups
+    statistic_matrix <- forceSymmetric(statistic_matrix, uplo = "U")
+    statistic_matrix <- as.dist(statistic_matrix)
+    clustering       <- hclust(statistic_matrix, method = "complete")
+    groups           <- cutree(clustering, k = 3)
+    groups_mat[, i]  <- groups
+
+    #Multiscale method with true lrv
+    statistic_vector2 <- simulated_statistic[(nrow(simulated_statistic)/8 + 1):(2 * nrow(simulated_statistic)/8), i]
+    statistic_matrix2 <- matrix(statistic_vector2, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
+    statistic_matrix2 <- forceSymmetric(statistic_matrix2, uplo = "U")
+    statistic_matrix2 <- as.dist(statistic_matrix2)
+    clustering2       <- hclust(statistic_matrix2, method = "complete")
+    groups2           <- cutree(clustering2, k = 3)
+    groups_mat2[, i]  <- groups2
     
-    #Benchmark method (L2 distance)
-    statistic_vector_benchmark <- simulated_statistic[(nrow(simulated_statistic)/3 + 1):(2 * nrow(simulated_statistic) / 3), i]
+    #Benchmark method (h1)
+    statistic_vector_benchmark <- simulated_statistic[(2 * nrow(simulated_statistic)/8 + 1):(3 * nrow(simulated_statistic) / 8), i]
     statistic_matrix_benchmark <- matrix(statistic_vector_benchmark, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
     statistic_matrix_benchmark <- forceSymmetric(statistic_matrix_benchmark, uplo = "U")
     statistic_matrix_benchmark <- as.dist(statistic_matrix_benchmark)
@@ -102,22 +134,66 @@ for (t_len in different_T){
     groups_benchmark           <- cutree(clustering_benchmark, k = 3)
     groups_benchmark_mat[, i]  <- groups_benchmark
     
-    #Benchmark method 2 (max distance)
-    statistic_vector_benchmark2 <- simulated_statistic[(2 * nrow(simulated_statistic)/3 + 1):nrow(simulated_statistic), i]
+    #Benchmark method (h2)
+    statistic_vector_benchmark2 <- simulated_statistic[(3 * nrow(simulated_statistic)/8 + 1):(4 * nrow(simulated_statistic) / 8), i]
     statistic_matrix_benchmark2 <- matrix(statistic_vector_benchmark2, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
     statistic_matrix_benchmark2 <- forceSymmetric(statistic_matrix_benchmark2, uplo = "U")
     statistic_matrix_benchmark2 <- as.dist(statistic_matrix_benchmark2)
     clustering_benchmark2       <- hclust(statistic_matrix_benchmark2, method = "complete")
     groups_benchmark2           <- cutree(clustering_benchmark2, k = 3)
-    groups_benchmark2_mat[, i]  <- groups_benchmark2
+    groups_benchmark_mat2[, i]  <- groups_benchmark2
+
+    #Benchmark method (h3)
+    statistic_vector_benchmark3 <- simulated_statistic[(4 * nrow(simulated_statistic)/8 + 1):(5 * nrow(simulated_statistic) / 8), i]
+    statistic_matrix_benchmark3 <- matrix(statistic_vector_benchmark3, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
+    statistic_matrix_benchmark3 <- forceSymmetric(statistic_matrix_benchmark3, uplo = "U")
+    statistic_matrix_benchmark3 <- as.dist(statistic_matrix_benchmark3)
+    clustering_benchmark3       <- hclust(statistic_matrix_benchmark3, method = "complete")
+    groups_benchmark3           <- cutree(clustering_benchmark3, k = 3)
+    groups_benchmark_mat3[, i]  <- groups_benchmark3
+
+    #Benchmark method (h4)
+    statistic_vector_benchmark4 <- simulated_statistic[(5 * nrow(simulated_statistic)/8 + 1):(6 * nrow(simulated_statistic) / 8), i]
+    statistic_matrix_benchmark4 <- matrix(statistic_vector_benchmark4, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
+    statistic_matrix_benchmark4 <- forceSymmetric(statistic_matrix_benchmark4, uplo = "U")
+    statistic_matrix_benchmark4 <- as.dist(statistic_matrix_benchmark4)
+    clustering_benchmark4       <- hclust(statistic_matrix_benchmark4, method = "complete")
+    groups_benchmark4           <- cutree(clustering_benchmark4, k = 3)
+    groups_benchmark_mat4[, i]  <- groups_benchmark4
+
+    #Benchmark method (h5)
+    statistic_vector_benchmark5 <- simulated_statistic[(6 * nrow(simulated_statistic)/8 + 1):(7 * nrow(simulated_statistic) / 8), i]
+    statistic_matrix_benchmark5 <- matrix(statistic_vector_benchmark5, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
+    statistic_matrix_benchmark5 <- forceSymmetric(statistic_matrix_benchmark5, uplo = "U")
+    statistic_matrix_benchmark5 <- as.dist(statistic_matrix_benchmark5)
+    clustering_benchmark5       <- hclust(statistic_matrix_benchmark5, method = "complete")
+    groups_benchmark5           <- cutree(clustering_benchmark5, k = 3)
+    groups_benchmark_mat5[, i]  <- groups_benchmark5
+    
+    #Benchmark method (h6)
+    statistic_vector_benchmark6 <- simulated_statistic[(7 * nrow(simulated_statistic)/8 + 1):nrow(simulated_statistic), i]
+    statistic_matrix_benchmark6 <- matrix(statistic_vector_benchmark6, ncol = n_ts, nrow =  n_ts, byrow = FALSE)
+    statistic_matrix_benchmark6 <- forceSymmetric(statistic_matrix_benchmark6, uplo = "U")
+    statistic_matrix_benchmark6 <- as.dist(statistic_matrix_benchmark6)
+    clustering_benchmark6       <- hclust(statistic_matrix_benchmark6, method = "complete")
+    groups_benchmark6           <- cutree(clustering_benchmark6, k = 3)
+    groups_benchmark_mat6[, i]  <- groups_benchmark6
   }
   
   clustering_results            <- rbind(rep(3, n_rep), groups_mat)
+  clustering_results2            <- rbind(rep(3, n_rep), groups_mat2)
   clustering_results_benchmark  <- rbind(rep(3, n_rep), groups_benchmark_mat)
-  clustering_results_benchmark2 <- rbind(rep(3, n_rep), groups_benchmark2_mat)
+  clustering_results_benchmark2 <- rbind(rep(3, n_rep), groups_benchmark_mat2)
+  clustering_results_benchmark3 <- rbind(rep(3, n_rep), groups_benchmark_mat3)
+  clustering_results_benchmark4 <- rbind(rep(3, n_rep), groups_benchmark_mat4)
+  clustering_results_benchmark5 <- rbind(rep(3, n_rep), groups_benchmark_mat5)
+  clustering_results_benchmark6 <- rbind(rep(3, n_rep), groups_benchmark_mat6)
   
   filename = paste0("output/revision/misc/results_for_T_", t_len, "_comparison.RData")
-  save(clustering_results, clustering_results_benchmark, clustering_results_benchmark2, file = filename)
+  save(clustering_results, clustering_results2, clustering_results_benchmark,
+       clustering_results_benchmark2, clustering_results_benchmark3,
+       clustering_results_benchmark4, clustering_results_benchmark5,
+       clustering_results_benchmark6, file = filename)
 }
 
 
@@ -209,8 +285,8 @@ addtorow     <- list()
 addtorow$pos <- list(0, 0)
 addtorow$command <- c("& \\multicolumn{6}{c}{nominal size $\\alpha$} \\\\\n",
                         "$T$ & 0.01 & 0.05 & 0.1 & 0.01 & 0.05 & 0.1 \\\\\n") 
-  print.xtable(xtable(matrix_, digits = c(3), align = "ccccccc"), type = "latex",
-               file = filename, add.to.row = addtorow, include.colnames = FALSE)
+print.xtable(xtable(matrix_, digits = c(3), align = "ccccccc"), type = "latex",
+             file = filename, add.to.row = addtorow, include.colnames = FALSE)
 
 
 line <- paste0("%This simulation was done for the following values of the parameters: n_ts = ", n_ts,

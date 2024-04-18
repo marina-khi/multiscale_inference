@@ -551,7 +551,8 @@ repl_clustering <- function(rep, t_len_, n_ts_, grid_,
                                        innov = rnorm(t_len_, 0, sigma_),
                                        n = t_len_)
         
-        y_matrix[, i]     <- alpha_vec[i] + m_matrix_[, i] + error_matrix[, i]
+#        y_matrix[, i]     <- alpha_vec[i] + m_matrix_[, i] + error_matrix[, i]
+        y_matrix[, i]     <- m_matrix_[, i] + error_matrix[, i]
         
         #Estimating the fixed effects
         alpha_hat_tmp      <- mean(y_matrix[, i])
@@ -609,10 +610,11 @@ repl_clustering <- function(rep, t_len_, n_ts_, grid_,
           benchmark_results6[i, j] <- max(abs(smoothed_data6[, i] - smoothed_data6[, j]))
         }
       }
-      results <- c(as.vector(psi$stat_pairwise), as.vector(benchmark_results),
-                   as.vector(benchmark_results2), as.vector(benchmark_results3),
-                   as.vector(benchmark_results4), as.vector(benchmark_results5),
-                   as.vector(benchmark_results6))
+      results <- c(as.vector(psi_estimated$stat_pairwise),
+                   as.vector(psi_true$stat_pairwise),
+                   as.vector(benchmark_results), as.vector(benchmark_results2),
+                   as.vector(benchmark_results3), as.vector(benchmark_results4),
+                   as.vector(benchmark_results5), as.vector(benchmark_results6))
     } else {
       results <- c(as.vector(psi_estimated$stat_pairwise),
                    as.vector(psi_true$stat_pairwise))

@@ -209,8 +209,9 @@ for (t_len in different_T){
 ######################################################
 
 cat("Analysis of the results for the multiscale method with unknown number of clusters\n")
-correct_groups   <- c()
-correct_structure <- c()
+
+correct_groups_vec <- c()
+correct_structure_vec <- c()
 
 group_count <- list()
 error_count <- list()
@@ -228,10 +229,14 @@ for (t_len in different_T){
       group_count[[j]] <- table(factor(clustering_results[1, ], levels = 1:5))
       error_count[[j]] <- table(factor(results$num_of_errors, levels = 0:8))
     }
-    correct_groups    <- c(correct_groups, results$correct_number_of_groups/n_rep)
-    correct_structure <- c(correct_structure, results$correctly_specified_groups/n_rep)
+    correct_groups_vec    <- c(correct_groups_vec, results$correct_number_of_groups/n_rep)
+    correct_structure_vec <- c(correct_structure_vec, results$correctly_specified_groups/n_rep)
   }
 }
+
+correct_groups    <- matrix(correct_groups_vec, ncol = length(different_alpha), byrow = TRUE)
+correct_structure <- matrix(correct_structure_vec, ncol = length(different_alpha), byrow = TRUE)
+
 
 #######################
 #Output of the results#
