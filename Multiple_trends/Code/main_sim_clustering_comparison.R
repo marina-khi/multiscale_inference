@@ -102,7 +102,7 @@ for (t_len in different_T){
   colnames(groups_benchmark_mat5) <- paste0("rep_", 1:n_rep)
   rownames(groups_benchmark_mat5) <- paste0("ts_", 1:n_ts)
   
-  groups_benchmark_ma6t <- matrix(NA, ncol = n_rep, nrow = n_ts)
+  groups_benchmark_mat6 <- matrix(NA, ncol = n_rep, nrow = n_ts)
   colnames(groups_benchmark_mat6) <- paste0("rep_", 1:n_rep)
   rownames(groups_benchmark_mat6) <- paste0("ts_", 1:n_ts)
   
