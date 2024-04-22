@@ -76,7 +76,7 @@ plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
      type = 'l', cex = 0.8)
 lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
       y = errors, type = "l", col = "red")
-mtext(side = 1, text = paste0("Example of one time series from Cluster 1"), line = 2.3, cex = 1)
+mtext(side = 1, text = expression(f[1](t/T) + epsilon[it]), line = 2.3, cex = 1)
 
 
 errors <- arima.sim(model = list(ar = a),
@@ -88,7 +88,7 @@ plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
      type = 'l', cex = 0.8)
 lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
       y = m1 + errors, type = "l", col = "red")
-mtext(side = 1, text = paste0("Example of one time series from Cluster 2"), line = 2.3, cex = 1)
+mtext(side = 1, text = expression(f[2](t/T) + epsilon[it]), line = 2.3, cex = 1)
 
 errors <- arima.sim(model = list(ar = a),
                     innov = rnorm(t_len, 0, sigma),
@@ -99,7 +99,7 @@ plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
      type = 'l', cex = 0.8)
 lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
       y = m2 + errors, type = "l", col = "red")
-mtext(side = 1, text = paste0("Example of one time series from Cluster 3"), line = 2.3, cex = 1)
+mtext(side = 1, text = expression(f[3](t/T) + epsilon[it]), line = 2.3, cex = 1)
 
 dev.off()
 

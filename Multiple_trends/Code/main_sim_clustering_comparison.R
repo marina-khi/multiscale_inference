@@ -181,7 +181,7 @@ for (t_len in different_T){
   }
   
   clustering_results            <- rbind(rep(3, n_rep), groups_mat)
-  clustering_results2            <- rbind(rep(3, n_rep), groups_mat2)
+  clustering_results2           <- rbind(rep(3, n_rep), groups_mat2)
   clustering_results_benchmark  <- rbind(rep(3, n_rep), groups_benchmark_mat)
   clustering_results_benchmark2 <- rbind(rep(3, n_rep), groups_benchmark_mat2)
   clustering_results_benchmark3 <- rbind(rep(3, n_rep), groups_benchmark_mat3)
@@ -202,67 +202,98 @@ for (t_len in different_T){
 ######################################################
 
 cat("Analysis of the results for the multiscale method with unknown number of clusters\n")
-correct_groups   <- c()
 correct_structure <- c()
+error_count       <- list()
 
-group_count <- list()
-error_count <- list()
-
-correct_groups2    <- c()
 correct_structure2 <- c()
+error_count2       <- list()
 
-group_count2 <- list()
-error_count2 <- list()
-
-correct_groups_benchmark   <- c()
 correct_structure_benchmark <- c()
+error_count_benchmark       <- list()
 
-group_count_benchmark <- list()
-error_count_benchmark <- list()
-
-correct_groups_benchmark2   <- c()
 correct_structure_benchmark2 <- c()
+error_count_benchmark2       <- list()
 
-group_count_benchmark2 <- list()
-error_count_benchmark2 <- list()
+correct_structure_benchmark3 <- c()
+error_count_benchmark3       <- list()
+
+correct_structure_benchmark4 <- c()
+error_count_benchmark4       <- list()
+
+correct_structure_benchmark5 <- c()
+error_count_benchmark5       <- list()
+
+correct_structure_benchmark6 <- c()
+error_count_benchmark6       <- list()
 
 j <- 1
 
 for (t_len in different_T){
   filename = paste0("output/revision/misc/results_for_T_", t_len, "_comparison.RData")
   load(file = filename)
-  cat("Analysis of the results for the multiscale method with known number of clusters\n")
+  cat("Analysis of the results for the multiscale method with estimated lrv\n")
   results <- cluster_analysis(t_len_ = t_len, n_rep_ = n_rep, alpha_ = alpha,
                               results_matrix_ = clustering_results,
                               correct_specification_ = correct_specification)
   
-  group_count[[j]] <- table(factor(clustering_results[1, ], levels = 1:5))
-  error_count[[j]] <- table(factor(results$num_of_errors, levels = 0:8))
-  
-  correct_groups    <- c(correct_groups, results$correct_number_of_groups/n_rep)
+  error_count[[j]]  <- table(factor(results$num_of_errors, levels = 0:8))
   correct_structure <- c(correct_structure, results$correctly_specified_groups/n_rep)
+
+  cat("Analysis of the results for the multiscale method with true lrv\n")
+  results2 <- cluster_analysis(t_len_ = t_len, n_rep_ = n_rep, alpha_ = alpha,
+                               results_matrix_ = clustering_results2,
+                               correct_specification_ = correct_specification)
   
-  cat("Analysis of the results for the benchmark method with L2 distance and small bandwidth\n")
+  error_count2[[j]]  <- table(factor(results$num_of_errors, levels = 0:8))
+  correct_structure2 <- c(correct_structure2, results2$correctly_specified_groups/n_rep)
+  
+  cat("Analysis of the results for the benchmark method with bandwidth h1\n")
   results_benchmark <- cluster_analysis(t_len_ = t_len, n_rep_ = n_rep, alpha_ = alpha,
                                         results_matrix_ = clustering_results_benchmark,
                                         correct_specification_ = correct_specification)
   
-  group_count_benchmark[[j]] <- table(factor(clustering_results_benchmark[1, ], levels = 1:5))
-  error_count_benchmark[[j]] <- table(factor(results_benchmark$num_of_errors, levels = 0:8))
-  
-  correct_groups_benchmark    <- c(correct_groups_benchmark, results_benchmark$correct_number_of_groups/n_rep)
+  error_count_benchmark[[j]]  <- table(factor(results_benchmark$num_of_errors, levels = 0:8))
   correct_structure_benchmark <- c(correct_structure_benchmark, results_benchmark$correctly_specified_groups/n_rep)
 
-  cat("Analysis of the results for the benchmark method with L2 distance and large bandwidth\n")
+  cat("Analysis of the results for the benchmark method with bandwidth h2\n")
   results_benchmark2 <- cluster_analysis(t_len_ = t_len, n_rep_ = n_rep, alpha_ = alpha,
                                          results_matrix_ = clustering_results_benchmark2,
                                          correct_specification_ = correct_specification)
   
-  group_count_benchmark2[[j]] <- table(factor(clustering_results_benchmark2[1, ], levels = 1:5))
-  error_count_benchmark2[[j]] <- table(factor(results_benchmark2$num_of_errors, levels = 0:8))
-  
-  correct_groups_benchmark2    <- c(correct_groups_benchmark2, results_benchmark2$correct_number_of_groups/n_rep)
+  error_count_benchmark2[[j]]  <- table(factor(results_benchmark2$num_of_errors, levels = 0:8))
   correct_structure_benchmark2 <- c(correct_structure_benchmark2, results_benchmark2$correctly_specified_groups/n_rep)
+
+  cat("Analysis of the results for the benchmark method with bandwidth h3\n")
+  results_benchmark3 <- cluster_analysis(t_len_ = t_len, n_rep_ = n_rep, alpha_ = alpha,
+                                         results_matrix_ = clustering_results_benchmark3,
+                                         correct_specification_ = correct_specification)
+  
+  error_count_benchmark3[[j]]  <- table(factor(results_benchmark3$num_of_errors, levels = 0:8))
+  correct_structure_benchmark3 <- c(correct_structure_benchmark3, results_benchmark3$correctly_specified_groups/n_rep)
+  
+  cat("Analysis of the results for the benchmark method with bandwidth h4\n")
+  results_benchmark4 <- cluster_analysis(t_len_ = t_len, n_rep_ = n_rep, alpha_ = alpha,
+                                         results_matrix_ = clustering_results_benchmark4,
+                                         correct_specification_ = correct_specification)
+  
+  error_count_benchmark4[[j]]  <- table(factor(results_benchmark4$num_of_errors, levels = 0:8))
+  correct_structure_benchmark4 <- c(correct_structure_benchmark4, results_benchmark4$correctly_specified_groups/n_rep)
+  
+  cat("Analysis of the results for the benchmark method with bandwidth h5\n")
+  results_benchmark5 <- cluster_analysis(t_len_ = t_len, n_rep_ = n_rep, alpha_ = alpha,
+                                         results_matrix_ = clustering_results_benchmark5,
+                                         correct_specification_ = correct_specification)
+  
+  error_count_benchmark5[[j]]  <- table(factor(results_benchmark5$num_of_errors, levels = 0:8))
+  correct_structure_benchmark5 <- c(correct_structure_benchmark5, results_benchmark5$correctly_specified_groups/n_rep)
+  
+  cat("Analysis of the results for the benchmark method with bandwidth h6\n")
+  results_benchmark6 <- cluster_analysis(t_len_ = t_len, n_rep_ = n_rep, alpha_ = alpha,
+                                         results_matrix_ = clustering_results_benchmark6,
+                                         correct_specification_ = correct_specification)
+  
+  error_count_benchmark6[[j]]  <- table(factor(results_benchmark6$num_of_errors, levels = 0:8))
+  correct_structure_benchmark6 <- c(correct_structure_benchmark6, results_benchmark6$correctly_specified_groups/n_rep)
   j <- j + 1
 }
 
@@ -272,10 +303,16 @@ for (t_len in different_T){
 
 
 
-tmp <- matrix(NA, nrow = length(different_T), ncol = 3)
+tmp <- matrix(NA, nrow = length(different_T), ncol = 8)
 tmp[, 1] <- as.vector(correct_structure)
-tmp[, 2] <- as.vector(correct_structure_benchmark)
-tmp[, 3] <- as.vector(correct_structure_benchmark2)
+tmp[, 2] <- as.vector(correct_structure2)
+tmp[, 3] <- as.vector(correct_structure_benchmark)
+tmp[, 4] <- as.vector(correct_structure_benchmark2)
+tmp[, 5] <- as.vector(correct_structure_benchmark3)
+tmp[, 6] <- as.vector(correct_structure_benchmark4)
+tmp[, 7] <- as.vector(correct_structure_benchmark5)
+tmp[, 8] <- as.vector(correct_structure_benchmark6)
+
 row.names(tmp) <- paste0("$T = ", different_T, "$")
 
 filename = paste0("output/revision/clustering_comparison.tex")
@@ -283,15 +320,15 @@ output_matrix(tmp, filename)
 
 addtorow     <- list()
 addtorow$pos <- list(0, 0)
-addtorow$command <- c("& \\multicolumn{6}{c}{nominal size $\\alpha$} \\\\\n",
-                        "$T$ & 0.01 & 0.05 & 0.1 & 0.01 & 0.05 & 0.1 \\\\\n") 
-print.xtable(xtable(matrix_, digits = c(3), align = "ccccccc"), type = "latex",
+addtorow$command <- c("& $\\mathcal{T}_{\\text{MS}}$ & $\\mathcal{T}_{\\text{MS, true lrv}}$ & $\\mathcal{T}_{\\text{bm, }1}$ & $\\mathcal{T}_{\\text{bm, }2}$ & $\\mathcal{T}_{\\text{bm, }3}$ & $\\mathcal{T}_{\\text{bm, }4}$ & $\\mathcal{T}_{\\text{bm, }5}$ & $\\mathcal{T}_{\\text{bm, }6}$\\\\\n")
+
+print.xtable(xtable(matrix_, digits = c(3), align = "ccccccccc"), type = "latex",
              file = filename, add.to.row = addtorow, include.colnames = FALSE)
 
 
-line <- paste0("%This simulation was done for the following values of the parameters: n_ts = ", n_ts,
-               ", with ", n_rep, " simulations for calculating size and power and ", sim_runs,
-               " simulations to calculate the Gaussian quantiles. Furthermore, for the error process we have a = ",
+line <- paste0("%This simulation was done for the following values of the parameters: n_ts = ",
+               n_ts, ", with ", n_rep,
+               " simulations for calculating size and power. Furthermore, for the error process we have a = ",
                a, " and sigma = ", sigma,
                ". There are no fixed effects. The grid is standard.")
 write(line, file = filename, append = TRUE)

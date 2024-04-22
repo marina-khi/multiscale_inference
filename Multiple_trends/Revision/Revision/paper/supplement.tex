@@ -87,7 +87,7 @@ The simulation design is as follows: We generate data from the model $Y_{it} = m
 \[ \boldsymbol{X}_{it} = \begin{pmatrix} a_1 & 0 & 0 \\ 0 & a_2 & 0 \\ 0 & 0 & a_3 \end{pmatrix} \boldsymbol{X}_{i,t-1} + \boldsymbol{\nu}_{it}, \] 
 where $\boldsymbol{X}_{it} = ( X_{it,1}, X_{it,2}, X_{it,3} )^\top$, $\boldsymbol{\nu}_{it} = ( \nu_{it,1}, \nu_{it,2}, \nu_{it,3} )^\top$ and we choose $a_1 = a_2 = a_3 = 0.25$. The innovations $\boldsymbol{\nu}_{it}$ are drawn i.i.d.\ from a multivariate normal distribution $N(0,\Phi)$ with
 \[ \Phi = \begin{pmatrix} 1 & \varphi & \varphi \\ \varphi & 1 & \varphi \\ \varphi & \varphi & 1 \end{pmatrix}, \]
-where $\varphi = 0.25$ specifies the correlation between the 3 covariates. The parameter vector $\boldsymbol{\beta}_i = (\beta_{i,1},\beta_{i,2},\beta_{i,3})^\top$ is chosen to equal $(1,1,1)^\top$ for each $i$. Moreover, for each $i$, the idiosyncratic error process $\{\varepsilon_{it}: 1 \le t \le T\}$ follows the AR(1) model $\varepsilon_{it} = a \varepsilon_{i, t-1} + \eta_{it}$, where $a = 0.25$ and the innovations $\eta_{it}$ are i.i.d.\ normally distributed with mean $0$ and standard deviation $0.25$. 
+where $\varphi = 0.25$\footnote{We have repeated the analysis for $\phi = 0.1$ and the results are roughly the same.} specifies the correlation between the 3 covariates. The parameter vector $\boldsymbol{\beta}_i = (\beta_{i,1},\beta_{i,2},\beta_{i,3})^\top$ is chosen to equal $(1,1,1)^\top$ for each $i$. Moreover, for each $i$, the idiosyncratic error process $\{\varepsilon_{it}: 1 \le t \le T\}$ follows the AR(1) model $\varepsilon_{it} = a \varepsilon_{i, t-1} + \eta_{it}$, where $a = 0.25$ and the innovations $\eta_{it}$ are i.i.d.\ normally distributed with mean $0$ and standard deviation $0.25$. 
 The vector of fixed effects $\boldsymbol{\alpha} = (\alpha_1,\ldots,\alpha_n)^\top$ is modelled as a normally distributed random vector. In particular, $\boldsymbol{\alpha} \sim N(0,\Sigma)$ with
 \[ \Sigma =
 \begin{pmatrix}
@@ -97,14 +97,14 @@ The vector of fixed effects $\boldsymbol{\alpha} = (\alpha_1,\ldots,\alpha_n)^\t
 \rho   & \cdots & \rho   & 1
 \end{pmatrix},
 \]
-where $\rho = 0.25$ gives the correlation across $i$. 
+where $\rho = 0.25$\footnote{We have repeated the analysis for $\rho = 0.1$ and the results are roughly the same.} gives the correlation across $i$.
 %We assume that the covariates $\X_{it}$ and the error terms $\varepsilon_{js}$ are independent from each other for all $1 \leq i,j \leq n$ and $1 \leq t, s \leq T$. 
 To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ without loss of generality. To produce data under the alternative, we use the bump function
 \begin{align}
-m_1(u) =  b \,\cdot &\,\mathbbm{1}(u \in [0.2, 0.4]) \cdot \left(1 - \left\{\frac{u - 0.3}{0.1}\right\}^2\right)^2 \nonumber \\
-&- b \cdot\mathbbm{1}(u \in [0.6, 0.8]) \cdot \left(1 - \left\{\frac{u - 0.7}{0.1}\right\}^2\right)^2 \label{eq:bump-fct}
+m_1(u) =  b \cdot  \vartheta(u, 0.3, 0.1) - b  \cdot  \vartheta(u,0.7, 0.1)  \label{eq:bump-fct}
 \end{align}
-for $b \in \{ 0.25, 0.5, 0.75 \}$ (depicted in Figure \ref{fig:bump_function}) and let $m_i = 0$ for $i \neq 1$. Note that the normalisation constraint $\int_0^1 m_1(u) du = 0$ is directly satisfied in this case. For each simulation exercise, we draw $5000$ samples. \textcolor{blue}{[Marina: I have deleted the case with $\varphi=\rho=0.1$. It does not give additional information.]}
+
+with $\vartheta(u,c,d) =  \ind\left\{\frac{|u - c|}{d}\leq 1\right\} \left(1 - \frac{(u - c)^2}{d^2}\right)^2$ for $b \in \{ 0.25, 0.5, 0.75 \}$ (depicted in Figure \ref{fig:bump_function}) and let $m_i = 0$ for $i \neq 1$. Note that the normalisation constraint $\int_0^1 m_1(u) du = 0$ is directly satisfied in this case. For each simulation exercise, we draw $5000$ samples.
 
 
 \begin{figure}[t!]
