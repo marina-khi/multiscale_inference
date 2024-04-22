@@ -66,10 +66,10 @@ s_t_2 <- function(x, h, T_size, x_vec) {
 
 #Local Linear estimator using the Epanechnikov kernel. 
 local_linear_smoothing <- function(x_, data_p, grid_p, bw){
-  if (length(data_p) != length(grid_p)){
-    cat("Dimensions of the grid and the data do not match, please check the arguments")
-    return(NULL)
-  } else {
+#  if (length(data_p) != length(grid_p)){
+#    cat("Dimensions of the grid and the data do not match, please check the arguments")
+#    return(NULL)
+#  } else {
     result      = 0
     norm        = 0
     t_len       = length(data_p)
@@ -82,7 +82,7 @@ local_linear_smoothing <- function(x_, data_p, grid_p, bw){
       norm = norm + k
     }
     return(result/norm)
-  }
+#  }
 }
 
 #Simulating a bump function
@@ -483,15 +483,14 @@ repl_clustering <- function(rep, t_len_, n_ts_, grid_,
   if (gaussian_sim){
     z_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
     z_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    sigma_vector  <- rep(sigma_, n_ts_)
-    
+
     for (i in 1:n_ts_){
       z_matrix[, i]      <- rnorm(t_len_, 0, sigma_)
       z_augm_matrix[, i] <- z_matrix[, i] - mean(z_matrix[, i])
     }
     
     psi <- compute_statistics(data = z_augm_matrix,
-                              sigma_vec = sigma_vector,
+                              sigma_vec = rep(sigma_, n_ts_),
                               n_ts = n_ts_, grid = grid_)
     results <- c(as.vector(psi$stat_pairwise))
   } else {
@@ -563,9 +562,9 @@ repl_clustering <- function(rep, t_len_, n_ts_, grid_,
         sigmahat_vector    <- c(sigmahat_vector, sigma_hat_i) 
       }
     }    
-    sigma_vector <- rep(sqrt(sigma_^2/((1 - a_)^2)), n_ts_)      
+    sigma_vector  <- rep(sqrt(sigma_^2/((1 - a_)^2)), n_ts_)      
     psi_estimated <- compute_statistics(data = y_augm_matrix,
-                                        sigma_vec = rep(mean(sigmahat_vector), n_ts_),
+                                        sigma_vec = rep(sqrt(mean(sigmahat_vector^2)), n_ts_),
                                         n_ts = n_ts_, grid = grid_)
     psi_true <- compute_statistics(data = y_augm_matrix,
                                    sigma_vec = sigma_vector,
@@ -573,6 +572,7 @@ repl_clustering <- function(rep, t_len_, n_ts_, grid_,
     
     if (comparison){
       grid_points    <- seq(1/t_len_, 1, by = 1/t_len_)
+      u_grid         <- unique(grid_$gset[, 1])
       smoothed_data  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
       smoothed_data2 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
       smoothed_data3 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
@@ -583,12 +583,12 @@ repl_clustering <- function(rep, t_len_, n_ts_, grid_,
       for (i in 1:n_ts_){
         h_min <- min(grid_$bws)
         h_max <- max(grid_$bws)
-        smoothed_data[, i]   <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(y_augm_matrix[, i], grid_points, h_min))
-        smoothed_data2[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(y_augm_matrix[, i], grid_points, h_min + 0.2 * (h_max - h_min)))
-        smoothed_data3[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(y_augm_matrix[, i], grid_points, h_min + 0.4 * (h_max - h_min)))
-        smoothed_data4[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(y_augm_matrix[, i], grid_points, h_min + 0.6 * (h_max - h_min)))
-        smoothed_data5[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(y_augm_matrix[, i], grid_points, h_min + 0.8 * (h_max - h_min)))
-        smoothed_data6[, i]  <- mapply(local_linear_smoothing, grid_points, MoreArgs = list(y_augm_matrix[, i], grid_points, h_max))
+        smoothed_data[, i]   <- mapply(local_linear_smoothing, u_grid, MoreArgs = list(y_augm_matrix[, i], grid_points, h_min))
+        smoothed_data2[, i]  <- mapply(local_linear_smoothing, u_grid, MoreArgs = list(y_augm_matrix[, i], grid_points, h_min + 0.2 * (h_max - h_min)))
+        smoothed_data3[, i]  <- mapply(local_linear_smoothing, u_grid, MoreArgs = list(y_augm_matrix[, i], grid_points, h_min + 0.4 * (h_max - h_min)))
+        smoothed_data4[, i]  <- mapply(local_linear_smoothing, u_grid, MoreArgs = list(y_augm_matrix[, i], grid_points, h_min + 0.6 * (h_max - h_min)))
+        smoothed_data5[, i]  <- mapply(local_linear_smoothing, u_grid, MoreArgs = list(y_augm_matrix[, i], grid_points, h_min + 0.8 * (h_max - h_min)))
+        smoothed_data6[, i]  <- mapply(local_linear_smoothing, u_grid, MoreArgs = list(y_augm_matrix[, i], grid_points, h_max))
       }
       
       #Calculating the benchmark model
@@ -728,22 +728,29 @@ cluster_analysis <- function(t_len_, n_rep_, alpha_, results_matrix_,
 
 
 #Create a matrix (for size and power table for example) and write them in the tex file
-output_matrix <- function(matrix_, filename){
+output_matrix <- function(matrix_, filename_, numcols_){
   addtorow     <- list()
   addtorow$pos <- list(0, 0)
-  addtorow$command <- c("& \\multicolumn{3}{c}{nominal size $\\alpha$} \\\\\n",
-                        "$T$ & 0.01 & 0.05 & 0.1 \\\\\n") 
-  print.xtable(xtable(matrix_, digits = c(3), align = "cccc"), type = "latex",
-               file = filename, add.to.row = addtorow, include.colnames = FALSE)
-}
-
-output_matrix2 <- function(matrix_, filename){
-  addtorow     <- list()
-  addtorow$pos <- list(0, 0)
-  addtorow$command <- c("& \\multicolumn{6}{c}{nominal size $\\alpha$} \\\\\n",
-                        "$T$ & 0.01 & 0.05 & 0.1 & 0.01 & 0.05 & 0.1 \\\\\n") 
-  print.xtable(xtable(matrix_, digits = c(3), align = "ccccccc"), type = "latex",
-               file = filename, add.to.row = addtorow, include.colnames = FALSE)
+  if (numcols_ == 4) {
+    addtorow$command <- c("& \\multicolumn{3}{c}{nominal size $\\alpha$} \\\\\n",
+                          "$T$ & 0.01 & 0.05 & 0.1 \\\\\n") 
+    print.xtable(xtable(matrix_, digits = c(3), align = "cccc"), type = "latex",
+                 file = filename_, add.to.row = addtorow, include.colnames = FALSE,
+                 sanitize.text.function=function(x){x})
+  } else if (numcols_ == 7) {
+    addtorow$command <- c("& \\multicolumn{6}{c}{nominal size $\\alpha$} \\\\\n",
+                          "$T$ & 0.01 & 0.05 & 0.1 & 0.01 & 0.05 & 0.1 \\\\\n") 
+    print.xtable(xtable(matrix_, digits = c(3), align = "ccccccc"), type = "latex",
+                 file = filename_, add.to.row = addtorow, include.colnames = FALSE,
+                 sanitize.text.function=function(x){x})
+  } else if (numcols_ == 9){
+    addtorow$pos     <- list(0)
+    addtorow$command <- c("& $\\mathcal{T}_{\\text{MS}}$ & $\\mathcal{T}_{\\text{MS, true lrv}}$ & $\\mathcal{T}_{\\text{bmk, }1}$ & $\\mathcal{T}_{\\text{bmk, }2}$ & $\\mathcal{T}_{\\text{bmk, }3}$ & $\\mathcal{T}_{\\text{bmk, }4}$ & $\\mathcal{T}_{\\text{bmk, }5}$ & $\\mathcal{T}_{\\text{bmk, }6}$\\\\\n")
+    
+    print.xtable(xtable(matrix_, digits = c(3), align = "ccccccccc"), type = "latex",
+                 file = filename_, add.to.row = addtorow, include.colnames = FALSE,
+                 sanitize.text.function=function(x){x})
+  } else {cat("Number of columns not supported")}
 }
 
 produce_hist_plots <- function(file_extension_, different_T_, n_rep_,

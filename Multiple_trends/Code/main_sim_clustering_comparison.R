@@ -20,8 +20,8 @@ source("functions/functions.R")
 ##############################
 
 n_ts     <- 15 #number of different time series for simulation
-n_rep    <- 1000 #number of simulations for calculating size and power
-sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
+n_rep    <- 5000 #number of simulations for calculating size and power
+sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
 
 different_T <- c(100, 250, 500) #Different lengths of time series
 alpha       <- 0.05 #Different confidence levels
@@ -47,9 +47,8 @@ for (t_len in different_T){
   u_grid <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
   h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
   h_grid <- h_grid[h_grid > log(t_len) / t_len]
-  grid   <- construct_grid(t = t_len)
+  grid   <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
   
-
   m_matrix <- matrix(0, nrow = t_len, ncol = n_ts)
   for (i in (floor(n_ts / 3) + 1):(floor(2 * n_ts / 3))){
     m_matrix[, i] <- 0.35 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.35 * b_function((1:t_len)/t_len, 0.75, 0.25)
@@ -297,11 +296,10 @@ for (t_len in different_T){
   j <- j + 1
 }
 
+
 #######################
 #Output of the results#
 #######################
-
-
 
 tmp <- matrix(NA, nrow = length(different_T), ncol = 8)
 tmp[, 1] <- as.vector(correct_structure)
@@ -316,37 +314,10 @@ tmp[, 8] <- as.vector(correct_structure_benchmark6)
 row.names(tmp) <- paste0("$T = ", different_T, "$")
 
 filename = paste0("output/revision/clustering_comparison.tex")
-output_matrix(tmp, filename)
-
-addtorow     <- list()
-addtorow$pos <- list(0, 0)
-addtorow$command <- c("& $\\mathcal{T}_{\\text{MS}}$ & $\\mathcal{T}_{\\text{MS, true lrv}}$ & $\\mathcal{T}_{\\text{bm, }1}$ & $\\mathcal{T}_{\\text{bm, }2}$ & $\\mathcal{T}_{\\text{bm, }3}$ & $\\mathcal{T}_{\\text{bm, }4}$ & $\\mathcal{T}_{\\text{bm, }5}$ & $\\mathcal{T}_{\\text{bm, }6}$\\\\\n")
-
-print.xtable(xtable(matrix_, digits = c(3), align = "ccccccccc"), type = "latex",
-             file = filename, add.to.row = addtorow, include.colnames = FALSE)
-
-
+output_matrix(matrix_ = tmp, filename = filename, numcols = 9)
 line <- paste0("%This simulation was done for the following values of the parameters: n_ts = ",
                n_ts, ", with ", n_rep,
                " simulations for calculating size and power. Furthermore, for the error process we have a = ",
                a, " and sigma = ", sigma,
                ". There are no fixed effects. The grid is standard.")
-write(line, file = filename, append = TRUE)
-
-# filename = paste0("output/tables/", n_ts, "_ts_correct_group_number.tex")
-# rownames(correct_groups) <- different_T
-# output_matrix(correct_groups, filename)
-# 
-# filename2 = paste0("output/tables/", n_ts, "_ts_correct_group_structure.tex")
-# rownames(correct_structure) <- different_T
-# output_matrix(correct_structure, filename2)
-
-
-
-# filename = paste0("output/tables/", n_ts, "_ts_correct_group_number_benchmark.tex")
-# rownames(correct_groups_benchmark) <- different_T
-# output_matrix(correct_groups_benchmark, filename)
-# 
-# filename2 = paste0("output/tables/", n_ts, "_ts_correct_group_structure_benchmark.tex")
-# rownames(correct_structure_benchmark) <- different_T
-# output_matrix(correct_structure_benchmark, filename)
+write(line, file = filename, append = TRUE)   

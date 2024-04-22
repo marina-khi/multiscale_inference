@@ -243,7 +243,7 @@ for (b in different_b){
     filename = paste0("output/revision/", n_ts, "_ts_power_b_",
                       b * 100, "_sizer_comparison.tex")
   }
-  output_matrix2(tmp, filename)
+  output_matrix(tmp, filename, numcols_ = 7)
   line <- paste0("%This simulation was done for the following values of the parameters: n_ts = ", n_ts,
                  ", with ", n_rep, " simulations for calculating size and power and ", sim_runs,
                  " simulations to calculate the Gaussian quantiles. Furthermore, for the error process we have a = ",
