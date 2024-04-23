@@ -181,7 +181,7 @@ for (b in different_b){
     filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_power_b_",
                       b * 100, ".tex")
   }
-  output_matrix(tmp, filename)
+  output_matrix(tmp, filename, numcols_ = 4)
   line <- paste0("%This simulation was done for the seed ", seed,
                  ", for the following values of the parameters: n_ts = ", n_ts,
                  ", with ", n_rep, " simulations for calculating size and power and ", sim_runs,
@@ -301,7 +301,7 @@ for (b in different_b){
     filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_power_b_",
                       b * 100, "_fine_grid.tex")
   }
-  output_matrix(tmp, filename)
+  output_matrix(tmp, filename, numcols_ = 4)
   line <- paste0("%This simulation was done for the seed ", seed,
                  ", for the following values of the parameters: n_ts = ", n_ts,
                  ", with ", n_rep, " simulations for calculating size and power and ", sim_runs,
@@ -440,7 +440,7 @@ for (b in different_b){
     filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_power_b_",
                       b * 100, "_dyadic_grid.tex")
   }
-  output_matrix(tmp, filename)
+  output_matrix(tmp, filename, numcols_ = 4)
   line <- paste0("%This simulation was done for the seed ", seed,
                  ", for the following values of the parameters: n_ts = ", n_ts,
                  ", with ", n_rep, " simulations for calculating size and power and ", sim_runs,

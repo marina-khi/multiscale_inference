@@ -185,7 +185,7 @@ $H_T^{\text{fine}} = \{ h \in [ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1
 \footnotesize{
 \begin{center}
 \caption{Empirical size and power of the multiscale test for three different grids. Each column corresponds to a particular choice of grid. Panels (a)--(d) of each column have the same structure as in Figure \ref{tab:sizepower}.}\label{tab:grids}
-{\color{red}\begin{subtable}[b]{0.32\textwidth}
+\begin{subtable}[b]{0.32\textwidth}
 \setcounter{subtable}{0}    
 \centering  
 \caption*{sparser grid $\mathcal{G}_T^{\text{sparse}}$}\vspace{0.1cm} 
@@ -198,7 +198,7 @@ $H_T^{\text{fine}} = \{ h \in [ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1
 \caption{$b=0.75$}
 \input{../output/15_ts_25_25_power_b_75_dyadic_grid}
 \end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
+{\color{red}\begin{subtable}[b]{0.32\textwidth}
 \setcounter{subtable}{0}  
 \centering  
 \caption*{grid $\mathcal{G}_T$ from Section \ref{subsec:sim:main}}\vspace{0.1cm} 
@@ -253,7 +253,7 @@ Our procedure can be combined with any method off-the-shelf for long-run error v
 \footnotesize{
 \caption{Empirical size and power of the multiscale test. Each column corresponds to a particular choice of $n$. Panels (a)--(d) of each column have the same structure as in Figure \ref{tab:sizepower}.}\label{tab:large-n}
   
-{\color{red}\begin{subtable}[c]{0.24\textwidth}
+\begin{subtable}[c]{0.24\textwidth}
 \centering  
 \caption*{$n=15$}\vspace{0.1cm} 
 \caption{$b=0$}
@@ -265,7 +265,7 @@ Our procedure can be combined with any method off-the-shelf for long-run error v
 \caption{$b=0.75$}
 \input{../output/15_ts_25_25_power_b_75_dyadic_grid}
 \end{subtable}
-\begin{subtable}[c]{0.24\textwidth}
+{\color{red}\begin{subtable}[c]{0.24\textwidth}
 \setcounter{subtable}{0}  
 \centering  
 \caption*{$n=25$}\vspace{0.1cm} 
@@ -400,7 +400,7 @@ We next investigate the finite sample performance of the clustering algorithm fr
 
 \begin{figure}[t!]
 \includegraphics[width=\textwidth]{../output/clustering_functions.pdf}
-\caption{In black: the group-specific trend functions $f_1, f_2$ and $f_3$. In red: the time series $\{Y_{it}^\circ : 1 \le t \le T \}$ with $Y_{it}^\circ = f_l(t/T) + \varepsilon_{it}$ for one simulation run and $T=250$. \textcolor{blue}{[Marina: Could you also produce this plot for $T=100$ and $T=250$ and send the two plots to me? I think it would better to include the plot with $T=100$ or $T=250$. Moreover: If we add covariates and fixed effects to the simulation setting, the $x$-axis label ``Example of one time series from Cluster $l$'' is not appropriate any more and should be deleted ... Maybe it would be enough to make a plot with three smaller panels in a row that only show $f_1$, $f_2$ and $f_3$ without the red time series.]}}\label{fig:clustering_fcts}
+\caption{In black: the group-specific trend functions $f_1, f_2$ and $f_3$. In red: the time series $\{Y_{it}^\circ : 1 \le t \le T \}$ with $Y_{it}^\circ = f_l(t/T) + \varepsilon_{it}$ for one simulation run and $T=250$.}\label{fig:clustering_fcts}
 \end{figure}
 
 
@@ -468,25 +468,26 @@ Our multiscale approach can be regarded as a refinement of this very natural and
 %This procedure serves as a straightforward and intuitive benchmark, with our approach being a refinement of it. In particular, our approach replaces the simple distance measure $d_{ij}$ by a more advanced multiscale distance measure and provides a way to estimate the number of clusters -- a feature not included in the benchmark procedure. For the sake of fair comparison, we assume that the number of clusters $N=3$ is known, and thus, do not provide an estimate of the number of groups $\widehat{N}$.
 
 
-We implement our clustering algorithm in exactly the same way as in Section \ref{subsec:sim:clustering}. \textcolor{blue}{To run the benchmark algorithm in practice, we need to discretize the supremum over all time points $u \in [0,1]$ in Step 2 of the algorithm. To make the comparison as fair as possible, we replace this supremum by the maximum over all points $u \in U_T$, where $U_T$ is the grid of locations defined in \eqref{eq:grid-loc} that underlies the location-scale grid $\mathcal{G}_T = U_T \times H_T$ of our multiscale test. Moreover, we need to choose a bandwidth to run the benchmark algorithm. We consider six different choices: $h_k = h_{\min} + c_k (h_{\max} - h_{\min})$ with $c_k = 0.2(k-1)$ for $k=1,\ldots,6$.}   
+We implement our clustering algorithm in exactly the same way as in Section \ref{subsec:sim:clustering}. To run the benchmark algorithm in practice, we need to discretize the supremum over all time points $u \in [0,1]$ in Step 2 of the algorithm. To make the comparison as fair as possible, we replace this supremum by the maximum over all points $u \in U_T$, where $U_T$ is the grid of locations defined in \eqref{eq:grid-loc} that underlies the location-scale grid $\mathcal{G}_T = U_T \times H_T$ of our multiscale test. Moreover, we need to choose a bandwidth to run the benchmark algorithm. We consider six different choices: $h_k = h_{\min} + c_k (h_{\max} - h_{\min})$ with $c_k = 0.2(k-1)$ for $k=1,\ldots,6$.
 
 %We implement the clustering algorithm as in Section \ref{subsec:sim:clustering} with one small difference. Computational time of the benchmark procedure exceeds significantly the computational time needed for our method (presumably, due to the lack of the discretization of the grid), hence, in order to lighten the computational burden, instead of $5000$ samples, we simulate $1000$ samples for this simulation exercise.
 
 
 \begin{table}[t!]
 \centering
-\caption{Empirical probabilities that $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{ G_1,G_2,G_3\}$ for the proposed clustering approach with estimated long-run variance ($\mathcal{T}_{\text{MS}}$) for $\alpha = 0.05$, the proposed clustering approach with true theoretical value of the long-run variance ($\mathcal{T}_{\text{MS, true lrv}}$) and the benchmark procedures with various bandwidths ($\mathcal{T}_{\text{bm, }1} - \mathcal{T}_{\text{bm, }6}$) for different sample sizes $T$.}\label{tab:clustering:comparison}
+\caption{Empirical probabilities that $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{ G_1,G_2,G_3\}$ for the proposed clustering approach with estimated long-run variance ($\mathcal{T}_{\text{MS}}$) and with true theoretical value of the long-run variance ($\mathcal{T}_{\text{MS, true lrv}}$) and the benchmark procedures $\mathcal{T}_{\text{bmk, }1} - \mathcal{T}_{\text{bmk, }6}$ corresponding to bandwidths $h_1 - h_6$ for different sample sizes $T$.}\label{tab:clustering:comparison}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
-{\color{red}
-\begin{tabular}{ccccccccc}
-  \hline
-  & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{MS, true lrv}}$ & $\mathcal{T}_{\text{bm, }1}$ & $\mathcal{T}_{\text{bm, }2}$ & $\mathcal{T}_{\text{bm, }3}$ & $\mathcal{T}_{\text{bm, }4}$ & $\mathcal{T}_{\text{bm, }5}$ & $\mathcal{T}_{\text{bm, }6}$ \\
- \hline
-$T= 100$ & 0.007 & 0.029 & 0.066& 0.066 & 0 & 0  & 0 & 0\\ 
-$T=  250$ & 0.742 & 0.903 & 0.943 & 0.066 & 0 & 0 & 0 & 0\\ 
-$T=  500$ & 1.000 & 1.000 & 1.000 & 0.066& 0 & 0 & 0 & 0\\ 
-   \hline
-\end{tabular}}
+{\color{red}\input{../output/clustering_comparison}}
+%{\color{red}
+%\begin{tabular}{ccccccccc}
+%  \hline
+%  & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{MS, true lrv}}$ & $\mathcal{T}_{\text{bm, }1}$ & $\mathcal{T}_{\text{bm, }2}$ & $\mathcal{T}_{\text{bm, }3}$ & $\mathcal{T}_{\text{bm, }4}$ & $\mathcal{T}_{\text{bm, }5}$ & $\mathcal{T}_{\text{bm, }6}$ \\
+% \hline
+%$T= 100$ & 0.007 & 0.029 & 0.066& 0.066 & 0 & 0  & 0 & 0\\ 
+%$T=  250$ & 0.742 & 0.903 & 0.943 & 0.066 & 0 & 0 & 0 & 0\\ 
+%$T=  500$ & 1.000 & 1.000 & 1.000 & 0.066& 0 & 0 & 0 & 0\\ 
+%   \hline
+%\end{tabular}}
 \end{table}
 
 %\addtocounter{table}{-1} 

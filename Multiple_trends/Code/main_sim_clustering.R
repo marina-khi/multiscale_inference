@@ -41,7 +41,7 @@ rho     <- 0.25 #covariance between the fixed effects
 
 numCores = round(parallel::detectCores() * .80)
 
-seed <- 135792468
+seed <- 135798642
 set.seed(seed)
 
 correct_specification <- c(rep(1, (floor(n_ts / 3))),
@@ -112,7 +112,7 @@ for (t_len in different_T){
   u_grid <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
   h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
   h_grid <- h_grid[h_grid > log(t_len) / t_len]
-  grid   <- construct_grid(t = t_len)
+  grid   <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
   
   m_matrix <- matrix(0, nrow = t_len, ncol = n_ts)
   for (i in (floor(n_ts / 3) + 1):(floor(2 * n_ts / 3))){
@@ -248,8 +248,8 @@ produce_hist_plots(file_extension_ = "", different_T_ = different_T,
 
 filename = paste0("output/revision/", n_ts, "_ts_correct_group_number.tex")
 rownames(correct_groups) <- different_T
-output_matrix(correct_groups, filename)
+output_matrix(matrix_ = correct_groups, filename_ = filename, numcols_ = 4)
 
 filename2 = paste0("output/revision/", n_ts, "_ts_correct_group_structure.tex")
 rownames(correct_structure) <- different_T
-output_matrix(correct_structure, filename2)
+output_matrix(matrix_ = correct_structure, filename_ = filename, numcols_ = 4)

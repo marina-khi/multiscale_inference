@@ -45,7 +45,7 @@ q <- 25
 r <- 10
 
 #For parallel computation
-numCores  <- round(parallel::detectCores() * .70)
+numCores  <- round(parallel::detectCores() * .80)
 
 
 ################################
@@ -124,7 +124,7 @@ for (n_ts in different_n_ts){
       if (b == 0) {
         cat("SIZE SIMULATIONS FOR n_ts = ", n_ts, "\n")
       } else {
-        cat("POWER SIMULATIONS fOR n_ts = ", n_ts, ", WITH b = ", b, "\n")
+        cat("POWER SIMULATIONS FOR n_ts = ", n_ts, ", WITH b = ", b, "\n")
         #trend function which is a bump
         m_matrix[, 1] <- bump((1:t_len)/t_len) * b    
       }
@@ -178,7 +178,7 @@ for (n_ts in different_n_ts){
       filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_power_b_",
                         b * 100, "_dyadic_grid.tex")
     }
-    output_matrix(tmp, filename)
+    output_matrix(tmp, filename, numcols_ = 4)
     line <- paste0("%This simulation was done for the seed ", seed,
                    ", for the following values of the parameters: n_ts = ", n_ts,
                    ", with ", n_rep, " simulations for calculating size and power and ", sim_runs,
