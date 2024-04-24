@@ -130,7 +130,7 @@ We thus consider intervals $\mathcal{I}_{u, h} = [u-h, u+h]$ which contain $5, 1
 \begin{center}
 \caption{Empirical size and power of the multiscale test for different sample sizes $T$ and nominal sizes $\alpha$.
 Each panel gives the results for a different bump height $b$, where $b = 0$ corresponds to the null and $b = 0.25,0.5,0.75$ to three different alternatives.}\label{tab:sizepower}
-{\color{red}\begin{subtable}[b]{0.4\textwidth}
+\begin{subtable}[b]{0.4\textwidth}
 \centering  
 \caption{$b=0$}
 \input{../output/15_ts_25_25_size}
@@ -149,7 +149,7 @@ Each panel gives the results for a different bump height $b$, where $b = 0$ corr
 \centering  
 \vspace{0.25cm} \caption{$b=0.75$}
 \input{../output/15_ts_25_25_power_b_75}
-\end{subtable}}
+\end{subtable}
 \end{center}}
 \end{table}
 
@@ -198,7 +198,7 @@ $H_T^{\text{fine}} = \{ h \in [ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1
 \caption{$b=0.75$}
 \input{../output/15_ts_25_25_power_b_75_dyadic_grid}
 \end{subtable}
-{\color{red}\begin{subtable}[b]{0.32\textwidth}
+\begin{subtable}[b]{0.32\textwidth}
 \setcounter{subtable}{0}  
 \centering  
 \caption*{grid $\mathcal{G}_T$ from Section \ref{subsec:sim:main}}\vspace{0.1cm} 
@@ -211,7 +211,7 @@ $H_T^{\text{fine}} = \{ h \in [ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1
 \caption{$b=0.75$}
 \input{../output/15_ts_25_25_power_b_75}
 \end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
+{\color{red}\begin{subtable}[b]{0.32\textwidth}
 \setcounter{subtable}{0}    
 \centering  
 \caption*{finer grid $\mathcal{G}_T^{\text{fine}}$}\vspace{0.1cm}
@@ -231,11 +231,10 @@ $H_T^{\text{fine}} = \{ h \in [ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1
 The simulation results for the three grids are reported in Table \ref{tab:grids}.\footnote{Note that the simulation results for the grid $\mathcal{G}_T$ in the first column of Table \ref{tab:grids} are identical with those in Table \ref{tab:sizepower}. For ease of comparison, we have repeated these results as part of Table \ref{tab:grids}.}
 Each column corresponds to a particular choice of grid. Panel (a) in each column specifies the empirical size of the test, while panels (b)--(d) give the empirical power against the alternatives with bump size $b \in \{0.25,0.5,0.75\}$. 
 %, while {\color{red} the results for the finer grid are presented in Table \ref{tab:grid-fine}.} We report the results for the simulation scenario with stronger correlation across the time series and between the covariates, i.e., with $\rho = 0.25$ and $\phi = 0.25$, since this scenario is less favourable for our multiscale procedure and the results with different values of $\rho$ and $\phi$ are fairly similar.
-\textcolor{blue}{[NOT REALLY TRUE!]
-As can be seen, the size and power numbers in Table \ref{tab:grids} are quite stable across the three different grids. %This demonstrates that 
+As can be seen, for large sample size $T=500$ the size numbers in Table \ref{tab:grids} are quite stable across the three different grids. Furthermore, even though the power numbers increase as the grid gets finer, the test has reasonable power properties for all of the choices of the grid. %This demonstrates that 
 %Although there are minor deviations from the results for the original simulated scenario presented in Section A.1, these variations are not substantial which confirms the robust performance of the proposed test when applied to a finer grid.
 %Furthermore, as we have seen in Section \ref{subsec:sim:large_n}, the behaviour of our test does not substantially change in case of a much sparser grid $\mathcal{G}_T^{\text{sparse}}$.
-This suggests that as long as the grid is chosen sufficiently rich (in the sense of including a variety of bandwidth values ranging from very small to very large and many time points that are scattered rather densely over the unit interval), the particular choice of grid has a negligible effect on the test.} 
+This suggests that as long as the grid is chosen sufficiently rich (in the sense of including a variety of bandwidth values ranging from very small to very large and many time points that are scattered rather densely over the unit interval), the particular choice of grid has a negligible effect on the test.
 
 
 Apart from the grid, our method depends on the following tuning parameters: (i) the number of bootstrap samples $L$ to compute the Gaussian quantile, (ii) the kernel $K$, and (iii) secondary tuning parameters for the computation of the long-run error variance. 
@@ -265,7 +264,7 @@ Our procedure can be combined with any method off-the-shelf for long-run error v
 \caption{$b=0.75$}
 \input{../output/15_ts_25_25_power_b_75_dyadic_grid}
 \end{subtable}
-{\color{red}\begin{subtable}[c]{0.24\textwidth}
+\begin{subtable}[c]{0.24\textwidth}
 \setcounter{subtable}{0}  
 \centering  
 \caption*{$n=25$}\vspace{0.1cm} 
@@ -303,7 +302,7 @@ Our procedure can be combined with any method off-the-shelf for long-run error v
 \input{../output/100_ts_25_25_dyadic_grid_power_b_50}\vspace{0.25cm}
 \caption{$b=0.75$}
 \input{../output/100_ts_25_25_dyadic_grid_power_b_75}
-\end{subtable}}}
+\end{subtable}}
 
 \end{sidewaystable}
 
@@ -475,7 +474,7 @@ We implement our clustering algorithm in exactly the same way as in Section \ref
 
 \begin{table}[t!]
 \centering
-\caption{Empirical probabilities that $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{ G_1,G_2,G_3\}$ for the proposed clustering approach with estimated long-run variance ($\mathcal{T}_{\text{MS}}$) and with true theoretical value of the long-run variance ($\mathcal{T}_{\text{MS, true lrv}}$) and the benchmark procedures $\mathcal{T}_{\text{bmk, }1} - \mathcal{T}_{\text{bmk, }6}$ corresponding to bandwidths $h_1 - h_6$ for different sample sizes $T$.}\label{tab:clustering:comparison}
+\caption{Empirical probabilities that $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{ G_1,G_2,G_3\}$ for the proposed clustering approach with an estimated long-run variance ($\mathcal{T}_{\text{MS}}$) and with the true theoretical value of the long-run variance ($\mathcal{T}_{\text{MS, true lrv}}$) and the benchmark procedures $\mathcal{T}_{\text{bmk, }1} - \mathcal{T}_{\text{bmk, }6}$ corresponding to bandwidths $h_1 - h_6$ for different sample sizes $T$.}\label{tab:clustering:comparison}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
 {\color{red}\input{../output/clustering_comparison}}
 %{\color{red}
