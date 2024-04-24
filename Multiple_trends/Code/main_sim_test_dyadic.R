@@ -19,7 +19,7 @@ options(xtable.timestamp = "")
 ##############################
 seed <- 22446688
 
-different_n_ts <- c(15, 25, 50, 100) #Number of time series
+different_n_ts <- c(25, 50, 100) #Number of time series
 
 #For the covariate process
 beta    <- c(1, 1, 1)

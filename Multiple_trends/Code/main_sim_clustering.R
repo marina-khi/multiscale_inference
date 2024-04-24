@@ -252,4 +252,4 @@ output_matrix(matrix_ = correct_groups, filename_ = filename, numcols_ = 4)
 
 filename2 = paste0("output/revision/", n_ts, "_ts_correct_group_structure.tex")
 rownames(correct_structure) <- different_T
-output_matrix(matrix_ = correct_structure, filename_ = filename, numcols_ = 4)
+output_matrix(matrix_ = correct_structure, filename_ = filename2, numcols_ = 4)

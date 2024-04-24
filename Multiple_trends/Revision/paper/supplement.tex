@@ -211,7 +211,7 @@ $H_T^{\text{fine}} = \{ h \in [ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1
 \caption{$b=0.75$}
 \input{../output/15_ts_25_25_power_b_75}
 \end{subtable}
-{\color{red}\begin{subtable}[b]{0.32\textwidth}
+\begin{subtable}[b]{0.32\textwidth}
 \setcounter{subtable}{0}    
 \centering  
 \caption*{finer grid $\mathcal{G}_T^{\text{fine}}$}\vspace{0.1cm}
@@ -223,7 +223,7 @@ $H_T^{\text{fine}} = \{ h \in [ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1
 \input{../output/15_ts_25_25_power_b_50_fine_grid}\vspace{0.25cm}
 \caption{$b=0.75$}
 \input{../output/15_ts_25_25_power_b_75_fine_grid}
-\end{subtable}}
+\end{subtable}
 \end{center}}
 \end{table}
 
@@ -231,7 +231,7 @@ $H_T^{\text{fine}} = \{ h \in [ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1
 The simulation results for the three grids are reported in Table \ref{tab:grids}.\footnote{Note that the simulation results for the grid $\mathcal{G}_T$ in the first column of Table \ref{tab:grids} are identical with those in Table \ref{tab:sizepower}. For ease of comparison, we have repeated these results as part of Table \ref{tab:grids}.}
 Each column corresponds to a particular choice of grid. Panel (a) in each column specifies the empirical size of the test, while panels (b)--(d) give the empirical power against the alternatives with bump size $b \in \{0.25,0.5,0.75\}$. 
 %, while {\color{red} the results for the finer grid are presented in Table \ref{tab:grid-fine}.} We report the results for the simulation scenario with stronger correlation across the time series and between the covariates, i.e., with $\rho = 0.25$ and $\phi = 0.25$, since this scenario is less favourable for our multiscale procedure and the results with different values of $\rho$ and $\phi$ are fairly similar.
-As can be seen, for large sample size $T=500$ the size numbers in Table \ref{tab:grids} are quite stable across the three different grids. Furthermore, even though the power numbers increase as the grid gets finer, the test has reasonable power properties for all of the choices of the grid. %This demonstrates that 
+As can be seen, for large sample size $T=500$ the size numbers in Table \ref{tab:grids} are quite stable across the three different grids. Furthermore, even though the power numbers are a bit lower in case of a sparse grid compared to a , the test has reasonable power properties for all of the choices of the grid. %This demonstrates that 
 %Although there are minor deviations from the results for the original simulated scenario presented in Section A.1, these variations are not substantial which confirms the robust performance of the proposed test when applied to a finer grid.
 %Furthermore, as we have seen in Section \ref{subsec:sim:large_n}, the behaviour of our test does not substantially change in case of a much sparser grid $\mathcal{G}_T^{\text{sparse}}$.
 This suggests that as long as the grid is chosen sufficiently rich (in the sense of including a variety of bandwidth values ranging from very small to very large and many time points that are scattered rather densely over the unit interval), the particular choice of grid has a negligible effect on the test.
@@ -403,6 +403,8 @@ We next investigate the finite sample performance of the clustering algorithm fr
 \end{figure}
 
 
+The simulation results are reported in Table \ref{tab:clustering}. The entries in Table \ref{tab:clustering}(a) are computed as the number of simulations for which $\widehat{N} = N$ divided by the total number of simulations. They thus specify the empirical probabilities with which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$. Analogously, the entries of Table \ref{tab:clustering}(b) give the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$. The results in Table \ref{tab:clustering} nicely illustrate the theoretical properties of our clustering algorithm. According to Proposition \ref{prop:clustering:1}, the probability that $\widehat{N} = N$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{G_1,G_2,G_3\}$ should be at least $(1-\alpha)$ asymptotically. For the largest sample size $T = 500$, the empirical probabilities reported in Table \ref{tab:clustering} can indeed be seen to exceed the value $(1-\alpha)$ as predicted by Proposition \ref{prop:clustering:1}. For the smaller sample sizes $T=100$ and $T=250$, in contrast, the empirical probabilities are substantially smaller than $(1-\alpha)$. This reflects the asymptotic nature of Proposition \ref{prop:clustering:1} and is not very surprising. It simply mirrors the fact that for the smaller sample sizes $T=100$ and $T=250$, the effective noise level in the simulated data is quite high.
+
 \begin{table}[t]
 \footnotesize{
 \begin{center}
@@ -411,13 +413,13 @@ We next investigate the finite sample performance of the clustering algorithm fr
 \centering
 \caption{Empirical probabilities that \\ $\widehat{N} = N$}\label{tab:clustering:1}
 \renewcommand{\arraystretch}{1.2}
-{\color{red}\input{../output/15_ts_correct_group_number}}
+\input{../output/15_ts_correct_group_number}
 \end{subtable}
 \begin{subtable}[b]{0.48\textwidth}
 \centering
 \caption{\centering Empirical probabilities that $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{ G_1,G_2,G_3\}$}\label{tab:clustering:2}
 \renewcommand{\arraystretch}{1.2}
-{\color{red}\input{../output/15_ts_correct_group_structure}}
+\input{../output/15_ts_correct_group_structure}
 \end{subtable}
 \end{center}}
 \vspace{-0.5cm}
@@ -427,24 +429,20 @@ We next investigate the finite sample performance of the clustering algorithm fr
 \begin{figure}[t!]
 \centering
 \includegraphics[width=0.95\textwidth]{../output/hist_groups}
-\caption{{\color{red}Estimated number of groups $\widehat{N}$ for nominal size $\alpha = 0.05$. }
+\caption{Estimated number of groups $\widehat{N}$ for nominal size $\alpha = 0.05$.
 %Each panel corresponds to a different sample size $T$.
 }\label{fig:clustering:1}
 \vspace{0.25cm}
 
 \includegraphics[width=0.95\textwidth]{../output/hist_errors}
-\caption{{\color{red}Number of classification errors for nominal size $\alpha = 0.05$. }
+\caption{Number of classification errors for nominal size $\alpha = 0.05$.
 %Each panel corresponds to a different sample size $T$.
 }\label{fig:clustering:2}
 \end{figure}
 
-
-The simulation results are reported in Table \ref{tab:clustering}. The entries in Table \ref{tab:clustering}(a) are computed as the number of simulations for which $\widehat{N} = N$ divided by the total number of simulations. They thus specify the empirical probabilities with which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$. Analogously, the entries of Table \ref{tab:clustering}(b) give the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$. The results in Table \ref{tab:clustering} nicely illustrate the theoretical properties of our clustering algorithm. According to Proposition \ref{prop:clustering:1}, the probability that $\widehat{N} = N$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{G_1,G_2,G_3\}$ should be at least $(1-\alpha)$ asymptotically. {\color{red}For the largest sample size $T = 500$, the empirical probabilities reported in Table \ref{tab:clustering} can indeed be seen to exceed the value $(1-\alpha)$ as predicted by Proposition \ref{prop:clustering:1}. For the smaller sample sizes $T=100$ and $T=250$, in contrast, the empirical probabilities are substantially smaller than $(1-\alpha)$. This reflects the asymptotic nature of Proposition \ref{prop:clustering:1} and is not very surprising. It simply mirrors the fact that for the smaller sample sizes $T=100$ and $T=250$, the effective noise level in the simulated data is quite high.}
-
-
-{\color{red}Figures \ref{fig:clustering:1} and \ref{fig:clustering:2} give more insight into what happens for $T=100$ and $T=250$.} Figure \ref{fig:clustering:1} shows histograms of the $5000$ simulated values of $\widehat{N}$, while Figure \ref{fig:clustering:2} depicts histograms of the number of classification errors produced by our algorithm. By the number of classification errors, we simply mean the number of incorrectly classified time series, which is formally calculated as 
+Figures \ref{fig:clustering:1} and \ref{fig:clustering:2} give more insight into what happens for $T=100$ and $T=250$. Figure \ref{fig:clustering:1} shows histograms of the $5000$ simulated values of $\widehat{N}$, while Figure \ref{fig:clustering:2} depicts histograms of the number of classification errors produced by our algorithm. By the number of classification errors, we simply mean the number of incorrectly classified time series, which is formally calculated as 
 $\min_{\pi \in S_{\widehat{N}}} \big\{ |G_1 \setminus \widehat{G}_{\pi(1)}| +|G_2 \setminus \widehat{G}_{\pi(2)}| + |G_3 \setminus \widehat{G}_{\pi(3)}| \big\}$
-with $S_{\widehat{N}}$ being the set of all permutations of $\{1, 2, \ldots, \widehat{N}\}$. {\color{red}The histogram of Figure \ref{fig:clustering:1} for $T=100$ clearly shows that our method underestimates the number of groups ($\widehat{N} = 2$ in $4055$ cases out of $5000$). In particular, it fails to detect the difference between two out of three groups in a large number of simulations. This is reflected in the corresponding histogram of Figure \ref{fig:clustering:2} which shows that there are exactly $5$ classification errors in $3924$ of the $5000$ simulation runs. In most of these cases, the estimated group structure $\{ \widehat{G}_1, \widehat{G}_{2}\}$ coincides with either $\{ G_1 \cup G_2,G_3\}$,  $\{ G_1, G_2\cup G_3\}$ or $ \{ G_1 \cup G_3,G_2\}$. In summary, we can conclude that the small empirical probabilities for $T=100$ in Table \ref{tab:clustering} are due to the algorithm underestimating the number of groups. Inspecting the histograms for $T=250$, one can see that the performance of the estimators $\widehat{N}$ and $\{ \widehat{G}_1,\ldots, \widehat{G}_{\widehat{N}} \}$ improves significantly, even though the corresponding empirical probabilities in Table \ref{tab:clustering} are still somewhat below the target $(1-\alpha)$.}
+with $S_{\widehat{N}}$ being the set of all permutations of $\{1, 2, \ldots, \widehat{N}\}$. The histogram of Figure \ref{fig:clustering:1} for $T=100$ and $T = 250$ clearly shows that our method underestimates the number of groups. In particular, it fails to detect the difference between two out of three groups in a large number of simulations ($\widehat{N} = 2$ in $3403$ and $4744$ cases out of $5000$ for $T= 100$ and $T=250$, respectively). This is reflected in the corresponding histogram of Figure \ref{fig:clustering:2} which shows that there are exactly $5$ classification errors in $3322$ ($4744$) of the $5000$ simulation runs for $T=100$ ($T=250$). In most of these cases, the estimated group structure $\{ \widehat{G}_1, \widehat{G}_{2}\}$ coincides with either $\{ G_1 \cup G_2,G_3\}$,  $\{ G_1, G_2\cup G_3\}$ or $ \{ G_1 \cup G_3,G_2\}$. In summary, we can conclude that the zero empirical probabilities for $T=100$ and $T=250$ in Table \ref{tab:clustering} are due to the algorithm underestimating the number of groups. Inspecting the histograms for $T=500$, one can see that the performance of the estimators $\widehat{N}$ and $\{ \widehat{G}_1,\ldots, \widehat{G}_{\widehat{N}} \}$ improves significantly. %, even though the corresponding empirical probabilities in Table \ref{tab:clustering} are still somewhat below the target $(1-\alpha)$.
 
 
 \subsection{Comparison of our clustering algorithm with a benchmark}
