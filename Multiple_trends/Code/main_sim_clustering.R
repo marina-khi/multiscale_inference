@@ -197,7 +197,7 @@ for (t_len in different_T){
     }
     clustering_results  <- rbind(number_of_groups_vec, groups_mat)
 
-    filename = paste0("output/revision/misc/results_for_T_", t_len, "_and_alpha_", alpha * 100, "_2.RData")
+    filename = paste0("output/revision/misc/results_for_T_", t_len, "_and_alpha_", alpha * 100, ".RData")
     save(clustering_results, file = filename)
   }
   toc()
@@ -219,7 +219,7 @@ error_count <- list()
 j <- 0
 for (t_len in different_T){
   for (alpha in different_alpha){
-    filename = paste0("output/revision/misc/results_for_T_", t_len, "_and_alpha_", alpha * 100, "_2.RData")
+    filename = paste0("output/revision/misc/results_for_T_", t_len, "_and_alpha_", alpha * 100, ".RData")
     load(file = filename)
     results <- cluster_analysis(t_len_ = t_len, n_rep_ = n_rep, alpha_ = alpha,
                                 results_matrix_ = clustering_results,

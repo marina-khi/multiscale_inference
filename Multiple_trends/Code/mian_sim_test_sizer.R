@@ -25,7 +25,7 @@ n_ts  <- 2 #Number of time series
 n_rep    <- 5000 #number of simulations for calculating size and power
 sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles for MS test
 
-different_T     <- c(100, 250, 500, 750, 1000) #Different lengths of time series
+different_T     <- c(100, 250, 500) #Different lengths of time series
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
 different_b     <- c(0, 0.25, 0.5) #Zero is for calculating the size
 

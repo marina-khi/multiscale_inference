@@ -87,7 +87,9 @@ The simulation design is as follows: We generate data from the model $Y_{it} = m
 \[ \boldsymbol{X}_{it} = \begin{pmatrix} a_1 & 0 & 0 \\ 0 & a_2 & 0 \\ 0 & 0 & a_3 \end{pmatrix} \boldsymbol{X}_{i,t-1} + \boldsymbol{\nu}_{it}, \] 
 where $\boldsymbol{X}_{it} = ( X_{it,1}, X_{it,2}, X_{it,3} )^\top$, $\boldsymbol{\nu}_{it} = ( \nu_{it,1}, \nu_{it,2}, \nu_{it,3} )^\top$ and we choose $a_1 = a_2 = a_3 = 0.25$. The innovations $\boldsymbol{\nu}_{it}$ are drawn i.i.d.\ from a multivariate normal distribution $N(0,\Phi)$ with
 \[ \Phi = \begin{pmatrix} 1 & \varphi & \varphi \\ \varphi & 1 & \varphi \\ \varphi & \varphi & 1 \end{pmatrix}, \]
-where $\varphi = 0.25$\footnote{We have repeated the analysis for $\phi = 0.1$ and the results are roughly the same.} specifies the correlation between the 3 covariates. The parameter vector $\boldsymbol{\beta}_i = (\beta_{i,1},\beta_{i,2},\beta_{i,3})^\top$ is chosen to equal $(1,1,1)^\top$ for each $i$. Moreover, for each $i$, the idiosyncratic error process $\{\varepsilon_{it}: 1 \le t \le T\}$ follows the AR(1) model $\varepsilon_{it} = a \varepsilon_{i, t-1} + \eta_{it}$, where $a = 0.25$ and the innovations $\eta_{it}$ are i.i.d.\ normally distributed with mean $0$ and standard deviation $0.25$. 
+\textcolor{red}{where $\varphi = 0.25$ specifies the correlation between the 3 covariates}.
+%\footnote{As a robustness check, we have repeated the analysis for $\phi = 0.1$. However, as the results a very similar, we do not report them here.}
+The parameter vector $\boldsymbol{\beta}_i = (\beta_{i,1},\beta_{i,2},\beta_{i,3})^\top$ is chosen to equal $(1,1,1)^\top$ for each $i$. Moreover, for each $i$, the idiosyncratic error process $\{\varepsilon_{it}: 1 \le t \le T\}$ follows the AR(1) model $\varepsilon_{it} = a \varepsilon_{i, t-1} + \eta_{it}$, where $a = 0.25$ and the innovations $\eta_{it}$ are i.i.d.\ normally distributed with mean $0$ and standard deviation $0.25$. 
 The vector of fixed effects $\boldsymbol{\alpha} = (\alpha_1,\ldots,\alpha_n)^\top$ is modelled as a normally distributed random vector. In particular, $\boldsymbol{\alpha} \sim N(0,\Sigma)$ with
 \[ \Sigma =
 \begin{pmatrix}
@@ -97,14 +99,14 @@ The vector of fixed effects $\boldsymbol{\alpha} = (\alpha_1,\ldots,\alpha_n)^\t
 \rho   & \cdots & \rho   & 1
 \end{pmatrix},
 \]
-where $\rho = 0.25$\footnote{We have repeated the analysis for $\rho = 0.1$ and the results are roughly the same.} gives the correlation across $i$.
+\textcolor{red}{where $\rho = 0.25$ gives the correlation across $i$}.
+%\footnote{As a robustness check, we have repeated the analysis for $\rho = 0.1$. However, as the results a very similar, we do not report them here.}
 %We assume that the covariates $\X_{it}$ and the error terms $\varepsilon_{js}$ are independent from each other for all $1 \leq i,j \leq n$ and $1 \leq t, s \leq T$. 
 To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ without loss of generality. To produce data under the alternative, we use the bump function
 \begin{align}
 m_1(u) =  b \cdot  \vartheta(u, 0.3, 0.1) - b  \cdot  \vartheta(u,0.7, 0.1)  \label{eq:bump-fct}
 \end{align}
-
-with $\vartheta(u,c,d) =  \ind\left\{\frac{|u - c|}{d}\leq 1\right\} \left(1 - \frac{(u - c)^2}{d^2}\right)^2$ for $b \in \{ 0.25, 0.5, 0.75 \}$ (depicted in Figure \ref{fig:bump_function}) and let $m_i = 0$ for $i \neq 1$. Note that the normalisation constraint $\int_0^1 m_1(u) du = 0$ is directly satisfied in this case. For each simulation exercise, we draw $5000$ samples.
+with $\vartheta(u,c,d) =  \ind \left\{\frac{|u - c|}{d}\leq 1 \right\} \left(1 - \frac{(u - c)^2}{d^2}\right)^2$ for $b \in \{ 0.25, 0.5, 0.75 \}$ (depicted in Figure \ref{fig:bump_function}) and let $m_i = 0$ for $i \neq 1$. Note that the normalisation constraint $\int_0^1 m_1(u) du = 0$ is directly satisfied in this case. For each simulation exercise, we draw $5000$ samples.
 
 
 \begin{figure}[t!]
@@ -113,10 +115,13 @@ with $\vartheta(u,c,d) =  \ind\left\{\frac{|u - c|}{d}\leq 1\right\} \left(1 - \
 \end{figure}
 
 
-Figure \ref{fig:bump_function} illustrates that the described simulation setup is quite challenging already without covariates and fixed effects. The black lines in the plot show the bump function $m_1$ for different heights of the bump $b \in \{0, 0.25, 0.5, 0.75\}$, where the value $b=0$ corresponds to the null $H_0$. The red lines show one realization of the time series $\{Y_{1t}^\circ:1 \le t \le T \}$ for $T=250$, where $Y_{1t}^\circ = m_1(\frac{t}{T}) + \varepsilon_{1t}$ is an idealized version of $Y_{1t}$ without covariates and fixed effects. The values $b=0.25,0.5,0.75$ correspond to three different alternatives. In particular, the larger the bump size $b$, the further away from the null is the corresponding alternative. For the smallest value $b=0.25$, the bump function is very difficult to detect since the noise level is very high, or put differently, since the signal-to-noise ratio is very small (as is clearly visible in the upper right panel of Figure \ref{fig:bump_function}). For $b=0.5$ and $b=0.75$, the signal-to-noise ratio slowly gets bigger, making it less difficult to detect the bump function. Nevertheless, even for $b=0.75$, there is substantial noise around the bump function, meaning that detection of the bump is still non-trivial. 
+Figure \ref{fig:bump_function} illustrates that the described simulation setup is quite challenging already without covariates and fixed effects. The black lines in the plot show the bump function $m_1$ for different heights of the bump $b \in \{0, 0.25, 0.5, 0.75\}$, where the value $b=0$ corresponds to the null $H_0$. The red lines show one realization of the time series $\{Y_{1t}^\circ:1 \le t \le T \}$ for $T=250$, where $Y_{1t}^\circ = m_1(\frac{t}{T}) + \varepsilon_{1t}$ is an idealized version of $Y_{1t}$ without covariates and fixed effects. The values $b=0.25,0.5,0.75$ correspond to three different alternatives. In particular, the larger the bump size $b$, the further away from the null is the corresponding alternative. For the smallest value $b=0.25$, the bump function is very difficult to detect since the noise level is very high, or put differently, since the signal-to-noise ratio is very small (as is clearly visible in the upper right panel of Figure \ref{fig:bump_function}). For $b=0.5$ and $b=0.75$, the signal-to-noise ratio slowly gets bigger, making it less difficult to detect the bump function. Nevertheless, even for $b=0.75$, there is substantial noise around the bump function. %, meaning that detection of the bump is still non-trivial. 
 
 
-Our multiscale test is implemented as follows: The estimators $\widehat{\bfbeta}_i$ and $\widehat{\alpha}_i$ of the unknown parameters $\bfbeta_i$ and $\alpha_i$ are computed as described in Section~\ref{subsec:test:prep}. Since the errors $\varepsilon_{it}$ follow an AR($1$) process, we estimate the long-run error variance by the difference-based estimator proposed in \cite{KhismatullinaVogt2020}, setting the tuning parameters $q$ and $r$ to $25$ and $10$, respectively. In order to construct our test statistics, we use an Epanechnikov kernel and the grid $\mathcal{G}_T = U_T \times H_T$ with
+Our multiscale test is implemented as follows: The estimators $\widehat{\bfbeta}_i$ and $\widehat{\alpha}_i$ of the unknown parameters $\bfbeta_i$ and $\alpha_i$ are computed as described in Section~\ref{subsec:test:prep}.
+%Since the errors $\varepsilon_{it}$ follow an AR($1$) process, we estimate the long-run error variance by the difference-based estimator proposed in \cite{KhismatullinaVogt2020}, setting the tuning parameters $q$ and $r$ to $25$ and $10$, respectively.
+The long-run error variance is estimated by the difference-based estimator proposed in \cite{KhismatullinaVogt2020}, where the tuning parameters $q$ and $r$ are set to $25$ and $10$, respectively.
+In order to construct our test statistics, we use an Epanechnikov kernel and the location-scale grid $\mathcal{G}_T = U_T \times H_T$ with
 \begin{align}
 U_T & = \big\{ u \in [0,1]: u = \textstyle{\frac{5t}{T}} \text{ with } 1 \le t \le T \big\} \label{eq:grid-loc} \\
 H_T & = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5 t -3}{T}} \text{ with } 1 \le t \le T \big\}. \label{eq:grid-scale}
@@ -158,9 +163,9 @@ Table \ref{tab:sizepower} reports the simulation results, in particular, the emp
 %The left column of Table \ref{tab:sizepower} gives the results for the simulation setting with the correlation parameters $(\phi,\rho) = (0.1,0.1)$, the right column those for the setting with $(\phi,\rho) = (0.25,0.25)$. (We do not present the results for $(\phi,\rho) = (0.1,0.25)$ and $(\phi,\rho) = (0.25,0.1)$ as they are quite similar and do not bring additional insights.)
 The four panels (a)--(d) of Table \ref{tab:sizepower} correspond to different values of the bump size $b$. Panel (a) corresponds to the case $b=0$ and thus gives the empirical size of the test under the null $H_0$. Panels (b)--(d), in contrast, report the empirical power against the three alternatives with $b \in \{0.25,0.5,0.75\}$.
 %The actual size of the test is reported in the two subtables (a), whereas subtables (b)--(d) report the power against the three different alternatives with $b \in \{0.25,0.5,0.75\}$. Both the actual size and the power are computed as the number of simulations in which the test rejects the global null $H_0$ divided by the total number of simulations.
-Inspecting panel (a), one can see that the empirical size of the test gives a reasonable approximation to the target $\alpha$ in all scenarios under investigation.
+\textcolor{red}{Inspecting panel (a), one can see that the empirical size of the test gives a reasonable approximation to the target $\alpha$ in all scenarios under investigation, even though the size numbers are a bit downward/upward biased for the smaller time series lengths $T=100$ and $T=250$.}
 %, even though the size numbers have a slight upward bias. {\color{red}This bias gets smaller as the sample size $T$ increases, which reflects the fact that we get more and more information for each of the tests that we need to carry out.} We can also see that the upward bias become slightly more pronounced in case of stronger degrees of correlation across the covariates and the time series, i.e., with higher values of $\phi$ and $\rho$, but the change in test performance is almost negligible and can be attributed to random sampling. To summarize, even though slightly liberal, the test controls the FWER quite accurately in the simulation settings that we consider.
-Inspecting panels (b)--(d), one can further see that the test has good power properties. For the smallest height of the bump function $b = 0.25$ and the smallest time series length $T = 100$, the power is only moderate, reflecting the fact that the alternative with $b = 0.25$ is not very far away from the null. However, as we increase the height $b$ and the sample size $T$, the power increases quickly. For the height value $b = 0.5$ and $T=250$, for instance, we already have power of over $95\%$.
+Inspecting panels (b)--(d), one can further see that the test has good power properties. For the smallest bump size $b = 0.25$ and the smallest time series length $T = 100$, the power is only moderate, reflecting the fact that the alternative with $b = 0.25$ is not very far away from the null. However, as we increase the bump size $b$ and the time series length $T$, the power increases quickly. For $b = 0.5$ and $T=250$, for instance, we already have power of over $95\%$ when $\alpha \ge 0.05$.
 
 
 \subsection{Robustness checks on the choice of tuning parameters}\label{subsec:sim:grid}
@@ -177,7 +182,7 @@ $\mathcal{G}_T^{\text{fine}} = U_T^{\text{fine}} \times H_T^{\text{fine}}$,
 where  
 $U_T^{\text{fine}}  = \{ u \in [0,1]: u = \textstyle{\frac{t}{T}} \text{ with } 1 \le t \le T \}$
 and
-$H_T^{\text{fine}} = \{ h \in [ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} ]:  h = \textstyle{\frac{2t}{T}} \text{ with } 1 \le t \le T \}$. Such a fine grid significantly increases the number of tests which also affects the computational time. Hence, to decrease the computational time, for the fine grid we calculate the Gaussian quantile based on $L = 1000$ bootstrap samples and we simulate $1000$ samples for each simulation scenario. Apart from this, we work precisely with the same simulation setup as in Section \ref{subsec:sim:main}.
+$H_T^{\text{fine}} = \{ h \in [ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} ]:  h = \textstyle{\frac{2t}{T}} \text{ with } 1 \le t \le T \}$. Apart from the choice of grid, we work precisely with the same simulation setup as in Section \ref{subsec:sim:main}.\footnote{As the grid $\mathcal{G}_T^{\text{fine}}$ is very fine, the number of tests to be carried out is extremely large, which significantly increases the computational burden. To decrease computational time, we proceed as follows when using the fine grid $\mathcal{G}_T^{\text{fine}}$:  we calculate the Gaussian quantile based on $L = 1000$ (rather than $5000$) bootstrap samples and we simulate $1000$ samples (rather than $5000$) for each simulation scenario.}
 
 
 \begin{table}[t!]
@@ -228,17 +233,21 @@ $H_T^{\text{fine}} = \{ h \in [ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1
 \end{table}
 
 
-The simulation results for the three grids are reported in Table \ref{tab:grids}.\footnote{Note that the simulation results for the grid $\mathcal{G}_T$ in the first column of Table \ref{tab:grids} are identical with those in Table \ref{tab:sizepower}. For ease of comparison, we have repeated these results as part of Table \ref{tab:grids}.}
+The simulation results for the three grids are reported in Table \ref{tab:grids}.\footnote{Note that the simulation results for the grid $\mathcal{G}_T$ in the second column of Table \ref{tab:grids} are identical with those in Table \ref{tab:sizepower}. For ease of comparison, we have repeated these results as part of Table \ref{tab:grids}.}
 Each column corresponds to a particular choice of grid. Panel (a) in each column specifies the empirical size of the test, while panels (b)--(d) give the empirical power against the alternatives with bump size $b \in \{0.25,0.5,0.75\}$. 
 %, while {\color{red} the results for the finer grid are presented in Table \ref{tab:grid-fine}.} We report the results for the simulation scenario with stronger correlation across the time series and between the covariates, i.e., with $\rho = 0.25$ and $\phi = 0.25$, since this scenario is less favourable for our multiscale procedure and the results with different values of $\rho$ and $\phi$ are fairly similar.
-As can be seen, for large sample size $T=500$ the size numbers in Table \ref{tab:grids} are quite stable across the three different grids. Furthermore, even though the power numbers are a bit lower in case of a sparse grid compared to a , the test has reasonable power properties for all of the choices of the grid. %This demonstrates that 
+\textcolor{red}{As can be seen, the size numbers in Table \ref{tab:grids} are fairly stable across the three different grids. In particular, we get a reasonable approximation to the target size $\alpha$, no matter which of the three grids we are working with.} 
+Moreover, the power numbers for $\mathcal{G}_T$ and the finer grid $\mathcal{G}_T^{\text{fine}}$ are very similar to each other. Those for the sparser grid $\mathcal{G}_T^{\text{sparse}}$, in contrast, are somewhat lower, which may be explained as follows: As $\mathcal{G}_T^{\text{sparse}}$ is considerably sparser than the other two grids, much less intervals $\interval = [u-h,u+h]$ are taken into account. In particular, intervals may potentially be ignored where the deviation from the null is quite strong. This results in a loss of power.
+Taken together, our simulation results suggest the following: (i) The particular choice of grid has a negligible effect on the empirical size of the test. (ii) As long as the grid is sufficiently rich, the choice of grid also has a negligible effect on the power of the test. 
+%As long as the grid is chosen sufficiently rich (in the sense of including a variety of bandwidth values ranging from very small to very large and many time points that are scattered rather densely over the unit interval), the particular choice of grid has a negligible effect on the test.
+%Furthermore, even though the power numbers are a bit lower in case of a sparse grid compared to a , the test has reasonable power properties for all of the choices of the grid. %This demonstrates that
 %Although there are minor deviations from the results for the original simulated scenario presented in Section A.1, these variations are not substantial which confirms the robust performance of the proposed test when applied to a finer grid.
 %Furthermore, as we have seen in Section \ref{subsec:sim:large_n}, the behaviour of our test does not substantially change in case of a much sparser grid $\mathcal{G}_T^{\text{sparse}}$.
-This suggests that as long as the grid is chosen sufficiently rich (in the sense of including a variety of bandwidth values ranging from very small to very large and many time points that are scattered rather densely over the unit interval), the particular choice of grid has a negligible effect on the test.
+%This suggests that as long as the grid is chosen sufficiently rich (in the sense of including a variety of bandwidth values ranging from very small to very large and many time points that are scattered rather densely over the unit interval), the particular choice of grid has a negligible effect on the test.
 
 
 Apart from the grid, our method depends on the following tuning parameters: (i) the number of bootstrap samples $L$ to compute the Gaussian quantile, (ii) the kernel $K$, and (iii) secondary tuning parameters for the computation of the long-run error variance. 
-As long as $L$ is chosen large enough (say $L \ge 1000$), the exact value of $L$ should have a negligible effect. We use $L=5000$ throughout the paper. As a robustness check, we have rerun everything with $L=1000$, which (as expected) yields almost identical results. (The results are not reported here but are available from the authors upon request.) 
+As long as $L$ is chosen large enough (say $L \ge 1000$), the exact value of $L$ should have a negligible effect. We use $L=5000$ throughout the paper.\footnote{Except for the simulations with the fine grid $\mathcal{G}_T^{\text{fine}}$, where $L=1000$.} As a robustness check, we have rerun everything with $L=1000$, which (as expected) yields almost identical results.\footnote{The results are not reported here but are available from the authors upon request.} 
 As suggested by classical nonparametric theory, the Epanechnikov kernel (which is used throughout the paper) has good properties and the choice of kernel $K$ is of minor importance, in particular, much less important than the choice of bandwidth. Thus, we have not carried out robustness checks with respect to the choice of kernel.
 Our procedure can be combined with any method off-the-shelf for long-run error variance estimation. In the current simulation study, we work with the long-run variance estimator from \cite{KhismatullinaVogt2020}, where extensive robustness checks with respect to the choice of tuning parameters have been carried out. We refer to Section 5.2 therein for the details.
 
@@ -307,7 +316,7 @@ Our procedure can be combined with any method off-the-shelf for long-run error v
 \end{sidewaystable}
 
 
-So far, we have fixed the number of time series at $n = 15$. We now examine the performance of our test as $n$ gets larger. To do so, we rerun the simulation exercises from Section \ref{subsec:sim:main} for $n \in \{25,50,100\}$ and $T$ as before, i.e., $T \in \{100,250,500\}$. We work with precisely the same simulation setup as specified in Section \ref{subsec:sim:main} except for the fact that we use the smaller grid $\mathcal{G}_T^{\text{sparse}}$ defined in \eqref{eq:grid-sparse} to decrease the computational burden. Overall, our simulation results suggest that the test performs well for larger $n$. The results are presented in Table \ref{tab:large-n}, with each column corresponding to a particular choice of $n$. The upper panels (a) of Table \ref{tab:large-n} show that the empirical size of the test provides a suitable approximation to the target $\alpha$ across all scenarios under consideration. In particular, the size numbers remain quite stable as $n$ increases. Panels (b)--(d) further show that the test has reasonable power across all considered senarios. The power numbers, however, decrease somewhat as $n$ gets larger, which can be explained as follows: Let $\mathcal{M} = \{ (u,h,i,j): (u,h) \in \grid \text{ and } 1 \le i < j \le n \}$ be the collection of all location-scale points $(u,h)$ and all pairs of time series $(i,j)$ under consideration and let $\mathcal{M}_1 \subseteq \mathcal{M}$ be the set of tuples $(u,h,i,j)$ for which the local hypothesis $H_0^{[i, j]}(u, h)$ is false. Since in the simulation setup at hand, all trend functions are the same except the first one, it holds that $|\mathcal{M}_1| / |\mathcal{M}| \to 0$ as $n \to \infty$ (where $| \mathcal{M} |$ denotes the cardinality of the set $\mathcal{M}$). Hence, as $n$ increases, the total number of hypotheses to be tested grows much faster than the number of hypotheses where we see deviations from the null. As a consequence, it gets harder to detect these deviations, which is reflected in somewhat lower power numbers. 
+So far, we have fixed the number of time series at $n = 15$. We now examine the performance of our test as $n$ gets larger. To do so, we rerun the simulation exercises from Section \ref{subsec:sim:main} for $n \in \{25,50,100\}$ and $T$ as before, i.e., $T \in \{100,250,500\}$. We work with precisely the same simulation setup as specified in Section \ref{subsec:sim:main} except for the fact that we use the smaller grid $\mathcal{G}_T^{\text{sparse}}$ defined in \eqref{eq:grid-sparse} to decrease the computational burden. Overall, our simulation results suggest that the test performs well for larger $n$. The results are presented in Table \ref{tab:large-n}, with each column corresponding to a particular choice of $n$. \textcolor{red}{The upper panels (a) of Table \ref{tab:large-n} show that the empirical size of the test provides a reasonably good approximation to the target $\alpha$ across all scenarios under consideration. In particular, the size numbers remain fairly stable as $n$ increases, even though they appear to get a little less precise for larger $n$.} Panels (b)--(d) further show that the test has reasonable power across all considered senarios. The power numbers, however, decrease somewhat as $n$ gets larger, which can be explained as follows: Let $\mathcal{M} = \{ (u,h,i,j): (u,h) \in \grid \text{ and } 1 \le i < j \le n \}$ be the collection of all location-scale points $(u,h)$ and all pairs of time series $(i,j)$ under consideration and let $\mathcal{M}_1 \subseteq \mathcal{M}$ be the set of tuples $(u,h,i,j)$ for which the local hypothesis $H_0^{[i, j]}(u, h)$ is false. Since in the simulation setup at hand, all trend functions are the same except the first one, it holds that $|\mathcal{M}_1| / |\mathcal{M}| \to 0$ quite fast as $n \to \infty$ (where $| \mathcal{M} |$ denotes the cardinality of the set $\mathcal{M}$). Hence, as $n$ increases, the total number of hypotheses to be tested grows much faster than the number of hypotheses where we see deviations from the null. As a consequence, it gets harder to detect these deviations, which is reflected in somewhat lower power numbers. 
 
 
 \subsection{Comparison of our test with SiZer} 
@@ -316,8 +325,11 @@ So far, we have fixed the number of time series at $n = 15$. We now examine the 
 To the best of our knowledge, the only other multiscale test for comparing trend curves available in the literature is the SiZer test developed in \cite{Park2009}. In this section, we compare our method with this test. Notably, \cite{Park2009} consider a simplified version of our model without covariates and fixed effects. Moreover, rigorous theory has been developed only for the case of $n=2$ time series. The authors propose a possible extension of their approach to the case of more than $n=2$ time series, but the extension does not allow for a pairwise comparison of the time series. Moreover, it is not clear how to calculate the actual size and power of the test in the case of more than $n=2$ time series. For our comparison, we thus consider the model $Y_{it} = m_i\big(\frac{t}{T}\big) + \varepsilon_{it}$ without covariates and fixed effects and we choose the number of time series to be equal to $n=2$. 
 
 
-The simulation setup is as specified in Section \ref{subsec:sim:main} (without covariates and fixed effects, i.e., $\boldsymbol{\beta}_i = 0$ and $\alpha_i = 0$ for all $i$). We consider different time series lengths $T \in \{100,250,500,$ $750,1000\}$. As before, to generate data under the null $H_0: m_1 = m_2$, we let $m_i = 0$ for $i=1, 2$, and to produce data under the alternative, we use the bump function $m_1$ defined in \eqref{eq:bump-fct} with bump size $b \in \{ 0.25, 0.5 \}$ while setting $m_2 = 0$.
-We implement our multiscale test as in Section \ref{subsec:sim:main} with one important change. To make the comparison between the methods as fair as possible, we do not estimate the long-run error variance from the data but consider it as known. Specifically, we use the theoretical value of the long-run error variance based on the true parameter values: $\sigma^2 = \frac{E[\eta_{it}^2]}{(1 - a)^2} = \frac{1}{9}$. Since SiZer depends not only on the long-run error variance but on the whole autocovariance function $\{ \gamma(k): k \in \integers\}$ of the error process, we use the following formula for the autocovariance function in the calculation of the critical values of SiZer: $\gamma(k) = \frac{E[\eta_{it}^2] a^{|k|}}{1 - a^2} = \frac{0.25^{|k|}}{15}$. %Further details for the exact implementation of SiZer can be found in the Appendix in \cite{KhismatullinaVogt2020}.
+The simulation setup is as specified in Section \ref{subsec:sim:main} (without covariates and fixed effects, i.e., $\boldsymbol{\beta}_i = 0$ and $\alpha_i = 0$ for all $i$).
+%We consider different time series lengths $T \in \{100,250,500\}$.
+As before, to generate data under the null $H_0: m_1 = m_2$, we let $m_i = 0$ for $i=1, 2$, and to produce data under the alternative, we use the bump function $m_1$ defined in \eqref{eq:bump-fct} with bump size $b \in \{ 0.25, 0.5 \}$ while setting $m_2 = 0$.
+We implement our multiscale test as in Section \ref{subsec:sim:main}. For the implementation of the SiZer test, we use the same location-scale grid $\mathcal{G}_T$ as for our test. While our method depends on the long-run error variance $\sigma^2$, the SiZer test depends on the whole autocovariance function $\{ \gamma(k): k \in \integers\}$ of the error process. To make the comparison as fair as possible, we assume the autocovariance function $\gamma(\cdot)$ and thus the long-run error variance $\sigma^2 = \sum_{k=-\infty}^\infty \gamma(k)$ to be known when implementing the two methods.
+%We implement our multiscale test as in Section \ref{subsec:sim:main} with one important change. To make the comparison between the methods as fair as possible, we do not estimate the long-run error variance from the data but consider it as known. Specifically, we use the theoretical value of the long-run error variance based on the true parameter values: $\sigma^2 = \frac{E[\eta_{it}^2]}{(1 - a)^2} = \frac{1}{9}$. Since SiZer depends not only on the long-run error variance but on the whole autocovariance function $\{ \gamma(k): k \in \integers\}$ of the error process, we use the following formula for the autocovariance function in the calculation of the critical values of SiZer: $\gamma(k) = \frac{E[\eta_{it}^2] a^{|k|}}{1 - a^2} = \frac{0.25^{|k|}}{15}$. %Further details for the exact implementation of SiZer can be found in the Appendix in \cite{KhismatullinaVogt2020}.
 
 
 \begin{table}[t!]
@@ -336,8 +348,8 @@ We implement our multiscale test as in Section \ref{subsec:sim:main} with one im
   $T = 100$ & 0.010 & 0.099 & 0.047 & 0.332 & 0.106 & 0.524 \\ 
   $T = 250$ & 0.008 & 0.162 & 0.041 & 0.510 & 0.102 & 0.699 \\ 
   $T = 500$ & 0.009 & 0.214 & 0.044 & 0.598 & 0.089 & 0.787 \\ 
-  $T = 750$ & 0.008 & 0.252 & 0.045 & 0.657 & 0.095 & 0.844 \\ 
-  $T = 1000$ & 0.012 & 0.271 & 0.053 & 0.691 & 0.102 & 0.873 \\ 
+%  $T = 750$ & 0.008 & 0.252 & 0.045 & 0.657 & 0.095 & 0.844 \\ 
+%  $T = 1000$ & 0.012 & 0.271 & 0.053 & 0.691 & 0.102 & 0.873 \\ 
 \bottomrule
 \end{tabularx}
 \end{subtable}
@@ -354,8 +366,8 @@ We implement our multiscale test as in Section \ref{subsec:sim:main} with one im
 $T = 100$ & 0.075 & 0.251 & 0.193 & 0.551 & 0.317 & 0.714 \\ 
   $T = 250$ & 0.253 & 0.629 & 0.486 & 0.876 & 0.633 & 0.951 \\ 
   $T = 500$ & 0.640 & 0.905 & 0.817 & 0.985 & 0.887 & 0.996 \\ 
-  $T = 750$ & 0.867 & 0.982 & 0.957 & 0.998 & 0.981 & 1.000 \\ 
-  $T = 1000$ & 0.970 & 0.998 & 0.993 & 1.000 & 0.997 & 1.000 \\ 
+%  $T = 750$ & 0.867 & 0.982 & 0.957 & 0.998 & 0.981 & 1.000 \\ 
+%  $T = 1000$ & 0.970 & 0.998 & 0.993 & 1.000 & 0.997 & 1.000 \\ 
 \bottomrule
 \end{tabularx}
 \end{subtable}
@@ -372,8 +384,8 @@ $T = 100$ & 0.075 & 0.251 & 0.193 & 0.551 & 0.317 & 0.714 \\
 $T = 100$ & 0.482 & 0.733 & 0.703 & 0.922 & 0.815 & 0.967 \\ 
   $T = 250$ & 0.966 & 0.998 & 0.994 & 1.000 & 0.998 & 1.000 \\ 
   $T = 500$ & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
-  $T = 750$ & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
-  $T = 1000$ & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
+%  $T = 750$ & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
+%  $T = 1000$ & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\ 
 \bottomrule
 \end{tabularx}
 \end{subtable}}
@@ -382,7 +394,7 @@ $T = 100$ & 0.482 & 0.733 & 0.703 & 0.922 & 0.815 & 0.967 \\
 
 In what follows, we denote our multiscale test by $\mathcal{T}_{\text{MS}}$ and the SiZer test of \cite{Park2009} by $\mathcal{T}_{\text{SiZer}}$. Table \ref{tab:sizer} presents the results of our comparison study. Panel (a) compares the empirical size of the two tests, while panels (b) and (c) provide a power comparison. 
 %of the size and power simulation studies comparing $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{SiZer}}$ are presented in Tables \ref{tab:size:compare} and Tables \ref{tab:power:compare1}, \ref{tab:power:compare2} respectively.
-There is an important difference between $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{SiZer}}$ to be noticed: $\mathcal{T}_{\text{MS}}$ is a global test procedure, whereas $\mathcal{T}_{\text{SiZer}}$ is scale-wise in essence. This means that $\mathcal{T}_{\text{MS}}$ tests the hypotheses $H_0^{[1,2]}(u,h)$ simultaneously for all locations $u \in U_T$ and scales $h \in H_T$ and controls the size simultaneously over both locations $u$ and scales $h$. $\mathcal{T}_{\text{SiZer}}$, in contrast, tests $H_0^{[1,2]}(u,h)$ simultaneously for all $u \in U_T$ but separately for each scale $h \in H_T$ and, hence, controls the size for each scale $h \in H_T$ separately. This results in $\mathcal{T}_{\text{SiZer}}$ being much too liberal, as panel (a) illustrates: whereas the empirical size numbers of $\mathcal{T}_{\text{MS}}$ closely align with the target size $\alpha$, the size numbers of $\mathcal{T}_{\text{SiZer}}$ are much larger than the target $\alpha$. Since the number of scales $h$ in the grid $\mathcal{G}_T$ increases with $T$, the size numbers deviate more and more strongly from the target $\alpha$ as $T$ increases. To summarize, as expected, the global test $\mathcal{T}_{\text{MS}}$ holds the size reasonably well, whereas the scale-wise method $\mathcal{T}_{\text{SiZer}}$ is much too liberal.
+There is an important difference between $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{SiZer}}$ to be noticed: $\mathcal{T}_{\text{MS}}$ is a global test procedure, whereas $\mathcal{T}_{\text{SiZer}}$ is scale-wise in essence. This means that $\mathcal{T}_{\text{MS}}$ tests the hypotheses $H_0^{[1,2]}(u,h)$ simultaneously for all locations $u \in U_T$ and scales $h \in H_T$. In particular, it controls the size simultaneously over both locations $u$ and scales $h$. $\mathcal{T}_{\text{SiZer}}$, in contrast, tests $H_0^{[1,2]}(u,h)$ simultaneously for all $u \in U_T$ but separately for each scale $h \in H_T$ and, hence, controls the size for each scale $h \in H_T$ separately. This results in $\mathcal{T}_{\text{SiZer}}$ being much too liberal, as panel (a) illustrates: whereas the empirical size numbers of $\mathcal{T}_{\text{MS}}$ closely align with the target size $\alpha$, the size numbers of $\mathcal{T}_{\text{SiZer}}$ are much larger than the target $\alpha$. In particular, they deviate more and more strongly from the target $\alpha$ as $T$ increases, since the number of scales $h$ in the grid $\mathcal{G}_T$ increases with $T$. To summarize, as expected, the global test $\mathcal{T}_{\text{MS}}$ holds the size reasonably well, whereas the scale-wise method $\mathcal{T}_{\text{SiZer}}$ is much too liberal.
 %One could of course fix this issue by using a simple multiple testing correction such as Bonferroini. However, as the statistics underlying the test are strongly correlated across bandwidths $h$ (and time series $(i,j)$ in the case $n > 2$), this will most probably result in a very conservative procedure.
 Inspecting the power numbers in panels (b) and (c), one can further see that in all simulation scenarios, $\mathcal{T}_{\text{SiZer}}$ is more powerful than $\mathcal{T}_{\text{MS}}$. These higher power numbers, however, should not be taken at face value. In particular, they do not imply that $\mathcal{T}_{\text{SiZer}}$ is better in detecting deviations from the null than our test. They are rather a simple consequence of the fact that $\mathcal{T}_{\text{SiZer}}$ is much too liberal as illustrated in panel (a).
 
@@ -399,16 +411,17 @@ We next investigate the finite sample performance of the clustering algorithm fr
 
 \begin{figure}[t!]
 \includegraphics[width=\textwidth]{../output/clustering_functions.pdf}
-\caption{In black: the group-specific trend functions $f_1, f_2$ and $f_3$. In red: the time series $\{Y_{it}^\circ : 1 \le t \le T \}$ with $Y_{it}^\circ = f_l(t/T) + \varepsilon_{it}$ for one simulation run and $T=250$.}\label{fig:clustering_fcts}
+\caption{In black: the group-specific trend functions $f_l$ ($l=1,2,3$). In red: the time series $\{Y_{it}^\circ : 1 \le t \le T \}$ with $Y_{it}^\circ = f_l(t/T) + \varepsilon_{it}$ ($l=1,2,3$) for one simulation run and $T=250$.}\label{fig:clustering_fcts}
 \end{figure}
 
 
-The simulation results are reported in Table \ref{tab:clustering}. The entries in Table \ref{tab:clustering}(a) are computed as the number of simulations for which $\widehat{N} = N$ divided by the total number of simulations. They thus specify the empirical probabilities with which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$. Analogously, the entries of Table \ref{tab:clustering}(b) give the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$. The results in Table \ref{tab:clustering} nicely illustrate the theoretical properties of our clustering algorithm. According to Proposition \ref{prop:clustering:1}, the probability that $\widehat{N} = N$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{G_1,G_2,G_3\}$ should be at least $(1-\alpha)$ asymptotically. For the largest sample size $T = 500$, the empirical probabilities reported in Table \ref{tab:clustering} can indeed be seen to exceed the value $(1-\alpha)$ as predicted by Proposition \ref{prop:clustering:1}. For the smaller sample sizes $T=100$ and $T=250$, in contrast, the empirical probabilities are substantially smaller than $(1-\alpha)$. This reflects the asymptotic nature of Proposition \ref{prop:clustering:1} and is not very surprising. It simply mirrors the fact that for the smaller sample sizes $T=100$ and $T=250$, the effective noise level in the simulated data is quite high.
+The simulation results are reported in Table \ref{tab:clustering}. The entries in Table \ref{tab:clustering}(a) are computed as the number of simulations for which $\widehat{N} = N$ divided by the total number of simulations. They thus specify the empirical probabilities with which the estimate $\widehat{N}$ is equal to the true number of groups $N = 3$. Analogously, the entries of Table \ref{tab:clustering}(b) give the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\}$ equals the true one $\{G_1,G_2,G_3\}$. The results in Table \ref{tab:clustering} nicely illustrate the theoretical properties of our clustering algorithm. According to Proposition \ref{prop:clustering:1}, the probability that $\widehat{N} = N$ and $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{G_1,G_2,G_3\}$ should be at least $(1-\alpha)$ asymptotically. For the largest sample size $T = 500$, the empirical probabilities reported in Table \ref{tab:clustering} can indeed be seen to exceed the value $(1-\alpha)$ for $\alpha \in \{0.05,0.1\}$ as predicted by Proposition \ref{prop:clustering:1} and to be close to $(1-\alpha)$ for $\alpha=0.01$. For the smaller sample sizes $T=100$ and $T=250$, in contrast, the empirical probabilities are substantially smaller than $(1-\alpha)$. This reflects the asymptotic nature of Proposition \ref{prop:clustering:1} and is not very surprising. It simply mirrors the fact that for the smaller sample sizes $T=100$ and $T=250$, the effective noise level in the simulated data is quite high.
+
 
 \begin{table}[t]
 \footnotesize{
 \begin{center}
-\caption{Clustering results for different sample sizes $T$ and nominal sizes $\alpha$.}\label{tab:clustering}
+\caption{Clustering results for different time series lengths $T$ and nominal sizes $\alpha$.}\label{tab:clustering}
 \begin{subtable}[b]{0.48\textwidth}
 \centering
 \caption{Empirical probabilities that \\ $\widehat{N} = N$}\label{tab:clustering:1}
@@ -429,20 +442,21 @@ The simulation results are reported in Table \ref{tab:clustering}. The entries i
 \begin{figure}[t!]
 \centering
 \includegraphics[width=0.95\textwidth]{../output/hist_groups}
-\caption{Estimated number of groups $\widehat{N}$ for nominal size $\alpha = 0.05$.
+\caption{Histograms of the estimated number of groups $\widehat{N}$ for nominal size $\alpha = 0.05$.
 %Each panel corresponds to a different sample size $T$.
 }\label{fig:clustering:1}
 \vspace{0.25cm}
 
 \includegraphics[width=0.95\textwidth]{../output/hist_errors}
-\caption{Number of classification errors for nominal size $\alpha = 0.05$.
+\caption{Histograms of the number of classification errors for nominal size $\alpha = 0.05$.
 %Each panel corresponds to a different sample size $T$.
 }\label{fig:clustering:2}
 \end{figure}
 
+
 Figures \ref{fig:clustering:1} and \ref{fig:clustering:2} give more insight into what happens for $T=100$ and $T=250$. Figure \ref{fig:clustering:1} shows histograms of the $5000$ simulated values of $\widehat{N}$, while Figure \ref{fig:clustering:2} depicts histograms of the number of classification errors produced by our algorithm. By the number of classification errors, we simply mean the number of incorrectly classified time series, which is formally calculated as 
 $\min_{\pi \in S_{\widehat{N}}} \big\{ |G_1 \setminus \widehat{G}_{\pi(1)}| +|G_2 \setminus \widehat{G}_{\pi(2)}| + |G_3 \setminus \widehat{G}_{\pi(3)}| \big\}$
-with $S_{\widehat{N}}$ being the set of all permutations of $\{1, 2, \ldots, \widehat{N}\}$. The histogram of Figure \ref{fig:clustering:1} for $T=100$ and $T = 250$ clearly shows that our method underestimates the number of groups. In particular, it fails to detect the difference between two out of three groups in a large number of simulations ($\widehat{N} = 2$ in $3403$ and $4744$ cases out of $5000$ for $T= 100$ and $T=250$, respectively). This is reflected in the corresponding histogram of Figure \ref{fig:clustering:2} which shows that there are exactly $5$ classification errors in $3322$ ($4744$) of the $5000$ simulation runs for $T=100$ ($T=250$). In most of these cases, the estimated group structure $\{ \widehat{G}_1, \widehat{G}_{2}\}$ coincides with either $\{ G_1 \cup G_2,G_3\}$,  $\{ G_1, G_2\cup G_3\}$ or $ \{ G_1 \cup G_3,G_2\}$. In summary, we can conclude that the zero empirical probabilities for $T=100$ and $T=250$ in Table \ref{tab:clustering} are due to the algorithm underestimating the number of groups. Inspecting the histograms for $T=500$, one can see that the performance of the estimators $\widehat{N}$ and $\{ \widehat{G}_1,\ldots, \widehat{G}_{\widehat{N}} \}$ improves significantly. %, even though the corresponding empirical probabilities in Table \ref{tab:clustering} are still somewhat below the target $(1-\alpha)$.
+with $S_{\widehat{N}}$ being the set of all permutations of $\{1, 2, \ldots, \widehat{N}\}$. The histograms of Figure \ref{fig:clustering:1} for $T=100$ and $T = 250$ clearly show that our method underestimates the number of groups. In particular, it fails to detect the difference between two out of three groups in a large number of simulations ($\widehat{N} = 2$ in $3403$ and $4744$ cases out of $5000$ for $T= 100$ and $T=250$, respectively). This is reflected in the corresponding histograms of Figure \ref{fig:clustering:2} which show that there are exactly $5$ classification errors in $3322$ ($4744$) of the $5000$ simulation runs for $T=100$ ($T=250$). In most of these cases, the estimated group structure $\{ \widehat{G}_1, \widehat{G}_{2}\}$ coincides with either $\{ G_1 \cup G_2,G_3\}$,  $\{ G_1, G_2\cup G_3\}$ or $ \{ G_1 \cup G_3,G_2\}$. In summary, we can conclude that the very small empirical probabilities for $T=100$ and $T=250$ in Table \ref{tab:clustering} are due to the algorithm underestimating the number of groups. Inspecting the histograms for $T=500$ in Figures \ref{fig:clustering:1} and \ref{fig:clustering:2}, one can see that the performance of the estimators $\widehat{N}$ and $\{ \widehat{G}_1,\ldots, \widehat{G}_{\widehat{N}} \}$ improves significantly as the time series length $T$ increases. %, even though the corresponding empirical probabilities in Table \ref{tab:clustering} are still somewhat below the target $(1-\alpha)$.
 
 
 \subsection{Comparison of our clustering algorithm with a benchmark}
@@ -465,16 +479,21 @@ Our multiscale approach can be regarded as a refinement of this very natural and
 %This procedure serves as a straightforward and intuitive benchmark, with our approach being a refinement of it. In particular, our approach replaces the simple distance measure $d_{ij}$ by a more advanced multiscale distance measure and provides a way to estimate the number of clusters -- a feature not included in the benchmark procedure. For the sake of fair comparison, we assume that the number of clusters $N=3$ is known, and thus, do not provide an estimate of the number of groups $\widehat{N}$.
 
 
-We implement our clustering algorithm in exactly the same way as in Section \ref{subsec:sim:clustering}. To run the benchmark algorithm in practice, we need to discretize the supremum over all time points $u \in [0,1]$ in Step 2 of the algorithm. To make the comparison as fair as possible, we replace this supremum by the maximum over all points $u \in U_T$, where $U_T$ is the grid of locations defined in \eqref{eq:grid-loc} that underlies the location-scale grid $\mathcal{G}_T = U_T \times H_T$ of our multiscale test. Moreover, we need to choose a bandwidth to run the benchmark algorithm. We consider six different choices: $h_k = h_{\min} + c_k (h_{\max} - h_{\min})$ with $c_k = 0.2(k-1)$ for $k=1,\ldots,6$.
+We implement our clustering algorithm in exactly the same way as in Section \ref{subsec:sim:clustering} (with $N=3$ known). To run the benchmark algorithm in practice, we need to discretize the supremum over all time points $u \in [0,1]$ in Step 2 of the algorithm. To make the comparison as fair as possible, we replace this supremum by the maximum over all points $u \in U_T$, where $U_T$ is the grid of locations defined in \eqref{eq:grid-loc} that underlies the location-scale grid $\mathcal{G}_T = U_T \times H_T$ of our multiscale test. Moreover, we need to choose a bandwidth to run the benchmark algorithm. We consider six different choices: $h_l = h_{\min} + c_l (h_{\max} - h_{\min})$ with $c_l = 0.2(l-1)$ for $l=1,\ldots,6$.
 
 %We implement the clustering algorithm as in Section \ref{subsec:sim:clustering} with one small difference. Computational time of the benchmark procedure exceeds significantly the computational time needed for our method (presumably, due to the lack of the discretization of the grid), hence, in order to lighten the computational burden, instead of $5000$ samples, we simulate $1000$ samples for this simulation exercise.
 
 
 \begin{table}[t!]
-\centering
-\caption{Empirical probabilities that $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{ G_1,G_2,G_3\}$ for the proposed clustering approach with an estimated long-run variance ($\mathcal{T}_{\text{MS}}$) and with the true theoretical value of the long-run variance ($\mathcal{T}_{\text{MS, true lrv}}$) and the benchmark procedures $\mathcal{T}_{\text{bmk, }1} - \mathcal{T}_{\text{bmk, }6}$ corresponding to bandwidths $h_1 - h_6$ for different sample sizes $T$.}\label{tab:clustering:comparison}
+\footnotesize{  
+\begin{center}
+\caption{Empirical probabilities that the estimated group structure is identical to the true group structure $\{ G_1,G_2,G_3\}$. $\mathcal{T}_{\text{MS}}$ denotes our multiscale method and $\mathcal{T}_{\text{bmk, }l}$ the benchmark procedure with bandwidth $h_l$ ($l=1,\ldots,6$). 
+%  $\{ \widehat{G}_1,\ldots,\widehat{G}_N\} = \{ G_1,G_2,G_3\}$ for the proposed clustering approach with an estimated long-run variance ($\mathcal{T}_{\text{MS}}$) and with the true theoretical value of the long-run variance ($\mathcal{T}_{\text{MS, true lrv}}$) and the benchmark procedures $\mathcal{T}_{\text{bmk, }1} - \mathcal{T}_{\text{bmk, }6}$ corresponding to bandwidths $h_1 - h_6$ for different sample sizes $T$.
+\textcolor{red}{[Can we delete $\mathcal{T}_{\text{MS, true lrv}}$? Not really needed in my opinion.]}}\label{tab:clustering:comparison}
+\renewcommand{\arraystretch}{1.2}  
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
-{\color{red}\input{../output/clustering_comparison}}
+\input{../output/clustering_comparison}
+\end{center}}
 %{\color{red}
 %\begin{tabular}{ccccccccc}
 %  \hline
@@ -486,6 +505,7 @@ We implement our clustering algorithm in exactly the same way as in Section \ref
 %   \hline
 %\end{tabular}}
 \end{table}
+
 
 %\addtocounter{table}{-1} 
 %\begin{table}[t]
@@ -524,12 +544,8 @@ We implement our clustering algorithm in exactly the same way as in Section \ref
 %\end{figure}
 
 
-The simulation results are reported in Table \ref{tab:clustering:comparison}. The entries of the table give the empirical probabilities with which the estimated group structure $\{ \widehat{G}_1,\ldots,\widehat{G}_3\}$ equals the true one $\{G_1,G_2,G_3\}$.
-\textcolor{blue}{[Ideally, would like to have the following results:]
-The two main take-away messages are these:
-(i) The performance of the benchmark procedure is heavily influenced by the choice of bandwidth.
-(ii) The performance of our multiscale method is comparable to that of the benchmark with the best choice of bandwidth.
-This can be interpreted as follows: our multiscale method automatically selects the ``right'' scale(s) or bandwidth(s), i.e., those which are most suitable for comparing the trend curves. }
+The simulation results are reported in Table \ref{tab:clustering:comparison}. The entries of the table give the empirical probabilities with which the estimated group structure equals the true one $\{G_1,G_2,G_3\}$. The two main results are as follows: (i) The performance of the benchmark procedure is heavily influenced by the choice of bandwidth.
+(ii) Our multiscale method outperforms the benchmark with all considered bandwidth choices $h_l$. Results (i) and (ii) nicely illustrate the main advantage of our multiscale method: it automatically selects the ``right'' scale(s) or bandwidth(s), i.e., those which are most suitable for comparing the trend curves.
 
 
 %{\color{red} The results highlight a significant distinction: the benchmark procedure's outcomes are heavily influenced by the selection of bandwidth, a limitation not observed in our clustering approach. Furthermore, with large sample sizes, the empirical probabilities of success using our clustering approach—even with an estimated number of clusters—are quite high. In contrast, the benchmark procedure lacks a method for estimating the number of clusters. 
@@ -554,7 +570,6 @@ This can be interpreted as follows: our multiscale method automatically selects 
   
 
 
-
 \section{Application to GDP growth data}\label{sec:app:gdp}
 
 
@@ -562,7 +577,7 @@ In what follows, we revisit an application example from \cite{Zhang2012}. The ai
 %In particular, the OECD.Stat database, which is our main source for data on major economic indicators, contains quarterly data of good quality only for the above mentioned $11$ countries. 
 In the following list, we specify the data for our analysis.\footnote{All data were accessed and downloaded on 7 December 2021.}
 
-\begin{itemize}[leftmargin=0.5cm]
+\begin{itemize}[leftmargin=0.5cm, itemsep=0pt, parsep=0pt, topsep=3pt]
 \item \textbf{Gross domestic product ($\boldsymbol{GDP}$):} We use freely available data on \textit{Gross Domestic Product -- Expenditure Approach} from the OECD.Stat %\nocite{OECD} 
 database (\texttt{https://stats.\linebreak oecd.org/Index.aspx}). To be as close as possible to the specification of the data in \cite{Zhang2012}, we use seasonally adjusted quarterly data on GDP expressed in millions of 2015 US dollars.\footnote{Since the publication of \cite{Zhang2012}, the OECD reference year has changed from 2005 to 2015. We have decided to analyse the latest version of the data in order to be able to make more accurate and up-to-date conclusions.} 
 %The data are available from 1960 to 2021 which fully covers the time period that we take into consideration. 
@@ -585,11 +600,11 @@ For each of the $n=11$ countries in our sample, we thus observe a quarterly time
 \Delta \ln GDP_{it}
  & = m_i \Big( \frac{t}{T} \Big) + \beta_{i, 1} \Delta \ln L_{it} + \beta_{i, 2} \Delta \ln K_{it} + \beta_{i, 3} \Delta \ln H_{it} + \alpha_i + \varepsilon_{it} \label{eq:model:app}
 \end{align}
-for $1 \le t \le T$, where $\bfbeta_i = (\beta_{i, 1}, \beta_{i, 2}, \beta_{i, 3})^\top$ is a vector of unknown parameters, $m_i$ is a country-specific unknown nonparametric time trend and $\alpha_i$ is a country-specific fixed effect. 
+for $1 \le t \le T$, where $\bfbeta_i = (\beta_{i, 1}, \beta_{i, 2}, \beta_{i, 3})^\top$ is a vector of unknown parameters, $m_i$ is a country-specific nonparametric time trend and $\alpha_i$ is a country-specific fixed effect. 
 
 
 In order to test the null hypothesis $H_0: m_1 = \ldots = m_n$ with $n = 11$ in model \eqref{eq:model:app}, we implement our multiscale test as follows: 
-\begin{itemize}[leftmargin=0.5cm]
+\begin{itemize}[leftmargin=0.5cm, itemsep=0pt, parsep=0pt, topsep=3pt]
 
 \item We choose $K$ to be the Epanechnikov kernel and consider the set of location-scale points $\mathcal{G}_T = U_T \times H_T$, where 
 %\begin{align*}

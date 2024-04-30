@@ -499,15 +499,16 @@ repl_clustering <- function(rep, t_len_, n_ts_, grid_,
     y_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
     error_matrix  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
     
-    big_sigma_matrix       <- matrix(rho_, nrow = n_ts_, ncol = n_ts_)
-    diag(big_sigma_matrix) <- 1
-    alpha_vec              <- rmvnorm(1, mean = rep(0, n_ts_), sigma = big_sigma_matrix)
-    
     sigmahat_vector <- c()
     
     if (!is.null(beta_)){    
+      big_sigma_matrix       <- matrix(rho_, nrow = n_ts_, ncol = n_ts_)
+      diag(big_sigma_matrix) <- 1
+      alpha_vec              <- rmvnorm(1, mean = rep(0, n_ts_), sigma = big_sigma_matrix)
+      
       phi_matrix       <- matrix(phi_, nrow = 3, ncol = 3)
       diag(phi_matrix) <- 1
+      a_matrix         <- diag(a_x_vec_)
       
       for (i in 1:n_ts_){
         error_matrix[, i] <- arima.sim(model = list(ar = a_),
@@ -515,7 +516,6 @@ repl_clustering <- function(rep, t_len_, n_ts_, grid_,
                                        n = t_len_)
         
         nu       <- rmvnorm(t_len_ + 10, mean = c(0, 0, 0), sigma = phi_matrix)
-        a_matrix <- diag(a_x_vec_)
         x_matrix <- matrix(0, 3, t_len_ + 10)
         
         for (t in 2:(t_len_ + 10)){
@@ -546,12 +546,10 @@ repl_clustering <- function(rep, t_len_, n_ts_, grid_,
       }
     } else {
       for (i in 1:n_ts_){
-        error_matrix[, i] <- arima.sim(model = list(ar = a_),
-                                       innov = rnorm(t_len_, 0, sigma_),
-                                       n = t_len_)
-        
-#        y_matrix[, i]     <- alpha_vec[i] + m_matrix_[, i] + error_matrix[, i]
-        y_matrix[, i]     <- m_matrix_[, i] + error_matrix[, i]
+        error_matrix[, i]  <- arima.sim(model = list(ar = a_),
+                                        innov = rnorm(t_len_, 0, sigma_),
+                                        n = t_len_)
+        y_matrix[, i]      <- m_matrix_[, i] + error_matrix[, i]
         
         #Estimating the fixed effects
         alpha_hat_tmp      <- mean(y_matrix[, i])
@@ -562,23 +560,26 @@ repl_clustering <- function(rep, t_len_, n_ts_, grid_,
         sigmahat_vector    <- c(sigmahat_vector, sigma_hat_i) 
       }
     }    
-    sigma_vector  <- rep(sqrt(sigma_^2/((1 - a_)^2)), n_ts_)      
-    psi_estimated <- compute_statistics(data = y_augm_matrix,
-                                        sigma_vec = rep(sqrt(mean(sigmahat_vector^2)), n_ts_),
-                                        n_ts = n_ts_, grid = grid_)
-    psi_true <- compute_statistics(data = y_augm_matrix,
-                                   sigma_vec = sigma_vector,
-                                   n_ts = n_ts_, grid = grid_)
+    psi <- compute_statistics(data = y_augm_matrix, sigma_vec = sigmahat_vector,
+                              n_ts = n_ts_, grid = grid_)
     
     if (comparison){
+      #psi_estimated <- compute_statistics(data = y_augm_matrix,
+      #                                    sigma_vec = sigmahat_vector,
+      #                                    n_ts = n_ts_, grid = grid_)
+      #sigma_vector  <- rep(sqrt(sigma_^2/((1 - a_)^2)), n_ts_)      
+      #psi_true      <- compute_statistics(data = y_augm_matrix,
+      #                                    sigma_vec = sigma_vector,
+      #                                    n_ts = n_ts_, grid = grid_)
+      
       grid_points    <- seq(1/t_len_, 1, by = 1/t_len_)
       u_grid         <- unique(grid_$gset[, 1])
-      smoothed_data  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-      smoothed_data2 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-      smoothed_data3 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-      smoothed_data4 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-      smoothed_data5 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-      smoothed_data6 <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      smoothed_data  <- matrix(NA, nrow = length(u_grid), ncol = n_ts_)
+      smoothed_data2 <- matrix(NA, nrow = length(u_grid), ncol = n_ts_)
+      smoothed_data3 <- matrix(NA, nrow = length(u_grid), ncol = n_ts_)
+      smoothed_data4 <- matrix(NA, nrow = length(u_grid), ncol = n_ts_)
+      smoothed_data5 <- matrix(NA, nrow = length(u_grid), ncol = n_ts_)
+      smoothed_data6 <- matrix(NA, nrow = length(u_grid), ncol = n_ts_)
       
       for (i in 1:n_ts_){
         h_min <- min(grid_$bws)
@@ -610,14 +611,14 @@ repl_clustering <- function(rep, t_len_, n_ts_, grid_,
           benchmark_results6[i, j] <- max(abs(smoothed_data6[, i] - smoothed_data6[, j]))
         }
       }
-      results <- c(as.vector(psi_estimated$stat_pairwise),
-                   as.vector(psi_true$stat_pairwise),
+      results <- c(as.vector(psi$stat_pairwise),
+                   #as.vector(psi_estimated$stat_pairwise),
+                   #as.vector(psi_true$stat_pairwise),
                    as.vector(benchmark_results), as.vector(benchmark_results2),
                    as.vector(benchmark_results3), as.vector(benchmark_results4),
                    as.vector(benchmark_results5), as.vector(benchmark_results6))
     } else {
-      results <- c(as.vector(psi_estimated$stat_pairwise),
-                   as.vector(psi_true$stat_pairwise))
+      results <- c(as.vector(psi$stat_pairwise))
     }
   }
   return(results)

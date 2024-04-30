@@ -75,7 +75,7 @@
 
 \bigskip
 \begin{abstract}
-{\noindent We develop new econometric methods for the comparison of nonparametric time trends. In many applications, practitioners are interested in examining the trending behaviour of the observed time series. Among other things, they would like to know which trends have a different form and in which time intervals the differences occur. We design a multiscale test to formally approach these questions. Specifically, we develop a test which allows to make rigorous confidence statements about which time trends are different and where (i.e., in which time intervals) they differ. Based on our multiscale test, we further develop a clustering algorithm which allows to cluster the observed time series into groups with the same trending behaviour. We derive asymptotic theory for our test and clustering methods. The theory is complemented by a simulation study and two applications to house pricing and GDP growth data.}
+{\noindent We develop new econometric methods for the comparison of nonparametric time trends. In many applications, practitioners are interested in examining the trending behaviour of multiple time series. Among other things, they would like to know which time series have different trends and in which time intervals the differences occur. We design a multiscale test to formally approach these questions. Specifically, we develop a test which allows to make rigorous confidence statements about which time trends are different and where (i.e., in which time intervals) they differ. Based on our multiscale test, we further develop a clustering algorithm which allows to cluster the observed time series into groups with the same trending behaviour. We derive asymptotic theory for our test and clustering methods. The theory is complemented by a simulation study and two applications to house pricing and GDP growth data.}
 \end{abstract}
 
 \noindent%
@@ -106,7 +106,9 @@ Y_{it} = m_i \Big( \frac{t}{T} \Big) + \bfbeta^\top_i \X_{it} + \alpha_i + \vare
 for $1 \le t \le T$, where $m_i: [0,1] \to \reals$ is a nonparametric (deterministic) trend function, $\bfbeta_i$ is a vector of $d$ parameters, $\X_{it}$ is a vector of covariates, $\alpha_i$ is a fixed effect and $\varepsilon_{it}$ is an idiosyncratic error term. As common in nonparametric regression, the trends $m_i$ in model \eqref{eq:model_full} depend on rescaled time $t/T$ rather than on real time $t$ and are thus defined on the unit interval $[0,1]$; see e.g.\ \cite{Robinson1989}, \cite{Dahlhaus1997} and \cite{VogtLinton2014} for a discussion of rescaled time. More details on the components of model \eqref{eq:model_full} together with the technical assumptions imposed on them can be found in Section \ref{sec:model}.
 
 
-There are various statistical tests for the comparison of time trends in the literature. Most commonly, the null hypothesis $H_0: m_i = m + c_i \ \forall i \in \{1,\ldots,n\}$ is tested under which the trends $m_i$ are parallel to each other. By a simple normalization of the components in model \eqref{eq:model_full}, we can always achieve that the trends $m_i$ are exactly the same under $H_0$ rather than only parallel. Hence, after normalization (the details of which are given in Section \ref{sec:model}), the null hypothesis $H_0$ can be reformulated as follows: 
+There are various statistical tests for the comparison of time trends in the literature. Most commonly, the null hypothesis
+\[ H_0: m_i = m + c_i \text{ for some } c_i \in \reals \text{ and all } i \in \{1,\ldots,n\} \]
+is tested under which the trends $m_i$ are parallel to each other, i.e., under which they are shifted versions of a common time trend $m$. By a simple normalization of the model components in \eqref{eq:model_full}, we can always achieve that the trends $m_i$ are exactly the same under $H_0$ rather than only parallel. Hence, after normalization (the details of which are given in Section \ref{sec:model}), the null hypothesis $H_0$ can be reformulated as follows: 
 \[ H_0: m_1 = m_2 = \ldots = m_n. \]   
 The problem of testing $H_0$ has been studied in a number of articles. In a restricted version of \eqref{eq:model_full} without covariates, it has been investigated in \cite{HaerdleMarron1990}, \cite{Hall1990}, \cite{DegrasWu2012} and \cite{ChenWu2018} among others. Test methods in a less restricted version of \eqref{eq:model_full} with covariates and homogeneous parameters ($\bfbeta_i = \bfbeta$ for all $i$) have been derived, e.g., in \cite{Zhang2012} and \cite{Hidalgo2014}.
 
@@ -114,15 +116,15 @@ The problem of testing $H_0$ has been studied in a number of articles. In a rest
 Even though many different approaches for testing $H_0$ have been developed over the years, most of them have a serious shortcoming: they are very uninformative. They allow to say (with a certain statistical confidence) whether $H_0$ is violated or not, but they do not give any information on which types of violations occur. In particular, if $H_0$ is rejected, they only provide the information that some of the trend curves are not the same. Practitioners, however, would like to have much more specific information: they would like to know (i) \textit{which} trends have a different form and (ii) \textit{in which time intervals} the trends are different. The main aim of this paper is to construct a test procedure which provides exactly this information. More technically speaking, we construct a test which allows to make rigorous simultaneous confidence statements about (i) \textit{which} trend curves are different and (ii) \textit{where} (i.e., in which time intervals) they differ. 
 
 
-Very roughly speaking, our approach works as follows: Let $\{\mathcal{I}_r: 1 \le r \le R\}$ be a large family of time intervals $\mathcal{I}_r \subseteq [0,1]$ and let $H_{0,r}^{[i,j]}: m_i(w) = m_j(w) \ \forall w \in \mathcal{I}_r$ be the hypothesis that the two trend curves $m_i$ and $m_j$ are identical on the interval $\mathcal{I}_r$. Our procedure simultaneously tests $H_{0,r}^{[i, j]}$ for all $r$ and all pairs of time series $(i,j)$. As the intervals $\mathcal{I}_r$ have different lengths or scales, it is called a multiscale method. Our main theoretical result shows that under suitable technical conditions, the developed multiscale test controls the familywise error rate, i.e., the probability of wrongly rejecting at least one null hypothesis $H_{0,r}^{[i, j]}$. As we will see, this allows us to make simultaneous confidence statements of the following form for a given significance level $\alpha \in (0,1)$: 
+Very roughly speaking, our approach works as follows: Let $\{\mathcal{I}_r: 1 \le r \le R\}$ be a large family of time intervals $\mathcal{I}_r \subseteq [0,1]$ and let $H_{0,r}^{[i,j]}: m_i(w) = m_j(w) \ \forall w \in \mathcal{I}_r$ be the hypothesis that the two trend curves $m_i$ and $m_j$ are identical on the interval $\mathcal{I}_r$. Our procedure simultaneously tests $H_{0,r}^{[i, j]}$ for all $r$ and all pairs of time series $(i,j)$. As the intervals $\mathcal{I}_r$ have different lengths or scales, it belongs to the class of statistical multiscale methods. Our main theoretical result shows that under suitable technical conditions, the developed multiscale test controls the familywise error rate, i.e., the probability of wrongly rejecting at least one null hypothesis $H_{0,r}^{[i, j]}$. As we will see, this allows us to make simultaneous confidence statements of the following form for a given significance level $\alpha \in (0,1)$: 
 \textit{With probability at least $1-\alpha$, the trends $m_i$ and $m_j$ differ on any interval $\mathcal{I}_r$ and for any pair $(i,j)$ for which $H_{0,r}^{[i, j]}$ is rejected.} 
 Hence, as desired, we can make confidence statements about (i) \textit{which} trend curves are different and (ii) \textit{where} they differ.
 
 
-To the best of our knowledge, there are no other test procedures available in the literature which allow to make such confidence statements in the context of the general model \eqref{eq:model_full}. We are only aware of two other multiscale tests for the comparison of nonparametric time trends, both of which are restricted to a strongly simplified version of model \eqref{eq:model_full} without covariates. The first is a SiZer test by \cite{Park2009}, for which theory has only been derived in the special case of $n=2$ time series. The second is a multiscale test by \cite{KhismatullinaVogt2023}, which was developed to detect differences between epidemic time trends in the context of the COVID-19 pandemic. Being tailored to epidemic count data, their model is quite specific. In particular, it includes neither covariates nor fixed effects and it does not allow for any dependence structures across $i$ and $t$. In contrast, our model is quite general and thus apt for a wide range of economic and financial applications. Notably, our methodology can be regarded as an extension of that in \cite{KhismatullinaVogt2023}. However, their theoretical results heavily depend on the specific setting and thus do not carry over easily to our general framework. Our theoretical analysis is thus utterly different from theirs. See Remark \ref{remark:general-theo-2} for a discussion of the main differences. 
+To the best of our knowledge, there are no other test procedures available in the literature which allow to make such confidence statements in the context of the general model \eqref{eq:model_full}. We are only aware of two other multiscale tests for the comparison of nonparametric time trends, both of which are restricted to a strongly simplified version of model \eqref{eq:model_full} without covariates. The first is a SiZer test by \cite{Park2009}, for which theory has only been derived in the special case of $n=2$ time series. The second is a multiscale test by \cite{KhismatullinaVogt2023}, which was developed to detect differences between epidemic time trends in the context of the COVID-19 pandemic. Being tailored to epidemic count data, their model is quite specific. In particular, it includes neither covariates nor fixed effects and it does not allow for any dependence structures across $i$ and $t$. In contrast, our model is quite general and thus apt for a wide range of economic and financial applications. Notably, our methodology can be regarded as an extension of that in \cite{KhismatullinaVogt2023}. However, their theoretical analysis heavily depends on the specific epidemic model under consideration and thus cannot be extended easily to our general framework. Our theoretical analysis is thus utterly different from theirs. See Remark \ref{remark:general-theo-2} for a discussion of the main differences. 
 
 
-Our multiscale test is constructed step by step in Section \ref{sec:test} and its theoretical properties are laid out in Section \ref{sec:theo}. Based on this test, we further develop a clustering algorithm which allows to detect groups of time series with the same trend. This clustering algorithm is introduced and investigated in Section \ref{sec:clustering}. The proofs of all theoretical results are relegated to the Supplementary Material. We complement the theoretical analysis of the paper by a simulation study in Section A in the Supplement and two application examples in Section \ref{sec:app} and Section B of the Supplement. In the first application example, we examine a long record of housing price data from different countries, whereas the second example is concerned with GDP growth data from a number of OECD countries. 
+Our multiscale test is constructed step by step in Section \ref{sec:test} and its theoretical properties are laid out in Section \ref{sec:theo}. Based on the test, we further develop a clustering algorithm which allows to detect groups of time series with the same trend. This clustering algorithm is introduced and investigated in Section \ref{sec:clustering}. The proofs of all theoretical results are relegated to the Supplementary Material. We complement the theoretical analysis of the paper by a simulation study in Section A in the Supplement and two application examples in Section \ref{sec:app} and Section B of the Supplement. In the first application example, we examine a long record of housing price data from different countries, whereas the second example is concerned with GDP growth data from a number of OECD countries. 
 
 
 
@@ -136,7 +138,7 @@ For a vector $\mathbf{v} = (v_1, \ldots, v_m)\in\reals^m$, we write $\|\mathbf{v
 Let $\eta_t$ ($t \in \integers$) be independent and identically distributed ($\text{i.i.d.}$) random variables, write $\mathcal{F}_t  = (\ldots, \eta_{t-1}, \eta_t)$ and let $g: \reals^\infty \to \reals$ be a measurable function such that $g(\mathcal{F}_t) = g(\ldots, \eta_{t-1}, \eta_t)$ is a properly defined random variable. Following \cite{Wu2005}, we define the \textit{physical dependence measure} of the process $\{g(\mathcal{F}_t)\}_{t=-\infty}^\infty$ by $\delta_q(g, t) = \| g(\mathcal{F}_t) - g(\mathcal{F}_t^\prime) \|_q$, where $\mathcal{F}_t^\prime  = (\ldots, \eta_{-1}, \eta^\prime_0, \eta_1, \ldots, \eta_t)$ is a coupled version of $\mathcal{F}_t$ with $\eta_0^\prime$ an i.i.d.\ copy of $\eta_0$. 
 
 
-\subsection{Model}\label{subsec:model_setting}
+\subsection{Details on model equation \eqref{eq:model_full}}\label{subsec:model_setting}
 
 
 We now give some details on the components of model \eqref{eq:model_full}. We first have a closer look at the error structure which consists of the two components $\alpha_i$ and $\varepsilon_{it}$. We do not impose any distributional assumptions on the terms $\alpha_i$. In particular, they can be either deterministic or random and they may be correlated with the covariates $\X_{it}$ in an arbitrary way. Following the panel data literature in economics, we refer to them as fixed effects. The terms $\varepsilon_{it}$ are idiosyncratic errors which are assumed to have zero mean. They are allowed to be correlated across $t$ but are assumed to be independent across $i$. Precise technical conditions on them are given in Section \ref{subsec:model_assumptions} below.  Whereas the idiosyncratic errors $\varepsilon_{it}$ are restricted to be independent across $i$, we do not impose any restrictions on the dependence structure between the fixed effects $\alpha_i$ across $i$. Hence, we allow for cross-sectional dependence in the error structure via the fixed effects $\alpha_i$. Similarly, the covariates $\X_{it}$ are allowed to be dependent across $i$ in an arbitrary way. As a consequence, the $n$ time series $\mathcal{T}_i$ in our panel can be correlated with each other in various ways.  
@@ -146,13 +148,13 @@ The trend functions $m_i$ are not identified in model \eqref{eq:model_full}. In 
 For identification, we impose the constraint $\int_0^1 m_i(u) du = 0$ for all $i$, which vertically shifts each curve $m_i$ such that the overall mean level $\int_0^1 m_i(u)$ is equal to $0$. Such a normalization is quite natural in many application contexts. Take e.g.\ the application on house price data in Section \ref{sec:app}. The term $\int_0^1 m_i(u) du$ can be interpreted as the long-term average house price level in country $i$, which may be very different across countries. The normalization $\int_0^1 m_i(u) du = 0$ corrects for differences in these long-term price levels. Put differently, the normalized trends give the deviation from the long-term price levels. 
 
 
-If the trends $m_i$ are parallel, i.e., $m_i = m + c_i$ with some constants $c_i$ and a common trend $m$ for all $i$, the constraint $\int_0^1 m_i(u) du = 0$ implies that $c_i = c := \int_0^1 m(u) du$ for all $i$. Put differently, it implies that the trends are exactly the same. Hence, under our identification constraint, the null hypothesis that the trends are parallel to each other coincides with the hypothesis that the trends are identical. 
+Consider the case where the trends $m_i$ are parallel, i.e., $m_i = m + c_i$ with some constants $c_i$ and a common trend $m$ for all $i$. The constraint $\int_0^1 m_i(u) du = 0$ implies that $c_i = c := -\int_0^1 m(u) du$ for all $i$. Put differently, it implies that the trends are exactly the same. Hence, under our identification constraint, the null hypothesis that the trends are parallel to each other coincides with the hypothesis that the trends are identical. 
 
 
 Finally note that throughout the paper, we restrict attention to the case where the number of time series $n$ in model \eqref{eq:model_full} is fixed. Extending our theoretical results to the case where $n$ grows with $T$ is a possible topic for further research.
 
 
-\subsection{Assumptions}\label{subsec:model_assumptions}
+\subsection{Formal assumptions}\label{subsec:model_assumptions}
 
 
 The error processes $\mathcal{E}_i = \{ \varepsilon_{it}: 1 \le t \le T\}$ satisfy the following conditions. 
@@ -187,15 +189,15 @@ We finally impose some assumptions on the relationship between the covariates an
 \end{enumerate}
 
 
-%\begin{remark}
-%Conditions \ref{C-reg1}--\ref{C-reg3} can be relaxed to cover locally stationary regressors. For example, \ref{C-reg1} may be replaced by
-%\begin{enumerate}[label=(C\arabic*$^\prime$),leftmargin=1.1cm]
-%\setcounter{enumi}{3}
-%\item \label{C-reg1-star} The variables $X_{it, j}$ allow for the representation $X_{it, j} = h_{ij}(t; \mathcal{G}_{it, j})$, where $\mathcal{G}_{it, j} = (\ldots, \xi_{it-1,j}, \xi_{it, j})$, the random variables $\xi_{it, j}$ are i.i.d.\ across $t$ and $h_{ij}(t;\cdot): \reals^\infty \rightarrow \reals$ is a measurable function  for each $t$ such that $X_{it, j}$ is well-defined. We use the notation $\X_{it} = \boldsymbol{h}_{i}(t; \mathcal{G}_{it})$ with $\boldsymbol{h}_i = (h_{i1}, \ldots, h_{id})^\top$ and $\mathcal{G}_{it} = (\mathcal{G}_{it,1}, \ldots, \mathcal{G}_{it, d})^\top$. It holds that $\ex [X_{it, j}]=0$ and $\| X_{it, j} \|_{q^\prime} <\infty$ for all $i$, $j$ and $t$, where $q^\prime > \max \{ 4, \theta q \}$ with $q$ from \ref{C-err1} and $\theta$ specified in \ref{C-grid} below.
-%\end{enumerate}
-%The other assumptions can be adjusted accordingly. We conjecture that our main theoretical results still hold in this case. However, the complexity of the technical arguments will increase drastically. Hence, for the sake of clarity, we restrict attention to stationary covariates $\X_{it}$. 
-%\end{remark}
-
+\begin{remark}
+Conditions \ref{C-err3} and \ref{C-reg3} restrict the error and covariate processes to be weakly dependent.
+\begin{enumerate}[label=(\roman*),leftmargin=0.9cm, itemsep=0pt, parsep=0pt, topsep=3pt]
+\item Intuitively, we require weak dependence conditions for the following reason: Strongly dependent error and covariate processes are very persistent and may thus exhibit trend-like behaviour. It is in general very difficult to discern the deterministic trends $m_i$ from the stochastic trends produced by such processes.
+\item Even though we restrict attention to weakly dependent processes, our conditions allow for a very wide range of error and covariate processes. They in particular allow for processes which (despite formally being weakly dependent) are quite persistent and may thus produce trend-like patterns. A specific example are AR(1) error (and covariate) processes $\{\varepsilon_{it}: 1 \le t \le T\}$ of the form $\varepsilon_{it} = \phi \varepsilon_{i,t-1} + \eta_{it}$ with i.i.d.\ innovations $\eta_{it}$ and $|\phi| < 1$, where $\phi$ may be arbitrarily close to $1$, e.g., $\phi = 0.99$. Our asymptotic theory is able to deal with such quite persistent (yet formally weakly dependent) processes.
+\item That we are able to handle such persistent processes from an asymptotic point of view does of course not imply good performance in finite samples. In particular, if the time series length $T$ is rather moderate (such as in our simulations where $T$ is between $100$ and $500$), it is virtually impossible to discern the deterministic trends $m_i$ from the stochastic trends produced by AR(1) error processes with $\phi=0.99$. Notably, this is not a specific shortcoming of our method but an issue for any statistical procedure. Hence, when faced with small time series lengths like $T=100$, $250$ or $500$ as in our simulations, we can handle AR(1) error processes with a moderately large AR parameter such as $\phi=0.25$ or $\phi= 0.5$. But it is utopian to get reasonably good performance in close-to-unit-root-cases with, e.g., $\phi=0.95$ or $\phi=0.99$.  
+\end{enumerate}
+\end{remark}
+  
 
 
 \section{The multiscale test}\label{sec:test}
@@ -287,7 +289,7 @@ For our theoretical results, we suppose that the set of location-scale points $\
 
 \end{enumerate}
 \ref{C-grid} and \ref{C-h} place relatively mild restrictions on the set $\grid$: \ref{C-grid} allows $\grid$ to be very large compared to the sample size $T$. In particular, $\grid$ may grow as any polynomial of $T$. \ref{C-h} allows $\grid$ to contain intervals $[u-h,u+h]$ of many different scales $h$, ranging from very small intervals of scale $h_{\min}$ to substantially larger intervals of scale $h_{\max}$.
-As an example, we use the following grid in our application in Section \ref{sec:app}: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{t}{T}} \text{ with } 1 \le t \le T \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{T}} \text{ with } 1 \le t \le T \big\}$. We thus take into account all locations $u$ on an equidistant grid $U_T$ with step length $1/T$ and all scales $h=2/T, 7/T, 12/T,\ldots$ with $\log T /T \le h \le 1/4$. As we have yearly data, this implies that each interval $\interval =[u-h,u+h]$ with $(u,h) \in \grid$ spans $5, 15, 25, \ldots$ years. The lower bound $\log T / T$ is motivated by Assumption \ref{C-h}. 
+As an example, we use the following location-scale grid in our application in Section \ref{sec:app}: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{t}{T}} \text{ with } 1 \le t \le T \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{T}} \text{ with } 1 \le t \le T \big\}$. We thus take into account all locations $u$ on an equidistant grid $U_T$ with step length $1/T$ and all scales $h=2/T, 7/T, 12/T,\ldots$ with $\log T /T \le h \le 1/4$. As we have yearly data in our application, this implies that each interval $[u-h,u+h]$ with $(u,h) \in \grid$ spans $5, 15, 25, \ldots$ years. The lower bound $\log T / T$ is motivated by \ref{C-h}. 
 
 
 \subsection{The test procedure}\label{subsec:test:test}
@@ -333,11 +335,9 @@ where $Z_{it}$ are independent standard normal random variables for $1 \le t \le
 which can be regarded as a Gaussian version of the test statistic $\widehat{\Psi}_{n,T}$ under the null $H_0$ (in the idealized case with $\widehat{\bfbeta}_i = \bfbeta_i$ and $\widehat{\sigma}_i^2 = \sigma_i^2$ for all $i$). We now choose $q_{n,T}(\alpha)$ to be the $(1-\alpha)$-quantile of $\Phi_{n,T}$. 
 
 
-%\begin{remark}
 Importantly, this choice of $q_{n,T}(\alpha)$ can be computed by Monte Carlo simulations in practice: assuming that $\sigma_i^2 = \sigma^2$ for all $i$, we can rewrite the statistics from \eqref{eq:phi_zero_ij} as
 \[\phi^0_{ij, T}(u, h) = \frac{1}{\sqrt{2}} \Big|\sum\limits_{t=1}^T w_{t,T}(u, h) \, \big\{ (Z_{it} - \bar{Z}_i) - (Z_{jt} - \bar{Z}_j) \big\}\Big| - \lambda(h). \] 
 This shows that the distribution of these statistics and thus the distribution of the multiscale statistic $\Phi_{n,T}$ only depend on the Gaussian variables $Z_{it}$ for $1 \le i \le n$ and $1 \le t \le T$. Consequently, we can approximate the distribution of $\Phi_{n,T}$ -- and in particular its quantiles $q_{n,T}(\alpha)$ -- by simulating values of the Gaussian random variables $Z_{it}$. In Section \ref{subsec:test:impl}, we explain in detail how to compute Monte Carlo approximations of the quantiles $q_{n,T}(\alpha)$. 
-%\end{remark}
 
 
 \begin{remark}
@@ -360,7 +360,7 @@ FDR control, in contrast, would only allow us to make the following type of stat
 On average, $100 (1-\alpha) \%$ of the differences detected by our test correspond to true differences.
 \end{minipage}
 \end{equation}
-In our opinion, in most economic and financial applications, one is rather interested in statements of the form \eqref{eq:CS-FWER} than \eqref{eq:CS-FDR}. Take a financial example where the aim is to compare volatility trends of different stocks. Practitioners would like interpret the differences detected by the test. For instance, they would like to connect them to certain market events. This presupposes a certain confidence that the detected differences are worth interpreting (i.e., that they are not spurious but correspond to real differences). It is not enough to be confident that (on average) a certain percentage of the detected differences is worth interpreting. Hence, confidence statements of the form \eqref{eq:CS-FWER} appear more apt than statements of the form \eqref{eq:CS-FDR}.
+In our opinion, in most economic and financial applications, one is rather interested in statements of the form \eqref{eq:CS-FWER} than \eqref{eq:CS-FDR}. Take a financial example where the aim is to compare volatility trends of different stocks. Practitioners would like to interpret the differences detected by the test. For instance, they would like to connect them to certain market events. This presupposes a certain confidence that the detected differences are worth interpreting (i.e., that they are not spurious but correspond to real differences). It is not enough to be confident that (on average) a certain percentage of the detected differences is worth interpreting. Hence, confidence statements of the form \eqref{eq:CS-FWER} appear more apt than statements of the form \eqref{eq:CS-FDR}.
 \end{remark}
   
 
@@ -529,6 +529,8 @@ $\pr ( E_{n,T}(\alpha) ) \ge (1 - \alpha) + o(1)$.
 \end{prop}
 According to Proposition \ref{prop:clustering:2}, the sets $\mathcal{S}^{[\ell,\ell^\prime]}_{n, T}(\alpha)$ allow us to locate, with a pre-specified confidence, time intervals where the group-specific trend functions $f_\ell$ and $f_{\ell^\prime}$ differ from each other. In particular, we can claim with asymptotic confidence at least $1 - \alpha$ that the trend functions $f_\ell$ and $f_{\ell^\prime}$ differ on all intervals $\interval \in \mathcal{S}^{[\ell,\ell^\prime]}_{n, T}(\alpha)$.\footnote{This statement remains to hold true when the sets of intervals $\mathcal{S}^{[\ell,\ell^\prime]}_{n, T}(\alpha)$ are replaced by the corresponding sets of minimal intervals.} 
 
+
+
 \section{Empirical application}\label{sec:app}
 
 
@@ -554,32 +556,32 @@ The inclusion of a nonparametric trend function $m_i$ in model \eqref{eq:model:a
 
 
 We implement our multiscale test as follows: 
-(i) We choose $K$ to be the Epanechnikov kernel and consider the set of location-scale points $\mathcal{G}_T = U_T \times H_T$, where $U_T = \{ u \in [0,1]: u = \textstyle{\frac{t}{T}} \text{ with } 1 \le t \le T \}$ and $H_T = \{ h \in [ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} ]:  h = \textstyle{\frac{5t - 3}{T}} \text{ with } 1 \le t \le T \}$. We thus take into account
+(i) We choose $K$ to be the Epanechnikov kernel and consider the location-scale grid $\mathcal{G}_T = U_T \times H_T$, where $U_T = \{ u \in [0,1]: u = \textstyle{\frac{t}{T}} \text{ with } 1 \le t \le T \}$ and $H_T = \{ h \in [ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} ]:  h = \textstyle{\frac{5t - 3}{T}} \text{ with } 1 \le t \le T \}$. We thus take into account
 %all locations $u$ on an equidistant grid $U_T$ with step length $1/T$ and
 all scales $h=2/T, 7/T, 12/T,\ldots$ with $\log T /T \le h \le 1/4$, where the lower bound $\log T / T$ is motivated by Assumption \ref{C-h}. This implies that each interval $\interval =[u-h,u+h]$ with $(u,h) \in \grid$ spans $5, 15, 25, \ldots$ years.   
-(ii) We assume that for each $i$, the error process $\mathcal{E}_i = \{\varepsilon_{it}: 1 \leq t \leq T\}$ follows an AR($p_i$) model and we estimate the long-run variances $\sigma_i^2$ by the difference-based estimator from \cite{KhismatullinaVogt2020} with tuning parameters $q$ and $r$ equal to $15$ and $10$, respectively. We choose $p_i$ by minimizing BIC. For $7$ out of $8$ countries the order $p_i$ determined by BIC\footnote{Applying other information criteria such as FPE, AIC and HQ yields exactly the same results in these cases.} is equal to $1$. For the sake of simplicity, we thus assume that $p_i = 1$ for all $i$.
+(ii) We assume that for each $i$, the error process $\mathcal{E}_i = \{\varepsilon_{it}: 1 \leq t \leq T\}$ follows an AR($p_i$) model and we estimate the long-run variances $\sigma_i^2$ by the difference-based estimator from \cite{KhismatullinaVogt2020} with tuning parameters $q=15$ and $r=10$. We choose $p_i$ by minimizing BIC. For $7$ out of $8$ countries, the order $p_i$ determined by BIC\footnote{Applying other information criteria such as FPE, AIC and HQ yields exactly the same results in these cases.} is equal to $1$. For the sake of simplicity, we thus assume that $p_i = 1$ for all $i$.
 (iii) The critical values $q_{n, T}(\alpha)$ are computed by Monte Carlo methods as described in Section \ref{subsec:test:impl}, where we set $L=5000$.
 Besides these choices, we implement the test exactly as described in Section \ref{sec:test}.  
 
 
 \begin{sidewaysfigure}[p!]
 \begin{minipage}[t]{0.24\textwidth}
-\includegraphics[width=\textwidth]{output/plots/hp/AUS_vs_NLD}
+\includegraphics[width=\textwidth]{../output/plots/hp/AUS_vs_NLD}
 \caption{Test results for the comparison of the house prices in Australia and the Netherlands.}\label{fig:hp:Australia:Netherlands}
 \end{minipage}
 \hspace{0.1cm}
 \begin{minipage}[t]{0.24\textwidth}
-\includegraphics[width=\textwidth]{output/plots/hp/BEL_vs_NLD}
+\includegraphics[width=\textwidth]{../output/plots/hp/BEL_vs_NLD}
 \caption{Test results for the comparison of the house prices in Belgium and the Netherlands.}\label{fig:hp:Belgium:Netherlands}
 \end{minipage}
 \hspace{0.1cm}
 \begin{minipage}[t]{0.24\textwidth}
-\includegraphics[width=\textwidth]{output/plots/hp/BEL_vs_DNK}
+\includegraphics[width=\textwidth]{../output/plots/hp/BEL_vs_DNK}
 \caption{Test results for the comparison of the house prices in Belgium and Denmark.}\label{fig:hp:Belgium:Denmark}
 \end{minipage}
 \hspace{0.1cm}
 \begin{minipage}[t]{0.24\textwidth}
-\includegraphics[width=\textwidth]{output/plots/hp/BEL_vs_USA}
+\includegraphics[width=\textwidth]{../output/plots/hp/BEL_vs_USA}
 \caption{Test results for the comparison of the house prices in Belgium and the USA.}\label{fig:hp:Belgium:USA}
 \end{minipage}
 \caption*{Note: In each figure, panel (a) shows the two augmented time series of the house prices, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i, j]}_{min}(\alpha)$ in black.}
@@ -589,7 +591,7 @@ Besides these choices, we implement the test exactly as described in Section \re
 We are now ready to apply the test to the data. The overall null $H_0$ is rejected at levels $\alpha = 0.05$ and $\alpha = 0.1$. The detailed test results for $\alpha =0.05$ are presented in Figures \ref{fig:hp:Australia:Netherlands}--\ref{fig:hp:Belgium:USA}. 
 Each figure corresponds to a specific pair of countries $(i, j)$ for which our test detects differences between the trends. 
 %As in Section \ref{subsec:app:gdp}, each figure corresponds to the comparison of a pair of countries $(i, j)$ for which our test detects differences between the trends. 
-In each figure, panel (a) shows the augmented time series $\{\widehat{Y}_{it}: 1 \le t \le T\}$ and $\{\widehat{Y}_{jt}: 1 \le t \le T\}$ for the two countries $i$ and $j$ that are compared. 
+In each figure, panel (a) shows the augmented time series $\{\widehat{Y}_{it}: 1 \le t \le T\}$ with $\widehat{Y}_{it} := Y_{it} -\widehat{\alpha}_i - \widehat{\bfbeta}_i^\top \X_{it}$ and $\{\widehat{Y}_{jt}: 1 \le t \le T\}$ for the two countries $i$ and $j$ that are compared. 
 Panel (b) presents smoothed versions of the time series from (a), in particular, it shows local linear kernel estimates of the two trend functions $m_i$ and $m_j$, where the bandwidth window covers $15$ years and an Epanechnikov kernel is used.
 Panel (c) presents the results produced by our test: 
 it depicts in grey the set $\mathcal{S}^{[i, j]}(\alpha)$ of all the intervals for which the test rejects the local null $H_0^{[i, j]}(u, h)$. The set of minimal intervals $\mathcal{S}^{[i, j]}_{min}(\alpha) \subseteq \mathcal{S}^{[i, j]}(\alpha)$ is highlighted in black. According to \eqref{eq:CS-v2}, we can make the following simultaneous confidence statement about the intervals plotted in panels (c) of Figures \ref{fig:hp:Australia:Netherlands}--\ref{fig:hp:Belgium:USA}: we can claim, with confidence of about $95\%$, that there is a difference between the functions $m_i$ and $m_j$ on each of these intervals. 
@@ -598,15 +600,15 @@ it depicts in grey the set $\mathcal{S}^{[i, j]}(\alpha)$ of all the intervals f
 %Panel (a) shows the augmented time series $\{\widehat{Y}_{it}: 1 \le t \le T\}$ and $\{\widehat{Y}_{jt}: 1 \le t \le T\}$ for the two countries $i$ and $j$ under consideration. Panel (b) presents smoothed versions of the time series from (a) with the bandwidth window covering $15$ years. Panel (c) presents the test results for the level $\alpha=0.05$. As before, the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ for which our test rejects and the set of minimal intervals $\mathcal{S}^{[i, j]}_{min}(\alpha) \subseteq \mathcal{S}^{[i, j]}(\alpha)$ are depicted in grey and black, respectively. According to \eqref{eq:CS-v2}, we can make the following simultaneous confidence statement about the intervals plotted in panels (c) of Figures \ref{fig:hp:Australia:Netherlands}--\ref{fig:hp:Belgium:USA}: we can claim, with confidence of about $95\%$, that there is a difference between the trends $m_i$ and $m_j$ on each of these intervals. 
 
 
-Overall, our findings are in line with the observations in \cite{Knoll2017} who find considerable cross-country heterogeneity in the house price trends. The authors note that before World War II, the countries exhibit similar trends in real house prices, while the trends start to diverge sometime after World War II. This fits with our findings in Figures \ref{fig:hp:Australia:Netherlands}--\ref{fig:hp:Belgium:Netherlands} which show that our test detects differences between the trends of Australia and the Netherlands (of Belgium and the Netherlands) starting only from 1968 (1966) onwards. Contrary to \cite{Knoll2017}, however, our test also finds significant differences in the first half of the observed time period, specifically, between the time trends of Belgium and Denmark and of Belgium and the USA (Figures \ref{fig:hp:Belgium:Denmark} and \ref{fig:hp:Belgium:USA}, respectively). This discrepancy in the results is most certainly due to the fact that the method used in \cite{Knoll2017} does not account for effects of other factors such as GDP or population growth, while our test allows to include various determinants of the average house prices in model \eqref{eq:model:app4}. We in particular believe that the rate of population growth is the main factor that causes the discrepancy in the results. The influence of this factor on house prices greatly varies across countries. Specifically, the estimated regression coefficient of the population growth rate for Belgium (BEL), Denmark (DNK) and the USA is $\widehat{\beta}_{\text{BEL}, 2} = 3.45$, $\widehat{\beta}_{\text{DNK}, 2} = 0.19$ and $\widehat{\beta}_{\text{USA}, 2} = 0.80$, respectively. To substantiate our conjecture, we have repeated the analysis  with one distinction: we do not include the population growth rate as a regressor in the model. As expected, our test does not find any significant differences between Belgium and Denmark and between Belgium and the USA in this case, which is in line with the findings presented in \cite{Knoll2017}. 
+Overall, our findings are in line with the observations in \cite{Knoll2017} who find considerable cross-country heterogeneity in the house price trends. The authors note that before World War II, the countries exhibit similar trends in real house prices, while the trends start to diverge sometime after World War II. This fits with our findings in Figures \ref{fig:hp:Australia:Netherlands}--\ref{fig:hp:Belgium:Netherlands} which show that our test detects differences between the trends of Australia and the Netherlands (of Belgium and the Netherlands) starting only from 1968 (1966) onwards. Contrary to \cite{Knoll2017}, however, our test also finds significant differences in the first half of the observed time period, specifically, between the time trends of Belgium and Denmark and of Belgium and the USA (Figures \ref{fig:hp:Belgium:Denmark} and \ref{fig:hp:Belgium:USA}, respectively). This discrepancy in the results is most certainly due to the fact that the method used in \cite{Knoll2017} does not account for effects of other factors such as GDP or population growth, while our test allows to include various determinants of the average house prices in model \eqref{eq:model:app4}. We in particular believe that the rate of population growth is the main factor that causes the discrepancy in the results. The influence of this factor on house prices greatly varies across countries. Specifically, the estimated regression coefficient of the population growth rate for Belgium (BEL), Denmark (DNK) and the USA is $\widehat{\beta}_{\text{BEL}, 2} = 3.45$, $\widehat{\beta}_{\text{DNK}, 2} = 0.19$ and $\widehat{\beta}_{\text{USA}, 2} = 0.80$, respectively. To substantiate our conjecture, we have repeated the analysis with one distinction: we do not include the population growth rate as a regressor in the model. As expected, our test does not find any significant differences between Belgium and Denmark and between Belgium and the USA in this case, which is in line with the findings presented in \cite{Knoll2017}. 
 
 
 \begin{figure}[t!]
 \begin{center}
-\includegraphics[width=0.75\textwidth]{output/plots/hp/dendrogram}
+\includegraphics[width=0.75\textwidth]{../output/plots/hp/dendrogram}
 \caption{Dendrogram of the HAC algorithm. Each coloured rectangle corresponds to one of the clusters.}\label{fig:hp:dend}
 
-\includegraphics[width=0.75\textwidth]{output/plots/hp/all_clusters}
+\includegraphics[width=0.75\textwidth]{../output/plots/hp/all_clusters}
 \caption{Local linear estimates of the $n=8$ time trends (calculated from the augmented time series $\widehat{Y}_{it}$ with a bandwidth window covering $15$ years and an Epanechikov kernel). Each trend estimate is coloured according to the cluster that it is assigned to. }\label{fig:hp:all_clusters}
 \end{center}
 \end{figure}
@@ -628,7 +630,7 @@ In this paper, we have developed new methods for the comparison of nonparametric
 
 
 
-\spacingset{1.18}
+\spacingset{1.17}
 \bibliographystyle{ims}
 {\small
 \setlength{\bibsep}{0.55em}
