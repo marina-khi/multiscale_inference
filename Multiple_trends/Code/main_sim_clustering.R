@@ -58,10 +58,10 @@ t_len <- 250
 
 m1 <- numeric(t_len)
 m2 <- numeric(t_len)
-m1 <- 0.35 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.35 * b_function((1:t_len)/t_len, 0.75, 0.25)
-m2 <- b_function((1:t_len)/t_len, 0.75, 0.025) - b_function((1:t_len)/t_len, 0.25, 0.025)
+m1 <- 0.5 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.5 * b_function((1:t_len)/t_len, 0.75, 0.25)
+m2 <- 2 * b_function((1:t_len)/t_len, 0.75, 0.025) - 2 * b_function((1:t_len)/t_len, 0.25, 0.025)
 
-pdf(paste0("output/revision/clustering_functions.pdf"),
+pdf(paste0("output/revision/clustering_functions_2.pdf"),
     width = 12, height = 12, paper="special")
 par(mfrow = c(3, 1))
 par(mar = c(4, 3, 0.5, 0)) #Margins for each plot
@@ -116,10 +116,10 @@ for (t_len in different_T){
   
   m_matrix <- matrix(0, nrow = t_len, ncol = n_ts)
   for (i in (floor(n_ts / 3) + 1):(floor(2 * n_ts / 3))){
-    m_matrix[, i] <- 0.35 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.35 * b_function((1:t_len)/t_len, 0.75, 0.25)
+    m_matrix[, i] <- 0.5 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.5 * b_function((1:t_len)/t_len, 0.75, 0.25)
   }
   for (i in (floor(2 * n_ts / 3) + 1):n_ts){
-    m_matrix[, i] <- b_function((1:t_len)/t_len, 0.75, 0.025) - b_function((1:t_len)/t_len, 0.25, 0.025)
+    m_matrix[, i] <- 2 * b_function((1:t_len)/t_len, 0.75, 0.025) - 2 * b_function((1:t_len)/t_len, 0.25, 0.025)
   }
   
   cat("Calculating the Gaussian quantiles\n")
@@ -197,7 +197,7 @@ for (t_len in different_T){
     }
     clustering_results  <- rbind(number_of_groups_vec, groups_mat)
 
-    filename = paste0("output/revision/misc/results_for_T_", t_len, "_and_alpha_", alpha * 100, ".RData")
+    filename = paste0("output/revision/misc/results_for_T_", t_len, "_and_alpha_", alpha * 100, "_2.RData")
     save(clustering_results, file = filename)
   }
   toc()
@@ -219,7 +219,7 @@ error_count <- list()
 j <- 0
 for (t_len in different_T){
   for (alpha in different_alpha){
-    filename = paste0("output/revision/misc/results_for_T_", t_len, "_and_alpha_", alpha * 100, ".RData")
+    filename = paste0("output/revision/misc/results_for_T_", t_len, "_and_alpha_", alpha * 100, "_2.RData")
     load(file = filename)
     results <- cluster_analysis(t_len_ = t_len, n_rep_ = n_rep, alpha_ = alpha,
                                 results_matrix_ = clustering_results,
