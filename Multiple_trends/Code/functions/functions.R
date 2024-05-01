@@ -744,11 +744,11 @@ output_matrix <- function(matrix_, filename_, numcols_){
     print.xtable(xtable(matrix_, digits = c(3), align = "ccccccc"), type = "latex",
                  file = filename_, add.to.row = addtorow, include.colnames = FALSE,
                  sanitize.text.function=function(x){x})
-  } else if (numcols_ == 9){
+  } else if (numcols_ == 8){
     addtorow$pos     <- list(0)
-    addtorow$command <- c("& $\\mathcal{T}_{\\text{MS}}$ & $\\mathcal{T}_{\\text{MS, true lrv}}$ & $\\mathcal{T}_{\\text{bmk, }1}$ & $\\mathcal{T}_{\\text{bmk, }2}$ & $\\mathcal{T}_{\\text{bmk, }3}$ & $\\mathcal{T}_{\\text{bmk, }4}$ & $\\mathcal{T}_{\\text{bmk, }5}$ & $\\mathcal{T}_{\\text{bmk, }6}$\\\\\n")
+    addtorow$command <- c("& $\\mathcal{T}_{\\text{MS}}$ & $\\mathcal{T}_{\\text{bmk, }1}$ & $\\mathcal{T}_{\\text{bmk, }2}$ & $\\mathcal{T}_{\\text{bmk, }3}$ & $\\mathcal{T}_{\\text{bmk, }4}$ & $\\mathcal{T}_{\\text{bmk, }5}$ & $\\mathcal{T}_{\\text{bmk, }6}$\\\\\n")
     
-    print.xtable(xtable(matrix_, digits = c(3), align = "ccccccccc"), type = "latex",
+    print.xtable(xtable(matrix_, digits = c(3), align = "cccccccc"), type = "latex",
                  file = filename_, add.to.row = addtorow, include.colnames = FALSE,
                  sanitize.text.function=function(x){x})
   } else {cat("Number of columns not supported")}
