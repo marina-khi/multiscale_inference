@@ -31,7 +31,7 @@ sigma <- 0.25
 
 numCores = round(parallel::detectCores() * .80)
 
-seed <- 222444666
+seed <- 123454321
 
 correct_specification <- c(rep(1, (floor(n_ts / 3))),
                            rep(2, (floor(2 * n_ts / 3) - floor(n_ts / 3))),
@@ -108,8 +108,7 @@ for (t_len in different_T){
     statistic_matrix <- forceSymmetric(statistic_matrix, uplo = "U")
     statistic_matrix <- as.dist(statistic_matrix)
     clustering       <- hclust(statistic_matrix, method = "complete")
-    groups           <- cutree(clustering, k = 3)
-    groups_mat[, i]  <- groups
+    groups_mat[, i]  <- cutree(clustering, k = 3)
 
     #Benchmark method (h1)
     statistic_vector_benchmark <- simulated_statistic[(nrow(simulated_statistic)/7 + 1):(2 * nrow(simulated_statistic) / 7), i]
@@ -117,8 +116,7 @@ for (t_len in different_T){
     statistic_matrix_benchmark <- forceSymmetric(statistic_matrix_benchmark, uplo = "U")
     statistic_matrix_benchmark <- as.dist(statistic_matrix_benchmark)
     clustering_benchmark       <- hclust(statistic_matrix_benchmark, method = "complete")
-    groups_benchmark           <- cutree(clustering_benchmark, k = 3)
-    groups_benchmark_mat[, i]  <- groups_benchmark
+    groups_benchmark_mat[, i]  <- cutree(clustering_benchmark, k = 3)
     
     #Benchmark method (h2)
     statistic_vector_benchmark2 <- simulated_statistic[(2 * nrow(simulated_statistic)/7 + 1):(3 * nrow(simulated_statistic) / 7), i]
@@ -126,8 +124,7 @@ for (t_len in different_T){
     statistic_matrix_benchmark2 <- forceSymmetric(statistic_matrix_benchmark2, uplo = "U")
     statistic_matrix_benchmark2 <- as.dist(statistic_matrix_benchmark2)
     clustering_benchmark2       <- hclust(statistic_matrix_benchmark2, method = "complete")
-    groups_benchmark2           <- cutree(clustering_benchmark2, k = 3)
-    groups_benchmark_mat2[, i]  <- groups_benchmark2
+    groups_benchmark_mat2[, i]  <- cutree(clustering_benchmark2, k = 3)
 
     #Benchmark method (h3)
     statistic_vector_benchmark3 <- simulated_statistic[(3 * nrow(simulated_statistic)/7 + 1):(4 * nrow(simulated_statistic) / 7), i]
@@ -135,8 +132,7 @@ for (t_len in different_T){
     statistic_matrix_benchmark3 <- forceSymmetric(statistic_matrix_benchmark3, uplo = "U")
     statistic_matrix_benchmark3 <- as.dist(statistic_matrix_benchmark3)
     clustering_benchmark3       <- hclust(statistic_matrix_benchmark3, method = "complete")
-    groups_benchmark3           <- cutree(clustering_benchmark3, k = 3)
-    groups_benchmark_mat3[, i]  <- groups_benchmark3
+    groups_benchmark_mat3[, i]  <- cutree(clustering_benchmark3, k = 3)
 
     #Benchmark method (h4)
     statistic_vector_benchmark4 <- simulated_statistic[(4 * nrow(simulated_statistic)/7 + 1):(5 * nrow(simulated_statistic) / 7), i]
@@ -144,8 +140,7 @@ for (t_len in different_T){
     statistic_matrix_benchmark4 <- forceSymmetric(statistic_matrix_benchmark4, uplo = "U")
     statistic_matrix_benchmark4 <- as.dist(statistic_matrix_benchmark4)
     clustering_benchmark4       <- hclust(statistic_matrix_benchmark4, method = "complete")
-    groups_benchmark4           <- cutree(clustering_benchmark4, k = 3)
-    groups_benchmark_mat4[, i]  <- groups_benchmark4
+    groups_benchmark_mat4[, i]  <- cutree(clustering_benchmark4, k = 3)
 
     #Benchmark method (h5)
     statistic_vector_benchmark5 <- simulated_statistic[(5 * nrow(simulated_statistic)/7 + 1):(6 * nrow(simulated_statistic) / 7), i]
@@ -153,8 +148,7 @@ for (t_len in different_T){
     statistic_matrix_benchmark5 <- forceSymmetric(statistic_matrix_benchmark5, uplo = "U")
     statistic_matrix_benchmark5 <- as.dist(statistic_matrix_benchmark5)
     clustering_benchmark5       <- hclust(statistic_matrix_benchmark5, method = "complete")
-    groups_benchmark5           <- cutree(clustering_benchmark5, k = 3)
-    groups_benchmark_mat5[, i]  <- groups_benchmark5
+    groups_benchmark_mat5[, i]  <- cutree(clustering_benchmark5, k = 3)
     
     #Benchmark method (h6)
     statistic_vector_benchmark6 <- simulated_statistic[(6 * nrow(simulated_statistic)/7 + 1):nrow(simulated_statistic), i]
@@ -162,8 +156,7 @@ for (t_len in different_T){
     statistic_matrix_benchmark6 <- forceSymmetric(statistic_matrix_benchmark6, uplo = "U")
     statistic_matrix_benchmark6 <- as.dist(statistic_matrix_benchmark6)
     clustering_benchmark6       <- hclust(statistic_matrix_benchmark6, method = "complete")
-    groups_benchmark6           <- cutree(clustering_benchmark6, k = 3)
-    groups_benchmark_mat6[, i]  <- groups_benchmark6
+    groups_benchmark_mat6[, i]  <- cutree(clustering_benchmark6, k = 3)
   }
   
   clustering_results            <- rbind(rep(3, n_rep), groups_mat)
@@ -213,7 +206,7 @@ j <- 1
 for (t_len in different_T){
   filename = paste0("output/revision/misc/results_for_T_", t_len, "_comparison.RData")
   load(file = filename)
-  cat("Analysis of the results for the multiscale method with estimated lrv\n")
+  cat("Analysis of the results for the multiscale method with the estimated lrv\n")
   results <- cluster_analysis(t_len_ = t_len, n_rep_ = n_rep, alpha_ = alpha,
                               results_matrix_ = clustering_results,
                               correct_specification_ = correct_specification)

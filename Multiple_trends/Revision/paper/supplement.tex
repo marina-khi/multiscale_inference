@@ -87,7 +87,7 @@ The simulation design is as follows: We generate data from the model $Y_{it} = m
 \[ \boldsymbol{X}_{it} = \begin{pmatrix} a_1 & 0 & 0 \\ 0 & a_2 & 0 \\ 0 & 0 & a_3 \end{pmatrix} \boldsymbol{X}_{i,t-1} + \boldsymbol{\nu}_{it}, \] 
 where $\boldsymbol{X}_{it} = ( X_{it,1}, X_{it,2}, X_{it,3} )^\top$, $\boldsymbol{\nu}_{it} = ( \nu_{it,1}, \nu_{it,2}, \nu_{it,3} )^\top$ and we choose $a_1 = a_2 = a_3 = 0.25$. The innovations $\boldsymbol{\nu}_{it}$ are drawn i.i.d.\ from a multivariate normal distribution $N(0,\Phi)$ with
 \[ \Phi = \begin{pmatrix} 1 & \varphi & \varphi \\ \varphi & 1 & \varphi \\ \varphi & \varphi & 1 \end{pmatrix}, \]
-\textcolor{red}{where $\varphi = 0.25$ specifies the correlation between the 3 covariates}.
+where $\varphi = 0.25$ specifies the correlation between the 3 covariates.
 %\footnote{As a robustness check, we have repeated the analysis for $\phi = 0.1$. However, as the results a very similar, we do not report them here.}
 The parameter vector $\boldsymbol{\beta}_i = (\beta_{i,1},\beta_{i,2},\beta_{i,3})^\top$ is chosen to equal $(1,1,1)^\top$ for each $i$. Moreover, for each $i$, the idiosyncratic error process $\{\varepsilon_{it}: 1 \le t \le T\}$ follows the AR(1) model $\varepsilon_{it} = a \varepsilon_{i, t-1} + \eta_{it}$, where $a = 0.25$ and the innovations $\eta_{it}$ are i.i.d.\ normally distributed with mean $0$ and standard deviation $0.25$. 
 The vector of fixed effects $\boldsymbol{\alpha} = (\alpha_1,\ldots,\alpha_n)^\top$ is modelled as a normally distributed random vector. In particular, $\boldsymbol{\alpha} \sim N(0,\Sigma)$ with
@@ -99,7 +99,7 @@ The vector of fixed effects $\boldsymbol{\alpha} = (\alpha_1,\ldots,\alpha_n)^\t
 \rho   & \cdots & \rho   & 1
 \end{pmatrix},
 \]
-\textcolor{red}{where $\rho = 0.25$ gives the correlation across $i$}.
+where $\rho = 0.25$ gives the correlation across $i$.
 %\footnote{As a robustness check, we have repeated the analysis for $\rho = 0.1$. However, as the results a very similar, we do not report them here.}
 %We assume that the covariates $\X_{it}$ and the error terms $\varepsilon_{js}$ are independent from each other for all $1 \leq i,j \leq n$ and $1 \leq t, s \leq T$. 
 To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ without loss of generality. To produce data under the alternative, we use the bump function
@@ -138,7 +138,7 @@ Each panel gives the results for a different bump height $b$, where $b = 0$ corr
 \begin{subtable}[b]{0.4\textwidth}
 \centering  
 \caption{$b=0$}
-\input{../output/15_ts_25_25_size}
+{\color{red}\input{../output/15_ts_25_25_size}}
 \end{subtable}
 \begin{subtable}[b]{0.4\textwidth}
 \centering  
@@ -163,7 +163,7 @@ Table \ref{tab:sizepower} reports the simulation results, in particular, the emp
 %The left column of Table \ref{tab:sizepower} gives the results for the simulation setting with the correlation parameters $(\phi,\rho) = (0.1,0.1)$, the right column those for the setting with $(\phi,\rho) = (0.25,0.25)$. (We do not present the results for $(\phi,\rho) = (0.1,0.25)$ and $(\phi,\rho) = (0.25,0.1)$ as they are quite similar and do not bring additional insights.)
 The four panels (a)--(d) of Table \ref{tab:sizepower} correspond to different values of the bump size $b$. Panel (a) corresponds to the case $b=0$ and thus gives the empirical size of the test under the null $H_0$. Panels (b)--(d), in contrast, report the empirical power against the three alternatives with $b \in \{0.25,0.5,0.75\}$.
 %The actual size of the test is reported in the two subtables (a), whereas subtables (b)--(d) report the power against the three different alternatives with $b \in \{0.25,0.5,0.75\}$. Both the actual size and the power are computed as the number of simulations in which the test rejects the global null $H_0$ divided by the total number of simulations.
-\textcolor{red}{Inspecting panel (a), one can see that the empirical size of the test gives a reasonable approximation to the target $\alpha$ in all scenarios under investigation, even though the size numbers are a bit downward/upward biased for the smaller time series lengths $T=100$ and $T=250$.}
+Inspecting panel (a), one can see that the empirical size of the test gives a reasonable approximation to the target $\alpha$ in all scenarios under investigation, even though the size numbers are a bit downward/upward biased for the smaller time series lengths $T=100$ and $T=250$.
 %, even though the size numbers have a slight upward bias. {\color{red}This bias gets smaller as the sample size $T$ increases, which reflects the fact that we get more and more information for each of the tests that we need to carry out.} We can also see that the upward bias become slightly more pronounced in case of stronger degrees of correlation across the covariates and the time series, i.e., with higher values of $\phi$ and $\rho$, but the change in test performance is almost negligible and can be attributed to random sampling. To summarize, even though slightly liberal, the test controls the FWER quite accurately in the simulation settings that we consider.
 Inspecting panels (b)--(d), one can further see that the test has good power properties. For the smallest bump size $b = 0.25$ and the smallest time series length $T = 100$, the power is only moderate, reflecting the fact that the alternative with $b = 0.25$ is not very far away from the null. However, as we increase the bump size $b$ and the time series length $T$, the power increases quickly. For $b = 0.5$ and $T=250$, for instance, we already have power of over $95\%$ when $\alpha \ge 0.05$.
 
@@ -236,8 +236,7 @@ $H_T^{\text{fine}} = \{ h \in [ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1
 The simulation results for the three grids are reported in Table \ref{tab:grids}.\footnote{Note that the simulation results for the grid $\mathcal{G}_T$ in the second column of Table \ref{tab:grids} are identical with those in Table \ref{tab:sizepower}. For ease of comparison, we have repeated these results as part of Table \ref{tab:grids}.}
 Each column corresponds to a particular choice of grid. Panel (a) in each column specifies the empirical size of the test, while panels (b)--(d) give the empirical power against the alternatives with bump size $b \in \{0.25,0.5,0.75\}$. 
 %, while {\color{red} the results for the finer grid are presented in Table \ref{tab:grid-fine}.} We report the results for the simulation scenario with stronger correlation across the time series and between the covariates, i.e., with $\rho = 0.25$ and $\phi = 0.25$, since this scenario is less favourable for our multiscale procedure and the results with different values of $\rho$ and $\phi$ are fairly similar.
-\textcolor{red}{As can be seen, the size numbers in Table \ref{tab:grids} are fairly stable across the three different grids. In particular, we get a reasonable approximation to the target size $\alpha$, no matter which of the three grids we are working with.} 
-Moreover, the power numbers for $\mathcal{G}_T$ and the finer grid $\mathcal{G}_T^{\text{fine}}$ are very similar to each other. Those for the sparser grid $\mathcal{G}_T^{\text{sparse}}$, in contrast, are somewhat lower, which may be explained as follows: As $\mathcal{G}_T^{\text{sparse}}$ is considerably sparser than the other two grids, much less intervals $\interval = [u-h,u+h]$ are taken into account. In particular, intervals may potentially be ignored where the deviation from the null is quite strong. This results in a loss of power.
+As can be seen, the size numbers in Table \ref{tab:grids} are fairly stable across the three different grids. In particular, we get a reasonable approximation to the target size $\alpha$, no matter which of the three grids we are working with. Moreover, the power numbers for $\mathcal{G}_T$ and the finer grid $\mathcal{G}_T^{\text{fine}}$ are very similar to each other. Those for the sparser grid $\mathcal{G}_T^{\text{sparse}}$, in contrast, are somewhat lower, which may be explained as follows: As $\mathcal{G}_T^{\text{sparse}}$ is considerably sparser than the other two grids, much less intervals $\interval = [u-h,u+h]$ are taken into account. In particular, intervals may potentially be ignored where the deviation from the null is quite strong. This results in a loss of power.
 Taken together, our simulation results suggest the following: (i) The particular choice of grid has a negligible effect on the empirical size of the test. (ii) As long as the grid is sufficiently rich, the choice of grid also has a negligible effect on the power of the test. 
 %As long as the grid is chosen sufficiently rich (in the sense of including a variety of bandwidth values ranging from very small to very large and many time points that are scattered rather densely over the unit interval), the particular choice of grid has a negligible effect on the test.
 %Furthermore, even though the power numbers are a bit lower in case of a sparse grid compared to a , the test has reasonable power properties for all of the choices of the grid. %This demonstrates that
@@ -316,7 +315,7 @@ Our procedure can be combined with any method off-the-shelf for long-run error v
 \end{sidewaystable}
 
 
-So far, we have fixed the number of time series at $n = 15$. We now examine the performance of our test as $n$ gets larger. To do so, we rerun the simulation exercises from Section \ref{subsec:sim:main} for $n \in \{25,50,100\}$ and $T$ as before, i.e., $T \in \{100,250,500\}$. We work with precisely the same simulation setup as specified in Section \ref{subsec:sim:main} except for the fact that we use the smaller grid $\mathcal{G}_T^{\text{sparse}}$ defined in \eqref{eq:grid-sparse} to decrease the computational burden. Overall, our simulation results suggest that the test performs well for larger $n$. The results are presented in Table \ref{tab:large-n}, with each column corresponding to a particular choice of $n$. \textcolor{red}{The upper panels (a) of Table \ref{tab:large-n} show that the empirical size of the test provides a reasonably good approximation to the target $\alpha$ across all scenarios under consideration. In particular, the size numbers remain fairly stable as $n$ increases, even though they appear to get a little less precise for larger $n$.} Panels (b)--(d) further show that the test has reasonable power across all considered senarios. The power numbers, however, decrease somewhat as $n$ gets larger, which can be explained as follows: Let $\mathcal{M} = \{ (u,h,i,j): (u,h) \in \grid \text{ and } 1 \le i < j \le n \}$ be the collection of all location-scale points $(u,h)$ and all pairs of time series $(i,j)$ under consideration and let $\mathcal{M}_1 \subseteq \mathcal{M}$ be the set of tuples $(u,h,i,j)$ for which the local hypothesis $H_0^{[i, j]}(u, h)$ is false. Since in the simulation setup at hand, all trend functions are the same except the first one, it holds that $|\mathcal{M}_1| / |\mathcal{M}| \to 0$ quite fast as $n \to \infty$ (where $| \mathcal{M} |$ denotes the cardinality of the set $\mathcal{M}$). Hence, as $n$ increases, the total number of hypotheses to be tested grows much faster than the number of hypotheses where we see deviations from the null. As a consequence, it gets harder to detect these deviations, which is reflected in somewhat lower power numbers. 
+So far, we have fixed the number of time series at $n = 15$. We now examine the performance of our test as $n$ gets larger. To do so, we rerun the simulation exercises from Section \ref{subsec:sim:main} for $n \in \{25,50,100\}$ and $T$ as before, i.e., $T \in \{100,250,500\}$. We work with precisely the same simulation setup as specified in Section \ref{subsec:sim:main} except for the fact that we use the smaller grid $\mathcal{G}_T^{\text{sparse}}$ defined in \eqref{eq:grid-sparse} to decrease the computational burden. Overall, our simulation results suggest that the test performs well for larger $n$. The results are presented in Table \ref{tab:large-n}, with each column corresponding to a particular choice of $n$. The upper panels (a) of Table \ref{tab:large-n} show that the empirical size of the test provides a reasonably good approximation to the target $\alpha$ across all scenarios under consideration. In particular, the size numbers remain fairly stable as $n$ increases, even though they appear to get a little less precise for larger $n$.Panels (b)--(d) further show that the test has reasonable power across all considered senarios. The power numbers, however, decrease somewhat as $n$ gets larger, which can be explained as follows: Let $\mathcal{M} = \{ (u,h,i,j): (u,h) \in \grid \text{ and } 1 \le i < j \le n \}$ be the collection of all location-scale points $(u,h)$ and all pairs of time series $(i,j)$ under consideration and let $\mathcal{M}_1 \subseteq \mathcal{M}$ be the set of tuples $(u,h,i,j)$ for which the local hypothesis $H_0^{[i, j]}(u, h)$ is false. Since in the simulation setup at hand, all trend functions are the same except the first one, it holds that $|\mathcal{M}_1| / |\mathcal{M}| \to 0$ quite fast as $n \to \infty$ (where $| \mathcal{M} |$ denotes the cardinality of the set $\mathcal{M}$). Hence, as $n$ increases, the total number of hypotheses to be tested grows much faster than the number of hypotheses where we see deviations from the null. As a consequence, it gets harder to detect these deviations, which is reflected in somewhat lower power numbers. 
 
 
 \subsection{Comparison of our test with SiZer} 
@@ -489,21 +488,11 @@ We implement our clustering algorithm in exactly the same way as in Section \ref
 \begin{center}
 \caption{Empirical probabilities that the estimated group structure is identical to the true group structure $\{ G_1,G_2,G_3\}$. $\mathcal{T}_{\text{MS}}$ denotes our multiscale method and $\mathcal{T}_{\text{bmk, }l}$ the benchmark procedure with bandwidth $h_l$ ($l=1,\ldots,6$). 
 %  $\{ \widehat{G}_1,\ldots,\widehat{G}_N\} = \{ G_1,G_2,G_3\}$ for the proposed clustering approach with an estimated long-run variance ($\mathcal{T}_{\text{MS}}$) and with the true theoretical value of the long-run variance ($\mathcal{T}_{\text{MS, true lrv}}$) and the benchmark procedures $\mathcal{T}_{\text{bmk, }1} - \mathcal{T}_{\text{bmk, }6}$ corresponding to bandwidths $h_1 - h_6$ for different sample sizes $T$.
-\textcolor{red}{[Can we delete $\mathcal{T}_{\text{MS, true lrv}}$? Not really needed in my opinion.]}}\label{tab:clustering:comparison}
+}\label{tab:clustering:comparison}
 \renewcommand{\arraystretch}{1.2}  
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
-\input{../output/clustering_comparison}
+{\color{red}\input{../output/clustering_comparison}}
 \end{center}}
-%{\color{red}
-%\begin{tabular}{ccccccccc}
-%  \hline
-%  & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{MS, true lrv}}$ & $\mathcal{T}_{\text{bm, }1}$ & $\mathcal{T}_{\text{bm, }2}$ & $\mathcal{T}_{\text{bm, }3}$ & $\mathcal{T}_{\text{bm, }4}$ & $\mathcal{T}_{\text{bm, }5}$ & $\mathcal{T}_{\text{bm, }6}$ \\
-% \hline
-%$T= 100$ & 0.007 & 0.029 & 0.066& 0.066 & 0 & 0  & 0 & 0\\ 
-%$T=  250$ & 0.742 & 0.903 & 0.943 & 0.066 & 0 & 0 & 0 & 0\\ 
-%$T=  500$ & 1.000 & 1.000 & 1.000 & 0.066& 0 & 0 & 0 & 0\\ 
-%   \hline
-%\end{tabular}}
 \end{table}
 
 
@@ -635,22 +624,22 @@ it depicts in grey the set $\mathcal{S}^{[i, j]}(\alpha)$ of all the intervals f
 
 \begin{sidewaysfigure}[p!]
 \begin{minipage}[t]{0.24\textwidth}
-\includegraphics[width=\textwidth]{output/plots/gdp/AUS_vs_NOR}
+\includegraphics[width=\textwidth]{../output/plots/gdp/AUS_vs_NOR}
 \caption{Test results for the comparison of Australia and Norway.}\label{fig:Australia:Norway}
 \end{minipage}
 \hspace{0.1cm}
 \begin{minipage}[t]{0.24\textwidth}
-\includegraphics[width=\textwidth]{output/plots/gdp/AUT_vs_NOR}
+\includegraphics[width=\textwidth]{../output/plots/gdp/AUT_vs_NOR}
 \caption{Test results for the comparison of Austria and Norway.}\label{fig:Austria:Norway}
 \end{minipage}
 \hspace{0.1cm}
 \begin{minipage}[t]{0.24\textwidth}
-\includegraphics[width=\textwidth]{output/plots/gdp/CAN_vs_NOR}
+\includegraphics[width=\textwidth]{../output/plots/gdp/CAN_vs_NOR}
 \caption{Test results for the comparison of Canada and Norway.}\label{fig:Canada:Norway}
 \end{minipage}
 \hspace{0.1cm}
 \begin{minipage}[t]{0.24\textwidth}
-\includegraphics[width=\textwidth]{output/plots/gdp/CHE_vs_NOR}
+\includegraphics[width=\textwidth]{../output/plots/gdp/CHE_vs_NOR}
 \caption{Test results for the comparison of Switzerland and Norway.}\label{fig:Switzerland:Norway}
 \end{minipage}
 \caption*{Note: In each figure, panel (a) shows the two augmented time series, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i, j]}_{min}(\alpha)$ in black. }
@@ -659,22 +648,22 @@ it depicts in grey the set $\mathcal{S}^{[i, j]}(\alpha)$ of all the intervals f
 
 \begin{sidewaysfigure}[p!]
 \begin{minipage}[t]{0.24\textwidth}
-\includegraphics[width=\textwidth]{output/plots/gdp/DEU_vs_NOR}
+\includegraphics[width=\textwidth]{../output/plots/gdp/DEU_vs_NOR}
 \caption{Test results for the comparison of Germany and Norway.}\label{fig:Germany:Norway}
 \end{minipage}
 \hspace{0.1cm}
 \begin{minipage}[t]{0.24\textwidth}
-\includegraphics[width=\textwidth]{output/plots/gdp/FIN_vs_NOR}
+\includegraphics[width=\textwidth]{../output/plots/gdp/FIN_vs_NOR}
 \caption{Test results for the comparison of Finland and Norway.}\label{fig:Finland:Norway}
 \end{minipage}
 \hspace{0.1cm}
 \begin{minipage}[t]{0.24\textwidth}
-\includegraphics[width=\textwidth]{output/plots/gdp/FRA_vs_NOR}
+\includegraphics[width=\textwidth]{../output/plots/gdp/FRA_vs_NOR}
 \caption{Test results for the comparison of France and Norway.}\label{fig:France:Norway}
 \end{minipage}
 \hspace{0.1cm}
 \begin{minipage}[t]{0.24\textwidth}
-\includegraphics[width=\textwidth]{output/plots/gdp/USA_vs_NOR}
+\includegraphics[width=\textwidth]{../output/plots/gdp/USA_vs_NOR}
 \caption{Test results for the comparison of the USA and Norway.}\label{fig:USA:Norway}
 \end{minipage}
 \caption*{Note: In each figure, panel (a) shows the two augmented time series, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i, j]}_{min}(\alpha)$ in black.}
@@ -684,17 +673,17 @@ it depicts in grey the set $\mathcal{S}^{[i, j]}(\alpha)$ of all the intervals f
 \begin{sidewaysfigure}[p!]
 \centering
 \begin{minipage}[t]{0.24\textwidth}
-\includegraphics[width=\textwidth]{output/plots/gdp/JPN_vs_NOR}
+\includegraphics[width=\textwidth]{../output/plots/gdp/JPN_vs_NOR}
 \caption{Test results for the comparison of Japan and Norway.}\label{fig:Japan:Norway}
 \end{minipage}
 \hspace{0.1cm}
 \begin{minipage}[t]{0.24\textwidth}
-\includegraphics[width=\textwidth]{output/plots/gdp/USA_vs_FRA}
+\includegraphics[width=\textwidth]{../output/plots/gdp/USA_vs_FRA}
 \caption{Test results for the comparison of the USA and France.}\label{fig:USA:France}
 \end{minipage}
 \hspace{0.1cm}
 \begin{minipage}[t]{0.24\textwidth}
-\includegraphics[width=\textwidth]{output/plots/gdp/AUS_vs_FRA}
+\includegraphics[width=\textwidth]{../output/plots/gdp/AUS_vs_FRA}
 \caption{Test results for the comparison of Australia and France.}\label{fig:Australia:France}
 \end{minipage}
 \caption*{Note: In each figure, panel (a) shows the two augmented time series, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i, j]}_{min}(\alpha)$ in black.}
@@ -709,10 +698,10 @@ Figures \ref{fig:USA:France} and \ref{fig:Australia:France} present the results 
 
 \begin{figure}[t!]
 \begin{center}
-\includegraphics[width=0.75\textwidth]{output/plots/gdp/dendrogram}
+\includegraphics[width=0.75\textwidth]{../output/plots/gdp/dendrogram}
 \caption{Dendrogram of the HAC algorithm. Each coloured rectangle corresponds to one of the clusters.}\label{fig:gdp:dend}
 
-\includegraphics[width=0.75\textwidth]{output/plots/gdp/all_clusters}
+\includegraphics[width=0.75\textwidth]{../output/plots/gdp/all_clusters}
 \caption{Local linear estimates of the $n=11$ time trends (calculated from the augmented time series $\widehat{Y}_{it}$ with bandwidth $h = 0.1$ and Epanechnikov kernel). Each trend estimate is coloured according to the cluster that it is assigned to. }\label{fig:gdp:all_clusters}
 \end{center}
 \end{figure}
