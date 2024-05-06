@@ -31,7 +31,7 @@ sigma <- 0.25
 
 numCores = round(parallel::detectCores() * .80)
 
-seed <- 123454321
+seed <- 1357531
 
 correct_specification <- c(rep(1, (floor(n_ts / 3))),
                            rep(2, (floor(2 * n_ts / 3) - floor(n_ts / 3))),
@@ -51,10 +51,10 @@ for (t_len in different_T){
   
   m_matrix <- matrix(0, nrow = t_len, ncol = n_ts)
   for (i in (floor(n_ts / 3) + 1):(floor(2 * n_ts / 3))){
-    m_matrix[, i] <- 0.5 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.5 * b_function((1:t_len)/t_len, 0.75, 0.25)
+    m_matrix[, i] <- 0.3 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.3 * b_function((1:t_len)/t_len, 0.75, 0.25)
   }
   for (i in (floor(2 * n_ts / 3) + 1):n_ts){
-    m_matrix[, i] <- 2 * b_function((1:t_len)/t_len, 0.75, 0.025) - 2 * b_function((1:t_len)/t_len, 0.25, 0.025)
+    m_matrix[, i] <- b_function((1:t_len)/t_len, 0.75, 0.025) - b_function((1:t_len)/t_len, 0.25, 0.025)
   }
   
   cat("Calculating the distance measures for T = ", t_len,"\n")
@@ -167,7 +167,7 @@ for (t_len in different_T){
   clustering_results_benchmark5 <- rbind(rep(3, n_rep), groups_benchmark_mat5)
   clustering_results_benchmark6 <- rbind(rep(3, n_rep), groups_benchmark_mat6)
   
-  filename = paste0("output/revision/misc/results_for_T_", t_len, "_comparison_higher_trend.RData")
+  filename = paste0("output/revision/misc/results_for_T_", t_len, "_comparison.RData")
   save(clustering_results, clustering_results_benchmark,
        clustering_results_benchmark2, clustering_results_benchmark3,
        clustering_results_benchmark4, clustering_results_benchmark5,
@@ -204,7 +204,7 @@ error_count_benchmark6       <- list()
 j <- 1
 
 for (t_len in different_T){
-  filename = paste0("output/revision/misc/results_for_T_", t_len, "_comparison_higher_trend.RData")
+  filename = paste0("output/revision/misc/results_for_T_", t_len, "_comparison.RData")
   load(file = filename)
   cat("Analysis of the results for the multiscale method with the estimated lrv\n")
   results <- cluster_analysis(t_len_ = t_len, n_rep_ = n_rep, alpha_ = alpha,

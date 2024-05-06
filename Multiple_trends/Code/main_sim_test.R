@@ -122,6 +122,7 @@ for (t_len in different_T){
   quants <- as.vector(quantiles[2, ])
   
   for (b in different_b){
+    set.seed(seed + 1)
     m_matrix      <- matrix(0, nrow = t_len, ncol = n_ts)
     if (b == 0) {
       cat("SIZE SIMULATIONS\n")
