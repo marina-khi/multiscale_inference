@@ -122,7 +122,7 @@ for (t_len in different_T){
   quants <- as.vector(quantiles[2, ])
   
   for (b in different_b){
-    set.seed(seed + 1)
+    set.seed(seed + 3)
     m_matrix      <- matrix(0, nrow = t_len, ncol = n_ts)
     if (b == 0) {
       cat("SIZE SIMULATIONS\n")
@@ -169,10 +169,7 @@ for (t_len in different_T){
   }
 }
 
-#######################
-#Output of the results#
-#######################
-
+#Output of the results
 for (b in different_b){
   l   <- match(b, different_b)
   tmp <- as.matrix(size_and_power_array[, l, ])
@@ -246,6 +243,7 @@ for (t_len in different_T){
   quants <- as.vector(quantiles[2, ])
   
   for (b in different_b){
+    set.seed(seed + 3)
     m_matrix      <- matrix(0, nrow = t_len, ncol = n_ts)
     if (b == 0) {
       cat("SIZE SIMULATIONS\n")
@@ -385,6 +383,7 @@ for (t_len in different_T){
   quants <- as.vector(quantiles[2, ])
   
   for (b in different_b){
+    set.seed(seed + 3)
     m_matrix      <- matrix(0, nrow = t_len, ncol = n_ts)
     if (b == 0) {
       cat("SIZE SIMULATIONS\n")
