@@ -121,31 +121,21 @@ for (t_len in different_T){
   
   quants <- as.vector(quantiles[2, ])
   
-  for (b in different_b){
-    set.seed(seed + 3)
-    m_matrix      <- matrix(0, nrow = t_len, ncol = n_ts)
-    if (b == 0) {
-      cat("SIZE SIMULATIONS\n")
-    } else {
-      cat("POWER SIMULATIONS, BUMP FUNCTION WITH b = ", b, "\n")
-      
-      #Only the first trend function is non-zero:
-      m_matrix[, 1] <- bump((1:t_len)/t_len) * b
-    }
-    
-    tic()
-    cl <- makePSOCKcluster(numCores)
-    registerDoParallel(cl)
-    foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
-      repl(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
-           a_ = a, sigma_ = sigma,
-           beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
-           rho_ = rho, m_matrix_ = m_matrix, q_ = q, r_ = r)
-      # Loop one-by-one using foreach
-    } -> simulated_pairwise_statistics
-    stopCluster(cl)
-    toc()
-        
+  tic()
+  cl <- makePSOCKcluster(numCores)
+  registerDoParallel(cl)
+  foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
+    repl(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
+         a_ = a, sigma_ = sigma,
+         beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
+         rho_ = rho, different_b_ = different_b,
+         q_ = q, r_ = r)
+    # Loop one-by-one using foreach
+  } -> simulated_pairwise_statistics
+  stopCluster(cl)
+  toc()
+  
+  for (j in 1:length(different_b)){
     simulated_statistic <- apply(simulated_pairwise_statistics[1:(n_ts * n_ts), ], 2, max)
     
     size_and_power_vec <- c()
@@ -168,6 +158,7 @@ for (t_len in different_T){
     size_and_power_array[k, l, ] <- size_and_power_vec
   }
 }
+
 
 #Output of the results
 for (b in different_b){
