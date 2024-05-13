@@ -136,7 +136,7 @@ for (t_len in different_T){
   toc()
   
   for (j in 1:length(different_b)){
-    simulated_statistic <- apply(simulated_pairwise_statistics[1:(n_ts * n_ts), ], 2, max)
+    simulated_statistic <- apply(simulated_pairwise_statistics[((j - 1) * n_ts * n_ts + 1):(j * n_ts * n_ts), ], 2, max)
     
     size_and_power_vec <- c()
     for (alpha in different_alpha){
@@ -149,13 +149,13 @@ for (t_len in different_T){
       num_of_rej         <- sum(simulated_statistic > quant)/n_rep
       size_and_power_vec <- c(size_and_power_vec, num_of_rej) 
       
-      cat("Ratio of rejection is ", num_of_rej, "with b = ", b,
+      cat("Ratio of rejection is ", num_of_rej, "with b = ", different_b[j],
           ", alpha = ", alpha, "and T = ", t_len, "\n")
     }
     
     #Storing the results in a 3D array
-    l <- match(b, different_b)
-    size_and_power_array[k, l, ] <- size_and_power_vec
+#    l <- match(b, different_b)
+    size_and_power_array[k, j, ] <- size_and_power_vec
   }
 }
 

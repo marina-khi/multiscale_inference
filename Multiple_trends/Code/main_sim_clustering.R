@@ -58,10 +58,10 @@ t_len <- 250
 
 m1 <- numeric(t_len)
 m2 <- numeric(t_len)
-m1 <- 0.5 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.5 * b_function((1:t_len)/t_len, 0.75, 0.25)
-m2 <- 2 * b_function((1:t_len)/t_len, 0.75, 0.025) - 2 * b_function((1:t_len)/t_len, 0.25, 0.025)
+m1 <- 0.35 * b_function((1:t_len)/t_len, 0.25, 0.25) - 0.35 * b_function((1:t_len)/t_len, 0.75, 0.25)
+m2 <- b_function((1:t_len)/t_len, 0.75, 0.025) - b_function((1:t_len)/t_len, 0.25, 0.025)
 
-pdf(paste0("output/revision/clustering_functions_2.pdf"),
+pdf(paste0("output/revision/clustering_functions.pdf"),
     width = 12, height = 12, paper="special")
 par(mfrow = c(3, 1))
 par(mar = c(4, 3, 0.5, 0)) #Margins for each plot
