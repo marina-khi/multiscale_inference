@@ -31,7 +31,7 @@ sigma <- 0.25
 
 numCores = round(parallel::detectCores() * .80)
 
-seed <- 1357531
+seed <- 13577531
 
 correct_specification <- c(rep(1, (floor(n_ts / 3))),
                            rep(2, (floor(2 * n_ts / 3) - floor(n_ts / 3))),

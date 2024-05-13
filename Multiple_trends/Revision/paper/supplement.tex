@@ -425,13 +425,13 @@ The simulation results are reported in Table \ref{tab:clustering}. The entries i
 \centering
 \caption{Empirical probabilities that \\ $\widehat{N} = N$}\label{tab:clustering:1}
 \renewcommand{\arraystretch}{1.2}
-\input{../output/15_ts_correct_group_number}
+{\color{red}\input{../output/15_ts_correct_group_number}}
 \end{subtable}
 \begin{subtable}[b]{0.48\textwidth}
 \centering
 \caption{\centering Empirical probabilities that $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{ G_1,G_2,G_3\}$}\label{tab:clustering:2}
 \renewcommand{\arraystretch}{1.2}
-\input{../output/15_ts_correct_group_structure}
+{\color{red}\input{../output/15_ts_correct_group_structure}}
 \end{subtable}
 \end{center}}
 \vspace{-0.5cm}
@@ -491,47 +491,9 @@ We implement our clustering algorithm in exactly the same way as in Section \ref
 }\label{tab:clustering:comparison}
 \renewcommand{\arraystretch}{1.2}  
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
-{\color{red}\input{../output/clustering_comparison}}
+\input{../output/clustering_comparison}
 \end{center}}
 \end{table}
-
-
-%\addtocounter{table}{-1} 
-%\begin{table}[t]
-%\footnotesize{
-%\begin{center}
-%\caption{Clustering results for different sample sizes $T$ and nominal sizes $\alpha$.}\label{tab:clustering}
-%\begin{subtable}[b]{0.48\textwidth}
-%\centering
-%\caption{Empirical probabilities that \\ $\widehat{N} = N$}\label{tab:clustering:1}
-%\renewcommand{\arraystretch}{1.2}
-%\input{output/tables/15_ts_correct_group_number}
-%\end{subtable}
-%\begin{subtable}[b]{0.48\textwidth}
-%\centering
-%\caption{\centering Empirical probabilities that $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{ G_1,G_2,G_3\}$}\label{tab:clustering:2}
-%\renewcommand{\arraystretch}{1.2}
-%\input{output/tables/15_ts_correct_group_structure}
-%\end{subtable}
-%\end{center}}
-%\vspace{-0.5cm}
-%\end{table}
-%
-%
-%\begin{figure}[t!]
-%\centering
-%\includegraphics[width=0.95\textwidth]{output/plots/sim/histograms_groups}
-%\caption{Estimated number of groups $\widehat{N}$ for nominal size $\alpha = 0.05$. 
-%%Each panel corresponds to a different sample size $T$.
-%}\label{fig:clustering:1}
-%\vspace{0.25cm}
-%
-%\includegraphics[width=0.95\textwidth]{output/plots/sim/histograms_errors}
-%\caption{Number of classification errors for nominal size $\alpha = 0.05$. 
-%%Each panel corresponds to a different sample size $T$.
-%}\label{fig:clustering:2}
-%\end{figure}
-
 
 The simulation results are reported in Table \ref{tab:clustering:comparison}. The entries of the table give the empirical probabilities with which the estimated group structure equals the true one $\{G_1,G_2,G_3\}$. The two main results are as follows: (i) The performance of the benchmark procedure is heavily influenced by the choice of bandwidth.
 (ii) Our multiscale method outperforms the benchmark with all considered bandwidth choices $h_l$. Results (i) and (ii) nicely illustrate the main advantage of our multiscale method: it automatically selects the ``right'' scale(s) or bandwidth(s), i.e., those which are most suitable for comparing the trend curves.
