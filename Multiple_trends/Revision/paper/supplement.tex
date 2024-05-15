@@ -138,7 +138,7 @@ Each panel gives the results for a different bump height $b$, where $b = 0$ corr
 \begin{subtable}[b]{0.4\textwidth}
 \centering  
 \caption{$b=0$}
-{\color{red}\input{../output/15_ts_25_25_size}}
+\input{../output/15_ts_25_25_size}
 \end{subtable}
 \begin{subtable}[b]{0.4\textwidth}
 \centering  
@@ -398,7 +398,8 @@ There is an important difference between $\mathcal{T}_{\text{MS}}$ and $\mathcal
 Inspecting the power numbers in panels (b) and (c), one can further see that in all simulation scenarios, $\mathcal{T}_{\text{SiZer}}$ is more powerful than $\mathcal{T}_{\text{MS}}$. These higher power numbers, however, should not be taken at face value. In particular, they do not imply that $\mathcal{T}_{\text{SiZer}}$ is better in detecting deviations from the null than our test. They are rather a simple consequence of the fact that $\mathcal{T}_{\text{SiZer}}$ is much too liberal as illustrated in panel (a).
 
 
-There are of course other procedures besides the SiZer test of \cite{Park2009} that can be regarded as potential competitors of our test (\cite{DegrasWu2012}, \cite{Meyer2015}, \cite{Lyubchich2016}). However,  The main merit of our method is that we can perform inference uniformly over all locations $u$ and bandwidths (or scales) $h$ in the grid $\mathcal{G}_T$ and over all pairs of time series $(i,j)$. The potential competitors we are aware of do not have this uniformity property. Specifically, they are not uniform over bandwidths $h$ and usually also not over pairs of time series $(i,j)$ (simBaS). Hence, most probably, we will see a very similar picture when comparing these methods with ours: they will be much too liberal. In this sense, the above comparison with SiZer is prototypical. 
+There are of course other procedures besides the SiZer test of \cite{Park2009} that can be regarded as potential competitors of our test. %(\cite{DegrasWu2012}, \cite{Meyer2015}, \cite{Lyubchich2016}). However, 
+The main merit of our method is that we can perform inference uniformly over all locations $u$ and bandwidths (or scales) $h$ in the grid $\mathcal{G}_T$ and over all pairs of time series $(i,j)$. The potential competitors we are aware of do not have this uniformity property. Specifically, they are not uniform over bandwidths $h$ and usually also not over pairs of time series $(i,j)$. Hence, most probably, we will see a very similar picture when comparing these methods with ours: they will be much too liberal. In this sense, the above comparison with SiZer is prototypical. 
 
 
 \subsection{Performance of the clustering algorithm}\label{subsec:sim:clustering}
@@ -425,13 +426,13 @@ The simulation results are reported in Table \ref{tab:clustering}. The entries i
 \centering
 \caption{Empirical probabilities that \\ $\widehat{N} = N$}\label{tab:clustering:1}
 \renewcommand{\arraystretch}{1.2}
-{\color{red}\input{../output/15_ts_correct_group_number}}
+\input{../output/15_ts_correct_group_number}
 \end{subtable}
 \begin{subtable}[b]{0.48\textwidth}
 \centering
 \caption{\centering Empirical probabilities that $\{ \widehat{G}_1,\ldots,\widehat{G}_{\widehat{N}}\} = \{ G_1,G_2,G_3\}$}\label{tab:clustering:2}
 \renewcommand{\arraystretch}{1.2}
-{\color{red}\input{../output/15_ts_correct_group_structure}}
+\input{../output/15_ts_correct_group_structure}
 \end{subtable}
 \end{center}}
 \vspace{-0.5cm}
@@ -455,7 +456,7 @@ The simulation results are reported in Table \ref{tab:clustering}. The entries i
 
 Figures \ref{fig:clustering:1} and \ref{fig:clustering:2} give more insight into what happens for $T=100$ and $T=250$. Figure \ref{fig:clustering:1} shows histograms of the $5000$ simulated values of $\widehat{N}$, while Figure \ref{fig:clustering:2} depicts histograms of the number of classification errors produced by our algorithm. By the number of classification errors, we simply mean the number of incorrectly classified time series, which is formally calculated as 
 $\min_{\pi \in S_{\widehat{N}}} \big\{ |G_1 \setminus \widehat{G}_{\pi(1)}| +|G_2 \setminus \widehat{G}_{\pi(2)}| + |G_3 \setminus \widehat{G}_{\pi(3)}| \big\}$
-with $S_{\widehat{N}}$ being the set of all permutations of $\{1, 2, \ldots, \widehat{N}\}$. The histograms of Figure \ref{fig:clustering:1} for $T=100$ and $T = 250$ clearly show that our method underestimates the number of groups. In particular, it fails to detect the difference between two out of three groups in a large number of simulations ($\widehat{N} = 2$ in $3403$ and $4744$ cases out of $5000$ for $T= 100$ and $T=250$, respectively). This is reflected in the corresponding histograms of Figure \ref{fig:clustering:2} which show that there are exactly $5$ classification errors in $3322$ ($4744$) of the $5000$ simulation runs for $T=100$ ($T=250$). In most of these cases, the estimated group structure $\{ \widehat{G}_1, \widehat{G}_{2}\}$ coincides with either $\{ G_1 \cup G_2,G_3\}$,  $\{ G_1, G_2\cup G_3\}$ or $ \{ G_1 \cup G_3,G_2\}$. In summary, we can conclude that the very small empirical probabilities for $T=100$ and $T=250$ in Table \ref{tab:clustering} are due to the algorithm underestimating the number of groups. Inspecting the histograms for $T=500$ in Figures \ref{fig:clustering:1} and \ref{fig:clustering:2}, one can see that the performance of the estimators $\widehat{N}$ and $\{ \widehat{G}_1,\ldots, \widehat{G}_{\widehat{N}} \}$ improves significantly as the time series length $T$ increases. %, even though the corresponding empirical probabilities in Table \ref{tab:clustering} are still somewhat below the target $(1-\alpha)$.
+with $S_{\widehat{N}}$ being the set of all permutations of $\{1, 2, \ldots, \widehat{N}\}$. The histograms of Figure \ref{fig:clustering:1} for $T=100$ and $T = 250$ clearly show that our method underestimates the number of groups. In particular, it fails to detect the difference between two out of three groups in a large number of simulations ($\widehat{N} = 2$ in $3448$ and $4883$ cases out of $5000$ for $T= 100$ and $T=250$, respectively). This is reflected in the corresponding histograms of Figure \ref{fig:clustering:2} which show that there are exactly $5$ classification errors in $3345$ ($4884$) of the $5000$ simulation runs for $T=100$ ($T=250$). In most of these cases, the estimated group structure $\{ \widehat{G}_1, \widehat{G}_{2}\}$ coincides with either $\{ G_1 \cup G_2,G_3\}$,  $\{ G_1, G_2\cup G_3\}$ or $ \{ G_1 \cup G_3,G_2\}$. In summary, we can conclude that the very small empirical probabilities for $T=100$ and $T=250$ in Table \ref{tab:clustering} are due to the algorithm underestimating the number of groups. Inspecting the histograms for $T=500$ in Figures \ref{fig:clustering:1} and \ref{fig:clustering:2}, one can see that the performance of the estimators $\widehat{N}$ and $\{ \widehat{G}_1,\ldots, \widehat{G}_{\widehat{N}} \}$ improves significantly as the time series length $T$ increases. %, even though the corresponding empirical probabilities in Table \ref{tab:clustering} are still somewhat below the target $(1-\alpha)$.
 
 
 \subsection{Comparison of our clustering algorithm with a benchmark}

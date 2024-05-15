@@ -18,7 +18,7 @@ source("functions/functions.R")
 ##############################
 #Defining necessary constants#
 ##############################
-seed <- 22446688
+seed <- 543212345
 
 n_ts <- 15 #Number of time series
 
