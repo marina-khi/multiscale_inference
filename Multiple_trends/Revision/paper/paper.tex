@@ -108,7 +108,7 @@ for $1 \le t \le T$, where $m_i: [0,1] \to \reals$ is a nonparametric (determini
 
 There are various statistical tests for the comparison of time trends in the literature. Most commonly, the null hypothesis
 \[ H_0: m_i = m + c_i \text{ for some } c_i \in \reals \text{ and all } i \in \{1,\ldots,n\} \]
-is tested under which the trends $m_i$ are parallel to each other, i.e., under which they are shifted versions of a common time trend $m$. By a simple normalization of the model components in \eqref{eq:model_full}, we can always achieve that the trends $m_i$ are exactly the same under $H_0$ rather than only parallel. Hence, after normalization (the details of which are given in Section \ref{sec:model}), the null hypothesis $H_0$ can be reformulated as follows: 
+is tested under which the trends $m_i$ are parallel to each other, i.e., under which they are shifted versions of a common time trend $m$. By a simple normalization of the model components in \eqref{eq:model_full}, we can always achieve that the trends $m_i$ are exactly the same under $H_0$ rather than only parallel. Hence, after normalization (the details of which are given in Section \ref{sec:model}), the null hypothesis $H_0$ can be reformulated as follows in our model: 
 \[ H_0: m_1 = m_2 = \ldots = m_n. \]   
 The problem of testing $H_0$ has been studied in a number of articles. In a restricted version of \eqref{eq:model_full} without covariates, it has been investigated in \cite{HaerdleMarron1990}, \cite{Hall1990}, \cite{DegrasWu2012} and \cite{ChenWu2018} among others. Test methods in a less restricted version of \eqref{eq:model_full} with covariates and homogeneous parameters ($\bfbeta_i = \bfbeta$ for all $i$) have been derived, e.g., in \cite{Zhang2012} and \cite{Hidalgo2014}.
 
@@ -116,7 +116,7 @@ The problem of testing $H_0$ has been studied in a number of articles. In a rest
 Even though many different approaches for testing $H_0$ have been developed over the years, most of them have a serious shortcoming: they are very uninformative. They allow to say (with a certain statistical confidence) whether $H_0$ is violated or not, but they do not give any information on which types of violations occur. In particular, if $H_0$ is rejected, they only provide the information that some of the trend curves are not the same. Practitioners, however, would like to have much more specific information: they would like to know (i) \textit{which} trends have a different form and (ii) \textit{in which time intervals} the trends are different. The main aim of this paper is to construct a test procedure which provides exactly this information. More technically speaking, we construct a test which allows to make rigorous simultaneous confidence statements about (i) \textit{which} trend curves are different and (ii) \textit{where} (i.e., in which time intervals) they differ. 
 
 
-Very roughly speaking, our approach works as follows: Let $\{\mathcal{I}_r: 1 \le r \le R\}$ be a large family of time intervals $\mathcal{I}_r \subseteq [0,1]$ and let $H_{0,r}^{[i,j]}: m_i(w) = m_j(w) \ \forall w \in \mathcal{I}_r$ be the hypothesis that the two trend curves $m_i$ and $m_j$ are identical on the interval $\mathcal{I}_r$. Our procedure simultaneously tests $H_{0,r}^{[i, j]}$ for all $r$ and all pairs of time series $(i,j)$. As the intervals $\mathcal{I}_r$ have different lengths or scales, it belongs to the class of statistical multiscale methods. Our main theoretical result shows that under suitable technical conditions, the developed multiscale test controls the familywise error rate, i.e., the probability of wrongly rejecting at least one null hypothesis $H_{0,r}^{[i, j]}$. As we will see, this allows us to make simultaneous confidence statements of the following form for a given significance level $\alpha \in (0,1)$: 
+Very roughly speaking, our approach works as follows: Let $\{\mathcal{I}_r: 1 \le r \le R\}$ be a large family of time intervals $\mathcal{I}_r \subseteq [0,1]$ and let $H_{0,r}^{[i,j]}: m_i(w) = m_j(w) \ \forall w \in \mathcal{I}_r$ be the hypothesis that the two trend curves $m_i$ and $m_j$ are identical on the interval $\mathcal{I}_r$. Our procedure simultaneously tests $H_{0,r}^{[i, j]}$ for all $r$ and all pairs of time series $(i,j)$. As the intervals $\mathcal{I}_r$ have different lengths or scales, this approach belongs to the class of statistical multiscale methods. Our main theoretical result shows that under suitable technical conditions, the developed multiscale test controls the familywise error rate, i.e., the probability of wrongly rejecting at least one null hypothesis $H_{0,r}^{[i, j]}$. As we will see, this allows us to make simultaneous confidence statements of the following form for a given significance level $\alpha \in (0,1)$: 
 \textit{With probability at least $1-\alpha$, the trends $m_i$ and $m_j$ differ on any interval $\mathcal{I}_r$ and for any pair $(i,j)$ for which $H_{0,r}^{[i, j]}$ is rejected.} 
 Hence, as desired, we can make confidence statements about (i) \textit{which} trend curves are different and (ii) \textit{where} they differ.
 
@@ -135,7 +135,7 @@ Our multiscale test is constructed step by step in Section \ref{sec:test} and it
 
 
 For a vector $\mathbf{v} = (v_1, \ldots, v_m)\in\reals^m$, we write $\|\mathbf{v}\|_q = \big(\sum_{i=1}^m v_i^q\big)^{1/q}$ to denote its $\ell_q$-norm and use the shorthand $\|\mathbf{v}\| = \|\mathbf{v}\|_2$ in the special case $q = 2$. For a random variable $V$, we define its $\mathcal{L}^q$-norm by $\|V\|_q = (\ex |V|^q)^{1/q}$ and write $\|V\| := \|V\|_2$ in the case $q = 2$.
-Let $\eta_t$ ($t \in \integers$) be independent and identically distributed ($\text{i.i.d.}$) random variables, write $\mathcal{F}_t  = (\ldots, \eta_{t-1}, \eta_t)$ and let $g: \reals^\infty \to \reals$ be a measurable function such that $g(\mathcal{F}_t) = g(\ldots, \eta_{t-1}, \eta_t)$ is a properly defined random variable. Following \cite{Wu2005}, we define the \textit{physical dependence measure} of the process $\{g(\mathcal{F}_t)\}_{t=-\infty}^\infty$ by $\delta_q(g, t) = \| g(\mathcal{F}_t) - g(\mathcal{F}_t^\prime) \|_q$, where $\mathcal{F}_t^\prime  = (\ldots, \eta_{-1}, \eta^\prime_0, \eta_1, \ldots, \eta_t)$ is a coupled version of $\mathcal{F}_t$ with $\eta_0^\prime$ an i.i.d.\ copy of $\eta_0$. 
+Let $\eta_t$ ($t \in \integers$) be independent and identically distributed ($\text{i.i.d.}$) random variables, write $\mathcal{F}_t  = (\ldots, \eta_{t-1}, \eta_t)$ and let $g: \reals^\infty \to \reals$ be a measurable function such that $g(\mathcal{F}_t) = g(\ldots, \eta_{t-1}, \eta_t)$ is a properly defined random variable. Following \cite{Wu2005}, we define the physical dependence measure of the process $\{g(\mathcal{F}_t)\}_{t=-\infty}^\infty$ by $\delta_q(g, t) = \| g(\mathcal{F}_t) - g(\mathcal{F}_t^\prime) \|_q$, where $\mathcal{F}_t^\prime  = (\ldots, \eta_{-1}, \eta^\prime_0, \eta_1, \ldots, \eta_t)$ is a coupled version of $\mathcal{F}_t$ with $\eta_0^\prime$ an i.i.d.\ copy of $\eta_0$. 
 
 
 \subsection{Details on model equation \eqref{eq:model_full}}\label{subsec:model_setting}
@@ -193,7 +193,7 @@ We finally impose some assumptions on the relationship between the covariates an
 Conditions \ref{C-err3} and \ref{C-reg3} restrict the error and covariate processes to be weakly dependent.
 \begin{enumerate}[label=(\roman*),leftmargin=0.9cm, itemsep=0pt, parsep=0pt, topsep=3pt]
 \item Intuitively, we require weak dependence conditions for the following reason: Strongly dependent error and covariate processes are very persistent and may thus exhibit trend-like behaviour. It is in general very difficult to discern the deterministic trends $m_i$ from the stochastic trends produced by such processes.
-\item Even though we restrict attention to weakly dependent processes, our conditions allow for a very wide range of error and covariate processes. They in particular allow for processes which (despite formally being weakly dependent) are quite persistent and may thus produce trend-like patterns. A specific example are AR(1) error (and covariate) processes $\{\varepsilon_{it}: 1 \le t \le T\}$ of the form $\varepsilon_{it} = \phi \varepsilon_{i,t-1} + \eta_{it}$ with i.i.d.\ innovations $\eta_{it}$ and $|\phi| < 1$, where $\phi$ may be arbitrarily close to $1$, e.g., $\phi = 0.99$. Our asymptotic theory is able to deal with such quite persistent (yet formally weakly dependent) processes.
+\item Even though we restrict attention to weakly dependent processes, our conditions allow for a very wide range of error and covariate processes. They in particular allow for processes which (despite formally being weakly dependent) are quite persistent and may thus produce trend-like patterns. A specific example are AR(1) error (and covariate) processes $\{\varepsilon_{it}: 1 \le t \le T\}$ of the form $\varepsilon_{it} = \phi \varepsilon_{i,t-1} + \eta_{it}$ with i.i.d.\ innovations $\eta_{it}$ and $|\phi| < 1$, where $\phi$ is arbitrarily close to $1$, e.g., $\phi = 0.99$. Our asymptotic theory is able to deal with such quite persistent (yet formally weakly dependent) processes.
 \item That we are able to handle such persistent processes from an asymptotic point of view does of course not imply good performance in finite samples. In particular, if the time series length $T$ is rather moderate (such as in our simulations where $T$ is between $100$ and $500$), it is virtually impossible to discern the deterministic trends $m_i$ from the stochastic trends produced by AR(1) error processes with $\phi=0.99$. Notably, this is not a specific shortcoming of our method but an issue for any statistical procedure. Hence, when faced with small time series lengths like $T=100$, $250$ or $500$ as in our simulations, we can handle AR(1) error processes with a moderately large AR parameter such as $\phi=0.25$ or $\phi= 0.5$. But it is utopian to get reasonably good performance in close-to-unit-root-cases with, e.g., $\phi=0.95$ or $\phi=0.99$.  
 \end{enumerate}
 \end{remark}
@@ -219,7 +219,7 @@ In what follows, we design such a simultaneous test procedure step by step. To s
 \subsection{Preliminary steps}\label{subsec:test:prep}
 
 
-If the fixed effects $\alpha_i$ and the coefficient vectors $\bfbeta_i$ were known, our testing problem would be greatly simplified. In particular, we could consider the model
+If the fixed effects $\alpha_i$ and the coefficient vectors $\bfbeta_i$ were known, our test problem would be greatly simplified. In particular, we could consider the model
 $Y_{it}^\circ = m_i (\frac{t}{T}) + \varepsilon_{it}$ with $Y_{it}^\circ := Y_{it} - \alpha_i - \bfbeta_i^\top \X_{it}$,
 which is a standard nonparametric regression equation. As $\alpha_i$ and $\bfbeta_i$ are not observed in practice, we construct estimators $\widehat{\alpha}_i$ and $\widehat{\bfbeta}_i$ and replace the unknown variables $Y_{it}^\circ$ by the approximations $\widehat{Y}_{it} := Y_{it} -\widehat{\alpha}_i - \widehat{\bfbeta}_i^\top \X_{it}$. In what follows, we explain how to construct estimators of $\alpha_i$ and $\bfbeta_i$. 
 
@@ -228,7 +228,7 @@ In order to estimate the parameter vector $\bfbeta_i$ for a given $i$, we consid
 \begin{align}\label{eq:beta:est}
 \widehat{\bfbeta}_i = \Big( \sum_{t=2}^T \Delta \X_{it} \Delta \X_{it}^\top \Big)^{-1} \sum_{t=2}^T \Delta \X_{it} \Delta Y_{it}.
 \end{align}
-In Lemma B.5 %\ref{lemma-beta-rate} 
+In Lemma C.5 %\ref{lemma-beta-rate} 
 in the Supplement, we show that $\widehat{\bfbeta}_i - \bfbeta_i = O_p(T^{-1/2})$ under our assumptions. Given $\widehat{\bfbeta}_i$, we next estimate the fixed effect term $\alpha_i$ by 
 \begin{align}\label{eq:alpha:est}
 \widehat{\alpha}_i &= \frac{1}{T}\sum_{t=1}^T \big(Y_{it} - \widehat{\bfbeta}_i^\top \X_{it}\big). 
@@ -236,7 +236,7 @@ in the Supplement, we show that $\widehat{\bfbeta}_i - \bfbeta_i = O_p(T^{-1/2})
 This is a reasonable estimator of $\alpha_i$ for the following reason: For each $i$, it holds that $\widehat{\alpha}_i - \alpha_i = \big(\bfbeta_i - \widehat{\bfbeta}_i \big)^\top\frac{1}{T}\sum_{t=1}^T  \X_{it} + \frac{1}{T}\sum_{t=1}^T m_i(\frac{t}{T}) + \frac{1}{T}\sum_{t=1}^T \varepsilon_{it} = O_p(T^{-1/2})$, since $\frac{1}{T}\sum_{i=1}^T \varepsilon_{it} = O_p(T^{-1/2})$ by the law of large numbers, $\frac{1}{T}\sum_{i=1}^T m_i(t/T) = O(T^{-1})$ due to Lipschitz continuity of $m_i$ and the normalisation $\int_{0}^1 m_i(u)du = 0$, $\frac{1}{T}\sum_{t=1}^T  \X_{it} = O_p(1)$ by Chebyshev's inequality and $\widehat{\bfbeta}_i - \bfbeta_i = O_p (T^{-1/2})$. 
 
 
-Besides $\widehat{\bfbeta}_i$ and $\widehat{\alpha}_i$, we also need an estimator of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty}$ $\cov(\varepsilon_{i0}, \varepsilon_{i\ell})$ for each $i$. Throughout the paper, we assume that the long-run error variance is the same for all $i$, i.e., $\sigma_i^2 = \sigma^2$ for all $i$.  For technical reasons, we nevertheless use a different estimator of $\sigma^2$ for each $i$. In particular, we let $\widehat{\sigma}_i^2$ be an estimator of $\sigma^2$ which depends only on the $i$-th time series $\{ \widehat{Y}_{it}: 1 \le t \le T \}$, i.e., $\widehat{\sigma}_i^2 = \widehat{\sigma}_i^2(\widehat{Y}_{i1},\ldots,\widehat{Y}_{iT})$ is a function of the variables $\widehat{Y}_{it}$ for $1 \le t \le T$.\footnote{This construction is for technical convenience. Specifically, it allows us to apply the strong approximation results from \cite{BerkesLiuWu2014} separately to each time series $i$, which simplifies the proofs.} Our theory works with any estimator $\widehat{\sigma}_i^2$ which has the property that $\widehat{\sigma}_i^2 = \sigma^2 + o_p(\rho_T)$ for each $i$, where $\rho_T$ slowly converges to zero, in particular, $\rho_T = o(1/\log T)$. We now briefly discuss two possible choices of $\widehat{\sigma}_i^2$. Following \cite{Kim2016}, we can estimate $\sigma^2$ by a variant of the subseries variance estimator, which was first proposed by \cite{Carlstein1986} and then extended by \cite{WuZhao2007}. A full definition of the estimator can be found in Lemma B.6 %\ref{lemmaA:lrv} 
+Besides $\widehat{\bfbeta}_i$ and $\widehat{\alpha}_i$, we also need an estimator of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty}$ $\cov(\varepsilon_{i0}, \varepsilon_{i\ell})$ for each $i$. Throughout the paper, we assume that the long-run error variance is the same for all $i$, i.e., $\sigma_i^2 = \sigma^2$ for all $i$.  For technical reasons, we nevertheless use a different estimator of $\sigma^2$ for each $i$. In particular, we let $\widehat{\sigma}_i^2$ be an estimator of $\sigma^2$ which depends only on the $i$-th time series $\{ \widehat{Y}_{it}: 1 \le t \le T \}$, i.e., $\widehat{\sigma}_i^2 = \widehat{\sigma}_i^2(\widehat{Y}_{i1},\ldots,\widehat{Y}_{iT})$ is a function of the variables $\widehat{Y}_{it}$ for $1 \le t \le T$.\footnote{This construction is for technical convenience. Specifically, it allows us to apply the strong approximation results from \cite{BerkesLiuWu2014} separately to each time series $i$, which simplifies the proofs.} Our theory works with any estimator $\widehat{\sigma}_i^2$ which has the property that $\widehat{\sigma}_i^2 = \sigma^2 + o_p(\rho_T)$ for each $i$, where $\rho_T$ slowly converges to zero, in particular, $\rho_T = o(1/\log T)$. We now briefly discuss two possible choices of $\widehat{\sigma}_i^2$. Following \cite{Kim2016}, we can estimate $\sigma^2$ by a variant of the subseries variance estimator, which was first proposed by \cite{Carlstein1986} and then extended by \cite{WuZhao2007}. A full definition of the estimator can be found in Lemma C.6 %\ref{lemmaA:lrv} 
 of the Supplement where we derive its convergence rate. 
 %Formally, we set
 %\begin{align}
@@ -289,7 +289,7 @@ For our theoretical results, we suppose that the set of location-scale points $\
 
 \end{enumerate}
 \ref{C-grid} and \ref{C-h} place relatively mild restrictions on the set $\grid$: \ref{C-grid} allows $\grid$ to be very large compared to the sample size $T$. In particular, $\grid$ may grow as any polynomial of $T$. \ref{C-h} allows $\grid$ to contain intervals $[u-h,u+h]$ of many different scales $h$, ranging from very small intervals of scale $h_{\min}$ to substantially larger intervals of scale $h_{\max}$.
-As an example, we use the following location-scale grid in our application in Section \ref{sec:app}: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{t}{T}} \text{ with } 1 \le t \le T \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{T}} \text{ with } 1 \le t \le T \big\}$. We thus take into account all locations $u$ on an equidistant grid $U_T$ with step length $1/T$ and all scales $h=2/T, 7/T, 12/T,\ldots$ with $\log T /T \le h \le 1/4$. As we have yearly data in our application, this implies that each interval $[u-h,u+h]$ with $(u,h) \in \grid$ spans $5, 15, 25, \ldots$ years. The lower bound $\log T / T$ is motivated by \ref{C-h}. 
+As an example, we use the following location-scale grid in our application in Section \ref{sec:app}: $\mathcal{G}_T = U_T \times H_T$, where $U_T = \big\{ u \in [0,1]: u = \textstyle{\frac{t}{T}} \text{ with } 1 \le t \le T \big\}$ and $H_T = \big\{ h \in \big[ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} \big]:  h = \textstyle{\frac{5t - 3}{T}} \text{ with } 1 \le t \le T \big\}$. We thus take into account all locations $u$ on an equidistant grid $U_T$ with step length $1/T$ and all scales $h=2/T, 7/T, 12/T,\ldots$ with $\log T /T \le h \le 1/4$, where the lower bound $\log T / T$ is motivated by \ref{C-h}. As we have yearly data in our application, this implies that each interval $[u-h,u+h]$ with $(u,h) \in \grid$ spans $5, 15, 25, \ldots$ years. 
 
 
 \subsection{The test procedure}\label{subsec:test:test}
@@ -357,7 +357,7 @@ With (asymptotic) probability $1-\alpha$, the differences between the trends det
 FDR control, in contrast, would only allow us to make the following type of statement:
 \begin{equation}\label{eq:CS-FDR}
 \begin{minipage}[c][2.25cm][c]{13cm}
-On average, $100 (1-\alpha) \%$ of the differences detected by our test correspond to true differences.
+On average, at least $100 (1-\alpha) \%$ of the differences detected by our test correspond to true differences.
 \end{minipage}
 \end{equation}
 In our opinion, in most economic and financial applications, one is rather interested in statements of the form \eqref{eq:CS-FWER} than \eqref{eq:CS-FDR}. Take a financial example where the aim is to compare volatility trends of different stocks. Practitioners would like to interpret the differences detected by the test. For instance, they would like to connect them to certain market events. This presupposes a certain confidence that the detected differences are worth interpreting (i.e., that they are not spurious but correspond to real differences). It is not enough to be confident that (on average) a certain percentage of the detected differences is worth interpreting. Hence, confidence statements of the form \eqref{eq:CS-FWER} appear more apt than statements of the form \eqref{eq:CS-FDR}.
@@ -377,7 +377,7 @@ In practice, we implement the test as follows for a given significance level $\a
 
 \pagebreak
 \begin{remark} 
-In some cases, the number of intervals in $\mathcal{S}^{[i, j]}(\alpha)$ may be quite large, rendering the visual representation of the test results outlined in Step 3 cumbersome. To overcome this drawback, we replace $\mathcal{S}^{[i, j]}(\alpha)$ with the subset of minimal intervals $\mathcal{S}^{[i, j]}_{\text{min}}(\alpha) \subseteq \mathcal{S}^{[i, j]}(\alpha)$. As in \cite{Duembgen2002}, we call an interval $\mathcal{I}_{u, h} \in \mathcal{S}^{[i, j]}(\alpha)$ minimal if there is no other interval $\mathcal{I}_{u^\prime, h^\prime} \in \mathcal{S}^{[i, j]}(\alpha)$ such that $\mathcal{I}_{u^\prime, h^\prime} \subset \mathcal{I}_{u, h}$. Notably, our theoretical results remain to hold true when the sets $\mathcal{S}^{[i, j]}(\alpha)$ are replaced by $\mathcal{S}^{[i, j]}_{\text{min}}(\alpha)$. See Section \ref{sec:theo} for the details. 
+In some cases, the number of intervals in $\mathcal{S}^{[i, j]}(\alpha)$ may be quite large, rendering the visual representation of the test results outlined in Step 3 cumbersome. To overcome this drawback, we replace $\mathcal{S}^{[i, j]}(\alpha)$ with the subset of minimal intervals $\mathcal{S}^{[i, j]}_{\textnormal{min}}(\alpha) \subseteq \mathcal{S}^{[i, j]}(\alpha)$. As in \cite{Duembgen2002}, we call an interval $\mathcal{I}_{u, h} \in \mathcal{S}^{[i, j]}(\alpha)$ minimal if there is no other interval $\mathcal{I}_{u^\prime, h^\prime} \in \mathcal{S}^{[i, j]}(\alpha)$ such that $\mathcal{I}_{u^\prime, h^\prime} \subset \mathcal{I}_{u, h}$. Notably, our theoretical results remain to hold true when the sets $\mathcal{S}^{[i, j]}(\alpha)$ are replaced by $\mathcal{S}^{[i, j]}_{\textnormal{min}}(\alpha)$. See Section \ref{sec:theo} for the details. 
 \end{remark}
 
 
@@ -416,7 +416,7 @@ The proof of Theorem \ref{theo:stat:global} builds on two important theoretical 
 
 
 \begin{remark}\label{remark:general-theo-2}
-Even though the multiscale test in \cite{KhismatullinaVogt2023} is similar in spirit to ours, their theoretical analysis is completely different from ours. In particular, their proofs build on high-dimensional central limit theorems for hyperrectangles \citep{Chernozhukov2017}, while our proofs rely on strong approximations. Hence, even without the inclusion of covariates and fixed effects, our proof strategy would be completely different. The issue is that the arguments in \cite{KhismatullinaVogt2023} rely heavily on the i.i.d.\ structure of the data and thus do not carry over to the model setting at hand which involves complicated dependence structures both across $i$ and $t$.
+Even though the multiscale test in \cite{KhismatullinaVogt2023} is similar in spirit to ours, their theoretical analysis is completely different from ours. In particular, their proofs build on high-dimensional central limit theorems for hyperrectangles \citep{Chernozhukov2017}, while our proofs rely on strong approximations. Hence, even without the inclusion of covariates and fixed effects, our proof strategy would be completely different. The issue is that the arguments in \cite{KhismatullinaVogt2023} rely heavily on the independence structure of the data and thus do not carry over to the model setting at hand which involves complicated dependence structures both across $i$ and $t$.
 \end{remark}
 
 
@@ -471,7 +471,7 @@ According to \eqref{eq:CS-v2}, the graphical device introduced in Section \ref{s
 
 
 Consider a situation in which the null $H_0: m_1 = m_2 = \ldots = m_n$ is violated. Even though some of the trend functions are different in this case, part of them may still be the same. Put differently, there may be groups of time series which have the same time trend. Formally speaking, we define a group structure as follows: There exist sets or groups of time series $G_1,\ldots, G_N$ with $N \le n$ and $\{1,\ldots, n\} = \mathbin{\dot{\bigcup}}_{\ell=1}^{N} G_\ell$ such that for each $1 \le \ell \le N$,
-$m_i = f_\ell$ for all $i \in G_\ell$, 
+\[ m_i = f_\ell \quad \text{for all } i \in G_\ell, \] 
 where $f_\ell$ are group-specific trend functions. Hence, the time series which belong to the group $G_\ell$ all have the same time trend $f_\ell$. Throughout the section, we suppose that the group-specific trend functions $f_\ell$ have the following properties: 
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.2cm,topsep=3pt]
 \setcounter{enumi}{11}
@@ -479,9 +479,9 @@ where $f_\ell$ are group-specific trend functions. Hence, the time series which 
 \end{enumerate}
 
 
-In what follows, we combine our multiscale methods with a clustering algorithm to estimating the unknown group structure from the data. More specifically, we use the multiscale statistics $\max_{(u, h) \in \mathcal{G}_T}\hat{\psi}^0_{ij, T}(u, h)$ calculated for each $i$ and $j$ as distance measures which are fed into a hierarchical clustering algorithm. To describe the algorithm, let $S \subseteq \{1,\ldots, n\}$ and $S^\prime \subseteq \{1,\ldots, n\}$ be two sets of time series from our sample. We define a dissimilarity measure between $S$ and $S^\prime$ by 
+In what follows, we combine our multiscale methods with a clustering algorithm to estimate the unknown group structure from the data. More specifically, we use the multiscale statistics $\max_{(u, h) \in \mathcal{G}_T}\widehat{\psi}^0_{ij, T}(u, h)$ calculated for each pair $(i,j)$ as distance measures which are fed into a hierarchical clustering algorithm. To describe the algorithm, let $S \subseteq \{1,\ldots, n\}$ and $S^\prime \subseteq \{1,\ldots, n\}$ be two sets of time series from our sample. We define a dissimilarity measure between $S$ and $S^\prime$ by 
 \begin{equation}\label{dissimilarity}
-\widehat{\Delta}(S,S^\prime) = \max_{\substack{i \in S, \\ j \in S^\prime}} \Big(\max_{(u, h) \in \mathcal{G}_T}\hat{\psi}^0_{ij, T}(u, h)\Big) 
+\widehat{\Delta}(S,S^\prime) = \max_{\substack{i \in S, \\ j \in S^\prime}} \Big(\max_{(u, h) \in \mathcal{G}_T}\widehat{\psi}^0_{ij, T}(u, h)\Big) 
 \end{equation}
 %This is called a complete linkage measure of dissimilarity. Alternatively, we may work with an average or a single linkage measure. We now combine the dissimilarity measure $\widehat{\Delta}$
 and run the following hierarchical agglomerative clustering (HAC) algorithm: 
@@ -584,7 +584,7 @@ Besides these choices, we implement the test exactly as described in Section \re
 \includegraphics[width=\textwidth]{../output/plots/hp/BEL_vs_USA}
 \caption{Test results for the comparison of the house prices in Belgium and the USA.}\label{fig:hp:Belgium:USA}
 \end{minipage}
-\caption*{Note: In each figure, panel (a) shows the two augmented time series of the house prices, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i, j]}_{min}(\alpha)$ in black.}
+\caption*{Note: In each figure, panel (a) shows the two augmented time series of the house prices, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i, j]}_{\textnormal{min}}(\alpha)$ in black.}
 \end{sidewaysfigure}
 
 
@@ -594,7 +594,7 @@ Each figure corresponds to a specific pair of countries $(i, j)$ for which our t
 In each figure, panel (a) shows the augmented time series $\{\widehat{Y}_{it}: 1 \le t \le T\}$ with $\widehat{Y}_{it} := Y_{it} -\widehat{\alpha}_i - \widehat{\bfbeta}_i^\top \X_{it}$ and $\{\widehat{Y}_{jt}: 1 \le t \le T\}$ for the two countries $i$ and $j$ that are compared. 
 Panel (b) presents smoothed versions of the time series from (a), in particular, it shows local linear kernel estimates of the two trend functions $m_i$ and $m_j$, where the bandwidth window covers $15$ years and an Epanechnikov kernel is used.
 Panel (c) presents the results produced by our test: 
-it depicts in grey the set $\mathcal{S}^{[i, j]}(\alpha)$ of all the intervals for which the test rejects the local null $H_0^{[i, j]}(u, h)$. The set of minimal intervals $\mathcal{S}^{[i, j]}_{min}(\alpha) \subseteq \mathcal{S}^{[i, j]}(\alpha)$ is highlighted in black. According to \eqref{eq:CS-v2}, we can make the following simultaneous confidence statement about the intervals plotted in panels (c) of Figures \ref{fig:hp:Australia:Netherlands}--\ref{fig:hp:Belgium:USA}: we can claim, with confidence of about $95\%$, that there is a difference between the functions $m_i$ and $m_j$ on each of these intervals. 
+it depicts in grey the set $\mathcal{S}^{[i, j]}(\alpha)$ of all the intervals for which the test rejects the local null $H_0^{[i, j]}(u, h)$. The set of minimal intervals $\mathcal{S}^{[i, j]}_{\textnormal{min}}(\alpha) \subseteq \mathcal{S}^{[i, j]}(\alpha)$ is highlighted in black. According to \eqref{eq:CS-v2}, we can make the following simultaneous confidence statement about the intervals plotted in panels (c) of Figures \ref{fig:hp:Australia:Netherlands}--\ref{fig:hp:Belgium:USA}: we can claim, with confidence of about $95\%$, that there is a difference between the functions $m_i$ and $m_j$ on each of these intervals. 
 
 
 %Panel (a) shows the augmented time series $\{\widehat{Y}_{it}: 1 \le t \le T\}$ and $\{\widehat{Y}_{jt}: 1 \le t \le T\}$ for the two countries $i$ and $j$ under consideration. Panel (b) presents smoothed versions of the time series from (a) with the bandwidth window covering $15$ years. Panel (c) presents the test results for the level $\alpha=0.05$. As before, the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ for which our test rejects and the set of minimal intervals $\mathcal{S}^{[i, j]}_{min}(\alpha) \subseteq \mathcal{S}^{[i, j]}(\alpha)$ are depicted in grey and black, respectively. According to \eqref{eq:CS-v2}, we can make the following simultaneous confidence statement about the intervals plotted in panels (c) of Figures \ref{fig:hp:Australia:Netherlands}--\ref{fig:hp:Belgium:USA}: we can claim, with confidence of about $95\%$, that there is a difference between the trends $m_i$ and $m_j$ on each of these intervals. 
@@ -630,10 +630,10 @@ In this paper, we have developed new methods for the comparison of nonparametric
 
 
 
-\spacingset{1.17}
+\spacingset{1.25}
 \bibliographystyle{ims}
 {\small
-\setlength{\bibsep}{0.55em}
+\setlength{\bibsep}{0.6em}
 \bibliography{../bib}}
 
 

@@ -227,7 +227,7 @@ for (t_len in different_T){
     if (alpha == 0.05){
       j <- j + 1
       group_count[[j]] <- table(factor(clustering_results[1, ], levels = 1:5))
-      error_count[[j]] <- table(factor(results$num_of_errors, levels = 0:8))
+      error_count[[j]] <- table(factor(results$num_of_errors, levels = 0:10))
     }
     correct_groups_vec    <- c(correct_groups_vec, results$correct_number_of_groups/n_rep)
     correct_structure_vec <- c(correct_structure_vec, results$correctly_specified_groups/n_rep)
