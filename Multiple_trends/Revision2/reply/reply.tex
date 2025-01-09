@@ -1,0 +1,136 @@
+\documentclass[a4paper,12pt]{article}
+
+% Load Packages
+\usepackage{amsfonts,amsthm,amsopn}
+\usepackage[psamsfonts]{amssymb}
+\usepackage[cmex10]{amsmath}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{natbib}
+\usepackage[left=3cm,right=3cm,top=2.5cm,bottom=3cm]{geometry}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[]{graphicx}
+\usepackage{graphics}
+\usepackage[bb=dsserif]{mathalpha}
+\usepackage{bm}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{rotating,tabularx}
+\usepackage[font=small]{caption}
+\usepackage{ulem}
+
+\newcommand{\ex}{\mathbb{E}} % expectation
+\newcommand{\ind}{\mathbb{1}}
+\newcommand{\bfbeta}{\bm{\beta}} %bold beta coefficent
+\newcommand{\reference}[1]{\textcolor{black}{#1}}
+
+\setlength\parindent{0pt}
+\renewcommand{\baselinestretch}{1.2}
+
+%\usepackage{xr}
+%\externaldocument{../paper/paper}
+%\externaldocument{../paper/supplement}
+\usepackage{hyperref}
+
+% Start document
+\begin{document}
+
+
+
+\begin{center}
+\underline{\Large\textbf{{Reply to reports on article JBES-P-2022-0567.R1}}}\end{center}
+\vspace{10pt}
+
+
+First of all, we would like to thank the editor, the associate editor and the reviewers for their many comments and suggestions which were very helpful to improve the paper. In the revision, we have addressed all comments of the referees and have rewritten the paper accordingly. Please find our point-by-point responses to the referees below. In our responses, we have indicated where alterations to the manuscript have been made. Please also note that we have tried to add as much of the new material as possible to the main body of the paper. However, to meet the 35-pages-limit, we still had to relegate parts of the material.%, in particular, the revised simulation study (which comprises many additional simulation exercises) to the Supplement.
+If required, we can of course rearrange the material, shifting part of the simulations to the main body of the text while moving other parts to the Supplement. 
+
+
+
+%\subsection*{Reply to the editor}
+%
+%
+%\begin{enumerate}[label=\arabic*.,leftmargin=0.6cm]
+%
+%
+%\item \textit{The reviewers have diversified opinions, and they raise many issues. Although I think you can address many of them, there is one main issue I don’t see how to handle: As the AE points out, you do not have a compelling case for the null hypothesis that time trends are identical across multiple time series. Like the AE, I can’t think of different economic time series sharing the same trend.  I appreciate your discussions on clustering much more, but the same issue arises within a group. \\
+%There is a small econometric literature on co-trending and co-breaking where common time trends and breaks are used to capture comovements of multiple time series. Rather than time trends being identical, they are proportional to each other. That might be more plausible for modeling multiple economic time series. Because this may be difficult in your framework, I do not mean to impose it.  Instead, I am pointing out that such literature may or may not be helpful. \\
+%Although I doubt the plausibility and usefulness of the null hypothesis, I would like to give the benefit of the doubt. I am willing to consider a revision of your paper, though with no guarantee that it will ultimately be accepted. I ask you to address all of the reviewers' concerns. Most importantly, please make a much more compelling and convincing case for the null hypothesis, which may be very difficult. %I should note that this is not a typical R\&R and is a rather weak R\&R.
+%}
+%We hope the above summary and the corresponding discussion in the revised paper make a convincing case why our approach is much more useful and informative than competing methods for the comparison of time trends. 
+%
+%
+%\end{enumerate}
+
+
+
+\subsection*{Reply to the associate editor}
+
+
+\begin{enumerate}[label=\arabic*.,leftmargin=0.6cm]
+
+
+\item {\color{blue}\textit{My apologies, but I maintain that your $H_0$ (page 3) is unnatural and uninteresting. In the trend analysis of multiple time series, it is extremely unlikely that the natural ‘position of ignorance’ is that all trend curves are the same. What if, for example, I already know or suspect that the curves form distinct groups? It is then something of a wasted effort to start from the position that they do not differ at all. Also, the null hypothesis is not robust to high-dimensionality as it is more likely that some curves will differ as I observe a higher number of variates (I understand that you do not do this in the paper but this only makes it even less interesting, in my view). As a cartoon illustration of the first point above, if I suspect that $p-1$ (say) curves may be the same, but 1 is distinctly different, do I need to first remove the offending one before performing your test, in which case I enter the territory of post-selection inference (which you do not cover), or do I not need to remove the offending one, in which case I am pretending that my $H_0$ is different from what it is in reality?}}
+
+We agree that it is unlikely that all trends are identical in many real-world applications, our null hypothesis $H_0$ represents the simplest, most parsimonious starting point for testing. This aligns with the traditional Neyman-Pearson framework, where the null serves as a benchmark for detecting departures. Our multiscale method enhances this approach by not only rejecting $H_0$ but also identifying specific intervals and pairs of series where differences occur, providing actionable insights beyond a binary rejection decision. 
+\item {\color{blue}\textit{The clustering part is nice and perhaps it could form the main thread of a much shorter paper.}  }
+
+
+\item {\color{blue}\textit{The empirical application is interesting, but this is thanks to the use of clustering rather than as a consequence of testing - the null is obviously inappropriate, as Figure 6 suggests, so there is no point in assuming it only to surely reject it. In other words, “let us test our null of equality between all trends” doesn’t seem a scientifically valid suggestion for this dataset. The suggestion of clustering the countries is fine, though.}}
+
+
+\item {\color{blue}\textit{Can your model (1.1) include autoregression? Either way, it would be good to see it spelled out explicitly.}}
+
+\item {\color{blue}\textit{I was unconvinced by the subtraction of the overall level on p. 6. Firstly, this clearly risks eliminating useful information (what if some curves differ from others in the overall level)? Secondly, I am not sure if it is meaningful to look at averages of (e.g. increasing) trends - for example, what is the interpretation of a “long-term average house price level in [a] country”? In “Time Series 101”, we teach students not to take averages of non-stationary time series!}  }
+
+\item {\color{blue}\textit{(C5) - you use the delta notation before defining it. Why do your covariates X have to be random, e.g. why can’t you have one of them as (say) a linear trend?}}
+\item {\color{blue}\textit{Your comment (iii) on p. 9. But isn’t it the case that for near-unit root processes, you will have a variety of different scenarios (some stochastic trends pointing strongly upwards, some downwards, some with no specific direction) - a situation that should be easy to discriminate from your typical scenarios of interest?}}
+\item {\color{blue}\textit{P. 11. “Throughout the paper, we assume that the long-run error variance is the same for all i, (...) [but we] use a different estimator of $\sigma^2$ for each $i$ - this seems suboptimal.}}
+\item {\color{blue}\textit{I was disappointed to see that the method was not able to handle missing values.}}
+
+  
+\end{enumerate}
+
+  
+
+\subsection*{Reply to referee 1}
+
+
+Thank you very much for the careful reading of our manuscript and the interesting suggestions. In our revision, we have addressed all your comments. Please see our replies to them below.
+\begin{enumerate}[label=\arabic*.,leftmargin=0.6cm]
+
+
+\item {\color{blue}\textit{The simulation studies do not really showcase these priorities. First, simulation results do not appear at all in the main paper. If there is a question about practical relevance of the methods (which the review team did raise), then empirical support should be elevated above some of the technical details. Second, the global size and power tables do not clearly illustrate such local testing capabilities—these metrics would require a much larger collection of data-generating processes to measure performance across a large spectrum of alternative hypotheses. Third, the suggested competitors have not been included, and no compelling reasons were given (more below). Finally, the authors have kept $m_i = 0$ to simulate data under the null “WLOG”. As I noted before, this is not WLOG for all methods; that it *is* WLOG for their method suggests that they may observe comparative gains over other approaches for smaller sample sizes ($n$).}}
+
+\item {\color{blue}\textit{I do not understand why the authors are resistant to add the simple competitors suggested (additive models w/ CI-based testing and Bayesian analogs). Their reasoning was 1) these methods do not offer the same theory guarantees and 2) they include another method, sizer, and a simplified version of their approach. For 1): if the theory actually offers practical gains, then this should show up clearly empirically and further advertise the proposed methods! For 2): sizer is a reasonable competitor (for n=2), but I don’t see why that would eliminate consideration of any alternatives. If the question is “which curves are different and when”, a natural first approach would be to fit a nonparametric model to each curve and see where/when the confidence/credible intervals do not overlap (w/ or w/o a Bonferroni correction). Beating this approach will be more convincing for general readers.}}
+
+\item {\color{blue}\textit{Stochastic volatility (SV) is widely important in the types of applications that the authors mention. Yet the authors 1) claim that extensions to SV would be challenging, 2) elect not to consider any simulation designs with SV to examine robustness, and 3) claim that SV can be handled with log-transformations (and then using the same mean models as proposed). Perhaps 1) is true, but 2) is important based on the claims in the paper and the relevance for this journal. Finally, 3) is not correct for the most widely-used SV models.}}
+
+\end{enumerate}
+
+
+\subsection*{Reply to referee 2}
+
+
+Thank you very much for the careful reading of our manuscript and the final acceptance. We have addressed your remaining question in the revision. Please see our reply to it below.
+\begin{enumerate}[label=\arabic*.,leftmargin=0.6cm]
+
+  
+\item \textit{Thank you very much for your very careful revision. I have just one remaining "cosmetic" question: can you explain why in the third row of your figures such as Figure 1, page 27, we see several intervals one op top of the other? In other words is there a meaning of the y-axis of this lower plots, what is its scale? Thank you in advance for adding this information (which I might have missed elsewhere?).}
+
+The vertical positioning of the intervals from the sets $\mathcal{S}^{[i, j]}(\alpha)$ does not bear any additional information and is used for better graphical representation only. We have added this information to the Note under Figures 1-4, and we apologize for not making it clear beforehand.
+
+\end{enumerate}
+
+
+
+\pagebreak
+\vspace{10pt}
+\bibliographystyle{ims}
+{\small
+\setlength{\bibsep}{0.55em}
+\bibliography{../bib}}
+
+
+
+\end{document}

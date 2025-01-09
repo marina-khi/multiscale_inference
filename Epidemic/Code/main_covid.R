@@ -114,7 +114,7 @@ sigmahat <- sqrt(mean(sigma_vec * sigma_vec))
 result <- multiscale_test(data = covid_mat, sigma = sigmahat,
                           alpha = alpha,
                           n_ts = n_ts, grid = grid,
-                          sim_runs = sim_runs)
+                          sim_runs = sim_runs, epidem = TRUE)
 
 #Rename the countries for the plot
 countries_names <- c("Germany", "Spain", "France", "United Kingdom", "Italy")

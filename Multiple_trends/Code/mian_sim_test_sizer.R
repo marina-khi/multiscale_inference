@@ -12,7 +12,7 @@ library(doParallel)
 
 #Load necessary functions  
 source("functions/functions.r")
-# source("functions/sim.r")
+source("functions/functions_other.r")
 sourceCpp("functions/SiZer_functions.cpp")
 
 
