@@ -799,7 +799,7 @@ produce_hist_plots <- function(file_extension_, different_T_, n_rep_,
                    main = "", ylab = "", xaxt = 'n', space = 0)
     text(x = bp2, y = error_count_[[j]], label = error_count_[[j]], cex = 0.8, pos = 3)
     mtext(side = 1, text = paste0(labels_[j], " T = ", t_len), line = 3.4)
-    axis(1, at = bp2, labels = 0:8, tick = FALSE, line = -0.5, cex.axis = 1)
+    axis(1, at = bp2, labels = 0:10, tick = FALSE, line = -0.5, cex.axis = 0.8)
     title(xlab = "number of errors", mgp = c(1.5,1,0), cex.lab = 1)
   }
   dev.off() 
