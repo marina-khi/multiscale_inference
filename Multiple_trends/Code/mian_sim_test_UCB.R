@@ -9,17 +9,18 @@ library(tictoc)
 library(foreach)
 library(parallel)
 library(doParallel)
+library(mvtnorm)
 
 #Load necessary functions  
 source("functions/functions.r")
-sourceCpp("functions/SiZer_functions.cpp")
+source("functions/functions_other.r")
 
 
 ##############################
 #Defining necessary constants#
 ##############################
 
-n_ts  <- 2 #Number of time series
+n_ts <- 2 #Number of time series
 
 n_rep    <- 100 #number of simulations for calculating size and power
 sim_runs <- 100 #number of simulations to calculate the Gaussian quantiles for MS test
@@ -29,8 +30,8 @@ different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
 different_b     <- c(0, 0.5) #Zero is for calculating the size
 
 #For the error process
-a            <- 0.25
-sigma        <- 0.25
+a     <- 0.25
+sigma <- 0.25
 
 #For the covariate process
 beta    <- c(1, 1, 1)
@@ -112,9 +113,9 @@ for (t_len in different_T){
   
   for (b in different_b){
     simulated_pairwise_statistics <- matrix(NA, nrow = n_ts * n_ts, ncol = n_rep)
-    sizer_results_matrix          <- matrix(NA, nrow = length(different_alpha), ncol = n_rep)
+    UCB_results_matrix            <- matrix(NA, nrow = length(different_alpha), ncol = n_rep)
     
-    m_matrix      <- matrix(0, nrow = t_len, ncol = n_ts)
+    m_matrix <- matrix(0, nrow = t_len, ncol = n_ts)
     if (b == 0) {
       cat("SIZE SIMULATIONS\n")
     } else {
@@ -122,32 +123,56 @@ for (t_len in different_T){
       #Only the first trend function is non-zero:
       m_matrix[, 1] <- bump((1:t_len)/t_len) * b
     }
-    
-    for (val in 1:n_rep){
-      #Simulated data
-      y_matrix      <- matrix(NA, nrow = t_len, ncol = n_ts)
-      y_augm_matrix <- matrix(NA, nrow = t_len, ncol = n_ts)
-      error_matrix  <- matrix(NA, nrow = t_len, ncol = n_ts)
 
-      big_sigma_matrix       <- matrix(rho, nrow = n_ts, ncol = n_ts)
-      diag(big_sigma_matrix) <- 1
-      alpha_vec              <- rmvnorm(1, mean = rep(0, n_ts), sigma = big_sigma_matrix)
+    big_sigma_matrix       <- matrix(rho, nrow = n_ts, ncol = n_ts)
+    diag(big_sigma_matrix) <- 1
+    alpha_vec              <- rmvnorm(1, mean = rep(0, n_ts), sigma = big_sigma_matrix)
+    
+    phi_matrix       <- matrix(phi_, nrow = 3, ncol = 3)
+    diag(phi_matrix) <- 1
+    a_matrix         <- diag(a_x_vec)       
+    for (val in 1:n_rep){
+      y_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      y_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      sigmahat_vec  <- rep(NA, n_ts_)  
+    
+      error_matrix  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
       
-            
-      y_sizer_matrix <- matrix(NA, nrow = t_len * n_ts, ncol = 2)
-      
-      for (i in 1:n_ts){
+      nu       <- rmvnorm(t_len + 10, mean = c(0, 0, 0), sigma = phi_matrix)
+      x_matrix <- matrix(0, 3, t_len + 10)
+        
+      for (t in 2:(t_len + 10)){
+        x_matrix[, t] <- a_matrix %*% x_matrix[, t - 1] + nu[t, ]
+      }
+      x_matrix <- t(x_matrix[, -(1:10)])
+          
+      x_diff_1 <- x_matrix[, 1] - dplyr::lag(x_matrix[, 1], n = 1, default = NA)
+      x_diff_2 <- x_matrix[, 2] - dplyr::lag(x_matrix[, 2], n = 1, default = NA)
+      x_diff_3 <- x_matrix[, 3] - dplyr::lag(x_matrix[, 3], n = 1, default = NA)
+      #Estimating beta
+      x_diff_tmp <- as.matrix(cbind(x_diff_1, x_diff_2, x_diff_3))[-1, ]
+      for (i in 1:n_ts_){
         error_matrix[, i] <- arima.sim(model = list(ar = a),
                                        innov = rnorm(t_len, 0, sigma),
                                        n = t_len)
-        
-        y_matrix[, i]     <- m_matrix[, i] + error_matrix[, i]
-        
-        #Estimating the fixed effects
-        alpha_hat_tmp      <- mean(y_matrix[, i])
-        y_augm_matrix[, i] <- y_matrix[, i] - alpha_hat_tmp
+        y_matrix[, i] <- alpha_vec[i] + m_matrix[, i] + beta_ %*% t(x_matrix) + error_matrix[, i]
+            
+        #First differences
+        y_diff     <- y_matrix[, i] - dplyr::lag(y_matrix[, i], n = 1, default = NA)
+        y_diff_tmp <- as.matrix(y_diff)[-1, ]
+            
+        beta_hat_tmp       <- solve(t(x_diff_tmp) %*% x_diff_tmp) %*% t(x_diff_tmp) %*% y_diff_tmp
+        alpha_hat_tmp      <- mean(y_matrix[, i] - x_matrix %*% as.vector(beta_hat_tmp))
+            
+        y_augm_matrix[, i] <- y_matrix[, i] - x_matrix %*% as.vector(beta_hat_tmp) - alpha_hat_tmp
+            
+        AR.struc           <- estimate_lrv(data = y_augm_matrix[, i], q = q,
+                                               r_bar = r, p = 1)
+        sigma_hat_i        <- sqrt(AR.struc$lrv)
+        sigmahat_vec[i] <- sigma_hat_i 
       }
-      
+    }
+        
       #MULTISCALE TEST
       psi <- compute_statistics(data = y_augm_matrix,
                                 sigma_vec = sigma_vector,

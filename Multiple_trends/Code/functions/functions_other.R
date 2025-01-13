@@ -251,3 +251,92 @@ SiZer_test <- function(values1, values2, std.devs, quants, grid){
   
   return(list(ugrid=u.grid.full, hgrid=h.grid.full, test=test.sizer))
 }
+
+
+###############
+#UCB FUNCTIONS#
+###############
+
+#' Epanechnikov kernel function.
+#' @param x A number.
+#' @return 3/4(1-x^2) for |x|<=1 and 0 elsewhere.
+#' @example 
+#' epanechnikov_kernel(1)
+epanechnikov_kernel <- function(x)
+{
+  if (abs(x)<=1)
+  {
+    result = 3/4 * (1 - x*x)
+  } else {
+    result = 0
+  }
+  return(result)
+}
+
+#' Function needed for local linear smoothing
+#' @param x      Location at which the local linear smoother is calculated.
+#' @param h      Bandwidth that is used for calculating local linear smoothing function.
+#' @param T_size Sample size
+#' @param x_vec  Vector of values for the X variables, length should be T_size
+s_t_0 <- function(x, h, T_size, x_vec) {
+  result = 0
+  for (i in 1:T_size) {
+    u = (x_vec[i] - x) / h
+    result = result + epanechnikov_kernel(u)
+  }
+  return(result / (T_size * h));
+}
+
+#' Function needed for local linear smoothing
+#' @param x      Location at which the local linear smoother is calculated.
+#' @param h      Bandwidth that is used for calculating local linear smoothing function.
+#' @param T_size Sample size
+#' @param x_vec  Vector of values for the X variables, length should be T_size
+s_t_1 <- function(x, h, T_size, x_vec) {
+  result = 0
+  for (i in 1:T_size) {
+    u = (x_vec[i] - x) / h
+    result = result + epanechnikov_kernel(u) * u
+  }
+  return(result / (T_size * h));
+}
+
+#' Function needed for local linear smoothing
+#' @param x      Location at which the local linear smoother is calculated.
+#' @param h      Bandwidth that is used for calculating local linear smoothing function.
+#' @param T_size Sample size
+#' @param x_vec  Vector of values for the X variables, length should be T_size
+s_t_2 <- function(x, h, T_size, x_vec) {
+  result = 0
+  for (i in 1:T_size) {
+    u = (x_vec[i] - x) / h
+    result = result + epanechnikov_kernel(u) * u * u
+  }
+  return(result / (T_size * h));
+}
+
+#Local Linear estimator using the Epanechnikov kernel. 
+UCB_estimation <- function(x_, data_p, grid_p, bw){
+  #  if (length(data_p) != length(grid_p)){
+  #    cat("Dimensions of the grid and the data do not match, please check the arguments")
+  #    return(NULL)
+  #  } else {
+  result       = 0
+  t_len        = length(data_p)
+  s_t_2_value1 = s_t_2(x = x_, h = bw, T_size = t_len, x_vec = grid_p)
+  s_t_1_value1 = s_t_1(x = x_, h = bw, T_size = t_len, x_vec = grid_p)
+  s_t_0_value1 = s_t_0(x = x_, h = bw, T_size = t_len, x_vec = grid_p)
+  num1 = s_t_2_value1 * s_t_0_value1 - s_t_1_value1^2
+  s_t_2_value2 = s_t_2(x = x_, h = bw * sqrt(2), T_size = t_len, x_vec = grid_p)
+  s_t_1_value2 = s_t_1(x = x_, h = bw * sqrt(2), T_size = t_len, x_vec = grid_p)
+  s_t_0_value2 = s_t_0(x = x_, h = bw * sqrt(2), T_size = t_len, x_vec = grid_p)
+  num2 = s_t_2_value2 * s_t_0_value2 - s_t_1_value2^2
+  for (i in 1:t_len){
+    u1 = (grid_p[i] - x_) / bw
+    denom1 = (s_t_2_value1 - s_t_1_value1 * u1) * epanechnikov_kernel(u1)
+    u2 = (grid_p[i] - x_) / (bw * sqrt(2))
+    denom2 = (s_t_2_value2 - s_t_1_value2 * u2) * epanechnikov_kernel(u2)
+    result = result + (2 * denom1 / num1 - denom2 / num2) * data_p[i]
+  }
+  return(result)
+}
