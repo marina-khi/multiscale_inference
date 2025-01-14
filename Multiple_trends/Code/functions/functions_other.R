@@ -278,13 +278,13 @@ epanechnikov_kernel <- function(x)
 #' @param h      Bandwidth that is used for calculating local linear smoothing function.
 #' @param T_size Sample size
 #' @param x_vec  Vector of values for the X variables, length should be T_size
-s_t_0 <- function(x, h, T_size, x_vec) {
+s_t_0_UCB <- function(x, h, T_size, x_vec) {
   result = 0
   for (i in 1:T_size) {
     u = (x_vec[i] - x) / h
     result = result + epanechnikov_kernel(u)
   }
-  return(result / (T_size * h));
+  return(result);
 }
 
 #' Function needed for local linear smoothing
@@ -292,13 +292,13 @@ s_t_0 <- function(x, h, T_size, x_vec) {
 #' @param h      Bandwidth that is used for calculating local linear smoothing function.
 #' @param T_size Sample size
 #' @param x_vec  Vector of values for the X variables, length should be T_size
-s_t_1 <- function(x, h, T_size, x_vec) {
+s_t_1_UCB <- function(x, h, T_size, x_vec) {
   result = 0
   for (i in 1:T_size) {
-    u = (x_vec[i] - x) / h
-    result = result + epanechnikov_kernel(u) * u
+    u = x_vec[i] - x
+    result = result + epanechnikov_kernel(u/h) * u
   }
-  return(result / (T_size * h));
+  return(result);
 }
 
 #' Function needed for local linear smoothing
@@ -306,13 +306,13 @@ s_t_1 <- function(x, h, T_size, x_vec) {
 #' @param h      Bandwidth that is used for calculating local linear smoothing function.
 #' @param T_size Sample size
 #' @param x_vec  Vector of values for the X variables, length should be T_size
-s_t_2 <- function(x, h, T_size, x_vec) {
+s_t_2_UCB <- function(x, h, T_size, x_vec) {
   result = 0
   for (i in 1:T_size) {
-    u = (x_vec[i] - x) / h
-    result = result + epanechnikov_kernel(u) * u * u
+    u = x_vec[i] - x
+    result = result + epanechnikov_kernel(u/h) * u * u
   }
-  return(result / (T_size * h));
+  return(result);
 }
 
 #Local Linear estimator using the Epanechnikov kernel. 
@@ -323,20 +323,31 @@ UCB_estimation <- function(x_, data_p, grid_p, bw){
   #  } else {
   result       = 0
   t_len        = length(data_p)
-  s_t_2_value1 = s_t_2(x = x_, h = bw, T_size = t_len, x_vec = grid_p)
-  s_t_1_value1 = s_t_1(x = x_, h = bw, T_size = t_len, x_vec = grid_p)
-  s_t_0_value1 = s_t_0(x = x_, h = bw, T_size = t_len, x_vec = grid_p)
+  s_t_2_value1 = s_t_2_UCB(x = x_, h = bw, T_size = t_len, x_vec = grid_p)
+  s_t_1_value1 = s_t_1_UCB(x = x_, h = bw, T_size = t_len, x_vec = grid_p)
+  s_t_0_value1 = s_t_0_UCB(x = x_, h = bw, T_size = t_len, x_vec = grid_p)
   num1 = s_t_2_value1 * s_t_0_value1 - s_t_1_value1^2
-  s_t_2_value2 = s_t_2(x = x_, h = bw * sqrt(2), T_size = t_len, x_vec = grid_p)
-  s_t_1_value2 = s_t_1(x = x_, h = bw * sqrt(2), T_size = t_len, x_vec = grid_p)
-  s_t_0_value2 = s_t_0(x = x_, h = bw * sqrt(2), T_size = t_len, x_vec = grid_p)
+  s_t_2_value2 = s_t_2_UCB(x = x_, h = bw * sqrt(2), T_size = t_len, x_vec = grid_p)
+  s_t_1_value2 = s_t_1_UCB(x = x_, h = bw * sqrt(2), T_size = t_len, x_vec = grid_p)
+  s_t_0_value2 = s_t_0_UCB(x = x_, h = bw * sqrt(2), T_size = t_len, x_vec = grid_p)
   num2 = s_t_2_value2 * s_t_0_value2 - s_t_1_value2^2
   for (i in 1:t_len){
-    u1 = (grid_p[i] - x_) / bw
-    denom1 = (s_t_2_value1 - s_t_1_value1 * u1) * epanechnikov_kernel(u1)
-    u2 = (grid_p[i] - x_) / (bw * sqrt(2))
-    denom2 = (s_t_2_value2 - s_t_1_value2 * u2) * epanechnikov_kernel(u2)
+    u = grid_p[i] - x_
+    denom1 = (s_t_2_value1 - s_t_1_value1 * u) * epanechnikov_kernel(u / bw)
+    denom2 = (s_t_2_value2 - s_t_1_value2 * u) * epanechnikov_kernel(u / (bw * sqrt(2)))
     result = result + (2 * denom1 / num1 - denom2 / num2) * data_p[i]
   }
   return(result)
+}
+
+sigma_estimation_UCB <- function(y_, x_matrix_, beta_est_, m_, k_n_){
+  result <- 0
+  for (i in 1:(m_ - 1)){
+    tmp <- 0
+    for (j in 1:k_n_){
+      tmp <- tmp + as.vector((y_[j + i * k_n_] - y_[j + (i - 1) * k_n_] - (x_matrix_[j + i * k_n_, ] - x_matrix_[j + (i - 1) * k_n_, ]) %*% as.vector(beta_est_)))
+    }
+    result <- result + tmp^2
+  }
+  return(result / (2 * (m_ - 1) * k_n_))
 }

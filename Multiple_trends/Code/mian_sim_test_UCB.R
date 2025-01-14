@@ -41,7 +41,24 @@ phi     <- 0.25                 #dependence between the innovations
 #For the fixed effects
 rho <- 0.25 #covariance between the fixed effects
 
+#Parameters for the estimation of long-run-variance
+q <- 25 
+r <- 10
+
 seed <- 246802468
+
+######################
+#Derivative constants#
+######################
+sigma_vector <- rep(sigma, n_ts)
+
+phi_matrix       <- matrix(phi, nrow = 3, ncol = 3)
+diag(phi_matrix) <- 1
+a_matrix         <- diag(a_x_vec) 
+
+big_sigma_matrix       <- matrix(rho, nrow = n_ts, ncol = n_ts)
+diag(big_sigma_matrix) <- 1
+
 
 ################################
 #Calculating the size and power#
@@ -68,17 +85,23 @@ for (t_len in different_T){
   set.seed(seed)
   k <- match(t_len, different_T)
   
+  k_n <- ceiling(t_len^(1/3))
+  m   <- ceiling(t_len / k_n)
+  
   #Constructing the grid
   u_grid <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
   h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
   h_grid <- h_grid[h_grid > log(t_len) / t_len]
   grid   <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
   
+  grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
+  
   ####################################
   #Calculating the Gaussian quantiles#
   ####################################
   
   cat("Calculating the Gaussian quantiles\n")
+
   simulated_pairwise_gaussian <- matrix(NA, nrow = n_ts * n_ts, ncol = sim_runs)
   
   for (val in 1:sim_runs){
@@ -86,7 +109,7 @@ for (t_len in different_T){
     z_augm_matrix <- matrix(NA, nrow = t_len, ncol = n_ts)
     
     for (i in 1:n_ts){
-      z_matrix[, i]      <- rnorm(t_len, 0, sqrt(lrv))
+      z_matrix[, i]      <- rnorm(t_len, 0, sigma)
       z_augm_matrix[, i] <- z_matrix[, i] - mean(z_matrix[, i])
     }
     
@@ -124,67 +147,73 @@ for (t_len in different_T){
       m_matrix[, 1] <- bump((1:t_len)/t_len) * b
     }
 
-    big_sigma_matrix       <- matrix(rho, nrow = n_ts, ncol = n_ts)
-    diag(big_sigma_matrix) <- 1
-    alpha_vec              <- rmvnorm(1, mean = rep(0, n_ts), sigma = big_sigma_matrix)
-    
-    phi_matrix       <- matrix(phi_, nrow = 3, ncol = 3)
-    diag(phi_matrix) <- 1
-    a_matrix         <- diag(a_x_vec)       
     for (val in 1:n_rep){
-      y_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-      y_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-      sigmahat_vec  <- rep(NA, n_ts_)  
-    
-      error_matrix  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      y_matrix      <- matrix(NA, nrow = t_len, ncol = n_ts)
+      y_augm_matrix <- matrix(NA, nrow = t_len, ncol = n_ts)
+      error_matrix  <- matrix(NA, nrow = t_len, ncol = n_ts)
       
-      nu       <- rmvnorm(t_len + 10, mean = c(0, 0, 0), sigma = phi_matrix)
-      x_matrix <- matrix(0, 3, t_len + 10)
-        
-      for (t in 2:(t_len + 10)){
-        x_matrix[, t] <- a_matrix %*% x_matrix[, t - 1] + nu[t, ]
-      }
-      x_matrix <- t(x_matrix[, -(1:10)])
-          
-      x_diff_1 <- x_matrix[, 1] - dplyr::lag(x_matrix[, 1], n = 1, default = NA)
-      x_diff_2 <- x_matrix[, 2] - dplyr::lag(x_matrix[, 2], n = 1, default = NA)
-      x_diff_3 <- x_matrix[, 3] - dplyr::lag(x_matrix[, 3], n = 1, default = NA)
-      #Estimating beta
-      x_diff_tmp <- as.matrix(cbind(x_diff_1, x_diff_2, x_diff_3))[-1, ]
-      for (i in 1:n_ts_){
+      alpha_vec     <- rmvnorm(1, mean = rep(0, n_ts), sigma = big_sigma_matrix)
+      
+      sigmahat_vec     <- rep(NA, n_ts)
+      sigmahat_vec_UCB <- rep(NA, n_ts) 
+    
+      #UNIFORM CONFIDENCE BOUNDS
+      estimated_trend_UCB <- matrix(NA, nrow = t_len, ncol = n_ts)
+      
+      for (i in 1:n_ts){
         error_matrix[, i] <- arima.sim(model = list(ar = a),
                                        innov = rnorm(t_len, 0, sigma),
                                        n = t_len)
-        y_matrix[, i] <- alpha_vec[i] + m_matrix[, i] + beta_ %*% t(x_matrix) + error_matrix[, i]
-            
-        #First differences
-        y_diff     <- y_matrix[, i] - dplyr::lag(y_matrix[, i], n = 1, default = NA)
-        y_diff_tmp <- as.matrix(y_diff)[-1, ]
-            
-        beta_hat_tmp       <- solve(t(x_diff_tmp) %*% x_diff_tmp) %*% t(x_diff_tmp) %*% y_diff_tmp
-        alpha_hat_tmp      <- mean(y_matrix[, i] - x_matrix %*% as.vector(beta_hat_tmp))
-            
-        y_augm_matrix[, i] <- y_matrix[, i] - x_matrix %*% as.vector(beta_hat_tmp) - alpha_hat_tmp
-            
-        AR.struc           <- estimate_lrv(data = y_augm_matrix[, i], q = q,
-                                               r_bar = r, p = 1)
-        sigma_hat_i        <- sqrt(AR.struc$lrv)
-        sigmahat_vec[i] <- sigma_hat_i 
-      }
-    }
+        nu       <- rmvnorm(t_len + 10, mean = c(0, 0, 0), sigma = phi_matrix)
+        x_matrix <- matrix(0, 3, t_len + 10)
+          
+        for (t in 2:(t_len + 10)){
+          x_matrix[, t] <- a_matrix %*% x_matrix[, t - 1] + nu[t, ]
+        }
+        x_matrix <- t(x_matrix[, -(1:10)])
         
+        y_matrix[, i] <- alpha_vec[i] + m_matrix[, i] + beta %*% t(x_matrix) + error_matrix[, i]
+#        y_matrix[, i] <- m_matrix[, i] + beta %*% t(x_matrix) + error_matrix[, i]
+        
+                    
+        #First differences
+        y_diff_tmp <- y_matrix[, i] - dplyr::lag(y_matrix[, i], n = 1, default = NA)
+        y_diff     <- as.matrix(y_diff_tmp)[-1, ]
+        x_diff_1   <- x_matrix[, 1] - dplyr::lag(x_matrix[, 1], n = 1, default = NA)
+        x_diff_2   <- x_matrix[, 2] - dplyr::lag(x_matrix[, 2], n = 1, default = NA)
+        x_diff_3   <- x_matrix[, 3] - dplyr::lag(x_matrix[, 3], n = 1, default = NA)
+
+        #Estimating beta
+        x_diff    <- as.matrix(cbind(x_diff_1, x_diff_2, x_diff_3))[-1, ]
+        beta_hat  <- solve(t(x_diff) %*% x_diff) %*% t(x_diff) %*% y_diff
+        alpha_hat <- mean(y_matrix[, i] - x_matrix %*% as.vector(beta_hat))
+            
+        y_augm_matrix[, i] <- y_matrix[, i] - x_matrix %*% as.vector(beta_hat) - alpha_hat
+            
+        #Estimating the variance
+        AR.struc        <- estimate_lrv(data = y_augm_matrix[, i], q = q,
+                                           r_bar = r, p = 1)
+        sigma_hat_i     <- sqrt(AR.struc$lrv)
+        sigmahat_vec[i] <- sigma_hat_i
+        sigma_hat_UCB_i <- sqrt(sigma_estimation_UCB(y_ = y_matrix[, i],
+                                                     x_matrix_ = x_matrix,
+                                                     beta_est_ = beta_hat,
+                                                     m_ = m, k_n_ = k_n)) 
+        sigmahat_vec_UCB[i] <- sigma_hat_UCB_i
+                
+        estimated_trend_UCB[, i] <- mapply(UCB_estimation, grid_points,
+                                           MoreArgs = list(data_p = y_augm_matrix[, i],
+                                                           grid_p = grid_points,
+                                                           bw = 5/t_len))
+      }
       #MULTISCALE TEST
       psi <- compute_statistics(data = y_augm_matrix,
-                                sigma_vec = sigma_vector,
+                                sigma_vec = sigmahat_vec,
                                 n_ts = n_ts, grid = grid)    
       simulated_pairwise_statistics[, val] <- as.vector(psi$stat_pairwise)
-      
-      #VALUES FOR UCB TEST
-      values1     <- sizer.wghts %*% y_matrix[, 1]
-      sizer.vals1 <- as.vector(values1)
-      values2     <- sizer.wghts %*% y_matrix[, 2]
-      sizer.vals2 <- as.vector(values2)
-      
+
+
+
       sizer_results_vec <- c()
       for (alpha in different_alpha){
         j <- match(alpha, different_alpha)
