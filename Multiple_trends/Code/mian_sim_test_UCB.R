@@ -22,12 +22,12 @@ source("functions/functions_other.r")
 
 n_ts <- 2 #Number of time series
 
-n_rep    <- 100 #number of simulations for calculating size and power
-sim_runs <- 100 #number of simulations to calculate the Gaussian quantiles for MS test
+n_rep    <- 1000 #number of simulations for calculating size and power
+sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles for MS test
 
-different_T     <- c(100) #Different lengths of time series
-different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
-different_b     <- c(0, 0.5) #Zero is for calculating the size
+different_T <- c(100, 250, 500) #Different lengths of time series
+alpha       <- 0.05 #Confidence levels
+different_b <- c(0, 0.5, 1, 2) #Zero is for calculating the size
 
 #For the error process
 a     <- 0.25
@@ -46,6 +46,7 @@ q <- 25
 r <- 10
 
 seed <- 246802468
+
 
 ######################
 #Derivative constants#
@@ -66,20 +67,16 @@ diag(big_sigma_matrix) <- 1
 
 size_and_power_array <- array(NA, dim = c(length(different_T),
                                           length(different_b),
-                                          length(different_alpha)),
+                                          1),
                               dimnames = list(t = different_T,
                                               b = different_b,
-                                              alpha = different_alpha))
+                                              alpha = alpha))
 size_and_power_UCB_array <- array(NA, dim = c(length(different_T),
                                                 length(different_b),
-                                                length(different_alpha)),
-                                    dimnames = list(t = different_T,
-                                                    b = different_b,
-                                                    alpha = different_alpha))
-
-#Constructing the set of pairwise comparisons
-ijset <- expand.grid(i = 1:n_ts, j = 1:n_ts)
-ijset <- ijset[ijset$i < ijset$j, ]
+                                                1),
+                                  dimnames = list(t = different_T,
+                                                  b = different_b,
+                                                  alpha = alpha))
 
 for (t_len in different_T){
   set.seed(seed)
@@ -101,42 +98,66 @@ for (t_len in different_T){
   ####################################
   
   cat("Calculating the Gaussian quantiles\n")
-
   simulated_pairwise_gaussian <- matrix(NA, nrow = n_ts * n_ts, ncol = sim_runs)
+  simulated_gaussian_UCB      <- c()
   
   for (val in 1:sim_runs){
     z_matrix      <- matrix(NA, nrow = t_len, ncol = n_ts)
     z_augm_matrix <- matrix(NA, nrow = t_len, ncol = n_ts)
-    
+
     for (i in 1:n_ts){
-      z_matrix[, i]      <- rnorm(t_len, 0, sigma)
+      z_matrix[, i]      <- rnorm(t_len, 0, 1)
       z_augm_matrix[, i] <- z_matrix[, i] - mean(z_matrix[, i])
     }
-    
+
     psi <- compute_statistics(data = z_augm_matrix,
-                              sigma_vec = sigma_vector,
+                              sigma_vec = rep(1, n_ts),
                               n_ts = n_ts, grid = grid)
     simulated_pairwise_gaussian[, val] <- as.vector(psi$stat_pairwise)
+    
+    gaussian_UCB <- mapply(UCB_estimation, grid_points,
+                           MoreArgs = list(data_p = z_matrix[, 1],
+                                           grid_p = grid_points,
+                                           bw = 5/t_len))
+    simulated_gaussian_UCB <- c(simulated_gaussian_UCB, max(gaussian_UCB))
   }
   
   simulated_gaussian <- apply(simulated_pairwise_gaussian, 2, max)
   
-  probs      <- seq(0.5, 0.995, by = 0.005)
-  quantiles  <- as.vector(quantile(simulated_gaussian, probs = probs))
-  quantiles  <- rbind(probs, quantiles)
+  probs     <- seq(0.5, 0.995, by = 0.005)
+  quantiles <- as.vector(quantile(simulated_gaussian, probs = probs))
+  quantiles <- rbind(probs, quantiles)
   
   colnames(quantiles) <- NULL
   rownames(quantiles) <- NULL
   
   quants <- as.vector(quantiles[2, ])
+
+  quantiles_UCB <- as.vector(quantile(simulated_gaussian_UCB, probs = probs))
+  quantiles_UCB <- rbind(probs, quantiles_UCB)
   
+  colnames(quantiles_UCB) <- NULL
+  rownames(quantiles_UCB) <- NULL
+  
+  quants_UCB <- as.vector(quantiles_UCB[2, ])
+  
+  if (sum(probs == (1 - alpha)) == 0) {
+    pos <- which.min(abs(probs - (1 - alpha)))
+  } else {
+    pos   <- which.max(probs == (1 - alpha))  
+  }
+
+  quant     <- quants[pos]
+  quant_UCB <- quants_UCB[pos]
+  
+    
   #################################
   #Testing for different scenarios#
   #################################
   
   for (b in different_b){
     simulated_pairwise_statistics <- matrix(NA, nrow = n_ts * n_ts, ncol = n_rep)
-    UCB_results_matrix            <- matrix(NA, nrow = length(different_alpha), ncol = n_rep)
+    result_UCB                    <- c()
     
     m_matrix <- matrix(0, nrow = t_len, ncol = n_ts)
     if (b == 0) {
@@ -159,6 +180,8 @@ for (t_len in different_T){
     
       #UNIFORM CONFIDENCE BOUNDS
       estimated_trend_UCB <- matrix(NA, nrow = t_len, ncol = n_ts)
+      upper_UCB           <- matrix(NA, nrow = t_len, ncol = n_ts)
+      lower_UCB           <- matrix(NA, nrow = t_len, ncol = n_ts)
       
       for (i in 1:n_ts){
         error_matrix[, i] <- arima.sim(model = list(ar = a),
@@ -166,16 +189,14 @@ for (t_len in different_T){
                                        n = t_len)
         nu       <- rmvnorm(t_len + 10, mean = c(0, 0, 0), sigma = phi_matrix)
         x_matrix <- matrix(0, 3, t_len + 10)
-          
+        
         for (t in 2:(t_len + 10)){
           x_matrix[, t] <- a_matrix %*% x_matrix[, t - 1] + nu[t, ]
         }
         x_matrix <- t(x_matrix[, -(1:10)])
         
         y_matrix[, i] <- alpha_vec[i] + m_matrix[, i] + beta %*% t(x_matrix) + error_matrix[, i]
-#        y_matrix[, i] <- m_matrix[, i] + beta %*% t(x_matrix) + error_matrix[, i]
-        
-                    
+
         #First differences
         y_diff_tmp <- y_matrix[, i] - dplyr::lag(y_matrix[, i], n = 1, default = NA)
         y_diff     <- as.matrix(y_diff_tmp)[-1, ]
@@ -205,60 +226,50 @@ for (t_len in different_T){
                                            MoreArgs = list(data_p = y_augm_matrix[, i],
                                                            grid_p = grid_points,
                                                            bw = 5/t_len))
+        upper_UCB[, i] <- estimated_trend_UCB[, i] + sigma_hat_UCB_i * quant_UCB
+        lower_UCB[, i] <- estimated_trend_UCB[, i] - sigma_hat_UCB_i * quant_UCB
+        # plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+        #      y = estimated_trend_UCB[, i], ylim = c(-1.6, 1.6),
+        #      xlab = "", ylab = "", main = NULL,
+        #      type = 'l', cex = 0.8)
+        # lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+        #       y = upper_UCB[, i], type = "l",
+        #       col = "red")
+        # lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+        #       y = lower_UCB[, i], type = "l",
+        #       col = "red")        
       }
       #MULTISCALE TEST
       psi <- compute_statistics(data = y_augm_matrix,
                                 sigma_vec = sigmahat_vec,
                                 n_ts = n_ts, grid = grid)    
       simulated_pairwise_statistics[, val] <- as.vector(psi$stat_pairwise)
-
-
-
-      sizer_results_vec <- c()
-      for (alpha in different_alpha){
-        j <- match(alpha, different_alpha)
-        SiZer_results <- SiZer_test(values1 = sizer.vals1, values2 = sizer.vals2,
-                                    std.devs = sizer.std, quants = sizer.quants[[j]],
-                                    grid = grid)
-        sizer_results_vec <- c(sizer_results_vec, as.integer(sum(abs(SiZer_results$test))>0))
-        
-       }
-      sizer_results_matrix[, val] <- as.vector(sizer_results_vec)
+      result_UCB <- c(result_UCB, (sum((lower_UCB[, 1] < upper_UCB[, 2]) & (lower_UCB[, 2] < upper_UCB[, 1])) == 0))
     }
     
     simulated_statistic <- apply(simulated_pairwise_statistics[1:(n_ts * n_ts), ], 2, max)
     
-    size_and_power_vec       <- c()
-    size_and_power_sizer_vec <- c()
+    size_and_power_vec     <- c()
+    size_and_power_UCB_vec <- c()
     
-    for (alpha in different_alpha){
-      j <- match(alpha, different_alpha)
-      if (sum(probs == (1 - alpha)) == 0)
-        pos <- which.min(abs(probs - (1 - alpha)))
-      if (sum(probs == (1 - alpha)) != 0)
-        pos <- which.max(probs == (1 - alpha))    
-      quant <- quants[pos]
+    num_of_rej         <- sum(simulated_statistic > quant)/n_rep
+    size_and_power_vec <- c(size_and_power_vec, num_of_rej) 
       
-      num_of_rej         <- sum(simulated_statistic > quant)/n_rep
-      size_and_power_vec <- c(size_and_power_vec, num_of_rej) 
+    cat("Ratio of rejection is ", num_of_rej, "with b = ", b,
+        ", alpha = ", alpha, "and T = ", t_len, "\n")
       
-      cat("Ratio of rejection is ", num_of_rej, "with b = ", b,
-          ", alpha = ", alpha, "and T = ", t_len, "\n")
+    num_of_rej_UCB         <- sum(result_UCB)/n_rep
+    size_and_power_UCB_vec <- c(size_and_power_UCB_vec, num_of_rej_UCB) 
       
-      num_of_rej_sizer         <- sum(sizer_results_matrix[j, ])/n_rep
-      size_and_power_sizer_vec <- c(size_and_power_sizer_vec, num_of_rej_sizer) 
-      
-      cat("Ratio of rejection for SiZer is ", num_of_rej_sizer, "with b = ", b,
-          ", alpha = ", alpha, "and T = ", t_len, "\n")
-    }
+    cat("Ratio of rejection for UCB is ", num_of_rej_UCB, "with b = ", b,
+        ", alpha = ", alpha, "and T = ", t_len, "\n")
     
     #Storing the results in a 3D array
     l <- match(b, different_b)
-    size_and_power_array[k, l, ]       <- size_and_power_vec
-    size_and_power_sizer_array[k, l, ] <- size_and_power_sizer_vec
+    size_and_power_array[k, l, ]     <- size_and_power_vec
+    size_and_power_UCB_array[k, l, ] <- size_and_power_UCB_vec
   }
 } 
-
 
 
 #######################
