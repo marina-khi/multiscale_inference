@@ -175,7 +175,7 @@ The covariates $\X_{it} = (X_{it,1},\ldots, X_{it, d})^\top$ are assumed to have
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm, itemsep=0pt, parsep=0pt, topsep=3pt]
 \setcounter{enumi}{3}
 \item \label{C-reg1} It holds that $X_{it, j} = h_{ij}(\mathcal{G}_{it, j})$, where $\mathcal{G}_{it, j} = (\ldots, \xi_{it-1,j}, \xi_{it, j})$, the random variables $\xi_{it, j}$ are i.i.d.\ across $t$ and $h_{ij}: \reals^\infty \rightarrow \reals$ is a measurable function such that $X_{it, j}$ is well-defined. We use the notation $\X_{it} = \boldsymbol{h}_{i}(\mathcal{G}_{it})$ with $\boldsymbol{h}_i = (h_{i1}, \ldots, h_{id})^\top$ and $\mathcal{G}_{it} = (\mathcal{G}_{it,1}, \ldots, \mathcal{G}_{it, d})^\top$. It holds that $\ex [X_{it, j}]=0$ and $\| X_{it, j} \|_{q^\prime} <\infty$ for all $i$ and $j$, where $q^\prime > \max \{ 4, \theta q \}$ with $q$ from \ref{C-err1} and $\theta$ specified in \ref{C-grid} below.
-\item \label{C-reg2} The matrix $\ex[\Delta \X_{it} \Delta \X_{it}^\top]$ is invertible for each $i$.
+\item \label{C-reg2} The matrix $\ex[\Delta \X_{it} \Delta \X_{it}^\top]$ {\color{red}with $\Delta \X_{it} = \X_{it} - \X_{it-1}$} is invertible for each $i$.
 \item \label{C-reg3} For each $i$ and $j$, it holds that $\sum_{s \ge 0} \delta_{q^\prime}(h_{ij}, s)$ is finite and $\sum_{s \ge t} \delta_{q^\prime}(h_{ij}, s)= O(t^{-\alpha})$ for some $\alpha > 1/2 - 1/{q^\prime}$ with $q^\prime$ from \ref{C-reg1}.
 \end{enumerate}
 Assumption \ref{C-reg1} guarantees that the process $\{ \X_{it}: 1 \le t \le T \}$ is stationary and causal for each $i$. Assumption \ref{C-reg3} restricts the serial dependence of the process $\{ \X_{it}: 1 \le t \le T \}$ for each $i$ in terms of the physical dependence measure.

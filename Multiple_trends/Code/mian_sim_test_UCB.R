@@ -82,8 +82,8 @@ for (t_len in different_T){
   set.seed(seed)
   k <- match(t_len, different_T)
   
-  k_n <- ceiling(t_len^(1/3))
-  m   <- ceiling(t_len / k_n)
+  k_n <- floor(t_len^(1/3))
+  m   <- floor(t_len / k_n)
   
   #Constructing the grid
   u_grid <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
