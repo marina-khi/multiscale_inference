@@ -129,10 +129,11 @@ size_and_power_calculations <- function(grid_type_ = "normal", seed_ = 1, n_ts_ 
     l   <- match(b, different_b_)
     tmp <- as.matrix(size_and_power_array[, l, ])
     if (b == 0){
-      filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_size", filename_ext_, ".tex")
+      filename = paste0("output/revision/", n_ts, "_ts_", phi_ * 100, "_",
+                        rho_ * 100, "_size", filename_ext_, ".tex")
     } else {
-      filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_power_b_",
-                        b * 100, filename_ext_, ".tex")
+      filename = paste0("output/revision/", n_ts, "_ts_", phi_ * 100, "_",
+                        rho_ * 100, "_power_b_", b * 100, filename_ext_, ".tex")
     }
     output_matrix(tmp, filename, numcols_ = 4)
     line <- paste0("%This simulation was done for the seed ", seed_,

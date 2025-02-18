@@ -90,9 +90,9 @@ size_and_power_calculations(grid_type_ = "normal", seed_ = seed, n_ts_ = n_ts,
                             q_ = q, r_ = r, numCores_ = numCores,
                             filename_ext_ = "")
 
-##########################
-#Once more for dense grid#
-##########################
+##################################################
+#Once more for dense grid                        #
+##################################################
 
 n_rep    <- 1000 #number of simulations for calculating size and power
 sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
@@ -107,9 +107,9 @@ size_and_power_calculations(grid_type_ = "dense", seed_ = seed, n_ts_ = n_ts,
                             filename_ext_ = "_dense_grid")
 
 
-###########################
-#Once more for dyadic grid#
-###########################
+##################################################
+#Once more for dyadic grid                       #
+##################################################
 
 n_rep    <- 5000 #number of simulations for calculating size and power
 sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
