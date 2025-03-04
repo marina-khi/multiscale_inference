@@ -34,14 +34,14 @@ sigma <- 0.25
 
 #For the fixed effects
 rho      <- 0.25 #covariance between the fixed effects
-n_rep    <- 100 #number of simulations for calculating size and power
-sim_runs <- 100 #number of simulations to calculate the Gaussian quantiles
+n_rep    <- 5000 #number of simulations for calculating size and power
+sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
 
 #Different parameters
 different_T     <- c(100, 250, 500) #Different lengths of time series  
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
-#different_b     <- c(0.25, 0.5, 0.75) #Zero is for calculating the size
-different_b     <- c(0.75) #Zero is for calculating the size
+different_b     <- c(0.25, 0.5, 0.75) #Zero is for calculating the size
+#different_b     <- c(0.75) #Zero is for calculating the size
 
 
 #Parameters for the estimation of long-run-variance
@@ -71,7 +71,7 @@ actual_power_array <- array(NA, dim = c(length(different_T),
 for (t_len in different_T){
   set.seed(seed)
   k <- match(t_len, different_T)
-  #Constructing the grid
+  #Constructing the full grid for calculating the Gaussian quantiles
   u_grid <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
   h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
   h_grid <- h_grid[h_grid > log(t_len) / t_len]
@@ -100,6 +100,14 @@ for (t_len in different_T){
   rownames(quantiles) <- NULL
     
   quants <- as.vector(quantiles[2, ])
+  
+  #Restricting the grid to only look at the actual power
+  gset_pos  <- grid$gset
+#  gset_pos$lower <- gset_pos$u - gset_pos$h
+#  gset_pos$upper <- gset_pos$u + gset_pos$h
+  deletions <- (((u.lower1 <= gset_pos$u + gset_pos$h) & (gset_pos$u - gset_pos$h <= u.upper1)) | ((u.lower2 <= gset_pos$u + gset_pos$h) & (gset_pos$u - gset_pos$h <= u.upper2)))
+#  gset_pos <- gset_pos[deletions, ]
+  grid_actual <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid, deletions = deletions)
     
   #Calculating the true test statistics
   tic()
@@ -107,12 +115,11 @@ for (t_len in different_T){
   registerDoParallel(cl)
   foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
     source("functions/functions.R")
-    repl_actual_power(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
+    repl(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid_actual,
            a_ = a, sigma_ = sigma,
            beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
            rho_ = rho, different_b_ = different_b,
-           q_ = q, r_ = r, u.lower1_ = u.lower1, u.lower2_ = u.lower2,
-           u.upper1_ = u.upper1, u.upper2 = u.upper1)
+           q_ = q, r_ = r)
       # Loop one-by-one using foreach
     } -> simulated_pairwise_statistics
   stopCluster(cl)
@@ -122,17 +129,17 @@ for (t_len in different_T){
     simulated_statistic <- apply(simulated_pairwise_statistics[((j - 1) * n_ts * n_ts + 1):(j * n_ts * n_ts), ], 2, max)
     
     actual_power_vec <- c()
-    for (alpha in different_alpha_){
+    for (alpha in different_alpha){
       if (sum(probs == (1 - alpha)) == 0)
         pos <- which.min(abs(probs - (1 - alpha)))
       if (sum(probs == (1 - alpha)) != 0)
         pos <- which.max(probs == (1 - alpha))    
       quant <- quants[pos]
         
-      num_of_rej         <- sum(simulated_statistic > quant)/n_rep_
+      num_of_rej       <- sum(simulated_statistic > quant)/n_rep
       actual_power_vec <- c(actual_power_vec, num_of_rej) 
         
-      cat("Ratio of rejection is ", num_of_rej, "with b = ", different_b_[j],
+      cat("Ratio of rejection is ", num_of_rej, "with b = ", different_b[j],
           ", alpha = ", alpha, "and T = ", t_len, "\n")
     }
       
