@@ -20,14 +20,14 @@ source("functions/functions_other.r")
 #Defining necessary constants#
 ##############################
 
-n_ts <- 2 #Number of time series
+n_ts <- 15 #Number of time series
 
-n_rep    <- 1000 #number of simulations for calculating size and power
-sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles for MS test
+n_rep    <- 100 #number of simulations for calculating size and power
+sim_runs <- 100 #number of simulations to calculate the Gaussian quantiles for MS test
 
 different_T <- c(100, 250, 500) #Different lengths of time series
 alpha       <- 0.05 #Confidence levels
-different_b <- c(0, 0.5, 1, 2) #Zero is for calculating the size
+different_b <- c(0, 0.25, 0.5, 0.75) #Zero is for calculating the size
 
 #For the error process
 a     <- 0.25
@@ -244,7 +244,7 @@ for (t_len in different_T){
                                 sigma_vec = sigmahat_vec,
                                 n_ts = n_ts, grid = grid)    
       simulated_pairwise_statistics[, val] <- as.vector(psi$stat_pairwise)
-      result_UCB <- c(result_UCB, (sum((lower_UCB[, 1] < upper_UCB[, 2]) & (lower_UCB[, 2] < upper_UCB[, 1])) == 0))
+      result_UCB <- c(result_UCB, (sum((upper_UCB[, 1] < lower_UCB[, 2]) | (upper_UCB[, 2] < lower_UCB[, 1])) == 0))
     }
     
     simulated_statistic <- apply(simulated_pairwise_statistics[1:(n_ts * n_ts), ], 2, max)

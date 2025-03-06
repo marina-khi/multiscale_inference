@@ -366,7 +366,7 @@ produce_plots_hp <- function(results, data_i, data_j,
 #N(0, Sigma_a_mat_), the time series as
 #y = alpha_ + beta_ %*% covariates + m_matrix_ + errors,
 #estimates the parameters, and then computes the test statistics
-repl <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
+repl <- function(rep_, n_ts_, t_len_, grid_, ijset_ = NULL, a_ = 0, sigma_ = 1,
                  beta_ = NULL, a_x_vec_ = c(0, 0, 0), phi_ = 0,
                  rho_ = 0, different_b_ = c(0),
                  q_ = 25, r_ = 10, gaussian_sim = FALSE){
@@ -386,7 +386,7 @@ repl <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
     
     psi <- compute_statistics(data = z_augm_matrix,
                               sigma_vec = sigma_vector,
-                              n_ts = n_ts_, grid = grid_)
+                              n_ts = n_ts_, ijset = ijset_, grid = grid_)
     results <- c(as.vector(psi$stat_pairwise))
   } else {
 
@@ -480,7 +480,7 @@ repl <- function(rep_, n_ts_, t_len_, grid_, a_ = 0, sigma_ = 1,
     for (k in 1:length(different_b_)){
       psi     <- compute_statistics(data = y_augm_matrices[[k]],
                                     sigma_vec = sigmahat_list[[k]],
-                                    n_ts = n_ts_, grid = grid_)    
+                                    n_ts = n_ts_, ijset = ijset_, grid = grid_)    
       results <- c(results, as.vector(psi$stat_pairwise))
     }
   }

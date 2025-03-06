@@ -102,12 +102,13 @@ for (t_len in different_T){
   quants <- as.vector(quantiles[2, ])
   
   #Restricting the grid to only look at the actual power
-  gset_pos  <- grid$gset
-#  gset_pos$lower <- gset_pos$u - gset_pos$h
-#  gset_pos$upper <- gset_pos$u + gset_pos$h
-  deletions <- (((u.lower1 <= gset_pos$u + gset_pos$h) & (gset_pos$u - gset_pos$h <= u.upper1)) | ((u.lower2 <= gset_pos$u + gset_pos$h) & (gset_pos$u - gset_pos$h <= u.upper2)))
-#  gset_pos <- gset_pos[deletions, ]
+  gset_pos    <- grid$gset
+  deletions   <- (((u.lower1 <= gset_pos$u + gset_pos$h) & (gset_pos$u - gset_pos$h <= u.upper1)) | ((u.lower2 <= gset_pos$u + gset_pos$h) & (gset_pos$u - gset_pos$h <= u.upper2)))
   grid_actual <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid, deletions = deletions)
+  
+  #Restricting the set of pairwise comparisons only to the first vs the others
+  ijset_actual <- expand.grid(i = 1, j = 1:n_ts)
+  ijset_actual <- ijset_actual[ijset_actual$i < ijset_actual$j, ]
     
   #Calculating the true test statistics
   tic()
@@ -115,7 +116,7 @@ for (t_len in different_T){
   registerDoParallel(cl)
   foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
     source("functions/functions.R")
-    repl(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid_actual,
+    repl(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid_actual, ijset_ = ijset,
            a_ = a, sigma_ = sigma,
            beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
            rho_ = rho, different_b_ = different_b,
@@ -158,7 +159,7 @@ for (b in different_b){
   output_matrix(tmp, filename, numcols_ = 4)
   line <- paste0("%This simulation was done for the seed ", seed,
                  ", for the following values of the parameters: n_ts = ", n_ts,
-                 ", with ", n_rep_, " simulations for calculating actual power and ", sim_runs,
+                 ", with ", n_rep, " simulations for calculating actual power and ", sim_runs,
                  " simulations to calculate the Gaussian quantiles. Furthermore, for the error process we have a = ",
                  a, " and sigma = ", sigma, 
                  ". For the covariate process a_1 = a_2 = a_3 = ", a_x_vec[1], " and phi = ", phi,
