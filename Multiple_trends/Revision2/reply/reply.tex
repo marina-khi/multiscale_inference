@@ -144,7 +144,7 @@ Thank you very much for the careful reading of our manuscript and the interestin
 
 Although simulation results are primarily in the Supplement due to space constraints, we have highlighted the key findings of the practical relevance in the main text to better showcase our method’s local testing capabilities (see p. ...). {\color{red}Marina: I have not done that.}
 
-We agree that the global size does not really illustrate local testing capacities, hence, we also calculate actual power: the percentage of simulation runs in which our test indicates difference between $m_1$ and some $m_i$ for $i = 2, \ldots, N$ on some interval $[u-h, u+h]$ where the difference is indeed present, that is, on some interval $[u-h, u+h]$ such that $[u-h, u+h] \cap ([0.2, 0.4] \cup [0.6, 0.8]) \neq \emptyset$. The values of the actual power for different simulation scenarios are presented in Table \ref{tab:actualpower}.  {\color{red}Marina: The power numbers actually look pretty good, we can report them in the simulation study instead of the global power (given in Table \ref{tab:sizepower} for comparison).}
+We agree that the global size does not really illustrate local testing capacities, hence, we also calculate actual power: the percentage of simulation runs in which our test indicates difference between $m_1$ and some $m_i$ for $i = 2, \ldots, n$ on some interval $[u-h, u+h]$ where the difference is indeed present, that is, on some interval $[u-h, u+h]$ such that $[u-h, u+h] \cap ([0.2, 0.4] \cup [0.6, 0.8]) \neq \emptyset$. The values of the actual power for different simulation scenarios are presented in Table \ref{tab:actualpower}.  {\color{red}Marina: The power numbers actually look pretty good, we can report them in the simulation study instead of the global power (given in Table \ref{tab:sizepower} for comparison).}
 
 
 \begin{table}[t!]
@@ -210,7 +210,7 @@ We have added the following naive competitor that is based on the uniform confid
 
 \begin{itemize}
 \item We consider the model without the fixed effects $\alpha_i$ since the specification in \cite{Kim2016} does not allow for fixed effects.
-\item For each of the time series $i = 1, \ldots, n$, we calculate the UCB as described in \cite{Kim2016} using bandwidth $10/T$ {\color{red}Marina: optimal bandwidth using cross-validation was not that easy to estimate and the theoretical optimal bandwidths were $0.4, 0.33, 0.29$ for $T=100, 250, 500$, respectively.}.
+\item For each of the time series $i = 1, \ldots, n$, we calculate the UCB as described in \cite{Kim2016} using bandwidth $10/T$. {\color{red}Marina: optimal bandwidth using cross-validation was not that easy to estimate and the theoretical optimal bandwidths were $0.4, 0.33, 0.29$ for $T=100, 250, 500$, respectively.}.
 \item For each pairwise comparison $(i, j)$, we consider the null hypothesis rejected if there is $t \in \{1, \ldots, T\}$ such that the UCBs for $m_i(t/T)$ and $m_j(t/T)$ do not overlap.
 \item We do not apply any correction for the multiple testing problem.
 \item We calculate how many times we reject the null for our method and for the naive competitor. The results are presented in Table 
