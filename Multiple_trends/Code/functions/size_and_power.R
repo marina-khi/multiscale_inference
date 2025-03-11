@@ -1,9 +1,14 @@
-size_and_power_calculations <- function(grid_type_ = "normal", seed_ = 1, n_ts_ = 2,
-                                        beta_ = c(1, 1, 1), a_x_vec_ = c(0.25, 0.25, 0.25), phi_ = 0.25,
+size_and_power_calculations <- function(grid_type_ = "normal", type_of_m_ = "",
+                                        seed_ = 1, n_ts_ = 2,
+                                        beta_ = c(1, 1, 1),
+                                        a_x_vec_ = c(0.25, 0.25, 0.25),
+                                        phi_ = 0.25,
                                         a_ = 0.25, sigma_ = 0.25,
                                         rho_ = 0.25,
                                         n_rep_ = 1000, sim_runs_ = 1000,
-                                        different_T_ = c(100, 250, 500), different_alpha_ = c(0.01, 0.05, 0.1), different_b_ = c(0),
+                                        different_T_ = c(100, 250, 500),
+                                        different_alpha_ = c(0.01, 0.05, 0.1),
+                                        different_b_ = c(0),
                                         q_ = 25, r_ = 10, numCores_ = 2,
                                         filename_ext_ = ""){
   source("functions/functions.R")
@@ -94,7 +99,7 @@ size_and_power_calculations <- function(grid_type_ = "normal", seed_ = 1, n_ts_ 
            a_ = a_, sigma_ = sigma_,
            beta_ = beta_, a_x_vec_ = a_x_vec_, phi_ = phi_,
            rho_ = rho_, different_b_ = different_b_,
-           q_ = q_, r_ = r_, gaussian_sim = FALSE)
+           q_ = q_, r_ = r_, type_of_m_ = type_of_m_, gaussian_sim = FALSE)
       # Loop one-by-one using foreach
     } -> simulated_pairwise_statistics
     stopCluster(cl)

@@ -33,14 +33,14 @@ sigma <- 0.25
 
 #For the fixed effects
 rho      <- 0.25 #covariance between the fixed effects
-n_rep    <- 100 #number of simulations for calculating size and power
-sim_runs <- 100 #number of simulations to calculate the Gaussian quantiles
+n_rep    <- 5000 #number of simulations for calculating size and power
+sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
 
 #Different parameters
 different_T     <- c(100, 250, 500) #Different lengths of time series  
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
 #different_b     <- c(0, 0.25, 0.5, 0.75) #Zero is for calculating the size
-different_b     <- c(0, 0.75) #Zero is for calculating the size
+different_b     <- c(0) #Zero is for calculating the size
 
 
 #Parameters for the estimation of long-run-variance
@@ -81,14 +81,33 @@ numCores  <- round(parallel::detectCores() * .80)
 #Calculating the size and power for a normal grid#
 ##################################################
 
-size_and_power_calculations(grid_type_ = "normal", seed_ = seed, n_ts_ = n_ts,
+size_and_power_calculations(grid_type_ = "normal", type_of_m_ = "",
+                            seed_ = seed, n_ts_ = n_ts,
                             beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
                             a_ = a, sigma_ = sigma,
                             rho_ = rho,
                             n_rep_ = n_rep, sim_runs_ = sim_runs,
-                            different_T_ = different_T, different_alpha_ = different_alpha, different_b_ = different_b,
+                            different_T_ = different_T,
+                            different_alpha_ = different_alpha,
+                            different_b_ = different_b,
                             q_ = q, r_ = r, numCores_ = numCores,
                             filename_ext_ = "")
+
+####################################################################################
+#Calculating the size and power for a normal grid and bump functions under the null#
+####################################################################################
+
+size_and_power_calculations(grid_type_ = "normal", type_of_m_ = "bump",
+                            seed_ = seed, n_ts_ = n_ts,
+                            beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
+                            a_ = a, sigma_ = sigma,
+                            rho_ = rho,
+                            n_rep_ = n_rep, sim_runs_ = sim_runs,
+                            different_T_ = different_T,
+                            different_alpha_ = different_alpha,
+                            different_b_ = different_b,
+                            q_ = q, r_ = r, numCores_ = numCores,
+                            filename_ext_ = "_bump_null")
 
 ##################################################
 #Once more for dense grid                        #
