@@ -22,8 +22,8 @@ source("functions/functions_other.r")
 
 n_ts <- 15 #Number of time series
 
-n_rep    <- 100 #number of simulations for calculating size and power
-sim_runs <- 100 #number of simulations to calculate the Gaussian quantiles for MS test
+n_rep    <- 1000 #number of simulations for calculating size and power
+sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles for MS test
 
 different_T <- c(100, 250, 500) #Different lengths of time series
 alpha       <- 0.05 #Confidence levels
@@ -60,6 +60,76 @@ a_matrix         <- diag(a_x_vec)
 big_sigma_matrix       <- matrix(rho, nrow = n_ts, ncol = n_ts)
 diag(big_sigma_matrix) <- 1
 
+##################################################
+#Cross-validation to obtain the optimal bandwidth#
+##################################################
+
+# opt_bw_vec<- c()
+# bw <- 0.1
+# 
+# for (t_len in different_T){
+#   m_vec <- bump((1:t_len)/t_len) * 0.5
+#   grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
+#   
+#   for (val in 1:n_rep){
+#     #UNIFORM CONFIDENCE BOUNDS
+#     estimated_trend_UCB <- c()
+#     
+#     error    <- arima.sim(model = list(ar = a),
+#                           innov = rnorm(t_len, 0, sigma),
+#                           n = t_len)
+#     nu       <- rmvnorm(t_len + 10, mean = c(0, 0, 0), sigma = phi_matrix)
+#     x_matrix <- matrix(0, 3, t_len + 10)
+#         
+#     for (t in 2:(t_len + 10)){
+#       x_matrix[, t] <- a_matrix %*% x_matrix[, t - 1] + nu[t, ]
+#     }
+#     x_matrix <- t(x_matrix[, -(1:10)])
+#         
+#     y <- m_vec + beta %*% t(x_matrix) + error[, i]
+#         
+#     #First differences
+#     y_diff_tmp <- y - dplyr::lag(y, n = 1, default = NA)
+#     y_diff     <- as.matrix(y_diff_tmp)[-1, ]
+#     x_diff_1   <- x_matrix[, 1] - dplyr::lag(x_matrix[, 1], n = 1, default = NA)
+#     x_diff_2   <- x_matrix[, 2] - dplyr::lag(x_matrix[, 2], n = 1, default = NA)
+#     x_diff_3   <- x_matrix[, 3] - dplyr::lag(x_matrix[, 3], n = 1, default = NA)
+#         
+#     #Estimating beta
+#     x_diff    <- as.matrix(cbind(x_diff_1, x_diff_2, x_diff_3))[-1, ]
+#     beta_hat  <- solve(t(x_diff) %*% x_diff) %*% t(x_diff) %*% y_diff
+# 
+#     y_augm <- y - x_matrix %*% as.vector(beta_hat)
+#         
+#     estimated_trend_UCB <- mapply(UCB_estimation, grid_points,
+#                                   MoreArgs = list(data_p = y_augm,
+#                                                   grid_p = grid_points,
+#                                                   bw = bw))
+#     y_fitted <- x_matrix %*% as.vector(beta_hat) + estimated_trend_UCB
+#     
+#     h_matrix <- matrix(NA, ncol = t_len, nrow = t_len)
+#     w_matrix <- matrix(NA, ncol = t_len, nrow = t_len)
+#     for (t in 1:t_len){
+#       for (s in 1:t_len){
+#         s_t_2_value1 = s_t_2_UCB(x = s/t_len, h = bw, T_size = t_len, x_vec = grid_points)
+#         s_t_1_value1 = s_t_1_UCB(x = s/t_len, h = bw, T_size = t_len, x_vec = grid_points)
+#         s_t_0_value1 = s_t_0_UCB(x = s/t_len, h = bw, T_size = t_len, x_vec = grid_points)
+#         num1 = s_t_2_value1 * s_t_0_value1 - s_t_1_value1^2
+#         s_t_2_value2 = s_t_2_UCB(x = s/t_len, h = bw * sqrt(2), T_size = t_len, x_vec = grid_points)
+#         s_t_1_value2 = s_t_1_UCB(x = s/t_len, h = bw * sqrt(2), T_size = t_len, x_vec = grid_points)
+#         s_t_0_value2 = s_t_0_UCB(x = s/t_len, h = bw * sqrt(2), T_size = t_len, x_vec = grid_points)
+#         num2 = s_t_2_value2 * s_t_0_value2 - s_t_1_value2^2
+#         u = t/t_len - s/t_len
+#         denom1 = (s_t_2_value1 - s_t_1_value1 * u) * epanechnikov_kernel(u / bw)
+#         denom2 = (s_t_2_value2 - s_t_1_value2 * u) * epanechnikov_kernel(u / (bw * sqrt(2)))
+#         w_matrix[t, s] = 2 * denom1 / num1 - denom2 / num2
+#         h_matrix[t, s] <- w_matrix[t, s] + t(x_matrix[t, ]) %*% solve(t(x_diff) %*% x_diff)        
+#       }
+#     }
+#   }
+#   opt_bw_vec <- c(opt_bw_vec, opt_bw)
+# }
+
 
 ################################
 #Calculating the size and power#
@@ -84,6 +154,7 @@ for (t_len in different_T){
   
   k_n <- floor(t_len^(1/3))
   m   <- floor(t_len / k_n)
+  bandwidth <- 
   
   #Constructing the grid
   u_grid <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
@@ -118,7 +189,7 @@ for (t_len in different_T){
     gaussian_UCB <- mapply(UCB_estimation, grid_points,
                            MoreArgs = list(data_p = z_matrix[, 1],
                                            grid_p = grid_points,
-                                           bw = 5/t_len))
+                                           bw = 10/t_len))
     simulated_gaussian_UCB <- c(simulated_gaussian_UCB, max(gaussian_UCB))
   }
   
@@ -157,7 +228,7 @@ for (t_len in different_T){
   
   for (b in different_b){
     simulated_pairwise_statistics <- matrix(NA, nrow = n_ts * n_ts, ncol = n_rep)
-    result_UCB                    <- c()
+    simulated_pairwise_UCB        <- matrix(0, nrow = n_ts * n_ts, ncol = n_rep)
     
     m_matrix <- matrix(0, nrow = t_len, ncol = n_ts)
     if (b == 0) {
@@ -182,6 +253,10 @@ for (t_len in different_T){
       estimated_trend_UCB <- matrix(NA, nrow = t_len, ncol = n_ts)
       upper_UCB           <- matrix(NA, nrow = t_len, ncol = n_ts)
       lower_UCB           <- matrix(NA, nrow = t_len, ncol = n_ts)
+      
+#      plot(NA, ylim = c(-1.6, 1.6), xlim = c(0, 1),
+#           xlab = "", ylab = "", main = NULL,
+#          type = 'l', cex = 0.8)
       
       for (i in 1:n_ts){
         error_matrix[, i] <- arima.sim(model = list(ar = a),
@@ -225,29 +300,44 @@ for (t_len in different_T){
         estimated_trend_UCB[, i] <- mapply(UCB_estimation, grid_points,
                                            MoreArgs = list(data_p = y_augm_matrix[, i],
                                                            grid_p = grid_points,
-                                                           bw = 5/t_len))
+                                                           bw = 10/t_len))
         upper_UCB[, i] <- estimated_trend_UCB[, i] + sigma_hat_UCB_i * quant_UCB
         lower_UCB[, i] <- estimated_trend_UCB[, i] - sigma_hat_UCB_i * quant_UCB
-        # plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-        #      y = estimated_trend_UCB[, i], ylim = c(-1.6, 1.6),
-        #      xlab = "", ylab = "", main = NULL,
-        #      type = 'l', cex = 0.8)
-        # lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-        #       y = upper_UCB[, i], type = "l",
-        #       col = "red")
-        # lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-        #       y = lower_UCB[, i], type = "l",
-        #       col = "red")        
       }
       #MULTISCALE TEST
       psi <- compute_statistics(data = y_augm_matrix,
                                 sigma_vec = sigmahat_vec,
                                 n_ts = n_ts, grid = grid)    
       simulated_pairwise_statistics[, val] <- as.vector(psi$stat_pairwise)
-      result_UCB <- c(result_UCB, (sum((upper_UCB[, 1] < lower_UCB[, 2]) | (upper_UCB[, 2] < lower_UCB[, 1])) == 0))
+      #The UCB test
+      for (i in 1:n_ts){
+        for (j in 1:n_ts){
+          simulated_pairwise_UCB[n_ts * (i-1) + j, val] <- sum((upper_UCB[, i] < lower_UCB[, j]) | (upper_UCB[, i] < lower_UCB[, j]))
+          if (simulated_pairwise_UCB[n_ts * (i-1) + j, val] != 0){
+            plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+                  y = estimated_trend_UCB[, i], type = 'l', col = 'red', ylim = c(-1.6, 1.6), 
+                            xlab = "", ylab = "", main = NULL, cex = 0.8)
+            lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+                  y = upper_UCB[, i], type = "l",
+                  col = "red")
+            lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+                  y = lower_UCB[, i], type = "l",
+                  col = "red")
+            lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+                  y = estimated_trend_UCB[, j], type = 'l', col = 'blue')
+            lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+                  y = upper_UCB[, j], type = "l",
+                  col = "blue")
+            lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+                  y = lower_UCB[, j], type = "l",
+                  col = "blue")           
+          }
+        }
+      }
     }
     
-    simulated_statistic <- apply(simulated_pairwise_statistics[1:(n_ts * n_ts), ], 2, max)
+    simulated_statistic     <- apply(simulated_pairwise_statistics[1:(n_ts * n_ts), ], 2, max)
+    simulated_statistic_UCB <- apply(simulated_pairwise_UCB[1:(n_ts * n_ts), ], 2, sum)
     
     size_and_power_vec     <- c()
     size_and_power_UCB_vec <- c()
@@ -258,7 +348,7 @@ for (t_len in different_T){
     cat("Ratio of rejection is ", num_of_rej, "with b = ", b,
         ", alpha = ", alpha, "and T = ", t_len, "\n")
       
-    num_of_rej_UCB         <- sum(result_UCB)/n_rep
+    num_of_rej_UCB         <- sum(simulated_statistic_UCB != 0)/n_rep
     size_and_power_UCB_vec <- c(size_and_power_UCB_vec, num_of_rej_UCB) 
       
     cat("Ratio of rejection for UCB is ", num_of_rej_UCB, "with b = ", b,

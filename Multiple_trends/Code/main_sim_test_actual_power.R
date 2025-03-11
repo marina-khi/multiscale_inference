@@ -116,7 +116,7 @@ for (t_len in different_T){
   registerDoParallel(cl)
   foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
     source("functions/functions.R")
-    repl(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid_actual, ijset_ = ijset,
+    repl(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid_actual, ijset_ = ijset_actual,
            a_ = a, sigma_ = sigma,
            beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
            rho_ = rho, different_b_ = different_b,
