@@ -22,10 +22,10 @@ source("functions/functions_other.r")
 
 n_ts <- 15 #Number of time series
 
-n_rep    <- 1000 #number of simulations for calculating size and power
-sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles for MS test
+n_rep    <- 100 #number of simulations for calculating size and power
+sim_runs <- 100 #number of simulations to calculate the Gaussian quantiles for MS test
 
-different_T <- c(100, 250, 500) #Different lengths of time series
+different_T <- c(250) #Different lengths of time series
 alpha       <- 0.05 #Confidence levels
 different_b <- c(0, 0.25, 0.5, 0.75) #Zero is for calculating the size
 
@@ -42,22 +42,11 @@ phi     <- 0.25                 #dependence between the innovations
 q <- 25 
 r <- 10
 
-seed <- 246802468
+#seed <- 246802468
 
 #For parallel computation
 numCores  <- round(parallel::detectCores() * .80)
 
-######################
-#Derivative constants#
-######################
-sigma_vector <- rep(sigma, n_ts)
-
-phi_matrix       <- matrix(phi, nrow = 3, ncol = 3)
-diag(phi_matrix) <- 1
-a_matrix         <- diag(a_x_vec) 
-
-big_sigma_matrix       <- matrix(rho, nrow = n_ts, ncol = n_ts)
-diag(big_sigma_matrix) <- 1
 
 ##################################################
 #Cross-validation to obtain the optimal bandwidth#
@@ -142,7 +131,7 @@ size_and_power_UCB_array <- array(NA, dim = c(length(different_T),
                                                   alpha = alpha))
 
 for (t_len in different_T){
-  set.seed(seed)
+#  set.seed(seed)
   k   <- match(t_len, different_T)
 
   #Constructing the grid
@@ -172,7 +161,7 @@ for (t_len in different_T){
   stopCluster(cl)
   toc()
 
-  probs     <- seq(0.5, 0.995, by = 0.005)
+  probs <- seq(0.5, 0.995, by = 0.005)
 
   quantiles_UCB <- as.vector(quantile(simulated_gaussian_UCB, probs = probs))
   quantiles_UCB <- rbind(probs, quantiles_UCB)
@@ -195,28 +184,30 @@ for (t_len in different_T){
   #Testing for different scenarios#
   #################################
   
-    simulated_statistic     <- apply(simulated_pairwise_statistics[1:(n_ts * n_ts), ], 2, max)
-    simulated_statistic_UCB <- apply(simulated_pairwise_UCB[1:(n_ts * n_ts), ], 2, sum)
-    
-    size_and_power_vec     <- c()
-    size_and_power_UCB_vec <- c()
-    
-    num_of_rej         <- sum(simulated_statistic > quant)/n_rep
-    size_and_power_vec <- c(size_and_power_vec, num_of_rej) 
-      
-    cat("Ratio of rejection is ", num_of_rej, "with b = ", b,
+  tic()
+  cl <- makePSOCKcluster(numCores)
+  registerDoParallel(cl)
+  foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
+    source("functions/functions.R")
+    repl_UCB(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, bw_ = 0.1,
+         a_ = a, sigma_ = sigma,
+         beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
+         different_b_ = different_b, quant_UCB_ = quant_UCB,
+         gaussian_sim = FALSE)
+    # Loop one-by-one using foreach
+  } -> pairwise_comparison_UCB
+  stopCluster(cl)
+  toc()
+  
+  for (j in 1:length(different_b)){
+    pairwise_results_UCB <- apply(pairwise_comparison_UCB[((j - 1) * n_ts * n_ts + 1):(j * n_ts * n_ts), ], 2, sum)
+    num_of_rej_UCB       <- sum(pairwise_results_UCB != 0)/n_rep
+
+    cat("Ratio of rejection for UCB is ", num_of_rej_UCB, "with b = ", different_b[j],
         ", alpha = ", alpha, "and T = ", t_len, "\n")
-      
-    num_of_rej_UCB         <- sum(simulated_statistic_UCB != 0)/n_rep
-    size_and_power_UCB_vec <- c(size_and_power_UCB_vec, num_of_rej_UCB) 
-      
-    cat("Ratio of rejection for UCB is ", num_of_rej_UCB, "with b = ", b,
-        ", alpha = ", alpha, "and T = ", t_len, "\n")
-    
+
     #Storing the results in a 3D array
-    l <- match(b, different_b)
-    size_and_power_array[k, l, ]     <- size_and_power_vec
-    size_and_power_UCB_array[k, l, ] <- size_and_power_UCB_vec
+    size_and_power_UCB_array[k, j, ] <- num_of_rej_UCB
   }
 } 
 
@@ -227,24 +218,17 @@ for (t_len in different_T){
 
 for (b in different_b){
   l   <- match(b, different_b)
-  tmp <- matrix(NA, nrow = length(different_T), ncol = 2 * length(different_alpha))
-  for (i in 1:length(different_alpha)){
-    tmp[, 2 * i - 1] <- as.vector(size_and_power_array[, l, i])
-    tmp[, 2 * i]     <- as.vector(size_and_power_sizer_array[, l, i])
-  }
-  
-  row.names(tmp) <- paste0("$T = ", row.names(as.matrix(size_and_power_array[, l, ])), "$")
-  
-  tmp2 <- as.matrix(size_and_power_array[, l, ])
-  tmp3 <- as.matrix(size_and_power_sizer_array[, l, ])
+  tmp <- matrix(NA, nrow = length(different_T), ncol = 1)
+
+  row.names(tmp) <- paste0("$T = ", row.names(as.matrix(size_and_power_UCB_array[, l, ])), "$")
   
   if (b == 0){
-    filename = paste0("output/revision/", n_ts, "_ts_size_UCB_comparison.tex")
+    filename = paste0("output/revision/", n_ts, "_ts_size_UCB.tex")
   } else {
     filename = paste0("output/revision/", n_ts, "_ts_power_b_",
-                      b * 100, "_UCB_comparison.tex")
+                      b * 100, "_UCB.tex")
   }
-  output_matrix(tmp, filename, numcols_ = 7)
+  output_matrix(tmp, filename, numcols_ = 1)
   line <- paste0("%This simulation was done for the following values of the parameters: n_ts = ", n_ts,
                  ", with ", n_rep, " simulations for calculating size and power and ", sim_runs,
                  " simulations to calculate the Gaussian quantiles. Furthermore, for the error process we have a = ",

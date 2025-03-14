@@ -498,13 +498,13 @@ repl <- function(rep_, n_ts_, t_len_, grid_, ijset_ = NULL, a_ = 0, sigma_ = 1,
 #y = alpha_ + beta_ %*% covariates + m_matrix_ + errors,
 #estimates the parameters, and then computes the test statistics
 repl_UCB <- function(rep_, n_ts_, t_len_, bw_ = 0.1, a_ = 0, sigma_ = 1,
-                 beta_ = NULL, a_x_vec_ = c(0, 0, 0), phi_ = 0,
-                 different_b_ = c(0), quant_UCB_ = 0,
-                 gaussian_sim = FALSE){
-  library(dplyr)
+                     beta_ = NULL, a_x_vec_ = c(0, 0, 0), phi_ = 0,
+                     different_b_ = c(0), quant_UCB_ = 0,
+                     gaussian_sim = FALSE){
+  
+  grid_points <- seq(from = 1 / t_len_, to = 1, by = 1 / t_len_)  
   
   if (gaussian_sim){
-    grid_points  <- seq(from = 1 / t_len_, to = 1, by = 1 / t_len_)
     z_vec        <- rnorm(t_len_, 0, 1)
     gaussian_UCB <- mapply(UCB_estimation, grid_points,
                            MoreArgs = list(data_p = z_vec,
@@ -513,27 +513,32 @@ repl_UCB <- function(rep_, n_ts_, t_len_, bw_ = 0.1, a_ = 0, sigma_ = 1,
     results <- c(max(abs(gaussian_UCB)))
   } else {
     library(mvtnorm)
+    library(dplyr)
     
-    k_n <- floor(t_len^(1/3))
-    m   <- floor(t_len / k_n)
+    results <- c()
     
-    m_matrix        <- matrix(0, nrow = t_len_, ncol = n_ts_)
-    y_matrices      <- list()
-    y_augm_matrices <- list()
-    sigmahat_list   <- list()
+    k_n <- floor(t_len_^(1/3))
+    m   <- floor(t_len_ / k_n)
+    
+    m_matrices          <- list()
+    y_matrices          <- list()
+    y_augm_matrices     <- list()
+    estimated_trend_UCB <- list()
+    upper_UCB           <- list()
+    lower_UCB           <- list()
     
     for (k in 1:length(different_b_)){
-      y_matrices[[k]]      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-      y_augm_matrices[[k]] <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-      sigmahat_list[[k]]   <- rep(NA, n_ts_)  
+      y_matrices[[k]]          <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      m_matrices[[k]]          <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      m_matrices[[k]][, 1]     <- bump((1:t_len_)/t_len_) * different_b_[k]
+      y_augm_matrices[[k]]     <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      estimated_trend_UCB[[k]] <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      upper_UCB[[k]]           <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      lower_UCB[[k]]           <- matrix(NA, nrow = t_len_, ncol = n_ts_)
     }
     
     error_matrix  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    
-    big_sigma_matrix       <- matrix(rho_, nrow = n_ts_, ncol = n_ts_)
-    diag(big_sigma_matrix) <- 1
-    alpha_vec              <- rmvnorm(1, mean = rep(0, n_ts_), sigma = big_sigma_matrix)
-    
+
     phi_matrix       <- matrix(phi_, nrow = 3, ncol = 3)
     diag(phi_matrix) <- 1
     a_matrix         <- diag(a_x_vec_)      
@@ -560,8 +565,7 @@ repl_UCB <- function(rep_, n_ts_, t_len_, bw_ = 0.1, a_ = 0, sigma_ = 1,
         
       k <- 1
       for (b in different_b_){
-        m_matrix[, 1]        <- bump((1:t_len_)/t_len_) * b
-        y_matrices[[k]][, i] <- m_matrix[, i] + beta_ %*% t(x_matrix) + error_matrix[, i]
+        y_matrices[[k]][, i] <- m_matrices[[k]][, i] + beta_ %*% t(x_matrix) + error_matrix[, i]
           
         #First differences
         y_diff     <- y_matrices[[k]][, i] - dplyr::lag(y_matrices[[k]][, i], n = 1, default = NA)
@@ -575,46 +579,56 @@ repl_UCB <- function(rep_, n_ts_, t_len_, bw_ = 0.1, a_ = 0, sigma_ = 1,
                                                      x_matrix_ = x_matrix,
                                                      beta_est_ = beta_hat_tmp,
                                                      m_ = m, k_n_ = k_n)) 
-        sigmahat_list[[k]][i] <- sigma_hat_UCB_i
-        
+
         estimated_trend_UCB[[k]][, i] <- mapply(UCB_estimation, grid_points,
-                                           MoreArgs = list(data_p = y_augm_matrices[[k]][, i],
-                                                           grid_p = grid_points,
-                                                           bw = bw_))
+                                                MoreArgs = list(data_p = y_augm_matrices[[k]][, i],
+                                                                grid_p = grid_points,
+                                                                bw = bw_))
         upper_UCB[[k]][, i] <- estimated_trend_UCB[[k]][, i] + sigma_hat_UCB_i * quant_UCB_
         lower_UCB[[k]][, i] <- estimated_trend_UCB[[k]][, i] - sigma_hat_UCB_i * quant_UCB_
         
         k <- k + 1
       }
     }
-    results <- c()
+
     for (k in 1:length(different_b_)){
-      simulated_pairwise_UCB 
-      for (i in 1:n_ts){
-        for (j in 1:n_ts){
-          simulated_pairwise_UCB[n_ts * (i-1) + j, val] <- sum((upper_UCB[[k]][, i] < lower_UCB[[k]][, j]) | (upper_UCB[[k]][, i] < lower_UCB[[k]][, j]))
-          # if (simulated_pairwise_UCB[n_ts * (i-1) + j, val] != 0){
-          #   plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-          #        y = estimated_trend_UCB[, i], type = 'l', col = 'red', ylim = c(-1.6, 1.6), 
-          #        xlab = "", ylab = "", main = NULL, cex = 0.8)
-          #   lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-          #         y = upper_UCB[, i], type = "l",
-          #         col = "red")
-          #   lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-          #         y = lower_UCB[, i], type = "l",
-          #         col = "red")
-          #   lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-          #         y = estimated_trend_UCB[, j], type = 'l', col = 'blue')
-          #   lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-          #         y = upper_UCB[, j], type = "l",
-          #         col = "blue")
-          #   lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
-          #         y = lower_UCB[, j], type = "l",
-          #         col = "blue")           
-          # }
+      pairwise_intersection_UCB <- matrix(NA, ncol = n_ts_, nrow = n_ts_) 
+      for (i in 1:n_ts_){
+        for (j in 1:n_ts_){
+          pairwise_intersection_UCB[i, j] <- sum((upper_UCB[[k]][, i] < lower_UCB[[k]][, j]) | (upper_UCB[[k]][, i] < lower_UCB[[k]][, j]))
+          if (pairwise_intersection_UCB[i, j] != 0){
+            filename = paste0("output/revision/", i, "_vs_", j, "with_b_", b*100, ".pdf")
+            pdf(filename, width = 5, height = 3.5, paper="special")
+            layout(matrix(c(1, 2), ncol=1), widths=c(2.4, 2.4),
+                   heights=c(1.5, 1.8), TRUE)
+            
+            #Setting the layout of the graphs
+            par(cex = 1, tck = -0.025)
+            par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
+            par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
+            
+            plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+                 y = estimated_trend_UCB[[k]][, i], type = 'l', col = 'red', ylim = c(-1.6, 1.6),
+                 xlab = "", ylab = "", main = NULL, cex = 0.8)
+            lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+                  y = upper_UCB[[k]][, i], type = "l",
+                  col = "red")
+            lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+                  y = lower_UCB[[k]][, i], type = "l",
+                  col = "red")
+            lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+                  y = estimated_trend_UCB[[k]][, j], type = 'l', col = 'blue')
+            lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+                  y = upper_UCB[[k]][, j], type = "l",
+                  col = "blue")
+            lines(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
+                  y = lower_UCB[[k]][, j], type = "l",
+                  col = "blue")
+            dev.off()
+          }
         }
-      }   
-      results <- c(results, as.vector(psi$stat_pairwise))
+      }
+      results <- c(results, as.vector(pairwise_intersection_UCB))
     }
   }
   return(results)
