@@ -435,9 +435,7 @@ repl <- function(rep_, n_ts_, t_len_, grid_, ijset_ = NULL, a_ = 0, sigma_ = 1,
         for (b in different_b_){
           m_matrix[, 1] <- bump((1:t_len_)/t_len_) * b
           if ((type_of_m_ == "bump") & (b == 0)){
-            for (i in 1:n_ts_){
-              m_matrix[, i] <- bump((1:t_len_)/t_len_) * 0.5
-            }      
+            m_matrix[, i] <- bump((1:t_len_)/t_len_) * 0.5
           }
           y_matrices[[k]][, i] <- alpha_vec[i] + m_matrix[, i] + beta_ %*% t(x_matrix) + error_matrix[, i]
 
