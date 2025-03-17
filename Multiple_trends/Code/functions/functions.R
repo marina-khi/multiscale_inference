@@ -590,20 +590,19 @@ repl_UCB <- function(rep_, n_ts_, t_len_, bw_ = 0.1, a_ = 0, sigma_ = 1,
     }
 
     for (k in 1:length(different_b_)){
+      counter <- 0
       pairwise_intersection_UCB <- matrix(NA, ncol = n_ts_, nrow = n_ts_) 
       for (i in 1:n_ts_){
         for (j in 1:n_ts_){
           pairwise_intersection_UCB[i, j] <- sum((upper_UCB[[k]][, i] < lower_UCB[[k]][, j]) | (upper_UCB[[k]][, i] < lower_UCB[[k]][, j]))
-          if (pairwise_intersection_UCB[i, j] != 0){
-            filename = paste0("output/revision/", i, "_vs_", j, "with_b_", b*100, ".pdf")
+          if ((pairwise_intersection_UCB[i, j] != 0) & (counter == 0)){
+            filename = paste0("output/revision/", i, "_vs_", j, "_with_T_", t_len_, "_and_b_", different_b_[k]*100, ".pdf")
             pdf(filename, width = 5, height = 3.5, paper="special")
-            layout(matrix(c(1, 2), ncol=1), widths=c(2.4, 2.4),
-                   heights=c(1.5, 1.8), TRUE)
-            
+
             #Setting the layout of the graphs
             par(cex = 1, tck = -0.025)
-            par(mar = c(0.5, 0.5, 2, 0)) #Margins for each plot
-            par(oma = c(0.2, 1.5, 0.2, 0.2)) #Outer margins
+            par(mar = c(0, 0, 0, 0)) #Margins for each plot
+            par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
             
             plot(x = seq(from = 1 / t_len, to = 1, by = 1 / t_len),
                  y = estimated_trend_UCB[[k]][, i], type = 'l', col = 'red', ylim = c(-1.6, 1.6),
@@ -624,6 +623,7 @@ repl_UCB <- function(rep_, n_ts_, t_len_, bw_ = 0.1, a_ = 0, sigma_ = 1,
                   col = "blue")
             dev.off()
           }
+          counter <- counter + 1
         }
       }
       results <- c(results, as.vector(pairwise_intersection_UCB))
