@@ -22,10 +22,10 @@ source("functions/functions_other.r")
 
 n_ts <- 15 #Number of time series
 
-n_rep    <- 100 #number of simulations for calculating size and power
-sim_runs <- 100 #number of simulations to calculate the Gaussian quantiles for MS test
+n_rep    <- 1000 #number of simulations for calculating size and power
+sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles for MS test
 
-different_T <- c(250) #Different lengths of time series
+different_T <- c(100, 250, 500) #Different lengths of time series
 alpha       <- 0.05 #Confidence levels
 different_b <- c(0, 0.25, 0.5, 0.75) #Zero is for calculating the size
 
@@ -211,6 +211,7 @@ for (t_len in different_T){
   }
 } 
 
+save(size_and_power_UCB_array, file = "output/revision/UCB_simulations.R")
 
 #######################
 #Output of the results#
