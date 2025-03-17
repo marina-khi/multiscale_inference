@@ -97,6 +97,7 @@ size_and_power_calculations(grid_type_ = "normal", type_of_m_ = "",
 #Calculating the size and power for a normal grid and bump functions under the null#
 ####################################################################################
 
+seed <- 111222333
 size_and_power_calculations(grid_type_ = "normal", type_of_m_ = "bump",
                             seed_ = seed, n_ts_ = n_ts,
                             beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
