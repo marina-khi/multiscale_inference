@@ -591,10 +591,18 @@ repl_UCB <- function(rep_, n_ts_, t_len_, bw_ = 0.1, a_ = 0, sigma_ = 1,
 
     for (k in 1:length(different_b_)){
       counter <- 0
-      pairwise_intersection_UCB <- matrix(NA, ncol = n_ts_, nrow = n_ts_) 
+      pairwise_intersection_UCB <- matrix(NA, ncol = n_ts_, nrow = n_ts_)
+      
+      #Ignoring the boundary issues
+      lower_boundary <- ceiling(0.05 * t_len_)
+      upper_boundary <- floor(0.95 * t_len_)
+      
+      tmp_u <- upper_UCB[[k]][lower_boundary:upper_boundary, ]
+      tmp_l <- lower_UCB[[k]][lower_boundary:upper_boundary, ]
+      
       for (i in 1:n_ts_){
         for (j in 1:n_ts_){
-          pairwise_intersection_UCB[i, j] <- sum((upper_UCB[[k]][, i] < lower_UCB[[k]][, j]) | (upper_UCB[[k]][, i] < lower_UCB[[k]][, j]))
+          pairwise_intersection_UCB[i, j] <- sum((tmp_u[, i] < tmp_l[, j]) | (tmp_u[, i] < tmp_l[, j]))
           if ((pairwise_intersection_UCB[i, j] != 0) & (counter == 0)){
             filename = paste0("output/revision/", i, "_vs_", j, "_with_T_", t_len_, "_and_b_", different_b_[k]*100, ".pdf")
             pdf(filename, width = 5, height = 3.5, paper="special")

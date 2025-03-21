@@ -13,7 +13,6 @@ library(tictoc)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
 
-#source("functions/size_and_power.R")
 source("functions/functions.R")
 
 ##############################
@@ -41,8 +40,6 @@ sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
 different_T     <- c(100, 250, 500) #Different lengths of time series  
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
 different_b     <- c(0.25, 0.5, 0.75) #Zero is for calculating the size
-#different_b     <- c(0.75) #Zero is for calculating the size
-
 
 #Parameters for the estimation of long-run-variance
 q <- 25 
@@ -67,6 +64,20 @@ actual_power_array <- array(NA, dim = c(length(different_T),
                             dimnames = list(t = different_T,
                                             b = different_b,
                                             alpha = different_alpha))
+
+majority_power_array <- array(NA, dim = c(length(different_T),
+                                          length(different_b),
+                                          length(different_alpha)),
+                              dimnames = list(t = different_T,
+                                              b = different_b,
+                                              alpha = different_alpha))
+
+full_power_array <- array(NA, dim = c(length(different_T),
+                                      length(different_b),
+                                      length(different_alpha)),
+                          dimnames = list(t = different_T,
+                                          b = different_b,
+                                          alpha = different_alpha))
 
 for (t_len in different_T){
   set.seed(seed)
@@ -102,50 +113,71 @@ for (t_len in different_T){
   quants <- as.vector(quantiles[2, ])
   
   #Restricting the grid to only look at the actual power
-  gset_pos    <- grid$gset
-  deletions   <- (((u.lower1 <= gset_pos$u + gset_pos$h) & (gset_pos$u - gset_pos$h <= u.upper1)) | ((u.lower2 <= gset_pos$u + gset_pos$h) & (gset_pos$u - gset_pos$h <= u.upper2)))
-  grid_actual <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid, deletions = deletions)
-  
-  #Restricting the set of pairwise comparisons only to the first vs the others
-  ijset_actual <- expand.grid(i = 1, j = 1:n_ts)
-  ijset_actual <- ijset_actual[ijset_actual$i < ijset_actual$j, ]
-    
+  gset_pos      <- grid$gset
+  deletions     <- (((u.lower1 <= gset_pos$u + gset_pos$h) & (gset_pos$u - gset_pos$h <= u.upper1)) | ((u.lower2 <= gset_pos$u + gset_pos$h) & (gset_pos$u - gset_pos$h <= u.upper2)))
+  grid_actual   <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid, deletions = deletions)
+
   #Calculating the true test statistics
   tic()
   cl <- makePSOCKcluster(numCores)
   registerDoParallel(cl)
   foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
     source("functions/functions.R")
-    repl(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid_actual, ijset_ = ijset_actual,
-           a_ = a, sigma_ = sigma,
-           beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
-           rho_ = rho, different_b_ = different_b,
-           q_ = q, r_ = r)
+    repl(rep_ = val, n_ts_ = n_ts, t_len_ = t_len,
+         grid_ = grid_actual, #ijset_ = ijset,
+         a_ = a, sigma_ = sigma,
+         beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi, rho_ = rho,
+         different_b_ = different_b,
+         q_ = q, r_ = r)
       # Loop one-by-one using foreach
     } -> simulated_pairwise_statistics
   stopCluster(cl)
   toc()
     
   for (j in 1:length(different_b)){
+    statistic_values <- simulated_pairwise_statistics[((j - 1) * n_ts * n_ts + 1):(j * n_ts * n_ts), ]
     simulated_statistic <- apply(simulated_pairwise_statistics[((j - 1) * n_ts * n_ts + 1):(j * n_ts * n_ts), ], 2, max)
     
     actual_power_vec <- c()
+    majority_power_vec <- c()
+    full_power_vec <- c()
     for (alpha in different_alpha){
       if (sum(probs == (1 - alpha)) == 0)
         pos <- which.min(abs(probs - (1 - alpha)))
       if (sum(probs == (1 - alpha)) != 0)
         pos <- which.max(probs == (1 - alpha))    
       quant <- quants[pos]
-        
-      num_of_rej       <- sum(simulated_statistic > quant)/n_rep
-      actual_power_vec <- c(actual_power_vec, num_of_rej) 
-        
-      cat("Ratio of rejection is ", num_of_rej, "with b = ", different_b[j],
+      
+      num_of_actual_rej <- 0
+      num_of_majority_rej <- 0
+      num_of_full_rej <- 0
+
+      for (val in 1:n_rep){
+        tmp <- matrix(statistic_values[, val], nrow = n_ts, ncol = n_ts)
+        num_of_rej  <- sum(tmp[1, ] > quant)
+        if (num_of_rej > 0) {num_of_actual_rej <- num_of_actual_rej + 1}
+        if (num_of_rej > 6) {num_of_majority_rej <- num_of_majority_rej + 1}
+        if (num_of_rej == 14) {num_of_full_rej <- num_of_full_rej + 1}
+      }
+      actual_power_vec <- c(actual_power_vec, num_of_actual_rej/n_rep)
+      majority_power_vec <- c(majority_power_vec, num_of_majority_rej/n_rep)
+      full_power_vec <- c(full_power_vec, num_of_full_rej/n_rep)
+      
+      cat("Ratio of correct rejections in at least one case is ",
+          num_of_actual_rej/n_rep, "with b = ", different_b[j],
+          ", alpha = ", alpha, "and T = ", t_len, "\n")
+      cat("Ratio of correct rejections in majority of the cases is ",
+          num_of_majority_rej/n_rep, "with b = ", different_b[j],
+          ", alpha = ", alpha, "and T = ", t_len, "\n")
+      cat("Ratio of correct rejections in all cases is ",
+          num_of_full_rej/n_rep, "with b = ", different_b[j],
           ", alpha = ", alpha, "and T = ", t_len, "\n")
     }
       
     #Storing the results in a 3D array
     actual_power_array[k, j, ] <- actual_power_vec
+    majority_power_array[k, j, ] <- majority_power_vec
+    full_power_array[k, j, ] <- full_power_vec
   }
 }
   
@@ -168,3 +200,36 @@ for (b in different_b){
   write(line, file = filename, append = TRUE)
 }
 
+for (b in different_b){
+  l   <- match(b, different_b)
+  tmp <- as.matrix(majority_power_array[, l, ])
+  filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_majority_power_b_",
+                    b * 100, ".tex")
+  output_matrix(tmp, filename, numcols_ = 4)
+  line <- paste0("%This simulation was done for the seed ", seed,
+                 ", for the following values of the parameters: n_ts = ", n_ts,
+                 ", with ", n_rep, " simulations for calculating majority power and ", sim_runs,
+                 " simulations to calculate the Gaussian quantiles. Furthermore, for the error process we have a = ",
+                 a, " and sigma = ", sigma, 
+                 ". For the covariate process a_1 = a_2 = a_3 = ", a_x_vec[1], " and phi = ", phi,
+                 ". For the fixed effect, we have rho = ", rho,
+                 ". The grid is normal")     
+  write(line, file = filename, append = TRUE)
+}
+
+for (b in different_b){
+  l   <- match(b, different_b)
+  tmp <- as.matrix(actual_power_array[, l, ])
+  filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_full_power_b_",
+                    b * 100, ".tex")
+  output_matrix(tmp, filename, numcols_ = 4)
+  line <- paste0("%This simulation was done for the seed ", seed,
+                 ", for the following values of the parameters: n_ts = ", n_ts,
+                 ", with ", n_rep, " simulations for calculating full power and ", sim_runs,
+                 " simulations to calculate the Gaussian quantiles. Furthermore, for the error process we have a = ",
+                 a, " and sigma = ", sigma, 
+                 ". For the covariate process a_1 = a_2 = a_3 = ", a_x_vec[1], " and phi = ", phi,
+                 ". For the fixed effect, we have rho = ", rho,
+                 ". The grid is normal")     
+  write(line, file = filename, append = TRUE)
+}
