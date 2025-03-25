@@ -136,11 +136,11 @@ for (t_len in different_T){
     
   for (j in 1:length(different_b)){
     statistic_values <- simulated_pairwise_statistics[((j - 1) * n_ts * n_ts + 1):(j * n_ts * n_ts), ]
-    simulated_statistic <- apply(simulated_pairwise_statistics[((j - 1) * n_ts * n_ts + 1):(j * n_ts * n_ts), ], 2, max)
-    
-    actual_power_vec <- c()
+
+    actual_power_vec   <- c()
     majority_power_vec <- c()
-    full_power_vec <- c()
+    full_power_vec     <- c()
+
     for (alpha in different_alpha){
       if (sum(probs == (1 - alpha)) == 0)
         pos <- which.min(abs(probs - (1 - alpha)))
@@ -153,11 +153,11 @@ for (t_len in different_T){
       num_of_full_rej <- 0
 
       for (val in 1:n_rep){
-        tmp <- matrix(statistic_values[, val], nrow = n_ts, ncol = n_ts)
+        tmp         <- matrix(statistic_values[, val], nrow = n_ts, ncol = n_ts)
         num_of_rej  <- sum(tmp[1, ] > quant)
-        if (num_of_rej > 0) {num_of_actual_rej <- num_of_actual_rej + 1}
-        if (num_of_rej > 6) {num_of_majority_rej <- num_of_majority_rej + 1}
-        if (num_of_rej == 14) {num_of_full_rej <- num_of_full_rej + 1}
+        if (num_of_rej > 0)   {num_of_actual_rej   <- num_of_actual_rej + 1}
+        if (num_of_rej > 6)   {num_of_majority_rej <- num_of_majority_rej + 1}
+        if (num_of_rej == 14) {num_of_full_rej     <- num_of_full_rej + 1}
       }
       actual_power_vec <- c(actual_power_vec, num_of_actual_rej/n_rep)
       majority_power_vec <- c(majority_power_vec, num_of_majority_rej/n_rep)
