@@ -211,8 +211,8 @@ for (t_len in different_T){
   }
 } 
 
-#save(size_and_power_UCB_array, file = "output/revision/UCB_simulations.R")
-#load(file = "output/revision/UCB_simulations.R")
+save(size_and_power_UCB_array, file = "output/revision/UCB_simulations.R")
+load(file = "output/revision/UCB_simulations.R")
 
 
 #######################
@@ -220,7 +220,7 @@ for (t_len in different_T){
 #######################
 
 tmp <- as.matrix(size_and_power_UCB_array[, , 1])
-row.names(tmp) <- paste0("$T = ", row.names(as.matrix(size_and_power_UCB_array[, ,1])), "$")
+row.names(tmp) <- paste0("$T = ", row.names(as.matrix(size_and_power_UCB_array[ , , 1])), "$")
 
   
 filename = paste0("output/revision/", n_ts, "_ts_UCB.tex")
