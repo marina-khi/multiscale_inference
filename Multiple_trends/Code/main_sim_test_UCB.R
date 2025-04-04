@@ -211,8 +211,8 @@ for (t_len in different_T){
   }
 } 
 
-#save(size_and_power_UCB_array, file = "output/revision/UCB_simulations.R")
-#load(file = "output/revision/UCB_simulations.R")
+save(size_and_power_UCB_array, file = "output/revision/UCB_simulations.R")
+load(file = "output/revision/UCB_simulations.R")
 
 
 #######################

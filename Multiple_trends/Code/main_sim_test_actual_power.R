@@ -219,7 +219,7 @@ for (b in different_b){
 
 for (b in different_b){
   l   <- match(b, different_b)
-  tmp <- as.matrix(actual_power_array[, l, ])
+  tmp <- as.matrix(full_power_array[, l, ])
   filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_full_power_b_",
                     b * 100, ".tex")
   output_matrix(tmp, filename, numcols_ = 4)
