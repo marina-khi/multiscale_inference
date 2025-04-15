@@ -1,15 +1,16 @@
 rm(list=ls())
 
-library(MSinference)
+#library(MSinference)
 library(xtable)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
-library(Rcpp)
+#library(Rcpp)
 library(tictoc)
 library(foreach)
 library(parallel)
 library(doParallel)
 library(mvtnorm)
+library(dplyr)
 
 #Load necessary functions  
 source("functions/functions.r")
@@ -43,6 +44,7 @@ q <- 25
 r <- 10
 
 #seed <- 246802468
+bw <- 0.1
 
 #For parallel computation
 numCores  <- round(parallel::detectCores() * .80)
@@ -118,6 +120,164 @@ numCores  <- round(parallel::detectCores() * .80)
 #   opt_bw_vec <- c(opt_bw_vec, opt_bw)
 # }
 
+#######################
+#Plotting one instance#
+#######################
+
+for (t_len in different_T){
+  k <- match(t_len, different_T)
+
+  #Calculating the Gaussian quantiles
+
+  cat("Calculating the Gaussian quantiles\n")
+  
+  #Calculating the Gaussian quantiles for UCB in parallel
+  tic()
+  cl <- makePSOCKcluster(numCores)
+  registerDoParallel(cl)
+  foreach (val = 1:sim_runs, .combine = "cbind") %dopar% {
+    source("functions/functions_other.R")
+    repl_UCB(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, bw_ = bw,
+             gaussian_sim = TRUE)
+    # Loop one-by-one using foreach
+  } -> simulated_gaussian_UCB
+  stopCluster(cl)
+  toc()
+  
+  probs <- seq(0.5, 0.995, by = 0.005)
+  
+  quantiles_UCB <- as.vector(quantile(simulated_gaussian_UCB, probs = probs))
+  quantiles_UCB <- rbind(probs, quantiles_UCB)
+  
+  colnames(quantiles_UCB) <- NULL
+  rownames(quantiles_UCB) <- NULL
+  
+  quants_UCB <- as.vector(quantiles_UCB[2, ])
+  
+  if (sum(probs == (1 - alpha)) == 0) {
+    pos <- which.min(abs(probs - (1 - alpha)))
+  } else {
+    pos   <- which.max(probs == (1 - alpha))  
+  }
+  
+  quant_UCB <- quants_UCB[pos]
+
+  #Calculating UCB
+
+  grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)  
+    
+  k_n            <- floor(t_len^(1/3))
+  m              <- floor(t_len / k_n)
+  lower_boundary <- ceiling(0.05 * t_len)
+  upper_boundary <- floor(0.95 * t_len)
+  grid           <- grid_points[lower_boundary:upper_boundary] #For plotting
+    
+  m_matrices          <- list()
+  y_matrices          <- list()
+  y_augm_matrices     <- list()
+  estimated_trend_UCB <- list()
+  upper_UCB           <- list()
+  lower_UCB           <- list()
+    
+  for (k in 1:length(different_b)){
+    y_matrices[[k]]          <- matrix(NA, nrow = t_len, ncol = n_ts)
+    m_matrices[[k]]          <- matrix(0, nrow = t_len, ncol = n_ts)
+    m_matrices[[k]][, 1]     <- bump((1:t_len)/t_len) * different_b[k]
+    y_augm_matrices[[k]]     <- matrix(NA, nrow = t_len, ncol = n_ts)
+    estimated_trend_UCB[[k]] <- matrix(NA, nrow = t_len, ncol = n_ts)
+    upper_UCB[[k]]           <- matrix(NA, nrow = t_len, ncol = n_ts)
+    lower_UCB[[k]]           <- matrix(NA, nrow = t_len, ncol = n_ts)
+  }
+    
+  error_matrix  <- matrix(NA, nrow = t_len, ncol = n_ts)
+    
+  phi_matrix       <- matrix(phi, nrow = 3, ncol = 3)
+  diag(phi_matrix) <- 1
+  a_matrix         <- diag(a_x_vec)      
+    
+  for (i in 1:n_ts){
+    error_matrix[, i] <- arima.sim(model = list(ar = a),
+                                   innov = rnorm(t_len, 0, sigma),
+                                   n = t_len)
+      
+    nu       <- rmvnorm(t_len + 10, mean = c(0, 0, 0), sigma = phi_matrix)
+    x_matrix <- matrix(0, 3, t_len + 10)
+      
+    for (t in 2:(t_len + 10)){
+      x_matrix[, t] <- a_matrix %*% x_matrix[, t - 1] + nu[t, ]
+    }
+    x_matrix <- t(x_matrix[, -(1:10)])
+      
+    x_diff_1 <- x_matrix[, 1] - dplyr::lag(x_matrix[, 1], n = 1, default = NA)
+    x_diff_2 <- x_matrix[, 2] - dplyr::lag(x_matrix[, 2], n = 1, default = NA)
+    x_diff_3 <- x_matrix[, 3] - dplyr::lag(x_matrix[, 3], n = 1, default = NA)
+      
+    #Estimating beta
+    x_diff_tmp <- as.matrix(cbind(x_diff_1, x_diff_2, x_diff_3))[-1, ]
+      
+    k <- 1
+    for (b in different_b){
+      y_matrices[[k]][, i] <- m_matrices[[k]][, i] + beta %*% t(x_matrix) + error_matrix[, i]
+      
+      #First differences
+      y_diff     <- y_matrices[[k]][, i] - dplyr::lag(y_matrices[[k]][, i], n = 1, default = NA)
+      y_diff_tmp <- as.matrix(y_diff)[-1, ]
+        
+      beta_hat_tmp <- solve(t(x_diff_tmp) %*% x_diff_tmp) %*% t(x_diff_tmp) %*% y_diff_tmp
+        
+      y_augm_matrices[[k]][, i] <- y_matrices[[k]][, i] - x_matrix %*% as.vector(beta_hat_tmp)
+        
+      sigma_hat_UCB_i <- sqrt(sigma_estimation_UCB(y_ = y_matrices[[k]][, i],
+                                                   x_matrix_ = x_matrix,
+                                                   beta_est_ = beta_hat_tmp,
+                                                   m_ = m, k_n_ = k_n)) 
+        
+      estimated_trend_UCB[[k]][, i] <- mapply(UCB_estimation, grid_points,
+                                              MoreArgs = list(data_p = y_augm_matrices[[k]][, i],
+                                                              grid_p = grid_points,
+                                                              bw = bw))
+      upper_UCB[[k]][, i] <- estimated_trend_UCB[[k]][, i] + sigma_hat_UCB_i * quant_UCB
+      lower_UCB[[k]][, i] <- estimated_trend_UCB[[k]][, i] - sigma_hat_UCB_i * quant_UCB
+    
+      k <- k + 1
+    }
+  }
+    
+  for (k in 1:length(different_b)){
+
+    #Ignoring the boundary issues
+    tmp_u <- upper_UCB[[k]][lower_boundary:upper_boundary, ]
+    tmp_l <- lower_UCB[[k]][lower_boundary:upper_boundary, ]
+
+    filename = paste0("output/revision/UCB_plot_with_T_", t_len, "_and_b_", different_b[k]*100, ".pdf")
+    pdf(filename, width = 5, height = 3.5, paper="special")
+
+    #Setting the layout of the graphs
+    par(cex = 1, tck = -0.025)
+    par(mar = c(0, 0, 0, 0)) #Margins for each plot
+    par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
+
+    plot(x = grid, xlim = c(0, 1),
+         y = estimated_trend_UCB[[k]][lower_boundary:upper_boundary, 1], type = 'l', col = 'red', ylim = c(-1.6, 1.6),
+         xlab = "", ylab = "", main = NULL, cex = 0.8)
+    lines(x = grid,
+          y = upper_UCB[[k]][lower_boundary:upper_boundary, 1], type = "l",
+          col = "red")
+    lines(x = grid,
+          y = lower_UCB[[k]][lower_boundary:upper_boundary, 1], type = "l",
+          col = "red")
+    lines(x = grid,
+          y = estimated_trend_UCB[[k]][lower_boundary:upper_boundary, 2], type = 'l', col = 'blue')
+    lines(x = grid,
+          y = upper_UCB[[k]][lower_boundary:upper_boundary, 2], type = "l",
+          col = "blue")
+    lines(x = grid,
+          y = lower_UCB[[k]][lower_boundary:upper_boundary, 2], type = "l",
+          col = "blue")
+    dev.off()
+  }
+} 
+
 
 ################################
 #Calculating the size and power#
@@ -134,14 +294,6 @@ for (t_len in different_T){
 #  set.seed(seed)
   k   <- match(t_len, different_T)
 
-  #Constructing the grid
-  u_grid <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
-  h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
-  h_grid <- h_grid[h_grid > log(t_len) / t_len]
-  grid   <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
-  
-  grid_points <- seq(from = 1 / t_len, to = 1, by = 1 / t_len)
-  
   ####################################
   #Calculating the Gaussian quantiles#
   ####################################
