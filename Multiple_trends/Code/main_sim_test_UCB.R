@@ -22,12 +22,12 @@ source("functions/functions_other.r")
 
 n_ts <- 15 #Number of time series
 
-n_rep    <- 10 #number of simulations for calculating size and power
+n_rep    <- 1000 #number of simulations for calculating size and power
 sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles for MS test
 
-different_T <- c(500) #Different lengths of time series
+different_T <- c(100, 250, 500) #Different lengths of time series
 alpha       <- 0.05 #Confidence levels
-different_b <- c(0.75) #Zero is for calculating the size
+different_b <- c(0, 0.25, 0.5, 0.75) #Zero is for calculating the size
 
 #For the error process
 a     <- 0.25
@@ -199,16 +199,16 @@ for (t_len in different_T){
   stopCluster(cl)
   toc()
   
-  # for (j in 1:length(different_b)){
-  #   pairwise_results_UCB <- apply(pairwise_comparison_UCB[((j - 1) * n_ts * n_ts + 1):(j * n_ts * n_ts), ], 2, sum)
-  #   num_of_rej_UCB       <- sum(pairwise_results_UCB != 0)/n_rep
-  # 
-  #   cat("Ratio of rejection for UCB is ", num_of_rej_UCB, "with b = ", different_b[j],
-  #       ", alpha = ", alpha, "and T = ", t_len, "\n")
-  # 
-  #   #Storing the results in a 3D array
-  #   size_and_power_UCB_array[k, j, ] <- num_of_rej_UCB
-  #}
+  for (j in 1:length(different_b)){
+    pairwise_results_UCB <- apply(pairwise_comparison_UCB[((j - 1) * n_ts * n_ts + 1):(j * n_ts * n_ts), ], 2, sum)
+    num_of_rej_UCB       <- sum(pairwise_results_UCB != 0)/n_rep
+
+    cat("Ratio of rejection for UCB is ", num_of_rej_UCB, "with b = ", different_b[j],
+        ", alpha = ", alpha, "and T = ", t_len, "\n")
+
+    #Storing the results in a 3D array
+    size_and_power_UCB_array[k, j, ] <- num_of_rej_UCB
+  }
 } 
 
 save(size_and_power_UCB_array, file = "output/revision/UCB_simulations.R")

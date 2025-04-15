@@ -801,34 +801,34 @@ repl_UCB <- function(rep_, n_ts_, t_len_, bw_ = 0.1, a_ = 0, sigma_ = 1,
         for (j in 1:n_ts_){
           pairwise_intersection_UCB[i, j] <- sum((tmp_u[, i] < tmp_l[, j]) | (tmp_u[, i] < tmp_l[, j]))
 #          if ((pairwise_intersection_UCB[i, j] != 0) & (counter == 0)){
-          if ((i == 1) & (j > 1)){
-            filename = paste0("output/revision/", i, "_vs_", j, "_with_T_", t_len_, "_and_b_", different_b_[k]*100, ".pdf")
-            pdf(filename, width = 5, height = 3.5, paper="special")
-
-            #Setting the layout of the graphs
-            par(cex = 1, tck = -0.025)
-            par(mar = c(0, 0, 0, 0)) #Margins for each plot
-            par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
-            
-            plot(x = grid, xlim = c(0, 1),
-                 y = estimated_trend_UCB[[k]][lower_boundary:upper_boundary, i], type = 'l', col = 'red', ylim = c(-1.6, 1.6),
-                 xlab = "", ylab = "", main = NULL, cex = 0.8)
-            lines(x = grid, 
-                  y = upper_UCB[[k]][lower_boundary:upper_boundary, i], type = "l",
-                  col = "red")
-            lines(x = grid,
-                  y = lower_UCB[[k]][lower_boundary:upper_boundary, i], type = "l",
-                  col = "red")
-            lines(x = grid, 
-                  y = estimated_trend_UCB[[k]][lower_boundary:upper_boundary, j], type = 'l', col = 'blue')
-            lines(x = grid, 
-                  y = upper_UCB[[k]][lower_boundary:upper_boundary, j], type = "l",
-                  col = "blue")
-            lines(x = grid,
-                  y = lower_UCB[[k]][lower_boundary:upper_boundary, j], type = "l",
-                  col = "blue")
-            dev.off()
-          }
+          # if ((i == 1) & (j > 1)){
+          #   filename = paste0("output/revision/", i, "_vs_", j, "_with_T_", t_len_, "_and_b_", different_b_[k]*100, ".pdf")
+          #   pdf(filename, width = 5, height = 3.5, paper="special")
+          # 
+          #   #Setting the layout of the graphs
+          #   par(cex = 1, tck = -0.025)
+          #   par(mar = c(0, 0, 0, 0)) #Margins for each plot
+          #   par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
+          #   
+          #   plot(x = grid, xlim = c(0, 1),
+          #        y = estimated_trend_UCB[[k]][lower_boundary:upper_boundary, i], type = 'l', col = 'red', ylim = c(-1.6, 1.6),
+          #        xlab = "", ylab = "", main = NULL, cex = 0.8)
+          #   lines(x = grid, 
+          #         y = upper_UCB[[k]][lower_boundary:upper_boundary, i], type = "l",
+          #         col = "red")
+          #   lines(x = grid,
+          #         y = lower_UCB[[k]][lower_boundary:upper_boundary, i], type = "l",
+          #         col = "red")
+          #   lines(x = grid, 
+          #         y = estimated_trend_UCB[[k]][lower_boundary:upper_boundary, j], type = 'l', col = 'blue')
+          #   lines(x = grid, 
+          #         y = upper_UCB[[k]][lower_boundary:upper_boundary, j], type = "l",
+          #         col = "blue")
+          #   lines(x = grid,
+          #         y = lower_UCB[[k]][lower_boundary:upper_boundary, j], type = "l",
+          #         col = "blue")
+          #   dev.off()
+          # }
           counter <- counter + 1
         }
       }
