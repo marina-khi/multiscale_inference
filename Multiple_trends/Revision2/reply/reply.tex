@@ -163,7 +163,7 @@ m_i(u) =  b \cdot  \vartheta(u, 0.3, 0.1) - b  \cdot  \vartheta(u,0.7, 0.1) \qua
 \end{align*}
 with $\vartheta(u,c,d) =  \ind \left\{\frac{|u - c|}{d}\leq 1 \right\} \left(1 - \frac{(u - c)^2}{d^2}\right)^2$ for $b = 0.25$. The empirical size for two cases (with zero and bump functions under the null, respectively) is presented in Table \ref{tab:sizes}. {\color{red}Marina: The size numbers are a bit more conservative, it seems that the convergence is slower.}
 
-{\color{red}I have also added how precise we are estimating the coefficients and the long-run variance. The results for various sample sizes $T=100, 250, 500$ and two different specifications of the null function ($m_i = 0$ for all $i$ and $m_i$ being the bump function as specified above.)}
+{\color{red}I have also added how precise we are estimating the coefficients and the long-run variance. The results for various sample sizes $T=100, 250, 500$ and two different specifications of the null function ($m_i = 0$ for all $i$ and $m_i$ being the bump function as specified above.) are presented in Figures \ref{fig:hist_coefficients:zero} - \ref{fig:hist_beta:bump}}.
 
 
 \begin{table}[t!]
@@ -430,24 +430,56 @@ We have added the following naive competitor that is based on the uniform confid
 \item We calculate how many times we reject the null for our method and for the naive competitor. The results are presented in Table \ref{tab:sizepower_UCB}.
 \end{itemize}
 
-Almost for all sample sizes (and especially for $T=250, 500$) the UCBs for two trend functions remain relatively wide compared to the strength of the signal so that we almost never detect any differences. One of such examples for $T=500$ and $b = 0.75$ is present in Figure \ref{fig:UCB}.
+Almost for all sample sizes (and especially for $T=250, 500$) the UCBs for two trend functions remain relatively wide compared to the strength of the signal so that we almost never detect any differences. One of such examples for $T=500$ and different $b$ is presented in Figure \ref{fig:UCB}.
 
-\begin{figure}[t]
-\begin{floatrow}
-\capbtabbox{
-\setcounter{table}{6}
+\begin{table}[t!]
+\setcounter{table}{5}
+\renewcommand{\arraystretch}{1.2}  
+\begin{center}
+\caption{Empirical size and power of the naive competitor for different time series lengths $T$ and bump heights $b$, where $b = 0$ corresponds to the null and $b = 0.25,0.5,0.75$ to three different alternatives}\label{tab:sizepower_UCB}
+\centering  
 \input{../output/15_ts_UCB}
-}{%
-  \caption{Empirical size and power of the naive competitor for different time series lengths $T$ and bump heights $b$, where $b = 0$ corresponds to the null and $b = 0.25,0.5,0.75$ to three different alternatives}\label{tab:sizepower_UCB}%
-}
-\ffigbox{\vspace{3mm}
-\includegraphics{../output/1_vs_15_with_b_75.pdf}
-}{%
-  \caption{An example of two uniform confidence bands for $T=500$ and $b=0.75$.}\label{fig:UCB}%
-}
-\end{floatrow}
-\end{figure}
+\end{center}
+\end{table}
 
+%\begin{figure}[t]
+%\begin{floatrow}
+%\capbtabbox{
+%\setcounter{table}{6}
+%\input{../output/15_ts_UCB}
+%}{%
+%  \caption{Empirical size and power of the naive competitor for different time series lengths $T$ and bump heights $b$, where $b = 0$ corresponds to the null and $b = 0.25,0.5,0.75$ to three different alternatives}\label{tab:sizepower_UCB}%
+%}
+%\ffigbox{\vspace{3mm}
+%\includegraphics{../output/1_vs_15_with_b_75.pdf}
+%}{%
+%  \caption{An example of two uniform confidence bands for $T=500$ and $b=0.75$.}\label{fig:UCB}%
+%}
+%\end{floatrow}
+%\end{figure}
+
+\begin{figure}[h]
+%\renewcommand{\arraystretch}{1.2}
+\footnotesize{
+\begin{center}
+\caption{An example of two uniform confidence bands for $T=500$ and $b=0.25, 0.50, 0.75$.}\label{fig:UCB}
+\begin{subfigure}[b]{0.31\textwidth}
+    \centering
+    \includegraphics[scale=0.33]{../output/UCB_plot_with_T_500_and_b_25.pdf}
+    \caption{$b = 0.25$}
+    \end{subfigure}
+\begin{subfigure}[b]{0.31\textwidth}
+    \centering
+    \includegraphics[scale=0.33]{../output/UCB_plot_with_T_500_and_b_50.pdf}
+    \caption{$b = 0.50$}
+    \end{subfigure}
+\begin{subfigure}[b]{0.31\textwidth}
+    \centering
+    \includegraphics[scale=0.33]{../output/UCB_plot_with_T_500_and_b_75.pdf}
+    \caption{$b = 0.75$}
+    \end{subfigure}
+    \end{center}}
+\end{figure}
 
 
 \item {\color{blue}\textit{Stochastic volatility (SV) is widely important in the types of applications that the authors mention. Yet the authors 1) claim that extensions to SV would be challenging, 2) elect not to consider any simulation designs with SV to examine robustness, and 3) claim that SV can be handled with log-transformations (and then using the same mean models as proposed). Perhaps 1) is true, but 2) is important based on the claims in the paper and the relevance for this journal. Finally, 3) is not correct for the most widely-used SV models.}}
