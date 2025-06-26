@@ -1,10 +1,10 @@
 rm(list=ls())
 
-#library(MSinference)
+library(MSinference)
 library(xtable)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
-#library(Rcpp)
+library(Rcpp)
 library(tictoc)
 library(foreach)
 library(parallel)
