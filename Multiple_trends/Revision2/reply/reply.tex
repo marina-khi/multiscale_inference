@@ -100,7 +100,7 @@ Moreover, our method can detect local trend similarities that might be missed in
 
 \item {\color{blue}\textit{Can your model (1.1) include autoregression? Either way, it would be good to see it spelled out explicitly.}}
 
-While the current formulation does not explicitly include autoregressive terms (due to the restriction on the relationship between the covariates and the errors introduced in Assumption (C7)), autoregressive dynamics can be incorporated through the error term $\varepsilon_{it}$.% as, for example, $\varepsilon_{it} = a \varepsilon_{i(t-1)} + \eta_{it}$, where $\eta_{it}$ are i.i.d. normal random variables with zero mean and finite variance and \linebreak $|a|<1$ ensures that Assumption (C3) is satisfied.
+While the current formulation does not explicitly include autoregressive terms (due to the restriction on the relationship between the covariates and the errors introduced in Assumption (C7)), autoregressive dynamics can be incorporated through the error term $\varepsilon_{it}$. % as, for example, $\varepsilon_{it} = a \varepsilon_{i(t-1)} + \eta_{it}$, where $\eta_{it}$ are i.i.d. normal random variables with zero mean and finite variance and \linebreak $|a|<1$ ensures that Assumption (C3) is satisfied.
 We briefly discuss this on p. 7 and in Remark 2.1 (p. 8-9). Moreover, all the size and power simulations are performed including the autoregressive structure in the error terms (see p. 1 in the Supplement). {\color{red}(Marina: should we say it explicitly somewhere in the text?)}
 
 \item {\color{blue}\textit{I was unconvinced by the subtraction of the overall level on p. 6. Firstly, this clearly risks eliminating useful information (what if some curves differ from others in the overall level)? Secondly, I am not sure if it is meaningful to look at averages of (e.g. increasing) trends - for example, what is the interpretation of a “long-term average house price level in [a] country”? In “Time Series 101”, we teach students not to take averages of non-stationary time series!}  }
@@ -152,7 +152,7 @@ We agree that the global size does not really illustrate local testing capacitie
 	\item \textbf{actual} power, i.e., the percentage of simulation runs in which our test indicates difference between $m_1$ and \textit{some} $m_i$ for $i = 2, \ldots, n$ on some interval $[u-h, u+h]$ where the difference is indeed present, that is, on some interval $[u-h, u+h]$ such that $[u-h, u+h] \cap ([0.2, 0.4] \cup [0.6, 0.8]) \neq \emptyset$. The values of the actual power for different simulation scenarios are presented in Table \ref{tab:actualpower};
 	\item \textbf{majority} power, i.e., the percentage of simulation runs in which our test indicates difference between $m_1$ and \textit{most of} $m_i$ for $i = 2, \ldots, n$ (in our case, at least $7$) on some interval $[u-h, u+h]$ where the difference is indeed present, that is, on some interval $[u-h, u+h]$ such that $[u-h, u+h] \cap ([0.2, 0.4] \cup [0.6, 0.8]) \neq \emptyset$. The values of the majority power for different simulation scenarios are presented in Table \ref{tab:majoritypower};
 	\item \textbf{full} power, i.e., the percentage of simulation runs in which our test indicates difference between $m_1$ and \textit{all} $m_i$ for $i = 2, \ldots, n$ on some interval $[u-h, u+h]$ where the difference is indeed present, that is, on some interval $[u-h, u+h]$ such that $[u-h, u+h] \cap ([0.2, 0.4] \cup [0.6, 0.8]) \neq \emptyset$. The values of the full power for different simulation scenarios are presented in Table \ref{tab:fullpower};
-	\item \textbf{spurious} power, i.e., the percentage of simulation runs in which our test indicates difference between $m_1$ and \textit{some} $m_i$ for $i = 2, \ldots, n$ on some interval $[u-h, u+h]$ where the difference is \textit{not} present, that is, on some interval $[u-h, u+h]$ such that $[u-h, u+h] \cap ([0.2, 0.4] \cup [0.6, 0.8]) = \emptyset$, or our test indicates a difference between $m_i$ and $m_j$ for some $i, j = 2, \ldots, n$. The values of the actual power for different simulation scenarios are presented in Table \ref{tab:spuriouspower}.
+	\item \textbf{spurious} power, i.e., the percentage of simulation runs in which our test indicates difference either between $m_1$ and \textit{some} $m_i$ for $i = 2, \ldots, n$ on some interval $[u-h, u+h]$ where the difference is \textit{not} present, that is, on some interval $[u-h, u+h]$ such that $[u-h, u+h] \cap ([0.2, 0.4] \cup [0.6, 0.8]) = \emptyset$, or between $m_i$ and $m_j$ for some $i, j = 2, \ldots, n$ anywhere on the interval $[0, 1]$. The values of the actual power for different simulation scenarios are presented in Table \ref{tab:spuriouspower}.
 \end{enumerate}
 
 	 {\color{red}Marina: The power numbers actually look pretty good, we can report them in the simulation study instead of the global power (given in Table \ref{tab:sizepower} for comparison).}
@@ -161,9 +161,7 @@ We have also included size simulation results with a bump function under the nul
 \begin{align*}
 m_i(u) =  b \cdot  \vartheta(u, 0.3, 0.1) - b  \cdot  \vartheta(u,0.7, 0.1) \quad \forall i = 1, \ldots, n,
 \end{align*}
-with $\vartheta(u,c,d) =  \ind \left\{\frac{|u - c|}{d}\leq 1 \right\} \left(1 - \frac{(u - c)^2}{d^2}\right)^2$ for $b = 0.25$. The empirical size for two cases (with zero and bump functions under the null, respectively) is presented in Table \ref{tab:sizes}. {\color{red}Marina: The size numbers are a bit more conservative, it seems that the convergence is slower.}
-
-{\color{red}I have also added how precise we are estimating the coefficients and the long-run variance. The results for various sample sizes $T=100, 250, 500$ and two different specifications of the null function ($m_i = 0$ for all $i$ and $m_i$ being the bump function as specified above.) are presented in Figures \ref{fig:hist_coefficients:zero} - \ref{fig:hist_beta:bump}}.
+with $\vartheta(u,c,d) =  \ind \left\{\frac{|u - c|}{d}\leq 1 \right\} \left(1 - \frac{(u - c)^2}{d^2}\right)^2$ for $b = 0.25$. The empirical size for both cases (with zero and bump functions under the null, respectively) is presented in Table \ref{tab:sizes}. {\color{red}Marina: The size numbers are a bit more conservative, it seems that the convergence is slower which can be explained by the following. I have also added how precise we are estimating the coefficients and the long-run variance. The results for various sample sizes $T=100, 250, 500$ and two different specifications of the null function (zero functions and bump function as specified above.) are presented in Figures \ref{fig:hist_coefficients:zero} - \ref{fig:hist_lrv:bump}. It is pretty clear that the estimation of he long-run variance is much less precise when we are considering the bump function instead of the zero function. The convergence to the true value as the sample size grows larger is visible but quite slow still.}
 
 
 \begin{table}[t!]
@@ -270,10 +268,27 @@ Each panel gives the results for a different bump height $b$, where $b = 0.25,0.
 \end{center}}
 \end{table} 
 
-
+\begin{table}[t!]
+\setcounter{table}{4}
+\renewcommand{\arraystretch}{1.2}  
+\footnotesize{
+\begin{center}
+\caption{Empirical size of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$ for different specification of $m_i$ under the null. The left panel gives the results for $m_i = 0$ for all $i$, whereas the right panel presents the results for $m_i$ being a bump function with height $0.25$. {\color{red}Marina: the left panel is one of the panels from the Supplement.}}\label{tab:sizes}
+\begin{subtable}[b]{0.4\textwidth}
+\centering  
+\caption{Zero function}
+\input{../output/15_ts_25_25_size}
+\end{subtable}
+\begin{subtable}[b]{0.4\textwidth}
+\centering  
+\caption{Bump function}
+\input{../output/15_ts_25_25_size_bump_null}
+\end{subtable}
+\end{center}}
+\end{table}
 
 \begin{table}[t!]
-\setcounter{table}{4}  
+\setcounter{table}{5}  
 \renewcommand{\arraystretch}{1.2}  
 \footnotesize{
 \begin{center}
@@ -302,24 +317,6 @@ Each panel gives the results for a different bump height $b$, where $b = 0$ corr
 \end{center}}
 \end{table}
 
-\begin{table}[t!]
-\setcounter{table}{5}
-\renewcommand{\arraystretch}{1.2}  
-\footnotesize{
-\begin{center}
-\caption{Empirical size of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$ for different specification of $m_i$ under the null. The left panel gives the results for $m_i = 0$ for all $i$, whereas the right panel presents the results for $m_i$ being a bump function with height $0.25$. {\color{red}Marina: the left panel is one of the panels from the Supplement.}}\label{tab:sizes}
-\begin{subtable}[b]{0.4\textwidth}
-\centering  
-\caption{Zero function}
-\input{../output/15_ts_25_25_size}
-\end{subtable}
-\begin{subtable}[b]{0.4\textwidth}
-\centering  
-\caption{Bump function}
-\input{../output/15_ts_25_25_size_bump_null}
-\end{subtable}
-\end{center}}
-\end{table}
 
 \begin{figure}[p]
 %\renewcommand{\arraystretch}{1.2}
@@ -423,17 +420,19 @@ We have added the following naive competitor that is based on the uniform confid
 
 \begin{itemize}
 \item We consider the model without the fixed effects $\alpha_i$ since the specification in \cite{Kim2016} does not allow for fixed effects.
-\item For each of the time series $i = 1, \ldots, n$, we calculate the UCB as described in \cite{Kim2016} using bandwidth $0.1$. {\color{red}Marina: optimal bandwidth using cross-validation was not that easy to calculate and the theoretical optimal bandwidths were $0.4, 0.33, 0.29$ for $T=100, 250, 500$, respectively. I am currently repeating the analysis with bandwidth equal to $0.2$, do not expect anything to change.}
+\item For each of the time series $i = 1, \ldots, n$, we calculate the UCB as described in \cite{Kim2016} using bandwidth $0.2$. {\color{red}Marina: optimal bandwidth using cross-validation was not that easy to calculate and the theoretical optimal bandwidths were $0.4, 0.33, 0.29$ for $T=100, 250, 500$, respectively.}
 \item For each pairwise comparison $(i, j)$, we consider the null hypothesis rejected if there is $t \in \{1, \ldots, T\}$ with a condition that $t/T \in [0.05, 0.95]$ (since the estimation procedure proposed in \cite{Kim2016} has poor performance at the boundaries, we have decided to exclude them from analysis) such that the UCBs for $m_i(t/T)$ and $m_j(t/T)$ do not overlap.
 \item We do not apply any correction for the multiple testing problem.
 \item We consider $\alpha = 0.05$.
-\item We calculate how many times we reject the null for our method and for the naive competitor. The results are presented in Table \ref{tab:sizepower_UCB}.
+\item We calculate how many times we reject the null for this naive competitor. The results are presented in Table \ref{tab:sizepower_UCB}. {\color{red} Marina: we are reporting here the global power for the competitor which is not super comparable to the other types of power that we have. On the other hand, even this power is still worse than our actual power. What do you think?}
 \end{itemize}
 
-Almost for all sample sizes (and especially for $T=250, 500$) the UCBs for two trend functions remain relatively wide compared to the strength of the signal so that we almost never detect any differences. One of such examples for $T=500$ and different $b$ is presented in Figure \ref{fig:UCB}.
+For the smallest sampel size $T=100$, the UCBs for two trend functions remain relatively wide compared to the strength of the signal so that we almost never detect any differences. For larger sample sizes ($T=250, 500$), this naive compatitor is able to detect the differences for the strong sygnal. However, we should point out that we did not account for multiple testing here and we expect that with Bonferroni correction, the UCBs will become much wider so that even the strongest will not be detectable. 
+
+Examples of two UCBs for $T=500$ and different values of $b$ are presented in Figure \ref{fig:UCB}.
 
 \begin{table}[t!]
-\setcounter{table}{5}
+\setcounter{table}{7}
 \renewcommand{\arraystretch}{1.2}  
 \begin{center}
 \caption{Empirical size and power of the naive competitor for different time series lengths $T$ and bump heights $b$, where $b = 0$ corresponds to the null and $b = 0.25,0.5,0.75$ to three different alternatives}\label{tab:sizepower_UCB}
@@ -483,6 +482,8 @@ Almost for all sample sizes (and especially for $T=250, 500$) the UCBs for two t
 
 
 \item {\color{blue}\textit{Stochastic volatility (SV) is widely important in the types of applications that the authors mention. Yet the authors 1) claim that extensions to SV would be challenging, 2) elect not to consider any simulation designs with SV to examine robustness, and 3) claim that SV can be handled with log-transformations (and then using the same mean models as proposed). Perhaps 1) is true, but 2) is important based on the claims in the paper and the relevance for this journal. Finally, 3) is not correct for the most widely-used SV models.}}
+
+In order to better mimc behaviour of the stochastic volatility, we have included size and power simulation results with time-varying error variance. Specifically, we assume that for each $i$, the idiosyncratic error process $\{\varepsilon_{it}: 1 \le t \le T\}$ follows the AR(1) model $\varepsilon_{it} = a \varepsilon_{i t-1} + \sigma(t/T)\eta_{it}$, where $a = 0.25$, the innovations $\eta_{it}$ are i.i.d.\ normally distributed with mean $0$ and standard deviation $1$ and $\sigma^2(u) = -\frac{3}{8}(x-0.5)^2 + \frac{3}{32}$ for $u \in [0, 1]$ (see also Figure \ref{fig:sigma_TV} for $T=500$). The choice of the coefficients is driven by the requirement $\int_0^1 \sigma^2(u)du = 0.25^2$ which was introduced so that this simulation scenario is comparable to the ones with constant variance. The calculation of the critical values is also performed using the time-varying variance. All of the other parameters of the DGP remain the same. The results are presented in Table \ref{tab:sizepower_SV}.
 
 \end{enumerate}
 

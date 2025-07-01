@@ -488,6 +488,156 @@ repl <- function(rep_, n_ts_, t_len_, grid_, ijset_ = NULL, a_ = 0, sigma_ = 1,
   return(results)
 }
 
+#Function that simulates 3 covariates as VAR(3) process with the given
+#coefficients (a_x_mat_ and sigma_x_mat_),
+#the error terms as AR(1) also with the given coefficient a_ and sigma_,
+#the fixed effect term alpha_ as a normally distributed random vector,
+#N(0, Sigma_a_mat_), the time series as
+#y = alpha_ + beta_ %*% covariates + m_matrix_ + errors,
+#estimates the parameters, and then computes the test statistics
+repl_SV <- function(rep_, n_ts_, t_len_, grid_, ijset_ = NULL, a_ = 0,
+                    beta_ = NULL, a_x_vec_ = c(0, 0, 0), phi_ = 0,
+                    rho_ = 0, different_b_ = c(0),
+                    q_ = 25, r_ = 10, type_of_m_ = "", gaussian_sim = FALSE){
+  
+  library(MSinference)
+  library(dplyr)
+  
+  sigma_tv_vec <- -3/8 * ((1:t_len_)/t_len_ - 0.5)^2 + 3/32
+  
+  if (gaussian_sim){
+    z_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    z_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    sigma_vector  <- rep(1, n_ts_)
+    
+    for (i in 1:n_ts_){
+      z_matrix[, i]      <- rnorm(t_len_, 0, 1)
+      z_augm_matrix[, i] <- z_matrix[, i] - mean(z_matrix[, i])
+    }
+    
+    psi <- compute_statistics(data = z_augm_matrix,
+                              sigma_vec = sigma_vector,
+                              n_ts = n_ts_, ijset = ijset_, grid = grid_)
+    results <- c(as.vector(psi$stat_pairwise))
+    
+    # z_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    # z_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+    # 
+    # for (i in 1:n_ts_){
+    #   z_matrix[, i]      <- rnorm(t_len_, 0, sqrt(sigma_tv_vec))
+    #   z_augm_matrix[, i] <- z_matrix[, i] - mean(z_matrix[, i])
+    # }
+    # 
+    # psi <- compute_statistics(data = z_augm_matrix,
+    #                           sigma_vec = sqrt(sigma_tv_vec),
+    #                           n_ts = n_ts_, ijset = ijset_, grid = grid_)
+    # results <- c(as.vector(psi$stat_pairwise))
+  } else {
+    m_matrix        <- matrix(0, nrow = t_len_, ncol = n_ts_)    
+    y_matrices      <- list()
+    y_augm_matrices <- list()
+    sigmahat_list   <- list()
+    for (k in 1:length(different_b_)){
+      y_matrices[[k]]      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      y_augm_matrices[[k]] <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      sigmahat_list[[k]]   <- rep(NA, n_ts_)  
+    }
+    
+    error_matrix     <- matrix(0, nrow = t_len_, ncol = n_ts_)
+    error_matrix_tmp <- matrix(0, nrow = t_len_ + 10, ncol = n_ts_)
+        
+    library(mvtnorm)    
+    big_sigma_matrix       <- matrix(rho_, nrow = n_ts_, ncol = n_ts_)
+    diag(big_sigma_matrix) <- 1
+    alpha_vec              <- rmvnorm(1, mean = rep(0, n_ts_), sigma = big_sigma_matrix)
+    
+    if (!is.null(beta_)){
+      phi_matrix       <- matrix(phi_, nrow = 3, ncol = 3)
+      diag(phi_matrix) <- 1
+      a_matrix         <- diag(a_x_vec_)      
+      
+      for (i in 1:n_ts_){
+        eta      <- rnorm(t_len_ + 10, mean = 0, sd = 1)
+        eta_SV   <- c(rep(1, 10), sqrt(sigma_tv_vec)) * eta
+        nu       <- rmvnorm(t_len_ + 10, mean = c(0, 0, 0), sigma = phi_matrix)
+        x_matrix <- matrix(0, 3, t_len_ + 10)
+        
+        for (t in 2:(t_len_ + 10)){
+          x_matrix[, t] <- a_matrix %*% x_matrix[, t - 1] + nu[t, ]
+          error_matrix_tmp[t, i] <- a_ * error_matrix_tmp[t - 1, i] + eta_SV[t]
+        }
+        
+        error_matrix[, i] <- error_matrix_tmp[-(1:10), i]
+        x_matrix <- t(x_matrix[, -(1:10)])
+        
+        x_diff_1 <- x_matrix[, 1] - dplyr::lag(x_matrix[, 1], n = 1, default = NA)
+        x_diff_2 <- x_matrix[, 2] - dplyr::lag(x_matrix[, 2], n = 1, default = NA)
+        x_diff_3 <- x_matrix[, 3] - dplyr::lag(x_matrix[, 3], n = 1, default = NA)
+        
+        #Estimating beta
+        x_diff_tmp <- as.matrix(cbind(x_diff_1, x_diff_2, x_diff_3))[-1, ]
+        
+        k <- 1
+        for (b in different_b_){
+          m_matrix[, 1] <- bump((1:t_len_)/t_len_) * b
+          if ((type_of_m_ == "bump") & (b == 0)){
+            m_matrix[, i] <- bump((1:t_len_)/t_len_) * 0.25
+          }
+          y_matrices[[k]][, i] <- alpha_vec[i] + m_matrix[, i] + beta_ %*% t(x_matrix) + error_matrix[, i]
+          
+          #First differences
+          y_diff     <- y_matrices[[k]][, i] - dplyr::lag(y_matrices[[k]][, i], n = 1, default = NA)
+          y_diff_tmp <- as.matrix(y_diff)[-1, ]
+          
+          beta_hat_tmp       <- solve(t(x_diff_tmp) %*% x_diff_tmp) %*% t(x_diff_tmp) %*% y_diff_tmp
+          alpha_hat_tmp      <- mean(y_matrices[[k]][, i] - x_matrix %*% as.vector(beta_hat_tmp))
+          
+          y_augm_matrices[[k]][, i] <- y_matrices[[k]][, i] - x_matrix %*% as.vector(beta_hat_tmp) - alpha_hat_tmp
+          
+          AR.struc           <- estimate_lrv(data = y_augm_matrices[[k]][, i], q = q_,
+                                             r_bar = r_, p = 1)
+          sigma_hat_i        <- sqrt(AR.struc$lrv)
+          sigmahat_list[[k]][i] <- sigma_hat_i 
+          k <- k + 1
+        }
+      }
+    } else {
+      for (i in 1:n_ts_){
+        eta      <- rnorm(t_len_ + 10, mean = 0, sd = 1)
+        eta_SV   <- c(rep(1, 10), sqrt(sigma_tv_vec)) * eta
+
+        for (t in 2:(t_len_ + 10)){
+          error_matrix_tmp[t, i] <- a_ * error_matrix_tmp[t - 1, i] + eta_SV[t]
+        }
+        error_matrix[, i] <- error_matrix_tmp[-(1:10), i]
+        
+        k <- 1
+        for (b in different_b_){
+          m_matrix[, 1]        <- bump((1:t_len_)/t_len_) * b
+          y_matrices[[k]][, i] <- alpha_vec[i] + m_matrix[, i] + beta_ %*% t(x_matrix) + error_matrix[, i]
+          
+          alpha_hat_tmp             <- mean(y_matrices[[k]][, i])
+          y_augm_matrices[[k]][, i] <- y_matrices[[k]][, i] - alpha_hat_tmp
+          
+          AR.struc              <- estimate_lrv(data = y_augm_matrices[[k]][, i], q = q_,
+                                                r_bar = r_, p = 1)
+          sigma_hat_i           <- sqrt(AR.struc$lrv)
+          sigmahat_list[[k]][i] <- sigma_hat_i 
+          k <- k + 1
+        }
+      }
+    }
+    results <- c()
+    for (k in 1:length(different_b_)){
+      psi     <- compute_statistics(data = y_augm_matrices[[k]],
+                                    sigma_vec = sigmahat_list[[k]],
+                                    n_ts = n_ts_, ijset = ijset_, grid = grid_)    
+      results <- c(results, as.vector(psi$stat_pairwise))
+    }
+  }
+  return(results)
+}
+
 repl_spurious <- function(rep_, n_ts_, t_len_, grid1_, grid2_,
                           ijset1_ = NULL, ijset2_ = NULL, a_ = 0, sigma_ = 1,
                           beta_ = NULL, a_x_vec_ = c(0, 0, 0), phi_ = 0,
