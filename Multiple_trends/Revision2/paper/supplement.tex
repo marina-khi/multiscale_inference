@@ -102,11 +102,11 @@ The vector of fixed effects $\boldsymbol{\alpha} = (\alpha_1,\ldots,\alpha_n)^\t
 where $\rho = 0.25$ gives the correlation across $i$.
 %\footnote{As a robustness check, we have repeated the analysis for $\rho = 0.1$. However, as the results a very similar, we do not report them here.}
 %We assume that the covariates $\X_{it}$ and the error terms $\varepsilon_{js}$ are independent from each other for all $1 \leq i,j \leq n$ and $1 \leq t, s \leq T$. 
-To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ without loss of generality. To produce data under the alternative, we use the bump function
+To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ without loss of generality. As a robustness check, we consider another specification of the null hypothesis. In particular, we use the bump function
 \begin{align}
-m_1(u) =  b \cdot  \vartheta(u, 0.3, 0.1) - b  \cdot  \vartheta(u,0.7, 0.1)  \label{eq:bump-fct}
+m_i(u) =  b \cdot  \vartheta(u, 0.3, 0.1) - b  \cdot  \vartheta(u,0.7, 0.1)  \label{eq:bump-fct}
 \end{align}
-with $\vartheta(u,c,d) =  \ind \left\{\frac{|u - c|}{d}\leq 1 \right\} \left(1 - \frac{(u - c)^2}{d^2}\right)^2$ for $b \in \{ 0.25, 0.5, 0.75 \}$ (depicted in Figure \ref{fig:bump_function}) and let $m_i = 0$ for $i \neq 1$. Note that the normalisation constraint $\int_0^1 m_1(u) du = 0$ is directly satisfied in this case. For each simulation exercise, we draw $5000$ samples.
+with $\vartheta(u,c,d) =  \ind \left\{\frac{|u - c|}{d}\leq 1 \right\} \left(1 - \frac{(u - c)^2}{d^2}\right)^2$ for $b= 0.25$ (bump function for various values of $b$ is depicted in Figure \ref{fig:bump_function}). Note that the normalisation constraint $\int_0^1 m_i(u) du = 0$ is directly satisfied in this case. In what follows, we refer to this case as $H_0^{\text{bump}}$. To produce the data under the alternative, we also use the bump function \eqref{eq:bump-fct} with $b \in \{ 0.25, 0.5, 0.75 \}$ for $m_1$ and let $m_i = 0$ for $i \neq 1$.  For each simulation exercise, we draw $5000$ samples.
 
 
 \begin{figure}[t!]
@@ -115,7 +115,7 @@ with $\vartheta(u,c,d) =  \ind \left\{\frac{|u - c|}{d}\leq 1 \right\} \left(1 -
 \end{figure}
 
 
-Figure \ref{fig:bump_function} illustrates that the described simulation setup is quite challenging already without covariates and fixed effects. The black lines in the plot show the bump function $m_1$ for different heights of the bump $b \in \{0, 0.25, 0.5, 0.75\}$, where the value $b=0$ corresponds to the null $H_0$. The red lines show one realization of the time series $\{Y_{1t}^\circ:1 \le t \le T \}$ for $T=250$, where $Y_{1t}^\circ = m_1(\frac{t}{T}) + \varepsilon_{1t}$ is an idealized version of $Y_{1t}$ without covariates and fixed effects. The values $b=0.25,0.5,0.75$ correspond to three different alternatives. In particular, the larger the bump size $b$, the further away from the null is the corresponding alternative. For the smallest value $b=0.25$, the bump function is very difficult to detect since the noise level is very high, or put differently, since the signal-to-noise ratio is very small (as is clearly visible in the upper right panel of Figure \ref{fig:bump_function}). For $b=0.5$ and $b=0.75$, the signal-to-noise ratio slowly gets bigger, making it less difficult to detect the bump function. Nevertheless, even for $b=0.75$, there is substantial noise around the bump function. %, meaning that detection of the bump is still non-trivial. 
+Figure \ref{fig:bump_function} illustrates that the described simulation setup is quite challenging already without covariates and fixed effects. The black lines in the plot show the bump function $m_1$ for different heights of the bump $b \in \{0, 0.25, 0.5, 0.75\}$, where the value $b=0$ corresponds to the null $H_0$. The red lines show one realization of the time series $\{Y_{1t}^\circ:1 \le t \le T \}$ for $T=250$, where $Y_{1t}^\circ = m_1(\frac{t}{T}) + \varepsilon_{1t}$ is an idealized version of $Y_{1t}$ without covariates and fixed effects. The values $b=0.25,0.5,0.75$ correspond to three different specifications of $m_1$ under the alternative. In particular, the larger the bump size $b$, the further away $m_1$ is from the other functions $m_i, i \neq 1$. For the smallest value $b=0.25$, the bump function is very difficult to detect since the noise level is very high, or put differently, since the signal-to-noise ratio is very small (as is clearly visible in the upper right panel of Figure \ref{fig:bump_function}). For $b=0.5$ and $b=0.75$, the signal-to-noise ratio slowly gets bigger, making it less difficult to detect the bump function. Nevertheless, even for $b=0.75$, there is substantial noise around the bump function. %, meaning that detection of the bump is still non-trivial. 
 
 
 Our multiscale test is implemented as follows: The estimators $\widehat{\bfbeta}_i$ and $\widehat{\alpha}_i$ of the unknown parameters $\bfbeta_i$ and $\alpha_i$ are computed as described in Section~\ref{subsec:test:prep}.
@@ -133,8 +133,8 @@ We thus consider intervals $\mathcal{I}_{u, h} = [u-h, u+h]$ which contain $5, 1
 \renewcommand{\arraystretch}{1.2}  
 \footnotesize{
 \begin{center}
-\caption{Empirical size and power of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$.
-Each panel gives the results for a different bump height $b$, where $b = 0$ corresponds to the null and $b = 0.25,0.5,0.75$ to three different alternatives.}\label{tab:sizepower}
+\caption{Empirical size and (global) power of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$.
+Each panel gives the results for a different bump height $b$, where $b = 0$ corresponds to the null $H_0$ and $b = 0.25,0.5,0.75$ to three different alternatives.}\label{tab:sizepower}
 \begin{subtable}[b]{0.4\textwidth}
 \centering  
 \caption{$b=0$}
@@ -158,6 +158,25 @@ Each panel gives the results for a different bump height $b$, where $b = 0$ corr
 \end{center}}
 \end{table}
 
+\begin{table}[t!]
+\renewcommand{\arraystretch}{1.2}  
+\footnotesize{
+\begin{center}
+\caption{Empirical size of the multiscale test for two specifications of the null hypothesis, $H_0: m_i = 0$ for all $i$, and $H_0^{\text{bump}}:$ $m_i$ is a bump function from \eqref{eq:bump-fct} with $b=0.25$ for all $i$, calculated for different time series lengths $T$ and nominal sizes $\alpha$.}\label{tab:size2}
+\begin{subtable}[b]{0.4\textwidth}
+\centering  
+\caption{$H_0$}
+\input{../output/15_ts_25_25_size}
+\end{subtable}
+\begin{subtable}[b]{0.4\textwidth}
+\centering  
+\caption{$H_0^{\text{bump}}$}
+\input{../output/15_ts_25_25_size_bump_null}
+\end{subtable}
+\end{center}}
+\end{table}
+
+
 
 Table \ref{tab:sizepower} reports the simulation results, in particular, the empirical size and power of the multiscale test. Both the empirical size and the empirical power are computed as the number of simulations in which the test rejects the global null $H_0$ divided by the total number of simulations.
 %The left column of Table \ref{tab:sizepower} gives the results for the simulation setting with the correlation parameters $(\phi,\rho) = (0.1,0.1)$, the right column those for the setting with $(\phi,\rho) = (0.25,0.25)$. (We do not present the results for $(\phi,\rho) = (0.1,0.25)$ and $(\phi,\rho) = (0.25,0.1)$ as they are quite similar and do not bring additional insights.)
@@ -169,6 +188,130 @@ Inspecting panels (b)--(d), one can further see that the test has good power pro
 %there is considerable noise in the data. Even for the largest bump size $b=0.75$, the noise level is so high that our test is barely able to detect the bump and reject the null. 
 %For the smallest bump size $b = 0.25$ and time series length $T \in \{100,250\}$, the power is only moderate, reflecting the fact that the alternative with $b = 0.25$ is not very far away from the null.
 However, as we increase the time series length $T$, the power increases quickly. For $T=250$ and $b=0.5$, for instance, we already have power of over $95\%$ when $\alpha \ge 0.05$.
+
+Table \ref{tab:size2}\footnote{Note that the simulation results for the null hypothesis "$H_0: m_i = 0$ for all $i$" in panel (a) of Table \ref{tab:size2} are identical with those in Table \ref{tab:sizepower}. For ease of comparison, we have repeated these results as part of Table \ref{tab:size2}.} reports the empirical size of the multiscale test for two specification of the common trend under the null hypothesis, $H_0$ and $H_0^{\text{bump}}$. As can be seen, the numbers are a bit lower for the case of the bump function ($H_0^{\text{bump}}$) compared to the zero function ($H_0$). One of the possible reasons for that is loss of precision in the estimation of the long-run variance when the trend is present. In case of $H_0$, there is no trend, hence, the problem of estimating long-run variance becomes an easier one. Since our test depends on the estimator, such loss of precision results in more conservative size numbers in panel (b) compared to panel (a).
+
+Furthermore, since the empirical power as presented in Table \ref{tab:sizepower} can be considered "global" and is not suited to capture local testing capabilities which are one of the main advantages of our multiscale test, we compute further metrics -- specifically, further types of power -- which we think are more apt to capture such local testing capabilities. Specifically, suppose our test rejects the local null hypothesis $H_0^{[i,j]}(u,h)$ under which the trends $m_i$ and $m_j$ are identical on the interval $[u-h,u+h]$. We say that the test finds
+\begin{itemize}
+\item a \textbf{real difference} between $i$ and $j$ on $[u-h,u+h]$ if $H_0^{[i,j]}(u,h)$ is indeed violated (i.e., if the trends $m_i$ and $m_j$ are indeed different on $[u-h,u+h]$),
+\item a \textbf{spurious difference} between $i$ and $j$ on $[u-h,u+h]$ if $H_0^{[i,j]}(u,h)$ is not violated (i.e., if the trends $m_i$ and $m_j$ are the same on $[u-h,u+h]$). 
+\end{itemize}
+Notably, the concept of global power does not give any information about
+\begin{itemize}
+\item whether the found differences are real or spurious,
+\item which real differences between the trends have been found, in particular, whether all or only part of the real differences have been found.
+\end{itemize}
+We refine the concept of global power to give this kind of information. More specifically, we compute the following types of power in our simulation setup where the trends $m_2,\ldots,m_n$ are identical and $m_1$ differs from them only in the time period $\mathcal{I}^* = ([0.2, 0.4] \cup [0.6, 0.8])$:
+\begin{itemize}
+\item \textbf{real power$^{\boldsymbol{[1]}}$}: the percentage of simulation runs in which our test finds a real difference between $m_1$ and \textit{at least one} other trend $m_i$ [i.e., a difference between $m_1$ and another $m_i$ on an interval $[u-h, u+h]$ with $[u-h, u+h] \cap \mathcal{I}^* \neq \emptyset$]. 
+\item \textbf{real power$^{\boldsymbol{[50]}}$}: the percentage of simulation runs in which our test finds a real difference between $m_1$ and \textit{at least 50\%} of the other trends $m_i$ [i.e., a difference between $m_1$ and $m_i$ on an interval $[u-h, u+h]$ with $[u-h, u+h] \cap \mathcal{I}^* \neq \emptyset$ for at least $50\%$ of the other trends $i$]. 
+\item \textbf{real power$^{\boldsymbol{[100]}}$}: the percentage of simulation runs in which our test finds a real difference between $m_1$ and \textit{all} other trends $m_i$ [i.e., a difference between $m_1$ and $m_i$ on some interval $[u-h, u+h]$ with $[u-h, u+h] \cap \mathcal{I}^* \neq \emptyset$ for all $i \ne 1$]. 
+\item \textbf{spurious power}: the percentage of simulation runs in which our test finds at least one spurious difference.  
+\end{itemize}
+
+\begin{table}[t!]
+\renewcommand{\arraystretch}{1.2}  
+\footnotesize{
+\begin{center}
+\caption{Real power$^{[1]}$ of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$.
+Each panel gives the results for a different bump height $b$, where $b = 0.25,0.5,0.75$ corresponds to three different alternatives of $m_1$.}\label{tab:realpower1}
+\begin{subtable}[b]{0.32\textwidth}
+\centering  
+\caption{$b=0.25$}
+\input{../output/15_ts_25_25_actual_power_b_25}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\setcounter{subtable}{0}  
+\centering  
+\vspace{0.25cm} 
+\caption{$b=0.5$}
+\input{../output/15_ts_25_25_actual_power_b_50}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering  
+\vspace{0.25cm} \caption{$b=0.75$}
+\input{../output/15_ts_25_25_actual_power_b_75}
+\end{subtable}
+\end{center}}
+\end{table} 
+\begin{table}[h!]
+\renewcommand{\arraystretch}{1.2}  
+\footnotesize{
+\begin{center}
+\caption{Real power$^{{[50]}}$ of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$.
+Each panel gives the results for a different bump height $b$, where $b = 0.25,0.5,0.75$ corresponds to three different alternatives of $m_1$.}\label{tab:realpower50}
+\begin{subtable}[b]{0.32\textwidth}
+\centering  
+\caption{$b=0.25$}
+\input{../output/15_ts_25_25_majority_power_b_25}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\setcounter{subtable}{0}  
+\centering  
+\vspace{0.25cm} 
+\caption{$b=0.5$}
+\input{../output/15_ts_25_25_majority_power_b_50}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering  
+\vspace{0.25cm} \caption{$b=0.75$}
+\input{../output/15_ts_25_25_majority_power_b_75}
+\end{subtable}
+\end{center}}
+\end{table} 
+\begin{table}[h!]
+\renewcommand{\arraystretch}{1.2}  
+\footnotesize{
+\begin{center}
+\caption{Real power$^{[100]}$ of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$.
+Each panel gives the results for a different bump height $b$, where $b = 0.25,0.5,0.75$ corresponds to three different alternatives of $m_1$.}\label{tab:realpower100}
+\begin{subtable}[b]{0.32\textwidth}
+\centering  
+\caption{$b=0.25$}
+\input{../output/15_ts_25_25_full_power_b_25}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\setcounter{subtable}{0}  
+\centering  
+\vspace{0.25cm} 
+\caption{$b=0.5$}
+\input{../output/15_ts_25_25_full_power_b_50}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering  
+\vspace{0.25cm} \caption{$b=0.75$}
+\input{../output/15_ts_25_25_full_power_b_75}
+\end{subtable}
+\end{center}}
+\end{table} 
+\begin{table}[h!]
+\renewcommand{\arraystretch}{1.2}  
+\footnotesize{
+\begin{center}
+\caption{Spurious power of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$.
+Each panel gives the results for a different bump height $b$, where $b = 0.25,0.5,0.75$ corresponds to three different alternatives of $m_1$.}\label{tab:spuriouspower}
+\begin{subtable}[b]{0.32\textwidth}
+\centering  
+\caption{$b=0.25$}
+\input{../output/15_ts_25_25_spurious_power_b_25}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\setcounter{subtable}{0}  
+\centering  
+\vspace{0.25cm} 
+\caption{$b=0.5$}
+\input{../output/15_ts_25_25_spurious_power_b_50}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering  
+\vspace{0.25cm} \caption{$b=0.75$}
+\input{../output/15_ts_25_25_spurious_power_b_75}
+\end{subtable}
+\end{center}}
+\end{table} 
+
+
+The results for real power$^{[1]}$, real power$^{[50]}$, real power$^{[100]}$ and spurious power are presented in Tables \ref{tab:realpower1} -- \ref{tab:spuriouspower}. These tables jointly demonstrate that the proposed multiscale test (i) gains power very quickly as either the sample size $T$ or the signal strength $b$ increases, (ii) has notable local testing capabilities that range from “at least one correct detection” (Table \ref{tab:realpower1}) to the demanding “all pairwise differences found” (Table \ref{tab:realpower100}), and (iii) controls spurious rejections at or below nominal levels (Table \ref{tab:spuriouspower}). In particular, real power$^{[1]}$ (Table \ref{tab:realpower1}) exceeds $82\%$ for all nominal sizes $\alpha$ already for moderate sample sizes $T\geq 250$ and moderate signals $b\geq 0.5$, and approaches $100\%$ for larger $T$ or stronger signals. Real power$^{[50]}$ (Table \ref{tab:realpower50}) and real power$^{[100]}$ (Table \ref{tab:realpower100}) naturally require more information but still exceed $78\%$ for all nominal sizes $\alpha$ and $T=500$ and $b\geq 0.5$. Moreover, spurious detections (Table \ref{tab:spuriouspower}) stay are almost always below or at the nominal size $\alpha$, demonstrating control of false positives. These findings confirm the main property of our method: the test not only signals that trends differ but pinpoints where and between which series, without sacrificing size.
 
 
 \subsection{Robustness checks on the choice of tuning parameters}\label{subsec:sim:grid}

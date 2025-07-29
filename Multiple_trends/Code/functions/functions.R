@@ -503,7 +503,7 @@ repl_SV <- function(rep_, n_ts_, t_len_, grid_, ijset_ = NULL, a_ = 0,
   library(MSinference)
   library(dplyr)
   
-  sigma_tv_vec <- -3/8 * ((1:t_len_)/t_len_ - 0.5)^2 + 3/32
+  sigma_tv_vec <- -0.15 * ((1:t_len_)/t_len_ - 0.5)^2 + 0.075
   
   if (gaussian_sim){
     z_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)

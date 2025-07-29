@@ -54,9 +54,25 @@ u.upper1 <- 0.4
 u.lower2 <- 0.6
 u.upper2 <- 0.8
 
-##################################################
-#Calculating the size and power for a normal grid#
-##################################################
+t_SV <- 500
+
+filename = paste0("output/revision/SV_plot.pdf")
+pdf(filename, width = 3, height = 2, paper="special")
+
+#Setting the layout of the graphs
+par(cex = 1, tck = -0.025)
+par(mar = c(2, 2, 0, 0)) #Margins for each plot
+par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
+
+plot(x = (1:t_SV)/t_SV, xlim = c(0, 1),
+     y = -0.15 * ((1:t_SV)/t_SV - 0.5)^2 + 0.075, type = 'l', ylim = c(0, 0.08),
+     xlab = "", ylab = "", main = NULL, cex = 0.8)
+dev.off()
+
+
+######################################
+#Calculating different types of power#
+######################################
 
 actual_power_array_SV <- array(NA, dim = c(length(different_T),
                                         length(different_b),
@@ -180,7 +196,6 @@ for (t_len in different_T){
   }
 }
 
-
 #Output of the results
 for (b in different_b){
   l   <- match(b, different_b)
@@ -192,8 +207,8 @@ for (b in different_b){
                  ", for the following values of the parameters: n_ts = ", n_ts,
                  ", with ", n_rep, " simulations for calculating actual power and ", sim_runs,
                  " simulations to calculate the Gaussian quantiles. Furthermore, for the error process we have a = ",
-                 a, " and sigma = ", sigma, 
-                 ". For the covariate process a_1 = a_2 = a_3 = ", a_x_vec[1], " and phi = ", phi,
+                 a, " and time-varying sigma. For the covariate process a_1 = a_2 = a_3 = ",
+                 a_x_vec[1], " and phi = ", phi,
                  ". For the fixed effect, we have rho = ", rho,
                  ". The grid is normal")     
   write(line, file = filename, append = TRUE)
@@ -209,8 +224,8 @@ for (b in different_b){
                  ", for the following values of the parameters: n_ts = ", n_ts,
                  ", with ", n_rep, " simulations for calculating majority power and ", sim_runs,
                  " simulations to calculate the Gaussian quantiles. Furthermore, for the error process we have a = ",
-                 a, " and sigma = ", sigma, 
-                 ". For the covariate process a_1 = a_2 = a_3 = ", a_x_vec[1], " and phi = ", phi,
+                 a, " and time-varying sigma. For the covariate process a_1 = a_2 = a_3 = ",
+                 a_x_vec[1], " and phi = ", phi,
                  ". For the fixed effect, we have rho = ", rho,
                  ". The grid is normal")     
   write(line, file = filename, append = TRUE)
@@ -226,9 +241,112 @@ for (b in different_b){
                  ", for the following values of the parameters: n_ts = ", n_ts,
                  ", with ", n_rep, " simulations for calculating full power and ", sim_runs,
                  " simulations to calculate the Gaussian quantiles. Furthermore, for the error process we have a = ",
-                 a, " and sigma = ", sigma, 
-                 ". For the covariate process a_1 = a_2 = a_3 = ", a_x_vec[1], " and phi = ", phi,
+                 a, " and time-varying sigma. For the covariate process a_1 = a_2 = a_3 = ",
+                 a_x_vec[1], " and phi = ", phi,
                  ". For the fixed effect, we have rho = ", rho,
                  ". The grid is normal")     
   write(line, file = filename, append = TRUE)
 }
+
+
+##################
+#Calculating size#
+##################
+
+size_array_SV <- array(NA, dim = c(length(different_T), 1,
+                                   length(different_alpha)),
+                       dimnames = list(t = different_T,
+                                       b = c(0),
+                                       alpha = different_alpha))
+
+for (t_len in different_T){
+  set.seed(seed)
+  k <- match(t_len, different_T)
+  #Constructing the full grid for calculating the Gaussian quantiles
+  u_grid <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
+  h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
+  h_grid <- h_grid[h_grid > log(t_len) / t_len]
+  grid   <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
+  
+  #Calculating the Gaussian quantiles in parallel
+  tic()
+  cl <- makePSOCKcluster(numCores)
+  registerDoParallel(cl)
+  foreach (val = 1:sim_runs, .combine = "cbind") %dopar% {
+    source("functions/functions.R")
+    repl_SV(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
+            gaussian_sim = TRUE)
+    # Loop one-by-one using foreach
+  } -> simulated_pairwise_gaussian
+  stopCluster(cl)
+  toc()
+  
+  simulated_gaussian <- apply(simulated_pairwise_gaussian, 2, max)
+  
+  probs      <- seq(0.5, 0.995, by = 0.005)
+  quantiles  <- as.vector(quantile(simulated_gaussian, probs = probs))
+  quantiles  <- rbind(probs, quantiles)
+  
+  colnames(quantiles) <- NULL
+  rownames(quantiles) <- NULL
+  
+  quants <- as.vector(quantiles[2, ])
+  
+  #Calculating the true test statistics
+  tic()
+  cl <- makePSOCKcluster(numCores)
+  registerDoParallel(cl)
+  foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
+    source("functions/functions.R")
+    repl_SV(rep_ = val, n_ts_ = n_ts, t_len_ = t_len,
+            grid_ = grid,
+            a_ = a, beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi, rho_ = rho,
+            different_b_ = c(0),
+            q_ = q, r_ = r)
+    # Loop one-by-one using foreach
+  } -> simulated_pairwise_statistics
+  stopCluster(cl)
+  toc()
+  
+  statistic_values <- simulated_pairwise_statistics
+
+  size_vec <- c()
+
+  for (alpha in different_alpha){
+    if (sum(probs == (1 - alpha)) == 0)
+      pos <- which.min(abs(probs - (1 - alpha)))
+    if (sum(probs == (1 - alpha)) != 0)
+      pos <- which.max(probs == (1 - alpha))    
+    quant <- quants[pos]
+      
+    num_of_actual_rej <- 0
+
+    for (val in 1:n_rep){
+      tmp         <- matrix(statistic_values[, val], nrow = n_ts, ncol = n_ts)
+      num_of_rej  <- sum(tmp[1, ] > quant)
+      if (num_of_rej > 0)   {num_of_actual_rej   <- num_of_actual_rej + 1}
+    }
+    size_vec <- c(size_vec, num_of_actual_rej/n_rep)
+
+    cat("Ratio of incorrect rejections in at least one case is ",
+        num_of_actual_rej/n_rep, "with alpha = ", alpha,
+        "and T = ", t_len, "\n")
+    }
+    
+    #Storing the results in a 3D array
+    size_array_SV[k, 1, ] <- size_vec
+}
+
+#Output of the results
+tmp <- as.matrix(size_array_SV[, 1, ])
+filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_size_SV.tex")
+output_matrix(tmp, filename, numcols_ = 4)
+line <- paste0("%This simulation was done for the seed ", seed,
+               ", for the following values of the parameters: n_ts = ", n_ts,
+               ", with ", n_rep, " simulations for calculating size and ", sim_runs,
+               " simulations to calculate the Gaussian quantiles. Furthermore, for the error process we have a = ",
+               a, " and time-varying sigma. For the covariate process a_1 = a_2 = a_3 = ",
+               a_x_vec[1], " and phi = ", phi,
+               ". For the fixed effect, we have rho = ", rho,
+               ". The grid is normal")     
+write(line, file = filename, append = TRUE)

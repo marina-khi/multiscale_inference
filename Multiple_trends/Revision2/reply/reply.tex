@@ -147,223 +147,6 @@ Thank you very much for the careful reading of our manuscript and the interestin
 
 Although simulation results are primarily in the Supplement due to space constraints, we have highlighted the key findings of the practical relevance in the main text to better showcase our method’s local testing capabilities (see p. ...). {\color{red}Marina: I have not done that.}
 
-We agree that the global size does not really illustrate local testing capacities, hence, we also calculate the following values:
-\begin{enumerate}
-	\item \textbf{actual} power, i.e., the percentage of simulation runs in which our test indicates difference between $m_1$ and \textit{some} $m_i$ for $i = 2, \ldots, n$ on some interval $[u-h, u+h]$ where the difference is indeed present, that is, on some interval $[u-h, u+h]$ such that $[u-h, u+h] \cap ([0.2, 0.4] \cup [0.6, 0.8]) \neq \emptyset$. The values of the actual power for different simulation scenarios are presented in Table \ref{tab:actualpower};
-	\item \textbf{majority} power, i.e., the percentage of simulation runs in which our test indicates difference between $m_1$ and \textit{most of} $m_i$ for $i = 2, \ldots, n$ (in our case, at least $7$) on some interval $[u-h, u+h]$ where the difference is indeed present, that is, on some interval $[u-h, u+h]$ such that $[u-h, u+h] \cap ([0.2, 0.4] \cup [0.6, 0.8]) \neq \emptyset$. The values of the majority power for different simulation scenarios are presented in Table \ref{tab:majoritypower};
-	\item \textbf{full} power, i.e., the percentage of simulation runs in which our test indicates difference between $m_1$ and \textit{all} $m_i$ for $i = 2, \ldots, n$ on some interval $[u-h, u+h]$ where the difference is indeed present, that is, on some interval $[u-h, u+h]$ such that $[u-h, u+h] \cap ([0.2, 0.4] \cup [0.6, 0.8]) \neq \emptyset$. The values of the full power for different simulation scenarios are presented in Table \ref{tab:fullpower};
-	\item \textbf{spurious} power, i.e., the percentage of simulation runs in which our test indicates difference either between $m_1$ and \textit{some} $m_i$ for $i = 2, \ldots, n$ on some interval $[u-h, u+h]$ where the difference is \textit{not} present, that is, on some interval $[u-h, u+h]$ such that $[u-h, u+h] \cap ([0.2, 0.4] \cup [0.6, 0.8]) = \emptyset$, or between $m_i$ and $m_j$ for some $i, j = 2, \ldots, n$ anywhere on the interval $[0, 1]$. The values of the actual power for different simulation scenarios are presented in Table \ref{tab:spuriouspower}.
-\end{enumerate}
-
-	 {\color{red}Marina: The power numbers actually look pretty good, we can report them in the simulation study instead of the global power (given in Table \ref{tab:sizepower} for comparison).}
-
-We have also included size simulation results with a bump function under the null $H_0: m_1 = \ldots = m_n$ instead of a zero function. Specifically, we assume that under the null, all $m_i$ are generated according to the following specification:
-\begin{align*}
-m_i(u) =  b \cdot  \vartheta(u, 0.3, 0.1) - b  \cdot  \vartheta(u,0.7, 0.1) \quad \forall i = 1, \ldots, n,
-\end{align*}
-with $\vartheta(u,c,d) =  \ind \left\{\frac{|u - c|}{d}\leq 1 \right\} \left(1 - \frac{(u - c)^2}{d^2}\right)^2$ for $b = 0.25$. The empirical size for both cases (with zero and bump functions under the null, respectively) is presented in Table \ref{tab:sizes}. {\color{red}Marina: The size numbers are a bit more conservative, it seems that the convergence is slower which can be explained by the following. I have also added how precise we are estimating the coefficients and the long-run variance. The results for various sample sizes $T=100, 250, 500$ and two different specifications of the null function (zero functions and bump function as specified above.) are presented in Figures \ref{fig:hist_coefficients:zero} - \ref{fig:hist_lrv:bump}. It is pretty clear that the estimation of he long-run variance is much less precise when we are considering the bump function instead of the zero function. The convergence to the true value as the sample size grows larger is visible but quite slow still.}
-
-
-\begin{table}[t!]
-\renewcommand{\arraystretch}{1.2}  
-\footnotesize{
-\begin{center}
-\caption{Actual power of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$.
-Each panel gives the results for a different bump height $b$, where $b = 0.25,0.5,0.75$ corresponds to three different alternatives of $m_1$.}\label{tab:actualpower}
-\begin{subtable}[b]{0.32\textwidth}
-\centering  
-\caption{$b=0.25$}
-\input{../output/15_ts_25_25_actual_power_b_25}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\setcounter{subtable}{0}  
-\centering  
-\vspace{0.25cm} 
-\caption{$b=0.5$}
-\input{../output/15_ts_25_25_actual_power_b_50}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\centering  
-\vspace{0.25cm} \caption{$b=0.75$}
-\input{../output/15_ts_25_25_actual_power_b_75}
-\end{subtable}
-\end{center}}
-\end{table} 
-
-\begin{table}[h]
-\renewcommand{\arraystretch}{1.2}  
-\footnotesize{
-\begin{center}
-\caption{Majority power of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$.
-Each panel gives the results for a different bump height $b$, where $b = 0.25,0.5,0.75$ corresponds to three different alternatives of $m_1$.}\label{tab:majoritypower}
-\begin{subtable}[b]{0.32\textwidth}
-\centering  
-\caption{$b=0.25$}
-\input{../output/15_ts_25_25_majority_power_b_25}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\setcounter{subtable}{0}  
-\centering  
-\vspace{0.25cm} 
-\caption{$b=0.5$}
-\input{../output/15_ts_25_25_majority_power_b_50}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\centering  
-\vspace{0.25cm} \caption{$b=0.75$}
-\input{../output/15_ts_25_25_majority_power_b_75}
-\end{subtable}
-\end{center}}
-\end{table} 
-
-\begin{table}[h]
-\renewcommand{\arraystretch}{1.2}  
-\footnotesize{
-\begin{center}
-\caption{Full power of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$.
-Each panel gives the results for a different bump height $b$, where $b = 0.25,0.5,0.75$ corresponds to three different alternatives of $m_1$.}\label{tab:fullpower}
-\begin{subtable}[b]{0.32\textwidth}
-\centering  
-\caption{$b=0.25$}
-\input{../output/15_ts_25_25_full_power_b_25}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\setcounter{subtable}{0}  
-\centering  
-\vspace{0.25cm} 
-\caption{$b=0.5$}
-\input{../output/15_ts_25_25_full_power_b_50}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\centering  
-\vspace{0.25cm} \caption{$b=0.75$}
-\input{../output/15_ts_25_25_full_power_b_75}
-\end{subtable}
-\end{center}}
-\end{table} 
-
-\begin{table}[t!]
-\renewcommand{\arraystretch}{1.2}  
-\footnotesize{
-\begin{center}
-\caption{Spurious power of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$.
-Each panel gives the results for a different bump height $b$, where $b = 0.25,0.5,0.75$ corresponds to three different alternatives of $m_1$.}\label{tab:spuriouspower}
-\begin{subtable}[b]{0.32\textwidth}
-\centering  
-\caption{$b=0.25$}
-\input{../output/15_ts_25_25_spurious_power_b_25}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\setcounter{subtable}{0}  
-\centering  
-\vspace{0.25cm} 
-\caption{$b=0.5$}
-\input{../output/15_ts_25_25_spurious_power_b_50}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\centering  
-\vspace{0.25cm} \caption{$b=0.75$}
-\input{../output/15_ts_25_25_spurious_power_b_75}
-\end{subtable}
-\end{center}}
-\end{table} 
-
-\begin{table}[t!]
-\setcounter{table}{4}
-\renewcommand{\arraystretch}{1.2}  
-\footnotesize{
-\begin{center}
-\caption{Empirical size of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$ for different specification of $m_i$ under the null. The left panel gives the results for $m_i = 0$ for all $i$, whereas the right panel presents the results for $m_i$ being a bump function with height $0.25$. {\color{red}Marina: the left panel is one of the panels from the Supplement.}}\label{tab:sizes}
-\begin{subtable}[b]{0.4\textwidth}
-\centering  
-\caption{Zero function}
-\input{../output/15_ts_25_25_size}
-\end{subtable}
-\begin{subtable}[b]{0.4\textwidth}
-\centering  
-\caption{Bump function}
-\input{../output/15_ts_25_25_size_bump_null}
-\end{subtable}
-\end{center}}
-\end{table}
-
-\begin{table}[t!]
-\setcounter{table}{5}  
-\renewcommand{\arraystretch}{1.2}  
-\footnotesize{
-\begin{center}
-\caption{Empirical size and power of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$.
-Each panel gives the results for a different bump height $b$, where $b = 0$ corresponds to the null and $b = 0.25,0.5,0.75$ to three different alternatives. {\color{red}Marina: these are the tables from the Supplement.}}\label{tab:sizepower}
-\begin{subtable}[b]{0.4\textwidth}
-\centering  
-\caption{$b=0$}
-\input{../output/15_ts_25_25_size}
-\end{subtable}
-\begin{subtable}[b]{0.4\textwidth}
-\centering  
-\caption{$b=0.25$}
-\input{../output/15_ts_25_25_power_b_25}
-\end{subtable}
-\begin{subtable}[b]{0.4\textwidth}
-\centering  
-\vspace{0.25cm} \caption{$b=0.5$}
-\input{../output/15_ts_25_25_power_b_50}
-\end{subtable}
-\begin{subtable}[b]{0.4\textwidth}
-\centering  
-\vspace{0.25cm} \caption{$b=0.75$}
-\input{../output/15_ts_25_25_power_b_75}
-\end{subtable}
-\end{center}}
-\end{table}
-
-
-\begin{figure}[p]
-%\renewcommand{\arraystretch}{1.2}
-\footnotesize{
-\begin{center}
-\caption{Histogram of the estimated coefficients $\beta_1$, $\beta_2$ and $\beta_3$ under the null of $m_i = 0$ for all $i$.}\label{fig:hist_coefficients:zero}
-\begin{subfigure}[b]{\textwidth}
-    \centering
-    \includegraphics[scale=0.33]{../output/beta_histogram_zero_function_T_100_b_0.pdf}
-    \caption{$T= 100$}
-    \end{subfigure}
-\begin{subfigure}[b]{\textwidth}
-    \centering
-    \includegraphics[scale=0.33]{../output/beta_histogram_zero_function_T_250_b_0.pdf}
-    \caption{$T= 250$}
-    \end{subfigure}
-\begin{subfigure}[b]{\textwidth}
-    \centering
-    \includegraphics[scale=0.33]{../output/beta_histogram_zero_function_T_500_b_0.pdf}
-    \caption{$T= 500$}
-    \end{subfigure}
-    \end{center}}
-\end{figure}
-
-\begin{figure}[p]
-%\renewcommand{\arraystretch}{1.2}
-\footnotesize{
-\begin{center}
-\caption{Histogram of the estimated coefficients $\beta_1$, $\beta_2$ and $\beta_3$ under the null of $m_i$ being the bump function.}\label{fig:hist_coefficients:bump}
-\begin{subfigure}[b]{\textwidth}
-    \centering
-    \includegraphics[scale=0.33]{../output/beta_histogram_bump_function_T_100_b_0.pdf}
-    \caption{$T= 100$}
-    \end{subfigure}
-\begin{subfigure}[b]{\textwidth}
-    \centering
-    \includegraphics[scale=0.33]{../output/beta_histogram_bump_function_T_250_b_0.pdf}
-    \caption{$T= 250$}
-    \end{subfigure}
-\begin{subfigure}[b]{\textwidth}
-    \centering
-    \includegraphics[scale=0.33]{../output/beta_histogram_bump_function_T_500_b_0.pdf}
-    \caption{$T= 500$}
-    \end{subfigure}
-    \end{center}}
-\end{figure}
-
 \begin{figure}[t]
 %\renewcommand{\arraystretch}{1.2}
 \footnotesize{
@@ -424,7 +207,7 @@ We have added the following naive competitor that is based on the uniform confid
 \item For each pairwise comparison $(i, j)$, we consider the null hypothesis rejected if there is $t \in \{1, \ldots, T\}$ with a condition that $t/T \in [0.05, 0.95]$ (since the estimation procedure proposed in \cite{Kim2016} has poor performance at the boundaries, we have decided to exclude them from analysis) such that the UCBs for $m_i(t/T)$ and $m_j(t/T)$ do not overlap.
 \item We do not apply any correction for the multiple testing problem.
 \item We consider $\alpha = 0.05$.
-\item We calculate how many times we reject the null for this naive competitor. The results are presented in Table \ref{tab:sizepower_UCB}. {\color{red} Marina: we are reporting here the global power for the competitor which is not super comparable to the other types of power that we have. On the other hand, even this power is still worse than our actual power. What do you think?}
+\item We calculate how many times we reject the null for this naive competitor. The results are presented in Table \ref{tab:sizepower_UCB}.
 \end{itemize}
 
 For the smallest sampel size $T=100$, the UCBs for two trend functions remain relatively wide compared to the strength of the signal so that we almost never detect any differences. For larger sample sizes ($T=250, 500$), this naive compatitor is able to detect the differences for the strong sygnal. However, we should point out that we did not account for multiple testing here and we expect that with Bonferroni correction, the UCBs will become much wider so that even the strongest will not be detectable. 
@@ -435,7 +218,7 @@ Examples of two UCBs for $T=500$ and different values of $b$ are presented in Fi
 \setcounter{table}{7}
 \renewcommand{\arraystretch}{1.2}  
 \begin{center}
-\caption{Empirical size and power of the naive competitor for different time series lengths $T$ and bump heights $b$, where $b = 0$ corresponds to the null and $b = 0.25,0.5,0.75$ to three different alternatives}\label{tab:sizepower_UCB}
+\caption{Empirical size and power of the naive competitor from \cite{Kim2016} for $\alpha = 0.05$ for different time series lengths $T$ and bump heights $b$, where $b = 0$ corresponds to the null and $b = 0.25,0.5,0.75$ to three different alternatives.}\label{tab:sizepower_UCB}
 \centering  
 \input{../output/15_ts_UCB}
 \end{center}
@@ -461,7 +244,7 @@ Examples of two UCBs for $T=500$ and different values of $b$ are presented in Fi
 %\renewcommand{\arraystretch}{1.2}
 \footnotesize{
 \begin{center}
-\caption{An example of two uniform confidence bands for $T=500$ and $b=0.25, 0.50, 0.75$.}\label{fig:UCB}
+\caption{An example of the uniform confidence bands for two time series $i=1$ and $ j \in \{2, \ldots, 15\}$ for $T=500$ and $b=0.25, 0.50, 0.75$.}\label{fig:UCB}
 \begin{subfigure}[b]{0.31\textwidth}
     \centering
     \includegraphics[scale=0.33]{../output/UCB_plot_with_T_500_and_b_25.pdf}
@@ -483,7 +266,107 @@ Examples of two UCBs for $T=500$ and different values of $b$ are presented in Fi
 
 \item {\color{blue}\textit{Stochastic volatility (SV) is widely important in the types of applications that the authors mention. Yet the authors 1) claim that extensions to SV would be challenging, 2) elect not to consider any simulation designs with SV to examine robustness, and 3) claim that SV can be handled with log-transformations (and then using the same mean models as proposed). Perhaps 1) is true, but 2) is important based on the claims in the paper and the relevance for this journal. Finally, 3) is not correct for the most widely-used SV models.}}
 
-In order to better mimc behaviour of the stochastic volatility, we have included size and power simulation results with time-varying error variance. Specifically, we assume that for each $i$, the idiosyncratic error process $\{\varepsilon_{it}: 1 \le t \le T\}$ follows the AR(1) model $\varepsilon_{it} = a \varepsilon_{i t-1} + \sigma(t/T)\eta_{it}$, where $a = 0.25$, the innovations $\eta_{it}$ are i.i.d.\ normally distributed with mean $0$ and standard deviation $1$ and $\sigma^2(u) = -\frac{3}{8}(x-0.5)^2 + \frac{3}{32}$ for $u \in [0, 1]$ (see also Figure \ref{fig:sigma_TV} for $T=500$). The choice of the coefficients is driven by the requirement $\int_0^1 \sigma^2(u)du = 0.25^2$ which was introduced so that this simulation scenario is comparable to the ones with constant variance. The calculation of the critical values is also performed using the time-varying variance. All of the other parameters of the DGP remain the same. The results are presented in Table \ref{tab:sizepower_SV}.
+\begin{figure}[h]
+%\renewcommand{\arraystretch}{1.2}
+\footnotesize{
+\begin{center}
+\caption{Time-varying error variance $\sigma^2(u)$ for $u \in [0, 1]$.}\label{fig:SV_plot}
+    \centering
+    \includegraphics{../output/SV_plot.pdf}
+    \end{center}}
+\end{figure}
+
+\begin{table}[t!]
+\renewcommand{\arraystretch}{1.2}  
+\footnotesize{
+\begin{center}
+\caption{Empirical size of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$ in case of time-varying error variance.}\label{tab:size_SV}
+\centering  
+\input{../output/15_ts_25_25_size_SV}
+\end{center}}
+\end{table}
+
+\begin{table}[t!]
+\renewcommand{\arraystretch}{1.2}  
+\footnotesize{
+\begin{center}
+\caption{Actual power of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$ in case of time-varying error variance.
+Each panel gives the results for a different bump height $b$, where $b = 0.25,0.5,0.75$ corresponds to three different alternatives of $m_1$.}\label{tab:actualpower_SV}
+\begin{subtable}[b]{0.32\textwidth}
+\centering  
+\caption{$b=0.25$}
+\input{../output/15_ts_25_25_actual_power_b_25_SV}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\setcounter{subtable}{0}  
+\centering  
+\vspace{0.25cm} 
+\caption{$b=0.5$}
+\input{../output/15_ts_25_25_actual_power_b_50_SV}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering  
+\vspace{0.25cm} \caption{$b=0.75$}
+\input{../output/15_ts_25_25_actual_power_b_75_SV}
+\end{subtable}
+\end{center}}
+\end{table} 
+
+\begin{table}[h]
+\renewcommand{\arraystretch}{1.2}  
+\footnotesize{
+\begin{center}
+\caption{Majority power of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$ in case of time-varying error variance.
+Each panel gives the results for a different bump height $b$, where $b = 0.25,0.5,0.75$ corresponds to three different alternatives of $m_1$.}\label{tab:majoritypower_SV}
+\begin{subtable}[b]{0.32\textwidth}
+\centering  
+\caption{$b=0.25$}
+\input{../output/15_ts_25_25_majority_power_b_25_SV}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\setcounter{subtable}{0}  
+\centering  
+\vspace{0.25cm} 
+\caption{$b=0.5$}
+\input{../output/15_ts_25_25_majority_power_b_50_SV}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering  
+\vspace{0.25cm} \caption{$b=0.75$}
+\input{../output/15_ts_25_25_majority_power_b_75_SV}
+\end{subtable}
+\end{center}}
+\end{table} 
+
+\begin{table}[h]
+\renewcommand{\arraystretch}{1.2}  
+\footnotesize{
+\begin{center}
+\caption{Full power of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$ in case of time-varying error variance.
+Each panel gives the results for a different bump height $b$, where $b = 0.25,0.5,0.75$ corresponds to three different alternatives of $m_1$.}\label{tab:fullpower_SV}
+\begin{subtable}[b]{0.32\textwidth}
+\centering  
+\caption{$b=0.25$}
+\input{../output/15_ts_25_25_full_power_b_25_SV}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\setcounter{subtable}{0}  
+\centering  
+\vspace{0.25cm} 
+\caption{$b=0.5$}
+\input{../output/15_ts_25_25_full_power_b_50_SV}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\centering  
+\vspace{0.25cm} \caption{$b=0.75$}
+\input{../output/15_ts_25_25_full_power_b_75_SV}
+\end{subtable}
+\end{center}}
+\end{table} 
+
+In order to better mimic behaviour of the stochastic volatility, we have included size and power simulation results with time-varying error variance. Specifically, we assume that for each $i$, the idiosyncratic error process $\{\varepsilon_{it}: 1 \le t \le T\}$ follows the AR(1) model $\varepsilon_{it} = a \varepsilon_{i t-1} + \sigma(t/T)\eta_{it}$, where $a = 0.25$, the innovations $\eta_{it}$ are i.i.d.\ normally distributed with mean $0$ and standard deviation $1$ and $\sigma^2(u) = -0.15(u-0.5)^2 + 0.075$ for $u \in [0, 1]$ (see also Figure \ref{fig:SV_plot} for $T=500$). The choice of the coefficients is driven by the requirement $\int_0^1 \sigma^2(u)du = 0.25^2$ that was introduced so that this simulation scenario is comparable to the ones with constant variance. The calculation of the critical values is also performed using the time-varying variance. All of the other parameters of the DGP remain the same. The results are presented in Tables \ref{tab:size_SV} - \ref{tab:fullpower_SV}.
+
+
 
 \end{enumerate}
 
