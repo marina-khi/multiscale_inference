@@ -549,6 +549,22 @@ Inspecting the power numbers in panels (b) and (c), one can further see that in 
 
 There are of course other procedures besides the SiZer test of \cite{Park2009} that can be regarded as potential competitors of our test. The main merit of our method is that we can perform inference uniformly over all locations $u$ and bandwidths (or scales) $h$ in the grid $\mathcal{G}_T$ and over all pairs of time series $(i,j)$. The potential competitors we are aware of do not have this uniformity property. Specifically, they are not uniform over bandwidths $h$ and usually also not over pairs of time series $(i,j)$. Hence, most probably, we will see a very similar picture when comparing these methods with ours: they will be much too liberal. In this sense, the above comparison with SiZer is prototypical. 
 
+\subsection{Comparison of our test with naive competitor} 
+
+In this section, we compare our method with a simple naive competitor that is based on the uniform confidence bands (UCB) from \cite{Kim2016}. For our comparison, we consider the model $Y_{it} = m_i(\frac{t}{T}) + \bfbeta_i^\top \X_{it} +  \varepsilon_{it}$ without the fixed effects since the specification in \cite{Kim2016} does not allow for fixed effects. Other than that, the simulation setup is as specified in Section \ref{subsec:sim:main}
+
+\begin{itemize}
+\item For each of the time series $i = 1, \ldots, n$, we calculate the UCB as described in \cite{Kim2016} using bandwidth $0.2$. {\color{red}Marina: optimal bandwidth using cross-validation was not that easy to calculate and the theoretical optimal bandwidths were $0.4, 0.33, 0.29$ for $T=100, 250, 500$, respectively.}
+\item For each pairwise comparison $(i, j)$, we consider the null hypothesis rejected if there is $t \in \{1, \ldots, T\}$ with a condition that $t/T \in [0.05, 0.95]$ (since the estimation procedure proposed in \cite{Kim2016} has poor performance at the boundaries, we have decided to exclude them from analysis) such that the UCBs for $m_i(t/T)$ and $m_j(t/T)$ do not overlap.
+\item We do not apply any correction for the multiple testing problem.
+\item We consider $\alpha = 0.05$.
+\item We calculate how many times we reject the null for this naive competitor. The results are presented in Table \ref{tab:sizepower_UCB}.
+\end{itemize}
+
+For the smallest sampel size $T=100$, the UCBs for two trend functions remain relatively wide compared to the strength of the signal so that we almost never detect any differences. For larger sample sizes ($T=250, 500$), this naive compatitor is able to detect the differences for the strong sygnal. However, we should point out that we did not account for multiple testing here and we expect that with Bonferroni correction, the UCBs will become much wider so that even the strongest will not be detectable. 
+
+Examples of two UCBs for $T=500$ and different values of $b$ are presented in Figure \ref{fig:UCB}.
+
 
 \subsection{Performance of the clustering algorithm}\label{subsec:sim:clustering}
 
