@@ -258,22 +258,22 @@ for (t_len in different_T_plotting){
     par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
 
     plot(x = grid, xlim = c(0, 1),
-         y = estimated_trend_UCB[[k]][lower_boundary:upper_boundary, 1], type = 'l', col = 'red', ylim = c(-1.6, 1.6),
+         y = estimated_trend_UCB[[k]][lower_boundary:upper_boundary, 1], type = 'l', col = 'red', ylim = c(-1.2, 1.2),
          xlab = "", ylab = "", main = NULL, cex = 0.8)
     lines(x = grid,
           y = upper_UCB[[k]][lower_boundary:upper_boundary, 1], type = "l",
-          col = "red")
+          col = "red", lty = 2)
     lines(x = grid,
           y = lower_UCB[[k]][lower_boundary:upper_boundary, 1], type = "l",
-          col = "red")
+          col = "red", lty = 2)
     lines(x = grid,
           y = estimated_trend_UCB[[k]][lower_boundary:upper_boundary, 2], type = 'l', col = 'blue')
     lines(x = grid,
           y = upper_UCB[[k]][lower_boundary:upper_boundary, 2], type = "l",
-          col = "blue")
+          col = "blue", lty = 2)
     lines(x = grid,
           y = lower_UCB[[k]][lower_boundary:upper_boundary, 2], type = "l",
-          col = "blue")
+          col = "blue", lty = 2)
     dev.off()
   }
 }
