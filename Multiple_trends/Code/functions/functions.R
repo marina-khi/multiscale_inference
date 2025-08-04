@@ -369,7 +369,8 @@ produce_plots_hp <- function(results, data_i, data_j,
 repl <- function(rep_, n_ts_, t_len_, grid_, ijset_ = NULL, a_ = 0, sigma_ = 1,
                  beta_ = NULL, a_x_vec_ = c(0, 0, 0), phi_ = 0,
                  rho_ = 0, different_b_ = c(0),
-                 q_ = 25, r_ = 10, type_of_m_ = "", gaussian_sim = FALSE){
+                 q_ = 25, r_ = 10, type_of_m_ = "", bump_height_ = 0,
+                 gaussian_sim = FALSE){
   
   library(MSinference)
   library(dplyr)
@@ -435,7 +436,7 @@ repl <- function(rep_, n_ts_, t_len_, grid_, ijset_ = NULL, a_ = 0, sigma_ = 1,
         for (b in different_b_){
           m_matrix[, 1] <- bump((1:t_len_)/t_len_) * b
           if ((type_of_m_ == "bump") & (b == 0)){
-            m_matrix[, i] <- bump((1:t_len_)/t_len_) * 0.25
+            m_matrix[, i] <- bump((1:t_len_)/t_len_) * bump_height_
           }
           y_matrices[[k]][, i] <- alpha_vec[i] + m_matrix[, i] + beta_ %*% t(x_matrix) + error_matrix[, i]
 

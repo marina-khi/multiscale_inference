@@ -99,6 +99,7 @@ size_and_power_calculations(grid_type_ = "normal", type_of_m_ = "",
 
 seed <- 111222333
 size_and_power_calculations(grid_type_ = "normal", type_of_m_ = "bump",
+                            bump_height_ = 0.25,
                             seed_ = seed, n_ts_ = n_ts,
                             beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
                             a_ = a, sigma_ = sigma,
@@ -108,7 +109,36 @@ size_and_power_calculations(grid_type_ = "normal", type_of_m_ = "bump",
                             different_alpha_ = different_alpha,
                             different_b_ = different_b,
                             q_ = q, r_ = r, numCores_ = numCores,
-                            filename_ext_ = "_bump_null")
+                            filename_ext_ = "_bump025_null")
+
+seed <- 123454321
+size_and_power_calculations(grid_type_ = "normal", type_of_m_ = "bump",
+                            bump_height_ = 0.5,
+                            seed_ = seed, n_ts_ = n_ts,
+                            beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
+                            a_ = a, sigma_ = sigma,
+                            rho_ = rho,
+                            n_rep_ = n_rep, sim_runs_ = sim_runs,
+                            different_T_ = different_T,
+                            different_alpha_ = different_alpha,
+                            different_b_ = different_b,
+                            q_ = q, r_ = r, numCores_ = numCores,
+                            filename_ext_ = "_bump050_null")
+
+seed <- 111222333
+size_and_power_calculations(grid_type_ = "normal", type_of_m_ = "bump",
+                            bump_height_ = 0.75,
+                            seed_ = seed, n_ts_ = n_ts,
+                            beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
+                            a_ = a, sigma_ = sigma,
+                            rho_ = rho,
+                            n_rep_ = n_rep, sim_runs_ = sim_runs,
+                            different_T_ = different_T,
+                            different_alpha_ = different_alpha,
+                            different_b_ = different_b,
+                            q_ = q, r_ = r, numCores_ = numCores,
+                            filename_ext_ = "_bump075_null")
+
 
 ##################################################
 #Once more for dense grid                        #
@@ -117,6 +147,7 @@ size_and_power_calculations(grid_type_ = "normal", type_of_m_ = "bump",
 n_rep    <- 1000 #number of simulations for calculating size and power
 sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
 
+seed <- 111222333
 size_and_power_calculations(grid_type_ = "dense", type_of_m_ = "",
                             seed_ = seed, n_ts_ = n_ts,
                             beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
