@@ -37,7 +37,7 @@ n_rep    <- 5000 #number of simulations for calculating size and power
 sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
 
 #Different parameters
-different_T     <- c(100, 250, 500) #Different lengths of time series  
+different_T     <- c(100, 250) #Different lengths of time series  
 different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
 #different_b     <- c(0, 0.25, 0.5, 0.75) #Zero is for calculating the size
 different_b     <- c(0) #Zero is for calculating the size
@@ -81,7 +81,7 @@ numCores  <- round(parallel::detectCores() * .80)
 #Calculating the size and power for a normal grid#
 ##################################################
 
-size_and_power_calculations(grid_type_ = "normal", type_of_m_ = "",
+size_and_power_calculations(grid_type_ = "normal", bump_height_ = 0,
                             seed_ = seed, n_ts_ = n_ts,
                             beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
                             a_ = a, sigma_ = sigma,
@@ -98,7 +98,7 @@ size_and_power_calculations(grid_type_ = "normal", type_of_m_ = "",
 ####################################################################################
 
 seed <- 111222333
-size_and_power_calculations(grid_type_ = "normal", type_of_m_ = "bump",
+size_and_power_calculations(grid_type_ = "normal", 
                             bump_height_ = 0.25,
                             seed_ = seed, n_ts_ = n_ts,
                             beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
@@ -111,8 +111,8 @@ size_and_power_calculations(grid_type_ = "normal", type_of_m_ = "bump",
                             q_ = q, r_ = r, numCores_ = numCores,
                             filename_ext_ = "_bump025_null")
 
-seed <- 123454321
-size_and_power_calculations(grid_type_ = "normal", type_of_m_ = "bump",
+seed <- 545454541
+size_and_power_calculations(grid_type_ = "normal",
                             bump_height_ = 0.5,
                             seed_ = seed, n_ts_ = n_ts,
                             beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
@@ -126,7 +126,7 @@ size_and_power_calculations(grid_type_ = "normal", type_of_m_ = "bump",
                             filename_ext_ = "_bump050_null")
 
 seed <- 111222333
-size_and_power_calculations(grid_type_ = "normal", type_of_m_ = "bump",
+size_and_power_calculations(grid_type_ = "normal",
                             bump_height_ = 0.75,
                             seed_ = seed, n_ts_ = n_ts,
                             beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
@@ -148,7 +148,7 @@ n_rep    <- 1000 #number of simulations for calculating size and power
 sim_runs <- 1000 #number of simulations to calculate the Gaussian quantiles
 
 seed <- 111222333
-size_and_power_calculations(grid_type_ = "dense", type_of_m_ = "",
+size_and_power_calculations(grid_type_ = "dense",
                             seed_ = seed, n_ts_ = n_ts,
                             beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
                             a_ = a, sigma_ = sigma,
@@ -168,7 +168,7 @@ size_and_power_calculations(grid_type_ = "dense", type_of_m_ = "",
 n_rep    <- 5000 #number of simulations for calculating size and power
 sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
 
-size_and_power_calculations(grid_type_ = "dyadic", type_of_m_ = "",
+size_and_power_calculations(grid_type_ = "dyadic", 
                             seed_ = seed, n_ts_ = n_ts,
                             beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi,
                             a_ = a, sigma_ = sigma,

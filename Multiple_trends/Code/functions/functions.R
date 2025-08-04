@@ -369,7 +369,7 @@ produce_plots_hp <- function(results, data_i, data_j,
 repl <- function(rep_, n_ts_, t_len_, grid_, ijset_ = NULL, a_ = 0, sigma_ = 1,
                  beta_ = NULL, a_x_vec_ = c(0, 0, 0), phi_ = 0,
                  rho_ = 0, different_b_ = c(0),
-                 q_ = 25, r_ = 10, type_of_m_ = "", bump_height_ = 0,
+                 q_ = 25, r_ = 10, bump_height_ = 0,
                  gaussian_sim = FALSE){
   
   library(MSinference)
@@ -434,10 +434,15 @@ repl <- function(rep_, n_ts_, t_len_, grid_, ijset_ = NULL, a_ = 0, sigma_ = 1,
         
         k <- 1
         for (b in different_b_){
-          m_matrix[, 1] <- bump((1:t_len_)/t_len_) * b
-          if ((type_of_m_ == "bump") & (b == 0)){
+          if (b == 0){
+            #Size simulations, but we can still have non-zero null
             m_matrix[, i] <- bump((1:t_len_)/t_len_) * bump_height_
+          } else {
+            #Power simulations
+            m_matrix      <- matrix(0, nrow = t_len_, ncol = n_ts_) 
+            m_matrix[, 1] <- bump((1:t_len_)/t_len_) * b
           }
+            
           y_matrices[[k]][, i] <- alpha_vec[i] + m_matrix[, i] + beta_ %*% t(x_matrix) + error_matrix[, i]
 
           #First differences
@@ -499,7 +504,7 @@ repl <- function(rep_, n_ts_, t_len_, grid_, ijset_ = NULL, a_ = 0, sigma_ = 1,
 repl_SV <- function(rep_, n_ts_, t_len_, grid_, ijset_ = NULL, a_ = 0,
                     beta_ = NULL, a_x_vec_ = c(0, 0, 0), phi_ = 0,
                     rho_ = 0, different_b_ = c(0),
-                    q_ = 25, r_ = 10, type_of_m_ = "", gaussian_sim = FALSE){
+                    q_ = 25, r_ = 10, gaussian_sim = FALSE){
   
   library(MSinference)
   library(dplyr)
@@ -520,19 +525,6 @@ repl_SV <- function(rep_, n_ts_, t_len_, grid_, ijset_ = NULL, a_ = 0,
                               sigma_vec = sigma_vector,
                               n_ts = n_ts_, ijset = ijset_, grid = grid_)
     results <- c(as.vector(psi$stat_pairwise))
-    
-    # z_matrix      <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    # z_augm_matrix <- matrix(NA, nrow = t_len_, ncol = n_ts_)
-    # 
-    # for (i in 1:n_ts_){
-    #   z_matrix[, i]      <- rnorm(t_len_, 0, sqrt(sigma_tv_vec))
-    #   z_augm_matrix[, i] <- z_matrix[, i] - mean(z_matrix[, i])
-    # }
-    # 
-    # psi <- compute_statistics(data = z_augm_matrix,
-    #                           sigma_vec = sqrt(sigma_tv_vec),
-    #                           n_ts = n_ts_, ijset = ijset_, grid = grid_)
-    # results <- c(as.vector(psi$stat_pairwise))
   } else {
     m_matrix        <- matrix(0, nrow = t_len_, ncol = n_ts_)    
     y_matrices      <- list()
@@ -581,9 +573,6 @@ repl_SV <- function(rep_, n_ts_, t_len_, grid_, ijset_ = NULL, a_ = 0,
         k <- 1
         for (b in different_b_){
           m_matrix[, 1] <- bump((1:t_len_)/t_len_) * b
-          if ((type_of_m_ == "bump") & (b == 0)){
-            m_matrix[, i] <- bump((1:t_len_)/t_len_) * 0.25
-          }
           y_matrices[[k]][, i] <- alpha_vec[i] + m_matrix[, i] + beta_ %*% t(x_matrix) + error_matrix[, i]
           
           #First differences
@@ -841,11 +830,13 @@ repl_precision <- function(rep_, n_ts_, t_len_,
 #N(0, Sigma_a_mat_), the time series as
 #y = alpha_ + beta_ %*% covariates + m_matrix_ + errors,
 #estimates the parameters, and then computes the test statistics
-repl_UCB <- function(rep_, n_ts_, t_len_, bw_ = 0.1, a_ = 0, sigma_ = 1,
+repl_UCB <- function(rep_, n_ts_, t_len_, grid_, ijset_ = NULL, 
+                     bw_ = 0.1, a_ = 0, sigma_ = 1,
                      beta_ = NULL, a_x_vec_ = c(0, 0, 0), phi_ = 0,
                      different_b_ = c(0), quant_UCB_ = 0,
-                     gaussian_sim = FALSE){
+                     q_ = 25, r_ = 10, gaussian_sim = FALSE){
   
+  library(MSinference)
   grid_points <- seq(from = 1 / t_len_, to = 1, by = 1 / t_len_)  
   
   if (gaussian_sim){
@@ -872,7 +863,7 @@ repl_UCB <- function(rep_, n_ts_, t_len_, bw_ = 0.1, a_ = 0, sigma_ = 1,
     estimated_trend_UCB <- list()
     upper_UCB           <- list()
     lower_UCB           <- list()
-    
+
     for (k in 1:length(different_b_)){
       y_matrices[[k]]          <- matrix(NA, nrow = t_len_, ncol = n_ts_)
       m_matrices[[k]]          <- matrix(0, nrow = t_len_, ncol = n_ts_)
@@ -881,6 +872,7 @@ repl_UCB <- function(rep_, n_ts_, t_len_, bw_ = 0.1, a_ = 0, sigma_ = 1,
       estimated_trend_UCB[[k]] <- matrix(NA, nrow = t_len_, ncol = n_ts_)
       upper_UCB[[k]]           <- matrix(NA, nrow = t_len_, ncol = n_ts_)
       lower_UCB[[k]]           <- matrix(NA, nrow = t_len_, ncol = n_ts_)
+      sigmahat_list[[k]]       <- rep(NA, n_ts_)
     }
     
     error_matrix  <- matrix(NA, nrow = t_len_, ncol = n_ts_)
@@ -933,6 +925,11 @@ repl_UCB <- function(rep_, n_ts_, t_len_, bw_ = 0.1, a_ = 0, sigma_ = 1,
         upper_UCB[[k]][, i] <- estimated_trend_UCB[[k]][, i] + sigma_hat_UCB_i * quant_UCB_
         lower_UCB[[k]][, i] <- estimated_trend_UCB[[k]][, i] - sigma_hat_UCB_i * quant_UCB_
         
+        AR.struc           <- estimate_lrv(data = y_augm_matrices[[k]][, i], q = q_,
+                                           r_bar = r_, p = 1)
+        sigma_hat_i        <- sqrt(AR.struc$lrv)
+        sigmahat_list[[k]][i] <- sigma_hat_i 
+        
         k <- k + 1
       }
     }
@@ -949,7 +946,13 @@ repl_UCB <- function(rep_, n_ts_, t_len_, bw_ = 0.1, a_ = 0, sigma_ = 1,
           pairwise_intersection_UCB[i, j] <- sum((tmp_u[, i] < tmp_l[, j]) | (tmp_u[, i] < tmp_l[, j]))
         }
       }
-      results <- c(results, as.vector(pairwise_intersection_UCB))
+      
+      psi <- compute_statistics(data = y_augm_matrices[[k]],
+                                sigma_vec = sigmahat_list[[k]],
+                                n_ts = n_ts_, ijset = ijset_, grid = grid_)    
+      
+      results <- c(results, as.vector(pairwise_intersection_UCB),
+                   as.vector(psi$stat_pairwise))
     }
   }
   return(results)

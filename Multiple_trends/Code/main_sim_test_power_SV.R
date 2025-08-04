@@ -1,0 +1,276 @@
+rm(list=ls())
+
+library(MSinference)
+library(haven)
+library(car)
+library(dplyr)
+library(Matrix)
+library(foreach)
+library(parallel)
+library(doParallel)
+library(xtable)
+library(tictoc)
+options(xtable.floating = FALSE)
+options(xtable.timestamp = "")
+
+source("functions/functions.R")
+
+##############################
+#Defining necessary constants#
+##############################
+seed <- 543212345
+
+n_ts <- 15 #Number of time series
+
+#For the covariate process
+beta    <- c(1, 1, 1)
+a_x_vec <- c(0.25, 0.25, 0.25) #VAR(1) coefficients
+phi     <- 0.25                 #dependence between the innovations
+
+#For the error process
+a     <- 0.25
+
+#For the fixed effects
+rho      <- 0.25 #covariance between the fixed effects
+n_rep    <- 5000 #number of simulations for calculating size and power
+sim_runs <- 5000 #number of simulations to calculate the Gaussian quantiles
+
+#Different parameters
+different_T     <- c(100, 250, 500) #Different lengths of time series  
+different_alpha <- c(0.01, 0.05, 0.1) #Different confidence levels
+different_b     <- c(0.25, 0.5, 0.75) #Zero is for calculating the size
+
+#Parameters for the estimation of long-run-variance
+q <- 25 
+r <- 10
+
+#For parallel computation
+numCores  <- round(parallel::detectCores() * .80)
+
+#Calculating actual power
+u.lower1 <- 0.2
+u.upper1 <- 0.4
+u.lower2 <- 0.6
+u.upper2 <- 0.8
+
+t_SV <- 500
+
+filename = paste0("output/revision/SV_plot.pdf")
+pdf(filename, width = 5, height = 2, paper="special")
+
+#Setting the layout of the graphs
+#par(cex = 1, tck = -0.025)
+par(mar = c(3, 2, 1, 0)) #Margins for each plot
+par(oma = c(0.2, 0.2, 0.2, 0.2)) #Outer margins
+
+plot(x = (1:t_SV)/t_SV, xlim = c(0, 1),
+     y = -0.15 * ((1:t_SV)/t_SV - 0.5)^2 + 0.075, type = 'l', ylim = c(0, 0.08),
+     xlab = "", ylab = "", main = NULL, cex = 0.8, yaxt = 'n')
+axis(2, at = c(0, 0.04, 0.08), labels = c(0, 0.04, 0.08), cex.axis = 1)
+mtext("u", side=1, line=2)
+
+dev.off()
+
+
+###################################
+#Calculating size and global power#
+###################################
+
+size_array_SV <- array(NA, dim = c(length(different_T), 1,
+                                   length(different_alpha)),
+                       dimnames = list(t = different_T,
+                                       b = c(0),
+                                       alpha = different_alpha))
+
+for (t_len in different_T){
+  set.seed(seed)
+  k <- match(t_len, different_T)
+  #Constructing the full grid for calculating the Gaussian quantiles
+  u_grid <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
+  h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
+  h_grid <- h_grid[h_grid > log(t_len) / t_len]
+  grid   <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
+  
+  #Calculating the Gaussian quantiles in parallel
+  tic()
+  cl <- makePSOCKcluster(numCores)
+  registerDoParallel(cl)
+  foreach (val = 1:sim_runs, .combine = "cbind") %dopar% {
+    source("functions/functions.R")
+    repl_SV(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
+            gaussian_sim = TRUE)
+    # Loop one-by-one using foreach
+  } -> simulated_pairwise_gaussian
+  stopCluster(cl)
+  toc()
+  
+  simulated_gaussian <- apply(simulated_pairwise_gaussian, 2, max)
+  
+  probs      <- seq(0.5, 0.995, by = 0.005)
+  quantiles  <- as.vector(quantile(simulated_gaussian, probs = probs))
+  quantiles  <- rbind(probs, quantiles)
+  
+  colnames(quantiles) <- NULL
+  rownames(quantiles) <- NULL
+  
+  quants <- as.vector(quantiles[2, ])
+  
+  #Calculating the true test statistics
+  tic()
+  cl <- makePSOCKcluster(numCores)
+  registerDoParallel(cl)
+  foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
+    source("functions/functions.R")
+    repl_SV(rep_ = val, n_ts_ = n_ts, t_len_ = t_len,
+            grid_ = grid,
+            a_ = a, beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi, rho_ = rho,
+            different_b_ = c(0),
+            q_ = q, r_ = r)
+    # Loop one-by-one using foreach
+  } -> simulated_pairwise_statistics
+  stopCluster(cl)
+  toc()
+  
+  statistic_values <- simulated_pairwise_statistics
+  
+  size_vec <- c()
+  
+  for (alpha in different_alpha){
+    if (sum(probs == (1 - alpha)) == 0)
+      pos <- which.min(abs(probs - (1 - alpha)))
+    if (sum(probs == (1 - alpha)) != 0)
+      pos <- which.max(probs == (1 - alpha))    
+    quant <- quants[pos]
+    
+    num_of_actual_rej <- 0
+    
+    for (val in 1:n_rep){
+      tmp         <- matrix(statistic_values[, val], nrow = n_ts, ncol = n_ts)
+      num_of_rej  <- sum(tmp[1, ] > quant)
+      if (num_of_rej > 0)   {num_of_actual_rej <- num_of_actual_rej + 1}
+    }
+    size_vec <- c(size_vec, num_of_actual_rej/n_rep)
+    
+    cat("Ratio of incorrect rejections in at least one case is ",
+        num_of_actual_rej/n_rep, "with alpha = ", alpha,
+        "and T = ", t_len, "\n")
+  }
+  
+  #Storing the results in a 3D array
+  size_array_SV[k, 1, ] <- size_vec
+}
+
+#Output of the results
+tmp <- as.matrix(size_array_SV[, 1, ])
+filename = paste0("output/revision/", n_ts, "_ts_", phi*100, "_", rho * 100, "_size_SV.tex")
+output_matrix(tmp, filename, numcols_ = 4)
+line <- paste0("%This simulation was done for the seed ", seed,
+               ", for the following values of the parameters: n_ts = ", n_ts,
+               ", with ", n_rep, " simulations for calculating size and ", sim_runs,
+               " simulations to calculate the Gaussian quantiles. Furthermore, for the error process we have a = ",
+               a, " and time-varying sigma. For the covariate process a_1 = a_2 = a_3 = ",
+               a_x_vec[1], " and phi = ", phi,
+               ". For the fixed effect, we have rho = ", rho,
+               ". The grid is normal")     
+write(line, file = filename, append = TRUE)
+
+
+##########################
+#Calculating global power#
+##########################
+
+power_array <- array(NA, dim = c(length(different_T),
+                                          length(different_b),
+                                          length(different_alpha)),
+                              dimnames = list(t = different_T,
+                                              b = different_b,
+                                              alpha = different_alpha))
+for (t_len in different_T){
+  set.seed(seed)
+  k <- match(t_len, different_T)
+  #Constructing the full grid for calculating the Gaussian quantiles
+  u_grid <- seq(from = 5 / t_len, to = 1, by = 5 / t_len)
+  h_grid <- seq(from = 2 / t_len, to = 1 / 4, by = 5 / t_len)
+  h_grid <- h_grid[h_grid > log(t_len) / t_len]
+  grid   <- construct_grid(t = t_len, u_grid = u_grid, h_grid = h_grid)
+  
+  #Calculating the Gaussian quantiles in parallel
+  tic()
+  cl <- makePSOCKcluster(numCores)
+  registerDoParallel(cl)
+  foreach (val = 1:sim_runs, .combine = "cbind") %dopar% {
+    source("functions/functions.R")
+    repl_SV(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
+            gaussian_sim = TRUE)
+    # Loop one-by-one using foreach
+  } -> simulated_pairwise_gaussian
+  stopCluster(cl)
+  toc()
+  
+  simulated_gaussian <- apply(simulated_pairwise_gaussian, 2, max)
+  
+  probs      <- seq(0.5, 0.995, by = 0.005)
+  quantiles  <- as.vector(quantile(simulated_gaussian, probs = probs))
+  quantiles  <- rbind(probs, quantiles)
+  
+  colnames(quantiles) <- NULL
+  rownames(quantiles) <- NULL
+  
+  quants <- as.vector(quantiles[2, ])
+  
+  #Calculating the true test statistics
+  tic()
+  cl <- makePSOCKcluster(numCores)
+  registerDoParallel(cl)
+  foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
+    source("functions/functions.R")
+    repl_SV(rep_ = val, n_ts_ = n_ts, t_len_ = t_len,
+            grid_ = grid,
+            a_ = a, beta_ = beta, a_x_vec_ = a_x_vec, phi_ = phi, rho_ = rho,
+            different_b_ = different_b,
+            q_ = q, r_ = r)
+    # Loop one-by-one using foreach
+  } -> simulated_pairwise_statistics
+  stopCluster(cl)
+  toc()
+  
+  for (j in 1:length(different_b)){
+    simulated_statistic <- apply(simulated_pairwise_statistics[((j - 1) * n_ts * n_ts + 1):(j * n_ts * n_ts), ], 2, max)
+    
+    power_vec <- c()
+    for (alpha in different_alpha){
+      if (sum(probs == (1 - alpha)) == 0)
+        pos <- which.min(abs(probs - (1 - alpha)))
+      if (sum(probs == (1 - alpha)) != 0)
+        pos <- which.max(probs == (1 - alpha))    
+      quant <- quants[pos]
+      
+      num_of_rej         <- sum(simulated_statistic > quant)/n_rep
+      power_vec <- c(power_vec, num_of_rej) 
+      
+      cat("Ratio of rejection is ", num_of_rej, "with b = ", different_b[j],
+          ", alpha = ", alpha, "and T = ", t_len, "\n")
+    }
+    
+    #Storing the results in a 3D array
+    power_array[k, j, ] <- power_vec
+  }
+}
+
+#Output of the results
+for (b in different_b){
+  l   <- match(b, different_b)
+  tmp <- as.matrix(size_and_power_array[, l, ])
+  filename = paste0("output/revision/", n_ts, "_ts_", phi_ * 100, "_",
+                      rho_ * 100, "_power_b_", b * 100, "_SV.tex")
+  output_matrix(tmp, filename, numcols_ = 4)
+  line <- paste0("%This simulation was done for the seed ", seed,
+                 ", for the following values of the parameters: n_ts = ", n_ts,
+                 ", with ", n_rep_, " simulations for calculating size and power and ", sim_runs,
+                 " simulations to calculate the Gaussian quantiles. Furthermore, for the error process we have a = ",
+                 a_, " and time-varying sigma. For the covariate process a_1 = a_2 = a_3 = ",
+                 a_x_vec_[1], " and phi = ", phi,
+                 ". For the fixed effect, we have rho = ", rho,
+                 ". The grid is normal")     
+  write(line, file = filename, append = TRUE)
+}

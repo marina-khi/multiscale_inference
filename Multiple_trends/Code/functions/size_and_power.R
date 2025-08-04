@@ -1,4 +1,4 @@
-size_and_power_calculations <- function(grid_type_ = "normal", type_of_m_ = "",
+size_and_power_calculations <- function(grid_type_ = "normal",
                                         bump_height_ = 0,
                                         seed_ = 1, n_ts_ = 2,
                                         beta_ = c(1, 1, 1),
@@ -100,7 +100,7 @@ size_and_power_calculations <- function(grid_type_ = "normal", type_of_m_ = "",
            a_ = a_, sigma_ = sigma_,
            beta_ = beta_, a_x_vec_ = a_x_vec_, phi_ = phi_,
            rho_ = rho_, different_b_ = different_b_,
-           q_ = q_, r_ = r_, type_of_m_ = type_of_m_, bump_height_ = bump_height_,
+           q_ = q_, r_ = r_, bump_height_ = bump_height_,
            gaussian_sim = FALSE)
       # Loop one-by-one using foreach
     } -> simulated_pairwise_statistics
