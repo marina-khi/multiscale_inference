@@ -80,7 +80,7 @@
 In this section, we investigate our test and clustering methods by means of Monte Carlo experiments.
 
 
-\subsection{Size and power of the multiscale test}\label{subsec:sim:main} 
+\subsection{Size and power properties of the multiscale test}\label{subsec:sim:main} 
 
 
 The simulation design is as follows: We generate data from the model $Y_{it} = m_i(\frac{t}{T}) + \bfbeta_i^\top \X_{it} +  \alpha_i  + \varepsilon_{it}$, where the number of time series is set to $n = 15$ and we consider different time series lengths $T$. We include $3$ covariates and model them by the VAR(3) process
@@ -88,7 +88,6 @@ The simulation design is as follows: We generate data from the model $Y_{it} = m
 where $\boldsymbol{X}_{it} = ( X_{it,1}, X_{it,2}, X_{it,3} )^\top$, $\boldsymbol{\nu}_{it} = ( \nu_{it,1}, \nu_{it,2}, \nu_{it,3} )^\top$ and we choose $a_1 = a_2 = a_3 = 0.25$. The innovations $\boldsymbol{\nu}_{it}$ are drawn i.i.d.\ from a multivariate normal distribution $N(0,\Phi)$ with
 \[ \Phi = \begin{pmatrix} 1 & \varphi & \varphi \\ \varphi & 1 & \varphi \\ \varphi & \varphi & 1 \end{pmatrix}, \]
 where $\varphi = 0.25$ specifies the correlation between the 3 covariates.
-%\footnote{As a robustness check, we have repeated the analysis for $\phi = 0.1$. However, as the results a very similar, we do not report them here.}
 The parameter vector $\boldsymbol{\beta}_i = (\beta_{i,1},\beta_{i,2},\beta_{i,3})^\top$ is chosen to equal $(1,1,1)^\top$ for each $i$. Moreover, for each $i$, the idiosyncratic error process $\{\varepsilon_{it}: 1 \le t \le T\}$ follows the AR(1) model $\varepsilon_{it} = a \varepsilon_{i t-1} + \eta_{it}$, where $a = 0.25$ and the innovations $\eta_{it}$ are i.i.d.\ normally distributed with mean $0$ and standard deviation $0.25$. 
 The vector of fixed effects $\boldsymbol{\alpha} = (\alpha_1,\ldots,\alpha_n)^\top$ is modelled as a normally distributed random vector. In particular, $\boldsymbol{\alpha} \sim N(0,\Sigma)$ with
 \[ \Sigma =
@@ -100,13 +99,11 @@ The vector of fixed effects $\boldsymbol{\alpha} = (\alpha_1,\ldots,\alpha_n)^\t
 \end{pmatrix},
 \]
 where $\rho = 0.25$ gives the correlation across $i$.
-%\footnote{As a robustness check, we have repeated the analysis for $\rho = 0.1$. However, as the results a very similar, we do not report them here.}
-%We assume that the covariates $\X_{it}$ and the error terms $\varepsilon_{js}$ are independent from each other for all $1 \leq i,j \leq n$ and $1 \leq t, s \leq T$. 
-To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$ without loss of generality. As a robustness check, we consider another specification of the null hypothesis. In particular, we use the bump function
+To generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$. (A robustness check with a different choice of $m_i$ is discussed below.) To produce data under the alternative, we use the bump function
 \begin{align}
-m_i(u) =  b \cdot  \vartheta(u, 0.3, 0.1) - b  \cdot  \vartheta(u,0.7, 0.1)  \label{eq:bump-fct}
+m_1(u) =  b \cdot  \vartheta(u, 0.3, 0.1) - b  \cdot  \vartheta(u,0.7, 0.1)  \label{eq:bump-fct}
 \end{align}
-with $\vartheta(u,c,d) =  \ind \left\{\frac{|u - c|}{d}\leq 1 \right\} \left(1 - \frac{(u - c)^2}{d^2}\right)^2$ for $b= 0.25$ (bump function for various values of $b$ is depicted in Figure \ref{fig:bump_function}). Note that the normalisation constraint $\int_0^1 m_i(u) du = 0$ is directly satisfied in this case. In what follows, we refer to this case as $H_0^{\text{bump}}$. To produce the data under the alternative, we also use the bump function \eqref{eq:bump-fct} with $b \in \{ 0.25, 0.5, 0.75 \}$ for $m_1$ and let $m_i = 0$ for $i \neq 1$.  For each simulation exercise, we draw $5000$ samples.
+with $\vartheta(u,c,d) =  \ind \left\{\frac{|u - c|}{d}\leq 1 \right\} \left(1 - \frac{(u - c)^2}{d^2}\right)^2$ for $b \in \{ 0.25, 0.5, 0.75 \}$ (depicted in Figure \ref{fig:bump_function}) and let $m_i = 0$ for $i \neq 1$. Note that the normalisation constraint $\int_0^1 m_1(u) du = 0$ is directly satisfied in this case. For each simulation exercise, we draw $5000$ samples.
 
 
 \begin{figure}[t!]
@@ -115,11 +112,10 @@ with $\vartheta(u,c,d) =  \ind \left\{\frac{|u - c|}{d}\leq 1 \right\} \left(1 -
 \end{figure}
 
 
-Figure \ref{fig:bump_function} illustrates that the described simulation setup is quite challenging already without covariates and fixed effects. The black lines in the plot show the bump function $m_1$ for different heights of the bump $b \in \{0, 0.25, 0.5, 0.75\}$, where the value $b=0$ corresponds to the null $H_0$. The red lines show one realization of the time series $\{Y_{1t}^\circ:1 \le t \le T \}$ for $T=250$, where $Y_{1t}^\circ = m_1(\frac{t}{T}) + \varepsilon_{1t}$ is an idealized version of $Y_{1t}$ without covariates and fixed effects. The values $b=0.25,0.5,0.75$ correspond to three different specifications of $m_1$ under the alternative. In particular, the larger the bump size $b$, the further away $m_1$ is from the other functions $m_i, i \neq 1$. For the smallest value $b=0.25$, the bump function is very difficult to detect since the noise level is very high, or put differently, since the signal-to-noise ratio is very small (as is clearly visible in the upper right panel of Figure \ref{fig:bump_function}). For $b=0.5$ and $b=0.75$, the signal-to-noise ratio slowly gets bigger, making it less difficult to detect the bump function. Nevertheless, even for $b=0.75$, there is substantial noise around the bump function. %, meaning that detection of the bump is still non-trivial. 
+Figure \ref{fig:bump_function} illustrates that the described simulation setup is quite challenging already without covariates and fixed effects. The black lines in the plot show the bump function $m_1$ for different heights of the bump $b \in \{0, 0.25, 0.5, 0.75\}$, where the value $b=0$ corresponds to the null $H_0$. The red lines show one realization of the time series $\{Y_{1t}^\circ:1 \le t \le T \}$ for $T=250$, where $Y_{1t}^\circ = m_1(\frac{t}{T}) + \varepsilon_{1t}$ is an idealized version of $Y_{1t}$ without covariates and fixed effects. The values $b=0.25,0.5,0.75$ correspond to three different specifications of $m_1$ under the alternative. In particular, the larger the bump size $b$, the further away $m_1$ is from the other functions $m_i, i \neq 1$. For the smallest value $b=0.25$, the bump function is very difficult to detect since the noise level is very high, or put differently, since the signal-to-noise ratio is very small (as is clearly visible in the upper right panel of Figure \ref{fig:bump_function}). For $b=0.5$ and $b=0.75$, the signal-to-noise ratio slowly gets bigger, making it less difficult to detect the bump function. Nevertheless, even for $b=0.75$, there is substantial noise around the bump function. 
 
 
 Our multiscale test is implemented as follows: The estimators $\widehat{\bfbeta}_i$ and $\widehat{\alpha}_i$ of the unknown parameters $\bfbeta_i$ and $\alpha_i$ are computed as described in Section~\ref{subsec:test:prep}.
-%Since the errors $\varepsilon_{it}$ follow an AR($1$) process, we estimate the long-run error variance by the difference-based estimator proposed in \cite{KhismatullinaVogt2020}, setting the tuning parameters $q$ and $r$ to $25$ and $10$, respectively.
 The long-run error variance is estimated by the difference-based estimator proposed in \cite{KhismatullinaVogt2020}, where the tuning parameters $q$ and $r$ are set to $25$ and $10$, respectively.
 In order to construct our test statistics, we use an Epanechnikov kernel and the location-scale grid $\mathcal{G}_T = U_T \times H_T$ with
 \begin{align}
@@ -133,7 +129,7 @@ We thus consider intervals $\mathcal{I}_{u, h} = [u-h, u+h]$ which contain $5, 1
 \renewcommand{\arraystretch}{1.2}  
 \footnotesize{
 \begin{center}
-\caption{Empirical size and (global) power of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$.
+\caption{Empirical size and power of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$.
 Each panel gives the results for a different bump height $b$, where $b = 0$ corresponds to the null $H_0$ and $b = 0.25,0.5,0.75$ to three different alternatives.}\label{tab:sizepower}
 \begin{subtable}[b]{0.4\textwidth}
 \centering  
@@ -158,63 +154,40 @@ Each panel gives the results for a different bump height $b$, where $b = 0$ corr
 \end{center}}
 \end{table}
 
-\begin{table}[t!]
-\renewcommand{\arraystretch}{1.2}  
-\footnotesize{
-\begin{center}
-\caption{Empirical size of the multiscale test for two specifications of the null hypothesis, $H_0: m_i = 0$ for all $i$, and $H_0^{\text{bump}}:$ $m_i$ is a bump function from \eqref{eq:bump-fct} with $b=0.25$ for all $i$, calculated for different time series lengths $T$ and nominal sizes $\alpha$.}\label{tab:size2}
-\begin{subtable}[b]{0.4\textwidth}
-\centering  
-\caption{$H_0$}
-\input{../output/15_ts_25_25_size}
-\end{subtable}
-\begin{subtable}[b]{0.4\textwidth}
-\centering  
-\caption{$H_0^{\text{bump}}$}
-\input{../output/15_ts_25_25_size_bump_null}
-\end{subtable}
-\end{center}}
-\end{table}
 
-
-
-Table \ref{tab:sizepower} reports the simulation results, in particular, the empirical size and power of the multiscale test. Both the empirical size and the empirical power are computed as the number of simulations in which the test rejects the global null $H_0$ divided by the total number of simulations.
-%The left column of Table \ref{tab:sizepower} gives the results for the simulation setting with the correlation parameters $(\phi,\rho) = (0.1,0.1)$, the right column those for the setting with $(\phi,\rho) = (0.25,0.25)$. (We do not present the results for $(\phi,\rho) = (0.1,0.25)$ and $(\phi,\rho) = (0.25,0.1)$ as they are quite similar and do not bring additional insights.)
+Table \ref{tab:sizepower} reports the empirical size and power of the multiscale test. Both the empirical size and the empirical power are computed as the number of simulations in which the test rejects the global null $H_0$ divided by the total number of simulations.
 The four panels (a)--(d) of Table \ref{tab:sizepower} correspond to different values of the bump size $b$. Panel (a) corresponds to the case $b=0$ and thus gives the empirical size of the test under the null $H_0$. Panels (b)--(d), in contrast, report the empirical power against the three alternatives with $b \in \{0.25,0.5,0.75\}$.
-%The actual size of the test is reported in the two subtables (a), whereas subtables (b)--(d) report the power against the three different alternatives with $b \in \{0.25,0.5,0.75\}$. Both the actual size and the power are computed as the number of simulations in which the test rejects the global null $H_0$ divided by the total number of simulations.
-Inspecting panel (a), one can see that the empirical size of the test gives a reasonable approximation to the target $\alpha$ in all scenarios under investigation, even though the size numbers are a bit downward/upward biased for the smaller time series lengths $T=100$ and $T=250$.
-%, even though the size numbers have a slight upward bias. {\color{red}This bias gets smaller as the sample size $T$ increases, which reflects the fact that we get more and more information for each of the tests that we need to carry out.} We can also see that the upward bias become slightly more pronounced in case of stronger degrees of correlation across the covariates and the time series, i.e., with higher values of $\phi$ and $\rho$, but the change in test performance is almost negligible and can be attributed to random sampling. To summarize, even though slightly liberal, the test controls the FWER quite accurately in the simulation settings that we consider.
+Inspecting panel (a), one can see that the empirical size of the test gives a reasonable approximation to the target $\alpha$ in all scenarios under investigation.
 Inspecting panels (b)--(d), one can further see that the test has good power properties. For the smallest time series length $T=100$, the power numbers are still very low, reflecting the fact that the noise level in the data is extremely high, even for the largest bump size $b=0.75$. 
-%there is considerable noise in the data. Even for the largest bump size $b=0.75$, the noise level is so high that our test is barely able to detect the bump and reject the null. 
-%For the smallest bump size $b = 0.25$ and time series length $T \in \{100,250\}$, the power is only moderate, reflecting the fact that the alternative with $b = 0.25$ is not very far away from the null.
 However, as we increase the time series length $T$, the power increases quickly. For $T=250$ and $b=0.5$, for instance, we already have power of over $95\%$ when $\alpha \ge 0.05$.
 
-Table \ref{tab:size2}\footnote{Note that the simulation results for the null hypothesis "$H_0: m_i = 0$ for all $i$" in panel (a) of Table \ref{tab:size2} are identical with those in Table \ref{tab:sizepower}. For ease of comparison, we have repeated these results as part of Table \ref{tab:size2}.} reports the empirical size of the multiscale test for two specification of the common trend under the null hypothesis, $H_0$ and $H_0^{\text{bump}}$. As can be seen, the numbers are a bit lower for the case of the bump function ($H_0^{\text{bump}}$) compared to the zero function ($H_0$). One of the possible reasons for that is loss of precision in the estimation of the long-run variance when the trend is present. In case of $H_0$, there is no trend, hence, the problem of estimating long-run variance becomes an easier one. Since our test depends on the estimator, such loss of precision results in more conservative size numbers in panel (b) compared to panel (a).
 
-Furthermore, since the empirical power as presented in Table \ref{tab:sizepower} can be considered "global" and is not suited to capture local testing capabilities which are one of the main advantages of our multiscale test, we compute further metrics -- specifically, further types of power -- which we think are more apt to capture such local testing capabilities. Specifically, suppose our test rejects the local null hypothesis $H_0^{[i,j]}(u,h)$ under which the trends $m_i$ and $m_j$ are identical on the interval $[u-h,u+h]$. We say that the test finds
-\begin{itemize}
-\item a \textbf{real difference} between $i$ and $j$ on $[u-h,u+h]$ if $H_0^{[i,j]}(u,h)$ is indeed violated (i.e., if the trends $m_i$ and $m_j$ are indeed different on $[u-h,u+h]$),
+The empirical power computed in Table \ref{tab:sizepower} is a very rough measure of performance. We now refine it to get more insight into the performance of our test methods. To do so, we introduce the following notation. We say that our test finds
+\begin{itemize}[itemsep=0pt, parsep=0pt, topsep=3pt]
+\item a \textbf{real difference} between $i$ and $j$ on the interval $[u-h,u+h]$ if the local null hypothesis $H_0^{[i,j]}(u,h)$ is violated (i.e., if the trends $m_i$ and $m_j$ are indeed different on $[u-h,u+h]$),
 \item a \textbf{spurious difference} between $i$ and $j$ on $[u-h,u+h]$ if $H_0^{[i,j]}(u,h)$ is not violated (i.e., if the trends $m_i$ and $m_j$ are the same on $[u-h,u+h]$). 
 \end{itemize}
-Notably, the concept of global power does not give any information about
-\begin{itemize}
-\item whether the found differences are real or spurious,
-\item which real differences between the trends have been found, in particular, whether all or only part of the real differences have been found.
-\end{itemize}
-We refine the concept of global power to give this kind of information. More specifically, we compute the following types of power in our simulation setup where the trends $m_2,\ldots,m_n$ are identical and $m_1$ differs from them only in the time period $\mathcal{I}^* = ([0.2, 0.4] \cup [0.6, 0.8])$:
-\begin{itemize}
+Notably, the power numbers in Table \ref{tab:sizepower} do not give any information on
+(i) whether the differences found by the test are real or spurious and
+(ii) which real differences have been found, in particular, whether all or only part of them have been found.
+We now introduce refined notions of power which give this kind of information. The simulation setup is the same as before. In particular, $m_1$ is the bump function from \eqref{eq:bump-fct} with $b \in \{0.25,0.5,0.75\}$ and $m_i = 0$ for all $i \ne 1$. Hence, $m_1$ differs from the other trends only in the time period $\mathcal{I}^* = [0.2, 0.4] \cup [0.6, 0.8]$. We compute the following notions of power in this setup: 
+\begin{itemize}[itemsep=0pt, parsep=0pt, topsep=3pt]
 \item \textbf{real power$^{\boldsymbol{[1]}}$}: the percentage of simulation runs in which our test finds a real difference between $m_1$ and \textit{at least one} other trend $m_i$ [i.e., a difference between $m_1$ and another $m_i$ on an interval $[u-h, u+h]$ with $[u-h, u+h] \cap \mathcal{I}^* \neq \emptyset$]. 
 \item \textbf{real power$^{\boldsymbol{[50]}}$}: the percentage of simulation runs in which our test finds a real difference between $m_1$ and \textit{at least 50\%} of the other trends $m_i$ [i.e., a difference between $m_1$ and $m_i$ on an interval $[u-h, u+h]$ with $[u-h, u+h] \cap \mathcal{I}^* \neq \emptyset$ for at least $50\%$ of the other trends $i$]. 
 \item \textbf{real power$^{\boldsymbol{[100]}}$}: the percentage of simulation runs in which our test finds a real difference between $m_1$ and \textit{all} other trends $m_i$ [i.e., a difference between $m_1$ and $m_i$ on some interval $[u-h, u+h]$ with $[u-h, u+h] \cap \mathcal{I}^* \neq \emptyset$ for all $i \ne 1$]. 
 \item \textbf{spurious power}: the percentage of simulation runs in which our test finds at least one spurious difference.  
 \end{itemize}
 
+
 \begin{table}[t!]
+
 \renewcommand{\arraystretch}{1.2}  
-\footnotesize{
-\begin{center}
-\caption{Real power$^{[1]}$ of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$.
-Each panel gives the results for a different bump height $b$, where $b = 0.25,0.5,0.75$ corresponds to three different alternatives of $m_1$.}\label{tab:realpower1}
+\footnotesize
+
+\caption{Real power$^{[1]}$ of the multiscale test.}\label{tab:realpower1}
+%Each panel gives the results for a different bump height $b$, where $b = 0.25,0.5,0.75$ corresponds to three different alternatives of $m_1$.
+\vspace{-0.25cm}
+
 \begin{subtable}[b]{0.32\textwidth}
 \centering  
 \caption{$b=0.25$}
@@ -232,14 +205,11 @@ Each panel gives the results for a different bump height $b$, where $b = 0.25,0.
 \vspace{0.25cm} \caption{$b=0.75$}
 \input{../output/15_ts_25_25_actual_power_b_75}
 \end{subtable}
-\end{center}}
-\end{table} 
-\begin{table}[h!]
-\renewcommand{\arraystretch}{1.2}  
-\footnotesize{
-\begin{center}
-\caption{Real power$^{{[50]}}$ of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$.
-Each panel gives the results for a different bump height $b$, where $b = 0.25,0.5,0.75$ corresponds to three different alternatives of $m_1$.}\label{tab:realpower50}
+\vspace{0.5cm}
+
+\caption{Real power$^{{[50]}}$ of the multiscale test.}\label{tab:realpower50}
+\vspace{-0.25cm}
+
 \begin{subtable}[b]{0.32\textwidth}
 \centering  
 \caption{$b=0.25$}
@@ -257,14 +227,11 @@ Each panel gives the results for a different bump height $b$, where $b = 0.25,0.
 \vspace{0.25cm} \caption{$b=0.75$}
 \input{../output/15_ts_25_25_majority_power_b_75}
 \end{subtable}
-\end{center}}
-\end{table} 
-\begin{table}[h!]
-\renewcommand{\arraystretch}{1.2}  
-\footnotesize{
-\begin{center}
-\caption{Real power$^{[100]}$ of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$.
-Each panel gives the results for a different bump height $b$, where $b = 0.25,0.5,0.75$ corresponds to three different alternatives of $m_1$.}\label{tab:realpower100}
+\vspace{0.5cm}
+
+\caption{Real power$^{[100]}$ of the multiscale test.}\label{tab:realpower100}
+\vspace{-0.25cm}
+
 \begin{subtable}[b]{0.32\textwidth}
 \centering  
 \caption{$b=0.25$}
@@ -282,14 +249,11 @@ Each panel gives the results for a different bump height $b$, where $b = 0.25,0.
 \vspace{0.25cm} \caption{$b=0.75$}
 \input{../output/15_ts_25_25_full_power_b_75}
 \end{subtable}
-\end{center}}
-\end{table} 
-\begin{table}[h!]
-\renewcommand{\arraystretch}{1.2}  
-\footnotesize{
-\begin{center}
-\caption{Spurious power of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$.
-Each panel gives the results for a different bump height $b$, where $b = 0.25,0.5,0.75$ corresponds to three different alternatives of $m_1$.}\label{tab:spuriouspower}
+\vspace{0.5cm}
+
+\caption{Spurious power of the multiscale test.}\label{tab:spuriouspower}
+\vspace{-0.25cm}
+
 \begin{subtable}[b]{0.32\textwidth}
 \centering  
 \caption{$b=0.25$}
@@ -304,202 +268,71 @@ Each panel gives the results for a different bump height $b$, where $b = 0.25,0.
 \end{subtable}
 \begin{subtable}[b]{0.32\textwidth}
 \centering  
-\vspace{0.25cm} \caption{$b=0.75$}
+\vspace{0.25cm} 
+\caption{$b=0.75$}
 \input{../output/15_ts_25_25_spurious_power_b_75}
 \end{subtable}
-\end{center}}
+
 \end{table} 
 
 
-The results for real power$^{[1]}$, real power$^{[50]}$, real power$^{[100]}$ and spurious power are presented in Tables \ref{tab:realpower1} -- \ref{tab:spuriouspower}. These tables jointly demonstrate that the proposed multiscale test (i) gains power very quickly as either the sample size $T$ or the signal strength $b$ increases, (ii) has notable local testing capabilities that range from “at least one correct detection” (Table \ref{tab:realpower1}) to the demanding “all pairwise differences found” (Table \ref{tab:realpower100}), and (iii) controls spurious rejections at or below nominal levels (Table \ref{tab:spuriouspower}). In particular, real power$^{[1]}$ (Table \ref{tab:realpower1}) exceeds $82\%$ for all nominal sizes $\alpha$ already for moderate sample sizes $T\geq 250$ and moderate signals $b\geq 0.5$, and approaches $100\%$ for larger $T$ or stronger signals. Real power$^{[50]}$ (Table \ref{tab:realpower50}) and real power$^{[100]}$ (Table \ref{tab:realpower100}) naturally require more information but still exceed $78\%$ for all nominal sizes $\alpha$ and $T=500$ and $b\geq 0.5$. Moreover, spurious detections (Table \ref{tab:spuriouspower}) stay are almost always below or at the nominal size $\alpha$, demonstrating control of false positives. These findings confirm the main property of our method: the test not only signals that trends differ but pinpoints where and between which series, without sacrificing size.
+The results for real power$^{[1]}$, real power$^{[50]}$, real power$^{[100]}$ and spurious power are presented in Tables \ref{tab:realpower1}--\ref{tab:spuriouspower}. 
+The real power numbers in Tables \ref{tab:realpower1}--\ref{tab:realpower100} demonstrate that our test is very capable of finding the real differences between the trends. As can be seen, the numbers increase very quickly as either the sample size $T$ or the signal strength $b$ gets larger. In particular, real power$^{[1]}$ (Table \ref{tab:realpower1}) exceeds $82\%$ for all nominal sizes $\alpha$ already for moderate sample sizes $T\geq 250$ and moderate signals $b\geq 0.5$, and approaches $100\%$ for larger $T$ or stronger signals. Real power$^{[50]}$ (Table \ref{tab:realpower50}) and real power$^{[100]}$ (Table \ref{tab:realpower100}) are naturally more demanding but still exceed $78\%$ for all nominal sizes $\alpha$, $T=500$ and $b\geq 0.5$.
+In addition, the spurious power numbers in Table \ref{tab:spuriouspower} demonstrate that the test controls the probability of finding a false positive at the nominal level $\alpha$. 
+Taken together, the results in Tables \ref{tab:realpower1}--\ref{tab:spuriouspower} illustrate the main advantage of our test: it provides information on which trends are different and where they differ from each other. 
 
 
-\subsection{Robustness checks on the choice of tuning parameters}\label{subsec:sim:grid}
+\subsection{Robustness checks for the multiscale test} 
 
 
-The main tuning parameter of our method is the grid $\mathcal{G}_T$, which in particular specifies the bandwidths that are taken into account. In order to assess the robustness of our test with respect to the grid, we repeat the simulation exercises from Section \ref{subsec:sim:main} with two different choices of the grid: a sparser and a finer grid than the one used in Section \ref{subsec:sim:main}.
-The sparser grid is defined as
-\begin{align}
-\mathcal{G}_T^{\text{sparse}} = \big\{ (u,h) \subseteq [0,1]: & \ (u,h) = ((2s+1) h, h) \text{ for } s = 0,\ldots,\Big\lfloor \frac{h^ {-1}-1}{2} \Big\rfloor \nonumber \\ & \ \text{and } h \in H_T^{\text{sparse}} \big\} \label{eq:grid-sparse}
-\end{align}
-with $H_T^{\text{sparse}} = \{ h = 2^k h_{\min} \text{ for } k=0,\ldots,K \}$, where $h_{\min} = \frac{\lceil \log T \rceil}{T}$ and $K$ is such that $2^K h_{\min} \le \frac{1}{4}$, i.e., $K \le \lfloor \log(\frac{T}{4 \lceil \log T \rceil }) \frac{1}{\log(2)} \rfloor$. This is a dyadic scheme with scales in the set $H_T^{\text{sparse}}$ as commonly used in Wavelet analysis. 
-The finer grid is defined as
-$\mathcal{G}_T^{\text{fine}} = U_T^{\text{fine}} \times H_T^{\text{fine}}$,
-where  
-$U_T^{\text{fine}}  = \{ u \in [0,1]: u = \textstyle{\frac{t}{T}} \text{ with } 1 \le t \le T \}$
-and
-$H_T^{\text{fine}} = \{ h \in [ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} ]:  h = \textstyle{\frac{2t}{T}} \text{ with } 1 \le t \le T \}$. Apart from the choice of grid, we work with precisely the same simulation setup as in Section \ref{subsec:sim:main}.\footnote{As the grid $\mathcal{G}_T^{\text{fine}}$ is very fine, the number of tests to be carried out is extremely large, which significantly increases the computational burden. To decrease computational time, we proceed as follows when using the fine grid $\mathcal{G}_T^{\text{fine}}$:  we calculate the Gaussian quantile based on $L = 1000$ (rather than $5000$) bootstrap samples and we simulate $1000$ samples (rather than $5000$) for each simulation scenario.}
+\subsubsection{Additional size simulations}\label{subsec:size-further}
 
 
 \begin{table}[t!]
 \renewcommand{\arraystretch}{1.2}  
 \footnotesize{
 \begin{center}
-\caption{Empirical size and power of the multiscale test for three different grids. Each column corresponds to a particular choice of grid. Panels (a)--(d) of each column have the same structure as in Table \ref{tab:sizepower}.}\label{tab:grids}
-\begin{subtable}[b]{0.32\textwidth}
-\setcounter{subtable}{0}    
+\caption{Empirical size of the multiscale test under $H_0$ with (a) $m_i = 0$ for all $i$ and (b) $m_i$ the bump function from \eqref{eq:bump-fct} with $b=0.25$ for all $i$.}\label{tab:size2}
+\begin{subtable}[b]{0.45\textwidth}
 \centering  
-\caption*{sparser grid $\mathcal{G}_T^{\text{sparse}}$}\vspace{0.1cm} 
-\caption{$b=0$}
-\input{../output/15_ts_25_25_size_dyadic_grid}\vspace{0.25cm}
-\caption{$b=0.25$}
-\input{../output/15_ts_25_25_power_b_25_dyadic_grid}\vspace{0.25cm}
-\caption{$b=0.5$}
-\input{../output/15_ts_25_25_power_b_50_dyadic_grid}\vspace{0.25cm}
-\caption{$b=0.75$}
-\input{../output/15_ts_25_25_power_b_75_dyadic_grid}
+\caption{$m_i = 0$ for all $i$}
+\input{../output/15_ts_25_25_size}
 \end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\setcounter{subtable}{0}  
+\begin{subtable}[b]{0.45\textwidth}
 \centering  
-\caption*{grid $\mathcal{G}_T$ from Section \ref{subsec:sim:main}}\vspace{0.1cm} 
-\caption{$b=0$}
-\input{../output/15_ts_25_25_size}\vspace{0.25cm}
-\caption{$b=0.25$}
-\input{../output/15_ts_25_25_power_b_25}\vspace{0.25cm}
-\caption{$b=0.5$}
-\input{../output/15_ts_25_25_power_b_50}\vspace{0.25cm}
-\caption{$b=0.75$}
-\input{../output/15_ts_25_25_power_b_75}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\setcounter{subtable}{0}    
-\centering  
-\caption*{finer grid $\mathcal{G}_T^{\text{fine}}$}\vspace{0.1cm}
-\caption{$b=0$}
-\input{../output/15_ts_25_25_size_fine_grid}\vspace{0.25cm}
-\caption{$b=0.25$}
-\input{../output/15_ts_25_25_power_b_25_fine_grid}\vspace{0.25cm}
-\caption{$b=0.5$}
-\input{../output/15_ts_25_25_power_b_50_fine_grid}\vspace{0.25cm}
-\caption{$b=0.75$}
-\input{../output/15_ts_25_25_power_b_75_fine_grid}
+\caption{$m_i$ bump function with $b=0.25$ for all $i$}
+\input{../output/15_ts_25_25_size_bump_null}
 \end{subtable}
 \end{center}}
 \end{table}
 
 
-The simulation results for the three grids are reported in Table \ref{tab:grids}.\footnote{Note that the simulation results for the grid $\mathcal{G}_T$ in the second column of Table \ref{tab:grids} are identical with those in Table \ref{tab:sizepower}. For ease of comparison, we have repeated these results as part of Table \ref{tab:grids}.}
-Each column corresponds to a particular choice of grid. Panel (a) in each column specifies the empirical size of the test, while panels (b)--(d) give the empirical power against the alternatives with bump size $b \in \{0.25,0.5,0.75\}$. 
-%, while {\color{red} the results for the finer grid are presented in Table \ref{tab:grid-fine}.} We report the results for the simulation scenario with stronger correlation across the time series and between the covariates, i.e., with $\rho = 0.25$ and $\phi = 0.25$, since this scenario is less favourable for our multiscale procedure and the results with different values of $\rho$ and $\phi$ are fairly similar.
-As can be seen, the size numbers in Table \ref{tab:grids} are fairly stable across the three different grids. In particular, we get a reasonable approximation to the target size $\alpha$, no matter which of the three grids we are working with. Moreover, the power numbers for $\mathcal{G}_T$ and the finer grid $\mathcal{G}_T^{\text{fine}}$ are quite similar to each other. Those for the sparser grid $\mathcal{G}_T^{\text{sparse}}$, in contrast, are somewhat lower, which may be explained as follows: As $\mathcal{G}_T^{\text{sparse}}$ is considerably sparser than the other two grids, much less intervals $\interval = [u-h,u+h]$ are taken into account. In particular, intervals may potentially be ignored where the deviation from the null is quite strong. This results in a loss of power.
-Taken together, our simulation results suggest the following: (i) The particular choice of grid has a negligible effect on the empirical size of the test. (ii) As long as the grid is sufficiently rich, the choice of grid also has a negligible effect on the power of the test. 
-%As long as the grid is chosen sufficiently rich (in the sense of including a variety of bandwidth values ranging from very small to very large and many time points that are scattered rather densely over the unit interval), the particular choice of grid has a negligible effect on the test.
-%Furthermore, even though the power numbers are a bit lower in case of a sparse grid compared to a , the test has reasonable power properties for all of the choices of the grid. %This demonstrates that
-%Although there are minor deviations from the results for the original simulated scenario presented in Section A.1, these variations are not substantial which confirms the robust performance of the proposed test when applied to a finer grid.
-%Furthermore, as we have seen in Section \ref{subsec:sim:large_n}, the behaviour of our test does not substantially change in case of a much sparser grid $\mathcal{G}_T^{\text{sparse}}$.
-%This suggests that as long as the grid is chosen sufficiently rich (in the sense of including a variety of bandwidth values ranging from very small to very large and many time points that are scattered rather densely over the unit interval), the particular choice of grid has a negligible effect on the test.
+\begin{figure}[t!]
+\caption{Histograms of the estimated (square root of the) long-run error variance with $m_i$ the zero and the bump function. The red vertical line is the true value of the (square root of the) long-run error variance.}\label{fig:lrv}
 
-
-Apart from the grid, our method depends on the following tuning parameters: (i) the number of bootstrap samples $L$ to compute the Gaussian quantile, (ii) the kernel $K$, and (iii) secondary tuning parameters for the computation of the long-run error variance. 
-As long as $L$ is chosen large enough (say $L \ge 1000$), the exact value of $L$ should have a negligible effect. We use $L=5000$ throughout the paper.\footnote{Except for the simulations with the fine grid $\mathcal{G}_T^{\text{fine}}$, where $L=1000$.} As a robustness check, we have rerun everything with $L=1000$, which (as expected) yields almost identical results.\footnote{The results are not reported here but are available from the authors upon request.} 
-As suggested by classical nonparametric theory, the Epanechnikov kernel (which is used throughout the paper) has good properties and the choice of kernel $K$ is of minor importance, in particular, much less important than the choice of bandwidth. Thus, we have not carried out robustness checks with respect to the choice of kernel.
-Our procedure can be combined with any method off-the-shelf for long-run error variance estimation. In the current simulation study, we work with the long-run variance estimator from \cite{KhismatullinaVogt2020}, where extensive robustness checks with respect to the choice of tuning parameters have been carried out. We refer to Section 5.2 therein for the details.
-
-\subsection{Performance of the test in the presence of time-varying error variance}\label{subsec:sim:SV}
-
-As a robustness check, in this section we investigate performance of our test in the presence of time-varying error variance. Specifically, we assume that for each $i$, the idiosyncratic error process $\{\varepsilon_{it}: 1 \le t \le T\}$ follows the AR(1) model $\varepsilon_{it} = a \varepsilon_{i t-1} + \sigma(t/T)\eta_{it}$, where $a = 0.25$, the innovations $\eta_{it}$ are i.i.d.\ normally distributed with mean $0$ and standard deviation $1$ and $\sigma^2(u) = -0.15(u-0.5)^2 + 0.075$ for $u \in [0, 1]$ (see also Figure \ref{fig:SV} for $T=500$). The choice of the the function $\sigma^2(u)$ is driven by the normalization $\int_0^1 \sigma^2(u)du = 0.25^2$ which is introduced to make this setup comparable to the ones from Section \ref{subsec:sim:main}. All of the other parameters remain as in Section \ref{subsec:sim:main}. The results are presented in Tables \ref{tab:size:SV} - \ref{tab:realpower100:SV}.
-
-Table \ref{tab:size:SV} demonstrates that the empirical size of the test always lie below the target $\alpha$ even in the presence of time-varying error variance. Tables \ref{tab:size:SV} - \ref{tab:realpower100:SV} further show that the test has reasonable local power (specifically, real power$^{[1]}$, real power$^{[1]}$ and real power$^{[100]}$ defined in Section \ref{subsec:sim:main}).
-\begin{figure}[h]
-%\renewcommand{\arraystretch}{1.2}
-\footnotesize{
-\begin{center}
-    \centering
-    \includegraphics{../output/SV_plot.pdf}
-    \end{center}\caption{Time-varying error variance $\sigma^2(u)$ for $u \in [0, 1]$.}\label{fig:SV}}
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\caption{$m_i = 0$ for all $i$}
+\includegraphics[scale=0.3]{../output/sigma_histogram_zero_function_T_100_b_0.pdf}
+\includegraphics[scale=0.3]{../output/sigma_histogram_zero_function_T_250_b_0.pdf}
+\includegraphics[scale=0.3]{../output/sigma_histogram_zero_function_T_500_b_0.pdf}
+\end{subfigure}
+\begin{subfigure}[b]{0.45\textwidth}
+\centering
+\caption{$m_i$ bump function with $b=0.25$ for all $i$}
+\includegraphics[scale=0.3]{../output/sigma_histogram_bump_function_T_100_b_0.pdf}
+\includegraphics[scale=0.3]{../output/sigma_histogram_bump_function_T_250_b_0.pdf}
+\includegraphics[scale=0.3]{../output/sigma_histogram_bump_function_T_500_b_0.pdf}
+\end{subfigure}
 \end{figure}
 
-\begin{table}[t!]
-\renewcommand{\arraystretch}{1.2}  
-\footnotesize{
-\begin{center}
-\caption{Empirical size of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$ in case of time-varying error variance.}\label{tab:size:SV}
-\centering  
-\input{../output/15_ts_25_25_size_SV}
-\end{center}}
-\end{table}
 
-\begin{table}[t!]
-\renewcommand{\arraystretch}{1.2}  
-\footnotesize{
-\begin{center}
-\caption{Real power$^{[1]}$ of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$ in case of time-varying error variance.
-Each panel gives the results for a different bump height $b$, where $b = 0.25,0.5,0.75$ corresponds to three different alternatives of $m_1$.}\label{tab:realpower1:SV}
-\begin{subtable}[b]{0.32\textwidth}
-\centering  
-\caption{$b=0.25$}
-\input{../output/15_ts_25_25_actual_power_b_25_SV}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\setcounter{subtable}{0}  
-\centering  
-\vspace{0.25cm} 
-\caption{$b=0.5$}
-\input{../output/15_ts_25_25_actual_power_b_50_SV}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\centering  
-\vspace{0.25cm} \caption{$b=0.75$}
-\input{../output/15_ts_25_25_actual_power_b_75_SV}
-\end{subtable}
-\end{center}}
-\end{table} 
-
-\begin{table}[h!]
-\renewcommand{\arraystretch}{1.2}  
-\footnotesize{
-\begin{center}
-\caption{Real power$^{[50]}$ of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$ in case of time-varying error variance.
-Each panel gives the results for a different bump height $b$, where $b = 0.25,0.5,0.75$ corresponds to three different alternatives of $m_1$.}\label{tab:realpower50:SV}
-\begin{subtable}[b]{0.32\textwidth}
-\centering  
-\caption{$b=0.25$}
-\input{../output/15_ts_25_25_majority_power_b_25_SV}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\setcounter{subtable}{0}  
-\centering  
-\vspace{0.25cm} 
-\caption{$b=0.5$}
-\input{../output/15_ts_25_25_majority_power_b_50_SV}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\centering  
-\vspace{0.25cm} \caption{$b=0.75$}
-\input{../output/15_ts_25_25_majority_power_b_75_SV}
-\end{subtable}
-\end{center}}
-\end{table} 
-
-\begin{table}[h!]
-\renewcommand{\arraystretch}{1.2}  
-\footnotesize{
-\begin{center}
-\caption{Real power$^{[100]}$ of the multiscale test for different time series lengths $T$ and nominal sizes $\alpha$ in case of time-varying error variance.
-Each panel gives the results for a different bump height $b$, where $b = 0.25,0.5,0.75$ corresponds to three different alternatives of $m_1$.}\label{tab:realpower100:SV}
-\begin{subtable}[b]{0.32\textwidth}
-\centering  
-\caption{$b=0.25$}
-\input{../output/15_ts_25_25_full_power_b_25_SV}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\setcounter{subtable}{0}  
-\centering  
-\vspace{0.25cm} 
-\caption{$b=0.5$}
-\input{../output/15_ts_25_25_full_power_b_50_SV}
-\end{subtable}
-\begin{subtable}[b]{0.32\textwidth}
-\centering  
-\vspace{0.25cm} \caption{$b=0.75$}
-\input{../output/15_ts_25_25_full_power_b_75_SV}
-\end{subtable}
-\end{center}}
-\end{table} 
+As a first robustness check, we re-run the size simulations from Section \ref{subsec:sim:main}  with a different choice of the function $m_i$. In particular, rather than choosing $m_i = 0$ for all $i$, we choose $m_i$ to be the bump function from \eqref{eq:bump-fct} with $b=0.25$. The resulting size numbers are presented in Table \ref{tab:size2}(b). For ease of comparison, we have reproduced the size numbers from Table \ref{tab:sizepower}(a) for the case with $m_i=0$ in Table \ref{tab:size2}(a). The main findings are as follows: (i) When $m_i$ is the bump function, the test is conservative. In particular, the size numbers are substantially below the target $\alpha$ for the smallest sample size $T=100$, gradually getting better as the sample size increases. (ii) When $m_i$ is the zero function, in contrast, the size numbers tend to be rather on the liberal than the conservative side. (iii) For smaller sample sizes, in particular for $T=100$, the size numbers tend to be more accurate when $m_i$ is the zero function. For larger sample sizes, in contrast, in particular for $T=500$, the size numbers are fairly accurate no matter whether $m_i$ is the zero or the bump function. 
+How can these differences in size numbers be explained? Importantly, estimating the long-run error variance $\sigma^2$ is more difficult in the presence of a non-trivial (i.e., non-constant) trend $m_i$. In particular, if we do not manage to eliminate the trend $m_i$ accurately from the data (e.g.\ by differencing or nonparametric regression techniques), this will bias the estimator of the long-run error variance. This is illustrated in Figure \ref{fig:lrv}: whereas the estimates of the long-run error variance are nearly unbiased in the case with $m_i = 0$ for all $i$, there is a clear bias in the case where $m_i$ is the bump function (the bias getting smaller as the sample size increases). As the long-run error variance enters our multiscale test statistic $\widehat{\Psi}_{n,T}$ as a normalization constant, a biased estimate of it will in general lead to size distortions. 
 
 
-\subsection{Performance of the test for large $\boldsymbol{n}$}\label{subsec:sim:large_n}
+\subsubsection{Performance of the test for large $\boldsymbol{n}$}\label{subsec:sim:large_n}
 
 
 \begin{sidewaystable}[p]
@@ -563,18 +396,284 @@ Each panel gives the results for a different bump height $b$, where $b = 0.25,0.
 \end{sidewaystable}
 
 
-So far, we have fixed the number of time series at $n = 15$. We now examine the performance of our test as $n$ gets larger. To do so, we rerun the simulation exercises from Section \ref{subsec:sim:main} for $n \in \{25,50,100\}$ and $T$ as before, i.e., $T \in \{100,250,500\}$. We work with precisely the same simulation setup as specified in Section \ref{subsec:sim:main} except for the fact that we use the smaller grid $\mathcal{G}_T^{\text{sparse}}$ defined in \eqref{eq:grid-sparse} to decrease the computational burden. Overall, our simulation results suggest that the test performs well for larger $n$. The results are presented in Table \ref{tab:large-n}, with each column corresponding to a particular choice of $n$. 
+So far, we have fixed the number of time series at $n = 15$. We now examine the performance of our test as $n$ gets larger. To do so, we re-run the simulation exercises from Section \ref{subsec:sim:main} for $n \in \{25,50,100\}$ and $T$ as before, i.e., $T \in \{100,250,500\}$. We work with precisely the same simulation setup as in Section \ref{subsec:sim:main} except that we use the smaller grid $\mathcal{G}_T^{\text{sparse}}$ defined in \eqref{eq:grid-sparse} to decrease the computational burden. Overall, our simulation results suggest that the test performs well for larger $n$. The results are presented in Table \ref{tab:large-n}, with each column corresponding to a particular choice of $n$. 
 The upper panels (a) of Table \ref{tab:large-n} show that the empirical size of the test provides a reasonably good approximation to the target $\alpha$ across all scenarios under consideration. In particular, the size numbers remain fairly stable as $n$ increases, even though they appear to get a little less precise for larger $n$. 
 Panels (b)--(d) further show that the test has reasonable power across all considered scenarios. The power numbers, however, decrease somewhat as $n$ gets larger, which may be explained as follows: Let $\mathcal{M} = \{ (u,h,i,j): (u,h) \in \grid \text{ and } 1 \le i < j \le n \}$ be the collection of all location-scale points $(u,h)$ and all pairs of time series $(i,j)$ under consideration and let $\mathcal{M}_1 \subseteq \mathcal{M}$ be the set of tuples $(u,h,i,j)$ for which the local null hypothesis $H_0^{[i, j]}(u, h)$ is false. Since in the simulation setup at hand, all trend functions are the same except the first one ($m_1$ being the bump function from \eqref{eq:bump-fct} with bump size $b$ and $m_i = 0$ for all $i \ne 1$), it holds that $|\mathcal{M}_1| / |\mathcal{M}| \to 0$ quite fast as $n \to \infty$ (where $| \mathcal{M} |$ denotes the cardinality of the set $\mathcal{M}$). Hence, as $n$ increases, the total number of hypotheses to be tested grows much faster than the number of hypotheses which are violated. As a consequence, it gets harder to detect these violations, which is reflected in somewhat lower power numbers. 
 
-\subsection{Comparison of our test with a naive competitor} 
 
-In this section, we compare our method with a simple naive competitor that is based on the uniform confidence bands (UCBs) from \cite{Kim2016}. For our comparison, we consider the model $Y_{it} = m_i(\frac{t}{T}) + \bfbeta_i^\top \X_{it} +  \varepsilon_{it}$ without the fixed effects since the specification in \cite{Kim2016} does not allow for them. Other than that, the simulation setup is as specified in Section \ref{subsec:sim:main}. We consider $n=15$ time series, and as before, to generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for $i=1, \ldots, n$, and to produce data under the alternative, we use the bump function $m_1$ defined in \eqref{eq:bump-fct} with bump size $b \in \{ 0.25, 0.5, 0.75 \}$ while setting $m_i = 0$ for $i = 2, \ldots, n$.
-We implement our multiscale test as in Section \ref{subsec:sim:main}.
+\subsubsection{Robustness checks on the choice of tuning parameters}\label{subsec:sim:grid}
 
-\begin{figure}[h!]
-%\renewcommand{\arraystretch}{1.2}
+
+The main tuning parameter of our method is the grid $\mathcal{G}_T$, which in particular specifies the bandwidths that are taken into account. In order to assess the robustness of our test with respect to the grid, we repeat the simulation exercises from Section \ref{subsec:sim:main} with two different choices of the grid: a sparser and a finer grid than the one used in Section \ref{subsec:sim:main}.
+The sparser grid is defined as
+\begin{align}
+\mathcal{G}_T^{\text{sparse}} = \big\{ (u,h) \subseteq [0,1]: & \ (u,h) = ((2s+1) h, h) \text{ for } s = 0,\ldots,\Big\lfloor \frac{h^ {-1}-1}{2} \Big\rfloor \nonumber \\* & \ \text{and } h \in H_T^{\text{sparse}} \big\} \label{eq:grid-sparse}
+\end{align}
+with $H_T^{\text{sparse}} = \{ h = 2^k h_{\min} \text{ for } k=0,\ldots,K \}$, where $h_{\min} = \frac{\lceil \log T \rceil}{T}$ and $K$ is such that $2^K h_{\min} \le \frac{1}{4}$, i.e., $K \le \lfloor \log(\frac{T}{4 \lceil \log T \rceil }) \frac{1}{\log(2)} \rfloor$. This is a dyadic scheme with scales in the set $H_T^{\text{sparse}}$ as commonly used in Wavelet analysis. 
+The finer grid is defined as
+$\mathcal{G}_T^{\text{fine}} = U_T^{\text{fine}} \times H_T^{\text{fine}}$,
+where  
+$U_T^{\text{fine}}  = \{ u \in [0,1]: u = \textstyle{\frac{t}{T}} \text{ with } 1 \le t \le T \}$
+and
+$H_T^{\text{fine}} = \{ h \in [ \textstyle{\frac{\log T}{T}}, \textstyle{\frac{1}{4}} ]:  h = \textstyle{\frac{2t}{T}} \text{ with } 1 \le t \le T \}$. Apart from the choice of grid, we work with precisely the same simulation setup as in Section \ref{subsec:sim:main}.\footnote{As the grid $\mathcal{G}_T^{\text{fine}}$ is very fine, the number of tests to be carried out is extremely large, which significantly increases the computational burden. To decrease computational time, we proceed as follows when using the fine grid $\mathcal{G}_T^{\text{fine}}$:  we calculate the Gaussian quantile based on $L = 1000$ (rather than $5000$) bootstrap samples and we simulate $1000$ samples (rather than $5000$) for each simulation scenario.}
+
+
+\begin{table}[t!]
+\renewcommand{\arraystretch}{1.2}  
 \footnotesize{
+\begin{center}
+\caption{Empirical size and power of the multiscale test for three different grids. Each column corresponds to a particular choice of grid. Panels (a)--(d) of each column have the same structure as in Table \ref{tab:sizepower}.}\label{tab:grids}
+\begin{subtable}[b]{0.32\textwidth}
+\setcounter{subtable}{0}    
+\centering  
+\caption*{sparser grid $\mathcal{G}_T^{\text{sparse}}$}\vspace{0.1cm} 
+\caption{$b=0$}
+\input{../output/15_ts_25_25_size_dyadic_grid}\vspace{0.25cm}
+\caption{$b=0.25$}
+\input{../output/15_ts_25_25_power_b_25_dyadic_grid}\vspace{0.25cm}
+\caption{$b=0.5$}
+\input{../output/15_ts_25_25_power_b_50_dyadic_grid}\vspace{0.25cm}
+\caption{$b=0.75$}
+\input{../output/15_ts_25_25_power_b_75_dyadic_grid}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\setcounter{subtable}{0}  
+\centering  
+\caption*{grid $\mathcal{G}_T$ from Section \ref{subsec:sim:main}}\vspace{0.1cm} 
+\caption{$b=0$}
+\input{../output/15_ts_25_25_size}\vspace{0.25cm}
+\caption{$b=0.25$}
+\input{../output/15_ts_25_25_power_b_25}\vspace{0.25cm}
+\caption{$b=0.5$}
+\input{../output/15_ts_25_25_power_b_50}\vspace{0.25cm}
+\caption{$b=0.75$}
+\input{../output/15_ts_25_25_power_b_75}
+\end{subtable}
+\begin{subtable}[b]{0.32\textwidth}
+\setcounter{subtable}{0}    
+\centering  
+\caption*{finer grid $\mathcal{G}_T^{\text{fine}}$}\vspace{0.1cm}
+\caption{$b=0$}
+\input{../output/15_ts_25_25_size_fine_grid}\vspace{0.25cm}
+\caption{$b=0.25$}
+\input{../output/15_ts_25_25_power_b_25_fine_grid}\vspace{0.25cm}
+\caption{$b=0.5$}
+\input{../output/15_ts_25_25_power_b_50_fine_grid}\vspace{0.25cm}
+\caption{$b=0.75$}
+\input{../output/15_ts_25_25_power_b_75_fine_grid}
+\end{subtable}
+\end{center}}
+\end{table}
+
+
+The simulation results for the three grids are reported in Table \ref{tab:grids}.\footnote{Note that the simulation results for the grid $\mathcal{G}_T$ in the second column of Table \ref{tab:grids} are identical with those in Table \ref{tab:sizepower}. For ease of comparison, we have repeated these results as part of Table \ref{tab:grids}.}
+Each column corresponds to a particular choice of grid. Panel (a) in each column specifies the empirical size of the test, while panels (b)--(d) give the empirical power against the alternatives with bump size $b \in \{0.25,0.5,0.75\}$. 
+As can be seen, the size numbers in Table \ref{tab:grids} are fairly stable across the three different grids. In particular, we get a reasonable approximation to the target size $\alpha$, no matter which of the three grids we are working with. Moreover, the power numbers for $\mathcal{G}_T$ and the finer grid $\mathcal{G}_T^{\text{fine}}$ are quite similar to each other. Those for the sparser grid $\mathcal{G}_T^{\text{sparse}}$, in contrast, are somewhat lower, which may be explained as follows: As $\mathcal{G}_T^{\text{sparse}}$ is considerably sparser than the other two grids, much less intervals $\interval = [u-h,u+h]$ are taken into account. In particular, intervals may potentially be ignored where the deviation from the null is quite strong. This results in a loss of power.
+Taken together, our simulation results suggest the following: (i) The particular choice of grid has a negligible effect on the empirical size of the test. (ii) As long as the grid is sufficiently rich, the choice of grid also has a negligible effect on the power of the test. 
+
+
+Apart from the grid, our method depends on the following tuning parameters: (i) the number of bootstrap samples $L$ to compute the Gaussian quantile, (ii) the kernel $K$, and (iii) secondary tuning parameters for the computation of the long-run error variance. 
+As long as $L$ is chosen large enough (say $L \ge 1000$), the exact value of $L$ should have a negligible effect. We use $L=5000$ throughout the paper.\footnote{Except for the simulations with the fine grid $\mathcal{G}_T^{\text{fine}}$, where $L=1000$.} As a robustness check, we have rerun everything with $L=1000$, which (as expected) yields almost identical results.\footnote{The results are not reported here but are available from the authors upon request.} 
+As suggested by classical nonparametric theory, the Epanechnikov kernel (which is used throughout the paper) has good properties and the choice of kernel $K$ is of minor importance, in particular, much less important than the choice of bandwidth. Thus, we have not carried out robustness checks with respect to the choice of kernel.
+Our procedure can be combined with any method off-the-shelf for long-run error variance estimation. In the current simulation study, we work with the long-run variance estimator from \cite{KhismatullinaVogt2020}, where extensive robustness checks with respect to the choice of tuning parameters have been carried out. We refer to Section 5.2 therein for the details.
+
+
+\subsubsection{Performance of the test in the presence of time-varying error variance}\label{subsec:sim:SV}
+
+
+% \begin{table}[t!]
+% \renewcommand{\arraystretch}{1.2}  
+% \footnotesize
+
+% \caption{Empirical size of the multiscale test in case of time-varying error variance.}\label{tab:size:SV}
+
+% \centering
+% \input{../output/15_ts_25_25_size_SV}
+% \vspace{0.6cm}
+
+% \caption{Real power$^{[1]}$ in case of time-varying error variance for the three different alternatives with bump height $b = 0.25,0.5,0.75$.}\label{tab:realpower1:SV}
+% \vspace{-0.25cm}
+
+% \begin{subtable}[b]{0.32\textwidth}
+% \centering  
+% \caption{$b=0.25$}
+% \input{../output/15_ts_25_25_actual_power_b_25_SV}
+% \end{subtable}
+% \begin{subtable}[b]{0.32\textwidth}
+% \setcounter{subtable}{0}  
+% \centering  
+% \vspace{0.25cm} 
+% \caption{$b=0.5$}
+% \input{../output/15_ts_25_25_actual_power_b_50_SV}
+% \end{subtable}
+% \begin{subtable}[b]{0.32\textwidth}
+% \centering  
+% \vspace{0.25cm} \caption{$b=0.75$}
+% \input{../output/15_ts_25_25_actual_power_b_75_SV}
+% \end{subtable}
+% \vspace{0.5cm}
+
+% \caption{Real power$^{[50]}$ in case of time-varying error variance for the three different alternatives with bump height $b = 0.25,0.5,0.75$.}\label{tab:realpower50:SV}
+% \vspace{-0.25cm}
+
+% \begin{subtable}[b]{0.32\textwidth}
+% \centering  
+% \caption{$b=0.25$}
+% \input{../output/15_ts_25_25_majority_power_b_25_SV}
+% \end{subtable}
+% \begin{subtable}[b]{0.32\textwidth}
+% \setcounter{subtable}{0}  
+% \centering  
+% \vspace{0.25cm} 
+% \caption{$b=0.5$}
+% \input{../output/15_ts_25_25_majority_power_b_50_SV}
+% \end{subtable}
+% \begin{subtable}[b]{0.32\textwidth}
+% \centering  
+% \vspace{0.25cm} \caption{$b=0.75$}
+% \input{../output/15_ts_25_25_majority_power_b_75_SV}
+% \end{subtable}
+% \vspace{0.5cm}
+
+% \caption{Real power$^{[100]}$ in case of time-varying error variance for the three different alternatives with bump height $b = 0.25,0.5,0.75$.}\label{tab:realpower100:SV}
+% \vspace{-0.25cm}
+
+% \begin{subtable}[b]{0.32\textwidth}
+% \centering  
+% \caption{$b=0.25$}
+% \input{../output/15_ts_25_25_full_power_b_25_SV}
+% \end{subtable}
+% \begin{subtable}[b]{0.32\textwidth}
+% \setcounter{subtable}{0}  
+% \centering  
+% \vspace{0.25cm} 
+% \caption{$b=0.5$}
+% \input{../output/15_ts_25_25_full_power_b_50_SV}
+% \end{subtable}
+% \begin{subtable}[b]{0.32\textwidth}
+% \centering  
+% \vspace{0.25cm} \caption{$b=0.75$}
+% \input{../output/15_ts_25_25_full_power_b_75_SV}
+% \end{subtable}
+
+% \end{table} 
+
+In what follows, we investigate the performance of our test in the presence of time-varying error variance. We consider the same simulation setup as in Section \ref{subsec:sim:main} except that we model the error processes $\{\varepsilon_{it}: 1 \le t \le T\}$ slightly differently. Specifically, for each $i$, we consider an AR(1) process of the form $\varepsilon_{it} = a \varepsilon_{i t-1} + \nu(t/T)\eta_{it}$ with $a = 0.25$ and i.i.d.\ standard normal innovations $\eta_{it}$. In the simulation setup of Section \ref{subsec:sim:main}, the function $\nu$ was assumed to be constant, in particular, $\nu(u) = c_\nu$ with $c_\nu = 0.25$ for all $u \in [0,1]$. Now, in contrast, we allow $\nu$ to vary over time, specifically, we let $\nu(u) = \{ -0.15(u-0.5)^2 + 0.075 \}^{1/2}$ for $u \in [0, 1]$. Note that with this choice, the average short-run error variance $\int_0^1 \nu^2(u)du$ is equal to $c_\nu^2 = 0.25^2$ and thus matches the short-run error variance in the setup of Section \ref{subsec:sim:main}. Notably, the time variation induced by our choice of $\nu$ is quite strong. In particular, we have $\max_{u \in [0,1]} \nu^2(u) = 2 \min_{u \in [0,1]} \nu^2(u)$. 
+The simulation results are presented in Table \ref{tab:sizepower:SV}. Even though the test has reasonable power properties (panels (b)--(d) in Table \ref{tab:sizepower:SV}), the empirical size lies substantially below the target $\alpha$ (panel (a) in Table \ref{tab:sizepower:SV}), implying that the test is quite conservative in the case at hand. This demonstrates that the test should be treated with caution when the (short-run and/or long-run) error variance is expected to be strongly time-varying. The issue is that the scaling of our test statistics depends on the long-run error variance (see equation \eqref{eq:psi_zero_ij}) and that this scaling is theoretically not correct any more if the long-run error variance is time-varying. We may therefore expect non-negligible size distortions when the long-run error variance strongly varies over time. 
+
+\begin{table}[t!]
+\renewcommand{\arraystretch}{1.2}  
+\footnotesize{
+\begin{center}
+\caption{Empirical size and power of the multiscale test in case of time-varying error variance for different time series lengths $T$ and nominal sizes $\alpha$. Each panel gives the results for a different bump height $b$, where $b = 0$ corresponds to the null $H_0$ and $b = 0.25,0.5,0.75$ to three different alternatives.}\label{tab:sizepower:SV}
+\begin{subtable}[b]{0.4\textwidth}
+\centering  
+\caption{$b=0$}
+\input{../output/15_ts_25_25_size_SV}
+\end{subtable}
+\begin{subtable}[b]{0.4\textwidth}
+\centering  
+\caption{$b=0.25$}
+\input{../output/15_ts_25_25_power_b_25_SV}
+\end{subtable}
+\begin{subtable}[b]{0.4\textwidth}
+\centering  
+\vspace{0.25cm} \caption{$b=0.5$}
+\input{../output/15_ts_25_25_power_b_50_SV}
+\end{subtable}
+\begin{subtable}[b]{0.4\textwidth}
+\centering  
+\vspace{0.25cm} \caption{$b=0.75$}
+\input{../output/15_ts_25_25_power_b_75_SV}
+\end{subtable}
+\end{center}}
+\end{table}
+
+\subsection{Comparison of our test with competing methods}
+
+
+We compare our methods with two competitors. First, we consider the following simple procedure:  (i) compute a uniform confidence band (UCB) at level $(1-\alpha)$ for each trend function $m_i$ and (ii) reject the hypothesis that $m_i$ and $m_j$ are the same if their UCBs do not overlap at some time point. This procedure may be run with a Bonferroni correction to take into account that multiple comparisons are carried out. In addition, we compare our test method with the SiZer test from \cite{Park2009}. 
+
+
+\subsubsection{Comparison with a simple competitor} 
+
+
+To set up the first competitor, we compute uniform confidence bands (UCBs) for the trends $m_i$ as described in \cite{Kim2016}. For our comparison, we consider the simplified model $Y_{it} = m_i(\frac{t}{T}) + \bfbeta_i^\top \X_{it} +  \varepsilon_{it}$ without fixed effects since the specification in \cite{Kim2016} does not allow for them. Other than that, the simulation setup is as specified in Section \ref{subsec:sim:main}. 
+In particular, to generate data under the null $H_0: m_1 = \ldots = m_n$, we let $m_i = 0$ for all $i$, and to produce data under the alternative, we use the bump function $m_1$ defined in \eqref{eq:bump-fct} with bump size $b \in \{ 0.25, 0.5, 0.75 \}$ while setting $m_i = 0$ for $i \ne 1$.
+We implement our multiscale test as in Section \ref{subsec:sim:main}, where we fix the nominal size at $\alpha = 0.05$. To implement the UCBs, we set $\alpha = 0.05$ and estimate the trend function $m_i$ separately for each time series $i$ by a local linear estimate with bandwidth $h = 0.2$.\footnote{\cite{Kim2016} proposes a data-driven way to calculate the bandwidth using cross-validation, which needs to be repeated for each realisation of the data and is  therefore computationally very expensive. Hence, we have chosen several fixed bandwidths ($h = 0.1, 0.2, 0.3$) and report here the results for the best-performing one (which is $h=0.2$).} We then construct the UCB of $m_i$ as described in \cite{Kim2016}. In what follows, we denote our multiscale test by $\mathcal{T}_{\text{MS}}$ and the test based on the UCBs from \cite{Kim2016} by $\mathcal{T}_{\text{UCB}}$. 
+
+
+Table \ref{tab:sizepower_UCB} compares the size and power properties of the two tests: panel (a) reports the empirical size numbers, while panels (b)--(d) specify the empirical power numbers under the three different alternatives with bump size $b \in \{0.25,0.5,0.75\}$. To calculate the empirical size and power for $\mathcal{T}_{\text{UCB}}$, we consider the null hypothesis $H_0$ as rejected if there exists at least one pair $(i, j)$ and at least one time point $t/T$ such that the UCBs of $m_i$ and $m_j$ do not overlap at $t/T$. As the estimation procedure from \cite{Kim2016} turned out to perform extremely poorly at the boundaries,  we restrict attention to points $t/T \in [0.05, 0.95]$ (which is fine as in our simulation setting, the trend $m_1$ differs from the other trends only in the time period $\mathcal{I}^* = [0.2, 0.4] \cup [0.6, 0.8]$ anyway).
+Table \ref{tab:sizepower_UCB} demonstrates that our test has reasonable size and power properties. The test $\mathcal{T}_{\text{UCB}}$, in contrast, is extremely conservative (with empirical size exactly equal to $0$ for all considered levels $\alpha$!) and has extremely low power for smaller sample sizes, the power moderately increasing with the sample size. Notably, we have run $\mathcal{T}_{\text{UCB}}$ without any Bonferroni correction which would make things even worse! The reason for this poor performance is illustrated in Figure \ref{fig:UCB} which shows the estimated trends $m_1$ and $m_2$ together with their UCBs in a representative simulation run for the largest sample size $T=500$. Even for this sample size, the bands are still very wide, overlapping everywhere for the bump sizes $b=0.25$ and $b=0.5$. Only for the largest bump size $b=0.75$, the bands do not overlap at all time points (but only hardly so). Hence, the computed UCBs are much too wide to produce a good test performance. 
+
+
+\begin{table}[t!]
+\renewcommand{\arraystretch}{1.2}  
+\footnotesize{
+\begin{center}
+\caption{Size and power comparisons (with $\alpha$ fixed at $0.05$) for our multiscale test $\mathcal{T}_{\text{MS}}$ and the procedure $\mathcal{T}_{\text{UCB}}$ based on UCBs from \cite{Kim2016}.}\label{tab:sizepower_UCB}
+\vspace{-0.25cm}
+
+
+\begin{subtable}[b]{0.23\textwidth}
+\centering  
+\caption{$b=0$}
+\begin{tabular}{ccc}
+  \hline
+ $T$ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{UCB}}$ \\
+ \hline
+100 & 0.036 & 0.000 \\ 
+  250 & 0.087 & 0.000 \\ 
+  500 & 0.067 & 0.000 \\ 
+   \hline
+\end{tabular}
+\end{subtable}
+\begin{subtable}[b]{0.23\textwidth}
+\centering  
+\caption{$b=0.25$}
+\begin{tabular}{ccc}
+  \hline
+ $T$ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{UCB}}$ \\
+ \hline
+100 & 0.045 & 0.000 \\ 
+  250 & 0.350 & 0.001 \\ 
+  500 & 0.754 & 0.000 \\ 
+   \hline
+\end{tabular}
+\end{subtable}
+\begin{subtable}[b]{0.23\textwidth}
+\centering  
+\vspace{0.25cm} \caption{$b=0.5$}
+\begin{tabular}{ccc}
+  \hline
+ $T$ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{UCB}}$ \\
+ \hline
+100 & 0.039 & 0.002 \\ 
+  250 & 0.962 & 0.029 \\ 
+  500 & 1.000 & 0.654 \\ 
+   \hline
+\end{tabular}
+\end{subtable}
+\begin{subtable}[b]{0.23\textwidth}
+\centering  
+\vspace{0.25cm} \caption{$b=0.75$}
+\begin{tabular}{ccc}
+  \hline
+ $T$ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{UCB}}$ \\
+ \hline
+100 & 0.029 & 0.010 \\ 
+  250 & 0.995 & 0.638 \\ 
+  500 & 1.000 & 1.000 \\ 
+   \hline
+\end{tabular}
+\end{subtable}
+\end{center}}
+\end{table}
+
+
+\begin{figure}[t!]
+\renewcommand{\arraystretch}{1.2}
+\footnotesize
 \begin{center}
 \begin{subfigure}[b]{0.31\textwidth}
     \centering
@@ -591,78 +690,20 @@ We implement our multiscale test as in Section \ref{subsec:sim:main}.
     \includegraphics[scale=0.33]{../output/UCB_plot_with_T_500_and_b_75.pdf}
     \caption{$b = 0.75$}
     \end{subfigure}
-    \end{center}\caption{Examples of the estimated bump function $m_1$ (solid line in red) and $m_2 = 0$ (solid line in blue) and their corresponding UCBs (dashed lines) for $T=500$ and $b=0.25, 0.5, 0.75$.}\label{fig:UCB}}
+\end{center}
+\vspace{-0.5cm}
+
+\caption{Estimated trends $m_1$ (solid line in red) and $m_2 = 0$ (solid line in blue) and their corresponding UCBs (dashed lines) for $T=500$ and $b=0.25, 0.5, 0.75$.}\label{fig:UCB}
 \end{figure}
 
-For the implementation of the competitor, we fix the nominal size $\alpha = 0.05$ and we estimate the trend function $m_i(t/T)$ separately for each of the time series $i = 1, \ldots, n$ using a local linear estimate with a bandwidth $h = 0.2$\footnote{The paper proposes a data-driven way to calculate the bandwidth using cross-validation, which needs to be repeated for each realisation of the data, and therefore, extremely computationally expensive. Hence, we have chosen several fixed bandwidths ($h = 0.1, 0.2, 0.3$) and report here results for the best-performing one.} and then construct the UCB of $m_i$ as described in \cite{Kim2016}. Examples of two instances of the estimated trends under the alternative together with their corresponding UCBs are shown in Figure \ref{fig:UCB}.
+
+%To calculate the size and power for the competitor based on UCBs, we consider the null hypothesis rejected if there exist at least one pair $(i, j)$ and at least one point $t/T$ such that the UCBs of $m_i$ and $m_j$ do not overlap at $t/T$. In our experience, the estimation procedure from \cite{Kim2016} has poor performance at the boundaries, hence, to make the comparison as fair as possible, we restrict our attention only to the points $t/T \in [0.05, 0.95]$.
+
+%In what follows, we denote our multiscale test by $\mathcal{T}_{\text{MS}}$ and the test based on the UCBs from \cite{Kim2016} by $\mathcal{T}_{\text{UCB}}$. Table \ref{tab:sizepower_UCB} presents the results of our comparison study. Panel (a) compares the empirical size of the two tests, while panels (b), (c) and (d) provide a power comparison. As can be expected, our test has good power properties compared to the competing procedure. For example, for the smallest sample size $T=100$, the UCBs for two trend functions remain relatively wide compared to the strength of the signal so that we almost never detect any differences. For moderate sample size $T=250$ our test perform well already for a moderate signal $b=0.5$ while $\mathcal{T}_{\text{UCB}}$ produces wide UCBs that the test barely has any power. Only for the largest sample size $T=500$, the test $\mathcal{T}_{\text{UCB}}$ reaches a power of $1$ for the strongest signal, with our test being more powerful in all of the other settings. Furthermore, in this comparison we do not apply any correction for multiple testing, but clearly any type of such correction would result in UCBs being wider and the test $\mathcal{T}_{\text{UCB}}$ needing even stronger signals and larger sample sizes to reach considerable power.
 
 
 
-To calculate the size and power for the competitor based on UCBs, we consider the null hypothesis rejected if there exist at least one pair $(i, j)$ and at least one point $t/T$ such that the UCBs of $m_i$ and $m_j$ do not overlap at $t/T$. In our experience, the estimation procedure from \cite{Kim2016} has poor performance at the boundaries, hence, to make the comparison as fair as possible, we restrict our attention only to the points $t/T \in [0.05, 0.95]$.
-
-In what follows, we denote our multiscale test by $\mathcal{T}_{\text{MS}}$ and the text based on the UCBs from \cite{Kim2016} by $\mathcal{T}_{\text{UCB}}$. Table \ref{tab:sizepower_UCB} presents the results of our comparison study. Panel (a) compares the empirical size of the two tests, while panels (b), (c) and (d) provide a power comparison. As can be expected, our test has good power properties compared to the competing procedure. For example, for the smallest sample size $T=100$, the UCBs for two trend functions remain relatively wide compared to the strength of the signal so that we almost never detect any differences. For moderate sample size $T=250$ our test perform well already for a moderate signal $b=0.5$ while $\mathcal{T}_{\text{UCB}}$ produces wide UCBs that the test barely has any power. Only for the largest sample size $T=500$, the test $\mathcal{T}_{\text{UCB}}$ reaches a power of $1$ for the strongest signal, with our test being more powerful in all of the other settings. Furthermore, in this comparison we do not apply any correction for multiple testing, but clearly any type of such correction would result in UCBs being wider and the test $\mathcal{T}_{\text{UCB}}$ needing even stronger signals and larger sample sizes to reach considerable power.
-
-\begin{table}[t!]
-\renewcommand{\arraystretch}{1.2}  
-\footnotesize{
-\begin{center}
-\caption{Size and power comparison of our multiscale test $\mathcal{T}_{\text{MS}}$ and the procedure $\mathcal{T}_{\text{UCB}}$ based on UCBs from \cite{Kim2016}.}\label{tab:sizepower_UCB}
-\begin{subtable}[b]{0.23\textwidth}
-\centering  
-\caption{$b=0$}
-\begin{tabular}{ccc}
-  \hline
- $T$ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{UCB}}$ \\
- \hline
-100 & . & 0.000 \\ 
-  250 & . & 0.000 \\ 
-  500 & . & 0.000 \\ 
-   \hline
-\end{tabular}
-\end{subtable}
-\begin{subtable}[b]{0.23\textwidth}
-\centering  
-\caption{$b=0.25$}
-\begin{tabular}{ccc}
-  \hline
- $T$ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{UCB}}$ \\
- \hline
-100 & . & 0.000 \\ 
-  250 & . & 0.001 \\ 
-  500 & . & 0.000 \\ 
-   \hline
-\end{tabular}
-\end{subtable}
-\begin{subtable}[b]{0.23\textwidth}
-\centering  
-\vspace{0.25cm} \caption{$b=0.5$}
-\begin{tabular}{ccc}
-  \hline
- $T$ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{UCB}}$ \\
- \hline
-100 & . & 0.002 \\ 
-  250 &. & 0.029 \\ 
-  500 &. & 0.654 \\ 
-   \hline
-\end{tabular}
-\end{subtable}
-\begin{subtable}[b]{0.23\textwidth}
-\centering  
-\vspace{0.25cm} \caption{$b=0.75$}
-\begin{tabular}{ccc}
-  \hline
- $T$ & $\mathcal{T}_{\text{MS}}$ & $\mathcal{T}_{\text{UCB}}$ \\
- \hline
-100 & . & 0.010 \\ 
-  250 &. & 0.638 \\ 
-  500 &. & 1.000 \\ 
-   \hline
-\end{tabular}
-\end{subtable}
-\end{center}}
-\end{table}
-
-\subsection{Comparison of our test with SiZer} 
+\subsubsection{Comparison with SiZer} 
 
 
 To the best of our knowledge, the only other multiscale test for comparing trend curves available in the literature is the SiZer test developed in \cite{Park2009}. In this section, we compare our method with this test. Notably, \cite{Park2009} consider a simplified version of our model without covariates and fixed effects. Moreover, rigorous theory has been developed only for the case of $n=2$ time series. The authors propose a possible extension of their approach to the case of more than $n=2$ time series, but the extension does not allow for a pairwise comparison of the time series. Moreover, it is not clear how to calculate the actual size and power of the test in the case of more than $n=2$ time series. For our comparison, we thus consider the model $Y_{it} = m_i\big(\frac{t}{T}\big) + \varepsilon_{it}$ without covariates and fixed effects and we choose the number of time series to be equal to $n=2$. 
@@ -736,14 +777,14 @@ $T = 100$ & 0.482 & 0.733 & 0.703 & 0.922 & 0.815 & 0.967 \\
 \end{table}
 
 
-As before, we use notation $\mathcal{T}_{\text{MS}}$ for our multiscale test and we denote the SiZer test of \cite{Park2009} by $\mathcal{T}_{\text{SiZer}}$. Table \ref{tab:sizer} presents the results of our comparison study. Panel (a) compares the empirical size of the two tests, while panels (b) and (c) provide a power comparison. 
+As before, we use the notation $\mathcal{T}_{\text{MS}}$ for our multiscale test and we denote the SiZer test of \cite{Park2009} by $\mathcal{T}_{\text{SiZer}}$. Table \ref{tab:sizer} presents the results of our comparison study. Panel (a) compares the empirical size of the two tests, while panels (b) and (c) provide a power comparison. 
 %of the size and power simulation studies comparing $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{SiZer}}$ are presented in Tables \ref{tab:size:compare} and Tables \ref{tab:power:compare1}, \ref{tab:power:compare2} respectively.
 There is an important difference between $\mathcal{T}_{\text{MS}}$ and $\mathcal{T}_{\text{SiZer}}$ to be noticed: $\mathcal{T}_{\text{MS}}$ is a global test procedure, whereas $\mathcal{T}_{\text{SiZer}}$ is scale-wise in essence. This means that $\mathcal{T}_{\text{MS}}$ tests the hypotheses $H_0^{[1,2]}(u,h)$ simultaneously for all locations $u \in U_T$ and scales $h \in H_T$. In particular, it controls the size simultaneously over both locations $u$ and scales $h$. $\mathcal{T}_{\text{SiZer}}$, in contrast, tests $H_0^{[1,2]}(u,h)$ simultaneously for all $u \in U_T$ but separately for each scale $h \in H_T$ and, hence, controls the size for each scale $h \in H_T$ separately. This results in $\mathcal{T}_{\text{SiZer}}$ being much too liberal, as panel (a) illustrates: whereas the empirical size numbers of $\mathcal{T}_{\text{MS}}$ closely align with the target size $\alpha$, the size numbers of $\mathcal{T}_{\text{SiZer}}$ are much larger than the target $\alpha$. In particular, they deviate more and more strongly from the target $\alpha$ as $T$ increases, since the number of scales $h$ in the grid $\mathcal{G}_T$ increases with $T$. To summarize, as expected, the global test $\mathcal{T}_{\text{MS}}$ holds the size reasonably well, whereas the scale-wise method $\mathcal{T}_{\text{SiZer}}$ is much too liberal.
 %One could of course fix this issue by using a simple multiple testing correction such as Bonferroini. However, as the statistics underlying the test are strongly correlated across bandwidths $h$ (and time series $(i,j)$ in the case $n > 2$), this will most probably result in a very conservative procedure.
 Inspecting the power numbers in panels (b) and (c), one can further see that in all simulation scenarios, $\mathcal{T}_{\text{SiZer}}$ is more powerful than $\mathcal{T}_{\text{MS}}$. These higher power numbers, however, should not be taken at face value. In particular, they do not imply that $\mathcal{T}_{\text{SiZer}}$ is better in detecting deviations from the null than our test. They are rather a simple consequence of the fact that $\mathcal{T}_{\text{SiZer}}$ is much too liberal as illustrated in panel (a).
 
 
-There are of course other procedures besides the SiZer test of \cite{Park2009} that can be regarded as potential competitors of our test. The main merit of our method is that we can perform inference uniformly over all locations $u$ and bandwidths (or scales) $h$ in the grid $\mathcal{G}_T$ and over all pairs of time series $(i,j)$. The potential competitors we are aware of do not have this uniformity property. Specifically, they are not uniform over bandwidths $h$ and usually also not over pairs of time series $(i,j)$. Hence, most probably, we will see a very similar picture when comparing these methods with ours: they will be much too liberal. In this sense, the above comparison with SiZer is prototypical. 
+%There are of course other procedures besides the SiZer test of \cite{Park2009} that can be regarded as potential competitors of our test. The main merit of our method is that we can perform inference uniformly over all locations $u$ and bandwidths (or scales) $h$ in the grid $\mathcal{G}_T$ and over all pairs of time series $(i,j)$. The potential competitors we are aware of do not have this uniformity property. Specifically, they are not uniform over bandwidths $h$ and usually also not over pairs of time series $(i,j)$. Hence, most probably, we will see a very similar picture when comparing these methods with ours: they will be much too liberal. In this sense, the above comparison with SiZer is prototypical. 
 
 
 \subsection{Performance of the clustering algorithm}\label{subsec:sim:clustering}
@@ -1830,7 +1871,7 @@ This together with \eqref{eq1-prop-clustering-2} implies that $\pr(E_{n,T}(\alph
 \bibliographystyle{ims}
 {\small
 \setlength{\bibsep}{0.6em}
-\bibliography{../bib}}
+\bibliography{bib}}
 
 
 

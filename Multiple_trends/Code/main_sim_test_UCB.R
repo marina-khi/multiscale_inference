@@ -47,8 +47,8 @@ r <- 10
 bw <- 0.2
 
 #For parallel computation
-numCores  <- round(parallel::detectCores() * .80)
-
+numCores <- round(parallel::detectCores() * .80)
+seed     <- 111222333
 
 # #######################
 # #Plotting one instance#
@@ -251,36 +251,36 @@ for (t_len in different_T){
   #Calculating the Gaussian quantiles for UCBs#
   #############################################
   
-  cat("Calculating the Gaussian quantiles\n")
-
-  #Calculating the Gaussian quantiles for UCB in parallel
-  tic()
-  cl <- makePSOCKcluster(numCores)
-  registerDoParallel(cl)
-  foreach (val = 1:sim_runs, .combine = "cbind") %dopar% {
-    source("functions/functions_other.R")
-    source("functions/functions.R")
-    repl_UCB(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, bw_ = 0.1,
-             gaussian_sim = TRUE)
-    # Loop one-by-one using foreach
-  } -> simulated_gaussian_UCB
-  stopCluster(cl)
-  toc()
-
-  quantiles_UCB <- as.vector(quantile(simulated_gaussian_UCB, probs = probs))
-  quantiles_UCB <- rbind(probs, quantiles_UCB)
-  
-  colnames(quantiles_UCB) <- NULL
-  rownames(quantiles_UCB) <- NULL
-  
-  quants_UCB <- as.vector(quantiles_UCB[2, ])
-  quant_UCB  <- quants_UCB[pos]
+  # cat("Calculating the Gaussian quantiles\n")
+  # 
+  # #Calculating the Gaussian quantiles for UCB in parallel
+  # tic()
+  # cl <- makePSOCKcluster(numCores)
+  # registerDoParallel(cl)
+  # foreach (val = 1:sim_runs, .combine = "cbind") %dopar% {
+  #   source("functions/functions_other.R")
+  #   source("functions/functions.R")
+  #   repl_UCB(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, bw_ = 0.1,
+  #            gaussian_sim = TRUE)
+  #   # Loop one-by-one using foreach
+  # } -> simulated_gaussian_UCB
+  # stopCluster(cl)
+  # toc()
+  # 
+  # quantiles_UCB <- as.vector(quantile(simulated_gaussian_UCB, probs = probs))
+  # quantiles_UCB <- rbind(probs, quantiles_UCB)
+  # 
+  # colnames(quantiles_UCB) <- NULL
+  # rownames(quantiles_UCB) <- NULL
+  # 
+  # quants_UCB <- as.vector(quantiles_UCB[2, ])
+  # quant_UCB  <- quants_UCB[pos]
   
   #################################################
   #Calculating the Gaussian quantiles for our test#
   #################################################
   tic()
-  cl <- makePSOCKcluster(numCores_)
+  cl <- makePSOCKcluster(numCores)
   registerDoParallel(cl)
   foreach (val = 1:sim_runs, .combine = "cbind") %dopar% {
     source("functions/functions.R")
@@ -306,42 +306,56 @@ for (t_len in different_T){
   #Testing for different scenarios#
   #################################
   
+  # tic()
+  # cl <- makePSOCKcluster(numCores)
+  # registerDoParallel(cl)
+  # foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
+  #   source("functions/functions.R")
+  #   repl_UCB(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, 
+  #            bw_ = bw, a_ = a, sigma_ = sigma, beta_ = beta,
+  #            a_x_vec_ = a_x_vec, phi_ = phi, different_b_ = different_b,
+  #            quant_UCB_ = quant_UCB, gaussian_sim = FALSE)
+  #   # Loop one-by-one using foreach
+  # } -> pairwise_comparison_UCB
+  # stopCluster(cl)
+  # toc()
+  # 
   tic()
   cl <- makePSOCKcluster(numCores)
   registerDoParallel(cl)
   foreach (val = 1:n_rep, .combine = "cbind") %dopar% {
     source("functions/functions.R")
-    repl_UCB(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
+    repl_UCB_compare(rep_ = val, n_ts_ = n_ts, t_len_ = t_len, grid_ = grid,
              ijset_ = ijset, 
-             bw_ = bw, a_ = a, sigma_ = sigma, beta_ = beta,
+             a_ = a, sigma_ = sigma, beta_ = beta,
              a_x_vec_ = a_x_vec, phi_ = phi, different_b_ = different_b,
-             quant_UCB_ = quant_UCB, q_ = q, r_ = r, gaussian_sim = FALSE)
+             q_ = q, r_ = r, gaussian_sim = FALSE)
     # Loop one-by-one using foreach
   } -> pairwise_comparison
   stopCluster(cl)
   toc()
   
   for (j in 1:length(different_b)){
-    pairwise_results_UCB <- apply(pairwise_comparison_UCB[(((2 * j - 1) - 1) * n_ts * n_ts + 1):((2 * j - 1) * n_ts * n_ts), ], 2, sum)
-    results              <- apply(pairwise_comparison_UCB[(((2 * j) - 1) * n_ts * n_ts + 1):((2 * j) * n_ts * n_ts), ], 2, max)
+#    pairwise_results_UCB <- apply(pairwise_comparison_UCB[((j - 1) * n_ts * n_ts + 1):(j * n_ts * n_ts), ], 2, sum)
+    simulated_statistic  <- apply(pairwise_comparison[((j - 1) * n_ts * n_ts + 1):(j * n_ts * n_ts), ], 2, max)
     
-    num_of_rej_UCB <- sum(pairwise_results_UCB != 0)/n_rep
+#    num_of_rej_UCB <- sum(pairwise_results_UCB != 0)/n_rep
     num_of_rej     <- sum(simulated_statistic > quant)/n_rep
-    
-    cat("Ratio of rejection for our test is ", num_of_rej, "with b = ", different_b_[j],
-        ", alpha = ", alpha, "and T = ", t_len, "\n")
 
-    cat("Ratio of rejection for UCB is ", num_of_rej_UCB, "with b = ", different_b[j],
+    cat("Ratio of rejection for our test is ", num_of_rej, "with b = ", different_b[j],
         ", alpha = ", alpha, "and T = ", t_len, "\n")
+    
+#    cat("Ratio of rejection for UCB is ", num_of_rej_UCB, "with b = ", different_b[j],
+#        ", alpha = ", alpha, "and T = ", t_len, "\n")
 
     #Storing the results in a 3D array
-    size_and_power_UCB_array[k, j, ] <- num_of_rej_UCB
+#    size_and_power_UCB_array[k, j, ] <- num_of_rej_UCB
     size_and_power_array[k, j, ] <- num_of_rej
   }
 } 
 
 save(size_and_power_UCB_array, size_and_power_array, file = "output/revision/UCB_simulations.R")
-#load(file = "output/revision/UCB_simulations.R")
+load(file = "output/revision/UCB_simulations.R")
 
 
 #######################
@@ -352,6 +366,26 @@ tmp <- as.matrix(size_and_power_UCB_array[, , 1])
 row.names(tmp) <- paste0("$T = ", row.names(as.matrix(size_and_power_UCB_array[ , , 1])), "$")
 
 filename = paste0("output/revision/", n_ts, "_ts_UCB.tex")
+
+#Create a matrix (for size and power table for example) and write them in the tex file
+addtorow     <- list()
+addtorow$pos <- list(0, 0)
+addtorow$command <- c("& \\multicolumn{4}{c}{different bump height $b$} \\\\\n",
+                      "$T$ & 0 & 0.25 & 0.5 & 0.75 \\\\\n") 
+print.xtable(xtable(tmp, digits = c(3), align = "ccccc"), type = "latex",
+             file = filename, add.to.row = addtorow, include.colnames = FALSE,
+             sanitize.text.function=function(x){x})
+line <- paste0("%This simulation was done for the following values of the parameters: n_ts = ", n_ts,
+               ", with ", n_rep, " simulations for calculating size and power and ", sim_runs,
+               " simulations to calculate the Gaussian quantiles. Furthermore, for the error process we have a = ",
+               a, " and sigma = ", sigma,
+               ". There are no fixed effects. The grid is normal.")
+write(line, file = filename, append = TRUE)
+
+tmp <- as.matrix(size_and_power_array[, , 1])
+row.names(tmp) <- paste0("$T = ", row.names(as.matrix(size_and_power_array[ , , 1])), "$")
+
+filename = paste0("output/revision/", n_ts, "_ts_UCB_compare.tex")
 
 #Create a matrix (for size and power table for example) and write them in the tex file
 addtorow     <- list()

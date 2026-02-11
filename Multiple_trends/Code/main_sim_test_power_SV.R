@@ -260,16 +260,16 @@ for (t_len in different_T){
 #Output of the results
 for (b in different_b){
   l   <- match(b, different_b)
-  tmp <- as.matrix(size_and_power_array[, l, ])
-  filename = paste0("output/revision/", n_ts, "_ts_", phi_ * 100, "_",
-                      rho_ * 100, "_power_b_", b * 100, "_SV.tex")
+  tmp <- as.matrix(power_array[, l, ])
+  filename = paste0("output/revision/", n_ts, "_ts_", phi * 100, "_",
+                      rho * 100, "_power_b_", b * 100, "_SV.tex")
   output_matrix(tmp, filename, numcols_ = 4)
   line <- paste0("%This simulation was done for the seed ", seed,
                  ", for the following values of the parameters: n_ts = ", n_ts,
-                 ", with ", n_rep_, " simulations for calculating size and power and ", sim_runs,
+                 ", with ", n_rep, " simulations for calculating size and power and ", sim_runs,
                  " simulations to calculate the Gaussian quantiles. Furthermore, for the error process we have a = ",
-                 a_, " and time-varying sigma. For the covariate process a_1 = a_2 = a_3 = ",
-                 a_x_vec_[1], " and phi = ", phi,
+                 a, " and time-varying sigma. For the covariate process a_1 = a_2 = a_3 = ",
+                 a_x_vec[1], " and phi = ", phi,
                  ". For the fixed effect, we have rho = ", rho,
                  ". The grid is normal")     
   write(line, file = filename, append = TRUE)

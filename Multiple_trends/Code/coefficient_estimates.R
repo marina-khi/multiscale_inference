@@ -81,10 +81,11 @@ for (t_len in different_T){
    
     #Setting the layout of the graphs
     par(cex = 1, tck = -0.025)
-    par(mar = c(2.5, 5.5, 2, 0.5)) #Margins for each plot
-
+    par(mar = c(2.5, 5.5, 5, 0.5)) #Margins for each plot
+    
     hist(simulated_sigma, main = "", cex.lab = 2, cex.axis = 1.5, xlab = "")
     abline(v = 1/3, col = "red")
+    title(main = paste0("T = ", t_len), font.main = 1, cex.main = 2.5, line = 1.5)
     dev.off()
     
     # filename = paste0("output/revision/beta_histogram_bump_function_T_", t_len, "_b_", different_b[j] * 100, ".pdf")
@@ -138,12 +139,14 @@ for (t_len in different_T){
     
     #Setting the layout of the graphs
     par(cex = 1, tck = -0.025)
-    par(mar = c(2.5, 5.5, 2, 0.5)) #Margins for each plot
+    par(mar = c(2.5, 5.5, 5, 0.5)) #Margins for each plot
     
     hist(simulated_sigma, main = "", cex.lab = 2, cex.axis = 1.5, xlab = "")
     abline(v = 1/3, col = "red")
+    title(main = paste0("T = ", t_len), font.main = 1, cex.main = 2.5, line = 1.5)
     dev.off()
     
+
     # filename = paste0("output/revision/beta_histogram_zero_function_T_", t_len, "_b_", different_b[j] * 100, ".pdf")
     # pdf(filename, width = 21, height = 5, paper="special")
     # layout(matrix(c(1, 2, 3), ncol = 3), widths=c(6.6, 6.6, 6.6),

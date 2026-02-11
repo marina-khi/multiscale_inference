@@ -144,11 +144,17 @@ Let $\eta_t$ ($t \in \integers$) be independent and identically distributed ($\t
 We now give some details on the components of model \eqref{eq:model_full}. We first have a closer look at the error structure which consists of the two components $\alpha_i$ and $\varepsilon_{it}$. We do not impose any distributional assumptions on the terms $\alpha_i$. In particular, they can be either deterministic or random and they may be correlated with the covariates $\X_{it}$ in an arbitrary way. Following the panel data literature in economics, we refer to them as fixed effects. The terms $\varepsilon_{it}$ are idiosyncratic errors which are assumed to have zero mean. They are allowed to be correlated across $t$ but are assumed to be independent across $i$. Precise technical conditions on them are given in Section \ref{subsec:model_assumptions} below.  Whereas the idiosyncratic errors $\varepsilon_{it}$ are restricted to be independent across $i$, we do not impose any restrictions on the dependence structure between the fixed effects $\alpha_i$ across $i$. Hence, we allow for cross-sectional dependence in the error structure via the fixed effects $\alpha_i$. Similarly, the covariates $\X_{it}$ are allowed to be dependent across $i$ in an arbitrary way. As a consequence, the $n$ time series $\mathcal{T}_i$ in our panel can be correlated with each other in various ways.  
 
 
-The trend functions $m_i$ are not identified in model \eqref{eq:model_full}. In particular, equation \eqref{eq:model_full} is equivalent to $Y_{it} = m_i^\diamond(t/T) + \boldsymbol{\beta}_i^\top \boldsymbol{X}_{it} + \alpha_i^\diamond + \varepsilon_{it}$, where $m_i^\diamond = m_i + c_i^\diamond$, $\alpha_i^\diamond = \alpha_i - c_i^\diamond$ and $c_i^\diamond$ is an arbitrary real constant. 
-For identification, we impose the constraint $\int_0^1 m_i(u) du = 0$ for all $i$, which vertically shifts each curve $m_i$ such that the overall mean level $\int_0^1 m_i(u)$ is equal to $0$. Such a normalization is quite natural in many application contexts. Take e.g.\ the application on house price data in Section \ref{sec:app}. The term $\int_0^1 m_i(u) du$ can be interpreted as the long-term average house price level in country $i$, which may be very different across countries. The normalization $\int_0^1 m_i(u) du = 0$ corrects for differences in these long-term price levels. Put differently, the normalized trends give the deviation from the long-term price levels. 
+The trend functions $m_i$ are not identified in model \eqref{eq:model_full}. In particular, equation \eqref{eq:model_full} is equivalent to $Y_{it} = m_i^\diamond(t/T) + \boldsymbol{\beta}_i^\top \boldsymbol{X}_{it} + \alpha_i^\diamond + \varepsilon_{it}$, where $m_i^\diamond = m_i + c_i^\diamond$, $\alpha_i^\diamond = \alpha_i - c_i^\diamond$ and $c_i^\diamond$ is an arbitrary real constant. For identification, we impose the constraint $\int_0^1 m_i(u) du = 0$ for all $i$, which vertically shifts each curve $m_i$ such that the overall mean level $\int_0^1 m_i(u)$ is equal to $0$. We briefly give some comments on this identification strategy:  
+{\color{black}
+\begin{itemize}[leftmargin=0.5cm,itemsep=0pt, parsep=0pt, topsep=3pt]
 
+\item The normalization $\int_0^1 m_i(u) du = 0$ for all $i$ does not eliminate any information from the model for the following reason: as pointed out above, the observed data $\{(Y_{it},X_{it})\}$ are consistent with the trends $m_i$ and the fixed effects $\alpha_i$ as well as with the vertically shifted versions $m_i^\diamond$ and $\alpha_i^\diamond$. Hence, the data do not contain any information on the overall level of the curves $m_i$. Therefore, we are free to subtract it without any loss of information. 
 
-Consider the case where the trends $m_i$ are parallel, i.e., $m_i = m + c_i$ with some constants $c_i$ and a common trend $m$ for all $i$. The constraint $\int_0^1 m_i(u) du = 0$ implies that $c_i = c := -\int_0^1 m(u) du$ for all $i$. Put differently, it implies that the trends are exactly the same. Hence, under our identification constraint, the null hypothesis that the trends are parallel to each other coincides with the hypothesis that the trends are identical. 
+\item The normalization $\int_0^1 m_i(u) du = 0$ for all $i$ is quite natural in many application contexts. In climatology, for instance, it is common to analyze temperature anomalies (i.e., the deviation of the temperatures from a long-term average) rather than the raw temperatures themselves. This amounts to vertically shift the trend functions $m_i$ by a long-term mean level. Another example is the application on house price data in Section \ref{sec:app}. The term $\int_0^1 m_i(u) du$ can be interpreted as the long-term average house price level in country $i$, which may be very different across countries. The normalization $\int_0^1 m_i(u) du = 0$ corrects for differences in these long-term price levels. Put differently, the normalized trends give the deviation from the long-term price levels. 
+
+\item Consider the case where the trends $m_i$ are parallel, i.e., $m_i = m + c_i$ with some constants $c_i$ and a common trend $m$ for all $i$. The constraint $\int_0^1 m_i(u) du = 0$ implies that $c_i = c := -\int_0^1 m(u) du$ for all $i$. Put differently, it implies that the trends are exactly the same. Hence, under our identification constraint, the null hypothesis that the trends are parallel to each other coincides with the hypothesis that the trends are identical. 
+
+\end{itemize}}
 
 
 Finally note that throughout the paper, we restrict attention to the case where the number of time series $n$ in model \eqref{eq:model_full} is fixed. Extending our theoretical results to the case where $n$ grows with $T$ is a possible topic for further research.
@@ -175,10 +181,10 @@ The covariates $\X_{it} = (X_{it,1},\ldots, X_{it, d})^\top$ are assumed to have
 \begin{enumerate}[label=(C\arabic*),leftmargin=1.05cm, itemsep=0pt, parsep=0pt, topsep=3pt]
 \setcounter{enumi}{3}
 \item \label{C-reg1} It holds that $X_{it, j} = h_{ij}(\mathcal{G}_{it, j})$, where $\mathcal{G}_{it, j} = (\ldots, \xi_{it-1,j}, \xi_{it, j})$, the random variables $\xi_{it, j}$ are i.i.d.\ across $t$ and $h_{ij}: \reals^\infty \rightarrow \reals$ is a measurable function such that $X_{it, j}$ is well-defined. We use the notation $\X_{it} = \boldsymbol{h}_{i}(\mathcal{G}_{it})$ with $\boldsymbol{h}_i = (h_{i1}, \ldots, h_{id})^\top$ and $\mathcal{G}_{it} = (\mathcal{G}_{it,1}, \ldots, \mathcal{G}_{it, d})^\top$. It holds that $\ex [X_{it, j}]=0$ and $\| X_{it, j} \|_{q^\prime} <\infty$ for all $i$ and $j$, where $q^\prime > \max \{ 4, \theta q \}$ with $q$ from \ref{C-err1} and $\theta$ specified in \ref{C-grid} below.
-\item \label{C-reg2} The matrix $\ex[\Delta \X_{it} \Delta \X_{it}^\top]$ {\color{red}with $\Delta \X_{it} = \X_{it} - \X_{it-1}$} is invertible for each $i$.
+\item \label{C-reg2} The matrix $\ex[\Delta \X_{it} \Delta \X_{it}^\top]$ is invertible for each $i$\textcolor{black}{, where $\Delta \X_{it} = \X_{it} - \X_{it-1}$}.
 \item \label{C-reg3} For each $i$ and $j$, it holds that $\sum_{s \ge 0} \delta_{q^\prime}(h_{ij}, s)$ is finite and $\sum_{s \ge t} \delta_{q^\prime}(h_{ij}, s)= O(t^{-\alpha})$ for some $\alpha > 1/2 - 1/{q^\prime}$ with $q^\prime$ from \ref{C-reg1}.
 \end{enumerate}
-Assumption \ref{C-reg1} guarantees that the process $\{ \X_{it}: 1 \le t \le T \}$ is stationary and causal for each $i$. Assumption \ref{C-reg3} restricts the serial dependence of the process $\{ \X_{it}: 1 \le t \le T \}$ for each $i$ in terms of the physical dependence measure.
+Assumption \ref{C-reg1} guarantees that the process $\{ \X_{it}: 1 \le t \le T \}$ is stationary and causal for each $i$. \textcolor{black}{Notably, stationarity of the regressors rules out the autoregressive case with $\X_{it} = (Y_{i,t-1},\ldots,Y_{i,t-d})^\top$.} Assumption \ref{C-reg3} restricts the serial dependence of the process $\{ \X_{it}: 1 \le t \le T \}$ for each $i$ in terms of the physical dependence measure. 
 
 
 We finally impose some assumptions on the relationship between the covariates and the errors and on the trend functions $m_i$.
@@ -236,7 +242,7 @@ in the Supplement, we show that $\widehat{\bfbeta}_i - \bfbeta_i = O_p(T^{-1/2})
 This is a reasonable estimator of $\alpha_i$ for the following reason: For each $i$, it holds that $\widehat{\alpha}_i - \alpha_i = \big(\bfbeta_i - \widehat{\bfbeta}_i \big)^\top\frac{1}{T}\sum_{t=1}^T  \X_{it} + \frac{1}{T}\sum_{t=1}^T m_i(\frac{t}{T}) + \frac{1}{T}\sum_{t=1}^T \varepsilon_{it} = O_p(T^{-1/2})$, since $\frac{1}{T}\sum_{i=1}^T \varepsilon_{it} = O_p(T^{-1/2})$ by the law of large numbers, $\frac{1}{T}\sum_{i=1}^T m_i(t/T) = O(T^{-1})$ due to Lipschitz continuity of $m_i$ and the normalisation $\int_{0}^1 m_i(u)du = 0$, $\frac{1}{T}\sum_{t=1}^T  \X_{it} = O_p(1)$ by Chebyshev's inequality and $\widehat{\bfbeta}_i - \bfbeta_i = O_p (T^{-1/2})$. 
 
 
-Besides $\widehat{\bfbeta}_i$ and $\widehat{\alpha}_i$, we also need an estimator of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty}$ $\cov(\varepsilon_{i0}, \varepsilon_{i\ell})$ for each $i$. Throughout the paper, we assume that the long-run error variance is the same for all $i$, i.e., $\sigma_i^2 = \sigma^2$ for all $i$.  For technical reasons, we nevertheless use a different estimator of $\sigma^2$ for each $i$. In particular, we let $\widehat{\sigma}_i^2$ be an estimator of $\sigma^2$ which depends only on the $i$-th time series $\{ \widehat{Y}_{it}: 1 \le t \le T \}$, i.e., $\widehat{\sigma}_i^2 = \widehat{\sigma}_i^2(\widehat{Y}_{i1},\ldots,\widehat{Y}_{iT})$ is a function of the variables $\widehat{Y}_{it}$ for $1 \le t \le T$.\footnote{This construction is for technical convenience. Specifically, it allows us to apply the strong approximation results from \cite{BerkesLiuWu2014} separately to each time series $i$, which simplifies the proofs.} Our theory works with any estimator $\widehat{\sigma}_i^2$ which has the property that $\widehat{\sigma}_i^2 = \sigma^2 + o_p(\rho_T)$ for each $i$, where $\rho_T$ slowly converges to zero, in particular, $\rho_T = o(1/\log T)$. We now briefly discuss two possible choices of $\widehat{\sigma}_i^2$. Following \cite{Kim2016}, we can estimate $\sigma^2$ by a variant of the subseries variance estimator, which was first proposed by \cite{Carlstein1986} and then extended by \cite{WuZhao2007}. A full definition of the estimator can be found in Lemma C.6 %\ref{lemmaA:lrv} 
+Besides $\widehat{\bfbeta}_i$ and $\widehat{\alpha}_i$, we also need an estimator of the long-run error variance $\sigma_i^2 = \sum\nolimits_{\ell=-\infty}^{\infty}$ $\cov(\varepsilon_{i0}, \varepsilon_{i\ell})$ for each $i$. Throughout the paper, we assume that the long-run error variance is the same for all $i$, i.e., $\sigma_i^2 = \sigma^2$ for all $i$. \textcolor{black}{Nevertheless, we use a different estimator of $\sigma^2$ for each $i$, which is suboptimal but avoids certain technical complications.} In particular, we let $\widehat{\sigma}_i^2$ be an estimator of $\sigma^2$ which depends only on the $i$-th time series $\{ \widehat{Y}_{it}: 1 \le t \le T \}$, i.e., $\widehat{\sigma}_i^2 = \widehat{\sigma}_i^2(\widehat{Y}_{i1},\ldots,\widehat{Y}_{iT})$ is a function of the variables $\widehat{Y}_{it}$ for $1 \le t \le T$.\footnote{This construction is for technical convenience. Specifically, it allows us to apply the strong approximation results from \cite{BerkesLiuWu2014} separately to each time series $i$, which simplifies the proofs.} Our theory works with any estimator $\widehat{\sigma}_i^2$ which has the property that $\widehat{\sigma}_i^2 = \sigma^2 + o_p(\rho_T)$ for each $i$, where $\rho_T$ slowly converges to zero, in particular, $\rho_T = o(1/\log T)$. We now briefly discuss two possible choices of $\widehat{\sigma}_i^2$. Following \cite{Kim2016}, we can estimate $\sigma^2$ by a variant of the subseries variance estimator, which was first proposed by \cite{Carlstein1986} and then extended by \cite{WuZhao2007}. A full definition of the estimator can be found in Lemma C.6 %\ref{lemmaA:lrv} 
 of the Supplement where we derive its convergence rate. 
 %Formally, we set
 %\begin{align}
@@ -375,7 +381,6 @@ In practice, we implement the test as follows for a given significance level $\a
 \end{enumerate}
 
 
-\pagebreak
 \begin{remark} 
 In some cases, the number of intervals in $\mathcal{S}^{[i, j]}(\alpha)$ may be quite large, rendering the visual representation of the test results outlined in Step 3 cumbersome. To overcome this drawback, we replace $\mathcal{S}^{[i, j]}(\alpha)$ with the subset of minimal intervals $\mathcal{S}^{[i, j]}_{\textnormal{min}}(\alpha) \subseteq \mathcal{S}^{[i, j]}(\alpha)$. As in \cite{Duembgen2002}, we call an interval $\mathcal{I}_{u, h} \in \mathcal{S}^{[i, j]}(\alpha)$ minimal if there is no other interval $\mathcal{I}_{u^\prime, h^\prime} \in \mathcal{S}^{[i, j]}(\alpha)$ such that $\mathcal{I}_{u^\prime, h^\prime} \subset \mathcal{I}_{u, h}$. Notably, our theoretical results remain to hold true when the sets $\mathcal{S}^{[i, j]}(\alpha)$ are replaced by $\mathcal{S}^{[i, j]}_{\textnormal{min}}(\alpha)$. See Section \ref{sec:theo} for the details. 
 \end{remark}
@@ -494,7 +499,7 @@ and run the following hierarchical agglomerative clustering (HAC) algorithm:
 and merge them into a new cluster. 
 \vspace{3pt}
 
-\noindent Iterating this procedure for $r = 1,\ldots, n-1$ yields a tree of nested partitions $\{\widehat{G}_1^{[r]},\ldots,\widehat{G}_{n-r}^{[r]}\}$, which can be graphically represented by a dendrogram. Roughly speaking, the HAC algorithm merges the $n$ singleton clusters $\widehat{G}_i^{[0]} = \{ i \}$ step by step until we end up with the cluster $\{1,\ldots, n\}$. In each step, the closest two clusters are merged, where the distance between clusters is measured in terms of the dissimilarity $\widehat{\Delta}$. We refer the reader to Section 14.3.12 in \cite{HastieTibshiraniFriedman2009} for an overview of hierarchical clustering methods. 
+\noindent Iterating this procedure for $r = 1,\ldots, n-1$ yields a tree of nested partitions $\{\widehat{G}_1^{[r]}, \ldots,\widehat{G}_{n-r}^{[r]}\}$, which can be graphically represented by a dendrogram. Roughly speaking, the HAC algorithm merges the $n$ singleton clusters $\widehat{G}_i^{[0]} = \{ i \}$ step by step until we end up with the cluster $\{1,\ldots, n\}$. In each step, the closest two clusters are merged, where the distance between clusters is measured in terms of the dissimilarity $\widehat{\Delta}$. We refer the reader to Section 14.3.12 in \cite{HastieTibshiraniFriedman2009} for an overview of hierarchical clustering methods. 
 
 
 When the number of groups $N$ is known, we estimate the group structure $\{G_1,\ldots, G_N\}$ by the $N$-partition $\{\widehat{G}_1^{[n-N]},\ldots,\widehat{G}_{N}^{[n-N]}\}$ produced by the HAC algorithm. When $N$ is unknown, we estimate it by the $\widehat{N}$-partition $\{\widehat{G}_1^{[n-\widehat{N}]},\ldots,\widehat{G}_{\widehat{N}}^{[n-\widehat{N}]}\}$, where 
@@ -528,6 +533,18 @@ asymptotically occurs with probability at least $1-\alpha$, i.e.,
 $\pr ( E_{n,T}(\alpha) ) \ge (1 - \alpha) + o(1)$. 
 \end{prop}
 According to Proposition \ref{prop:clustering:2}, the sets $\mathcal{S}^{[\ell,\ell^\prime]}_{n, T}(\alpha)$ allow us to locate, with a pre-specified confidence, time intervals where the group-specific trend functions $f_\ell$ and $f_{\ell^\prime}$ differ from each other. In particular, we can claim with asymptotic confidence at least $1 - \alpha$ that the trend functions $f_\ell$ and $f_{\ell^\prime}$ differ on all intervals $\interval \in \mathcal{S}^{[\ell,\ell^\prime]}_{n, T}(\alpha)$.\footnote{This statement remains to hold true when the sets of intervals $\mathcal{S}^{[\ell,\ell^\prime]}_{n, T}(\alpha)$ are replaced by the corresponding sets of minimal intervals.} 
+
+
+
+{\color{black}
+\section{Simulation study}\label{sec:app-sim-summary}
+
+
+In the supplementary material, we evaluate our test and clustering methods
+by Monte Carlo experiments. 
+In the first part of the simulation study, we investigate the finite sample performance of the multiscale test: we explore the size and power properties of the test, we run a series of robustness checks (regarding the choice of tuning parameters, etc.) and we compare the test with competing methods.  
+In the second part, we have a closer look at the clustering algorithm: we investigate how accurate our estimators of the unknown classes and their unknown number are and we compare our approach with a simple benchmark procedure. We refer the reader to Section A of the supplement for the details. 
+}
 
 
 
@@ -584,7 +601,9 @@ Besides these choices, we implement the test exactly as described in Section \re
 \includegraphics[width=\textwidth]{../output/plots/hp/BEL_vs_USA}
 \caption{Test results for the comparison of the house prices in Belgium and the USA.}\label{fig:hp:Belgium:USA}
 \end{minipage}
-\caption*{Note: In each figure, panel (a) shows the two augmented time series of the house prices, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i, j]}_{\textnormal{min}}(\alpha)$ in black {\color{red}(bear in mind that the vertical poisitioning of the intervals is for better visual representation purposes only).}}
+\caption*{Note: In each figure, panel (a) shows the two augmented time series of the house prices, panel (b) presents smoothed versions of the augmented time series, and panel (c) depicts the set of intervals $\mathcal{S}^{[i, j]}(\alpha)$ in grey and the subset of minimal intervals $\mathcal{S}^{[i, j]}_{\textnormal{min}}(\alpha)$ in black. \textcolor{black}{(The intervals in panel (c) are plotted one
+on top of the other. However, the order in which they are plotted is completely
+arbitrary, i.e., their vertical positioning does not convey any information.)}}
 \end{sidewaysfigure}
 
 
@@ -626,15 +645,14 @@ Hence, overall, our algorithm appears to produce a reasonable grouping of the ho
 \section{Concluding remarks}
 
 
-In this paper, we have developed new methods for the comparison of nonparametric time trends. The main advantage of our multiscale approach over other methods is that it is much more informative. Specifically, it allows to make rigorous simultaneous confidence statements about (i) \textit{which} trend curves are different and (ii) \textit{where} (i.e., in which time intervals) they differ. We have derived theory for our methods in a quite general model setting with covariates and a fixed effects error structure. Nevertheless, our framework may be extended in different directions. One interesting extension would be to make the error structure even more general by allowing the idiosyncratic error processes to be locally stationary rather than stationary. This would in particular accommodate time-varying error variances. Even though such an extension is far from trivial, it may be possible by using strong approximation theory for locally stationary processes \citep[][]{WuZhou2011}. Another interesting question is whether it is possible to bootstrap the multiscale statistic $\widehat{\Psi}_{n,T}$ under the null rather than simulating from the Gaussian analogue $\Phi_{n,T}$. Such a bootstrap procedure may be able to mimic the true distribution of the multiscale statistic under the null more closely than simulating from a Gaussian analogue.  
-
+In this paper, we have developed new methods for the comparison of nonparametric time trends. The main advantage of our multiscale approach over other methods is that it is much more informative. Specifically, it allows to make rigorous simultaneous confidence statements about (i) \textit{which} trend curves are different and (ii) \textit{where} (i.e., in which time intervals) they differ. We have derived theory for our methods in a quite general model setting with covariates and a fixed effects error structure. Nevertheless, our framework may be extended in different directions. One interesting extension would be to make the error structure even more general by allowing the idiosyncratic error processes to be locally stationary rather than stationary. This would in particular accommodate time-varying error variances. Even though such an extension is far from trivial, it may be possible by using strong approximation theory for locally stationary processes \citep[][]{WuZhou2011}. Another interesting question is whether it is possible to bootstrap the multiscale statistic $\widehat{\Psi}_{n,T}$ under the null rather than simulating from the Gaussian analogue $\Phi_{n,T}$. Such a bootstrap procedure may be able to mimic the true distribution of the multiscale statistic under the null more closely than simulating from a Gaussian analogue. \textcolor{black}{Finally, note that throughout the paper, we have assumed for simplicity that there are no missing data. In the special case where the data points are "missing at random" and not too many data points are missing, it is straightforward to adjust our methods. In general, however, it is non-trivial to do so.} 
 
 
 \spacingset{1.25}
 \bibliographystyle{ims}
 {\small
 \setlength{\bibsep}{0.6em}
-\bibliography{../bib}}
+\bibliography{bib}
 
 
 
